@@ -1,0 +1,17 @@
+{
+    "criteria": {
+        "itemreplace": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "custom_data": "{zx:['itemreplace']}"
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:internal/itembackup/effect_1"
+    }
+}

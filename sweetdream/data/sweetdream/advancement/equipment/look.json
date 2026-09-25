@@ -1,0 +1,20 @@
+{
+    "criteria": {
+        "look": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "items": "minecraft:paper",
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": ["look"]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:equipment/look/toggle"
+    }
+}

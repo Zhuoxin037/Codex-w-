@@ -3,7 +3,7 @@
 # ------------------------------------------------------------
 # 【宏参数】manacore:work.a {uuid,target,type,damage}(from 可选)
 #   target : 目标选择器字符串, 例如 "@e[tag=mana_target,distance=..8]"
-#   type   : 伤害类型(默认 minecraft:magic, 可绕过护甲)
+#   type   : 伤害类型(默认 minecraft:player_attack, 按玩家平砍算 -> 吃护甲)
 #   from   : 攻击者选择器, 省略则自动推导(见 from_auto)
 # 【为什么要先把数字变成字符串】宏替换会把 double 渲染成 "37.5d",
 #   而 /damage 的参数解析器不认 d 后缀。所以先用 lib/num/plain 把

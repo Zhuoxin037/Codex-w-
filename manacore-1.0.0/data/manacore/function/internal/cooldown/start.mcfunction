@@ -13,6 +13,10 @@
 #    end - #now 即可, 多人多技能也不会产生每刻的遍历开销。
 # 【双时间轴支持】tick 冷却走 cooldown, 秒冷却走 cooldown_seconds,
 #    两者都不会写死单位, 由调用方自己选。
+# 【本函数是唯一的入口】start_sec 只负责把秒换算成 tick(不再自己往下走),
+#   所以下面两句判断只会有一个成立, start_go 保证只跑一次。
+#   以前 start_sec 里也调了一次 start_go, 于是秒级冷却会被执行两遍,
+#   end 多加一次 #now、total 变成 #now+时长 —— 已经修掉了。
 # ============================================================
 execute store result score #dur manacore.math run data get storage manacore:work a.cooldown
 execute if score #dur manacore.math matches ..0 run function manacore:internal/cooldown/start_sec

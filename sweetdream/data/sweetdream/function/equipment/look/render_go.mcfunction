@@ -1,0 +1,41 @@
+# ============================================================
+# sweetdream:equipment/look/render_go —— 采集数值并画到动作栏(宏参数: {uuid})
+# ------------------------------------------------------------
+# 【显示顺序】攻击 / 生命 / 魔力 / 术阵 / 冷却
+# 【数值来源】
+#   攻击  players."<uuid>".stats.base_attack
+#   生命  实体自身的 Health  /  players."<uuid>".stats.max_health
+#   魔力  players."<uuid>".stats.current_mana / max_mana
+#   术阵  manacore:api/formation/count 的 out r.count / r.limit
+#   冷却  sweetdream:data last_skill."<uuid>"(由 cooldown_start 事件记下的
+#          "最近放过的技能") -> players."<uuid>".cooldowns."<该技能>".end
+#          减当前刻 #now。
+#          注意: 不能看"主手物品", 因为开面板时手里拿的是观测镜而不是武器。
+# 【为什么冷却要先清零再读】没在冷却时那条路径不存在, data get 会失败,
+#   计分项会保留上一次的旧值 —— 必须先手动归零。
+# ============================================================
+
+# ---- 攻击 / 生命 / 魔力 ----
+$execute store result score #v_atk zx.meta run data get storage manacore:players "$(uuid)".stats.base_attack
+execute store result score #v_hp zx.meta run data get entity @s Health
+$execute store result score #v_hpmax zx.meta run data get storage manacore:players "$(uuid)".stats.max_health
+$execute store result score #v_mana zx.meta run data get storage manacore:players "$(uuid)".stats.current_mana
+$execute store result score #v_manamax zx.meta run data get storage manacore:players "$(uuid)".stats.max_mana
+
+# ---- 术阵数量 / 上限(走前置包的接口, 它会遍历 8 个槽位) ----
+$data modify storage manacore:in arg set value {uuid:"$(uuid)"}
+function manacore:api/formation/count
+execute store result score #v_fcnt zx.meta run data get storage manacore:out r.count
+execute store result score #v_flim zx.meta run data get storage manacore:out r.limit
+
+# ---- 冷却: 查"最近放过的技能"还剩多久 ----
+# 从没放过技能(或记录被清掉)时显示 0。
+data remove storage zx:work a.skill
+$execute if data storage zx:data last_skill."$(uuid)" run data modify storage zx:work a.skill set from storage zx:data last_skill."$(uuid)"
+
+scoreboard players set #v_cd zx.meta 0
+scoreboard players set #v_end zx.meta 0
+execute if data storage zx:work a.skill run function sweetdream:equipment/look/cooldown_get with storage zx:work a
+
+# ---- 画出来 ----
+title @s actionbar [{"text":"⚔ ","color":"gray"},{"score":{"name":"#v_atk","objective":"zx.meta"},"color":"white"},{"text":"   ❤ ","color":"red"},{"score":{"name":"#v_hp","objective":"zx.meta"},"color":"red"},{"text":"/","color":"dark_red"},{"score":{"name":"#v_hpmax","objective":"zx.meta"},"color":"dark_red"},{"text":"   ✦ ","color":"aqua"},{"score":{"name":"#v_mana","objective":"zx.meta"},"color":"aqua"},{"text":"/","color":"dark_aqua"},{"score":{"name":"#v_manamax","objective":"zx.meta"},"color":"dark_aqua"},{"text":"   ✡ ","color":"light_purple"},{"score":{"name":"#v_fcnt","objective":"zx.meta"},"color":"light_purple"},{"text":"/","color":"dark_purple"},{"score":{"name":"#v_flim","objective":"zx.meta"},"color":"dark_purple"},{"text":"   ⏳ ","color":"yellow"},{"score":{"name":"#v_cd","objective":"zx.meta"},"color":"gold"},{"text":"s","color":"gold"}]

@@ -1,2 +1,0 @@
-#盔甲架复制有itemreplace的物品（实测有效
-$item replace entity @e[nbt={CustomName:"$(uuid)"},limit=1] weapon.mainhand from entity @s[nbt={SelectedItem:{components:{"minecraft:custom_data":{zx:["itemreplace"]}}}}] weapon.mainhand

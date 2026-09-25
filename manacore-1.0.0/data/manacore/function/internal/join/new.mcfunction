@@ -13,6 +13,14 @@
 function manacore:internal/slot/alloc
 execute store result storage manacore:work a.slot int 1 run scoreboard players get @s manacore.slot
 data modify storage manacore:work record set from storage manacore:config defaults
+
+# 【基础攻击力 = 玩家第一次进游戏时的实际攻击力】
+#   读的是原版属性 generic.attack_damage(面板攻击力)。
+#   只在这一条"新玩家首次注册"的路径上读, 所以老玩家的数值不会被重置。
+#   万一读取失败(理论上不会, 玩家一定有这个属性), execute store 不会写入,
+#   于是保留 config.defaults 里的那个值 —— 不会变成 0。
+execute store result storage manacore:work record.stats.base_attack double 1 run attribute @s minecraft:generic.attack_damage get
+
 data modify storage manacore:work record.uuid set from storage manacore:work a.uuid
 data modify storage manacore:work record.slot set from storage manacore:work a.slot
 data modify storage manacore:work record.u0 set from storage manacore:work a.u0

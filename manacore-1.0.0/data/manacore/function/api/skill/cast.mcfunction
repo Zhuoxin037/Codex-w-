@@ -20,7 +20,7 @@
 #   base_attack            -1 = 用面板
 #   skill_multiplier / independent_multiplier / custom_damage / health_ratio
 #   target                 目标选择器, 省略=只算伤害不打
-#   type                   伤害类型, 默认 minecraft:magic
+#   type                   伤害类型, 默认 minecraft:player_attack(吃护甲)
 #   from                   攻击者选择器, 省略自动推导
 # 【出参】out.success / out.reason("cooldown"/"mana"/"ok")
 #         out.damage / out.remaining(冷却剩余)
@@ -31,7 +31,7 @@
 #                     base_attack, skill_multiplier, independent_multiplier, custom_damage, health_ratio,
 #                     target(可选), type(可选), from(可选)}
 # 出参: manacore:out.success / out.reason / out.damage / out.remaining
-data modify storage manacore:work a set value {uuid:"",skill:"",mana:0.0,cooldown:0,cooldown_seconds:0.0,reduce:1b,consume:1b,base_attack:-1.0,skill_multiplier:1.0,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0,type:"minecraft:magic"}
+data modify storage manacore:work a set value {uuid:"",skill:"",mana:0.0,cooldown:0,cooldown_seconds:0.0,reduce:1b,consume:1b,base_attack:-1.0,skill_multiplier:1.0,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0,type:"minecraft:player_attack"}
 data modify storage manacore:work a merge from storage manacore:in arg
 data modify storage manacore:out r.success set value 0b
 data modify storage manacore:out r.reason set value ""

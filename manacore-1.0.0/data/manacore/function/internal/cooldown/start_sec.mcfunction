@@ -1,8 +1,13 @@
 # ------------------------------------------------------------
 # internal/cooldown/start_sec —— 秒级冷却换算
-# 【原理】cooldown_seconds x 20 -> #dur(tick); 换算后再走同一条
-#         start_go 流程, 所以"秒冷却"和"tick 冷却"后续处理完全一致。
-# 【为什么只有 >0 才继续】冷却为 0 或负数表示"没有冷却", 不该写记录。
+# 【职责】只做一件事: cooldown_seconds x 20 -> #dur(tick)。
+# 【千万不要在这里调 start_go】以前这里调了, 结果和 start 里那句
+#   "if #dur matches 1.. run start_go" 撞车:
+#     ① start 里 #dur = 0 -> 调本函数
+#     ② 本函数把 #dur 换成 400 -> 调 start_go(第一次) -> #dur 加上 #now 变成 32467
+#     ③ 回到 start, 那句 "matches 1.." 又成立 -> start_go(第二次)
+#        -> total 被写成 32467(= #now + 时长), end 又被加一次 #now
+#   tick 冷却不走这条路径, 所以只有"秒级冷却"会中招 —— 流光正是秒级。
+#   现在统一由 start 在一处进入 start_go, 两边不会重复。
 # ------------------------------------------------------------
 execute store result score #dur manacore.math run data get storage manacore:work a.cooldown_seconds 20
-execute if score #dur manacore.math matches 1.. run function manacore:internal/cooldown/start_go with storage manacore:work a

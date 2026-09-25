@@ -1,0 +1,26 @@
+{
+  "values": [
+    "minecraft:player",
+    "minecraft:armor_stand",
+    "minecraft:item",
+    "minecraft:experience_orb",
+    "minecraft:snowball",
+    "minecraft:egg",
+    "minecraft:ender_pearl",
+    "minecraft:experience_bottle",
+    "minecraft:arrow",
+    "minecraft:spectral_arrow",
+    "minecraft:trident",
+    "minecraft:firework_rocket",
+    "minecraft:eye_of_ender",
+    "minecraft:marker",
+    "minecraft:area_effect_cloud",
+    "minecraft:lightning_bolt",
+    "minecraft:interaction",
+    "minecraft:item_frame",
+    "minecraft:glow_item_frame",
+    "minecraft:painting",
+    "minecraft:leash_knot",
+    "minecraft:evoker_fangs"
+  ]
+}

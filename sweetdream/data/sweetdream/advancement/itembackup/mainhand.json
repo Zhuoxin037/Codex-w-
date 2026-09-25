@@ -1,0 +1,10 @@
+{
+    "criteria": {
+        "itemreplace_mainhand":{
+            "trigger": "tick"
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:internal/itembackup/mainhand_1"
+    }
+}
