@@ -1,0 +1,10 @@
+{
+  "pack": {
+    "pack_format": 71,
+    "supported_formats": {
+      "min_inclusive": 48,
+      "max_inclusive": 120
+    },
+    "description": " v1.0.0 (for MC 1.21.5)"
+  }
+}

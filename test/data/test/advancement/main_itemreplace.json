@@ -1,0 +1,10 @@
+{
+    "criteria": {
+        "main_itemreplace":{
+            "trigger": "tick"
+        }
+    },
+    "rewards": {
+        "function": "test:itemreplace_summon"
+    }
+}

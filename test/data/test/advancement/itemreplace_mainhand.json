@@ -1,0 +1,10 @@
+{
+    "criteria": {
+        "itemreplace_mainhand":{
+            "trigger": "tick"
+        }
+    },
+    "rewards": {
+        "function": "test:itemreplace_mainhand_1"
+    }
+}
