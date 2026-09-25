@@ -1,29 +1,34 @@
 # ============================================================
-# test:internal/summon_named_stand —— 按 UUID 命名的盔甲架(查重 + 召唤)
+# test:internal/summon_named_stand —— 备份盔甲架(自愈 + 跟随)
 # ------------------------------------------------------------
 # 【宏参数】test:work a {uuid}
 # 【调用】function test:internal/summon_named_stand with storage test:work a
-# 【这一行同时做了两件事】
-#   execute unless entity @e[tag=test_stand_<uuid>]
-#       —— 已经有一个属于自己的盔甲架了就跳过, 不会越召越多
-#   run summon armor_stand ~ ~ ~ {...}
-#       —— 在原地召唤, 各字段含义:
-#          CustomName        : 名字。1.20.5+ 的 SNBT 里, 不以 { 或 [ 开头的
-#                              字符串按"字面文本"处理, 所以直接写就行
-#          CustomNameVisible : 1b = 名字一直显示
-#          Tags              : 把 UUID 也写进标签。之后查重、选中它都靠这个,
-#                              比用 CustomName 去匹配又快又稳
-#          Invulnerable      : 1b = 免伤(打不掉)
-# 【想隐藏本体】在 NBT 里再加 Invisible:1b 即可。
-# 【宏规则】只有含 $(变量) 的行才能以 $ 开头; 没有变量的行加了 $ 会报
-#          "Macro without variables", 整个函数作废。
-# 【注意】本函数是宏函数, 必须用 "with storage ..." 调用。
-#   直接 /function test:internal/summon_named_stand 会因为拿不到参数而失败。
-# 【如果名字显示成 json 原文】说明你这个版本的 SNBT 按字面文本处理字符串,
-#   那就把下面那行换成再下面注释里的 JSON 写法。
+# 【规则】
+#   ① 找得到 -> 挪到脚边(保持加载) + 丢失计数清零
+#   ② 找不到 -> 丢失计数 +1
+#   ③ 连续丢失满 40 tick(约 2 秒)才真的补建一个
+# 【为什么不能"一丢就建"】
+#   刚进世界那一两 tick, 服务端还在异步加载区块, 旧架子还没被算进实体列表
+#   —— 选择器看不到它。如果这时候立刻补建, 每登录一次就会多一个,
+#   多几个取决于加载快慢, 表现就是"进一次游戏多一个盔甲架"。
+#   加一道"连续丢失"的门槛, 就能把这种瞬时误判过滤掉;
+#   而架子真的被摧毁时, 2 秒后照样会长回来。
+# 【想调快/调慢】改下面 matches 后面的 40(单位 tick, 20 = 1 秒):
+#   调小 = 重生更快但更容易被登录瞬间误判; 调大 = 更保险但重生更慢。
+# 【为什么别用 ~ -80 ~ 把它藏到地下】
+#   世界最低点是 -64(下界是 0), 低于它会被虚空销毁, 而 Invulnerable
+#   挡不住虚空伤害。一旦掉出去, 自愈逻辑就会每 tick 重造一个 -> 实体爆炸。
+#   想让它不碍眼, 在 NBT 里加 Invisible:1b(看不见但还在), 别往下塞。
+# 【字段】CustomName 显示你的 UUID; Tags 用来选中它; Invulnerable 免伤。
 # ============================================================
 
-$execute unless entity @e[tag=test_stand_$(uuid)] run summon armor_stand ~ ~ ~ {CustomName:"$(uuid)",CustomNameVisible:1b,Tags:["test_stand_$(uuid)"],Invulnerable:1b}
+# ① 找得到: 挪到脚边 + 丢失计数清零
+$execute if entity @e[tag=test_stand_$(uuid)] run tp @e[tag=test_stand_$(uuid)] ~ ~ ~
+$execute if entity @e[tag=test_stand_$(uuid)] run scoreboard players set #stand_miss test.meta 0
 
-# 备用(JSON 组件写法): 上面那行如果名字显示不对, 就启用这一行、注释掉上面那行
-# $execute unless entity @e[tag=test_stand_$(uuid)] run summon armor_stand ~ ~ ~ {CustomName:'{"text":"$(uuid)"}',CustomNameVisible:1b,Tags:["test_stand_$(uuid)"],Invulnerable:1b}
+# ② 找不到: 计数 +1(先别急着建)
+$execute unless entity @e[tag=test_stand_$(uuid)] run scoreboard players add #stand_miss test.meta 1
+
+# ③ 连续丢失满 40 tick 才补建, 建完把计数归零
+$execute unless entity @e[tag=test_stand_$(uuid)] if score #stand_miss test.meta matches 40.. run summon armor_stand ~ ~ ~ {CustomName:"$(uuid)",CustomNameVisible:1b,Tags:["test_stand_$(uuid)"],Invulnerable:1b}
+$execute unless entity @e[tag=test_stand_$(uuid)] if score #stand_miss test.meta matches 40.. run scoreboard players set #stand_miss test.meta 0
