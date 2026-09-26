@@ -15,11 +15,13 @@ execute store result storage manacore:work a.slot int 1 run scoreboard players g
 data modify storage manacore:work record set from storage manacore:config defaults
 
 # 【基础攻击力 = 玩家第一次进游戏时的实际攻击力】
-#   读的是原版属性 generic.attack_damage(面板攻击力)。
+#   读的是原版属性 attack_damage(面板攻击力)。
+#   注意: 1.21.2 起属性名去掉了 generic. 前缀 —— 写成 minecraft:generic.attack_damage
+#   会直接报"无法找到类型为 minecraft:attribute 的元素", 整个函数加载失败。
 #   只在这一条"新玩家首次注册"的路径上读, 所以老玩家的数值不会被重置。
 #   万一读取失败(理论上不会, 玩家一定有这个属性), execute store 不会写入,
 #   于是保留 config.defaults 里的那个值 —— 不会变成 0。
-execute store result storage manacore:work record.stats.base_attack double 1 run attribute @s minecraft:generic.attack_damage get
+execute store result storage manacore:work record.stats.base_attack double 1 run attribute @s minecraft:attack_damage get
 
 data modify storage manacore:work record.uuid set from storage manacore:work a.uuid
 data modify storage manacore:work record.slot set from storage manacore:work a.slot

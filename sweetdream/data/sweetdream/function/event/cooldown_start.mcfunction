@@ -9,5 +9,11 @@
 #   拿 UUID 拼路径。所以第一层把 manacore:ctx 当宏参数递给第二层。
 # ============================================================
 
-# 这一行里没有 $(变量): 参数是通过 "with storage" 传给下一层的, 所以不能加 $。
-execute if data storage manacore:ctx run function sweetdream:event/cooldown_start_go with storage manacore:ctx
+# 【两个坑都在这一行】
+#   ① 这一行里没有 $(变量), 所以不能加 $ 前缀。
+#   ② if data storage 后面必须跟一个"路径", 不能只写存储 ID ——
+#      只写 manacore:ctx 会报"错误的命令参数", 整个函数加载失败。
+#   ③ 存储 ID 和路径之间是【空格】, 不是点:
+#      storage manacore:ctx uuid   ✔
+#      storage manacore:ctx.uuid   ✘(会被当成一个叫 manacore:ctx.uuid 的存储)
+execute if data storage manacore:ctx uuid run function sweetdream:event/cooldown_start_go with storage manacore:ctx
