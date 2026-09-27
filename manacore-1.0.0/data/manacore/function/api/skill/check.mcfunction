@@ -7,7 +7,7 @@
 # 【用途】按下技能键时先查, 决定是"施放/灰显/提示蓝不够"。
 # 【完全不改数据】不扣蓝、不进冷却, 随便高频调用。
 # ============================================================
-data modify storage manacore:work a set value {uuid:"",skill:"",mana:0.0}
+data modify storage manacore:work a set value {uuid:"",mana:0.0}
 data modify storage manacore:work a merge from storage manacore:in arg
 data modify storage manacore:out r.success set value 1b
 data modify storage manacore:out r.ready set value 1b

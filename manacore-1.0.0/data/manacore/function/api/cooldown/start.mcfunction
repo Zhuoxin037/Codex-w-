@@ -15,7 +15,7 @@
 #   它会自动在释放成功后开始冷却。
 # 【重复调用】会覆盖旧记录, 也就是"刷新冷却时间"。
 # ============================================================
-data modify storage manacore:work a set value {uuid:"",skill:"",cooldown:0,cooldown_seconds:0.0,reduce:1b}
+data modify storage manacore:work a set value {uuid:"",cooldown:0,cooldown_seconds:0.0,reduce:1b}
 data modify storage manacore:work a merge from storage manacore:in arg
 function manacore:api/player/ensure
 execute if data storage manacore:work a.skill run function manacore:internal/cooldown/start with storage manacore:work a

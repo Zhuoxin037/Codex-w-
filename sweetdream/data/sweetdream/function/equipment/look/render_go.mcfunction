@@ -23,10 +23,18 @@ $execute store result score #v_mana zx.meta run data get storage manacore:player
 $execute store result score #v_manamax zx.meta run data get storage manacore:players "$(uuid)".stats.max_mana
 
 # ---- 术阵数量 / 上限(走前置包的接口, 它会遍历 8 个槽位) ----
+# 【重要: 为什么要备份/还原】manacore:in arg 是全局共享的"输入口", 不是存档。
+#   下面那行会把它整个覆盖成 {uuid:"..."}。以前没有备份/还原, 于是只要
+#   观测镜开着, 每刻都会把别人(或你在聊天栏手动填进去)的参数冲掉 ——
+#   症状就是 /data get storage manacore:in arg 只看得到 uuid。
+#   现在改成"先用 zx:look.saved_in 备份现场, 查完术阵再原样放回去"。
+execute if data storage manacore:in arg run data modify storage zx:look saved_in set from storage manacore:in arg
 $data modify storage manacore:in arg set value {uuid:"$(uuid)"}
 function manacore:api/formation/count
 execute store result score #v_fcnt zx.meta run data get storage manacore:out r.count
 execute store result score #v_flim zx.meta run data get storage manacore:out r.limit
+execute if data storage zx:look saved_in run data modify storage manacore:in arg set from storage zx:look saved_in
+execute if data storage zx:look saved_in run data remove storage zx:look saved_in
 
 # ---- 冷却: 查"最近放过的技能"还剩多久 ----
 # 从没放过技能(或记录被清掉)时显示 0。

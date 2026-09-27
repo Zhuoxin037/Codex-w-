@@ -10,9 +10,10 @@
 #   target  : 选择器字符串(必填, 留空则整个接口什么都不做)
 #   damage  : 伤害数值, 默认 0.0
 #   type    : 伤害类型, 默认 minecraft:player_attack
-#             —— 按"玩家平砍"结算, 会吃生物护甲、保护附魔, 死亡信息也记在攻击者头上
+#             —— 按玩家平砍结算, 吃护甲和保护附魔
 #             想穿甲(无视护甲)就填 minecraft:magic
-#             想"无来源的物理伤害"就填 minecraft:generic
+# 【关于伤害类型】1.21.5 原版没有"无视受伤无敌帧"的伤害类型标签, 自定义类型
+#   也没注册进去, 所以这里默认用原版类型; 多段伤害撞无敌帧的问题见 README。
 #   read    : 填 "manacore" 时, 忽略 damage, 直接从 manacore:out r.damage 取
 #             —— 这就是"把 manacore 算出来的伤害用进 /damage"的开关
 # 【target 可以是范围选择器】/damage 本身只收单个实体, 但本接口内部用

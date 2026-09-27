@@ -21,7 +21,8 @@ sweetdream/
    │  ├─ debug/     排错用
    │  ├─ example/   示例
    │  └─ equipment/ ★ 每做一个道具/武器/防具, 在这里建一个文件夹
-   │     ├─ liuguang/   流光(武器)
+   │     ├─ liuguang/   流光(武器: 锁定 + 3 秒后结算)
+   │     ├─ hengdao/    横刀(武器: 突进 + 落点范围伤害)
    │     └─ look/       观测镜(数值面板道具)
    └─ tags/entity_type/no_damage.json   不该被打的实体(含玩家)
 ```
@@ -37,18 +38,46 @@ sweetdream/
 
 ## 新增一把武器的步骤
 
-1. `equipment/<名字>/give.mcfunction` —— 给物品。`custom_data` 里必须带两个东西：
-   一个身份标记（进度靠它认人）、一个 `skill:"技能id"`（面板靠它显示冷却）。
-2. `advancement/equipment/<名字>.json` —— `consume_item` 触发，奖励指向你的技能函数。
-3. `equipment/<名字>/cast.mcfunction` —— **第一行必须撤销自己的进度**（见下）。
-4. 技能流程照抄 `equipment/liuguang/damage.mcfunction` 的骨架：
-   `读 UUID → 只读检查(冷却+魔力) → 锁目标 → 扣蓝 → 记冷却 → 算伤害 → 打伤害`
-5. `equipment/<名字>/effect.mcfunction` —— 真正造成伤害（数字要用宏拼进命令）。
+三件东西，**名字必须完全一致**。写错的表现是"右键毫无反应"且不报错，是最难查的一类。
+
+1. `equipment/<名字>/give.mcfunction` —— 给物品。`custom_data` 里必须带两个标记：
+   `custom_data={zx:["<名字>","itemreplace"]}`
+   - `<名字>`：武器 id，进度 `equipment/<名字>` 靠它认人
+   - `itemreplace`：让通用回手线认出"这是消耗型道具"
+   （**没有 `skill` 字段了** —— 那个字段没有任何代码读它，已经删掉。）
+2. `advancement/equipment/<名字>.json` —— `consume_item` 触发，条件是
+   `custom_data.zx` 里出现 `<名字>`，奖励指向 `sweetdream:equipment/<名字>/cast`。
+3. `equipment/<名字>/cast.mcfunction` —— 技能本体。
+   **第一行必须是 `advancement revoke @s only sweetdream:equipment/<名字>`**，
+   否则这个进度一辈子只触发一次（第二次右键毫无反应）。
+4. 技能流程照抄 `equipment/liuguang/cast.mcfunction` 的骨架：
+   `撤进度 → 读 UUID → 只读检查(冷却+魔力) → 锁目标 → 扣蓝 → 记冷却 → 算伤害 → schedule 延迟结算`
+5. 需要延迟结算（"3 秒后再打"这种）就照抄流光那四件套：
+   `hit` + `hit_self` + `hit_due` + `hit_calc`。
+   那是跨 tick 结算的完整写法 —— 包括"多人同时放不会互相串"的隔离方式，
+   以及怎么在 schedule 出来的函数里找回施法者。
+
+### 右键为什么是两条线
+
+| 线 | 进度 | 函数 | 职责 |
+| --- | --- | --- | --- |
+| 回手线（通用，所有消耗型道具共用） | `itembackup/consume`（条件 `zx:['itemreplace']`） | `internal/itembackup/effect_1` | 只负责把刀还回你手里 |
+| 技能线（每把武器一条） | `equipment/<名字>`（条件 `zx:['<名字>']`） | `equipment/<名字>/cast` | 只负责放技能 |
+
+两条线在同一次 `consume_item` 事件上同时触发，互不干扰。好处：
+
+- 冷却中右键 = 刀回来了、技能没放、聊天栏提示还剩多久
+- 某把武器的 cast 写坏了，回手机制照样好使
+
+`zx` 数组的匹配规则是"**按顺序包含**"，所以 `zx:["liuguang","itemreplace"]`
+能同时被 `zx:['liuguang']` 和 `zx:['itemreplace']` 匹配到。
 
 ## 踩过的坑（别重犯）
 
 - **进度奖励函数第一行必须 `advancement revoke @s only <自己那条进度>`**，
   否则进度只会触发一次，第二次右键毫无反应。
+- **做新武器时三处名字必须一致**：`give` 里 `zx` 的武器标记 / 进度文件名与条件 /
+   进度奖励指向的那个 `cast`。任一处不一致的表现都是"右键静默无反应"，不报错。
 - **含 `$(变量)` 的行必须以 `$` 开头；不含变量的行绝对不能加 `$`**
   （后者会报 `Macro without variables`，整个函数作废）。
 - **宏变量在函数"被调用那一刻"就固定了**：在函数体里才写进节点的字段，这一层引用不到，
@@ -61,6 +90,9 @@ sweetdream/
 - **别把盔甲架塞到 y < -64**：虚空伤害无视 `Invulnerable`，会被销毁然后反复重造。
 - **伤害默认 `minecraft:player_attack`**（吃护甲）；想穿甲自己传 `minecraft:magic`。
 - **改了范围要两处一起改**：技能里的"锁定判定"和 `effect` 里的"打伤害选择器"。
+- **`manacore:in arg` 是"共享输入口"，不是存档。** 它的生命周期是
+  "调用前填 → 函数读走"，中间谁都可以覆盖它。观测镜每刻查术阵数量都会用它，
+  所以别把要长期保存的东西塞在里面 —— 要存就用 `zx:data`。
 
 ## 每次改动后跑一遍的检查
 

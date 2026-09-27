@@ -18,9 +18,12 @@ execute unless data storage zx:data self{ok:1b} run return fail
 tag @s add test_pending_return
 schedule function sweetdream:internal/itembackup/return 1t
 
-# 顺手把技能放出去。
-# 【为什么放在回手之后】回手已经预约好了, 就算技能因为冷却/魔力不足提前
-#   return, 也不影响下一 tick 把刀拿回来 —— 冷却中右键不会丢刀。
-# 【冷却中也回手】消耗是游戏自己做的, 我们拦不住; 但回手机制和技能是分开的,
-#   所以"冷却中右键"的结果是: 刀回来了、技能没放、聊天栏提示还剩多少 tick。
-function sweetdream:equipment/liuguang/damage
+# 【技能不在这里放】本函数只管"把刀弄回来", 一个技能都不放。
+#   技能由每把武器自己的进度触发: advancement/equipment/<武器>.json,
+#   条件是物品 custom_data.zx 里带上武器自己的标记, 奖励指向它自己的 cast。
+#   —— 这样加新武器不用改这里。
+#   (以前这里是写死的 function sweetdream:equipment/liuguang/cast,
+#    结果所有带 itemreplace 的物品右键都放流光。)
+# 【为什么把回手和技能分成两件事】回手是"消耗型物品的通用机制", 技能是"武器
+#   自己的行为"。分开之后: 冷却中右键 = 刀回来了、技能没放、聊天栏提示还剩多久;
+#   某个武器的 cast 写坏了也不会连带把回手机制弄坏。

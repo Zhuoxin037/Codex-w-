@@ -2,7 +2,7 @@
 # sweetdream:equipment/look/cooldown_get —— 查"主手那把武器"的剩余冷却
 # ------------------------------------------------------------
 # 【宏参数】sweetdream:work a {uuid, skill}
-#   由 look/render_go 从主手物品的 custom_data.skill 读出来再传进来。
+#   由 look/render_go 从 zx:data last_skill."<uuid>" 读出来再传进来。
 # 【为什么要单独一个宏函数】冷却的路径是动态的:
 #     players."<uuid>".cooldowns."<技能id>".end
 #   而宏变量在"调用那一刻"就固定了。所以必须等读到技能 id 之后,
@@ -21,5 +21,7 @@ scoreboard players operation #v_cd zx.meta -= #now manacore.meta
 execute if score #v_cd zx.meta matches ..0 run scoreboard players set #v_cd zx.meta 0
 
 # tick -> 秒, 向上取整: (n + 19) / 20
+# 用自己包的 #tps(=20), 不用前置包的 #interval —— 那个是"回魔间隔",
+# 数值碰巧一样, 改了回魔间隔会把这里的秒数带歪。
 scoreboard players add #v_cd zx.meta 19
-scoreboard players operation #v_cd zx.meta /= #interval manacore.meta
+scoreboard players operation #v_cd zx.meta /= #tps zx.meta

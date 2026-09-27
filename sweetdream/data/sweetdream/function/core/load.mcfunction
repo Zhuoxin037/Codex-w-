@@ -14,6 +14,18 @@
 execute unless data storage zx:config obj_meta run scoreboard objectives add zx.meta dummy
 execute unless data storage zx:config obj_meta run data modify storage zx:config obj_meta set value 1b
 
+# zx.meta 上的常量: #tps = 每秒多少 tick。
+# 面板要把"剩余冷却 tick"换算成秒, 用的是它, 而不是前置包的 #interval。
+# (#interval 是"回魔间隔", 默认也是 20 —— 但那是巧合。哪天把回魔间隔改成 10,
+#  借它算冷却就会把秒数显示成 2 倍。)
+scoreboard players set #tps zx.meta 20
+
+# 横刀突进用的计分项: 每个玩家自己的"还剩几步"
+#   用计分项而不是 storage —— 它天然"每人一份", 不用按 UUID 拼路径,
+#   于是突进那一整套完全不需要宏函数, 少一层就少一类坑。
+execute unless data storage zx:config obj_dash run scoreboard objectives add zx.dash dummy
+execute unless data storage zx:config obj_dash run data modify storage zx:config obj_dash set value 1b
+
 # ============================================================
 # 把备份架子住的区块永久加载
 # ------------------------------------------------------------
