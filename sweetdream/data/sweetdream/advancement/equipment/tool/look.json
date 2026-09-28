@@ -1,0 +1,19 @@
+{
+    "criteria": {
+        "look": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": ["look"]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:equipment/tool/look/toggle"
+    }
+}

@@ -28,6 +28,19 @@
 `D:\PCL 正式版 2.10.0\.minecraft\versions\1.21.5-Fabric 0.16.10\saves\<存档名>\datapacks\`
 （注意存档在**版本目录**下面，不在 `.minecraft\saves`。）
 
+**省事的办法：双击 `部署到存档.bat`。**
+
+- 直接双击 → 部署到默认存档 `sweetdream_test`
+- 把别的**存档文件夹**（里面有 `level.dat` 的那个）拖到它图标上 → 部署到那个存档
+- 它用 `robocopy /MIR` 镜像复制，所以源里删掉的文件目标里也会跟着删，
+  不会留下旧版本的残留函数；部署完进游戏 `/reload` 就行
+- 拖错目录会直接报错退出，不会乱建文件夹
+
+> `部署到存档.bat` 只是个 ASCII 启动器，真正的逻辑在 `deploy.ps1`。
+> 为什么不写在一个 `.bat` 里：**中文写进 `.bat` 会被 cmd 按 GBK 解码成乱码**，
+> cmd 会把乱码碎片当命令执行。所以启动器保持纯 ASCII，中文放在
+> 带 BOM 的 `.ps1` 里（这个坑实测踩过）。
+
 ## 约定
 
 | 东西 | 用什么 | 说明 |
@@ -52,10 +65,10 @@
 - **前置包**：属性面板、魔力（含恢复修正 / 倍率 / 禁用）、冷却（秒级 / tick 级 / 多技能 / 缩减 / 重置）、
   术阵（创建 / 删除 / 查数 / 续时 / 上限可改）、伤害计算、事件标签，都可用。
 - **流光**：右键锁定 8 格内一个随机生物，3 秒后造成基础攻击 ×2（保底 6）的伤害，
-  冷却 20 秒，消耗 20 魔力。诊断入口 `/function sweetdream:equipment/liuguang/diagnose`。
-- **观测镜**：`/function sweetdream:equipment/look/give` 拿一个，右键开关动作栏面板
+  冷却 20 秒，消耗 20 魔力。诊断入口 `/function sweetdream:equipment/sword/liuguang/diagnose`。
+- **观测镜**：`/function sweetdream:equipment/tool/look/give` 拿一个，右键开关动作栏面板
   （攻击 / 生命 / 魔力 / 术阵 / 最近技能的冷却）。
-- **横刀**：`/function sweetdream:equipment/hengdao/give`。消耗 15 魔力、20 秒冷却，
+- **横刀**：`/function sweetdream:equipment/sword/hengdao/give`。消耗 15 魔力、20 秒冷却，
   向前突进最多 3 格（撞到生物或障碍停下），对落点 2 格内全部生物造成
   自身最大魔力 × 0.08 的伤害。
 - **右键分派**：右键被拆成两条独立的线 —— 通用的"回手线"和每把武器自己的

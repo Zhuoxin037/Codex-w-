@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "liuguang": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "liuguang"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:equipment/sword/liuguang/cast"
+    }
+}

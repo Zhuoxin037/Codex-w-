@@ -22,7 +22,7 @@ schedule function sweetdream:internal/itembackup/return 1t
 #   技能由每把武器自己的进度触发: advancement/equipment/<武器>.json,
 #   条件是物品 custom_data.zx 里带上武器自己的标记, 奖励指向它自己的 cast。
 #   —— 这样加新武器不用改这里。
-#   (以前这里是写死的 function sweetdream:equipment/liuguang/cast,
+#   (以前这里是写死的 function sweetdream:equipment/sword/liuguang/cast,
 #    结果所有带 itemreplace 的物品右键都放流光。)
 # 【为什么把回手和技能分成两件事】回手是"消耗型物品的通用机制", 技能是"武器
 #   自己的行为"。分开之后: 冷却中右键 = 刀回来了、技能没放、聊天栏提示还剩多久;

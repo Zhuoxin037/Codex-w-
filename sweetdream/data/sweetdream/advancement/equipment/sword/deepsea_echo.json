@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "deepsea_echo": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "deepsea_echo"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:equipment/sword/deepsea_echo/cast"
+    }
+}

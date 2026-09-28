@@ -1,0 +1,5 @@
+# 【改了一处】custom_data 第二段原本是 "helmet", 但这是胸甲 -> 改成 "chestplate"。
+# 【套装效果】拆成小标段: ✦ 套装效果 / ● 两个部位 / 空行 / 效果正文。
+# 【lore 排版】正文保留你原来的断行, 只换成新样式; 原来那个空字符串行改成空格行
+#   (空字符串有的地方会被吃掉, 用 " " 最稳)。
+give @s diamond_chestplate[item_name={text:"静脉泵",bold:true,color:"light_purple"},lore=[{"text":"✦ 被动技能","color":"gold","bold":true,"italic":false},{"text":"自身魔力值上限+120。自身生命值为满时每","color":"gray","italic":false},{"text":"秒恢复3点魔力值。","color":"gray","italic":false},{"text":" ","italic":false},{"text":"✦ 套装效果","color":"gold","bold":true,"italic":false},{"text":"● 静脉泵","color":"gray","italic":false},{"text":"● 体外供能装置","color":"gray","italic":false},{"text":" ","italic":false},{"text":"自身魔力值上限+120，生命值上限+15。","color":"gray","italic":false},{"text":"当魔力值及生命值都为满时，获得力量Ⅱ","color":"gray","italic":false},{"text":"和迅捷Ⅰ效果。","color":"gray","italic":false}],unbreakable={},custom_data={zx:["intravenous_pump","chestplate"]},tooltip_display={hidden_components:["unbreakable"]}]

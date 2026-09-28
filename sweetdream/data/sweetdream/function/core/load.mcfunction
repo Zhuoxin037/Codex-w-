@@ -26,6 +26,20 @@ scoreboard players set #tps zx.meta 20
 execute unless data storage zx:config obj_dash run scoreboard objectives add zx.dash dummy
 execute unless data storage zx:config obj_dash run data modify storage zx:config obj_dash set value 1b
 
+# 装备效果用的"账本": 每个来源自己身上"已经加进面板多少"
+#   装备加成只能靠"穿上加、脱下减"的差值写法(面板是一个数, 没有加成层),
+#   所以每个来源单独记一笔, 换装时才知道自己该加减多少。
+#   静脉泵 / 套装各记魔力, 体外 / 套装各记生命, 互不干涉。
+#   (计分项名字上限 16 字符, 所以写得短)
+execute unless data storage zx:config obj_pump_mana run scoreboard objectives add zx.pump_mana dummy
+execute unless data storage zx:config obj_pump_mana run data modify storage zx:config obj_pump_mana set value 1b
+execute unless data storage zx:config obj_set_mana run scoreboard objectives add zx.set_mana dummy
+execute unless data storage zx:config obj_set_mana run data modify storage zx:config obj_set_mana set value 1b
+execute unless data storage zx:config obj_power_hp run scoreboard objectives add zx.power_hp dummy
+execute unless data storage zx:config obj_power_hp run data modify storage zx:config obj_power_hp set value 1b
+execute unless data storage zx:config obj_set_hp run scoreboard objectives add zx.set_hp dummy
+execute unless data storage zx:config obj_set_hp run data modify storage zx:config obj_set_hp set value 1b
+
 # ============================================================
 # 把备份架子住的区块永久加载
 # ------------------------------------------------------------

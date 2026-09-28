@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "hengdao": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "hengdao"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:equipment/sword/hengdao/cast"
+    }
+}
