@@ -14,7 +14,11 @@ $tag @e[type=!#sweetdream:no_damage,distance=0.1..12,sort=nearest,limit=1] add z
 #   【存法】写在实体身上的 data.zx.status.yuanhai。
 #   五个通用标签(渊海/流火/夜火/白昼梦/噬心)将来都放这个位子,
 #   现在只做一个"存在"标记; 持续时间和层数等通用系统做好之后再补。
-$data modify entity @e[tag=zx.de_$(uuid),limit=1] data.zx.status.yuanhai set value 1b
+# 贴「渊海」标记: 走通用接口 —— 写 NBT + 给这只生物分配图标编号 + 生成图标显示实体
+#   (以前这里只写 NBT, 所以"有渊海"这件事玩家完全看不见)
+$data modify storage zx:work ic.target set value "@e[tag=zx.de_$(uuid),limit=1]"
+data modify storage zx:work ic.mark set value "yuanhai"
+function sweetdream:tag/mark with storage zx:work ic
 
 # 起手的表现(海味三件套 + 范围提示):
 #   · block.conduit.activate  潮涌核心被激活的那一声(最能代表"海")

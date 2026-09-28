@@ -13,11 +13,11 @@
 # ============================================================
 
 # ① 固定数值
-data modify storage zx:in arg set value {target:"@e[type=!#sweetdream:no_damage,distance=..4]",damage:5.0,type:"minecraft:player_attack"}
+data modify storage zx:in arg set value {target:"@e[type=!#sweetdream:no_damage,distance=..4]",damage:5.0}
 function sweetdream:api/damage
 
 # ② 用 manacore 算好的伤害(需要先有人在 manacore 里跑过一次算伤害)
-data modify storage zx:in arg set value {target:"@e[type=!#sweetdream:no_damage,distance=..4]",read:"manacore",type:"minecraft:player_attack"}
+data modify storage zx:in arg set value {target:"@e[type=!#sweetdream:no_damage,distance=..4]",read:"manacore"}
 function sweetdream:api/damage
 tellraw @s [{"text":"本次用的伤害: ","color":"gray"},{"nbt":"r.damage","storage":"sweetdream:out","color":"gold"}]
 

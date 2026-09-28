@@ -1,0 +1,10 @@
+{
+  "pack": {
+    "pack_format": 55,
+    "supported_formats": {
+      "min_inclusive": 34,
+      "max_inclusive": 99
+    },
+    "description": "sweetdream 图标 / 武器模型 (for MC 1.21.5)"
+  }
+}

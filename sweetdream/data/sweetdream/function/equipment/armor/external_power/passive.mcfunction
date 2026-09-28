@@ -9,9 +9,9 @@
 #
 # 【套装为什么写在体外这一份里】套装要同时看两件, 放哪边都得知道另一件;
 #   按约定统一放在这里, 静脉泵那份只管自己。
-# 【custom_data 必须写整份】execute if items 里 custom_data 是精确比对,
-#   少写一段就永远匹配不上, 而且不报错 —— 踩过一次, 整套效果静默失效。
-#   >>> 改 give 里的 custom_data 时, 这里和静脉泵那边都要同步改 <<<
+# 【认装备统一用 ~ 部分匹配 + 独有标记】custom_data~{zx:["external_power"]}
+#   用 = (精确匹配)会"多一段少一段就整个对不上"且不报错(踩过两次);
+#   用 ~ 之后加字段不用同步改, 但标记必须是这件装备独有的, 别写公共段。
 # ============================================================
 
 # ① 拿 UUID
@@ -20,9 +20,9 @@ execute unless data storage zx:data self{ok:1b} run return fail
 
 # ② 自己穿了吗 / 静脉泵穿了吗(套装要两件都在)
 scoreboard players set #power_on zx.meta 0
-execute if items entity @s armor.legs diamond_leggings[custom_data={zx:["external_power","leggings"]}] run scoreboard players set #power_on zx.meta 1
+execute if items entity @s armor.legs diamond_leggings[custom_data~{zx:["external_power"]}] run scoreboard players set #power_on zx.meta 1
 scoreboard players set #pump_on zx.meta 0
-execute if items entity @s armor.chest diamond_chestplate[custom_data={zx:["intravenous_pump","chestplate"]}] run scoreboard players set #pump_on zx.meta 1
+execute if items entity @s armor.chest diamond_chestplate[custom_data~{zx:["intravenous_pump"]}] run scoreboard players set #pump_on zx.meta 1
 scoreboard players operation #set_on zx.meta = #power_on zx.meta
 scoreboard players operation #set_on zx.meta *= #pump_on zx.meta
 

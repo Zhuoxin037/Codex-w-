@@ -53,9 +53,32 @@ foreach ($p in $pairs) {
 	}
 }
 
+# --- 资源包(图标 / 以后的武器模型) ---
+#   数据包只能改逻辑, 贴图/图标这类东西必须走资源包。这里把它镜像到
+#   游戏目录的 resourcepacks\ 下; 进游戏后在「选项 -> 资源包」启用一次即可
+#   (每个存档启用一次, 之后一直生效)。
+#   注意: 这个整合包开了版本隔离, 所以游戏目录是「版本文件夹」而不是 .minecraft;
+#   从存档路径往上两层正好是版本文件夹。
+$RpSrc = Join-Path $Src 'sweetdream_rp'
+if (Test-Path -LiteralPath $RpSrc) {
+	try {
+		$GameDir = Split-Path (Split-Path $Save)
+		$RpDst = Join-Path $GameDir 'resourcepacks\sweetdream_rp'
+		Write-Host '  复制 sweetdream_rp -> resourcepacks ...'
+		$null = robocopy $RpSrc $RpDst /MIR /NFL /NDL /NJH /NJS /NP
+		if ($LASTEXITCODE -ge 8) {
+			Write-Host ('  [警告] 资源包复制失败 (robocopy 代码 ' + $LASTEXITCODE + '), 请手动把它放进 resourcepacks') -ForegroundColor Yellow
+		}
+	} catch {
+		Write-Host '  [警告] 算不出游戏目录, 请手动把 sweetdream_rp 放进 resourcepacks' -ForegroundColor Yellow
+	}
+}
+
 Write-Host ''
 Write-Host '  完成。' -ForegroundColor Green
 Write-Host ''
-Write-Host '  下一步: 进游戏执行  /reload'
+Write-Host '  下一步:'
+Write-Host '    1) 进游戏执行  /reload'
+Write-Host '    2) 第一次装的话, 去「选项 -> 资源包」把 sweetdream_rp 启用(否则生物头顶只显示翻译键原文)'
 Write-Host ''
 Read-Host '按回车关闭'

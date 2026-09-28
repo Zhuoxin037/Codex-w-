@@ -9,11 +9,18 @@
 # 【入参】(全部写进 sweetdream:in arg, 没写的用默认值)
 #   target  : 选择器字符串(必填, 留空则整个接口什么都不做)
 #   damage  : 伤害数值, 默认 0.0
-#   type    : 伤害类型, 默认 minecraft:player_attack
-#             —— 按玩家平砍结算, 吃护甲和保护附魔
+#   type    : 伤害类型, 默认 sweetdream:skill(见下)
 #             想穿甲(无视护甲)就填 minecraft:magic
-# 【关于伤害类型】1.21.5 原版没有"无视受伤无敌帧"的伤害类型标签, 自定义类型
-#   也没注册进去, 所以这里默认用原版类型; 多段伤害撞无敌帧的问题见 README。
+# 【默认类型 sweetdream:skill 是什么】本包自己注册的伤害类型
+#   (data/sweetdream/damage_type/skill.json): 表现和玩家平砍一样(照样吃护甲、
+#   保护附魔、抗性), 但它被加进了原版的 `minecraft:bypasses_cooldown` 标签 ——
+#   于是**不再被生物的受伤无敌帧吃掉**。
+#   为什么要这样: 没有它的时候, 同一 tick 里的多段伤害(多个术阵中心重叠、
+#   多颗法球、深海一波接一波)只有第一段生效, 后面的全被吃掉 —— 这就是
+#   "技能打上去没伤害/伤害丢失"的根源。(注意: 它和每段间隔 ≥20 tick 的老
+#   办法不冲突, 间隔够的话本来也不会丢。)
+#   想自己另注册别的类型: 照 skill.json 写一份, 再把自己加进
+#   data/minecraft/tags/damage_type/bypasses_cooldown.json 即可。
 #   read    : 填 "manacore" 时, 忽略 damage, 直接从 manacore:out r.damage 取
 #             —— 这就是"把 manacore 算出来的伤害用进 /damage"的开关
 # 【target 可以是范围选择器】/damage 本身只收单个实体, 但本接口内部用
@@ -23,6 +30,9 @@
 # ============================================================
 
 data modify storage zx:work a set value {target:"",damage:0.0,type:"minecraft:player_attack",read:""}
+# 默认类型可以从 zx:config damage_type 改(见 core/load 的说明);
+# 调用方自己在 zx:in arg 里写了 type 的话, 下面那行 merge 会让调用方优先。
+execute if data storage zx:config damage_type run data modify storage zx:work a.type set from storage zx:config damage_type
 data modify storage zx:work a merge from storage zx:in arg
 
 # 出参先复位, 免得读到上一次调用的残留值

@@ -71,6 +71,15 @@
 - **横刀**：`/function sweetdream:equipment/sword/hengdao/give`。消耗 15 魔力、20 秒冷却，
   向前突进最多 3 格（撞到生物或障碍停下），对落点 2 格内全部生物造成
   自身最大魔力 × 0.08 的伤害。
+- **深海的回响**：`/function sweetdream:equipment/sword/deepsea_echo/give`。
+  标记 12 格内最近的生物并附加「渊海」，1 秒后开始**连锁扩散**（一波 → 1 秒 → 下一波），
+  每波对每个"源"周围 3 格造成当前魔力 ×0.15 的伤害，重复 2 次（每次额外 110 魔力）。
+  诊断入口 `/function sweetdream:equipment/sword/deepsea_echo/diagnose`。
+- **护甲三件**：静脉泵（胸甲，魔力上限 +120 / 满血回魔）、体外供能装置（护腿，
+  生命上限 +8 / 满魔再生）、狄俄尼索斯之桂冠（头盔，魔力上限 +200 /
+  受伤 20% 触发反胃 III + 力量 III + 每秒回 80 魔力共 3 秒）。
+  静脉泵 + 体外 = 套装（魔力上限再 +120、生命上限再 +15、双满给力量迅捷）。
+  自检入口 `/function sweetdream:equipment/armor/intravenous_pump/diagnose`。
 - **右键分派**：右键被拆成两条独立的线 —— 通用的"回手线"和每把武器自己的
   "技能线"，所以现在可以做第二、第三把武器了。新增一把武器 = 三个文件
   （give / advancement / cast），三处名字必须一致，写法见 `使用教程.md` §9.5。
@@ -80,8 +89,25 @@
 - **玩家 UUID 只算出 8 位**（例如 `0000000f`），正常应该是 36 位。
   入口在 `manacore-1.0.0/data/manacore/function/internal/uuid/build.mcfunction`。
   目前不影响使用（所有键都用同一个值，自洽），但这是个真的要修的 bug。
-- **原版没有"绕过无敌帧"的伤害类型标签**。同一个玩家短时间内打多段伤害时，
-  第 2 段起会被无敌帧吃掉。可行做法：每段间隔 ≥10 tick，或把多段合并成一次结算。
+- ~~原版没有"绕过无敌帧"的伤害类型标签~~ **已解决。** 原版其实**有**这个标签：
+  `minecraft:bypasses_cooldown`（1.21.5 里由 `DamageTypeTags` 注册，只是原版一个
+  伤害类型都没往里放，所以平时看不出它存在）。sweetdream 现在注册了自己的类型
+  `sweetdream:skill`（`data/sweetdream/damage_type/skill.json`）并把它挂进这个标签 ——
+  技能伤害**不再被受伤无敌帧吃掉**，所有技能默认都用它（照样吃护甲/保护附魔/抗性）。
+  副作用：同一 tick 的多段伤害现在会全部结算，以前"只算第一段"的技能会明显变强
+  （风行的"3 个术阵"以前只能看到 3 次伤害，现在才是真的 9 次），击退也会叠加 ——
+  以后做平衡时按"多段全额生效"来算。
+- **⚠️ 踩过的坑：`damage_type` 是"注册表"类内容，只在进世界时加载，`/reload` 不会补上它。**
+  第一次装（或改了 `data/sweetdream/damage_type/skill.json`）之后必须**退出世界再进来**。
+  只 `/reload` 的话日志里会出现
+  `Couldn't load tag minecraft:bypasses_cooldown ... sweetdream:skill (from file/sweetdream)`，
+  **症状是所有技能一点伤害都没有**（`/damage` 拿到不存在的类型就整条失败）。
+  保险开关（万一类型没生效）：
+  ```mcfunction
+  /data modify storage zx:config damage_type set value "minecraft:player_attack"
+  /reload
+  ```
+  这是"退回原版平砍类型"的应急按钮，代价是多段伤害又会撞无敌帧。
 
 ## 新开一个对话怎么接着干
 

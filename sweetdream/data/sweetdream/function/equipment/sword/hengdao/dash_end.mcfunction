@@ -31,12 +31,20 @@ function manacore:api/stats/get
 data modify storage manacore:in arg set value {uuid:"",base_attack:-1.0,skill_multiplier:0.08,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 data modify storage manacore:in arg.base_attack set from storage manacore:out r.value
+# 「下一次技能加成」: 风行攒的风声奖励对"所有以自身最大魔力值结算的技能"生效,
+#   横刀这一刀正好是最大魔力 ×0.08, 所以吃同一份。走 lib 统一处理
+#   (普通乘区、乘完即删), 别在这里再写一套独立乘区的定点乘法。
+data modify storage zx:work wg.uuid set from storage zx:data self.uuid
+function sweetdream:lib/max_mana_bonus with storage zx:work wg
 function manacore:api/damage/calc
 # 此刻 manacore:out r.damage = 最大魔力 x 0.08
 
 # ④ 打落点 2 格内全部生物
 #   target 可以写范围选择器 —— sweetdream:api/damage 内部会用 execute as 逐个展开。
 #   type=!#sweetdream:no_damage 已经把玩家、盔甲架、雪球、鸡蛋这类排掉了。
-data modify storage zx:in arg set value {target:"@e[type=!#sweetdream:no_damage,distance=0.1..2]",damage:0.0,type:"minecraft:player_attack"}
+data modify storage zx:in arg set value {target:"@e[type=!#sweetdream:no_damage,distance=..2]",damage:0.0}
 data modify storage zx:in arg.damage set from storage manacore:out r.damage
-function sweetdream:api/damage
+# 记一下这次范围选中了几只(0 = 选择器没选中任何生物), 给 debug/damage 排查用
+execute store result score #dbg_sel zx.meta run execute if entity @e[type=!#sweetdream:no_damage,distance=..2]
+# 再包一层 at @s: 不管谁调用, 都保证"以落点为中心"结算
+execute at @s run function sweetdream:api/damage

@@ -1,0 +1,13 @@
+{
+  "providers": [
+    {
+      "type": "bitmap",
+      "file": "sweetdream:font/icons.png",
+      "height": 32,
+      "ascent": 31,
+      "chars": [
+        "\ue000\ue001\ue002\ue003\ue004"
+      ]
+    }
+  ]
+}

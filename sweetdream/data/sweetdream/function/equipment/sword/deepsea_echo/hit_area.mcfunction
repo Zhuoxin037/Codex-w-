@@ -20,7 +20,7 @@ tag @e[type=!#sweetdream:no_damage,distance=..3] add zx.de_hit
 function sweetdream:equipment/sword/deepsea_echo/sfx_ring3
 
 # ② 逐个打出去(api/damage 内部会用 execute as 把范围选择器展开成单个实体)
-data modify storage zx:in arg set value {target:"@e[tag=zx.de_hit]",read:"manacore",type:"minecraft:player_attack"}
+data modify storage zx:in arg set value {target:"@e[tag=zx.de_hit]",read:"manacore"}
 function sweetdream:api/damage
 
 # ②.5 命中表现: 每个被打到的身上溅一圈水花

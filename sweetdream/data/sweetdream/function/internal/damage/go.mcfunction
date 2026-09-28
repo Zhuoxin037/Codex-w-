@@ -22,6 +22,11 @@
 #   也只是打不出伤害, 而不是整条命令报错。
 # ============================================================
 
+# 记一笔"最近一次 /damage 长什么样", 给 /function sweetdream:debug/damage 排查用
+$data modify storage zx:data last.num set value "$(num_str)"
+$data modify storage zx:data last.type set value "$(type)"
+scoreboard players add #dbg_calls zx.meta 1
+
 data modify storage zx:work a.head set string storage zx:work a.num_str 0 1
 execute if data storage zx:work a{head:"-"} run data modify storage zx:work a.num_str set value "0"
 

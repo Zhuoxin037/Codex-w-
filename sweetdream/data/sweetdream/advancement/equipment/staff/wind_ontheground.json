@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "wind": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "wind_ontheground"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:equipment/staff/wind_ontheground/cast"
+    }
+}

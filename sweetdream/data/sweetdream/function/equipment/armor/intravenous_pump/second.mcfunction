@@ -10,4 +10,9 @@
 #   不用改任何别的装备的代码。
 # ============================================================
 
+# 【备份公共输入口】理由见 lib/in_bak(这套每秒逻辑要读魔力面板)
+function sweetdream:lib/in_bak
+
 execute as @a run function sweetdream:equipment/armor/intravenous_pump/passive
+
+function sweetdream:lib/in_restore

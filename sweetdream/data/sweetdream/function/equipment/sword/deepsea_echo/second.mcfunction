@@ -6,4 +6,9 @@
 #   在 event/second.json 的 values 里多加一条自己的 second 就行。
 # ============================================================
 
+# 【备份公共输入口】理由见 lib/in_bak
+function sweetdream:lib/in_bak
+
 execute as @a run function sweetdream:equipment/sword/deepsea_echo/passive
+
+function sweetdream:lib/in_restore

@@ -25,7 +25,10 @@ $data modify storage zx:work a.num set value $(damage)
 function sweetdream:lib/num/plain
 
 data modify storage zx:work a.target set value "@s"
+# 先给一个一定存在的原版类型兜底, 再用配置覆盖 —— 这里不走 api/damage,
+# 而是直接调 internal/damage/with_from, 它的宏参数 type 必须存在。
 data modify storage zx:work a.type set value "minecraft:player_attack"
+execute if data storage zx:config damage_type run data modify storage zx:work a.type set from storage zx:config damage_type
 function sweetdream:internal/damage/with_from with storage zx:work a
 
 execute at @s run particle minecraft:enchanted_hit ~ ~1 ~ 0.4 0.4 0.4 0.15 30 normal
