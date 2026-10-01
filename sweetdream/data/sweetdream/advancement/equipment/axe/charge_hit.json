@@ -1,0 +1,10 @@
+{
+    "criteria": {
+        "hit": {
+            "trigger": "player_hurt_entity"
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:equipment/axe/charge/hit"
+    }
+}

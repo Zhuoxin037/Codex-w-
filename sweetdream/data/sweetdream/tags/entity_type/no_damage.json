@@ -21,6 +21,9 @@
     "minecraft:glow_item_frame",
     "minecraft:painting",
     "minecraft:leash_knot",
-    "minecraft:evoker_fangs"
+    "minecraft:evoker_fangs",
+    "minecraft:text_display",
+    "minecraft:item_display",
+    "minecraft:block_display"
   ]
 }

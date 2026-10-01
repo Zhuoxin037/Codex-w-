@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "liaoyuan": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "liaoyuan"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:equipment/sword/liaoyuan/cast"
+    }
+}

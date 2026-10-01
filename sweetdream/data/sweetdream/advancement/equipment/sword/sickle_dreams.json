@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "sickle_dreams": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "sickle_dreams"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:equipment/sword/sickle_dreams/cast"
+    }
+}

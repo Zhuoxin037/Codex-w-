@@ -1,8 +1,4 @@
-# ============================================================
-# sweetdream:tag/icon_tp —— 每隔几 tick 把图标摆到头顶(宏 {id})
-# ------------------------------------------------------------
-# 【为什么每 tick 都要摆】每 5 tick 才摆一次的话, 跑得快的怪会把图标甩在后面
-#   (上一版就是这个毛病)。现在由 core/tick 每 tick 调一次, 精确贴合。
-# ============================================================
-
-$execute at @s anchored eyes run tp @e[tag=zx.icon_$(id),limit=1] ~ ~1.0 ~
+# 两刻更新位置，续租 40 tick。主人不再参与跟随时图标最多两秒自动回收。
+# 单显示实体自带 billboard，因此横排在任意观察角度都不会互相遮挡。
+$execute at @s anchored eyes positioned ^ ^ ^ anchored feet run tp @e[type=minecraft:text_display,tag=zx.icon_v2,tag=zx.owner_$(u0)_$(u1)_$(u2)_$(u3),limit=1] ~ ~0.45 ~
+$scoreboard players set @e[type=minecraft:text_display,tag=zx.icon_v2,tag=zx.owner_$(u0)_$(u1)_$(u2)_$(u3),limit=1] zx.icon_ttl 40

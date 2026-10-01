@@ -1,0 +1,35 @@
+# 每刻只选一帧；所有帧复用同一个几何父模型。
+execute if score @s zx.sd_t matches 1 run item modify entity @s weapon.mainhand {function:"minecraft:set_components",components:{"minecraft:item_model":"dreamscythe:sweep/h01"}}
+execute if score @s zx.sd_t matches 2 run item modify entity @s weapon.mainhand {function:"minecraft:set_components",components:{"minecraft:item_model":"dreamscythe:sweep/h02"}}
+execute if score @s zx.sd_t matches 2 run function sweetdream:equipment/sword/sickle_dreams/sweep/fx_at/h02 with storage zx:sweep current
+execute if score @s zx.sd_t matches 3 run item modify entity @s weapon.mainhand {function:"minecraft:set_components",components:{"minecraft:item_model":"dreamscythe:sweep/h03"}}
+execute if score @s zx.sd_t matches 3 run function sweetdream:equipment/sword/sickle_dreams/sweep/fx_at/h03 with storage zx:sweep current
+execute if score @s zx.sd_t matches 4 run item modify entity @s weapon.mainhand {function:"minecraft:set_components",components:{"minecraft:item_model":"dreamscythe:sweep/h04"}}
+execute if score @s zx.sd_t matches 4 run function sweetdream:equipment/sword/sickle_dreams/sweep/fx_at/h04 with storage zx:sweep current
+execute if score @s zx.sd_t matches 5 run item modify entity @s weapon.mainhand {function:"minecraft:set_components",components:{"minecraft:item_model":"dreamscythe:sweep/h05"}}
+execute if score @s zx.sd_t matches 5 run function sweetdream:equipment/sword/sickle_dreams/sweep/fx_at/h05 with storage zx:sweep current
+execute if score @s zx.sd_t matches 6 run item modify entity @s weapon.mainhand {function:"minecraft:set_components",components:{"minecraft:item_model":"dreamscythe:sweep/h06"}}
+execute if score @s zx.sd_t matches 7 run item modify entity @s weapon.mainhand {function:"minecraft:set_components",components:{"minecraft:item_model":"dreamscythe:sweep/h07"}}
+execute if score @s zx.sd_t matches 7 run function sweetdream:equipment/sword/sickle_dreams/sweep/fx_at/h07 with storage zx:sweep current
+execute if score @s zx.sd_t matches 8 run item modify entity @s weapon.mainhand {function:"minecraft:set_components",components:{"minecraft:item_model":"dreamscythe:sweep/h08"}}
+execute if score @s zx.sd_t matches 8 run function sweetdream:equipment/sword/sickle_dreams/sweep/fx_at/h08 with storage zx:sweep current
+execute if score @s zx.sd_t matches 9 run item modify entity @s weapon.mainhand {function:"minecraft:set_components",components:{"minecraft:item_model":"dreamscythe:sweep/h09"}}
+execute if score @s zx.sd_t matches 9 run function sweetdream:equipment/sword/sickle_dreams/sweep/fx_at/h09 with storage zx:sweep current
+execute if score @s zx.sd_t matches 9 run function sweetdream:equipment/sword/sickle_dreams/sweep/at_impact with storage zx:sweep current
+execute if score @s zx.sd_t matches 10 run item modify entity @s weapon.mainhand {function:"minecraft:set_components",components:{"minecraft:item_model":"dreamscythe:sweep/h10"}}
+execute if score @s zx.sd_t matches 11 run item modify entity @s weapon.mainhand {function:"minecraft:set_components",components:{"minecraft:item_model":"dreamscythe:sweep/h11"}}
+execute if score @s zx.sd_t matches 12 run item modify entity @s weapon.mainhand {function:"minecraft:set_components",components:{"minecraft:item_model":"dreamscythe:sweep/h12"}}
+execute if score @s zx.sd_t matches 12 run function sweetdream:equipment/sword/sickle_dreams/sweep/fx_at/h12 with storage zx:sweep current
+execute if score @s zx.sd_t matches 13 run item modify entity @s weapon.mainhand {function:"minecraft:set_components",components:{"minecraft:item_model":"dreamscythe:sweep/h13"}}
+execute if score @s zx.sd_t matches 13 run function sweetdream:equipment/sword/sickle_dreams/sweep/fx_at/h13 with storage zx:sweep current
+execute if score @s zx.sd_t matches 14 run item modify entity @s weapon.mainhand {function:"minecraft:set_components",components:{"minecraft:item_model":"dreamscythe:sweep/h14"}}
+execute if score @s zx.sd_t matches 15 run item modify entity @s weapon.mainhand {function:"minecraft:set_components",components:{"minecraft:item_model":"dreamscythe:sweep/h15"}}
+execute if score @s zx.sd_t matches 16 run item modify entity @s weapon.mainhand {function:"minecraft:set_components",components:{"minecraft:item_model":"dreamscythe:sweep/h16"}}
+execute if score @s zx.sd_t matches 17 run item modify entity @s weapon.mainhand {function:"minecraft:set_components",components:{"minecraft:item_model":"dreamscythe:sweep/h17"}}
+execute if score @s zx.sd_t matches 18 run item modify entity @s weapon.mainhand {function:"minecraft:set_components",components:{"minecraft:item_model":"dreamscythe:sweep/h18"}}
+execute if score @s zx.sd_t matches 19 run item modify entity @s weapon.mainhand {function:"minecraft:set_components",components:{"minecraft:item_model":"dreamscythe:sweep/h19"}}
+execute if score @s zx.sd_t matches 20 run item modify entity @s weapon.mainhand {function:"minecraft:set_components",components:{"minecraft:item_model":"dreamscythe:sweep/h20"}}
+execute if score @s zx.sd_t matches 21 run item modify entity @s weapon.mainhand {function:"minecraft:set_components",components:{"minecraft:item_model":"dreamscythe:sweep/h21"}}
+execute if score @s zx.sd_t matches 22 run item modify entity @s weapon.mainhand {function:"minecraft:set_components",components:{"minecraft:item_model":"dreamscythe:sweep/h22"}}
+execute if score @s zx.sd_t matches 23 run item modify entity @s weapon.mainhand {function:"minecraft:set_components",components:{"minecraft:item_model":"dreamscythe:sweep/h23"}}
+execute if score @s zx.sd_t matches 24.. run function sweetdream:equipment/sword/sickle_dreams/sweep/context_cancel

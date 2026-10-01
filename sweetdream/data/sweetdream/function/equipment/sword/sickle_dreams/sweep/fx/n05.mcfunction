@@ -1,0 +1,16 @@
+# 水平扇面粒子；近距离可见，无额外模型。
+particle minecraft:dust{color:[0.78,0.56,0.96],scale:0.85} ^0.1178 ^1.1500 ^1.8963 0 0 0 0 1 normal @a[distance=..32]
+particle minecraft:dust{color:[0.39,0.18,0.61],scale:0.6} ^0.1079 ^1.1650 ^1.7367 0 0 0 0 1 normal @a[distance=..32]
+particle minecraft:dust{color:[0.78,0.56,0.96],scale:0.85} ^-0.2498 ^1.1500 ^1.8835 0 0 0 0 1 normal @a[distance=..32]
+particle minecraft:dust{color:[0.39,0.18,0.61],scale:0.6} ^-0.2288 ^1.1650 ^1.7249 0 0 0 0 1 normal @a[distance=..32]
+particle minecraft:dust{color:[0.78,0.56,0.96],scale:0.85} ^-0.6081 ^1.1500 ^1.8001 0 0 0 0 1 normal @a[distance=..32]
+particle minecraft:dust{color:[0.39,0.18,0.61],scale:0.6} ^-0.5569 ^1.1650 ^1.6485 0 0 0 0 1 normal @a[distance=..32]
+particle minecraft:dust{color:[0.78,0.56,0.96],scale:0.85} ^-0.9436 ^1.1500 ^1.6491 0 0 0 0 1 normal @a[distance=..32]
+particle minecraft:dust{color:[0.39,0.18,0.61],scale:0.6} ^-0.8641 ^1.1650 ^1.5102 0 0 0 0 1 normal @a[distance=..32]
+particle minecraft:dust{color:[0.78,0.56,0.96],scale:0.85} ^-1.2437 ^1.1500 ^1.4364 0 0 0 0 1 normal @a[distance=..32]
+particle minecraft:dust{color:[0.39,0.18,0.61],scale:0.6} ^-1.1390 ^1.1650 ^1.3154 0 0 0 0 1 normal @a[distance=..32]
+particle minecraft:dust{color:[0.78,0.56,0.96],scale:0.85} ^-1.4972 ^1.1500 ^1.1698 0 0 0 0 1 normal @a[distance=..32]
+particle minecraft:dust{color:[0.39,0.18,0.61],scale:0.6} ^-1.3711 ^1.1650 ^1.0713 0 0 0 0 1 normal @a[distance=..32]
+particle minecraft:witch ^0 ^1.15 ^1.2 0.7 0.12 0.4 0.01 3 normal @a[distance=..32]
+particle minecraft:enchanted_hit ^0 ^1.15 ^1.5 0.5 0.12 0.4 0.08 10 normal @a[distance=..32]
+playsound minecraft:block.amethyst_block.break player @a[distance=..24] ~ ~1 ~ 0.45 1.3

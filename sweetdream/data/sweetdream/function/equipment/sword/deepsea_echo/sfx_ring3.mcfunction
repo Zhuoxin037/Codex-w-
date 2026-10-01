@@ -23,21 +23,21 @@
 # ============================================================
 
 # 球内: 一整团蓝色粒子
-particle minecraft:dust{color:[0.30,0.65,1.0],scale:1.4} ~ ~1 ~ 3.0 3.0 3.0 0 55 force
+particle minecraft:dust{color:[0.30,0.65,1.0],scale:1.4} ~ ~1 ~ 3.0 3.0 3.0 0 24 normal
 
 # 中心: 一柱升起的蓝
-particle minecraft:dust{color:[0.45,0.80,1.0],scale:1.6} ~ ~0.2 ~ 0.5 1.4 0.5 0 20 force
+particle minecraft:dust{color:[0.45,0.80,1.0],scale:1.6} ~ ~0.2 ~ 0.5 1.4 0.5 0 10 normal
 
 # 外圈: 12 个采样点连成半径 3 的光环
-execute rotated 0 0 positioned ^ ^ ^3 run particle minecraft:dust{color:[0.30,0.65,1.0],scale:1.4} ~ ~1 ~ 0 0 0 0 3 force
-execute rotated 30 0 positioned ^ ^ ^3 run particle minecraft:dust{color:[0.30,0.65,1.0],scale:1.4} ~ ~1 ~ 0 0 0 0 3 force
-execute rotated 60 0 positioned ^ ^ ^3 run particle minecraft:dust{color:[0.30,0.65,1.0],scale:1.4} ~ ~1 ~ 0 0 0 0 3 force
-execute rotated 90 0 positioned ^ ^ ^3 run particle minecraft:dust{color:[0.30,0.65,1.0],scale:1.4} ~ ~1 ~ 0 0 0 0 3 force
-execute rotated 120 0 positioned ^ ^ ^3 run particle minecraft:dust{color:[0.30,0.65,1.0],scale:1.4} ~ ~1 ~ 0 0 0 0 3 force
-execute rotated 150 0 positioned ^ ^ ^3 run particle minecraft:dust{color:[0.30,0.65,1.0],scale:1.4} ~ ~1 ~ 0 0 0 0 3 force
-execute rotated 180 0 positioned ^ ^ ^3 run particle minecraft:dust{color:[0.30,0.65,1.0],scale:1.4} ~ ~1 ~ 0 0 0 0 3 force
-execute rotated 210 0 positioned ^ ^ ^3 run particle minecraft:dust{color:[0.30,0.65,1.0],scale:1.4} ~ ~1 ~ 0 0 0 0 3 force
-execute rotated 240 0 positioned ^ ^ ^3 run particle minecraft:dust{color:[0.30,0.65,1.0],scale:1.4} ~ ~1 ~ 0 0 0 0 3 force
-execute rotated 270 0 positioned ^ ^ ^3 run particle minecraft:dust{color:[0.30,0.65,1.0],scale:1.4} ~ ~1 ~ 0 0 0 0 3 force
-execute rotated 300 0 positioned ^ ^ ^3 run particle minecraft:dust{color:[0.30,0.65,1.0],scale:1.4} ~ ~1 ~ 0 0 0 0 3 force
-execute rotated 330 0 positioned ^ ^ ^3 run particle minecraft:dust{color:[0.30,0.65,1.0],scale:1.4} ~ ~1 ~ 0 0 0 0 3 force
+execute rotated 0 0 positioned ^ ^ ^3 run particle minecraft:dust{color:[0.30,0.65,1.0],scale:1.4} ~ ~1 ~ 0 0 0 0 2 normal
+execute rotated 30 0 positioned ^ ^ ^3 run particle minecraft:dust{color:[0.30,0.65,1.0],scale:1.4} ~ ~1 ~ 0 0 0 0 2 normal
+execute rotated 60 0 positioned ^ ^ ^3 run particle minecraft:dust{color:[0.30,0.65,1.0],scale:1.4} ~ ~1 ~ 0 0 0 0 2 normal
+execute rotated 90 0 positioned ^ ^ ^3 run particle minecraft:dust{color:[0.30,0.65,1.0],scale:1.4} ~ ~1 ~ 0 0 0 0 2 normal
+execute rotated 120 0 positioned ^ ^ ^3 run particle minecraft:dust{color:[0.30,0.65,1.0],scale:1.4} ~ ~1 ~ 0 0 0 0 2 normal
+execute rotated 150 0 positioned ^ ^ ^3 run particle minecraft:dust{color:[0.30,0.65,1.0],scale:1.4} ~ ~1 ~ 0 0 0 0 2 normal
+execute rotated 180 0 positioned ^ ^ ^3 run particle minecraft:dust{color:[0.30,0.65,1.0],scale:1.4} ~ ~1 ~ 0 0 0 0 2 normal
+execute rotated 210 0 positioned ^ ^ ^3 run particle minecraft:dust{color:[0.30,0.65,1.0],scale:1.4} ~ ~1 ~ 0 0 0 0 2 normal
+execute rotated 240 0 positioned ^ ^ ^3 run particle minecraft:dust{color:[0.30,0.65,1.0],scale:1.4} ~ ~1 ~ 0 0 0 0 2 normal
+execute rotated 270 0 positioned ^ ^ ^3 run particle minecraft:dust{color:[0.30,0.65,1.0],scale:1.4} ~ ~1 ~ 0 0 0 0 2 normal
+execute rotated 300 0 positioned ^ ^ ^3 run particle minecraft:dust{color:[0.30,0.65,1.0],scale:1.4} ~ ~1 ~ 0 0 0 0 2 normal
+execute rotated 330 0 positioned ^ ^ ^3 run particle minecraft:dust{color:[0.30,0.65,1.0],scale:1.4} ~ ~1 ~ 0 0 0 0 2 normal

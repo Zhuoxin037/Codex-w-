@@ -13,7 +13,9 @@
 #   所以直接内联, 别绕。
 # 【为什么还要 execute as】/damage 的目标参数只收单个实体, 用 execute as
 #   把范围选择器逐个展开成 @s。
+# 【★ 真正的伤害动作现在在 internal/damage/one ★】
+#   因为黄昏黎明之交界 需要"打之前看它带不带通用标签, 打完之后看它死没死" ——
+#   只有以"单个目标"身份执行才做得了这些检查, 所以这里只负责把范围拆成一个个人。
 # ============================================================
 
-$execute if entity @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] as $(target) run damage @s $(num_str) $(type) by @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1]
-$execute unless entity @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] as $(target) run damage @s $(num_str) $(type)
+$execute as $(target) run function sweetdream:internal/damage/one with storage zx:work a

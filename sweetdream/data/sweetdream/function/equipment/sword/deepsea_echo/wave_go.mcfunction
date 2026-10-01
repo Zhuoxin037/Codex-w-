@@ -38,12 +38,12 @@ function manacore:api/damage/calc
 $execute at @e[tag=zx.de_$(uuid),limit=1] run playsound minecraft:entity.guardian.ambient player @a ~ ~ ~ 0.8 0.7
 $execute at @e[tag=zx.de_$(uuid)] run particle minecraft:bubble ~ ~1.2 ~ 0.45 0.5 0.45 0.02 20 normal
 $execute at @e[tag=zx.de_$(uuid)] run particle minecraft:bubble_column_up ~ ~0.2 ~ 0.3 0.2 0.3 0.02 8 normal
-$execute as @e[tag=zx.de_$(uuid)] at @s run function sweetdream:equipment/sword/deepsea_echo/hit_area
+$execute as @e[tag=zx.de_$(uuid),limit=8] at @s run function sweetdream:equipment/sword/deepsea_echo/hit_area
 
 # 到下一波之间的那一秒里, 每 5 tick 补画一次水球(粒子寿命短, 只能补画)
-schedule function sweetdream:equipment/sword/deepsea_echo/fx 5t
-schedule function sweetdream:equipment/sword/deepsea_echo/fx 10t
-schedule function sweetdream:equipment/sword/deepsea_echo/fx 15t
+# 范围环补画改由每秒循环负责(见 lib/second) —— 优化建议第 3 条
+
+
 
 # ⑤ 传递: 本波被打到的 -> 下一波的源
 $tag @e[tag=zx.de_all] add zx.de_$(uuid)

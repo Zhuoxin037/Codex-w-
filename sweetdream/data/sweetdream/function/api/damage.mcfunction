@@ -49,6 +49,22 @@ function sweetdream:lib/num/plain
 
 data modify storage zx:out r.damage set from storage zx:work a.damage
 
+# 【★ 归属: 把执行者的 UUID 四个整数带上 ★】
+#   以前这里直接调 internal/damage/go(不带 by), 结果是"技能打死的不算玩家的击杀":
+#   · 不掉经验、死亡提示也不写玩家的名字
+#   · 依赖"玩家击杀"的东西(比如黄昏黎明之交界那个 killed 进度)永远不会触发
+#   现在改成先带上 UUID, 再交给 internal/damage/with_from —— 它会拼 by <射手>,
+#   并且"选不到人"(玩家刚好离线)时自动退化成无归属, 照样打得出伤害。
+#   执行者不是玩家时(比如由箭/法球自己执行), 四个整数留 0, 同样退化成无归属。
+data modify storage zx:work a.u0 set value 0
+data modify storage zx:work a.u1 set value 0
+data modify storage zx:work a.u2 set value 0
+data modify storage zx:work a.u3 set value 0
+execute if entity @s[type=minecraft:player] run data modify storage zx:work a.u0 set from entity @s UUID[0]
+execute if entity @s[type=minecraft:player] run data modify storage zx:work a.u1 set from entity @s UUID[1]
+execute if entity @s[type=minecraft:player] run data modify storage zx:work a.u2 set from entity @s UUID[2]
+execute if entity @s[type=minecraft:player] run data modify storage zx:work a.u3 set from entity @s UUID[3]
+
 # target 为空字符串时不能往下走: 空串依然是一个"存在的键", 只用 if data 拦不住,
 # 而宏展开成 "execute as  run damage ..." 会直接报语法错。所以判断它是不是 ""。
-execute unless data storage zx:work a{target:""} run function sweetdream:internal/damage/go with storage zx:work a
+execute unless data storage zx:work a{target:""} run function sweetdream:internal/damage/with_from with storage zx:work a

@@ -72,4 +72,4 @@ execute unless data storage zx:work a{locked:1b} run return fail
 
 # ⑧ 打上"我有一笔结算待处理", 3 秒后由 hit 结算
 tag @s add zx.lg_casting
-schedule function sweetdream:equipment/sword/liuguang/hit 3s
+# 由每秒循环扫到点结算(见 lib/second) —— 不再用一次性 schedule

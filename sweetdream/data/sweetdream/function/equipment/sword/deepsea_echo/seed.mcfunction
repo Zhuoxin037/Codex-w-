@@ -11,7 +11,7 @@
 $tag @e[type=!#sweetdream:no_damage,distance=0.1..12,sort=nearest,limit=1] add zx.de_$(uuid)
 
 # 给它附加「渊海」
-#   【存法】写在实体身上的 data.zx.status.yuanhai。
+#   【存法】由公共接口写入原生实体标签 zx.status.yuanhai。
 #   五个通用标签(渊海/流火/夜火/白昼梦/噬心)将来都放这个位子,
 #   现在只做一个"存在"标记; 持续时间和层数等通用系统做好之后再补。
 # 贴「渊海」标记: 走通用接口 —— 写 NBT + 给这只生物分配图标编号 + 生成图标显示实体
@@ -34,9 +34,9 @@ $execute at @e[tag=zx.de_$(uuid),limit=1] run particle minecraft:bubble ~ ~1.2 ~
 function sweetdream:equipment/sword/deepsea_echo/sfx_ring12
 
 # 到第一波之间的那一秒里, 每 5 tick 补画一次, 让水面不"断"
-schedule function sweetdream:equipment/sword/deepsea_echo/fx 5t
-schedule function sweetdream:equipment/sword/deepsea_echo/fx 10t
-schedule function sweetdream:equipment/sword/deepsea_echo/fx 15t
+# 范围环补画改由每秒循环负责(见 lib/second) —— 优化建议第 3 条
+
+
 
 # 记下"总共还要推进几波"。
 #   文案是"重复 2 次后结束" = 初次 1 波 + 重复 2 波 = 共 3 波。

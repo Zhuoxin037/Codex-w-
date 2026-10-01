@@ -1,0 +1,41 @@
+{
+    "anvil_cost": 4,
+    "description": {
+        "text": "霜矢"
+    },
+    "effects": {
+        "minecraft:post_attack": [
+            {
+                "affected": "attacker",
+                "enchanted": "attacker",
+                "effect": {
+                    "type": "minecraft:run_function",
+                    "function": "sweetdream:equipment/bow/cold_crow/hook_attacker"
+                }
+            },
+            {
+                "affected": "victim",
+                "enchanted": "attacker",
+                "effect": {
+                    "type": "minecraft:run_function",
+                    "function": "sweetdream:equipment/bow/cold_crow/hook_victim"
+                }
+            }
+        ]
+    },
+    "max_cost": {
+        "base": 50,
+        "per_level_above_first": 0
+    },
+    "max_level": 1,
+    "min_cost": {
+        "base": 1,
+        "per_level_above_first": 0
+    },
+    "primary_items": "#minecraft:enchantable/crossbow",
+    "slots": [
+        "mainhand"
+    ],
+    "supported_items": "#minecraft:enchantable/crossbow",
+    "weight": 1
+}

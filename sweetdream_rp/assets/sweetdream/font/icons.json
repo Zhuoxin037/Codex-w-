@@ -1,12 +1,18 @@
 {
   "providers": [
     {
+      "type": "space",
+      "advances": {
+        " ": 4
+      }
+    },
+    {
       "type": "bitmap",
       "file": "sweetdream:font/icons.png",
-      "height": 32,
-      "ascent": 31,
+      "height": 16,
+      "ascent": 14,
       "chars": [
-        "\ue000\ue001\ue002\ue003\ue004"
+        ""
       ]
     }
   ]

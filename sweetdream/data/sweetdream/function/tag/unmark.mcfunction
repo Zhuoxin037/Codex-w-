@@ -1,9 +1,4 @@
-# ============================================================
-# sweetdream:tag/unmark —— 摘掉一个通用标签
-# ------------------------------------------------------------
-# 【宏参数】zx:work ic {target, mark}  —— 和 mark 一样
-# 【会不会连图标一起收掉】会重算: 这只生物还剩别的标签就换成那个图标,
-#   一个都不剩就收掉图标、摘 zx.tagged、把编号还回去。
-# ============================================================
-
-$execute as $(target) run function sweetdream:tag/unmark_one with storage zx:work ic
+# 公共接口不变：{target:"选择器",mark:"五个英文名之一"}。
+# 内联传递 mark，冻结本次调用参数；刷新过程只使用独立的 zx:tag 存储。
+# 仅处理非玩家活体，避免把图标、掉落物等误当目标。
+$execute as $(target) at @s unless entity @s[type=minecraft:player] if data entity @s Health unless data entity @s {Health:0.0f} run function sweetdream:tag/unmark_one {mark:"$(mark)"}

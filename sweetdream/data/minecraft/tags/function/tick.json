@@ -1,5 +1,1 @@
-{
-  "values": [
-    "sweetdream:core/tick"
-  ]
-}
+{"values":["sweetdream:core/tick","naturewind:tick","sweetdream:equipment/sword/sickle_dreams/sweep/tick"]}

@@ -1,8 +1,6 @@
-# ============================================================
-# sweetdream:tag/unmark_one —— 摘标记(宏 {mark}; 以那只生物身份执行)
-# ============================================================
-
-$data remove entity @s data.zx.status."$(mark)"
-# 同样先收掉旧图标, 再重算: 有别的标签 -> 换图标; 一个不剩 -> 收图标 + 摘 zx.tagged + 清编号
-function sweetdream:tag/icon_kill_self
+# @s = 单只目标。先验证名称；非法输入不能修改状态或生成显示实体。
+$data modify storage zx:tag request set value {mark:"$(mark)"}
+execute unless data storage zx:tag request{mark:"yuanhai"} unless data storage zx:tag request{mark:"liuhuo"} unless data storage zx:tag request{mark:"yehuo"} unless data storage zx:tag request{mark:"shixin"} unless data storage zx:tag request{mark:"dream"} run return 0
+execute unless entity @s[tag=zx.tags_v2] run function sweetdream:tag/migrate
+$tag @s remove zx.status.$(mark)
 function sweetdream:tag/icon_refresh

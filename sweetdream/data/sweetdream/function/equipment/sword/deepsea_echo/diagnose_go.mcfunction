@@ -36,7 +36,7 @@ $execute if data storage zx:data de."$(uuid)".left store result score #left zx.m
 tellraw @s [{"text":"④ 源标记数: ","color":"gray"},{"score":{"name":"#src","objective":"zx.meta"},"color":"aqua"},{"text":"   剩余波数: ","color":"gray"},{"score":{"name":"#left","objective":"zx.meta"},"color":"aqua"}]
 
 # ⑤ 带「渊海」的生物数量
-execute store result score #yh zx.meta run execute if entity @e[nbt={data:{zx:{status:{yuanhai:1b}}}}]
+execute store result score #yh zx.meta run execute if entity @e[tag=zx.status.yuanhai]
 tellraw @s [{"text":"⑤ 带「渊海」的生物数: ","color":"gray"},{"score":{"name":"#yh","objective":"zx.meta"},"color":"light_purple"}]
 
 tellraw @s [{"text":"读法: ①=0 就是附近真没生物; 右键成功后 ④ 的源标记数应该先变成 1","color":"dark_gray"}]

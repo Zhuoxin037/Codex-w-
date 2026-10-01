@@ -1,139 +1,53 @@
-# -*- coding: utf-8 -*-
-"""
-sweetdream 图标字体生成脚本
-=========================================================================
-跑法(在仓库根目录):
-    python sweetdream_rp/tools/make_icons.py
-
-它生成三样东西:
-    sweetdream_rp/assets/sweetdream/textures/font/icons.png   5 个图标并排的图集
-    sweetdream_rp/assets/sweetdream/lang/*.json               图标字符的翻译键
-    (字体定义 font/icons.json 是手写的, 不在这里生成)
-
-【怎么改图标】
-  下面 SHAPES 里每个图标就是一段 Python 绘图代码, 画在 4 倍的画布上(128x128),
-  最后用 NEAREST 缩到 32x32 —— 这样边缘是"整齐的像素块", 不糊。
-  想换颜色改 COLORS; 想彻底换画风, 直接把 icons.png 用你的绘图软件重画
-  (保持 160x32、5 格、透明背景), 然后**不用**再跑这个脚本。
-
-【图集布局】
-  5 格横排, 每格 32x32, 总尺寸 160x32。
-  字符顺序 = yuanhai / liuhuo / yehuo / shixin / dream, 对应 U+E000..U+E004。
-"""
+"""通用状态像素图标生成器：32×32 原生像素，保留 U+E000..E004 字体映射。"""
+from pathlib import Path
 import json
-import os
-from PIL import Image, ImageDraw
-
-SS = 4                      # 超采样倍率
-CELL = 32                   # 每个图标最终尺寸
-N = 5                       # 图标数量
-HERE = os.path.dirname(os.path.abspath(__file__))
-RP = os.path.dirname(HERE)
-
-COLORS = {
-    "yuanhai": {"core": "#1E6FA8", "light": "#6FD3F2", "outline": "#06263A"},
-    "liuhuo":  {"core": "#E8701A", "light": "#FFD98A", "outline": "#4A1A00"},
-    "yehuo":   {"core": "#6A3FA0", "light": "#C9A7F0", "outline": "#2A1040"},
-    "shixin":  {"core": "#C81E3C", "light": "#FF7A8A", "outline": "#3A0010"},
-    "dream":   {"core": "#EDE6C8", "light": "#FFFFFF", "outline": "#6B6455"},
-}
-
-# 私用区字符: U+E000..U+E004(5 个图标)
-CHARS = [chr(0xE000 + i) for i in range(N)]
-ORDER = ["yuanhai", "liuhuo", "yehuo", "shixin", "dream"]
-
-
-def draw_droplet(d, c):
-    """渊海: 一滴水(圆 + 尖顶)"""
-    d.polygon([(64, 12), (98, 62), (30, 62)], fill=c["core"])
-    d.ellipse([22, 42, 106, 118], fill=c["core"])
-    d.ellipse([46, 62, 72, 96], fill=c["light"])
-
-
-def draw_flame(d, c):
-    """流火: 火苗(倒水滴 + 内焰)"""
-    d.polygon([(64, 10), (100, 70), (28, 70)], fill=c["core"])
-    d.ellipse([20, 52, 108, 122], fill=c["core"])
-    d.ellipse([48, 72, 78, 112], fill=c["light"])
-
-
-def draw_crescent(d, c):
-    """夜火: 弯月(大圆挖掉一个偏移圆)"""
-    d.ellipse([18, 18, 108, 108], fill=c["core"])
-    d.ellipse([46, 6, 128, 96], fill=(0, 0, 0, 0))
-    d.ellipse([30, 30, 52, 66], fill=c["light"])
-
-
-def draw_heart(d, c):
-    """噬心: 咬了一口的爱心"""
-    d.ellipse([14, 26, 68, 80], fill=c["core"])
-    d.ellipse([60, 26, 114, 80], fill=c["core"])
-    d.polygon([(16, 58), (112, 58), (64, 118)], fill=c["core"])
-    # 右上角"咬"掉一块(挖成透明) —— 缺口要大一点才看得出是"噬心"
-    d.ellipse([78, 0, 130, 52], fill=(0, 0, 0, 0))
-    d.ellipse([96, 4, 122, 30], fill=(0, 0, 0, 0))
-    d.ellipse([26, 40, 46, 64], fill=c["light"])
-
-
-def draw_cloud(d, c):
-    """白昼梦: 一朵云(三个圆 + 底座)"""
-    d.ellipse([10, 52, 70, 106], fill=c["core"])
-    d.ellipse([40, 34, 100, 100], fill=c["core"])
-    d.ellipse([72, 50, 120, 104], fill=c["core"])
-    d.rectangle([20, 78, 112, 106], fill=c["core"])
-    d.ellipse([30, 56, 50, 76], fill=c["light"])
-
-
-DRAW = {
-    "yuanhai": draw_droplet,
-    "liuhuo": draw_flame,
-    "yehuo": draw_crescent,
-    "shixin": draw_heart,
-    "dream": draw_cloud,
-}
-
+from PIL import Image, ImageDraw, ImageFilter
+RP=Path(__file__).resolve().parents[1]
+ORDER=['yuanhai','liuhuo','yehuo','shixin','dream']
+OUTLINES=['#081c36','#421424','#201039','#350e25','#393152']
+def render_plain(mark):
+ # 16 像素逻辑网格、三层有限色，不加星光、渐变或浮雕描边。
+ im=Image.new('RGBA',(16,16));d=ImageDraw.Draw(im)
+ if mark=='yuanhai':
+  d.polygon([(8,1),(12,7),(13,10),(12,13),(9,14),(6,14),(3,12),(3,9),(5,5)],fill='#153747')
+  d.polygon([(8,3),(10,7),(11,10),(10,12),(6,12),(5,10),(6,7)],fill='#397c98')
+  d.line([(7,6),(6,8),(6,10)],fill='#93c2cb',width=1)
+ elif mark=='liuhuo':
+  d.polygon([(9,1),(9,6),(12,8),(13,5),(14,10),(12,13),(9,14),(5,14),(2,11),(3,6),(5,8),(6,4)],fill='#633626')
+  d.polygon([(8,4),(8,8),(10,9),(12,8),(12,11),(10,13),(5,12),(4,9),(6,10),(6,7)],fill='#c77c37')
+  d.polygon([(8,8),(10,11),(9,12),(7,12),(6,11)],fill='#eac477')
+ elif mark=='yehuo':
+  d.polygon([(10,2),(7,2),(4,4),(2,7),(2,11),(4,13),(8,14),(12,12),(13,9),(10,11),(6,10),(5,7),(7,4)],fill='#332b4b')
+  d.line([(7,3),(4,6),(3,9),(5,12),(8,13),(11,11)],fill='#796a97',width=1)
+  d.line([(4,7),(4,9),(5,10)],fill='#a89ab9',width=1)
+ elif mark=='shixin':
+  d.polygon([(2,5),(4,3),(6,3),(8,5),(10,3),(13,4),(12,6),(10,6),(11,9),(13,9),(10,12),(8,14),(3,10),(2,8)],fill='#552e37')
+  d.polygon([(3,5),(5,4),(7,6),(8,7),(10,5),(9,7),(10,10),(8,12),(4,9),(3,7)],fill='#ad535a')
+  d.line([(4,5),(5,5),(6,6)],fill='#d79590',width=1)
+ return im.resize((32,32),Image.Resampling.NEAREST)
 
 def render(mark):
-    """画一格: 先画放大图 -> 描边 -> 缩到 32x32"""
-    c = COLORS[mark]
-    size = CELL * SS
-    img = Image.new("RGBA", (size, size), (0, 0, 0, 0))
-    DRAW[mark](ImageDraw.Draw(img), c)
-
-    # 描边: 把不透明区域向外膨胀 1 像素(在放大图里就是 SS 像素), 涂成暗色,
-    # 再把本体盖回去 —— 于是得到一圈干净的深色轮廓, 像原版图标那样有厚度。
-    from PIL import ImageFilter
-    alpha = img.split()[3]
-    grown = alpha.filter(ImageFilter.MaxFilter(2 * SS + 1))
-    outline = Image.new("RGBA", (size, size), c["outline"])
-    outline.putalpha(grown)
-    outline.alpha_composite(img)
-
-    return outline.resize((CELL, CELL), Image.NEAREST)
-
-
+ if mark!='dream':return render_plain(mark)
+ im=Image.new('RGBA',(32,32));d=ImageDraw.Draw(im)
+ # 珍珠云层 + 金星，浅色背景也有深色轮廓。
+ d.polygon([(4,19),(6,15),(10,15),(12,10),(17,9),(21,12),(22,16),(26,16),(28,20),(27,24),(24,26),(8,26),(4,23)],fill='#b2afdb')
+ d.polygon([(5,19),(7,16),(11,17),(13,12),(17,11),(20,14),(20,18),(24,17),(27,20),(26,23),(8,23),(5,22)],fill='#eee7df')
+ d.line([(7,18),(10,18),(12,20),(15,18),(20,18)],fill='#fffaf0',width=2)
+ d.line([(8,24),(22,24),(25,22)],fill='#8c88b4')
+ d.polygon([(24,3),(25,6),(28,7),(25,8),(24,11),(23,8),(20,7),(23,6)],fill='#ffda83')
+ d.point((24,7),fill='#fffbed');d.rectangle((7,9,8,10),fill='#d8cef6')
+ # 一像素硬边，无模糊采样，PNG 只使用全透明/全不透明。
+ alpha=im.getchannel('A').filter(ImageFilter.MaxFilter(3));edge=Image.new('RGBA',im.size,OUTLINES[ORDER.index(mark)])
+ edge.putalpha(alpha);edge.alpha_composite(im);return edge
 def main():
-    sheet = Image.new("RGBA", (CELL * N, CELL), (0, 0, 0, 0))
-    for i, mark in enumerate(ORDER):
-        sheet.paste(render(mark), (i * CELL, 0))
-
-    tex = os.path.join(RP, "assets", "sweetdream", "textures", "font", "icons.png")
-    os.makedirs(os.path.dirname(tex), exist_ok=True)
-    sheet.save(tex)
-    print("写出图集:", tex, sheet.size)
-
-    # lang: 翻译键 -> 图标字符(客户端读, 所以数据包里完全不用出现私用字符)
-    lang_dir = os.path.join(RP, "assets", "sweetdream", "lang")
-    os.makedirs(lang_dir, exist_ok=True)
-    table = {"sweetdream.icon." + m: CHARS[i] for i, m in enumerate(ORDER)}
-    for name in ("zh_cn", "en_us"):
-        p = os.path.join(lang_dir, name + ".json")
-        with open(p, "w", encoding="utf-8") as f:
-            json.dump(table, f, ensure_ascii=False, indent=2)
-        print("写出翻译:", p)
-
-    print("字符表:", {k: hex(ord(v)) for k, v in table.items()})
-
-
-if __name__ == "__main__":
-    main()
+ atlas=Image.new('RGBA',(160,32))
+ for i,m in enumerate(ORDER):atlas.alpha_composite(render(m),(i*32,0))
+ atlas.save(RP/'assets/sweetdream/textures/font/icons.png')
+ font={'providers':[{'type':'space','advances':{' ':4}},{'type':'bitmap','file':'sweetdream:font/icons.png','height':16,'ascent':14,'chars':[''.join(chr(0xe000+i) for i in range(5))]}]}
+ (RP/'assets/sweetdream/font/icons.json').write_text(json.dumps(font,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+ for lang in ['zh_cn','en_us']:
+  p=RP/f'assets/sweetdream/lang/{lang}.json';table=json.loads(p.read_text(encoding='utf-8')) if p.exists() else {}
+  table.update({'sweetdream.icon.'+m:chr(0xe000+i) for i,m in enumerate(ORDER)})
+  p.write_text(json.dumps(table,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+ print('Five icons: 160x32 RGBA. Unrelated translation keys preserved.')
+if __name__=='__main__':main()

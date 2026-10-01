@@ -8,7 +8,7 @@
 #         如果能调用但数值不对, 说明 load 没有跑完。
 # ============================================================
 tellraw @s [{"text":"==== ManaCore ====","color":"aqua","bold":true}]
-tellraw @s [{"text":"版本: ","color":"gray"},{"text":"1.0.0","color":"white"},{"text":"  目标: MC 1.21.5 (datapack 48~81)","color":"dark_gray"}]
+tellraw @s [{"text":"版本: ","color":"gray"},{"text":"1.0.0","color":"white"},{"text":"  目标: MC 1.21.5 (datapack 71 (仅 1.21.5))","color":"dark_gray"}]
 tellraw @s [{"text":"load 执行次数(#loads): ","color":"gray"},{"score":{"name":"#loads","objective":"manacore.meta"}}]
 tellraw @s [{"text":"关键常量: ","color":"gray"},{"text":"#interval=","color":"dark_gray"},{"score":{"name":"#interval","objective":"manacore.meta"}},{"text":"  #scale=","color":"dark_gray"},{"score":{"name":"#scale","objective":"manacore.meta"}},{"text":"  #max_slots=","color":"dark_gray"},{"score":{"name":"#max_slots","objective":"manacore.meta"}}]
 tellraw @s [{"text":"已登记玩家槽位(#next_slot): ","color":"gray"},{"score":{"name":"#next_slot","objective":"manacore.meta"}}]

@@ -28,4 +28,4 @@ $execute if data storage zx:data wg_bonus."$(uuid)" store result score #add zx.m
 scoreboard players operation #ex zx.meta += #add zx.meta
 $execute store result storage zx:data wg_bonus."$(uuid)" double 0.01 run scoreboard players get #ex zx.meta
 
-tellraw @s [{"text":"风声攒够了 —— 下一次以最大魔力结算的技能伤害 +","color":"aqua"},{"score":{"name":"#ex","objective":"zx.meta"},"color":"white"},{"text":"%","color":"aqua"},{"text":"  (合计, 加算)","color":"dark_gray"}]
+tellraw @s [{"text":"下一次以最大魔力结算的技能伤害 +","color":"aqua"},{"score":{"name":"#ex","objective":"zx.meta"},"color":"white"},{"text":"%","color":"aqua"},{"text":"  (合计, 加算)","color":"dark_gray"}]

@@ -1,11 +1,21 @@
+# ============================================================
+# manacore:internal/join/slot_check —— 决定"这个玩家用哪个槽"
 # ------------------------------------------------------------
-# internal/join/slot_check —— 槽位是否仍属于我
-# 【宏参数】manacore:macro.a {uuid,u0,u1,u2,u3,cur,slot}
-# 【判断】index."cur".uuid == 我的 uuid ?
-#         是  -> register(沿用原槽位, 数据不丢)
-#         否  -> reissue(说明槽位被别人用了 / 上次异常退出被回收了, 重新分配)
-# 【为什么需要这一步】玩家退出后槽位会被回收给别人; 而他的计分板里还留着
-#         旧槽位号。如果直接信任计分板, 就会把别人索引里的 uuid 覆盖掉。
-# ------------------------------------------------------------
-$execute if data storage manacore:index "$(cur)"{uuid:"$(uuid)"} run function manacore:internal/join/register with storage manacore:macro a
-$execute unless data storage manacore:index "$(cur)"{uuid:"$(uuid)"} run function manacore:internal/join/reissue with storage manacore:macro a
+# 【宏参数】manacore:macro a {uuid,cur,slot}
+# 【现在的做法(修槽位泄漏)】
+#   ① 先把整张 index 扫一遍(#i 0..max_slots), 看有没有哪一格记着这个 uuid
+#      - 找到 -> 直接把玩家计分项校正成那个槽, 然后 register(复用, 不再新分配)
+#      - 没找到 -> 才走 reissue(分配新槽)
+#   ② 扫完记得把 #i / #found 复位, 免得上一次的结果污染下一次
+# 【为什么不能只看 cur】玩家的分数会因为换存档/重登/被别的系统覆盖而失准,
+#   那就等于"每次都当新人", 槽位只增不减。
+# ============================================================
+scoreboard players set #found manacore.meta 0
+scoreboard players set #i manacore.meta 0
+function manacore:internal/index/find_uuid_loop
+scoreboard players set #i manacore.meta 0
+
+execute if score #found manacore.meta matches 1 run scoreboard players operation @s manacore.slot = #found_slot manacore.meta
+execute if score #found manacore.meta matches 1 run function manacore:internal/join/register with storage manacore:macro a
+execute unless score #found manacore.meta matches 1 run function manacore:internal/join/reissue with storage manacore:macro a
+scoreboard players set #found manacore.meta 0

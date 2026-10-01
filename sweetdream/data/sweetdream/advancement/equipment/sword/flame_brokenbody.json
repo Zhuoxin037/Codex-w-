@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "flame_brokenbody": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "flame_brokenbody"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:equipment/sword/flame_brokenbody/cast"
+    }
+}
