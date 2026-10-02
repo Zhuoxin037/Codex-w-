@@ -6,6 +6,14 @@
     "effects": {
         "minecraft:post_attack": [
             {
+                "affected": "damaging_entity",
+                "enchanted": "attacker",
+                "effect": {
+                    "type": "minecraft:run_function",
+                    "function": "sweetdream:equipment/bow/cold_crow/hook_arrow"
+                }
+            },
+            {
                 "affected": "attacker",
                 "enchanted": "attacker",
                 "effect": {

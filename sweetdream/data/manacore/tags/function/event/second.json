@@ -3,6 +3,8 @@
     "sweetdream:equipment/armor/intravenous_pump/second",
     "sweetdream:equipment/armor/external_power/second",
     "sweetdream:equipment/armor/dionysus_helmet/second",
+    "sweetdream:equipment/armor/brain_leech/second",
+    "sweetdream:equipment/armor/spine_symbiote/second",
     "sweetdream:equipment/sword/deepsea_echo/second",
     "sweetdream:equipment/staff/wind_ontheground/second",
     "sweetdream:equipment/axe/charge/second",
@@ -12,6 +14,8 @@
     "sweetdream:equipment/armor/dusk_dawn/second",
     "sweetdream:equipment/armor/ember/second",
     "sweetdream:equipment/armor/immolate/second",
+    "sweetdream:equipment/armor/iridescent/second",
+    "sweetdream:equipment/armor/mirage/second",
     "sweetdream:lib/second"
   ]
 }

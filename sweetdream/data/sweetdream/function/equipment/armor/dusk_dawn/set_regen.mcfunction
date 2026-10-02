@@ -12,6 +12,7 @@ data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/stats/get
 execute store result score #mz zx.meta run data get storage manacore:out r.value 100
 scoreboard players operation #mz zx.meta /= #100 manacore.meta
+# dup-ok: 两次整数除法是有意的 —— 第一次从"×100 的整数"回到原值, 第二次取 1%
 scoreboard players operation #mz zx.meta /= #100 manacore.meta
 
 data modify storage manacore:in arg set value {uuid:"",value:0.0}

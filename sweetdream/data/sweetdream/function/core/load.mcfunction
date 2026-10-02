@@ -197,4 +197,82 @@ execute unless data storage zx:config obj_em_conv run scoreboard objectives add 
 execute unless data storage zx:config obj_em_conv run data modify storage zx:config obj_em_conv set value 1b
 execute unless data storage zx:config obj_em_seen run scoreboard objectives add zx.em_seen dummy
 execute unless data storage zx:config obj_em_seen run data modify storage zx:config obj_em_seen set value 1b
+# 焚舟实际点火次数(用来核对"点了几次火 vs 余烬转了几次")
+execute unless data storage zx:config obj_im_ignite run scoreboard objectives add zx.im_ignite dummy
+execute unless data storage zx:config obj_im_ignite run data modify storage zx:config obj_im_ignite set value 1b
 execute unless data storage zx:config obj_em_mana50 run data modify storage zx:config obj_em_mana50 set value 1b
+# 脑髓蛭: 魔力上限账本 / 回魔修正是否已挂 / 攻击力账本
+execute unless data storage zx:config obj_bl_mana run scoreboard objectives add zx.bl_mana dummy
+execute unless data storage zx:config obj_bl_mana run data modify storage zx:config obj_bl_mana set value 1b
+execute unless data storage zx:config obj_bl_regen run scoreboard objectives add zx.bl_regen dummy
+execute unless data storage zx:config obj_bl_regen run data modify storage zx:config obj_bl_regen set value 1b
+execute unless data storage zx:config obj_bl_atk run scoreboard objectives add zx.bl_atk dummy
+execute unless data storage zx:config obj_bl_atk run data modify storage zx:config obj_bl_atk set value 1b
+# 脊骨共生: 魔力上限账本 / 护甲账本 / 生命上限账本
+execute unless data storage zx:config obj_ss_mana run scoreboard objectives add zx.ss_mana dummy
+execute unless data storage zx:config obj_ss_mana run data modify storage zx:config obj_ss_mana set value 1b
+execute unless data storage zx:config obj_ss_armor run scoreboard objectives add zx.ss_armor dummy
+execute unless data storage zx:config obj_ss_armor run data modify storage zx:config obj_ss_armor set value 1b
+execute unless data storage zx:config obj_ss_hp run scoreboard objectives add zx.ss_hp dummy
+execute unless data storage zx:config obj_ss_hp run data modify storage zx:config obj_ss_hp set value 1b
+# 魔力上限下限保护垫了多少(见 lib/mana_floor)
+execute unless data storage zx:config obj_floor_mana run scoreboard objectives add zx.floor_mana dummy
+execute unless data storage zx:config obj_floor_mana run data modify storage zx:config obj_floor_mana set value 1b
+# 异彩: 魔力上限账本
+execute unless data storage zx:config obj_ir_mana run scoreboard objectives add zx.ir_mana dummy
+execute unless data storage zx:config obj_ir_mana run data modify storage zx:config obj_ir_mana set value 1b
+# 幻昼: 魔力上限账本 / 套装攻击力账本(已挂多少) / 两条限时窗口各剩几秒
+execute unless data storage zx:config obj_mr_mana run scoreboard objectives add zx.mr_mana dummy
+execute unless data storage zx:config obj_mr_mana run data modify storage zx:config obj_mr_mana set value 1b
+execute unless data storage zx:config obj_mr_atk run scoreboard objectives add zx.mr_atk dummy
+execute unless data storage zx:config obj_mr_atk run data modify storage zx:config obj_mr_atk set value 1b
+execute unless data storage zx:config obj_mr_atk1 run scoreboard objectives add zx.mr_atk1 dummy
+execute unless data storage zx:config obj_mr_atk1 run data modify storage zx:config obj_mr_atk1 set value 1b
+execute unless data storage zx:config obj_mr_atk2 run scoreboard objectives add zx.mr_atk2 dummy
+execute unless data storage zx:config obj_mr_atk2 run data modify storage zx:config obj_mr_atk2 set value 1b
+# 幻昼套装"每层独立到期"的环形记账格(见 equipment/armor/mirage/expire):
+#   +1 环 6 格(每层活 5 秒, 不设上限)  +2 环 9 格(每层活 8 秒, 上限 10 层)
+execute unless data storage zx:config obj_mr_a0 run scoreboard objectives add zx.mr_a0 dummy
+execute unless data storage zx:config obj_mr_a0 run data modify storage zx:config obj_mr_a0 set value 1b
+execute unless data storage zx:config obj_mr_a1 run scoreboard objectives add zx.mr_a1 dummy
+execute unless data storage zx:config obj_mr_a1 run data modify storage zx:config obj_mr_a1 set value 1b
+execute unless data storage zx:config obj_mr_a2 run scoreboard objectives add zx.mr_a2 dummy
+execute unless data storage zx:config obj_mr_a2 run data modify storage zx:config obj_mr_a2 set value 1b
+execute unless data storage zx:config obj_mr_a3 run scoreboard objectives add zx.mr_a3 dummy
+execute unless data storage zx:config obj_mr_a3 run data modify storage zx:config obj_mr_a3 set value 1b
+execute unless data storage zx:config obj_mr_a4 run scoreboard objectives add zx.mr_a4 dummy
+execute unless data storage zx:config obj_mr_a4 run data modify storage zx:config obj_mr_a4 set value 1b
+execute unless data storage zx:config obj_mr_a5 run scoreboard objectives add zx.mr_a5 dummy
+execute unless data storage zx:config obj_mr_a5 run data modify storage zx:config obj_mr_a5 set value 1b
+execute unless data storage zx:config obj_mr_b0 run scoreboard objectives add zx.mr_b0 dummy
+execute unless data storage zx:config obj_mr_b0 run data modify storage zx:config obj_mr_b0 set value 1b
+execute unless data storage zx:config obj_mr_b1 run scoreboard objectives add zx.mr_b1 dummy
+execute unless data storage zx:config obj_mr_b1 run data modify storage zx:config obj_mr_b1 set value 1b
+execute unless data storage zx:config obj_mr_b2 run scoreboard objectives add zx.mr_b2 dummy
+execute unless data storage zx:config obj_mr_b2 run data modify storage zx:config obj_mr_b2 set value 1b
+execute unless data storage zx:config obj_mr_b3 run scoreboard objectives add zx.mr_b3 dummy
+execute unless data storage zx:config obj_mr_b3 run data modify storage zx:config obj_mr_b3 set value 1b
+execute unless data storage zx:config obj_mr_b4 run scoreboard objectives add zx.mr_b4 dummy
+execute unless data storage zx:config obj_mr_b4 run data modify storage zx:config obj_mr_b4 set value 1b
+execute unless data storage zx:config obj_mr_b5 run scoreboard objectives add zx.mr_b5 dummy
+execute unless data storage zx:config obj_mr_b5 run data modify storage zx:config obj_mr_b5 set value 1b
+execute unless data storage zx:config obj_mr_b6 run scoreboard objectives add zx.mr_b6 dummy
+execute unless data storage zx:config obj_mr_b6 run data modify storage zx:config obj_mr_b6 set value 1b
+execute unless data storage zx:config obj_mr_b7 run scoreboard objectives add zx.mr_b7 dummy
+execute unless data storage zx:config obj_mr_b7 run data modify storage zx:config obj_mr_b7 set value 1b
+execute unless data storage zx:config obj_mr_b8 run scoreboard objectives add zx.mr_b8 dummy
+execute unless data storage zx:config obj_mr_b8 run data modify storage zx:config obj_mr_b8 set value 1b
+# 环形下标取模用的模数: #6(+1 环) / #9(+2 环); #10 = +2 环的层数上限
+scoreboard players set #6 zx.meta 6
+scoreboard players set #9 zx.meta 9
+scoreboard players set #10 zx.meta 10
+# 百分比换算常量: #100 配合已有的 #3, "上限 ×3 ÷100" 就是 ×0.03
+scoreboard players set #100 zx.meta 100
+# 随机取模用的模数: #4 / #5(异彩"5 选 2"、幻昼"20% = 1/5")
+scoreboard players set #4 zx.meta 4
+scoreboard players set #5 zx.meta 5
+# 伪随机发生器(LCG)的常数, 见 lib/rnd —— 别乱改, 那两个乘数/增量决定了周期和分布
+scoreboard players set #1103515245 zx.meta 1103515245
+scoreboard players set #12345 zx.meta 12345
+scoreboard players set #65536 zx.meta 65536
+scoreboard players set #32768 zx.meta 32768

@@ -1,0 +1,15 @@
+{
+    "criteria": {
+        "hit_dream": {
+            "trigger": "player_hurt_entity",
+            "conditions": {
+                "entity": {
+                    "nbt": "{Tags:[\"zx.status.dream\"]}"
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:equipment/armor/mirage/hit_dream"
+    }
+}

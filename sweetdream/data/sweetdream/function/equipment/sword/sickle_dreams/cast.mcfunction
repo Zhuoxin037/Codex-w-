@@ -11,6 +11,11 @@
 #   -> 有就走强化(换成大范围、大伤害、时停、摘噬心), 没有就走基础(伤害 + 附噬心)。
 #   注意: 不是"先打一下再强化", 文案的"本次伤害强化为"是**替换**, 所以只打一次。
 # 【最大魔力口径 -> 吃「下一次技能加成」】两边都调 lib/max_mana_bonus。
+# 【★ 副手也能放(2026-10-03 修) ★】以前整套横扫写死主手: 把镰刀放副手右键时,
+#   300 魔力和冷却已经扣掉, 但等待那里只认 weapon.mainhand, 等 4 tick 之后
+#   超时取消 —— 表现就是"扣了魔力、什么也没发生"。
+#   现在在 cast 里把"这次用的哪只手"记进施法快照(record.hand = weapon.mainhand
+#   / weapon.offhand), 等待、武器判定、挥击帧、还原**全部按它走**。
 # ============================================================
 
 # ⓪ 撤销自己的进度(不撤销就只有第一次右键会触发)
@@ -56,6 +61,17 @@ function sweetdream:equipment/sword/sickle_dreams/area_base
 #   (观测镜的判定就是这么写的, 那个是验证过的)
 scoreboard players set #sd_enh zx.meta 0
 execute unless score @s zx.sd_lock matches 1.. as @e[tag=zx.sd_hit] if entity @s[tag=zx.status.shixin] run scoreboard players set #sd_enh zx.meta 1
+
+# ⑥.5 记下"这一下是从哪只手放的"
+#   【为什么必须在这里判】右键使用时, 消耗流程还没收尾 —— 物品仍在手上。
+#     过了这一 tick 镰刀就被通用回手挪走了, 再也分不出主手还是副手。
+#   【判法】原版规则是"主手物品能用就先用主手", 所以只有"**主手不是镰刀**、
+#     副手是"才算副手触发。两只手都拿镰刀时走主手, 和原版行为一致。
+#   【为什么用临时标签】只有 sweep/start 消费它, 读完就清, 不会留在身上。
+#     (不能读 effect_1 的 zx.ret_off —— 那两个是同一个 consume_item 的两条
+#      奖励, 先后顺序不保证, 这里读到的时候它可能还没写。)
+tag @s remove zx.sd_off
+execute unless items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["sickle_dreams"]}] if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["sickle_dreams"]}] run tag @s add zx.sd_off
 
 # ⑦ 保存本次分支和目标，回手后横扫，在主挥击帧结算。
 function sweetdream:equipment/sword/sickle_dreams/sweep/start

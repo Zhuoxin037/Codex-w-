@@ -40,8 +40,20 @@ scoreboard players add #tag_clock zx.meta 1
 execute if score #tag_clock zx.meta matches 20.. run function sweetdream:tag/second
 execute if score #tag_clock zx.meta matches 20.. run scoreboard players set #tag_clock zx.meta 0
 
-# 寒鸦这里**每刻什么都不用做**: "箭打中了谁"由弩上自带的附魔「霜矢」回调
-#   (hook_victim) 交给原版判定, 不再需要我们逐 tick 去认箭。
+# 寒鸦逐箭快照: 给"这一刻之前就已经存在的箭"都打上 zx.cc_seen。
+#   【为什么要这么绕】想把"这一发的层数/伤害"绑到**具体某一支箭**上, 就必须在
+#     射击那一刻把它认出来。按"离玩家最近的一支"认会被地上插着的老箭骗
+#     (以前就是栽在这上面)。而 #minecraft:tick 跑在实体刻**之前**, 所以:
+#       这一刻开始时 -> 场上所有旧箭都带 zx.cc_seen
+#       同一刻稍后玩家扣扳机 -> 新箭出生, 它是**唯一**不带这个标签的
+#     -> shot 里用 tag=!zx.cc_seen 就能精确抓到它(连多重射击的 3 支一起抓)
+#   下一次 tick 开头再把它们补上标记, 循环继续。没参与时开销为零。
+#   【为什么写三行】tick 函数的执行维度默认是主世界, @e 不会跨维度。
+execute in minecraft:overworld run tag @e[type=#sweetdream:cc_arrow,tag=!zx.cc_seen] add zx.cc_seen
+execute in minecraft:the_nether run tag @e[type=#sweetdream:cc_arrow,tag=!zx.cc_seen] add zx.cc_seen
+execute in minecraft:the_end run tag @e[type=#sweetdream:cc_arrow,tag=!zx.cc_seen] add zx.cc_seen
+
+# 霜矢:「箭打中了谁」由弩上自带的附魔回调(hook_arrow / hook_victim)交给原版判定
 
 # 焚舟: 每刻推 烈空(只对穿着焚舟的人跑)
 #   攻击命中时 hurt 里的 buff_on 也会写 manacore:in arg, 所以放在

@@ -27,11 +27,20 @@ tag @s remove test_look_tmp
 # ③ 关掉的时候顺手清空动作栏(不然最后那行会残留两秒)
 execute unless entity @s[tag=test_look_on] run title @s actionbar ""
 
-# ④ 道具是消耗品, 但必须"下一 tick"才还回主手
-#   【为什么不能同 tick】消耗流程在奖励函数跑完之后还会收尾 —— 会把主手设成
+# ④ 道具是消耗品, 但必须"下一 tick"才还回手里
+#   【为什么不能同 tick】消耗流程在奖励函数跑完之后还会收尾 —— 会把那个槽位设成
 #     消耗后的结果(空), 同 tick 放进去的东西会被它覆盖掉。
 #     这就是流光当初要 schedule 1t 的原因, 同一个坑。
-#   【为什么不用 give】give 会塞进随便哪个空槽, 手里就空了, 下一次右键点不到它。
+#   【为什么用 give 也不行】give 会塞进随便哪个空槽, 手里就空了, 下一次右键点不到它。
 #   【改道具属性时】这里和 look/return_item、look/give 三处的组件列表要一起改。
+#
+# 【★ 先记下"这一下是用哪只手放的" ★】本次修复的重点
+#   以前 return_item 写死塞进 weapon.mainhand。把观测镜放副手右键时,
+#   主手的装备会被直接覆盖掉 —— item replace 是覆盖式的, 不会掉在地上。
+#   趁此刻消耗还没走完、东西还在手上, 判定槽位存进标签 zx.look_off。
+#   判定顺序和通用回手线一致: 原版是"主手物品可用就先用主手", 所以先看主手。
+tag @s remove zx.look_off
+execute unless items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["look"]}] if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["look"]}] run tag @s add zx.look_off
+
 tag @s add test_look_pending
 schedule function sweetdream:equipment/tool/look/return_item 1t

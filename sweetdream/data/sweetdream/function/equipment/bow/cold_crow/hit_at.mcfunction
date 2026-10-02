@@ -8,4 +8,9 @@
 # ============================================================
 
 data modify storage zx:work cc.target set value "@e[tag=zx.cc_touch,limit=1]"
+# 这条是**备用路线**(射击瞬间沿准星探), 根本没经过附魔回调, 所以没有"箭"可认。
+# 给一个匹配不到的选择器, snap_prep 会跳过它、退回用射手名下那一份。字段必须存在,
+# 否则宏函数会因为"变量没提供"整支不跑。
+data modify storage zx:work cc.arrow set value "@e[tag=zx.cc_arr,limit=1]"
+function sweetdream:equipment/bow/cold_crow/snap_prep with storage zx:work cc
 function sweetdream:equipment/bow/cold_crow/fire with storage zx:work cc

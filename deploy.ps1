@@ -13,7 +13,7 @@
 $ErrorActionPreference = 'Stop'
 
 $Src = $PSScriptRoot
-$DefaultSave = 'D:\PCL 正式版 2.10.0\.minecraft\versions\1.21.5-Fabric 0.16.10\saves\sweetdream_test'
+$DefaultSave = 'D:\PCL 正式版 2.10.0\.minecraft\versions\1.21.5-Fabric 0.16.10\saves\测试包体'
 
 $Save = if ($args.Count -ge 1 -and $args[0]) { [string]$args[0] } else { $DefaultSave }
 $Save = $Save.TrimEnd('\')

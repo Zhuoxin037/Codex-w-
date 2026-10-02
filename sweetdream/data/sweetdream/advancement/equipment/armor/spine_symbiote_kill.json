@@ -1,0 +1,10 @@
+{
+    "criteria": {
+        "kill": {
+            "trigger": "player_killed_entity"
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:equipment/armor/spine_symbiote/kill"
+    }
+}

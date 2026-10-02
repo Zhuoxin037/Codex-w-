@@ -25,6 +25,7 @@ function manacore:api/damage/calc
 
 # 打两遍(同一个数值)
 data modify storage zx:in arg set value {target:"@e[tag=zx.fb_hit]",read:"manacore"}
+# dup-ok: 文案写的就是"前方两次 ×0.1", 这两行必须一样, 不是复制粘贴事故
 function sweetdream:api/damage
 function sweetdream:api/damage
 

@@ -15,8 +15,13 @@
 #     zx.cc_tier 计分项   —— 这一发是第几层(箭的命中结算要按它选范围和冰冻时长)
 #     data.zx.cc.dmg      —— 射手算好的伤害(最大魔力 ×0.1 / ×0.25, 已过"下一次技能加成")
 #     data.zx.cc.u0..u3   —— 射手的 UUID 四个整数(打伤害时用来算击杀归属)
-#   之后由 core/tick 的 arrow_tick 盯着这支箭, 看它撞到了谁。
+#   之后由弩上的附魔「霜矢」在**箭真的命中时**回调结算(hook_victim)。
 #   (和"法球"是同一套思路: 飞行物只负责飞, 数值在发射时就算好。)
+# 【★ 写两处, 三处都要对 ★】2026-10-03 起同一份数据写两个地方:
+#     · 箭自己身上(data.zx.cc) —— 逐箭快照, **命中时优先读它**
+#     · 射手名下(zx:data cc."<uuid>") —— 兜底, 认不出箭时退化用它
+#   只写射手名下的话, 连射时"第一支还在飞、第二发已经把它覆盖了", 第一支命中
+#   读到的就是第二发的层数(审查里那条"在途旧箭会被后发覆盖")。
 # 【★ 这一发怎么和"打中了谁"对上 ★】
 #   以前试过"在射击这一 tick 去认领场上那支箭", 结果反复出问题: 地上插着的老箭
 #   往往比刚飞出去的新箭更近, 数据就写错了对象; 而且进度触发时机还可能早于箭进世界。
@@ -38,8 +43,21 @@ scoreboard players add @s zx.cc_ice 0
 # ① 这一发的层数 = 当前冰凌 + 1
 scoreboard players operation #tier zx.meta = @s zx.cc_ice
 scoreboard players add #tier zx.meta 1
+# 【为什么要把层数夹到 1..4】正常流程下冰凌只在 0..3 之间转(第 4 层打完会清 0),
+#   #tier 也就只会是 1..4。但万一冰凌被别处(debug 命令、旧存档残留)推到 4 以上,
+#   层数就掉出了两张表的交集 —— 下面"按层数收费"只认 2/3/4, 越界会停在 20
+#   (按 1 层收费); 而 fire 里伤害那句是 `matches 3..`, 越界值反而成立(按 3 层以上
+#   打伤害)。收费表和结算表对不上。夹一下: 超上限一律按满层处理, 下一发自然清 0
+#   回到正常循环; 下限同理(冰凌理论上非负, 这行只是对称保护)。
+execute if score #tier zx.meta matches 5.. run scoreboard players set #tier zx.meta 4
+execute unless score #tier zx.meta matches 1.. run scoreboard players set #tier zx.meta 1
 
 # ② 按层数扣魔力
+#   【为什么不会出现"扣成负数" / "扣一半"】manacore:api/mana/consume 是原子的:
+#   内部先算出 #ok 再动手, 要么是"够 -> 完整扣款", 要么是"不够 -> 一个字节都不扣"
+#   (见 internal/mana/consume 的注释)。所以这里不需要再自己夹一次。
+#   【为什么不会出现"重复扣除"】本函数由 shot_crossbow 进度触发, 开头已经 revoke,
+#   一次射击只跑一遍, consume 也只调这一次。
 scoreboard players set #cost zx.meta 20
 execute if score #tier zx.meta matches 2 run scoreboard players set #cost zx.meta 50
 execute if score #tier zx.meta matches 3 run scoreboard players set #cost zx.meta 120
@@ -48,6 +66,21 @@ data modify storage manacore:in arg set value {uuid:"",value:0.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 execute store result storage manacore:in arg.value double 1 run scoreboard players get #cost zx.meta
 function manacore:api/mana/consume
+
+# ③ 魔力不足 —— 这一发只当普通箭, **不附加任何冰凌层数**
+#   【★ 为什么这里必须清掉射手名下的旧数据 ★】
+#     zx:data cc."<uuid>" 里存的是**上一发**的 tier / dmg, 而且会一直留在那儿。
+#     箭在扣魔力之前就已经离弦了, 打中生物时照样走 hook_victim -> apply -> fire,
+#     fire 一读就读到上一发留下的层数 —— 于是"没扣魔力、却放了满层冰凌"。
+#     这就是本 bug 的根。收工之前必须先把这一发显式写成 0 层。
+#   【为什么写成 tier:0, 而不是把整条删掉】删掉的话 fire 里 `data get` 会失败,
+#     `store result` 就不执行, #tier 会残留上一次结算的值(可能是别人的 4 层),
+#     比留着旧数据更危险。写成 0 是显式的、可读的"无效果"。
+#   【为什么写进 storage 而不是只靠 fire 那边判断】箭什么时候命中由原版说了算,
+#     可能隔好几刻; 中间玩家再射一发成功的话, 数据会被新的覆盖 —— 这是对的,
+#     "这一发的数据"永远以最近一次射击为准。
+execute if data storage manacore:out r{success:0b} run data modify storage zx:work cc.uuid set from storage zx:data self.uuid
+execute if data storage manacore:out r{success:0b} run function sweetdream:equipment/bow/cold_crow/clear with storage zx:work cc
 execute if data storage manacore:out r{success:0b} run tellraw @s [{"text":"魔力不足 —— 这一箭没有冰凌效果","color":"red"}]
 execute if data storage manacore:out r{success:0b} run return fail
 
@@ -73,6 +106,17 @@ execute store result storage zx:work cc.u1 int 1 run data get entity @s UUID[1]
 execute store result storage zx:work cc.u2 int 1 run data get entity @s UUID[2]
 execute store result storage zx:work cc.u3 int 1 run data get entity @s UUID[3]
 function sweetdream:equipment/bow/cold_crow/store with storage zx:work cc
+
+# ④.5 逐箭快照: 把同一份数据再写进**这一箭自己**身上
+#   【怎么认出"这一箭"】core/tick 在每刻开头给场上已有的箭都打了 zx.cc_seen,
+#     所以此刻唯一没带这个标签的, 就是这一 tick 刚射出去的 —— 多重射击的 3 支
+#     会一起被抓到(它们本来就是同一发的参数, 共用一份快照正好是对的)。
+#   【为什么不能省】按射手存的那一份会被下一发覆盖。在途的旧箭命中时就能靠
+#     自己身上这份读到"自己那一发"的层数, 不再被后发顶掉。
+#   【distance=..4】再限一下范围, 免得把同一刻别的玩家射出的箭也写进去
+#     (箭出生在玩家眼睛位置, 离自己不到 2 格)。
+#   【没认到也不慌】store 写的那份还在, 命中时退回去用, 只是变回旧行为。
+execute at @s as @e[type=#sweetdream:cc_arrow,tag=!zx.cc_seen,distance=..4] run function sweetdream:equipment/bow/cold_crow/snapshot with storage zx:work cc
 
 # ⑤ 命中判定: 由弩上自带的附魔「霜矢」回调(hook_victim)完成 —— 原版判定"这支箭打中了谁"。
 #   【备用方案】如果哪天附魔路线出问题, 把下面这行的注释去掉即可: 改成"射击瞬间沿准星探",

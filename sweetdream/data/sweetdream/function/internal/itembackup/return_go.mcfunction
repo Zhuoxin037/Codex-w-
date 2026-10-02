@@ -12,3 +12,7 @@ execute unless data storage zx:data self{ok:1b} run return fail
 
 data modify storage zx:work a.uuid set from storage zx:data self.uuid
 function sweetdream:internal/itembackup/effect_2 with storage zx:work a
+
+# 回手做完了, 槽位标记就用不着了 —— 留着会污染下一次判定。
+#   (下一次 effect_1 开头也会先 remove 一次, 这里是双保险)
+tag @s remove zx.ret_off

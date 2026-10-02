@@ -17,6 +17,7 @@ execute as @e[type=minecraft:pig,tag=zx.tag_test_a,limit=1] at @s run function s
 execute as @e[type=minecraft:pig,tag=zx.tag_test_b,limit=1] at @s run function sweetdream:debug/tag_test/check {expected:3,count:1,glyphs:2,case:"storage batch B"}
 execute unless data storage zx:work ic{mark:"yuanhai",sentinel:"keep"} run function sweetdream:debug/tag_test/fail {case:"caller input overwritten"}
 function sweetdream:tag/mark {target:"@e[type=minecraft:pig,tag=zx.tag_test]",mark:"yuanhai"}
+# dup-ok: 幂等性回归测试 —— 故意连标两次, 后面那行就是 repeat idempotent 的断言
 function sweetdream:tag/mark {target:"@e[type=minecraft:pig,tag=zx.tag_test]",mark:"yuanhai"}
 execute as @e[type=minecraft:pig,tag=zx.tag_test_a,limit=1] at @s run function sweetdream:debug/tag_test/check {expected:3,count:1,glyphs:2,case:"repeat idempotent"}
 function sweetdream:tag/mark {target:"@e[type=minecraft:pig,tag=zx.tag_test]",mark:"invalid"}

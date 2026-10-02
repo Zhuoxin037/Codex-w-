@@ -20,5 +20,10 @@ tellraw @s [{"text":"/damage 调用次数 ","color":"gray"},{"score":{"name":"#d
 execute if data storage zx:data last.num run tellraw @s [{"text":"最近一次伤害数字 ","color":"gray"},{"nbt":"last.num","storage":"zx:data","color":"white"},{"text":"   类型 ","color":"dark_gray"},{"nbt":"last.type","storage":"zx:data","color":"white"}]
 execute unless data storage zx:data last.num run tellraw @s [{"text":"还没有任何 /damage 被调用过","color":"red"}]
 
+# 【★ 命令成败 ★】0 = 那条 /damage **根本没成功**。最常见的原因是伤害类型
+#   没注册进世界(damage_type 是注册表, /reload 补不上) —— 详见
+#   /function sweetdream:debug/true_damage
+execute if data storage zx:data last.num run tellraw @s [{"text":"那次 /damage 成功? ","color":"gray"},{"score":{"name":"#dbg_dmg","objective":"zx.meta"},"color":"white"},{"text":"   (0 = 命令失败, 去查伤害类型)","color":"dark_gray"}]
+
 execute if data storage manacore:out r.damage run tellraw @s [{"text":"manacore 算出的伤害 ","color":"gray"},{"nbt":"r.damage","storage":"manacore:out","color":"aqua"}]
 tellraw @s [{"text":"接口出参 applied ","color":"gray"},{"nbt":"r.applied","storage":"zx:out","color":"yellow"},{"text":"   damage ","color":"dark_gray"},{"nbt":"r.damage","storage":"zx:out","color":"yellow"}]

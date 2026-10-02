@@ -15,4 +15,7 @@ execute if entity @a[tag=zx.de_run] run function sweetdream:equipment/sword/deep
 
 function sweetdream:lib/unfreeze_sweep
 
+# 魔力上限下限保护 —— 必须放在所有装备结算之后(脑髓蛭/脊骨共生会把上限算成负数)
+execute as @a run function sweetdream:lib/mana_floor
+
 function sweetdream:lib/in_restore

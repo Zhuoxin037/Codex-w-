@@ -18,6 +18,9 @@ scoreboard players add @s zx.lk_mode 0
 scoreboard players add @s zx.im_mk 0
 scoreboard players add @s zx.im_buff 0
 scoreboard players add @s zx.im_buff_mk 0
+scoreboard players add @s zx.im_ignite 0
+scoreboard players add @s zx.em_conv 0
+scoreboard players add @s zx.em_seen 0
 
 tellraw @s [{"text":"===== 余烬 / 焚舟 =====","color":"gold","bold":true}]
 execute if items entity @s armor.legs netherite_leggings[custom_data~{zx:["ember"]}] run tellraw @s [{"text":"余烬: ","color":"gray"},{"text":"已装备","color":"green"},{"text":"  上限账本 ","color":"gray"},{"score":{"name":"@s","objective":"zx.em_mana"},"color":"aqua"}]
@@ -30,8 +33,15 @@ tellraw @s [{"text":"烈空: ","color":"gray"},{"score":{"name":"@s","objective"
 tellraw @s [{"text":"烈空上限账本: ","color":"gray"},{"score":{"name":"@s","objective":"zx.im_mk"},"color":"aqua"},{"text":"   套装buff剩余: ","color":"gray"},{"score":{"name":"@s","objective":"zx.im_buff"},"color":"white"},{"text":"   套装buff账本: ","color":"gray"},{"score":{"name":"@s","objective":"zx.im_buff_mk"},"color":"aqua"}]
 tellraw @s [{"text":"换算常量 #20/#30: ","color":"gray"},{"score":{"name":"#20","objective":"zx.meta"},"color":"white"},{"text":" / ","color":"gray"},{"score":{"name":"#30","objective":"zx.meta"},"color":"white"}]
 tellraw @s [{"text":"套装+20 触发次数: ","color":"gray"},{"score":{"name":"@s","objective":"zx.im_set20"},"color":"white"},{"text":"  (烈空已 200 时会被夹住, 但这里仍会 +1)","color":"dark_gray"}]
-tellraw @s [{"text":"余烬燃烧结束转换次数: ","color":"gray"},{"score":{"name":"@s","objective":"zx.em_conv"},"color":"white"}]
+tellraw @s [{"text":"焚舟点火次数: ","color":"gray"},{"score":{"name":"@s","objective":"zx.im_ignite"},"color":"yellow"},{"text":"   余烬燃烧结束转换次数: ","color":"gray"},{"score":{"name":"@s","objective":"zx.em_conv"},"color":"white"}]
 tellraw @s [{"text":"余烬看到燃烧生物的 tick 次数: ","color":"gray"},{"score":{"name":"@s","objective":"zx.em_seen"},"color":"white"}]
+tellraw @s [{"text":"↑ 点火次数应该 ≈ 转换次数。点火明显更多 = 有火被漏掉了","color":"dark_gray"}]
+
+# 12 格内生物快照: Fire 值 / 余烬边沿标记 / 流火 / 夜火
+tellraw @s [{"text":"--- 周围生物 ---","color":"dark_gray"}]
+tag @s add zx.em_dbg
+execute as @e[type=!#sweetdream:hit_scan_exclude,distance=..12,sort=nearest,limit=8] at @s run function sweetdream:debug/ember_probe
+tag @s remove zx.em_dbg
 
 function sweetdream:lib/in_bak
 function sweetdream:lib/uuid
