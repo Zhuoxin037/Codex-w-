@@ -19,4 +19,8 @@ function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run tellraw @s [{"text":"还没注册完成(uuid 是空的), 等一秒再试","color":"red"}]
 execute unless data storage zx:data self{ok:1b} run return fail
 
-function sweetdream:debug/wind_macro with storage zx:data self
+# ⚠️ 宏参数一律先抄进 zx:work 再传 —— 直接写 `with storage zx:data self`
+#    会让 wind_macro **一条命令都不跑**(静默, 日志都不报)。2026-10-03 修。
+data modify storage zx:work sd set value {uuid:""}
+data modify storage zx:work sd.uuid set from storage zx:data self.uuid
+function sweetdream:debug/wind_macro with storage zx:work sd

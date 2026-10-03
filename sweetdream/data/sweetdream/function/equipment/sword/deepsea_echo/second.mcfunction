@@ -11,4 +11,9 @@ function sweetdream:lib/in_bak
 
 execute as @a run function sweetdream:equipment/sword/deepsea_echo/passive
 
+# 释放动画的兜底: 没在施法的人, 剑上的 floats[1] 一律写回 32(待机)。
+# 施法途中换栏位/丢地上会让 anim/end 推不进去, 剑上会残留一个中途帧号。
+# 每秒扫一遍, 最长 1 秒归位(详见 anim/reset_hands 的注释)。
+execute as @a run function sweetdream:equipment/sword/deepsea_echo/anim/reset_hands
+
 function sweetdream:lib/in_restore

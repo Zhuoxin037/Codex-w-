@@ -11,3 +11,7 @@
 data modify storage manacore:in arg set value {uuid:"",value:3.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/mana/add
+
+# 记进"装备额外回魔"账本 —— 前置包的 regen 接口不认识这种直接 add 的回魔,
+# debug/stats 里那一行"装备额外"就是靠它报数的(见 core/load 的注释)。
+scoreboard players add @s zx.regen_extra 3

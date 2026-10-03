@@ -56,7 +56,9 @@ $execute store result storage zx:data de."$(uuid)".left int 1 run scoreboard pla
 
 # 还要重复 -> 再花 110 魔力; 够就 1 秒后下一波, 不够就中断(并把标记清干净)
 execute if score #left zx.meta matches 1.. run function sweetdream:equipment/sword/deepsea_echo/pay_mana
-execute if score #left zx.meta matches 1.. if data storage manacore:out r{success:1b} run schedule function sweetdream:equipment/sword/deepsea_echo/wave 1s
+#   【为什么不是 schedule】见 cast ⑦ 的注释: 同名 schedule 会互相顶掉。
+#   这里只负责"把倒计时重置回 20", 真正每刻往下推的是 core/tick。
+execute if score #left zx.meta matches 1.. if data storage manacore:out r{success:1b} run scoreboard players set @s zx.de_t 20
 execute if score #left zx.meta matches 1.. if data storage manacore:out r{success:0b} run tellraw @s [{"text":"魔力不足, 连锁中断","color":"red"}]
 execute if score #left zx.meta matches 1.. if data storage manacore:out r{success:0b} run function sweetdream:equipment/sword/deepsea_echo/finish with storage zx:work de
 execute if score #left zx.meta matches ..0 run function sweetdream:equipment/sword/deepsea_echo/finish with storage zx:work de

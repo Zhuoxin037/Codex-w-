@@ -19,3 +19,8 @@ data modify storage manacore:in arg set value {uuid:"",value:0.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 execute store result storage manacore:in arg.value double 1 run scoreboard players get #mz zx.meta
 function manacore:api/mana/add
+
+# 记进"装备额外回魔"账本(见 core/load 的注释)。
+#   这一笔是"每 3 秒回 1% 上限", 数额随上限浮动, 所以直接搬 #mz 的原值,
+#   不写死数字 —— 以后改回魔公式这里不用跟着改。
+scoreboard players operation @s zx.regen_extra += #mz zx.meta

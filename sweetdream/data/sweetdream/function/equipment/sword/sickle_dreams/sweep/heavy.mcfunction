@@ -25,7 +25,9 @@ $execute if score @s zx.sd_t matches 9 run item modify entity @s $(hand) {functi
 execute if score @s zx.sd_t matches 9 run function sweetdream:equipment/sword/sickle_dreams/sweep/fx_at/h09 with storage zx:sweep current
 execute if score @s zx.sd_t matches 9 run function sweetdream:equipment/sword/sickle_dreams/sweep/at_impact with storage zx:sweep current
 $execute if score @s zx.sd_t matches 10 run item modify entity @s $(hand) {function:"minecraft:set_components",components:{"minecraft:item_model":"dreamscythe:sweep/h10"}}
+execute if score @s zx.sd_t matches 10 run function sweetdream:equipment/sword/sickle_dreams/sweep/fx_at/h10 with storage zx:sweep current
 $execute if score @s zx.sd_t matches 11 run item modify entity @s $(hand) {function:"minecraft:set_components",components:{"minecraft:item_model":"dreamscythe:sweep/h11"}}
+execute if score @s zx.sd_t matches 11 run function sweetdream:equipment/sword/sickle_dreams/sweep/fx_at/h11 with storage zx:sweep current
 $execute if score @s zx.sd_t matches 12 run item modify entity @s $(hand) {function:"minecraft:set_components",components:{"minecraft:item_model":"dreamscythe:sweep/h12"}}
 execute if score @s zx.sd_t matches 12 run function sweetdream:equipment/sword/sickle_dreams/sweep/fx_at/h12 with storage zx:sweep current
 $execute if score @s zx.sd_t matches 13 run item modify entity @s $(hand) {function:"minecraft:set_components",components:{"minecraft:item_model":"dreamscythe:sweep/h13"}}

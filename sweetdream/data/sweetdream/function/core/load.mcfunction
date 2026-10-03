@@ -39,6 +39,19 @@ execute unless data storage zx:config obj_power_hp run scoreboard objectives add
 execute unless data storage zx:config obj_power_hp run data modify storage zx:config obj_power_hp set value 1b
 execute unless data storage zx:config obj_set_hp run scoreboard objectives add zx.set_hp dummy
 execute unless data storage zx:config obj_set_hp run data modify storage zx:config obj_set_hp set value 1b
+# 升级系统: 盔甲升级给"魔力上限"的账本(同上面一套写法, 换装时靠差值加减)
+execute unless data storage zx:config obj_up_mana run scoreboard objectives add zx.up_mana dummy
+execute unless data storage zx:config obj_up_mana run data modify storage zx:config obj_up_mana set value 1b
+
+# 超限系统: 施法**那一刻**拍下来的超限乘区快照(整数百分比)
+#   不现读主手 —— 燎原光环 / 风行 3 轮爆发与回响都是施法之后才结算的,
+#   那时候玩家可能已经换手了。详见 overlimit/api/snap。
+execute unless data storage zx:config obj_ol_d run scoreboard objectives add zx.ol_d dummy
+execute unless data storage zx:config obj_ol_d run data modify storage zx:config obj_ol_d set value 1b
+execute unless data storage zx:config obj_ol_m run scoreboard objectives add zx.ol_m dummy
+execute unless data storage zx:config obj_ol_m run data modify storage zx:config obj_ol_m set value 1b
+execute unless data storage zx:config obj_ol_c run scoreboard objectives add zx.ol_c dummy
+execute unless data storage zx:config obj_ol_c run data modify storage zx:config obj_ol_c set value 1b
 
 # 桂冠专用: zx.dio_mana = 已经加进面板的魔力上限; zx.dio_regen = 还剩几秒回魔
 execute unless data storage zx:config obj_dio_mana run scoreboard objectives add zx.dio_mana dummy
@@ -75,6 +88,23 @@ execute unless data storage zx:config obj_chg_on run data modify storage zx:conf
 # 引梦镰 的"强化攻击"锁定: 触发过强化之后还剩几秒不能再触发(初始 0 = 没锁)
 execute unless data storage zx:config obj_sd_lock run scoreboard objectives add zx.sd_lock dummy
 execute unless data storage zx:config obj_sd_lock run data modify storage zx:config obj_sd_lock set value 1b
+
+# 深海的回响 · 释放动画
+#   zx.de_cast = 每个玩家自己的动画帧号: 0..31 = cast_00..cast_31,
+#                满 33 时被 anim/end 清掉。多人同时施法各播各的, 不互相串。
+#   三个假玩家常量挂在 zx.meta 上, 给 item_modifier 当"名字写死"的 score provider:
+#     #decast = anim/tick 每 tick 从 @s 抄进来的当前帧号
+#     #deidle = 32, 归位位 —— range_dispatch 的 threshold 32 那一条 = 原待机模型
+#     #dezero = 0, 占位。floats[0] 深海用不到, 但 replace_section 写满两个值
+#               比只写一个更靠近风行的已验证写法(那边也是两个值)。
+execute unless data storage zx:config obj_de_cast run scoreboard objectives add zx.de_cast dummy
+execute unless data storage zx:config obj_de_cast run data modify storage zx:config obj_de_cast set value 1b
+scoreboard players set #deidle zx.meta 32
+scoreboard players set #dezero zx.meta 0
+# zx.de_t: 深海连锁每人自己的倒计时(还剩几 tick 推下一波)。
+#   【为什么不用 schedule】见 cast ⑦ —— 同名 schedule 是全局一个槽, 会互相顶掉。
+execute unless data storage zx:config obj_de_t run scoreboard objectives add zx.de_t dummy
+execute unless data storage zx:config obj_de_t run data modify storage zx:config obj_de_t set value 1b
 
 # ---- 四件新装备/武器专用的计分项(目标名上限 16 字符, 所以写得很短) ----
 # 群星坠落之挽歌: se_mana = 已加进面板的魔力上限; se_regen = 受击后"每秒回10魔力"还剩几秒
@@ -218,6 +248,19 @@ execute unless data storage zx:config obj_ss_hp run data modify storage zx:confi
 # 魔力上限下限保护垫了多少(见 lib/mana_floor)
 execute unless data storage zx:config obj_floor_mana run scoreboard objectives add zx.floor_mana dummy
 execute unless data storage zx:config obj_floor_mana run data modify storage zx:config obj_floor_mana set value 1b
+
+# ---- 装备额外回魔的账本(两个) ----
+#   【为什么需要】前置包只认"每秒恢复速率"(regen modifier), 而静脉泵/桂冠/挽歌/
+#     黄昏黎明套装是**自己到点直接 add 魔力**的 —— 前置包不知道, 于是 debug 里
+#     "回魔/秒"那一行永远显示 0, 玩家明明在回魔却看不见。
+#   【为什么要两个】event/second 里各家装备排在前面, lib/second / debug/second 在后。
+#     所以: 各家装备每秒往 regen_extra 里累加; debug/second(列表最后一个)负责
+#     "把 regen_extra 抄进 regen_last, 再把 regen_extra 清零" —— 于是
+#     regen_last 永远是"上一秒完整的一整秒里实收了多少", 读它的人不受顺序影响。
+execute unless data storage zx:config obj_regen_extra run scoreboard objectives add zx.regen_extra dummy
+execute unless data storage zx:config obj_regen_extra run data modify storage zx:config obj_regen_extra set value 1b
+execute unless data storage zx:config obj_regen_last run scoreboard objectives add zx.regen_last dummy
+execute unless data storage zx:config obj_regen_last run data modify storage zx:config obj_regen_last set value 1b
 # 异彩: 魔力上限账本
 execute unless data storage zx:config obj_ir_mana run scoreboard objectives add zx.ir_mana dummy
 execute unless data storage zx:config obj_ir_mana run data modify storage zx:config obj_ir_mana set value 1b
@@ -262,12 +305,47 @@ execute unless data storage zx:config obj_mr_b7 run scoreboard objectives add zx
 execute unless data storage zx:config obj_mr_b7 run data modify storage zx:config obj_mr_b7 set value 1b
 execute unless data storage zx:config obj_mr_b8 run scoreboard objectives add zx.mr_b8 dummy
 execute unless data storage zx:config obj_mr_b8 run data modify storage zx:config obj_mr_b8 set value 1b
+
+# ---- 调试用的 /trigger 计分项(目标名上限 16 字符) ----
+#   trigger 型: 玩家敲一次就把"自己那一格"设成 1, 由 debug/tg_router 每刻取走。
+#   分数归 0 和重新 enable 都发生在取走之后 —— 见 debug/second。
+execute unless data storage zx:config obj_dbg_stats run scoreboard objectives add zx.dbg_stats trigger
+execute unless data storage zx:config obj_dbg_stats run data modify storage zx:config obj_dbg_stats set value 1b
+execute unless data storage zx:config obj_dbg_worn run scoreboard objectives add zx.dbg_worn trigger
+execute unless data storage zx:config obj_dbg_worn run data modify storage zx:config obj_dbg_worn set value 1b
+execute unless data storage zx:config obj_dbg_raw run scoreboard objectives add zx.dbg_raw trigger
+execute unless data storage zx:config obj_dbg_raw run data modify storage zx:config obj_dbg_raw set value 1b
+execute unless data storage zx:config obj_dbg_diff run scoreboard objectives add zx.dbg_diff trigger
+execute unless data storage zx:config obj_dbg_diff run data modify storage zx:config obj_dbg_diff set value 1b
+execute unless data storage zx:config obj_dbg_cd run scoreboard objectives add zx.dbg_cd trigger
+execute unless data storage zx:config obj_dbg_cd run data modify storage zx:config obj_dbg_cd set value 1b
+execute unless data storage zx:config obj_dbg_mana run scoreboard objectives add zx.dbg_mana trigger
+execute unless data storage zx:config obj_dbg_mana run data modify storage zx:config obj_dbg_mana set value 1b
+execute unless data storage zx:config obj_dbg_menu run scoreboard objectives add zx.dbg_menu trigger
+execute unless data storage zx:config obj_dbg_menu run data modify storage zx:config obj_dbg_menu set value 1b
+execute unless data storage zx:config obj_dbg_give run scoreboard objectives add zx.dbg_give trigger
+execute unless data storage zx:config obj_dbg_give run data modify storage zx:config obj_dbg_give set value 1b
+
+# ---- 通用数值注册表 ----
+#   把"debug/stats 要显示哪些加成"从写死的代码变成一张表, 见 lib/reg/build。
+#   ★ 以后加了新装备/新武器有加成, 只改 lib/reg/build 一处 ★
+function sweetdream:lib/reg/build
+
+# 建完立刻给在线玩家开一次(离线的人上线后由 debug/second 补)
+function sweetdream:debug/second
+
 # 环形下标取模用的模数: #6(+1 环) / #9(+2 环); #10 = +2 环的层数上限
 scoreboard players set #6 zx.meta 6
 scoreboard players set #9 zx.meta 9
 scoreboard players set #10 zx.meta 10
 # 百分比换算常量: #100 配合已有的 #3, "上限 ×3 ÷100" 就是 ×0.03
 scoreboard players set #100 zx.meta 100
+# 万分比换算常量(2026-10-04 加): 升级的 mhp 一路上是"百分数 ×100"(即单位为 0.01%),
+#   所以"最大魔力 × #up_pct"之后要 ÷10000 才是真百分比 —— 只除 #100 会**大 100 倍**。
+#   #5000 = 10000 的一半, 用来做四舍五入(1.5% of 300 = 4.5 -> 5)。
+#   见 upgrade/api/hit_percent 头注释里的单位链。
+scoreboard players set #5000 zx.meta 5000
+scoreboard players set #10000 zx.meta 10000
 # 随机取模用的模数: #4 / #5(异彩"5 选 2"、幻昼"20% = 1/5")
 scoreboard players set #4 zx.meta 4
 scoreboard players set #5 zx.meta 5

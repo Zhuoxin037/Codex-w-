@@ -1,7 +1,19 @@
 {
     "criteria": {
         "hurt": {
-            "trigger": "player_hurt_entity"
+            "trigger": "player_hurt_entity",
+            "conditions": {
+                "damage": {
+                    "type": {
+                        "tags": [
+                            {
+                                "expected": true,
+                                "id": "minecraft:is_player_attack"
+                            }
+                        ]
+                    }
+                }
+            }
         }
     },
     "rewards": {

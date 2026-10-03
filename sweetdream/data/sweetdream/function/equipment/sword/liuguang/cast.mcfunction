@@ -22,6 +22,11 @@
 # ⓪ 撤销自己的进度
 advancement revoke @s only sweetdream:equipment/sword/liuguang
 
+# ⓪.5 【超限分流】敲过超限石(custom_data.ol)的流光, 右键放的是「超限·流光」,
+#      原版技能被它顶掉 —— 见 equipment/sword/liuguang/overlimit。
+execute if data entity @s SelectedItem.components."minecraft:custom_data".ol run function sweetdream:equipment/sword/liuguang/overlimit
+execute if data entity @s SelectedItem.components."minecraft:custom_data".ol run return 0
+
 # ① 拿 uuid
 function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return fail

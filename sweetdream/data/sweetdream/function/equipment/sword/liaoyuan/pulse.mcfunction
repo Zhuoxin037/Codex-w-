@@ -27,6 +27,8 @@ data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 data modify storage manacore:in arg.base_attack set from storage manacore:out r.value
 data modify storage zx:work wg.uuid set from storage zx:data self.uuid
 function sweetdream:lib/max_mana_bonus with storage zx:work wg
+# ★ 超限的伤害乘区(敲过超限才有效): 0.04 -> 0.05, 和 lore 里的数字一一对应
+function sweetdream:overlimit/api/mod
 function manacore:api/damage/calc
 data modify storage zx:in arg set value {target:"@e[tag=zx.ly_hit]",read:"manacore"}
 function sweetdream:api/damage

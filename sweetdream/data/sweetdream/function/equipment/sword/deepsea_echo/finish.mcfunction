@@ -14,6 +14,9 @@
 $tag @e[tag=zx.de_$(uuid)] remove zx.de_$(uuid)
 $execute if data storage zx:data de."$(uuid)" run data remove storage zx:data de."$(uuid)"
 tag @s remove zx.de_run
+# 倒计时也归零 —— core/tick 是靠 zx.de_run 筛人的, 摘了标签其实已经不看了;
+# 归零是为了"万一标签还在"(比如手动补过), 也不会立刻又推进一波。
+scoreboard players set @s zx.de_t 0
 tag @e[tag=zx.de_hit] remove zx.de_hit
 tag @e[tag=zx.de_all] remove zx.de_all
 

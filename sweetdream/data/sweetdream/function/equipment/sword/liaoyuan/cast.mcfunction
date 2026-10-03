@@ -22,29 +22,41 @@ advancement revoke @s only sweetdream:equipment/sword/liaoyuan
 function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return fail
 
+# ①.2 ★ 拍下超限乘区 ★ 光环是施法之后才结算的(每秒推), 那时候主手可能已经
+#      换掉了 —— 所以在这里把"敲没敲超限"拍成玩家身上的快照, 后面全程用它。
+function sweetdream:overlimit/api/snap
+
 # ①.5 把要用到的计分项先建出来(没分数的目标在 matches 里判不出来)
 scoreboard players add @s zx.ly_aura 0
 scoreboard players add @s zx.ly_timer 0
 scoreboard players add @s zx.ly_times 0
 
 # ② 只读检查: 冷却 + 魔力 250
+#    ★ 检查之前先过一道超限: 敲过超限的燎原要 325 蓝、冷却 62.5 秒 ——
+#      不在这里乘的话, 提示会说"需要 250", 实际却扣 325(见 overlimit/api/mod)。
 data modify storage manacore:in arg set value {uuid:"",skill:"sweetdream:liaoyuan",mana:250.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
+function sweetdream:overlimit/api/mod
 function manacore:api/skill/check
+scoreboard players set #ly_need zx.meta 0
+execute store result score #ly_need zx.meta run data get storage zx:work olv.mana 1
 execute if data storage manacore:out r{reason:"cooldown"} run tellraw @s [{"text":"燎原 冷却中, 还剩 ","color":"red"},{"nbt":"r.remaining","storage":"manacore:out"},{"text":" tick","color":"red"}]
-execute if data storage manacore:out r{reason:"mana"} run tellraw @s [{"text":"魔力不足(需要 250)","color":"red"}]
+execute if data storage manacore:out r{reason:"mana"} run tellraw @s [{"text":"魔力不足(需要 ","color":"red"},{"score":{"name":"#ly_need","objective":"zx.meta"},"color":"red"},{"text":")","color":"red"}]
 execute unless data storage manacore:out r{success:1b} run return fail
 
-# ③ 扣魔力 250
+# ③ 扣魔力(超限后的值: zx:work olv.mana 由上面的 mod 抄好)
+#    先 set 成基准 250 再 from 覆盖 —— 万一 olv 读不到, 最坏也只是扣回原来的数, 不会扣 0。
 data modify storage manacore:in arg set value {uuid:"",value:250.0}
+data modify storage manacore:in arg.value set from storage zx:work olv.mana
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/mana/consume
-execute if data storage manacore:out r{success:0b} run tellraw @s [{"text":"魔力不足(需要 250)","color":"red"}]
+execute if data storage manacore:out r{success:0b} run tellraw @s [{"text":"魔力不足(需要 ","color":"red"},{"score":{"name":"#ly_need","objective":"zx.meta"},"color":"red"},{"text":")","color":"red"}]
 execute if data storage manacore:out r{success:0b} run return fail
 
-# ④ 起冷却 50 秒
+# ④ 起冷却 50 秒(超限后 62.5 秒)
 data modify storage manacore:in arg set value {uuid:"",skill:"sweetdream:liaoyuan",cooldown_seconds:50.0,reduce:1b}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
+function sweetdream:overlimit/api/mod
 function manacore:api/cooldown/start
 
 # ⑤ 开光环: 18 秒; 2 秒后第一次灼烧; 灼烧次数清零

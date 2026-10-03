@@ -25,6 +25,8 @@ data modify storage manacore:in arg.base_attack set from storage manacore:out r.
 #    所以这里不调用 sweetdream:lib/max_mana_bonus, 让它留着,
 #    下次施法时由"风行自己的爆发第 1 轮 / 横刀落点"吃掉。
 
+# ★ 超限的伤害乘区: 0.04 -> 0.048 (和 lore 里的数字一一对应)
+function sweetdream:overlimit/api/mod
 function manacore:api/damage/calc
 
 # 记下这一跳算出来的伤害(给 /function sweetdream:debug/wind 排查用)

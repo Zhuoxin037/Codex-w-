@@ -30,25 +30,43 @@
 function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return fail
 
+# ①.2 ★ 拍下超限乘区 ★ 技能后半段(3 轮爆发 + 20 秒回响)全是延迟结算的,
+#      到那时玩家多半已经换手 —— 所以乘区必须在**施法这一刻**定下来。
+function sweetdream:overlimit/api/snap
+
 # ② 只读检查: 冷却 + 魔力 550
+#    ★ 先过超限: 敲过超限的技能要 660 蓝、冷却 144 秒(见 overlimit/api/mod)
 data modify storage manacore:in arg set value {uuid:"",skill:"sweetdream:wind_ontheground",mana:550.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
+function sweetdream:overlimit/api/mod
 function manacore:api/skill/check
+scoreboard players set #wg_need zx.meta 0
+execute store result score #wg_need zx.meta run data get storage zx:work olv.mana 1
 execute if data storage manacore:out r{reason:"cooldown"} run tellraw @s [{"text":"风行于大地之上 冷却中, 还剩 ","color":"red"},{"nbt":"r.remaining","storage":"manacore:out"},{"text":" tick","color":"red"}]
-execute if data storage manacore:out r{reason:"mana"} run tellraw @s [{"text":"魔力不足(需要 550)","color":"red"}]
+execute if data storage manacore:out r{reason:"mana"} run tellraw @s [{"text":"魔力不足(需要 ","color":"red"},{"score":{"name":"#wg_need","objective":"zx.meta"},"color":"red"},{"text":")","color":"red"}]
 execute unless data storage manacore:out r{success:1b} run return fail
 
-# ③ 扣魔力 550
+# ③ 扣魔力 550(超限后的值)
 data modify storage manacore:in arg set value {uuid:"",value:550.0}
+data modify storage manacore:in arg.value set from storage zx:work olv.mana
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/mana/consume
-execute if data storage manacore:out r{success:0b} run tellraw @s [{"text":"魔力不足(需要 550)","color":"red"}]
+execute if data storage manacore:out r{success:0b} run tellraw @s [{"text":"魔力不足(需要 ","color":"red"},{"score":{"name":"#wg_need","objective":"zx.meta"},"color":"red"},{"text":")","color":"red"}]
 execute if data storage manacore:out r{success:0b} run return fail
 
-# ④ 记冷却 120 秒
+# ④ 记冷却 120 秒(超限后 144 秒)
 data modify storage manacore:in arg set value {uuid:"",skill:"sweetdream:wind_ontheground",cooldown_seconds:120.0,reduce:1b}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
+function sweetdream:overlimit/api/mod
 function manacore:api/cooldown/start
+
+# ④.5 播放释放动画(风行枝冠炸开, 26 tick = 1.3 秒)
+#   为什么卡在这里而不是函数末尾: 到这一步魔力已扣、冷却已记, "这一次施法成立"
+#   就已经确定了。而下面第 ⑤ 段里有一处 `run return 0`(术阵已满的分支),
+#   会提前结束整个函数 —— 动画点火要是写在末尾, 那条分支下就永远不播,
+#   可技能明明是放出来了的。放在这里两种情况都能播到。
+#   执行者仍是施法者本人(skill 一路进来没换过执行者), cast_start 用的就是 @s。
+function naturewind:cast_start
 
 # ⑤ X = 术阵还能召唤几个 = 上限 - 已占用
 data modify storage manacore:in arg set value {uuid:""}

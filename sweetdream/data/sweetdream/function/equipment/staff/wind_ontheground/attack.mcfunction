@@ -20,18 +20,27 @@
 function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return fail
 
+# ①.2 ★ 拍下超限乘区 ★ 法球带着伤害飞, 但本体伤害是**当下**算的 ——
+#      这里拍一次, 保证"这一发"用的就是此刻手里这把武器的超限状态。
+function sweetdream:overlimit/api/snap
+
 # ② 只读检查: 魔力 80(普攻不进冷却, 所以不查冷却)
+#    ★ 先过超限: 敲过超限的普攻要 96 蓝(见 overlimit/api/mod)
 data modify storage manacore:in arg set value {uuid:"",skill:"sweetdream:wind_attack",mana:80.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
+function sweetdream:overlimit/api/mod
 function manacore:api/skill/check
-execute if data storage manacore:out r{reason:"mana"} run tellraw @s [{"text":"魔力不足(需要 80)","color":"red"}]
+scoreboard players set #wg_need zx.meta 0
+execute store result score #wg_need zx.meta run data get storage zx:work olv.mana 1
+execute if data storage manacore:out r{reason:"mana"} run tellraw @s [{"text":"魔力不足(需要 ","color":"red"},{"score":{"name":"#wg_need","objective":"zx.meta"},"color":"red"},{"text":")","color":"red"}]
 execute unless data storage manacore:out r{success:1b} run return fail
 
-# ③ 扣魔力 80
+# ③ 扣魔力 80(超限后的值)
 data modify storage manacore:in arg set value {uuid:"",value:80.0}
+data modify storage manacore:in arg.value set from storage zx:work olv.mana
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/mana/consume
-execute if data storage manacore:out r{success:0b} run tellraw @s [{"text":"魔力不足(需要 80)","color":"red"}]
+execute if data storage manacore:out r{success:0b} run tellraw @s [{"text":"魔力不足(需要 ","color":"red"},{"score":{"name":"#wg_need","objective":"zx.meta"},"color":"red"},{"text":")","color":"red"}]
 execute if data storage manacore:out r{success:0b} run return fail
 
 # ④ 术阵满不满?(满则本次伤害 ×2.5, 写进独立乘区)
@@ -49,6 +58,8 @@ data modify storage manacore:in arg set value {uuid:"",base_attack:-1.0,skill_mu
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 data modify storage manacore:in arg.base_attack set from storage manacore:out r.value
 execute if score #full zx.meta matches 1 run data modify storage manacore:in arg.independent_multiplier set value 2.5
+# ★ 超限的伤害乘区: 0.04 -> 0.048 (和 lore 里的数字一一对应)
+function sweetdream:overlimit/api/mod
 function manacore:api/damage/calc
 
 # ⑥ 每次普攻后: 迅捷 III 1 秒(amplifier 2 = III 级)

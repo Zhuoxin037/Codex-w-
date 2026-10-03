@@ -265,6 +265,27 @@ seed / wave_go  ──schedule 5t / 10t / 15t──►  fx ──► fx_self ─
 2. 函数引用、标签引用、进度奖励与撤销、宏前缀 —— 这些都能静态查出来
 3. `/function sweetdream:debug/num_probe` 可以看宏渲染出来的数字长什么样
 
-## 风行模型动画运行时（已恢复）
+## 风行模型动画运行时
 
-`data/naturewind/function/load.mcfunction`、`tick.mcfunction`、`step.mcfunction` 及 `data/naturewind/item_modifier/animation_frame.json` 是游戏运行依赖，不能作为建模临时文件删除。每 3 tick 只更新玩家手中风行的 custom_model_data.floats[0]，16 个相位循环共 2.4 秒；既有 9 份枝冠几何按往返顺序使用。物品其他组件、额外模型参数和手持变换不改。没有持有者时停止推进。
+**两套动画、两条独立通道**，都写在物品的 `minecraft:custom_model_data` 上，
+由资源包 `assets/naturewind/items/staff.json` 里的两层 `range_dispatch` 分别读取。
+
+| | 待机（枝冠呼吸） | 释放（技能动画） |
+|---|---|---|
+| 分量 | `floats[0]` | `floats[1]` |
+| 节拍 | 每 3 tick 一个相位，16 相位循环 2.4 秒 | 每 tick 一帧，26 帧 = 1.3 秒 |
+| 驱动 | `naturewind/step` | `naturewind/cast_tick` |
+| 写入口 | `item_modifier naturewind:animation_frame` | `item_modifier naturewind:cast_frame` |
+| 何时跑 | 一直 | 只在施法之后 |
+
+- 场上没人拿风行时待机不推进也不改物品（`tick.mcfunction` 开头那句 `return 0`）。
+- **释放动画那一行必须放在那句 `return 0` 之前** —— 施法到一半把杖丢掉的玩家，
+  仍然要靠 `cast_tick` 把计数走完、把 `nw.casting` 摘掉。
+- `floats[1]` 缺失或 ≥26 → 走待机那套；0..25 → `cast_00..cast_25`。
+  **threshold 26 也是待机**，所以"归位"只需要一个正常数值，不用表达负值。
+- `step` 里还有一道兜底：所有 `unless tag=nw.casting` 的持杖者每 3 tick 被写一次
+  `cast_idle`。它修的是"施法途中换武器 → 帧号残留在物品上 → 待机动画永久失效"。
+- `crown_0..8` 这 9 份枝冠几何按往返顺序使用，只做整体升降；释放动画是另外
+  26 份完整的 `staff_optimized/cast/cast_00..25`（木杆+水晶+树枝合并）。
+- 以上全是游戏运行依赖，**不能当建模临时文件删掉**。
+- 想整个撤掉这次接入：`python .workbuddy/wind_revert.py`（原件都有备份）。

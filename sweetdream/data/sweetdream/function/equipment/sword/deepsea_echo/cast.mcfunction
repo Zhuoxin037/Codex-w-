@@ -63,5 +63,22 @@ data modify storage zx:work de.uuid set from storage zx:data self.uuid
 function sweetdream:equipment/sword/deepsea_echo/seed with storage zx:work de
 
 # ⑦ 起链: 1 秒后第一波
+#   【★ 为什么不用 schedule ★】schedule 是按**函数名**排队的, 而且默认是 replace
+#     模式 —— 谁再排一次同名函数, 就把上一条顶掉。这里的后果是:
+#       · 两个人几乎同时放深海 -> 后放的人把先放的人那一波顶了, 水链少打一波;
+#       · 同一个人"上一波还没到、又开了一条新链"(理论上冷却内不会, 但改数值后就可能)
+#         -> 两条链并成一条, 时间点漂移。
+#     所以改成"每人身上一个倒计时 zx.de_t", 由 core/tick 每刻推 ——
+#     多人同时施法各走各的, 谁也不影响谁。
+#   【为什么是 20】core/tick 里是"先减 1 再判 <=0", 所以设 20 = 正好 20 tick
+#     后推进, 和原来的 schedule ... 1s 等价。
 tag @s add zx.de_run
-schedule function sweetdream:equipment/sword/deepsea_echo/wave 1s
+scoreboard players set @s zx.de_t 20
+
+# ⑧ 播放释放动画(32 tick = 1.6 秒)
+#   【为什么放最后】前面 ①-⑥ 任何一步 return fail, 技能就没有成立, 不该有动画。
+#   【为什么和时间轴对得上】动画从这一刻起算, 第 20 tick 正好是技能第一波水链
+#     落地(1 秒 = 20 tick), anim/fx 在那一帧单独加了一圈最亮的环 ——
+#     于是"护手炸开"和"水链打到人"在视觉上是同一件事。
+#   【它自己会收尾】anim/end 摘 tag; 中途把剑丢了也不会卡住(见 anim/end 注释)。
+function sweetdream:equipment/sword/deepsea_echo/anim/start

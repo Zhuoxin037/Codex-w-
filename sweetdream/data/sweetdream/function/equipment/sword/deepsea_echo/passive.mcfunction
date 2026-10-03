@@ -13,3 +13,21 @@
 # ============================================================
 
 execute if items entity @s weapon.mainhand diamond_sword[custom_data~{"zx":["deepsea_echo"]}] run effect give @s minecraft:water_breathing 3 0 true
+
+# ============================================================
+# 待机环境特效 —— 手里握着这把剑时, 剑周一直在渗水
+# ------------------------------------------------------------
+# 【为什么放在这里】这个文件本来就是"主手持剑时每秒跑一次"的入口,
+#   粒子搭同一趟车, 没拿这把剑的人连选择器都过不了, 开销为零。
+# 【和释放动画的分工】这里只管"平时"。释放那 1.6 秒由 anim/fx 接管,
+#   两边用的是同一套颜色, 所以从待机到爆发不会突然换一种蓝。
+# 【三条粒子分别是什么】
+#   · 腰间高度的水汽团   —— 剑在手里的位置大约就在那, 慢慢往外渗
+#   · 上浮的气泡         —— 深海味的核心, 只给 2 颗, 多了就吵
+#   · 贴地的一圈淡雾     —— 站定时脚下像踩在一层薄水上
+# 【为什么不用 minecraft:nautilus/water_drop 之类】dust 是唯一能指定颜色的,
+#   另外两种偏亮偏白, 和这把剑的深蓝不搭。
+# ============================================================
+execute if items entity @s weapon.mainhand diamond_sword[custom_data~{"zx":["deepsea_echo"]}] run particle minecraft:dust{color:[0.28,0.55,0.92],scale:0.85} ~ ~1.10 ~ 0.45 0.60 0.45 0 4 normal
+execute if items entity @s weapon.mainhand diamond_sword[custom_data~{"zx":["deepsea_echo"]}] run particle minecraft:bubble ~ ~0.95 ~ 0.35 0.50 0.35 0.02 2 normal
+execute if items entity @s weapon.mainhand diamond_sword[custom_data~{"zx":["deepsea_echo"]}] run particle minecraft:dust{color:[0.30,0.58,0.95],scale:0.90} ~ ~0.15 ~ 1.10 0.05 1.10 0 5 normal

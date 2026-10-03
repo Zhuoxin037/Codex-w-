@@ -16,6 +16,8 @@
     "sweetdream:equipment/armor/immolate/second",
     "sweetdream:equipment/armor/iridescent/second",
     "sweetdream:equipment/armor/mirage/second",
-    "sweetdream:lib/second"
+    "sweetdream:lib/second",
+    "sweetdream:debug/second",
+    "sweetdream:equipment/sword/flame_brokenbody/model_sync"
   ]
 }

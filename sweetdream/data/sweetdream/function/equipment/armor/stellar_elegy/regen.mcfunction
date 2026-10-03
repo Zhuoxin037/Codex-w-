@@ -10,4 +10,7 @@ data modify storage manacore:in arg set value {uuid:"",value:10.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/mana/add
 
+# 记进"装备额外回魔"账本(见 core/load 的注释)
+scoreboard players add @s zx.regen_extra 10
+
 scoreboard players remove @s zx.se_regen 1

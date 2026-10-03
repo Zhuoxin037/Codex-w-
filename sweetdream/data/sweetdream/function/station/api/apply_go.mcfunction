@@ -22,7 +22,19 @@ $execute unless block $(x) $(y) $(z) #minecraft:shulker_boxes unless block $(x) 
 # ① 武器进工作台
 $item replace block $(x) $(y) $(z) container.0 from entity @s weapon.offhand
 # ② 只动一个字段: 升级 = 往 up 列表追加; 超限 = 写 ol
+#    ★ 第一次敲的时候物品上**根本没有 up 这个键**, 直接 append 会失败(静默):
+#      材料照样被消耗、但装备上什么都没写上去。所以先补一个空列表再追加。
+$execute if data storage zx:work st{kind:"upgrade"} unless data block $(x) $(y) $(z) Items[{Slot:0b}].components."minecraft:custom_data".up run data modify block $(x) $(y) $(z) Items[{Slot:0b}].components."minecraft:custom_data".up set value []
 $execute if data storage zx:work st{kind:"upgrade"} run data modify block $(x) $(y) $(z) Items[{Slot:0b}].components."minecraft:custom_data".up append value "$(id)"
 $execute if data storage zx:work st{kind:"overlimit"} run data modify block $(x) $(y) $(z) Items[{Slot:0b}].components."minecraft:custom_data".ol set value "$(of)"
+# ②.5 【名字和描述都要跟着变】光改数据、物品看上去还是老样子, 拿着会以为没生效。
+#      交给 station/api/lore_refresh 整段重建:
+#        · 没超限 -> 原描述(custom_data.lore_base) + 升级一节, 名字不动
+#        · 敲了超限 -> 名字换成 oldef.<ol>.name(超限·XX),
+#                      **描述整段换成** oldef.<ol>.lore + 升级一节
+#          (超限把技能整个换掉了, 只追加一行的话玩家仍然只看到旧技能)
+#      重建是幂等的, 敲几次都不会堆出重复标题。
+function sweetdream:station/api/lore_refresh with storage zx:work st
+
 # ③ 武器回副手
 $item replace entity @s weapon.offhand from block $(x) $(y) $(z) container.0

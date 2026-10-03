@@ -18,10 +18,10 @@
 # ============================================================
 
 # ① 副手触发 -> 还回副手
-execute as @a[tag=test_look_pending,tag=zx.look_off] run item replace entity @s weapon.offhand with recovery_compass[minecraft:item_name={text:"观测镜",bold:true,color:"aqua"},minecraft:lore=[{text:"右键: 开 / 关 数值面板",color:"gray",italic:false}],minecraft:custom_data={zx:["look"]},minecraft:consumable={animation:"none",consume_seconds:0,has_consume_particles:false,sound:"block.bamboo_wood_button.click_off"}]
+execute as @a[tag=test_look_pending,tag=zx.look_off] run item replace entity @s weapon.offhand with recovery_compass[minecraft:item_name={text:"观测镜",bold:true,color:"aqua"},minecraft:lore=[{"text":"右键: 开 / 关 数值面板","color":"gray","italic":false}],minecraft:custom_data={zx:["look"]},minecraft:consumable={animation:"none",consume_seconds:0,has_consume_particles:false,sound:"block.bamboo_wood_button.click_off"}]
 
 # ② 主手触发 -> 还回主手
-execute as @a[tag=test_look_pending,tag=!zx.look_off] run item replace entity @s weapon.mainhand with recovery_compass[minecraft:item_name={text:"观测镜",bold:true,color:"aqua"},minecraft:lore=[{text:"右键: 开 / 关 数值面板",color:"gray",italic:false}],minecraft:custom_data={zx:["look"]},minecraft:consumable={animation:"none",consume_seconds:0,has_consume_particles:false,sound:"block.bamboo_wood_button.click_off"}]
+execute as @a[tag=test_look_pending,tag=!zx.look_off] run item replace entity @s weapon.mainhand with recovery_compass[minecraft:item_name={text:"观测镜",bold:true,color:"aqua"},minecraft:lore=[{"text":"右键: 开 / 关 数值面板","color":"gray","italic":false}],minecraft:custom_data={zx:["look"]},minecraft:consumable={animation:"none",consume_seconds:0,has_consume_particles:false,sound:"block.bamboo_wood_button.click_off"}]
 
 # ③ 收尾: 两个标签一起清掉
 tag @a[tag=test_look_pending] remove test_look_pending

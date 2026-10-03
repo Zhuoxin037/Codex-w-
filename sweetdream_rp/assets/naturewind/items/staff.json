@@ -1,1 +1,486 @@
-{"hand_animation_on_swap":false,"model":{"type":"minecraft:select","property":"minecraft:display_context","cases":[{"when":["firstperson_righthand","firstperson_lefthand","thirdperson_righthand","thirdperson_lefthand"],"model":{"type":"minecraft:composite","models":[{"type":"minecraft:model","model":"naturewind:item/staff_optimized/body"},{"type":"minecraft:range_dispatch","property":"minecraft:custom_model_data","index":0,"fallback":{"type":"minecraft:model","model":"naturewind:item/staff_optimized/crown_4"},"entries":[{"threshold":0,"model":{"type":"minecraft:model","model":"naturewind:item/staff_optimized/crown_4"}},{"threshold":1,"model":{"type":"minecraft:model","model":"naturewind:item/staff_optimized/crown_5"}},{"threshold":2,"model":{"type":"minecraft:model","model":"naturewind:item/staff_optimized/crown_6"}},{"threshold":3,"model":{"type":"minecraft:model","model":"naturewind:item/staff_optimized/crown_7"}},{"threshold":4,"model":{"type":"minecraft:model","model":"naturewind:item/staff_optimized/crown_8"}},{"threshold":5,"model":{"type":"minecraft:model","model":"naturewind:item/staff_optimized/crown_7"}},{"threshold":6,"model":{"type":"minecraft:model","model":"naturewind:item/staff_optimized/crown_6"}},{"threshold":7,"model":{"type":"minecraft:model","model":"naturewind:item/staff_optimized/crown_5"}},{"threshold":8,"model":{"type":"minecraft:model","model":"naturewind:item/staff_optimized/crown_4"}},{"threshold":9,"model":{"type":"minecraft:model","model":"naturewind:item/staff_optimized/crown_3"}},{"threshold":10,"model":{"type":"minecraft:model","model":"naturewind:item/staff_optimized/crown_2"}},{"threshold":11,"model":{"type":"minecraft:model","model":"naturewind:item/staff_optimized/crown_1"}},{"threshold":12,"model":{"type":"minecraft:model","model":"naturewind:item/staff_optimized/crown_0"}},{"threshold":13,"model":{"type":"minecraft:model","model":"naturewind:item/staff_optimized/crown_1"}},{"threshold":14,"model":{"type":"minecraft:model","model":"naturewind:item/staff_optimized/crown_2"}},{"threshold":15,"model":{"type":"minecraft:model","model":"naturewind:item/staff_optimized/crown_3"}}]}]}}],"fallback":{"type":"minecraft:composite","models":[{"type":"minecraft:model","model":"naturewind:item/staff_optimized/body"},{"type":"minecraft:model","model":"naturewind:item/staff_optimized/crown_4"}]}}}
+{
+  "hand_animation_on_swap": false,
+  "model": {
+    "type": "minecraft:select",
+    "property": "minecraft:display_context",
+    "cases": [
+      {
+        "when": [
+          "firstperson_righthand",
+          "firstperson_lefthand",
+          "thirdperson_righthand",
+          "thirdperson_lefthand"
+        ],
+        "model": {
+          "type": "minecraft:range_dispatch",
+          "property": "minecraft:custom_model_data",
+          "index": 1,
+          "fallback": {
+            "type": "minecraft:composite",
+            "models": [
+              {
+                "type": "minecraft:model",
+                "model": "naturewind:item/staff_optimized/body"
+              },
+              {
+                "type": "minecraft:range_dispatch",
+                "property": "minecraft:custom_model_data",
+                "index": 0,
+                "fallback": {
+                  "type": "minecraft:model",
+                  "model": "naturewind:item/staff_optimized/crown_4"
+                },
+                "entries": [
+                  {
+                    "threshold": 0,
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "naturewind:item/staff_optimized/crown_4"
+                    }
+                  },
+                  {
+                    "threshold": 1,
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "naturewind:item/staff_optimized/crown_5"
+                    }
+                  },
+                  {
+                    "threshold": 2,
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "naturewind:item/staff_optimized/crown_6"
+                    }
+                  },
+                  {
+                    "threshold": 3,
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "naturewind:item/staff_optimized/crown_7"
+                    }
+                  },
+                  {
+                    "threshold": 4,
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "naturewind:item/staff_optimized/crown_8"
+                    }
+                  },
+                  {
+                    "threshold": 5,
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "naturewind:item/staff_optimized/crown_7"
+                    }
+                  },
+                  {
+                    "threshold": 6,
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "naturewind:item/staff_optimized/crown_6"
+                    }
+                  },
+                  {
+                    "threshold": 7,
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "naturewind:item/staff_optimized/crown_5"
+                    }
+                  },
+                  {
+                    "threshold": 8,
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "naturewind:item/staff_optimized/crown_4"
+                    }
+                  },
+                  {
+                    "threshold": 9,
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "naturewind:item/staff_optimized/crown_3"
+                    }
+                  },
+                  {
+                    "threshold": 10,
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "naturewind:item/staff_optimized/crown_2"
+                    }
+                  },
+                  {
+                    "threshold": 11,
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "naturewind:item/staff_optimized/crown_1"
+                    }
+                  },
+                  {
+                    "threshold": 12,
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "naturewind:item/staff_optimized/crown_0"
+                    }
+                  },
+                  {
+                    "threshold": 13,
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "naturewind:item/staff_optimized/crown_1"
+                    }
+                  },
+                  {
+                    "threshold": 14,
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "naturewind:item/staff_optimized/crown_2"
+                    }
+                  },
+                  {
+                    "threshold": 15,
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "naturewind:item/staff_optimized/crown_3"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "entries": [
+            {
+              "threshold": 0,
+              "model": {
+                "type": "minecraft:model",
+                "model": "naturewind:item/staff_optimized/cast/cast_00"
+              }
+            },
+            {
+              "threshold": 1,
+              "model": {
+                "type": "minecraft:model",
+                "model": "naturewind:item/staff_optimized/cast/cast_01"
+              }
+            },
+            {
+              "threshold": 2,
+              "model": {
+                "type": "minecraft:model",
+                "model": "naturewind:item/staff_optimized/cast/cast_02"
+              }
+            },
+            {
+              "threshold": 3,
+              "model": {
+                "type": "minecraft:model",
+                "model": "naturewind:item/staff_optimized/cast/cast_03"
+              }
+            },
+            {
+              "threshold": 4,
+              "model": {
+                "type": "minecraft:model",
+                "model": "naturewind:item/staff_optimized/cast/cast_04"
+              }
+            },
+            {
+              "threshold": 5,
+              "model": {
+                "type": "minecraft:model",
+                "model": "naturewind:item/staff_optimized/cast/cast_05"
+              }
+            },
+            {
+              "threshold": 6,
+              "model": {
+                "type": "minecraft:model",
+                "model": "naturewind:item/staff_optimized/cast/cast_06"
+              }
+            },
+            {
+              "threshold": 7,
+              "model": {
+                "type": "minecraft:model",
+                "model": "naturewind:item/staff_optimized/cast/cast_07"
+              }
+            },
+            {
+              "threshold": 8,
+              "model": {
+                "type": "minecraft:model",
+                "model": "naturewind:item/staff_optimized/cast/cast_08"
+              }
+            },
+            {
+              "threshold": 9,
+              "model": {
+                "type": "minecraft:model",
+                "model": "naturewind:item/staff_optimized/cast/cast_09"
+              }
+            },
+            {
+              "threshold": 10,
+              "model": {
+                "type": "minecraft:model",
+                "model": "naturewind:item/staff_optimized/cast/cast_10"
+              }
+            },
+            {
+              "threshold": 11,
+              "model": {
+                "type": "minecraft:model",
+                "model": "naturewind:item/staff_optimized/cast/cast_11"
+              }
+            },
+            {
+              "threshold": 12,
+              "model": {
+                "type": "minecraft:model",
+                "model": "naturewind:item/staff_optimized/cast/cast_12"
+              }
+            },
+            {
+              "threshold": 13,
+              "model": {
+                "type": "minecraft:model",
+                "model": "naturewind:item/staff_optimized/cast/cast_13"
+              }
+            },
+            {
+              "threshold": 14,
+              "model": {
+                "type": "minecraft:model",
+                "model": "naturewind:item/staff_optimized/cast/cast_14"
+              }
+            },
+            {
+              "threshold": 15,
+              "model": {
+                "type": "minecraft:model",
+                "model": "naturewind:item/staff_optimized/cast/cast_15"
+              }
+            },
+            {
+              "threshold": 16,
+              "model": {
+                "type": "minecraft:model",
+                "model": "naturewind:item/staff_optimized/cast/cast_16"
+              }
+            },
+            {
+              "threshold": 17,
+              "model": {
+                "type": "minecraft:model",
+                "model": "naturewind:item/staff_optimized/cast/cast_17"
+              }
+            },
+            {
+              "threshold": 18,
+              "model": {
+                "type": "minecraft:model",
+                "model": "naturewind:item/staff_optimized/cast/cast_18"
+              }
+            },
+            {
+              "threshold": 19,
+              "model": {
+                "type": "minecraft:model",
+                "model": "naturewind:item/staff_optimized/cast/cast_19"
+              }
+            },
+            {
+              "threshold": 20,
+              "model": {
+                "type": "minecraft:model",
+                "model": "naturewind:item/staff_optimized/cast/cast_20"
+              }
+            },
+            {
+              "threshold": 21,
+              "model": {
+                "type": "minecraft:model",
+                "model": "naturewind:item/staff_optimized/cast/cast_21"
+              }
+            },
+            {
+              "threshold": 22,
+              "model": {
+                "type": "minecraft:model",
+                "model": "naturewind:item/staff_optimized/cast/cast_22"
+              }
+            },
+            {
+              "threshold": 23,
+              "model": {
+                "type": "minecraft:model",
+                "model": "naturewind:item/staff_optimized/cast/cast_23"
+              }
+            },
+            {
+              "threshold": 24,
+              "model": {
+                "type": "minecraft:model",
+                "model": "naturewind:item/staff_optimized/cast/cast_24"
+              }
+            },
+            {
+              "threshold": 25,
+              "model": {
+                "type": "minecraft:model",
+                "model": "naturewind:item/staff_optimized/cast/cast_25"
+              }
+            },
+            {
+              "threshold": 26,
+              "model": {
+                "type": "minecraft:composite",
+                "models": [
+                  {
+                    "type": "minecraft:model",
+                    "model": "naturewind:item/staff_optimized/body"
+                  },
+                  {
+                    "type": "minecraft:range_dispatch",
+                    "property": "minecraft:custom_model_data",
+                    "index": 0,
+                    "fallback": {
+                      "type": "minecraft:model",
+                      "model": "naturewind:item/staff_optimized/crown_4"
+                    },
+                    "entries": [
+                      {
+                        "threshold": 0,
+                        "model": {
+                          "type": "minecraft:model",
+                          "model": "naturewind:item/staff_optimized/crown_4"
+                        }
+                      },
+                      {
+                        "threshold": 1,
+                        "model": {
+                          "type": "minecraft:model",
+                          "model": "naturewind:item/staff_optimized/crown_5"
+                        }
+                      },
+                      {
+                        "threshold": 2,
+                        "model": {
+                          "type": "minecraft:model",
+                          "model": "naturewind:item/staff_optimized/crown_6"
+                        }
+                      },
+                      {
+                        "threshold": 3,
+                        "model": {
+                          "type": "minecraft:model",
+                          "model": "naturewind:item/staff_optimized/crown_7"
+                        }
+                      },
+                      {
+                        "threshold": 4,
+                        "model": {
+                          "type": "minecraft:model",
+                          "model": "naturewind:item/staff_optimized/crown_8"
+                        }
+                      },
+                      {
+                        "threshold": 5,
+                        "model": {
+                          "type": "minecraft:model",
+                          "model": "naturewind:item/staff_optimized/crown_7"
+                        }
+                      },
+                      {
+                        "threshold": 6,
+                        "model": {
+                          "type": "minecraft:model",
+                          "model": "naturewind:item/staff_optimized/crown_6"
+                        }
+                      },
+                      {
+                        "threshold": 7,
+                        "model": {
+                          "type": "minecraft:model",
+                          "model": "naturewind:item/staff_optimized/crown_5"
+                        }
+                      },
+                      {
+                        "threshold": 8,
+                        "model": {
+                          "type": "minecraft:model",
+                          "model": "naturewind:item/staff_optimized/crown_4"
+                        }
+                      },
+                      {
+                        "threshold": 9,
+                        "model": {
+                          "type": "minecraft:model",
+                          "model": "naturewind:item/staff_optimized/crown_3"
+                        }
+                      },
+                      {
+                        "threshold": 10,
+                        "model": {
+                          "type": "minecraft:model",
+                          "model": "naturewind:item/staff_optimized/crown_2"
+                        }
+                      },
+                      {
+                        "threshold": 11,
+                        "model": {
+                          "type": "minecraft:model",
+                          "model": "naturewind:item/staff_optimized/crown_1"
+                        }
+                      },
+                      {
+                        "threshold": 12,
+                        "model": {
+                          "type": "minecraft:model",
+                          "model": "naturewind:item/staff_optimized/crown_0"
+                        }
+                      },
+                      {
+                        "threshold": 13,
+                        "model": {
+                          "type": "minecraft:model",
+                          "model": "naturewind:item/staff_optimized/crown_1"
+                        }
+                      },
+                      {
+                        "threshold": 14,
+                        "model": {
+                          "type": "minecraft:model",
+                          "model": "naturewind:item/staff_optimized/crown_2"
+                        }
+                      },
+                      {
+                        "threshold": 15,
+                        "model": {
+                          "type": "minecraft:model",
+                          "model": "naturewind:item/staff_optimized/crown_3"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:composite",
+      "models": [
+        {
+          "type": "minecraft:model",
+          "model": "naturewind:item/staff_optimized/body"
+        },
+        {
+          "type": "minecraft:model",
+          "model": "naturewind:item/staff_optimized/crown_4"
+        }
+      ]
+    }
+  }
+}

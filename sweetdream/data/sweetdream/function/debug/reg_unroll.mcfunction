@@ -1,0 +1,69 @@
+# ============================================================
+# sweetdream:debug/reg_unroll —— 把「通用数值注册表」逐行渲染出来
+# ------------------------------------------------------------
+# 【这个文件是生成的】改动请看 lib/reg/build.mcfunction, 然后跑
+#   python .workbuddy/gen_reg_unroll.py
+# 【为什么要写这么长】Minecraft 没有循环 —— 表里第 N 行就得有第 N 条命令
+#   去取它。槽数 = build 里登记的 cap; 表比槽长的话多出来的行不会被显示,
+#   check.py 第 16 项会提醒你。
+# ============================================================
+
+# ---------- b 表: 数值为 0 就不显示 ----------
+execute if data storage zx:reg b[0] run function sweetdream:debug/stat_row with storage zx:reg b[0]
+execute if data storage zx:reg b[1] run function sweetdream:debug/stat_row with storage zx:reg b[1]
+execute if data storage zx:reg b[2] run function sweetdream:debug/stat_row with storage zx:reg b[2]
+execute if data storage zx:reg b[3] run function sweetdream:debug/stat_row with storage zx:reg b[3]
+execute if data storage zx:reg b[4] run function sweetdream:debug/stat_row with storage zx:reg b[4]
+execute if data storage zx:reg b[5] run function sweetdream:debug/stat_row with storage zx:reg b[5]
+execute if data storage zx:reg b[6] run function sweetdream:debug/stat_row with storage zx:reg b[6]
+execute if data storage zx:reg b[7] run function sweetdream:debug/stat_row with storage zx:reg b[7]
+execute if data storage zx:reg b[8] run function sweetdream:debug/stat_row with storage zx:reg b[8]
+execute if data storage zx:reg b[9] run function sweetdream:debug/stat_row with storage zx:reg b[9]
+execute if data storage zx:reg b[10] run function sweetdream:debug/stat_row with storage zx:reg b[10]
+execute if data storage zx:reg b[11] run function sweetdream:debug/stat_row with storage zx:reg b[11]
+execute if data storage zx:reg b[12] run function sweetdream:debug/stat_row with storage zx:reg b[12]
+execute if data storage zx:reg b[13] run function sweetdream:debug/stat_row with storage zx:reg b[13]
+execute if data storage zx:reg b[14] run function sweetdream:debug/stat_row with storage zx:reg b[14]
+execute if data storage zx:reg b[15] run function sweetdream:debug/stat_row with storage zx:reg b[15]
+execute if data storage zx:reg b[16] run function sweetdream:debug/stat_row with storage zx:reg b[16]
+execute if data storage zx:reg b[17] run function sweetdream:debug/stat_row with storage zx:reg b[17]
+execute if data storage zx:reg b[18] run function sweetdream:debug/stat_row with storage zx:reg b[18]
+execute if data storage zx:reg b[19] run function sweetdream:debug/stat_row with storage zx:reg b[19]
+execute if data storage zx:reg b[20] run function sweetdream:debug/stat_row with storage zx:reg b[20]
+execute if data storage zx:reg b[21] run function sweetdream:debug/stat_row with storage zx:reg b[21]
+execute if data storage zx:reg b[22] run function sweetdream:debug/stat_row with storage zx:reg b[22]
+execute if data storage zx:reg b[23] run function sweetdream:debug/stat_row with storage zx:reg b[23]
+execute if data storage zx:reg b[24] run function sweetdream:debug/stat_row with storage zx:reg b[24]
+execute if data storage zx:reg b[25] run function sweetdream:debug/stat_row with storage zx:reg b[25]
+execute if data storage zx:reg b[26] run function sweetdream:debug/stat_row with storage zx:reg b[26]
+execute if data storage zx:reg b[27] run function sweetdream:debug/stat_row with storage zx:reg b[27]
+execute if data storage zx:reg b[28] run function sweetdream:debug/stat_row with storage zx:reg b[28]
+execute if data storage zx:reg b[29] run function sweetdream:debug/stat_row with storage zx:reg b[29]
+execute if data storage zx:reg b[30] run function sweetdream:debug/stat_row with storage zx:reg b[30]
+execute if data storage zx:reg b[31] run function sweetdream:debug/stat_row with storage zx:reg b[31]
+execute if data storage zx:reg b[32] run function sweetdream:debug/stat_row with storage zx:reg b[32]
+execute if data storage zx:reg b[33] run function sweetdream:debug/stat_row with storage zx:reg b[33]
+execute if data storage zx:reg b[34] run function sweetdream:debug/stat_row with storage zx:reg b[34]
+execute if data storage zx:reg b[35] run function sweetdream:debug/stat_row with storage zx:reg b[35]
+execute if data storage zx:reg b[36] run function sweetdream:debug/stat_row with storage zx:reg b[36]
+execute if data storage zx:reg b[37] run function sweetdream:debug/stat_row with storage zx:reg b[37]
+execute if data storage zx:reg b[38] run function sweetdream:debug/stat_row with storage zx:reg b[38]
+execute if data storage zx:reg b[39] run function sweetdream:debug/stat_row with storage zx:reg b[39]
+execute if data storage zx:reg b[40] run function sweetdream:debug/stat_row with storage zx:reg b[40]
+execute if data storage zx:reg b[41] run function sweetdream:debug/stat_row with storage zx:reg b[41]
+execute if data storage zx:reg b[42] run function sweetdream:debug/stat_row with storage zx:reg b[42]
+execute if data storage zx:reg b[43] run function sweetdream:debug/stat_row with storage zx:reg b[43]
+execute if data storage zx:reg b[44] run function sweetdream:debug/stat_row with storage zx:reg b[44]
+execute if data storage zx:reg b[45] run function sweetdream:debug/stat_row with storage zx:reg b[45]
+execute if data storage zx:reg b[46] run function sweetdream:debug/stat_row with storage zx:reg b[46]
+execute if data storage zx:reg b[47] run function sweetdream:debug/stat_row with storage zx:reg b[47]
+
+# ---------- a 表: 永远显示 ----------
+execute if data storage zx:reg a[0] run function sweetdream:debug/stat_row_a with storage zx:reg a[0]
+execute if data storage zx:reg a[1] run function sweetdream:debug/stat_row_a with storage zx:reg a[1]
+execute if data storage zx:reg a[2] run function sweetdream:debug/stat_row_a with storage zx:reg a[2]
+execute if data storage zx:reg a[3] run function sweetdream:debug/stat_row_a with storage zx:reg a[3]
+execute if data storage zx:reg a[4] run function sweetdream:debug/stat_row_a with storage zx:reg a[4]
+execute if data storage zx:reg a[5] run function sweetdream:debug/stat_row_a with storage zx:reg a[5]
+execute if data storage zx:reg a[6] run function sweetdream:debug/stat_row_a with storage zx:reg a[6]
+execute if data storage zx:reg a[7] run function sweetdream:debug/stat_row_a with storage zx:reg a[7]

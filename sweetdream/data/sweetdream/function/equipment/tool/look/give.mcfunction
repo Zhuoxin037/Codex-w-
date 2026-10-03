@@ -9,4 +9,4 @@
 # 【custom_data 的 zx:["look"] 是身份标记】进度就是靠它认人的, 别改。
 # ============================================================
 
-give @s recovery_compass[minecraft:item_name={text:"观测镜",bold:true,color:"aqua"},minecraft:lore=[{text:"右键: 开 / 关 数值面板",color:"gray",italic:false}],minecraft:custom_data={zx:["look"]},minecraft:consumable={animation:"none",consume_seconds:0,has_consume_particles:false,sound:"block.bamboo_wood_button.click_off"}]
+give @s recovery_compass[max_stack_size=1,minecraft:item_name={text:"观测镜",bold:true,color:"aqua"},minecraft:lore=[{"text":"右键: 开 / 关 数值面板","color":"gray","italic":false}],minecraft:custom_data={zx:["look"]},minecraft:consumable={animation:"none",consume_seconds:0,has_consume_particles:false,sound:"block.bamboo_wood_button.click_off"}]
