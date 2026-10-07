@@ -19,8 +19,9 @@
 # 【谁先谁后】先打完 3 轮, 才结算 bonus(风声奖励) 和 aura(20 秒回响)。
 #   因为风声是"边打边叠"的, 施法那一瞬间它还是 0 —— 提前算永远够不到 60。
 #
-# 【加成是普通乘区】风声奖励乘进**技能倍率**(skill_multiplier), 不是独立乘区。
-#   统一走 sweetdream:lib/max_mana_bonus, 所有"以最大魔力结算"的技能共用它。
+# 【加成是普通乘区】风声奖励乘进**最大魔力值技能倍率**(max_mana_mul), 不是独立乘区。
+#   2026-10-07 起它直接折进这条通道的**通用加成**(lib/mm_add/hook_calc, 20 秒),
+#   所有"以最大魔力结算"的技能在生效期内都自动吃得到, 不再需要各自调一行。
 #
 # 【「风声」是这个武器专属的】不放进"渊海/流火/夜火/白昼梦/噬心"那五个通用标签里,
 #   就记在玩家自己的计分项 zx.wg_sound 上, 别的武器不会碰它。
@@ -36,8 +37,12 @@ function sweetdream:overlimit/api/snap
 
 # ② 只读检查: 冷却 + 魔力 550
 #    ★ 先过超限: 敲过超限的技能要 660 蓝、冷却 144 秒(见 overlimit/api/mod)
+#    ★ 顺序不能反 ★ "填基准值 -> 抄进 olv.mana -> 再让 mod 覆盖":
+#      没敲超限时 mod 会在开头就 return, 那一步根本不会写 olv.mana ——
+#      这里必须先把基准值抄好, 否则 check 失败时提示会读成 0(或上一轮的陈旧值)。
 data modify storage manacore:in arg set value {uuid:"",skill:"sweetdream:wind_ontheground",mana:550.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
+data modify storage zx:work olv.mana set from storage manacore:in arg.mana
 function sweetdream:overlimit/api/mod
 function manacore:api/skill/check
 scoreboard players set #wg_need zx.meta 0

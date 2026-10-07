@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "harden_o": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "up_harden_o"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:upgrade/apply/harden_o"
+    }
+}

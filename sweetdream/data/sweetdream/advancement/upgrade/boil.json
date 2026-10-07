@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "boil": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "up_boil"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:upgrade/apply/boil"
+    }
+}

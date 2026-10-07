@@ -33,6 +33,104 @@ execute as @a[tag=test_look_on] run function sweetdream:equipment/tool/look/rend
 # 横刀突进: 只有分数 >= 1 的玩家参与, 平时完全不参与(开销为零)
 execute as @a[scores={zx.dash=1..}] at @s run function sweetdream:equipment/sword/hengdao/dash_tick
 
+# 无息(2026-10-07 批1): 向前突击 8 格(16 步 × 0.5), 撞生物不停、只被终点/障碍物拦下
+#   停下由 dash_end 打去程一击(×0.1) + 起归位; 同样只筛有分数的玩家。
+execute as @a[scores={zx.hush=1..}] at @s run function sweetdream:equipment/sword/hush/dash_tick
+
+# 无息 · 归位(2026-10-07 批1): 每刻朝原点 marker 迈 2 格, 约 0.2 秒闪回
+#   到点/倒计时耗尽由 back_finish 收尾并打回程一击(×0.2)。只筛带标签的人。
+execute as @a[tag=zx.hs_back] at @s run function sweetdream:equipment/sword/hush/back_step
+
+# 回锋(2026-10-07 批1): 主动的"每 0.35 秒重复一次"倒计时(zx.rb_t 7->0 = 7 刻)
+#   ★ 筛 `zx.rb_t=1..` 是天然停摆: 打完最后一段就停在 0, 不再被选中, 不用额外清标签。
+#   必须在 lib/in_restore 之前 —— tick_step 里的 recalc 要用公共输入口 manacore:in arg。
+execute as @a[scores={zx.rb_t=1..}] at @s run function sweetdream:equipment/sword/rebound/tick_step
+
+# 红莲(2026-10-07 批2): 主动"每 0.35 秒推一段"倒计时(zx.rl_t 7->0 = 7 刻)
+#   ★ 用户口径: 多段都依次隔 0.35 秒(同刻打完会被受伤无敌帧吃掉, 等于只有第一下掉血)。
+#   ★ 筛 `zx.rl_t=1..` 是天然停摆: 打完最后一段就停在 0, 不再被选中, 不用额外清标签。
+#   必须在 lib/in_restore 之前 —— tick_step 里的 recalc 要用公共输入口 manacore:in arg。
+execute as @a[scores={zx.rl_t=1..}] at @s run function sweetdream:equipment/axe/red_lotus/tick_step
+
+# 苍蓝星(2026-10-07 批2): 主动第 2 段的 0.35 秒倒计时(zx.as_d 7->0 = 7 刻)
+#   ★ 用户口径: 主动两段依次隔 0.35 秒(同刻第二段会被受伤无敌帧吃掉)。
+#   ★ 筛 `zx.as_d=1..` 是天然停摆: 落地后 tick_step 统一把它清 0, 不再被选中。
+#   必须在 lib/in_restore 之前 —— tick_step 里的 recalc2 要用公共输入口 manacore:in arg。
+execute as @a[scores={zx.as_d=1..}] at @s run function sweetdream:equipment/axe/azure_star/tick_step
+
+# 葬火(2026-10-07 批2): 第二段的 2 秒倒计时(40 -> 0, 归零在 pyre/boom 结算)
+#   ★ 筛 zx.py_d=1.. 是天然停摆: 归零后不再被选中(boom 里会把 pyre_x 清 0, 观测镜「葬火」段随之消失)。
+#   必须在 lib/in_restore 之前 —— boom 会走 api/damage(它要用公共输入口)。
+execute as @a[scores={zx.py_d=1..}] at @s run function sweetdream:equipment/axe/pyre/tick
+
+# 威霆(2026-10-07 批2): 「天煌」每刻 +1(上限 2000; 手持威霆且本刻没攻击到生物)
+#   没拿威霆时 passive 第一行就 return, 开销可忽略。
+execute as @a run function sweetdream:equipment/axe/thunderclap/passive
+
+# 威霆(2026-10-07 批2): 落雷表现 —— 每刻替"落雷排期" marker 劈**一道**真闪电
+#   ★ 2026-10-07 用户定: "真召唤闪电实体"(视觉上一道一道劈下来)。
+#     bolt_go 每次结算攻击放一个 marker(zx.tc_bs = 还剩几道), 这里每刻劈一道、剩余 -1,
+#     劈完 bolt_fx 自己 kill 掉 marker。
+#   【★ 三维度各写一遍 + 每行 distance=0.. ★】#minecraft:tick 只在主世界跑;
+#     而裸 @e 会跨维度搜索 —— 不锁维度同一道排期会被三行各推一次(劈 3 倍闪电)。
+execute in minecraft:overworld as @e[type=minecraft:marker,tag=zx.tc_strike,distance=0..] at @s run function sweetdream:equipment/axe/thunderclap/bolt_fx
+execute in minecraft:the_nether as @e[type=minecraft:marker,tag=zx.tc_strike,distance=0..] at @s run function sweetdream:equipment/axe/thunderclap/bolt_fx
+execute in minecraft:the_end as @e[type=minecraft:marker,tag=zx.tc_strike,distance=0..] at @s run function sweetdream:equipment/axe/thunderclap/bolt_fx
+
+# 共鸣(2026-10-07 批3): "自身法球穿过共鸣水晶" —— 每刻扫水晶, 看有没有自己人的法球进来
+#   【为什么每刻】"穿过时立即"是刻级事件(法球每刻飞 0.75 格), 每秒轮询会漏。
+#   【★ 三维度各写一遍 + 每行 distance=0.. ★】#minecraft:tick 只在主世界跑;
+#     裸 @e 会跨维度搜索 —— 不锁维度的话同一颗水晶会被三行各判一次(可能多打一份)。
+execute in minecraft:overworld as @e[type=minecraft:marker,tag=zx.ch_cry,distance=0..] at @s run function sweetdream:equipment/staff/chime/pass_check
+execute in minecraft:the_nether as @e[type=minecraft:marker,tag=zx.ch_cry,distance=0..] at @s run function sweetdream:equipment/staff/chime/pass_check
+execute in minecraft:the_end as @e[type=minecraft:marker,tag=zx.ch_cry,distance=0..] at @s run function sweetdream:equipment/staff/chime/pass_check
+
+# 调色盘(2026-10-07 批3): “色彩”每刻推进(寿命 / 出界 / 追最近生物 / 命中结算)
+#   【★ 三维度各写一遍 + 每行 distance=0.. ★】#minecraft:tick 只在主世界跑;
+#     裸 @e 会跨维度搜索 —— 不锁维度的话同一个“色彩”会被三行各推一次(飞 3 倍速 / 打 3 份伤害)。
+execute in minecraft:overworld as @e[type=minecraft:marker,tag=zx.pal_col,distance=0..] at @s run function sweetdream:equipment/staff/palette/color_tick
+execute in minecraft:the_nether as @e[type=minecraft:marker,tag=zx.pal_col,distance=0..] at @s run function sweetdream:equipment/staff/palette/color_tick
+execute in minecraft:the_end as @e[type=minecraft:marker,tag=zx.pal_col,distance=0..] at @s run function sweetdream:equipment/staff/palette/color_tick
+
+# 风帆(2026-10-08 改): 旋风的**形状**每刻画一帧(三条螺旋臂 + 漏斗收缩, 见 whirl_draw)
+#   【为什么必须每刻】每秒只闪一次 = "一团粒子凭空出现又消失", 转不起来;
+#     角度 zx.sl_a 每刻 +6 度, 60 刻(3 秒)转满一圈, 这才像旋风。
+#   【★ 三维度各写一遍 + 每行 distance=0.. ★】#minecraft:tick 只在主世界跑;
+#     裸 @e 会跨维度搜索 —— 不锁维度的话同一个旋风会被三行各画一次(转 3 倍速)。
+#   【颜色】跟着"最近一次附着了哪种属性"走: 流火鲜红 / 渊海深蓝 / 白昼梦粉 / 噬心黑。
+execute in minecraft:overworld as @e[type=minecraft:marker,tag=zx.sl_vtx,distance=0..] at @s run function sweetdream:equipment/staff/sail/whirl_fx
+execute in minecraft:the_nether as @e[type=minecraft:marker,tag=zx.sl_vtx,distance=0..] at @s run function sweetdream:equipment/staff/sail/whirl_fx
+execute in minecraft:the_end as @e[type=minecraft:marker,tag=zx.sl_vtx,distance=0..] at @s run function sweetdream:equipment/staff/sail/whirl_fx
+
+# 释梦(2026-10-07 批2): 「入梦体」每刻推进(寿命/离主人 10 格自毁 / 认领目标 / 飞去咬人)
+#   【每刻先清"认领标记"】让入梦体**依次**认领各自最近的、还没被占的生物 ——
+#     先跑的那个把它最近的占掉, 后面的只能挑没被占的, 于是同一刻不会有两个盯上同一只。
+#   【★ 三维度各写一遍 + 每行 distance=0.. ★】#minecraft:tick 只在主世界跑;
+#     而裸 @e 会跨维度搜索 —— 不锁维度的话同一只入梦体会被三行各推一次(飞 3 倍速)。
+execute in minecraft:overworld run tag @e[distance=0..,tag=zx.dr_claim] remove zx.dr_claim
+execute in minecraft:the_nether run tag @e[distance=0..,tag=zx.dr_claim] remove zx.dr_claim
+execute in minecraft:the_end run tag @e[distance=0..,tag=zx.dr_claim] remove zx.dr_claim
+execute in minecraft:overworld as @e[distance=0..,tag=zx.dr_pet] at @s run function sweetdream:equipment/axe/dream_reader/pet_tick
+execute in minecraft:the_nether as @e[distance=0..,tag=zx.dr_pet] at @s run function sweetdream:equipment/axe/dream_reader/pet_tick
+execute in minecraft:the_end as @e[distance=0..,tag=zx.dr_pet] at @s run function sweetdream:equipment/axe/dream_reader/pet_tick
+
+# 万念 / 千散 的延迟换手: 只对刚预约过的玩家跑(标签 zx.mq_swap, 见 myriad/swap)
+#   为什么必须排队等几 tick: 通用回手线会在 +1 tick 把备份塞回手里, 换早了会被覆盖。
+execute as @a[tag=zx.mq_swap] run function sweetdream:equipment/sword/myriad/swap
+
+# 超限·万念: 「剑魂」的绕身视觉 —— 只对身上有剑魂的玩家跑(每刻, 每秒画会闪)
+#   计分板 zx.mq_soul 就是剑魂数(0 个时选择器全空, 开销为零)。
+execute as @a[scores={zx.mq_soul=1..}] run function sweetdream:equipment/sword/myriad/soul_fx
+
+# 超限·万念: 「领域」的边界圈 —— 视觉每刻画, 寿命那部分留给 ol_second 每秒扣
+#   【★ 三维度各写一遍 + 每行 distance=0.. ★】#minecraft:tick 只在主世界跑;
+#     裸 @e 会跨维度搜索 —— 不锁维度的话同一个领域会被三行各画一次(转 3 倍速)。
+#   【为什么不画 Shoebox】domain_tick 每秒一次不够看的: 20 fps 里只有 1 帧有点,
+#     那就等于"看不见领域"(全套机制的边界判据, 看不见就没法玩)。
+execute in minecraft:overworld as @e[type=minecraft:marker,tag=zx.mq_f,distance=0..] at @s run function sweetdream:equipment/sword/myriad/domain_fx
+execute in minecraft:the_nether as @e[type=minecraft:marker,tag=zx.mq_f,distance=0..] at @s run function sweetdream:equipment/sword/myriad/domain_fx
+execute in minecraft:the_end as @e[type=minecraft:marker,tag=zx.mq_f,distance=0..] at @s run function sweetdream:equipment/sword/myriad/domain_fx
+
 # 深海的回响 · 释放动画: 只有施法中的玩家参与(zx.de_cast 从 0 走到 33, 共 34 tick)
 #   必须走每 tick 的节拍、不能借每秒被动 —— 释放动画要 20 fps 才不卡。
 #   这里不加 return 兜底: anim/end 自己会摘 tag, 中途把剑丢了也照样走完计数。
@@ -50,16 +148,16 @@ execute as @a[tag=zx.de_run,scores={zx.de_t=..0}] at @s run function sweetdream:
 # 冷冻: TicksFrozen 每 tick 会自己 -2(离开粉雪就衰减), 这里帮被冻住的生物续回 140,
 #   这样"冻 N tick"就是真的 N tick(见 lib/freeze_hold)。
 #   只对带 zx.freeze 的生物跑, 没冻住东西时开销为零。
-execute in minecraft:overworld as @e[tag=zx.freeze] run function sweetdream:lib/freeze_hold
-execute in minecraft:the_nether as @e[tag=zx.freeze] run function sweetdream:lib/freeze_hold
-execute in minecraft:the_end as @e[tag=zx.freeze] run function sweetdream:lib/freeze_hold
+execute in minecraft:overworld as @e[distance=0..,tag=zx.freeze] run function sweetdream:lib/freeze_hold
+execute in minecraft:the_nether as @e[distance=0..,tag=zx.freeze] run function sweetdream:lib/freeze_hold
+execute in minecraft:the_end as @e[distance=0..,tag=zx.freeze] run function sweetdream:lib/freeze_hold
 
 # 法球(法杖类普攻的载体): 场上没有法球时这个选择器是空的, 开销为零
 #   为什么不用 @a 而是 @e: 法球是 minecraft:marker, 要靠它自己带的数据飞,
 #   和"谁在拿着法杖"无关 —— 发射出去之后你切武器、走开都不影响它。
-execute in minecraft:overworld as @e[tag=zx.ball] at @s run function sweetdream:projectile/ball/tick with entity @s data
-execute in minecraft:the_nether as @e[tag=zx.ball] at @s run function sweetdream:projectile/ball/tick with entity @s data
-execute in minecraft:the_end as @e[tag=zx.ball] at @s run function sweetdream:projectile/ball/tick with entity @s data
+execute in minecraft:overworld as @e[distance=0..,tag=zx.ball] at @s run function sweetdream:projectile/ball/tick with entity @s data
+execute in minecraft:the_nether as @e[distance=0..,tag=zx.ball] at @s run function sweetdream:projectile/ball/tick with entity @s data
+execute in minecraft:the_end as @e[distance=0..,tag=zx.ball] at @s run function sweetdream:projectile/ball/tick with entity @s data
 
 # 标签位置每 2 tick 更新；完整状态校验固定每 20 tick，跨原版三维度。
 scoreboard players add #icon_t zx.meta 1
@@ -69,6 +167,21 @@ scoreboard players add #tag_clock zx.meta 1
 execute if score #tag_clock zx.meta matches 20.. run function sweetdream:tag/second
 execute if score #tag_clock zx.meta matches 20.. run scoreboard players set #tag_clock zx.meta 0
 
+# 标签图标淡出: 到点的标签摘掉后, 图标不是"啪"地消失, 而是逐帧降透明度 + 缩小再收掉。
+#   两个驱动各管一件事(只在淡出期间跑, 平时选择器全空):
+#     · as @e[tag=zx.icon_fading]            -> tag/icon_fade_icon: 逐帧淡出 + 到点 kill。
+#       从**图标侧**驱动: 生物中途死亡时图标仍能自己淡完, 不留孤儿。
+#     · as @e[tag=zx.icon_fading_owner] at @s -> tag/icon_fade: 淡出期间继续贴到头顶。
+#       生物这时已不在 zx.tagged 里、跟随循环不管它, 不补这条图标会被甩在原地。
+#       ★ at @s 不能省: icon_fade_go 用 `at @s anchored eyes` 取头顶位置。
+#   ★ 三维度各写一遍，并用 distance=0.. 限定维度；裸 @e 会跨维度重复处理。
+execute in minecraft:overworld as @e[distance=0..,tag=zx.icon_fading] run function sweetdream:tag/icon_fade_icon
+execute in minecraft:the_nether as @e[distance=0..,tag=zx.icon_fading] run function sweetdream:tag/icon_fade_icon
+execute in minecraft:the_end as @e[distance=0..,tag=zx.icon_fading] run function sweetdream:tag/icon_fade_icon
+execute in minecraft:overworld as @e[distance=0..,tag=zx.icon_fading_owner] at @s run function sweetdream:tag/icon_fade
+execute in minecraft:the_nether as @e[distance=0..,tag=zx.icon_fading_owner] at @s run function sweetdream:tag/icon_fade
+execute in minecraft:the_end as @e[distance=0..,tag=zx.icon_fading_owner] at @s run function sweetdream:tag/icon_fade
+
 # 寒鸦逐箭快照: 给"这一刻之前就已经存在的箭"都打上 zx.cc_seen。
 #   【为什么要这么绕】想把"这一发的层数/伤害"绑到**具体某一支箭**上, 就必须在
 #     射击那一刻把它认出来。按"离玩家最近的一支"认会被地上插着的老箭骗
@@ -77,10 +190,32 @@ execute if score #tag_clock zx.meta matches 20.. run scoreboard players set #tag
 #       同一刻稍后玩家扣扳机 -> 新箭出生, 它是**唯一**不带这个标签的
 #     -> shot 里用 tag=!zx.cc_seen 就能精确抓到它(连多重射击的 3 支一起抓)
 #   下一次 tick 开头再把它们补上标记, 循环继续。没参与时开销为零。
-#   【为什么写三行】tick 函数的执行维度默认是主世界, @e 不会跨维度。
-execute in minecraft:overworld run tag @e[type=#sweetdream:cc_arrow,tag=!zx.cc_seen] add zx.cc_seen
-execute in minecraft:the_nether run tag @e[type=#sweetdream:cc_arrow,tag=!zx.cc_seen] add zx.cc_seen
-execute in minecraft:the_end run tag @e[type=#sweetdream:cc_arrow,tag=!zx.cc_seen] add zx.cc_seen
+#   【为什么写三行 + 为什么每行都要 distance=0..】tick 函数的执行维度默认是主世界, 所以要三个维度各来一遍;
+#     但**裸 @e 会跨维度搜索**(没有位置参数就搜全部维度) —— 三行都写裸 @e 的话, 同一支箭会被标记 3 次。
+#     `distance=0..` 本身不过滤任何东西, 它的作用只是给选择器一个位置基准, 从而把搜索锁进当前维度。
+execute in minecraft:overworld run tag @e[distance=0..,type=#sweetdream:cc_arrow,tag=!zx.cc_seen] add zx.cc_seen
+execute in minecraft:the_nether run tag @e[distance=0..,type=#sweetdream:cc_arrow,tag=!zx.cc_seen] add zx.cc_seen
+execute in minecraft:the_end run tag @e[distance=0..,type=#sweetdream:cc_arrow,tag=!zx.cc_seen] add zx.cc_seen
+
+#   【为什么写三行】tick 函数执行维度默认主世界, 所以要三个维度各来一遍。
+#   【★ 每行都要 distance=0.. ★】裸 @e 会跨维度搜索 —— 三行都写裸 @e 的话, 同一支箭每刻会被结算 3 次。
+#   【为什么每刻】文案是"每刻造成伤害", 必须每 tick 结算; 没箭参与时选择器全空。
+#   【为什么写三行】tick 函数执行维度默认主世界, @e 不跨维度。
+execute in minecraft:overworld as @e[distance=0..,tag=zx.se_live] at @s run function sweetdream:equipment/bow/sculk_echo/tick_live
+execute in minecraft:the_nether as @e[distance=0..,tag=zx.se_live] at @s run function sweetdream:equipment/bow/sculk_echo/tick_live
+execute in minecraft:the_end as @e[distance=0..,tag=zx.se_live] at @s run function sweetdream:equipment/bow/sculk_echo/tick_live
+
+# 清醒梦: 被标记生物的"受击额外真伤"(每刻扫, 靠 HurtTime 判挨打) —— 只对带 zx.ld_mark 的生物跑
+#   【为什么每刻】"每次受到攻击"必须每 tick 才抓得准; 没被标记时选择器全空。
+#   【★ at @s 不能省 ★】`as` 只换执行者、**不改坐标**。少了 at @s, hit_extra 里的
+#     粒子会画在世界原点, 而 hit_extra_dmg 那句"2 格内全部生物"的选择器也在原点
+#     取范围 —— 结果就是范围真伤一次都打不到人(玩家报"梦回触发后不生效")。
+#     2026-10-05 修。旁边两条 zx.se_live / zx.freeze 同款, 后者的 freeze_hold
+#     只用实体 NBT、确实用不到坐标, 但保持一致的写法更安全。
+execute in minecraft:overworld as @e[distance=0..,tag=zx.ld_mark] at @s run function sweetdream:equipment/bow/lucid_dream/hit_extra
+execute in minecraft:the_nether as @e[distance=0..,tag=zx.ld_mark] at @s run function sweetdream:equipment/bow/lucid_dream/hit_extra
+execute in minecraft:the_end as @e[distance=0..,tag=zx.ld_mark] at @s run function sweetdream:equipment/bow/lucid_dream/hit_extra
+
 
 # 霜矢:「箭打中了谁」由弩上自带的附魔回调(hook_arrow / hook_victim)交给原版判定
 
@@ -88,6 +223,89 @@ execute in minecraft:the_end run tag @e[type=#sweetdream:cc_arrow,tag=!zx.cc_see
 #   攻击命中时 hurt 里的 buff_on 也会写 manacore:in arg, 所以放在
 #   in_restore 之前, 让这一整段都在公共输入口的备份保护里。
 execute as @a[tag=zx.im_on] at @s run function sweetdream:equipment/armor/immolate/tick
+
+# 焱(2026-10-08): 「视为金甲」—— 每刻掐掉猪灵挑"不穿金甲的人"的那条通道
+#   【必须每刻】猪灵的 NEAREST_TARGETABLE_PLAYER_NOT_WEARING_GOLD 记忆由
+#     NearestPlayersSensor 每 20 刻刷一次; 秒级清完它下一刻就填回来 = 白清。
+#   【开销】pig_tick 第一行就是"穿着"门控, 没穿焱的人一步都不往下走。
+#   【注意】它只写自己的节点 zx:work ba, 不碰公共输入口, 不用 in_bak 保护。
+execute as @a at @s run function sweetdream:equipment/armor/blaze_armor/pig_tick
+
+# 天穹: 跃升(每刻抬 0.5 格, 共 12 刻 = 6 格 ≈ 0.6 秒) + 跃升倒计时 + 俯冲推进
+#   【为什么放每刻】俯冲要 20 fps 才顺; 跃升也要逐刻才有"看得见的上升过程"。
+#   只对带 tag 的人跑, 没参与时选择器全空。
+#   顺序: 先抬一格(步数 1..12) -> 步数 +1 -> 超过 12 就到顶转"可俯冲"。
+#   【速率配套改】步数上限(12) 要跟 rise_step 的每刻高度(0.5) 配套 = 6 格。
+execute as @a[tag=zx.sv_rising,scores={zx.sv_rise=1..10}] at @s run function sweetdream:equipment/axe/skyvault/rise_step
+execute as @a[tag=zx.sv_rising] run scoreboard players add @s zx.sv_rise 1
+execute as @a[tag=zx.sv_rising,scores={zx.sv_rise=11..}] at @s run function sweetdream:equipment/axe/skyvault/rise_end
+execute as @a[tag=zx.sv_air,scores={zx.sv_launch=1..}] run scoreboard players remove @s zx.sv_launch 1
+execute as @a[tag=zx.sv_dive] at @s run function sweetdream:equipment/axe/skyvault/dive_tick
+
+# 天使核心: 两段技能之间的"间隔"倒计时(0.5 秒 = 10 tick), 到点放第二段
+execute as @a[tag=zx.ac_delay] run scoreboard players remove @s zx.ac_d 1
+execute as @a[tag=zx.ac_delay,scores={zx.ac_d=..0}] at @s run function sweetdream:equipment/axe/angel_core/dmg2
+
+# 终末天启 · 光柱: 施法期间**每刻**刷新实体光柱(不是每秒! 见 beam 头注释)
+#   【2026-10-07 改版】粒子 -> item_display 实体光柱(以撒风粗白光柱, 玩家口径)。
+#     beam = 外壳(备 UUID), beam_go = 跟随(tp 到眼睛下 0.4/前方 10 + 继承朝向)
+#     + 续命(zx.fr_ref 续到 3) + 按需生成; 寿命保险在下面那六行。
+#   【为什么必须每刻】同前: 每秒一次 = 20 fps 里 19 帧不动, 光柱跟不上视线。
+#   【跟随扫射】执行者是玩家本人、且用 at @s 把坐标+朝向都换成玩家的。
+#   【★ 中心轴仍沿视线**下方**偏 0.4 格(^-0.4)】见 beam 文件头的坑 69:
+#     与视线共线的光束在第一人称里投影成准星上的一个点 = **隐形**。
+#     实体光柱一样是共线几何, 偏移不能省(0.35 -> 0.4: 光柱更粗了)。
+#     判定(scan/伤害)不在这, 永远留准星轴上。
+#   【开销】选择器带 zx.fr_t=1.., 没人在放光柱时这条完全不进函数。
+execute as @a[scores={zx.fr_t=1..}] at @s run function sweetdream:equipment/staff/final_revelation/beam
+
+# —— 终末天启 · 实体光柱的寿命保险(每刻, 三维度各一遍) ——
+# 【续命制】放的时候 beam_go 每刻把光柱的 zx.fr_ref 续到 3; 这里每刻 -1,
+#   扣到 0 自杀。收尾函数漏调 / 玩家中途退游戏 / 实体被手动杀 —— 无论哪种
+#   断供, 光柱最多多活 3 刻, 不会变成永久孤儿(比在 end 里 kill 稳得多)。
+# 【为什么三维度各一遍】裸 @e 跨维度搜索(坑 55); 带维度前缀逐维度扫才不串。
+execute in minecraft:overworld as @e[type=item_display,tag=zx.fr_beam,distance=0..] run scoreboard players remove @s zx.fr_ref 1
+execute in minecraft:the_nether as @e[type=item_display,tag=zx.fr_beam,distance=0..] run scoreboard players remove @s zx.fr_ref 1
+execute in minecraft:the_end as @e[type=item_display,tag=zx.fr_beam,distance=0..] run scoreboard players remove @s zx.fr_ref 1
+execute in minecraft:overworld as @e[type=item_display,tag=zx.fr_beam,distance=0..] if score @s zx.fr_ref matches ..0 run kill @s
+execute in minecraft:the_nether as @e[type=item_display,tag=zx.fr_beam,distance=0..] if score @s zx.fr_ref matches ..0 run kill @s
+execute in minecraft:the_end as @e[type=item_display,tag=zx.fr_beam,distance=0..] if score @s zx.fr_ref matches ..0 run kill @s
+
+
+# 陨星: 熔星形态期间每刻检查"主手还是不是陨星", 换手立刻失效(见 meteor/tick)
+execute as @a[scores={zx.mt_on=1..}] run function sweetdream:equipment/axe/meteor/tick
+
+# 启示录: 每刻魔力快照(该武器位于快捷栏时) —— cooldown_start 观察者靠
+#   "本刻开头的魔力 - 现在的魔力"算出这次技能实际消耗了多少蓝, 见 apocalypse/snap。
+#   (#minecraft:tick 跑在实体刻之前 → 快照必然早于同一刻里发生的技能消耗)
+#   "快捷栏有启示录"由 wand_check 每刻打 zx.ap_has 标签, snap 只对有标签的人跑。
+execute as @a run function sweetdream:equipment/staff/apocalypse/wand_check
+execute as @a[tag=zx.ap_has] run function sweetdream:equipment/staff/apocalypse/snap
+
+#   ★ 三维度各写一遍, **且每行都要 distance=0..**: #minecraft:tick 只在主世界跑, 所以要三个维度各来一遍;
+#     而裸 @e 会跨维度搜索 —— 不锁维度的话, 同一只朽木/暗潮会被三行各推一次(动画 3 倍速)。
+#   · zx.anim       朽木破土升起 / 暗潮向四周扩散 / 两者的退场(沉回地里、退潮收拢);
+#                   参数(field/track/key/dir)在实体自己的 data.zx.anim 里, 帧值查 zx:anim 表。
+#   ★ 三维度各写一遍: #minecraft:tick 只在主世界跑, 而 @e 只覆盖当前维度 ——
+#     不这么写的话, 在下界/末地召唤的朽木、暗潮会永远卡在起始帧(和法球、freeze_hold 同理)。
+#   ★ 关键帧由服务端每刻下发, interpolation_duration 保持 0, 不靠客户端补间(见 lib/anim_step)。
+execute in minecraft:overworld as @e[distance=0..,tag=zx.anim] at @s run function sweetdream:lib/anim_step with entity @s data.zx.anim
+execute in minecraft:the_nether as @e[distance=0..,tag=zx.anim] at @s run function sweetdream:lib/anim_step with entity @s data.zx.anim
+execute in minecraft:the_end as @e[distance=0..,tag=zx.anim] at @s run function sweetdream:lib/anim_step with entity @s data.zx.anim
+
+# 雷鸣(thunder): 副手道具的"雷击连锁"
+#   【为什么必须每刻】闪电实体只活几刻(拖尾一结束就没了), 用每秒轮询必然漏;
+#     而"1 秒后再劈"也要求刻级精度。
+#   【两道扫描, 平时都空转】① 到点的 marker -> 原地再劈; ② 新出现的闪电 -> 登记。
+#   【★ 三维度各写一遍 + 每行 distance=0.. ★】#minecraft:tick 只在主世界跑,
+#     所以要三个维度各来一遍; 而裸 @e 会跨维度搜索 —— 不锁维度的话同一道闪电
+#     会被三行各处理一次(劈出 3 道雷)。distance=0.. 不过滤任何东西, 只用来锁维度。
+execute in minecraft:overworld as @e[distance=0..,tag=zx.th_pend] at @s if score @s zx.th_due <= #now manacore.meta run function sweetdream:equipment/tool/thunder/pend_go
+execute in minecraft:the_nether as @e[distance=0..,tag=zx.th_pend] at @s if score @s zx.th_due <= #now manacore.meta run function sweetdream:equipment/tool/thunder/pend_go
+execute in minecraft:the_end as @e[distance=0..,tag=zx.th_pend] at @s if score @s zx.th_due <= #now manacore.meta run function sweetdream:equipment/tool/thunder/pend_go
+execute in minecraft:overworld as @e[distance=0..,type=minecraft:lightning_bolt,tag=!zx.th_seen] at @s run function sweetdream:equipment/tool/thunder/strike
+execute in minecraft:the_nether as @e[distance=0..,type=minecraft:lightning_bolt,tag=!zx.th_seen] at @s run function sweetdream:equipment/tool/thunder/strike
+execute in minecraft:the_end as @e[distance=0..,type=minecraft:lightning_bolt,tag=!zx.th_seen] at @s run function sweetdream:equipment/tool/thunder/strike
 
 # 调试用的 /trigger: 只有刚按过的人分数 >= 1, 平时三个选择器全空。
 #   它也写 manacore:in arg(查数值/清冷却都要走前置包接口), 所以放在

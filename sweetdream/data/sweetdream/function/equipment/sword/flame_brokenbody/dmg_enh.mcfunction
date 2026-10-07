@@ -8,19 +8,15 @@
 #      这样"多段伤害"的手感一样(而且我们的伤害类型已挂 bypasses_cooldown,
 #      同一 tick 的两下都会落地, 不会被无敌帧吃掉)。
 #   ② 自身 6 格内, 一次 最大魔力 ×0.2。
-# 【加成】第一步算完就调 damage/calc, 里面已经过了 lib/max_mana_bonus;
-#   第二、三段复用同一个伤害值 / 重新算一次(不再吃加成, 因为已经被用掉了)。
+# 【加成】第一步算完就调 damage/calc —— 里面经 lib/mm_add/hook_calc 吃到
+#   「最大魔力值技能倍率」通用加成(风声 / 忘川彼岸 / 无效)。
+#   ★ 那份加成是**限时 buff**, 不再"用一次就被吃掉", 所以第二、三段若重新算
+#     也照样吃得到(旧版注释说的"已被用掉"已不成立)。
 # ============================================================
 
 # 第一段: 算一次 ×0.1
-data modify storage manacore:in arg set value {uuid:"",key:"max_mana"}
+data modify storage manacore:in arg set value {uuid:"",max_mana_mul:0.1,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/stats/get
-data modify storage manacore:in arg set value {uuid:"",base_attack:-1.0,skill_multiplier:0.1,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0}
-data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-data modify storage manacore:in arg.base_attack set from storage manacore:out r.value
-data modify storage zx:work wg.uuid set from storage zx:data self.uuid
-function sweetdream:lib/max_mana_bonus with storage zx:work wg
 function manacore:api/damage/calc
 
 # 打两遍(同一个数值)
@@ -30,12 +26,8 @@ function sweetdream:api/damage
 function sweetdream:api/damage
 
 # 第二段: 自身 6 格内, ×0.2
-data modify storage manacore:in arg set value {uuid:"",key:"max_mana"}
+data modify storage manacore:in arg set value {uuid:"",max_mana_mul:0.2,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/stats/get
-data modify storage manacore:in arg set value {uuid:"",base_attack:-1.0,skill_multiplier:0.2,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0}
-data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-data modify storage manacore:in arg.base_attack set from storage manacore:out r.value
 function manacore:api/damage/calc
 
 tag @e[tag=zx.fb_ring] remove zx.fb_ring

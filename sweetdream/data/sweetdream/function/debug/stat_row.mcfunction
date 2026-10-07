@@ -11,11 +11,18 @@
 #   ② 计分项为 0 不显示 —— 没实际加成就不占行。
 #     (负值不是 0, 照样显示 —— 比如脊骨共生"拿上限换别的"的负账。)
 # 【装备全名从哪来】names 表 —— 屏幕上是 "分类 · 全名"。
-#   names 里没登记的走第二分支, 打英文 id 并提示去补 ——
-#   静默丢一行是最难查的, 所以这里故意弄得很显眼。
+#   ★ 三个分支(靠 names / gsent 两张表区分) ★
+#     ① e 在 names 里  -> "分类 · 全名" (静脉泵那种单件装备)
+#     ② e 在 gsent 里  -> 不打名字 (e:"all" 的合计行: 套装合计 / 回魔账本 / 升级合计)
+#     ③ 两个都不在     -> 打英文 id + 红字 "(没登记中文名!)" —— 说明 e 真的写错了
+#   ⚠️ 少写②的时候, 所有 e:"all" 的行都会红着报"没登记中文名"(假警报),
+#      2026-10-04 真实事故(静脉泵的"回魔 · 装备额外")。gsent 表在 lib/reg/build。
+#   静默丢一行是最难查的, 所以③故意弄得很显眼。
 #   l / n 会被塞进 JSON 字符串: 不要写英文双引号和反斜杠。
 # ============================================================
 
 $execute if data storage zx:work eq.$(e) unless score @s $(o) matches 0 if data storage zx:reg names.$(e) run tellraw @s [{"text":"  $(l) · ","color":"gray"},{"nbt":"names.$(e)","storage":"zx:reg","color":"light_purple","italic":false},{"text":"  ","color":"gray"},{"score":{"name":"@s","objective":"$(o)"},"color":"$(c)"},{"text":"  $(n)","color":"dark_gray"}]
 
-$execute if data storage zx:work eq.$(e) unless score @s $(o) matches 0 unless data storage zx:reg names.$(e) run tellraw @s [{"text":"  $(l) · ","color":"gray"},{"text":"$(e)","color":"white"},{"text":"(没登记中文名!)","color":"dark_red"},{"text":"  ","color":"gray"},{"score":{"name":"@s","objective":"$(o)"},"color":"$(c)"},{"text":"  $(n)","color":"dark_gray"}]
+$execute if data storage zx:work eq.$(e) unless score @s $(o) matches 0 unless data storage zx:reg names.$(e) if data storage zx:reg gsent.$(e) run tellraw @s [{"text":"  $(l)  ","color":"gray"},{"score":{"name":"@s","objective":"$(o)"},"color":"$(c)"},{"text":"  $(n)","color":"dark_gray"}]
+
+$execute if data storage zx:work eq.$(e) unless score @s $(o) matches 0 unless data storage zx:reg names.$(e) unless data storage zx:reg gsent.$(e) run tellraw @s [{"text":"  $(l) · ","color":"gray"},{"text":"$(e)","color":"white"},{"text":"(没登记中文名!)","color":"dark_red"},{"text":"  ","color":"gray"},{"score":{"name":"@s","objective":"$(o)"},"color":"$(c)"},{"text":"  $(n)","color":"dark_gray"}]

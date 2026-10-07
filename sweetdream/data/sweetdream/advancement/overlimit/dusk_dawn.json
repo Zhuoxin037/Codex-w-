@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "dusk_dawn": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "ol_dusk_dawn"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:overlimit/apply/dusk_dawn"
+    }
+}

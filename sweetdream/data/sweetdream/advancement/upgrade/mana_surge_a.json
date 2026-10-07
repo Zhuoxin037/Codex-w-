@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "mana_surge_a": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "up_mana_surge_a"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:upgrade/apply/mana_surge_a"
+    }
+}

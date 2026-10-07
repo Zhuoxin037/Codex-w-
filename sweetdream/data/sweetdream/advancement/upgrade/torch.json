@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "torch": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "up_torch"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:upgrade/apply/torch"
+    }
+}

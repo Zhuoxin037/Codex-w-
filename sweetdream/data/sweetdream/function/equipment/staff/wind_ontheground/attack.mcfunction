@@ -11,8 +11,8 @@
 # 【伤害什么时候结算】**发射那一瞬间**就算好、塞进法球里带着飞。
 #   所以命中之前你换装 / 吃药都不会改这一颗球的伤害 —— 和文案的"本次攻击"一致。
 # 【迅捷给在发射时】文案写的是"每次普攻后", 所以一按右键就给, 不等到命中。
-# 【伤害怎么算】前置包的公式里 base_attack 可以自己指定,
-#   所以"当前魔力 ×0.04"= 把当前魔力当成 base_attack、倍率写 0.04。
+# 【伤害怎么算】"当前魔力 ×0.04"走框架的**其他倍率**通道(other_mul) ——
+#   那条通道的基数默认就是玩家当前魔力, 所以只写 other_mul 一个字段即可。
 #   术阵满的时候用 independent_multiplier 再乘 2.5(独立乘区, 正好干这个)。
 # ============================================================
 
@@ -26,8 +26,11 @@ function sweetdream:overlimit/api/snap
 
 # ② 只读检查: 魔力 80(普攻不进冷却, 所以不查冷却)
 #    ★ 先过超限: 敲过超限的普攻要 96 蓝(见 overlimit/api/mod)
+#    ★ 顺序不能反 ★ 先把基准值抄进 olv.mana, 再让 mod 覆盖 ——
+#      没敲超限时 mod 开头就 return, 不先抄的话提示会读成 0 / 陈旧值, 扣蓝也会用错数。
 data modify storage manacore:in arg set value {uuid:"",skill:"sweetdream:wind_attack",mana:80.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
+data modify storage zx:work olv.mana set from storage manacore:in arg.mana
 function sweetdream:overlimit/api/mod
 function manacore:api/skill/check
 scoreboard players set #wg_need zx.meta 0
@@ -51,12 +54,8 @@ scoreboard players set #full zx.meta 0
 execute if data storage manacore:out r{can_create:0b} run scoreboard players set #full zx.meta 1
 
 # ⑤ 算伤害: 当前魔力 ×0.04 (术阵满再 ×2.5)
-data modify storage manacore:in arg set value {uuid:"",key:"current_mana"}
+data modify storage manacore:in arg set value {uuid:"",other_mul:0.04,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/stats/get
-data modify storage manacore:in arg set value {uuid:"",base_attack:-1.0,skill_multiplier:0.04,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0}
-data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-data modify storage manacore:in arg.base_attack set from storage manacore:out r.value
 execute if score #full zx.meta matches 1 run data modify storage manacore:in arg.independent_multiplier set value 2.5
 # ★ 超限的伤害乘区: 0.04 -> 0.048 (和 lore 里的数字一一对应)
 function sweetdream:overlimit/api/mod

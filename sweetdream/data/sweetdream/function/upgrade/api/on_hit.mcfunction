@@ -14,11 +14,32 @@
 #   没升级的武器读出来都是 0, 所以空手/拿别的东西不会平白回魔。
 # 【为什么不挑"被打的是谁"】回魔只和"我手里这把"有关, 和打到谁无关 ——
 #   只有需要作用到目标身上的效果(附加标签之类)才要定位生物, 见 mirage/attack。
+# 【★ "每次攻击" = 一次平A算一次(命中几只都一样) ★】玩家 2026-10-07 定稿的措辞口径:
+#   文案写「每次攻击(后)」-> 按**攻击次数**算; 文案写「攻击到生物」-> 才按**命中数**算。
+#   升级石·魔力增殖的文案是"每次攻击都会为自身恢复 5 魔力值" ⇒ 一次算一次
+#   (实现 = 下面按游戏刻去重那两行)。
 # ============================================================
 
 advancement revoke @s only sweetdream:upgrade/attack
 
+# 【★ 同一刻只算一次 ★】进度是 `player_hurt_entity` —— **每命中一个生物触发一次**。
+#   横扫打 3 只 => 这个函数同一刻跑 3 遍 => 回魔也来 3 遍(α 打 3 只 = 回 15 魔力)。
+#   按**游戏刻**去重(照 brain_leech/attack 的既定做法, 用框架时钟 #now):
+#   · 没分数的玩家 `if score ... = #now` 直接判失败 => 第一次照样放行。
+#   · 先判后写戳; 本函数没有别的门控(任意主手武器都可能有升级), 所以放在最前。
+execute if score @s zx.up_lt = #now manacore.meta run return 0
+scoreboard players operation @s zx.up_lt = #now manacore.meta
+
 function sweetdream:upgrade/api/bonus_held
+
+# 【★ 效果开关要在 bonus_held 之后立刻读出来 ★】zx:out 是全包共用的出口节点,
+#   下面 hit_percent / hit_gain 还会调别的接口; 晚一步读就可能读到别人的结果。
+#   (存进 zx.meta 的临时量同理 —— #up_tc / #up_boil 只在本函数里用, 不会被那两个改)
+scoreboard players set #up_tc zx.meta 0
+execute store result score #up_tc zx.meta run data get storage zx:out r.tc
+scoreboard players set #up_boil zx.meta 0
+execute store result score #up_boil zx.meta run data get storage zx:out r.boil
+scoreboard players set #up_mk zx.meta 0
 
 scoreboard players set #up_gain zx.meta 0
 scoreboard players set #up_t zx.meta 0
@@ -31,3 +52,12 @@ execute store result score #up_pct zx.meta run data get storage zx:out r.mhp 100
 execute if score #up_pct zx.meta matches 1.. run function sweetdream:upgrade/api/hit_percent
 
 execute if score #up_gain zx.meta matches 1.. run function sweetdream:upgrade/api/hit_gain
+
+# ④ 火炬 / 沸腾(2026-10-08): 两条都要作用到"被打的那一只"身上, 所以先定位目标。
+#   ★ 沿用本函数最上面那条"每刻只算一次"的去重 —— 两者的文案都是「每次攻击」,
+#     即一次平A一次(不是按命中数), 所以这里不需要再加第二层去重。
+#   ★ lib/victim 只在真要用时才调: 装了这两颗石头的人毕竟是少数。
+#   ★ 两个开关共用一个入口(只定位一次目标), 且只在真装了这两颗石头时才跑。
+execute if score #up_tc zx.meta matches 1.. run scoreboard players set #up_mk zx.meta 1
+execute if score #up_boil zx.meta matches 1.. run scoreboard players set #up_mk zx.meta 1
+execute if score #up_mk zx.meta matches 1 run function sweetdream:upgrade/api/hit_mark

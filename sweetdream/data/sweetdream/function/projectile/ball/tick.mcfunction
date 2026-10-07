@@ -31,9 +31,11 @@ $execute rotated $(yaw) $(pitch) positioned ^ ^ ^0.75 unless block ~ ~ ~ #minecr
 #   现象就是"效果一直在头部萦绕, 却造成不了伤害"。
 #   dx/dy/dz 是"生物的判定箱有没有和这个盒子重叠", 体高体长都不影响。
 #   做法: 把执行位置挪到"球心 - 1.1", 再开一个 2.2 立方体的盒子。
-tag @e[tag=zx.ball_touch] remove zx.ball_touch
+# 【★ 这两条也要 distance=0.. ★】ball_touch 是"本刻自己在本维度挑出来的", 清理/查询都要锁在
+#   当前维度 —— 裸 @e 会跨维度搜索, 理论上可能抓到别的维度里残留的同名标签。
+tag @e[distance=0..,tag=zx.ball_touch] remove zx.ball_touch
 execute positioned ~-1.1 ~-1.1 ~-1.1 run tag @e[type=!#sweetdream:no_damage,dx=2.2,dy=2.2,dz=2.2,limit=1] add zx.ball_touch
-execute if entity @e[tag=zx.ball_touch,limit=1] run return run function sweetdream:projectile/ball/hit with entity @s data
+execute if entity @e[distance=0..,tag=zx.ball_touch,limit=1] run return run function sweetdream:projectile/ball/hit with entity @s data
 
 # ③ 前进
 #   · 软锁的目标还活着 -> 朝它拐过去(这就是"好命中"的来源)

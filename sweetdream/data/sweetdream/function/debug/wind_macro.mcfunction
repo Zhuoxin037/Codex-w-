@@ -13,15 +13,20 @@ scoreboard players operation #dbg_sound zx.meta = @s zx.wg_sound
 scoreboard players operation #dbg_aura zx.meta = @s zx.wg_aura
 scoreboard players operation #dbg_wmana zx.meta = @s zx.wg_mana
 tellraw @s [{"text":"风声        ","color":"gray"},{"score":{"name":"#dbg_sound","objective":"zx.meta"},"color":"white"},{"text":"   回响剩余 ","color":"dark_gray"},{"score":{"name":"#dbg_aura","objective":"zx.meta"},"color":"white"},{"text":" 秒","color":"dark_gray"}]
-tellraw @s [{"text":"回响加的最大魔力 ","color":"gray"},{"score":{"name":"#dbg_wmana","objective":"zx.meta"},"color":"aqua"},{"text":"   (回响结束时原样还回去)","color":"dark_gray"}]
+tellraw @s [{"text":"回响加的最大魔力 ","color":"gray"},{"score":{"name":"#dbg_wmana","objective":"zx.meta"},"color":"aqua"}]
 
-# ---- 下次技能加成 ----
-$execute if data storage zx:data wg_bonus."$(uuid)" run tellraw @s [{"text":"下次技能加成 ","color":"gray"},{"nbt":"wg_bonus.\"$(uuid)\"","storage":"zx:data","color":"light_purple"},{"text":"   (0.15 = +15%, 下一次以最大魔力结算的技能吃掉它)","color":"dark_gray"}]
-$execute unless data storage zx:data wg_bonus."$(uuid)" run tellraw @s [{"text":"下次技能加成 无","color":"dark_gray"}]
+# ---- 「最大魔力值技能倍率」通用加成(风声 / 忘川彼岸 / 无效) ----
+#   ★ 2026-10-07: 原来这里打的是 zx:data wg_bonus."<uuid>"(按 uuid 的一次性槽位),
+#     那份槽位已整体去掉 —— 现在读玩家自己的计分项, 不需要宏。
+#     2026-10-08: 没有倒计时了(拿到就挂着, 打出一次 mm 技能才清)。
+scoreboard players set #dbg_mma zx.meta 0
+execute store result score #dbg_mma zx.meta run scoreboard players get @s zx.mm_add
+execute if score #dbg_mma zx.meta matches 1.. run tellraw @s [{"text":"最大魔力技能加成 +","color":"gray"},{"score":{"name":"#dbg_mma","objective":"zx.meta"},"color":"light_purple"},{"text":"%（挂着, 打出一次最大魔力值技能后清零）","color":"dark_gray"}]
+execute unless score #dbg_mma zx.meta matches 1.. run tellraw @s [{"text":"最大魔力技能加成 无","color":"dark_gray"}]
 
 # ---- 上一次算出来的伤害(排查"到底有没有打出去") ----
 $execute if data storage zx:data wg_dbg."$(uuid)".burst run tellraw @s [{"text":"上次爆发每跳 ","color":"gray"},{"nbt":"wg_dbg.\"$(uuid)\".burst","storage":"zx:data","color":"white"}]
-$execute if data storage zx:data wg_dbg."$(uuid)".aura run tellraw @s [{"text":"上次回响每跳 ","color":"gray"},{"nbt":"wg_dbg.\"$(uuid)\".aura","storage":"zx:data","color":"white"},{"text":"   (每 4 秒一跳, 共 5 跳)","color":"dark_gray"}]
+$execute if data storage zx:data wg_dbg."$(uuid)".aura run tellraw @s [{"text":"上次回响每跳 ","color":"gray"},{"nbt":"wg_dbg.\"$(uuid)\".aura","storage":"zx:data","color":"white"}]
 
 # ---- 术阵占用 / 魔力 ----
 data modify storage manacore:in arg set value {uuid:""}
@@ -33,5 +38,3 @@ data modify storage manacore:in arg set value {uuid:""}
 $data modify storage manacore:in arg.uuid set value "$(uuid)"
 function manacore:api/mana/get
 tellraw @s [{"text":"魔力        ","color":"gray"},{"nbt":"r.value","storage":"manacore:out","color":"aqua"},{"text":" / ","color":"dark_aqua"},{"nbt":"r.max","storage":"manacore:out","color":"dark_aqua"}]
-
-tellraw @s [{"text":"提示: 风声要超过 60 才有加成 —— 3 个术阵 × 3 轮 × 7 只怪才够 63","color":"gold","italic":true}]

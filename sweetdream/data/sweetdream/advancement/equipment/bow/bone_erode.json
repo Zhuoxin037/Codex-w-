@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "bone_erode": {
+            "trigger": "shot_crossbow",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "bone_erode"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:equipment/bow/bone_erode/shot"
+    }
+}

@@ -19,14 +19,8 @@ tag @e[tag=zx.ly_hit] remove zx.ly_hit
 execute positioned ~-5 ~-5 ~-5 run tag @e[type=!#sweetdream:no_damage,dx=10,dy=10,dz=10] add zx.ly_hit
 
 # ③ 伤害 = 最大魔力 ×0.04
-data modify storage manacore:in arg set value {uuid:"",key:"max_mana"}
+data modify storage manacore:in arg set value {uuid:"",max_mana_mul:0.04,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/stats/get
-data modify storage manacore:in arg set value {uuid:"",base_attack:-1.0,skill_multiplier:0.04,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0}
-data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-data modify storage manacore:in arg.base_attack set from storage manacore:out r.value
-data modify storage zx:work wg.uuid set from storage zx:data self.uuid
-function sweetdream:lib/max_mana_bonus with storage zx:work wg
 # ★ 超限的伤害乘区(敲过超限才有效): 0.04 -> 0.05, 和 lore 里的数字一一对应
 function sweetdream:overlimit/api/mod
 function manacore:api/damage/calc

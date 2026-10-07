@@ -28,5 +28,7 @@ scoreboard players enable @a zx.dbg_raw
 scoreboard players enable @a zx.dbg_diff
 scoreboard players enable @a zx.dbg_cd
 scoreboard players enable @a zx.dbg_mana
+scoreboard players enable @a zx.dbg_fadd
+scoreboard players enable @a zx.dbg_fdel
 scoreboard players enable @a zx.dbg_menu
 scoreboard players enable @a zx.dbg_give

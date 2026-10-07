@@ -5,7 +5,16 @@
 # 【1% 怎么算】把上限按 x100 读成整数 -> 除以 100 回到原值 -> 再除以 100 取 1%。
 #   两次整数除法的精度损失最多 1 点, 对这种"每 3 秒回一点"的效果足够了。
 #   (计分板没有小数, 所以只能这么算)
+#
+# 【★★ 必须自己取一次 uuid ★★】second ④ 排在 ① passive(`execute as @a`, 逐个
+#   取 uuid)之后 —— 轮到这里时 zx:data self.uuid 里留的是**最后一个玩家**的。
+#   多人时变成"两个人都按同一个人的 UUID 回蓝": 那人拿双倍、另一人完全不回
+#   (账本 zx.regen_extra 还记在本人的账上, 对不上账)。同 apply_mana 那条注释。
+#   群星挽歌的 regen.mcfunction 顶部有同样一段说明, 那件是对的、这件漏了。
 # ============================================================
+
+function sweetdream:lib/uuid
+execute unless data storage zx:data self{ok:1b} run return 0
 
 data modify storage manacore:in arg set value {uuid:"",key:"max_mana"}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid

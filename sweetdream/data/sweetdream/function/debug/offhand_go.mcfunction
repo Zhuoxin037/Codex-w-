@@ -8,10 +8,10 @@
 # ============================================================
 
 # ⑤ 架子的主手槽
-$execute in minecraft:overworld unless entity @e[tag=test_stand_$(uuid)] run tellraw @s [{"text":"⑤ 备份盔甲架: 不存在(等 2 秒自愈, 或重进一次)","color":"red"}]
-$execute in minecraft:overworld if items entity @e[tag=test_stand_$(uuid),limit=1] weapon.mainhand * run tellraw @s [{"text":"⑤ 架子 主手槽: 有备份 ✓","color":"green"}]
-$execute in minecraft:overworld unless items entity @e[tag=test_stand_$(uuid),limit=1] weapon.mainhand * run tellraw @s [{"text":"⑤ 架子 主手槽: 空","color":"gray"}]
-$execute in minecraft:overworld if items entity @e[tag=test_stand_$(uuid),limit=1] weapon.offhand * run tellraw @s [{"text":"⑥ 架子 副手槽: 有备份 ✓","color":"green"}]
-$execute in minecraft:overworld unless items entity @e[tag=test_stand_$(uuid),limit=1] weapon.offhand * run tellraw @s [{"text":"⑥ 架子 副手槽: 空","color":"gray"}]
+$execute in minecraft:overworld unless entity @e[distance=0..,tag=test_stand_$(uuid)] run tellraw @s [{"text":"⑤ 备份盔甲架: 不存在(等 2 秒自愈, 或重进一次)","color":"red"}]
+$execute in minecraft:overworld if items entity @e[distance=0..,tag=test_stand_$(uuid),limit=1] weapon.mainhand * run tellraw @s [{"text":"⑤ 架子 主手槽: 有备份 ✓","color":"green"}]
+$execute in minecraft:overworld unless items entity @e[distance=0..,tag=test_stand_$(uuid),limit=1] weapon.mainhand * run tellraw @s [{"text":"⑤ 架子 主手槽: 空","color":"gray"}]
+$execute in minecraft:overworld if items entity @e[distance=0..,tag=test_stand_$(uuid),limit=1] weapon.offhand * run tellraw @s [{"text":"⑥ 架子 副手槽: 有备份 ✓","color":"green"}]
+$execute in minecraft:overworld unless items entity @e[distance=0..,tag=test_stand_$(uuid),limit=1] weapon.offhand * run tellraw @s [{"text":"⑥ 架子 副手槽: 空","color":"gray"}]
 
 tellraw @s [{"text":"   副手拿着武器但⑥是空 -> 备份没做成, 用了就会消失","color":"dark_gray"}]

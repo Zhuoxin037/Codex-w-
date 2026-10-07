@@ -1,23 +1,15 @@
 # ============================================================
 # sweetdream:upgrade/api/bonus_one —— 把**一条**升级的数值并进总账(宏 {id})
 # ------------------------------------------------------------
-# 【两类字段, 两套规则】
-#   dmg / mana / cd  : 乘区, 一律**累加**(0.1 = +10%), 单位 0.01 存在计分板上
-#   mm / mr / mh/mhp : 分级链条, 交给 bonus_take 按"同系取最高 tier"处理
-# 【为什么每次都先 set 0】data get 读不到(键不存在)时 store 不会执行,
-#   分数会**留着上一次的值** —— 不先归零就会把别人的数值算进来(踩过)。
+# 【★ 2026-10-07 二改: 老三样也进分级桶 ★】
+#   以前 dmg/mana/cd 在这里**无条件累加**, 只有 mm/mr/mh/mhp 走 bonus_take 的
+#   "同系取最高 tier"。后果: 同一条链里只要残留两条(α+β), 那三样就相加 ——
+#   玩家看到"不同等级的效果叠在一起了"(愿景 α+β = +30% 而不是 +20%)。
+#   现在**全部字段**统一交给 bonus_take: 同系只认最高 tier, 不同系才相加。
+#   这样连"老规则敲出来的 4 条老物品"也自动修正, 不用去洗物品数据。
+# 【本函数只剩两件事】读 tier -> 读 series -> 交给分级桶, 自己不碰任何账。
+#   #up_dmg/#up_mana/#up_cd 由调用方(bonus_held / bonus_armor)归零。
 # ============================================================
-
-# ---- 老三样: 累加 ----
-scoreboard players set #up_t zx.meta 0
-$execute store result score #up_t zx.meta run data get storage zx:config updef."$(id)".dmg 100
-scoreboard players operation #up_dmg zx.meta += #up_t zx.meta
-scoreboard players set #up_t zx.meta 0
-$execute store result score #up_t zx.meta run data get storage zx:config updef."$(id)".mana 100
-scoreboard players operation #up_mana zx.meta += #up_t zx.meta
-scoreboard players set #up_t zx.meta 0
-$execute store result score #up_t zx.meta run data get storage zx:config updef."$(id)".cd 100
-scoreboard players operation #up_cd zx.meta += #up_t zx.meta
 
 # ---- 分级链条: 取 series 和 tier, 交给下一层宏 ----
 scoreboard players set #up_tier zx.meta 0

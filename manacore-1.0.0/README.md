@@ -141,7 +141,7 @@ data modify storage mypack:buf.uuid set from storage manacore:ctx uuid
 function manacore:api/player/self_uuid
 
 # ② 组装技能参数
-data modify storage manacore:in arg set value {skill:"mypack:fireball", mana:20.0, cooldown_seconds:3.0, skill_multiplier:2.0, independent_multiplier:1.0, custom_damage:6.0, target:"@e[tag=mana_target,distance=..8,limit=1]"}
+data modify storage manacore:in arg set value {skill:"mypack:fireball", mana:20.0, cooldown_seconds:3.0, attack_mul:2.0, independent_multiplier:1.0, custom_damage:6.0, target:"@e[tag=mana_target,distance=..8,limit=1]"}
 data modify storage manacore:in arg.uuid set from storage manacore:out r.uuid
 
 # ③ 交给框架：查冷却 -> 扣蓝 -> 记冷却 -> 算伤害 -> 打伤害 -> 抛事件
@@ -216,7 +216,7 @@ execute if data storage manacore:out r {reason:"mana"} run tellraw @s {"text":"�
     base_attack: 5.0,               // 基础攻击力
     max_health: 20.0,               // 最大生命值
     custom_damage: 0.0,             // 技能固定伤害
-    skill_multiplier: 1.0,          // 技能倍率
+    skill_multiplier: 1.0,          // 旧字段: 技能倍率的旧名(calc 已不读, 改用 attack_mul)
     independent_multiplier: 1.0,    // 独立乘区
     cooldown: 0.0,                  // 冷却(秒, 技能表用)
     mana_regen: 1.0,                // 每秒基础恢复
@@ -406,8 +406,10 @@ formations : 8 个槽位    regen_mods : 8 个槽位
 | `api/stats/export_all` | — | `out.players` | 导出所有玩家数据 |
 
 内置 key：`current_mana` `max_mana` `base_attack` `max_health` `custom_damage`
-`skill_multiplier` `independent_multiplier` `cooldown` `mana_regen`
-`mana_regen_multiplier` `cooldown_reduction` `formation_limit`。
+`independent_multiplier` `cooldown` `mana_regen` `mana_regen_multiplier`
+`cooldown_reduction` `formation_limit`。
+（`skill_multiplier` 是早期遗留字段，仍存在于默认面板里，但伤害计算已改用三通道、
+不再读它，详见 7.5。）
 你也可以 `set` 任意自定义 key（例如 `crit_rate`），框架不会阻拦。
 
 ```mcfunction
@@ -486,16 +488,37 @@ function manacore:api/mana/regen/ban
 
 ### 7.5 伤害（damage）
 
-**公式**：`(基础攻击力 × 技能倍率 + 技能固定伤害 + 最大生命 × 生命系数) × 独立乘区`
+**公式（三通道）**：
+
+```
+伤害 =   最大魔力   × max_mana_mul
+        + 基础攻击力 × attack_mul
+        + 其他基数   × other_mul
+        + 技能固定伤害(custom_damage)
+        + 最大生命   × 生命系数(health_ratio)
+    最后整体 × 独立乘区(independent_multiplier)
+```
+
+三条倍率通道各吃什么基数：
+
+| 通道 | 基数 | 基数来源 |
+| --- | --- | --- |
+| `max_mana_mul` | 面板 `max_mana` | 框架自动读 |
+| `attack_mul` | `base_attack` 字段 | `-1` / 缺省 = 面板 `base_attack`，否则用给定值 |
+| `other_mul` | `other_base` 字段 | `-1` / 缺省 = 面板 `current_mana`，否则用给定值 |
+
+**缺省规则**：三条一条都不给 → 退回 `基础攻击力 × 1`（向后兼容旧写法）；
+**只要给了任意一条 → 没给的按 0**。旧名 `skill_multiplier` = `attack_mul`，
+仅在没给 `attack_mul` 时生效。
 
 | 接口 | 入参 | 出参 | 说明 |
 | --- | --- | --- | --- |
-| `api/damage/calc` | `{uuid, base_attack(-1=面板), skill_multiplier, independent_multiplier, custom_damage, health_ratio}` | `out.damage` | 只算不打 |
+| `api/damage/calc` | `{uuid, max_mana_mul, attack_mul, other_mul, base_attack(-1=面板), other_base(-1=当前魔力), custom_damage, health_ratio, independent_multiplier}` | `out.damage` | 只算不打 |
 | `api/damage/apply` | `{uuid, target, damage, type, from}` | `out.applied` | 只打不算 |
 | `api/damage/deal` | 上面两者合并 | `out.damage` | 算+打 |
 
 ```mcfunction
-data modify storage manacore:in arg set value {uuid:"<UUID>", base_attack:-1.0, skill_multiplier:2.0, independent_multiplier:1.5, custom_damage:10.0}
+data modify storage manacore:in arg set value {uuid:"<UUID>", attack_mul:2.0, independent_multiplier:1.5, custom_damage:10.0}
 function manacore:api/damage/calc
 /data get storage manacore:out r.damage     # => 例如 45.0
 ```
@@ -675,7 +698,7 @@ function manacore:api/stats/set
 ```mcfunction
 # mypack:skills/ice_lance
 function manacore:api/player/self_uuid
-data modify storage manacore:in arg set value {skill:"mypack:ice_lance", mana:35.0, cooldown_seconds:8.0, skill_multiplier:3.5, custom_damage:12.0, target:"@e[tag=mana_target,distance=..12,limit=1]"}
+data modify storage manacore:in arg set value {skill:"mypack:ice_lance", mana:35.0, cooldown_seconds:8.0, attack_mul:3.5, custom_damage:12.0, target:"@e[tag=mana_target,distance=..12,limit=1]"}
 data modify storage manacore:in arg.uuid set from storage manacore:out r.uuid
 function manacore:api/skill/cast
 execute if data storage manacore:out r {success:1b} run function mypack:skills/ice_lance_vfx
@@ -684,8 +707,9 @@ execute if data storage manacore:out r {success:1b} run function mypack:skills/i
 ### 10.3 修改伤害公式
 
 只改 `data/manacore/function/internal/damage/calc.mcfunction`。
-里面的注释标出了每一项（基础攻击力 / 技能倍率 / 固定伤害 / 生命系数 / 独立乘区），
-加一项就在对应的计分板运算处插一行。
+里面的注释标出了每一段（① 补默认 ② 三个基数 ③ 三条倍率 ④ 通道相加 ⑤ 固定伤害 +
+生命项 + 独立乘区），加一条通道就在 ②③④ 各插一段、并补上对应的默认值。
+三条通道的语义见 7.5。
 
 ### 10.4 扩容固定槽位（术阵 / 恢复修正）
 

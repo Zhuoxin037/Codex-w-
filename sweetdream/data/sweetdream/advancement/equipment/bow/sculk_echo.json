@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "sculk_echo": {
+            "trigger": "shot_crossbow",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "sculk_echo"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:equipment/bow/sculk_echo/shot"
+    }
+}

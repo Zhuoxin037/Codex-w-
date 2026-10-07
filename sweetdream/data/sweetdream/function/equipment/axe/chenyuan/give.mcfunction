@@ -1,0 +1,8 @@
+# ============================================================
+# sweetdream:equipment/axe/chenyuan/give —— 给一把「沉渊」
+# ------------------------------------------------------------
+# 【custom_data 三段 + skill】见 shadow_blade/give 的说明。
+# 【lore 版式】统一走 .workbuddy/lore_fmt.py。
+# ============================================================
+
+give @s diamond_axe[item_name={text:"沉渊",bold:true,color:dark_aqua},lore=[{"text":"✦ 被动技能","color":"gold","bold":true,"italic":false},{"text":"每次攻击带有缓慢效果的生物时都会使该","color":"gray","italic":false},{"text":"武器技能冷却 -1 秒。若自身魔力值高于","color":"gray","italic":false},{"text":"300 则额外消耗 50 魔力值并使其附加","color":"gray","italic":false},{"text":"「渊海」效果，若其已附加则改为为自身","color":"gray","italic":false},{"text":"恢复 70 魔力值。","color":"gray","italic":false},{"text":" ","italic":false},{"text":"✦ 主动技能","color":"gold","bold":true,"italic":false},{"text":"","italic":false,"extra":[{"text":"魔力 ","color":"gray"},{"text":"100","color":"aqua"},{"text":"   ·   ","color":"dark_gray"},{"text":"冷却 ","color":"gray"},{"text":"10 秒","color":"yellow"}]},{"text":" ","italic":false},{"text":"使用后使自身 6 格内随机一个生物及另一","color":"gray","italic":false},{"text":"附加了「渊海」效果的生物获得 3 秒缓慢","color":"gray","italic":false},{"text":"Ⅳ效果，之后对其造成相当于释放者自身","color":"gray","italic":false},{"text":"当前魔力值 ×0.08 的伤害。若自身有给自","color":"gray","italic":false},{"text":"身最大魔力值相关技能的增益则额外锁定","color":"gray","italic":false},{"text":"3 个生物并释放该技能效果，且本次攻击","color":"gray","italic":false},{"text":"伤害改为最大魔力值 ×0.08。","color":"gray","italic":false}],unbreakable={},custom_data={zx:["chenyuan","axe","itemreplace"],skill:"sweetdream:chenyuan"},consumable={animation:"none",consume_seconds:0,has_consume_particles:false,sound:"block.bamboo_wood_button.click_off"},tooltip_display={hidden_components:["unbreakable"]}]

@@ -34,7 +34,7 @@ function manacore:api/mana/get
 tellraw @s [{"text":"④ 魔力 = ","color":"gray"},{"nbt":"r.value","storage":"manacore:out"},{"text":" / ","color":"gray"},{"nbt":"r.max","storage":"manacore:out"}]
 
 # ⑤ 伤害预览(攻击力 x2)
-data modify storage manacore:in arg set value {uuid:"",skill_multiplier:2.0}
+data modify storage manacore:in arg set value {uuid:"",attack_mul:2.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 tellraw @s [{"text":"⑤ 伤害(攻击力x2) = ","color":"gray"},{"nbt":"r.damage","storage":"manacore:out","color":"gold"}]

@@ -21,21 +21,14 @@ execute at @s run playsound minecraft:entity.player.attack.strong player @a ~ ~ 
 execute at @s run playsound minecraft:entity.player.attack.crit player @a ~ ~ ~ 0.6 1.4
 
 # ③ 伤害 = 自身最大魔力 x 0.08
-#   原理见 使用教程 §7.8: base_attack 可以自己指定(传 -1 才是"用面板攻击力"),
-#   所以先读出 max_mana, 把它当 base_attack 传进去, 倍率写 0.08。
-data modify storage manacore:in arg set value {uuid:"",key:"max_mana"}
-data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/stats/get
-# 此刻 manacore:out r.value = 最大魔力
+#   走框架的"最大魔力值技能倍率"通道(max_mana_mul): 基数由框架自己取面板最大魔力,
+#   所以这里只要声明 max_mana_mul, 不必再先读 max_mana 塞进 base_attack。
 
-data modify storage manacore:in arg set value {uuid:"",base_attack:-1.0,skill_multiplier:0.08,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0}
+data modify storage manacore:in arg set value {uuid:"",max_mana_mul:0.08,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-data modify storage manacore:in arg.base_attack set from storage manacore:out r.value
 # 「下一次技能加成」: 风行攒的风声奖励对"所有以自身最大魔力值结算的技能"生效,
 #   横刀这一刀正好是最大魔力 ×0.08, 所以吃同一份。走 lib 统一处理
 #   (普通乘区、乘完即删), 别在这里再写一套独立乘区的定点乘法。
-data modify storage zx:work wg.uuid set from storage zx:data self.uuid
-function sweetdream:lib/max_mana_bonus with storage zx:work wg
 function manacore:api/damage/calc
 # 此刻 manacore:out r.damage = 最大魔力 x 0.08
 

@@ -11,4 +11,9 @@ function sweetdream:lib/in_bak
 
 execute as @a run function sweetdream:upgrade/armor_apply
 
+# 冷却剂 / 魔力沸涌(2026-10-07): 冷却缩减属性 + 长冷却/低魔力的额外减冷却。
+# 也放在 in_bak/in_restore 里 —— 它要调 manacore 的 cooldown_reduction_set
+# 与 mana/get(都会写公共输入口 manacore:in arg)。
+execute as @a run function sweetdream:upgrade/api/cd_tick
+
 function sweetdream:lib/in_restore

@@ -10,6 +10,8 @@
 #     /trigger zx.dbg_raw      原始面板数据(全部字段)
 #     /trigger zx.dbg_cd       立刻结束主手武器的技能冷却
 #     /trigger zx.dbg_mana     回满魔力(等价 +1000, 然后被上限夹住)
+#     /trigger zx.dbg_fadd     自己的术阵 +1(永久, 用 -1 摘)
+#     /trigger zx.dbg_fdel     自己的术阵 -1(摘编号最大的那个非空槽)
 #
 # 【★ 为什么用 trigger 型计分项 ★】
 #   trigger 是原版专门给"没有 OP 权限的玩家也能自己触发一条命令"开的口子:
@@ -20,7 +22,7 @@
 #   /trigger 成功之后, 原版会立刻把这一项对该玩家 disable + 分数归 0。
 #   不重新 enable 的话每人只能按一次 —— 重新打开的活儿在 debug/second 里。
 #
-# 【开销】平时所有人的分数都是 0 / 不存在, 八个选择器全空, 一条命令都不会
+# 【开销】平时所有人的分数都是 0 / 不存在, 十个选择器全空, 一条命令都不会
 #   往下走。只有刚按过的那一个人会进。
 #
 # 【★ 加新入口要做四件事 ★】
@@ -35,4 +37,6 @@ execute as @a[scores={zx.dbg_diff=1..}] run function sweetdream:debug/tg_diff
 execute as @a[scores={zx.dbg_raw=1..}] run function sweetdream:debug/tg_raw
 execute as @a[scores={zx.dbg_cd=1..}] run function sweetdream:debug/tg_cd
 execute as @a[scores={zx.dbg_mana=1..}] run function sweetdream:debug/tg_mana
+execute as @a[scores={zx.dbg_fadd=1..}] run function sweetdream:debug/tg_fadd
+execute as @a[scores={zx.dbg_fdel=1..}] run function sweetdream:debug/tg_fdel
 execute as @a[scores={zx.dbg_give=1..}] run function sweetdream:debug/tg_give

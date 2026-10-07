@@ -29,5 +29,4 @@ function sweetdream:debug/worn_slot {l:"胸甲  ",p:"equipment.chest"}
 function sweetdream:debug/worn_slot {l:"护腿  ",p:"equipment.legs"}
 function sweetdream:debug/worn_slot {l:"靴子  ",p:"equipment.feet"}
 
-tellraw @s [{"text":"(显示英文 id = 那件装备不在 zx:reg names 表里; 显示 — = 那个槽位是空的)","color":"dark_gray","italic":true}]
 tellraw @s [{"text":"看各装备给了多少加成 -> ","color":"dark_gray","italic":true},{"text":"/trigger zx.dbg_stats","color":"aqua","italic":true}]

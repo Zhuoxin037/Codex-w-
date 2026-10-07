@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "spine_symbiote": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "ol_spine_symbiote"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:overlimit/apply/spine_symbiote"
+    }
+}

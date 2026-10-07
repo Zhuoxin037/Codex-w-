@@ -1,7 +1,7 @@
 # 在当前维度里收所有到点的冷冻/时停(由 unfreeze_sweep 逐维度调用)
 
 # ① 冷冻到点 -> 解冻
-execute as @e[tag=zx.freeze] if score @s zx.fz_end <= #now manacore.meta run function sweetdream:lib/unfreeze_one
+execute as @e[distance=0..,tag=zx.freeze] if score @s zx.fz_end <= #now manacore.meta run function sweetdream:lib/unfreeze_one
 
 # ② 时停到点 -> 先标出来, 让应用层接一下, 再真正解除
 #    【为什么要多"标一下"这一步】zx.stop 一摘掉就再也分不出"刚结束的"和
@@ -13,12 +13,12 @@ execute as @e[tag=zx.freeze] if score @s zx.fz_end <= #now manacore.meta run fun
 #      把这一瞬间接出去。默认挂 sweetdream:event/noop, 没人接就是空转。
 #    【标签为什么用完就清】zx.ts_done 只在本次扫描内有效; 留着的话下一次扫描
 #      会把"上次结束的"再处理一遍。
-tag @e[tag=zx.ts_done] remove zx.ts_done
-execute as @e[tag=zx.stop] if score @s zx.ts_end <= #now manacore.meta run tag @s add zx.ts_done
+tag @e[distance=0..,tag=zx.ts_done] remove zx.ts_done
+execute as @e[distance=0..,tag=zx.stop] if score @s zx.ts_end <= #now manacore.meta run tag @s add zx.ts_done
 #    【兜底】带了 zx.stop 却没有 zx.ts_end 的(计时被外力清掉、或在旧版本里
 #      被写坏过): 上面的 `<=` 比较会因为分数不存在而失败, 它就永远解不开,
 #      NoAI 也就永远挂着。"分数不存在"的判断写法是"自己不等于自己"。
-execute as @e[tag=zx.stop] unless score @s zx.ts_end = @s zx.ts_end run tag @s add zx.ts_done
-execute if entity @e[tag=zx.ts_done,limit=1] run function #sweetdream:event/timestop_end
-execute as @e[tag=zx.ts_done] run function sweetdream:lib/timestop_one
-tag @e[tag=zx.ts_done] remove zx.ts_done
+execute as @e[distance=0..,tag=zx.stop] unless score @s zx.ts_end = @s zx.ts_end run tag @s add zx.ts_done
+execute if entity @e[distance=0..,tag=zx.ts_done,limit=1] run function #sweetdream:event/timestop_end
+execute as @e[distance=0..,tag=zx.ts_done] run function sweetdream:lib/timestop_one
+tag @e[distance=0..,tag=zx.ts_done] remove zx.ts_done

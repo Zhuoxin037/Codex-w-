@@ -24,6 +24,9 @@ scoreboard players set #em_promote zx.meta 0
 execute if entity @s[tag=zx.status.liuhuo] run scoreboard players set #em_promote zx.meta 1
 
 # ④ 通用标签接口: 目标就是当前 @s
+#   ★ 这里**故意**不走 lib/mark_consume(消耗统一入口) ★ —— 第 ⑤ 步是"把流火换成
+#     夜火"的**替换**, 不是消耗: 走入口的话, 穿「永恒」的执行者会把流火补回来,
+#     变成"流火+夜火"双状态(2026-10-04 记过的刷魔力漏洞), 所以保持直调 tag/unmark。
 data modify storage zx:work ic.target set value "@s"
 
 # ⑤ 原本有流火 -> 摘掉流火, 换成夜火

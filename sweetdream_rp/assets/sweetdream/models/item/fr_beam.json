@@ -1,0 +1,150 @@
+{
+ "credit": "终末天启·实体光柱(以撒风: 白亮实心核 + 半透明暖白外辉)。元素沿 model Z 铺 0..16px = 1 格, 由 beam_new 的 transformation scale [1,1,16] 拉成 16 格长条; 模型在 display 上以实体位置为中心, 所以条子在视线方向前后各 8 格 —— 生成点定在 '眼睛下方 0.45、前方 8 格', 整条正好从眼前铺到 16 格外。★ 别改 from/to 的 z 跨度(改了'中心对齐'就破了, 光柱会从半截处开始); ★ 贴图必须是四边对称的软边图(见 _gen_fr_beam.py 的说明), 换成平贴图 (白混凝土/白玻璃)就退回'塑料棍'观感。",
+ "ambientocclusion": false,
+ "gui_light": "front",
+ "textures": {
+  "glow": "sweetdream:item/fr_beam_glow",
+  "core": "sweetdream:item/fr_beam_core",
+  "particle": "sweetdream:item/fr_beam_glow"
+ },
+ "elements": [
+  {
+   "name": "光柱_外辉(暖白渐隐)",
+   "from": [
+    2,
+    2,
+    0
+   ],
+   "to": [
+    14,
+    14,
+    16
+   ],
+   "faces": {
+    "down": {
+     "texture": "#glow",
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ]
+    },
+    "up": {
+     "texture": "#glow",
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ]
+    },
+    "north": {
+     "texture": "#glow",
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ]
+    },
+    "south": {
+     "texture": "#glow",
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ]
+    },
+    "west": {
+     "texture": "#glow",
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ]
+    },
+    "east": {
+     "texture": "#glow",
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ]
+    }
+   }
+  },
+  {
+   "name": "光柱_亮核(纯白渐隐, 比外辉短一截)",
+   "from": [
+    5,
+    5,
+    2
+   ],
+   "to": [
+    11,
+    11,
+    14
+   ],
+   "faces": {
+    "down": {
+     "texture": "#core",
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ]
+    },
+    "up": {
+     "texture": "#core",
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ]
+    },
+    "north": {
+     "texture": "#core",
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ]
+    },
+    "south": {
+     "texture": "#core",
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ]
+    },
+    "west": {
+     "texture": "#core",
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ]
+    },
+    "east": {
+     "texture": "#core",
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ]
+    }
+   }
+  }
+ ]
+}

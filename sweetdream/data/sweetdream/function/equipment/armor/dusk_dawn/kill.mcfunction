@@ -12,10 +12,13 @@
 
 advancement revoke @s only sweetdream:equipment/armor/dusk_dawn_kill
 execute unless items entity @s armor.feet netherite_boots[custom_data~{zx:["dusk_dawn"]}] run return fail
+function sweetdream:equipment/armor/dusk_dawn/is_ol
 
 function sweetdream:equipment/armor/dusk_dawn/kill_init
 scoreboard players set @s zx.dd_t1 200
+# ★ 超限版: 持续 8 秒 -> 12 秒
 scoreboard players set @s zx.dd_temp 8
+execute if score #dd_ol zx.meta matches 1 run scoreboard players set @s zx.dd_temp 12
 function sweetdream:equipment/armor/dusk_dawn/temp_apply
 
 # 表现: 一圈暖金色的光(黄昏/黎明)

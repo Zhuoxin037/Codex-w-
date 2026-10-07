@@ -34,4 +34,3 @@ tellraw @s [{"text":"    freeze / fix_noai / deepsea / deepsea_go / damage / tru
 tellraw @s [{"text":"    offhand / offhand_go / cold_crow / ember_immolate / leech_spine","color":"gray"}]
 tellraw @s [{"text":"    iridescent_mirage / sickle / wind / num_probe","color":"gray"}]
 tellraw @s [{"text":"    lore (重刷副手物品的描述, 老装备改规则后用)","color":"gray"}]
-tellraw @s [{"text":"    rearm (某个一次性效果突然失效时, 先跑这个自诊)","color":"gray"}]

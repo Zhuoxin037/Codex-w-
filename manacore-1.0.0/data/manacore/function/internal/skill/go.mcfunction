@@ -2,7 +2,7 @@
 # internal/skill/go —— 技能真正生效
 # ------------------------------------------------------------
 # 【宏参数】manacore:work.a {uuid,skill,cooldown,cooldown_seconds,reduce,
-#          base_attack,skill_multiplier,independent_multiplier,
+#          max_mana_mul,attack_mul,other_mul,base_attack,other_base,
 #          custom_damage,health_ratio,target,type}
 # 【顺序】
 #   1) cooldown/start  : 立刻进入冷却("释放成功后才开始冷却")

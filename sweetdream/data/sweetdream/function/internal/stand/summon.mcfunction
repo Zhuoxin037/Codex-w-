@@ -23,14 +23,15 @@
 # ============================================================
 
 # 注意: 下面每条都先 execute in minecraft:overworld —— 架子固定住在主世界,
-# 而选择器只在"当前维度"里找实体。不加这一层, 玩家一下界就找不到了。
+# 而**裸 @e 会跨维度搜索** —— 不加这层的话在下界也能找到它(写 distance=0.. 是把搜索明确锁进主世界,
+#   架子固定住主世界, 只在主世界找它更严谨)。
 
 # ① 找得到: 丢失计数清零(不需要再挪它了, 它固定住)
-$execute in minecraft:overworld if entity @e[tag=test_stand_$(uuid)] run scoreboard players set #stand_miss zx.meta 0
+$execute in minecraft:overworld if entity @e[distance=0..,tag=test_stand_$(uuid)] run scoreboard players set #stand_miss zx.meta 0
 
 # ② 找不到: 计数 +1(先别急着建)
-$execute in minecraft:overworld unless entity @e[tag=test_stand_$(uuid)] run scoreboard players add #stand_miss zx.meta 1
+$execute in minecraft:overworld unless entity @e[distance=0..,tag=test_stand_$(uuid)] run scoreboard players add #stand_miss zx.meta 1
 
 # ③ 连续丢失满 40 tick 才补建, 建完把计数归零
-$execute in minecraft:overworld unless entity @e[tag=test_stand_$(uuid)] if score #stand_miss zx.meta matches 40.. run summon armor_stand 0.5 -60.0 0.5 {CustomName:"$(uuid)",CustomNameVisible:0b,Tags:["test_stand_$(uuid)"],Invulnerable:1b,Invisible:1b,Marker:1b,NoGravity:1b}
-$execute in minecraft:overworld unless entity @e[tag=test_stand_$(uuid)] if score #stand_miss zx.meta matches 40.. run scoreboard players set #stand_miss zx.meta 0
+$execute in minecraft:overworld unless entity @e[distance=0..,tag=test_stand_$(uuid)] if score #stand_miss zx.meta matches 40.. run summon armor_stand 0.5 -60.0 0.5 {CustomName:"$(uuid)",CustomNameVisible:0b,Tags:["test_stand_$(uuid)"],Invulnerable:1b,Invisible:1b,Marker:1b,NoGravity:1b}
+$execute in minecraft:overworld unless entity @e[distance=0..,tag=test_stand_$(uuid)] if score #stand_miss zx.meta matches 40.. run scoreboard players set #stand_miss zx.meta 0

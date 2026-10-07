@@ -1,0 +1,13 @@
+{
+  "values": [
+    "sweetdream:lib/dmg_ch",
+    "sweetdream:lib/dmg_add_clear",
+    "sweetdream:upgrade/api/dmg_held",
+    "sweetdream:equipment/armor/resonance/hook_calc",
+    "sweetdream:equipment/armor/styx_walk/hook_calc",
+    "sweetdream:equipment/tool/seraph_wing/hook_calc",
+    "sweetdream:lib/mm_add/hook_calc",
+    "sweetdream:lib/dmg_add_apply",
+    "sweetdream:equipment/tool/wrath/hook_calc"
+  ]
+}

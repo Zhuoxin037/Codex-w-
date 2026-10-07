@@ -38,8 +38,19 @@ scoreboard players operation #ol_c zx.meta = @s zx.ol_c
 execute if score #ol_d zx.meta matches 0 if score #ol_m zx.meta matches 0 if score #ol_c zx.meta matches 0 run return 0
 
 # ---- ② 哪几个字段存在就乘哪几个 ----
-#   (mana 那条会顺手把结果抄进 zx:work olv.mana, 给后面"扣蓝"那一步用 ——
+#   (mana 那条会顺手把结果抄进 zx:work olv.mana, 给后面"扣蓝 / 提示需要多少"用 ——
 #    check 和 consume 的字段名不一样, 不缓存的话两边就要各乘一次。)
+#   ⚠️ ★ 但 ① 的 return 意味着"没敲超限 = 这里一条都不跑"★
+#      所以调用点必须**自己先把基准值抄进 olv.mana** 再调 mod, 否则读它的人会拿到
+#      0 或上一轮的陈旧值(2026-10-04 事故: 风行提示"魔力不足(需要 0)", 文案是 550)。
+#      check 规则 30 盯着这条。
+#   ★ 技能倍率有三条通道 ★ 只乘"调用者实际写进 in arg 的那一条":
+#     燎原的灼烧 / 风行的爆发回响 = 最大魔力口径 -> max_mana_mul
+#     风行的普攻                  = 当前魔力口径 -> other_mul
+#     流光那种以攻击力结算的       = attack_mul
+#   所以同一把武器的不同技能各自吃到超限伤害, 不会漏也不会串。
 execute if data storage manacore:in arg.mana run function sweetdream:overlimit/api/mod/mana
 execute if data storage manacore:in arg.cooldown_seconds run function sweetdream:overlimit/api/mod/cd
-execute if data storage manacore:in arg.skill_multiplier run function sweetdream:overlimit/api/mod/sm
+execute if data storage manacore:in arg.max_mana_mul run function sweetdream:overlimit/api/mod/mm
+execute if data storage manacore:in arg.attack_mul run function sweetdream:overlimit/api/mod/sm
+execute if data storage manacore:in arg.other_mul run function sweetdream:overlimit/api/mod/om

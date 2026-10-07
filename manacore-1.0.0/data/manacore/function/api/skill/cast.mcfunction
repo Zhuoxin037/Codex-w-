@@ -7,7 +7,7 @@
 #   data modify storage manacore:in arg set value {
 #       uuid:"<施法者UUID>", skill:"mypack:fireball",
 #       mana:20.0, cooldown_seconds:3.0,
-#       skill_multiplier:2.0, independent_multiplier:1.0, custom_damage:6.0,
+#       attack_mul:2.0, independent_multiplier:1.0, custom_damage:6.0,
 #       target:"@e[tag=mana_target,distance=..8,limit=1]"}
 #   function manacore:api/skill/cast
 #   /execute if data storage manacore:out r {success:1b} run <放成功的表现>
@@ -17,8 +17,10 @@
 #   cooldown / cooldown_seconds  冷却(tick 优先, 秒自动 x20)
 #   reduce                 是否吃冷却缩减, 默认 1b
 #   consume                是否扣魔力, 默认 1b
-#   base_attack            -1 = 用面板
-#   skill_multiplier / independent_multiplier / custom_damage / health_ratio
+#   max_mana_mul / attack_mul / other_mul  三条倍率通道(见 api/damage/calc)
+#   base_attack            -1 = 用面板(基础攻击力通道的基数)
+#   other_base             -1 = 用当前魔力(其他倍率通道的基数)
+#   independent_multiplier / custom_damage / health_ratio
 #   target                 目标选择器, 省略=只算伤害不打
 #   type                   伤害类型, 默认 minecraft:player_attack(吃护甲)
 #   from                   攻击者选择器, 省略自动推导
@@ -28,10 +30,11 @@
 #   out.success 判定之后。
 # ============================================================
 # 入参: manacore:in {uuid, skill, mana, cooldown|cooldown_seconds, reduce, consume,
-#                     base_attack, skill_multiplier, independent_multiplier, custom_damage, health_ratio,
+#                     max_mana_mul, attack_mul, other_mul, base_attack, other_base,
+#                     independent_multiplier, custom_damage, health_ratio,
 #                     target(可选), type(可选), from(可选)}
 # 出参: manacore:out.success / out.reason / out.damage / out.remaining
-data modify storage manacore:work a set value {uuid:"",skill:"",mana:0.0,cooldown:0,cooldown_seconds:0.0,reduce:1b,consume:1b,base_attack:-1.0,skill_multiplier:1.0,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0,type:"minecraft:player_attack"}
+data modify storage manacore:work a set value {uuid:"",skill:"",mana:0.0,cooldown:0,cooldown_seconds:0.0,reduce:1b,consume:1b,base_attack:-1.0,other_base:-1.0,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0,type:"minecraft:player_attack"}
 data modify storage manacore:work a merge from storage manacore:in arg
 data modify storage manacore:out r.success set value 0b
 data modify storage manacore:out r.reason set value ""

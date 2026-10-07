@@ -36,7 +36,6 @@ $execute unless data storage zx:data snap."$(uuid)" run return 0
 
 # ---- 之后每次: 比较 + 更新快照 ----
 tellraw @s [{"text":"========== 和上次快照比 ==========","color":"gold"}]
-tellraw @s [{"text":"(只列变了的那几项; 比完之后快照已经更新成本次的值)","color":"dark_gray","italic":true}]
 scoreboard players set #d_n zx.meta 0
 
 # --- 魔力上限 ---

@@ -30,7 +30,15 @@
 function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return fail
 data modify storage zx:work ball.uuid set from storage zx:data self.uuid
-data modify storage zx:work ball merge value {u0:0,u1:0,u2:0,u3:0,yaw:0,pitch:0,hit:""}
+data modify storage zx:work ball merge value {u0:0,u1:0,u2:0,u3:0,yaw:0,pitch:0}
+# ★ hit(命中回调)只"缺了才补默认", 绝不能在 merge 里写死成 "" ★
+#   以前这行是 merge value {...,hit:""} —— merge 会**覆盖**已有键, 于是调用方
+#   (堕梦 attack 里)装好的 hit:".../fallen_dream/ball_hit" 被抹成空串,
+#   ball/hit 第 ⑥ 步 `unless data entity @s data{hit:""}` 直接跳过回调
+#   → 堕梦普攻的伤害全在回调里结算, 于是**一点伤害都没有**(2026-10-05 玩家报)。
+#   【调用方约定】装球一律用 `set value`(整份替换), 别用 merge —— 否则上一发
+#   留在 zx:work ball 里的 hit / fdmg 会串到下一发上。
+execute unless data storage zx:work ball.hit run data modify storage zx:work ball.hit set value ""
 
 # ② 归属: 玩家 UUID 的四个整数(打伤害时用它拼 by, 击杀才算在你头上)
 #    —— 直接从实体读, 不用按 uuid 去翻 manacore 的记录, 所以这里不需要宏

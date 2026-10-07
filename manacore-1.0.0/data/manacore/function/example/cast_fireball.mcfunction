@@ -14,8 +14,8 @@
 # ① 反查自己的 UUID(公开接口, 结果在 manacore:out.uuid)
 function manacore:api/player/self_uuid
 
-# ② 组装技能参数(魔力 20, 冷却 3 秒, 技能倍率 2, 固定伤害 6)
-data modify storage manacore:in arg set value {skill:"example:fireball",mana:20.0,cooldown_seconds:3.0,skill_multiplier:2.0,independent_multiplier:1.0,custom_damage:6.0,target:"@e[tag=mana_target,distance=..8,limit=1]"}
+# ② 组装技能参数(魔力 20, 冷却 3 秒, 基础攻击力倍率 2, 固定伤害 6)
+data modify storage manacore:in arg set value {skill:"example:fireball",mana:20.0,cooldown_seconds:3.0,attack_mul:2.0,independent_multiplier:1.0,custom_damage:6.0,target:"@e[tag=mana_target,distance=..8,limit=1]"}
 data modify storage manacore:in arg.uuid set from storage manacore:out r.uuid
 
 # ③ 交给框架: 冷却检查 -> 扣蓝 -> 记冷却 -> 算伤害 -> 打伤害 -> 抛事件

@@ -1,0 +1,16 @@
+{
+ "hand_animation_on_swap": false,
+ "model": {
+  "type": "minecraft:composite",
+  "models": [
+   {
+    "type": "minecraft:model",
+    "model": "sweetdream:item/sea_b_deep"
+   },
+   {
+    "type": "minecraft:model",
+    "model": "sweetdream:item/sea_b_ripple"
+   }
+  ]
+ }
+}

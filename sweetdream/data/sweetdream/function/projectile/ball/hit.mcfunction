@@ -11,9 +11,11 @@
 #   纯数字字符串 —— 这是本包所有"把数值打进 /damage"的统一做法
 # ============================================================
 
+# 【★ 自清理也要 distance=0.. ★】ball_hit 是本刻在这个维度里现打的临时标记;
+#    裸 @e 会跨维度搜索, 可能抓到别的维度里残留的同名标签。
 # ① 先标出"球的周围这个盒子里"的所有可伤害生物 —— 和 tick 里的判定用同一套盒子,
 #    这样"判定打中了"和"真的打到"才是同一个范围(也是为什么不用 distance: 见 tick)
-tag @e[tag=zx.ball_hit] remove zx.ball_hit
+tag @e[distance=0..,tag=zx.ball_hit] remove zx.ball_hit
 execute positioned ~-1.1 ~-1.1 ~-1.1 run tag @e[type=!#sweetdream:no_damage,dx=2.2,dy=2.2,dz=2.2] add zx.ball_hit
 
 # ② 组装参数(目标用标签选择器, 它不依赖执行位置, 所以不用再管位置对不对)
@@ -42,5 +44,5 @@ execute unless data entity @s data{style:"wind"} run function sweetdream:project
 $execute unless data entity @s data{hit:""} run function $(hit) with entity @s data
 
 # ⑦ 收尾: 摘掉临时标签 + 法球消失
-tag @e[tag=zx.ball_hit] remove zx.ball_hit
+tag @e[distance=0..,tag=zx.ball_hit] remove zx.ball_hit
 kill @s

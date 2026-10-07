@@ -51,6 +51,18 @@ data modify storage zx:reg a set value []
 data modify storage zx:reg menu set value []
 data modify storage zx:reg names set value {}
 
+# ---------- 全局行哨兵表 ----------
+#   e:"all" 的行是"合计"性质的(套装合计 / 回魔账本 / 升级合计…), **不属于任何单件装备**,
+#   所以它不该显示装备名, 也不该被当成"忘了登记中文名"。
+#   stat_row / stat_row_a 拿这张表当凭据(三分支):
+#     e 在 names 里 -> 打全名("魔力上限 · 静脉泵")
+#     e 在 gsent 里 -> 不打名字("回魔 · 装备额外  12 /秒")
+#     两个都不在   -> 打红字 "(没登记中文名!)"(说明 e 真的写错了)
+#   ⚠️ 漏建这张表的话, **所有 e:"all" 的行都会红着写 "all(没登记中文名!)"**
+#      —— 2026-10-04 真实事故: 静脉泵的"回魔 · 装备额外"那一行。
+#   ⚠️ check.py 的 regsent 项会同时盯"表在不在"和"渲染器认不认哨兵"。
+data modify storage zx:reg gsent set value {all:1b}
+
 # ============================================================
 # b: 数值为 0 就不显示 —— **按装备分组排序**, 同一件的行挨在一起
 # ============================================================
@@ -65,28 +77,28 @@ data modify storage zx:reg b append value {l:"套装魔力上限",o:"zx.set_mana
 data modify storage zx:reg b append value {l:"套装生命上限",o:"zx.set_hp",c:"red",n:"",e:"all"}
 
 # ---- 回魔账本(合计; 来源有静脉泵/桂冠/挽歌/黄昏套装, 不属于单件) ----
-data modify storage zx:reg b append value {l:"回魔 · 装备额外",o:"zx.regen_last",c:"green",n:"/秒 (上一秒实收)",e:"all"}
+data modify storage zx:reg b append value {l:"回魔 · 装备额外",o:"zx.regen_last",c:"green",n:"/秒",e:"all"}
 
 # ---- 体外供能装置 (external_power) ----
 data modify storage zx:reg b append value {l:"生命上限",o:"zx.power_hp",c:"red",n:"",e:"external_power"}
 
 # ---- 狄俄尼索斯之桂冠 (dionysus_helmet) ----
 data modify storage zx:reg b append value {l:"魔力上限",o:"zx.dio_mana",c:"aqua",n:"",e:"dionysus_helmet"}
-data modify storage zx:reg b append value {l:"回魔 · 剩余",o:"zx.dio_regen",c:"green",n:"秒 (期间每秒 +80)",e:"dionysus_helmet"}
+data modify storage zx:reg b append value {l:"回魔 · 剩余",o:"zx.dio_regen",c:"green",n:"秒",e:"dionysus_helmet"}
 
 # ---- 脑髓蛭 (brain_leech) ----
 data modify storage zx:reg b append value {l:"魔力上限",o:"zx.bl_mana",c:"aqua",n:"",e:"brain_leech"}
 data modify storage zx:reg b append value {l:"基础攻击力",o:"zx.bl_atk",c:"gold",n:"",e:"brain_leech"}
-data modify storage zx:reg b append value {l:"回魔修正",o:"zx.bl_regen",c:"green",n:"(1 = 已挂 +3/秒 的速率修正)",e:"brain_leech"}
+data modify storage zx:reg b append value {l:"回魔修正",o:"zx.bl_regen",c:"green",n:"",e:"brain_leech"}
 
 # ---- 脊骨共生 (spine_symbiote) ----
-data modify storage zx:reg b append value {l:"魔力上限",o:"zx.ss_mana",c:"aqua",n:"(负 = 拿上限换别的)",e:"spine_symbiote"}
+data modify storage zx:reg b append value {l:"魔力上限",o:"zx.ss_mana",c:"aqua",n:"",e:"spine_symbiote"}
 data modify storage zx:reg b append value {l:"生命上限",o:"zx.ss_hp",c:"red",n:"",e:"spine_symbiote"}
 data modify storage zx:reg b append value {l:"护甲",o:"zx.ss_armor",c:"white",n:"",e:"spine_symbiote"}
 
 # ---- 群星坠落之挽歌 (stellar_elegy) ----
 data modify storage zx:reg b append value {l:"魔力上限",o:"zx.se_mana",c:"aqua",n:"",e:"stellar_elegy"}
-data modify storage zx:reg b append value {l:"回魔 · 剩余",o:"zx.se_regen",c:"green",n:"秒 (期间每秒 +10)",e:"stellar_elegy"}
+data modify storage zx:reg b append value {l:"回魔 · 剩余",o:"zx.se_regen",c:"green",n:"秒",e:"stellar_elegy"}
 
 # ---- 黄昏黎明之交界 (dusk_dawn) ----
 data modify storage zx:reg b append value {l:"魔力上限",o:"zx.dd_mana",c:"aqua",n:"",e:"dusk_dawn"}
@@ -98,10 +110,32 @@ data modify storage zx:reg b append value {l:"魔力上限",o:"zx.em_mana",c:"aq
 
 # ---- 焚舟 (immolate) ----
 data modify storage zx:reg b append value {l:"魔力上限",o:"zx.im_mk",c:"aqua",n:"",e:"immolate"}
-data modify storage zx:reg b append value {l:"套装 buff 剩余",o:"zx.im_buff",c:"gold",n:"秒 (期间 魔力上限 +100)",e:"immolate"}
+data modify storage zx:reg b append value {l:"套装 buff 剩余",o:"zx.im_buff",c:"gold",n:"秒",e:"immolate"}
 
 # ---- 异彩 (iridescent) ----
 data modify storage zx:reg b append value {l:"魔力上限",o:"zx.ir_mana",c:"aqua",n:"",e:"iridescent"}
+
+# ---- 共振 (resonance) ----
+#   术阵数量本身在面板的"术阵"那一行看; 这里只记魔力上限那本账。
+data modify storage zx:reg b append value {l:"魔力上限",o:"zx.rs_mana",c:"aqua",n:"",e:"resonance"}
+
+# ---- 炉心 (furnace_core) ----
+#   三本账都是"穿上加 / 脱下减"的差值, 燃灰层数单独一行(0 层时不显示)。
+data modify storage zx:reg b append value {l:"魔力上限",o:"zx.fc_mana",c:"aqua",n:"",e:"furnace_core"}
+data modify storage zx:reg b append value {l:"生命上限",o:"zx.fc_hp",c:"red",n:"",e:"furnace_core"}
+data modify storage zx:reg b append value {l:"基础攻击力",o:"zx.fc_atk",c:"gold",n:"",e:"furnace_core"}
+data modify storage zx:reg b append value {l:"燃灰",o:"zx.fc_ash",c:"yellow",n:"层",e:"furnace_core"}
+
+# ---- 枯枝园 (withered_garden) ----
+data modify storage zx:reg b append value {l:"魔力上限",o:"zx.gd_mana",c:"aqua",n:"",e:"withered_garden"}
+
+# ---- 无光海 (lightless_sea) ----
+data modify storage zx:reg b append value {l:"魔力上限",o:"zx.ls_mana",c:"aqua",n:"",e:"lightless_sea"}
+data modify storage zx:reg b append value {l:"基础攻击力",o:"zx.ls_buf",c:"gold",n:"",e:"lightless_sea"}
+
+# ---- 启示录 (apocalypse) ----
+#   只登页数; 当前页魔力是 ×100 定点值, 直接上面板会差 100 倍, 不登。
+data modify storage zx:reg b append value {l:"启示页数",o:"zx.ap_n",c:"yellow",n:"页",e:"apocalypse"}
 
 # ---- 幻昼 (mirage) ----
 data modify storage zx:reg b append value {l:"魔力上限",o:"zx.mr_mana",c:"aqua",n:"",e:"mirage"}
@@ -115,11 +149,18 @@ data modify storage zx:reg b append value {l:"回响剩余",o:"zx.wg_aura",c:"li
 data modify storage zx:reg b append value {l:"爆发剩余",o:"zx.wg_burst",c:"light_purple",n:"轮",e:"wind_ontheground"}
 
 # ---- 寒鸦 (cold_crow) ----
-data modify storage zx:reg b append value {l:"冰凌层数",o:"zx.cc_ice",c:"blue",n:"(0..3)",e:"cold_crow"}
+data modify storage zx:reg b append value {l:"冰凌层数",o:"zx.cc_ice",c:"blue",n:"",e:"cold_crow"}
+
+# ---- 幽匿残响 (sculk_echo) ----
+data modify storage zx:reg b append value {l:"悲鸣",o:"zx.se_cry",c:"dark_aqua",n:"点",e:"sculk_echo"}
+
+# ---- 清醒梦 (lucid_dream) ----
+data modify storage zx:reg b append value {l:"梦回",o:"zx.ld_dream",c:"aqua",n:"层",e:"lucid_dream"}
 
 # ---- 燎原 (liaoyuan) ----
 data modify storage zx:reg b append value {l:"光环剩余",o:"zx.ly_aura",c:"gold",n:"秒",e:"liaoyuan"}
 data modify storage zx:reg b append value {l:"离下次灼烧",o:"zx.ly_timer",c:"gold",n:"秒",e:"liaoyuan"}
+data modify storage zx:reg b append value {l:"本光环灼烧次数",o:"zx.ly_times",c:"gold",n:"次",e:"liaoyuan"}
 
 # ---- 引梦镰 (sickle_dreams) ----
 data modify storage zx:reg b append value {l:"强化锁定",o:"zx.sd_lock",c:"light_purple",n:"秒",e:"sickle_dreams"}
@@ -130,19 +171,96 @@ data modify storage zx:reg b append value {l:"熔浆",o:"zx.fb_lava",c:"red",n:"
 # ---- 超·负·荷 (charge) ----
 data modify storage zx:reg b append value {l:"超载剩余",o:"zx.chg_on",c:"yellow",n:"秒",e:"charge"}
 
+# ---- 陨星 (meteor) ----
+data modify storage zx:reg b append value {l:"熔星剩余",o:"zx.mt_on",c:"gold",n:"秒",e:"meteor"}
+
+# ---- 热熔 (remelt) ----
+data modify storage zx:reg b append value {l:"熔解剩余",o:"zx.rm_on",c:"red",n:"秒",e:"remelt"}
+
+# ---- 天穹 (skyvault) ----
+data modify storage zx:reg b append value {l:"俯冲就绪",o:"zx.sv_launch",c:"aqua",n:"tick",e:"skyvault"}
+
 # ---- 深海的回响 (deepsea_echo) ----
-data modify storage zx:reg b append value {l:"下一波倒计时",o:"zx.de_t",c:"aqua",n:"tick (20 = 1 秒)",e:"deepsea_echo"}
+data modify storage zx:reg b append value {l:"下一波倒计时",o:"zx.de_t",c:"aqua",n:"tick",e:"deepsea_echo"}
 
 # ---- 全局兜底类(平时是 0, 出现就说明有情况) ----
-data modify storage zx:reg b append value {l:"魔力下限保护垫付",o:"zx.floor_mana",c:"dark_aqua",n:"(负 = 面板下限被救过)",e:"all"}
+data modify storage zx:reg b append value {l:"魔力下限保护垫付",o:"zx.floor_mana",c:"dark_aqua",n:"",e:"all"}
 
 # ---- 升级系统(盔甲升级给的魔力上限, 账本就记在 zx.up_mana 上) ----
-data modify storage zx:reg b append value {l:"升级·魔力上限",o:"zx.up_mana",c:"aqua",n:"(盔甲上的魔力提升 α/β/Ω)",e:"all"}
+data modify storage zx:reg b append value {l:"升级·魔力上限",o:"zx.up_mana",c:"aqua",n:"",e:"all"}
 
 # ============================================================
 # a: 永远显示(0 也有意义的) —— 同样要写 e, 只显示在身装备的
 # ============================================================
-data modify storage zx:reg a append value {l:"风声",o:"zx.wg_sound",c:"light_purple",n:"(超过 60 才有额外加成)",e:"wind_ontheground"}
+data modify storage zx:reg a append value {l:"风声",o:"zx.wg_sound",c:"light_purple",n:"",e:"wind_ontheground"}
+
+# ============================================================
+# layer: 「层数机制」一览 —— **观测镜第二行**的数据源(2026-10-05 新增)
+# ------------------------------------------------------------
+# 【这是干嘛的】
+#   观测镜(equipment/tool/look)以前只有一行: 攻击/生命/魔力/术阵/冷却。
+#   现在手里拿着武器、或身上穿着装备时, 若那件东西**有"层数"机制**,
+#   就在**下面一行**把当前层数显示出来 —— 一层一层刷多少、还剩几层, 一眼看到。
+#
+# 【为什么单开一张表, 不复用 b 表】
+#   b 表是"给 stats 面板看的账本", 里面混着魔力上限/生命上限这种**数值**行,
+#   还有"回魔剩余(秒)""冷却剩余"这种**计时器**行。观测镜第二行只要**层数**,
+#   混进去会把"层数"和"还剩几秒"搅在一起, 反而看不清。
+#   所以单开一张"只放层数类"的表, 谁要显示谁登记, stats 面板不受影响。
+#
+# 【字段】
+#   o = 计分项(一定要先在 core/load 建出来)
+#   l = 短标签(观测镜第二行直接显示这个, **要短** —— 一行挤得下才算好标签)
+#   c = 数值颜色
+#   e = 这层数属于哪件装备(custom_data.zx[0]) —— 只在**那件装备在身 / 在手上**时显示
+#   n = 尾巴备注(如「层」; 留空 "" 也行)
+#   max = 【可选】上限, 用来显示成 "3/5" 这种"当前/上限"格式; 不写就只显示当前值。
+#         ⚠️ 上限是**写死的常数**(不是计分项) —— 文案里"最多 N 层"的 N 就填这。
+#         没有上限概念的(悲鸣这种"点数")可不写。
+#   ⚠️ l / n 会被塞进 tellraw 的 JSON 字符串: 不要写英文双引号和反斜杠。
+#   ⚠️ 一行的字段(o/l/c/e)必须写全; 宏参数少一个那条命令直接不跑(不报错, 难查)。
+#
+# 【表位上限】layer 最多 16 行; 加超了改 .workbuddy/gen_reg_unroll.py 顶上的
+#   LAYER_CAP 常量再跑一次那个脚本, check.py 会帮你数。
+# ============================================================
+data modify storage zx:reg layer set value []
+
+# ---- 炉心「燃灰」(最多 10 层) ----
+data modify storage zx:reg layer append value {o:"zx.fc_ash",l:"燃灰",c:"yellow",e:"furnace_core",n:"",max:10}
+# ---- 寒鸦「冰凌」(最多 4 层) ----
+data modify storage zx:reg layer append value {o:"zx.cc_ice",l:"冰凌",c:"blue",e:"cold_crow",n:"",max:4}
+# ---- 烈火残躯「熔浆」(无硬上限, 由技能消耗) ----
+data modify storage zx:reg layer append value {o:"zx.fb_lava",l:"熔浆",c:"red",e:"flame_brokenbody",n:"",max:0}
+# ---- 焚舟「烈空」(0..200 点; 每 20 点 +30 魔力上限, 满 200 后攻击非燃烧目标逐点泄) ----
+data modify storage zx:reg layer append value {o:"zx.lk",l:"烈空",c:"gold",e:"immolate",n:"点",max:200}
+# ---- 清醒梦「梦回」(最多 5 层) ----
+data modify storage zx:reg layer append value {o:"zx.ld_dream",l:"梦回",c:"aqua",e:"lucid_dream",n:"",max:5}
+# ---- 幽匿残响「悲鸣」(0..50 点, 无"层"概念 -> 不加 max) ----
+data modify storage zx:reg layer append value {o:"zx.se_cry",l:"悲鸣",c:"dark_aqua",e:"sculk_echo",n:"点",max:0}
+# ---- 燎原「本光环灼烧次数」(第 3/6/9 次附加流火) ----
+data modify storage zx:reg layer append value {o:"zx.ly_times",l:"灼烧",c:"gold",e:"liaoyuan",n:"次",max:0}
+# ---- 启示录「启示」页数(最多 3 页; 页是玩家身上的持久资产, 跨施法保留) ----
+data modify storage zx:reg layer append value {o:"zx.ap_n",l:"启示",c:"gold",e:"apocalypse",n:"页",max:3}
+# ---- 终末天启「圣光」(最多 10 层; 满 10 层自动释放一次主动技能并清空) ----
+data modify storage zx:reg layer append value {o:"zx.fr_light",l:"圣光",c:"gold",e:"final_revelation",n:"层",max:10}
+# ---- 脑髓蛭「蛊虫」(最多 10 层; 满 10 层进入消耗模式, 每次攻击 -1 层, 消耗完重新积累) ----
+data modify storage zx:reg layer append value {o:"zx.bl_gu",l:"蛊虫",c:"green",e:"brain_leech",n:"层",max:10}
+# ---- 回锋「断刃」(最多 3 层; 攻击攒层, 主动消耗全部、每层重复一次) ----
+data modify storage zx:reg layer append value {o:"zx.rb_blade",l:"断刃",c:"white",e:"rebound",n:"层",max:3}
+# ---- 歌谣「曲调」(最多 8 层; 手持歌谣击杀攒层, 主动消耗殆尽) ----
+data modify storage zx:reg layer append value {o:"zx.bd_tune",l:"曲调",c:"gold",e:"ballad",n:"层",max:8}
+# ---- 威霆「天煌」(0..2000 点; 手持未攻击时每刻 +1, 换术阵时清空) ----
+data modify storage zx:reg layer append value {o:"zx.tc_n",l:"天煌",c:"aqua",e:"thunderclap",n:"点",max:2000}
+# ---- 葬火「放空的魔力值 X」(0 = 没有待结算的葬火; 打出下一次攻击后 X 转成第二段伤害) ----
+data modify storage zx:reg layer append value {o:"zx.py_x",l:"葬火",c:"red",e:"pyre",n:"",max:0}
+# ---- 苍蓝星「被动翻倍」(1 = 攒着一次"本武器伤害倍率翻倍"; 下一次技能消费后消失) ----
+data modify storage zx:reg layer append value {o:"zx.as_x2",l:"翻倍",c:"blue",e:"azure_star",n:"次",max:0}
+# ---- 超限·万念 / 千散「剑魂」(最多 5 个; 每有一个则本武器技能重复一次, 满 5 进「居合」) ----
+#   ★ 两把各登记一条 ★ layer 的 e 只能填一个 id("只在拿着这件时显示"), 而这套机制
+#     是"换手两用": 拿到千散时本该照样看见剑魂, 少登记一条就是"换个手 层数消失了"。
+data modify storage zx:reg layer append value {o:"zx.mq_soul",l:"剑魂",c:"light_purple",e:"myriad",n:"个",max:5}
+data modify storage zx:reg layer append value {o:"zx.mq_soul",l:"剑魂",c:"light_purple",e:"qiansan",n:"个",max:5}
+
 
 # ============================================================
 # names: 装备 id → 中文**全名**(worn / stats / name_row 都用它)
@@ -169,7 +287,74 @@ data modify storage zx:reg names.wind_ontheground set value "风行于大地之�
 data modify storage zx:reg names.liuguang set value "流光"
 data modify storage zx:reg names.hengdao set value "横刀"
 data modify storage zx:reg names.charge set value "超·负·荷"
+data modify storage zx:reg names.shadow_blade set value "影刃"
+data modify storage zx:reg names.remelt set value "热熔"
+data modify storage zx:reg names.aurora_dream set value "极光与幻梦"
+data modify storage zx:reg names.chenyuan set value "沉渊"
+data modify storage zx:reg names.angel_core set value "天使核心"
+data modify storage zx:reg names.meteor set value "陨星"
+data modify storage zx:reg names.skyvault set value "天穹"
 data modify storage zx:reg names.look set value "观测镜"
+# ---- 第五批(2026-10-05, 15 件) ----
+data modify storage zx:reg names.myriad set value "万念"
+data modify storage zx:reg names.qiansan set value "千散"
+data modify storage zx:reg names.agony set value "苦痛"
+data modify storage zx:reg names.polarized_light set value "偏振光"
+data modify storage zx:reg names.delusion set value "惑梦"
+data modify storage zx:reg names.fallen_dream set value "堕梦"
+data modify storage zx:reg names.apocalypse set value "启示录"
+data modify storage zx:reg names.sculk_echo set value "幽匿残响"
+data modify storage zx:reg names.bone_erode set value "蚀骨"
+data modify storage zx:reg names.lucid_dream set value "清醒梦"
+data modify storage zx:reg names.rainbow set value "虹彩"
+data modify storage zx:reg names.withered_garden set value "枯枝园"
+data modify storage zx:reg names.lightless_sea set value "无光海"
+data modify storage zx:reg names.furnace_core set value "炉心"
+data modify storage zx:reg names.resonance set value "共振"
+# ---- 第六批(2026-10-06 建, 只有 give, 效果待做) ----
+#   ★ 键必须等于 give 里 custom_data 的 zx:[ "<id>" ] 那一段, 否则 debug/worn 显示英文 id。
+data modify storage zx:reg names.final_revelation set value "终末天启"
+data modify storage zx:reg names.anion set value "负离子"
+data modify storage zx:reg names.styx_walk set value "漫步冥河之上"
+data modify storage zx:reg names.lethe_shore set value "沉溺忘川彼岸"
+data modify storage zx:reg names.eternity set value "永恒"
+data modify storage zx:reg names.thunder set value "雷鸣"
+data modify storage zx:reg names.blaze_plume set value "炽翎"
+data modify storage zx:reg names.bitter_cold set value "苦寒"
+data modify storage zx:reg names.mana_pump set value "体外魔力泵"
+data modify storage zx:reg names.nullify set value "无效"
+data modify storage zx:reg names.wrath set value "愠怒"
+data modify storage zx:reg names.seraph_wing set value "炽天使之翼"
+# ---- 第七批(2026-10-07, 28 件: 21 武器 + 7 盔甲, 只有 give, 效果待做) ----
+#   ★ 键必须等于 give 里 custom_data 的 zx:[ "<id>" ] 那一段, 否则 debug/worn 显示英文 id。
+data modify storage zx:reg names.hush set value "无息"
+data modify storage zx:reg names.rogue_star set value "游星"
+data modify storage zx:reg names.everfrost set value "永霜"
+data modify storage zx:reg names.verdict set value "神裁"
+data modify storage zx:reg names.tinder set value "火种"
+data modify storage zx:reg names.rebound set value "回锋"
+data modify storage zx:reg names.fissure set value "崩裂"
+data modify storage zx:reg names.dream_reader set value "释梦"
+data modify storage zx:reg names.draught set value "饮鸩"
+data modify storage zx:reg names.pyre set value "葬火"
+data modify storage zx:reg names.ballad set value "歌谣"
+data modify storage zx:reg names.thunderclap set value "威霆"
+data modify storage zx:reg names.red_lotus set value "红莲"
+data modify storage zx:reg names.azure_star set value "苍蓝星"
+data modify storage zx:reg names.chime set value "共鸣"
+data modify storage zx:reg names.palette set value "调色盘"
+data modify storage zx:reg names.begonia set value "海棠"
+data modify storage zx:reg names.gu_poison set value "蛊毒"
+data modify storage zx:reg names.twilight set value "暮光"
+data modify storage zx:reg names.sail set value "风帆"
+data modify storage zx:reg names.arc set value "电弧"
+data modify storage zx:reg names.mana_helm set value "聚魔头盔"
+data modify storage zx:reg names.mana_plate set value "聚魔胸甲"
+data modify storage zx:reg names.hex_belt set value "魔化腰带"
+data modify storage zx:reg names.flesh_mill set value "血肉磨坊"
+data modify storage zx:reg names.blaze_armor set value "焱"
+data modify storage zx:reg names.spirit_sight set value "灵视"
+data modify storage zx:reg names.fade set value "息影"
 
 # ============================================================
 # tg: 每个 /trigger 调试入口
@@ -186,6 +371,8 @@ data modify storage zx:reg tg.diff set value {obj:"zx.dbg_diff",name:"对比上�
 data modify storage zx:reg tg.raw set value {obj:"zx.dbg_raw",name:"原始面板数据(全部字段)",fn:"sweetdream:debug/raw"}
 data modify storage zx:reg tg.cd set value {obj:"zx.dbg_cd",name:"立刻结束主手武器冷却",fn:"sweetdream:debug/cd_clear"}
 data modify storage zx:reg tg.mana set value {obj:"zx.dbg_mana",name:"回满魔力(1000)",fn:"sweetdream:debug/recover_mana"}
+data modify storage zx:reg tg.fadd set value {obj:"zx.dbg_fadd",name:"自己的术阵 +1",fn:"sweetdream:debug/form_add"}
+data modify storage zx:reg tg.fdel set value {obj:"zx.dbg_fdel",name:"自己的术阵 -1",fn:"sweetdream:debug/form_del"}
 data modify storage zx:reg tg.menu set value {obj:"zx.dbg_menu",name:"打开这个调试菜单",fn:"sweetdream:debug/menu"}
 data modify storage zx:reg tg.give set value {obj:"zx.dbg_give",name:"发一套潜影盒(全部东西)",fn:"sweetdream:debug/give_all"}
 
@@ -198,9 +385,11 @@ data modify storage zx:reg menu append value {k:"worn",n:"6 个槽位各穿了�
 data modify storage zx:reg menu append value {k:"diff",n:"先按一次存快照, 换完装备再按一次看变了什么"}
 data modify storage zx:reg menu append value {k:"cd",n:"把主手那把武器自己的冷却清掉"}
 data modify storage zx:reg menu append value {k:"mana",n:"瞬间回 1000 魔力(被上限夹住 = 回满)"}
+data modify storage zx:reg menu append value {k:"fadd",n:"登记一个空的永久术阵, 用完记得按 -1 摘掉"}
+data modify storage zx:reg menu append value {k:"fdel",n:"摘掉编号最大的那个术阵(技能建的也摘)"}
 data modify storage zx:reg menu append value {k:"raw",n:"manacore:players 里那份原始数据 + 冷却表"}
 data modify storage zx:reg menu append value {k:"menu",n:"重新打印这个菜单"}
-data modify storage zx:reg menu append value {k:"give",n:"发两个潜影盒: 装备全集 21 件 + 强化材料 7 块"}
+data modify storage zx:reg menu append value {k:"give",n:"发潜影盒: 装备 28 件 + 强化材料 7 块(分两盒)"}
 
 # ---------- 记录本版本的表位上限(给 gen_reg_unroll.py / check.py 数用) ----------
-data modify storage zx:reg cap set value {b:48,a:8,menu:12}
+data modify storage zx:reg cap set value {b:56,a:8,menu:12,layer:20}

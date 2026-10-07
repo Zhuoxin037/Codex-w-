@@ -1,0 +1,34 @@
+[
+  {
+    "function": "minecraft:set_components",
+    "components": {
+      "minecraft:item_model": "coldcrow:crossbow"
+    }
+  },
+  {
+    "function": "minecraft:set_custom_model_data",
+    "floats": {
+      "values": [
+        {
+          "type": "minecraft:score",
+          "target": {
+            "type": "minecraft:fixed",
+            "name": "#ice"
+          },
+          "score": "zx.cc_vis"
+        },
+        {
+          "type": "minecraft:score",
+          "target": {
+            "type": "minecraft:fixed",
+            "name": "#frame"
+          },
+          "score": "zx.cc_vis"
+        }
+      ],
+      "mode": "replace_section",
+      "offset": 0,
+      "size": 2
+    }
+  }
+]

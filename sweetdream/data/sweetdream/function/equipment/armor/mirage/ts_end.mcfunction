@@ -11,7 +11,8 @@
 #   边沿检测会**锁相**(焚舟点火那个坑), 一半情况扫不到。
 #   lib/unfreeze_dim 已经把"结束的那一刻"广播出来了, 这里直接接。
 # 【为什么逐个维度跑也没问题】unfreeze_sweep 是每个维度各调一次, 本函数
-#   也就跟着每个维度各跑一遍; @e 只覆盖当前维度, 不会重复打同一只。
+#   也就跟着每个维度各跑一遍; **每行都带 distance=0..**, 所以同一只只会挨一次。
+#   ★ 2026-10-06 修: 这两处原来都是裸 @e, 会跨维度把同一只打 3 次(时停结束的真伤 = 3 倍)。
 # ============================================================
 
-execute as @e[tag=zx.ts_done] at @s run function sweetdream:equipment/armor/mirage/ts_hit
+execute as @e[distance=0..,tag=zx.ts_done] at @s run function sweetdream:equipment/armor/mirage/ts_hit

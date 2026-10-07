@@ -1,1 +1,9 @@
-{"values":["sweetdream:core/tick","naturewind:tick","sweetdream:equipment/sword/sickle_dreams/sweep/tick"]}
+{
+  "values": [
+    "sweetdream:core/tick",
+    "naturewind:tick",
+    "sweetdream:equipment/sword/sickle_dreams/sweep/tick",
+    "sweetdream:equipment/bow/cold_crow/model/tick",
+    "sweetdream:equipment/staff/apocalypse/visual/tick"
+  ]
+}

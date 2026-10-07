@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "lucid_dream": {
+            "trigger": "shot_crossbow",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "lucid_dream"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:equipment/bow/lucid_dream/shot"
+    }
+}

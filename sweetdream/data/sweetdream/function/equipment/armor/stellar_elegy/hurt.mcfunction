@@ -13,16 +13,20 @@ advancement revoke @s only sweetdream:equipment/armor/stellar_elegy
 
 # ① 戴着才生效(~ 部分匹配 + 独有标记, 以后改 give 也不用跟着改)
 execute unless items entity @s armor.legs netherite_leggings[custom_data~{zx:["stellar_elegy"]}] run return fail
+function sweetdream:equipment/armor/stellar_elegy/is_ol
 
-# ② 抗性提升 2(5 秒) + 起"每秒回 10 魔力"的倒计时(5 秒, 由 second 扣)
-#   II 级 = amplifier 1; 隐藏粒子(true)是为了别在身上一直冒圈圈
-effect give @s minecraft:resistance 5 1 true
+# ② 抗性提升(5 秒; 超限版 Ⅱ -> Ⅲ)。II 级 = amplifier 1, III 级 = amplifier 2;
+#   隐藏粒子(true)是为了别在身上一直冒圈圈
+execute unless score #se_ol zx.meta matches 1 run effect give @s minecraft:resistance 5 1 true
+execute if score #se_ol zx.meta matches 1 run effect give @s minecraft:resistance 5 2 true
 scoreboard players set @s zx.se_regen 5
 
-# ③ 之后: 让自身 5 格内"带任意一个通用标签"的生物各吃一次 当前魔力 ×0.02
+# ③ 之后: 让自身范围内"带任意一个通用标签"的生物各吃一次 当前魔力 ×倍率
+#    ★ 超限版: 5 格 -> 6 格(数值只有 5 / 6 两种, 直接写两条, 不必为它上宏)
 function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return fail
-data modify storage zx:work ma.target set value "@e[type=!#sweetdream:no_damage,distance=..5]"
+execute unless score #se_ol zx.meta matches 1 run data modify storage zx:work ma.target set value "@e[type=!#sweetdream:no_damage,distance=..5]"
+execute if score #se_ol zx.meta matches 1 run data modify storage zx:work ma.target set value "@e[type=!#sweetdream:no_damage,distance=..6]"
 function sweetdream:lib/marks_any with storage zx:work ma
 execute if entity @e[tag=zx.marked] run function sweetdream:equipment/armor/stellar_elegy/aoe
 

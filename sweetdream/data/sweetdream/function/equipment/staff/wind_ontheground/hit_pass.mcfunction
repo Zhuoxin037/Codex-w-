@@ -6,18 +6,14 @@
 #   这 3 次**拆成三轮、每秒一轮**(由 second 驱动, zx.wg_burst 计数),
 #   而不是同一瞬间打三下 —— 后者会被生物的受伤无敌帧吃掉两次,
 #   而且「风声」是按"命中几个生物"叠的, 合并了层数就少算了。
-# 【伤害是"最大魔力 ×0.07"】注意是每一轮各算一次(当前魔力不变, 所以数值一样),
-#   并且会先过一道 lib/max_mana_bonus(如果身上攒着"下一次技能加成", 第一轮吃掉它)。
+# 【伤害是"最大魔力 ×0.07"】注意是每一轮各算一次(当前魔力不变, 所以数值一样)。
+#   2026-10-07 起:"风声 / 忘川彼岸 / 无效"给的加成改成走通用乘区钩子
+#   (lib/mm_add/hook_calc), 这里**不再**需要自己调一行 —— 三轮回响也照样吃得到。
 # ============================================================
 
 # ① 算这一轮的伤害 = 最大魔力 ×0.07
-data modify storage manacore:in arg set value {uuid:"",key:"max_mana"}
+data modify storage manacore:in arg set value {uuid:"",max_mana_mul:0.07,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/stats/get
-data modify storage manacore:in arg set value {uuid:"",base_attack:-1.0,skill_multiplier:0.07,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0}
-data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-data modify storage manacore:in arg.base_attack set from storage manacore:out r.value
-function sweetdream:lib/max_mana_bonus with storage zx:work wg
 # ★ 超限的伤害乘区: 0.07 -> 0.084 (和 lore 里的数字一一对应)
 function sweetdream:overlimit/api/mod
 function manacore:api/damage/calc

@@ -4,8 +4,9 @@
 # 【宏参数】索引条目 {uuid,slot}
 # 【做法】先备份该玩家记录 -> 写入受控测试数据 -> 逐项断言 -> 还原。
 # 【用例】
-#   1. 伤害公式: base_attack=10, 技能倍率=2, 独立乘区=1.5, 固定伤害=5
-#                期望 (10x2+5)x1.5 = 37.5 -> 定点后 37500
+#   1a. 攻击力通道: base_attack=10, attack_mul=2, 独立乘区=1.5, 固定伤害=5
+#                 期望 (10x2+5)x1.5 = 37.5 -> 定点后 37500
+#   1b. 三通道相加: 最大魔力=100 x0.5 + 攻击力 10x2 + 固定 5 = 75 -> 75000
 #   2. 冷却    : 起 40 tick 冷却, 立刻查剩余应为 40, 然后清掉
 #   3. 术阵    : 创建 1 个术阵后数量应为 1
 #   4. 术阵上限: 连开 4 个(默认上限 3), 第 4 个必须被拒绝(success=0)
@@ -19,10 +20,18 @@ $tellraw @s [{"text":"测试对象: ","color":"gray"},{"text":"$(uuid)","color":
 # --- 用例1: 基础攻击力 / 技能倍率 / 独立乘区 ---
 $data modify storage manacore:players "$(uuid)".stats.base_attack set value 10.0
 $data modify storage manacore:players "$(uuid)".stats.max_health set value 20.0
-$data modify storage manacore:work a set value {uuid:"$(uuid)",base_attack:-1.0,skill_multiplier:2.0,independent_multiplier:1.5,custom_damage:5.0,health_ratio:0.0}
+$data modify storage manacore:work a set value {uuid:"$(uuid)",base_attack:-1.0,attack_mul:2.0,independent_multiplier:1.5,custom_damage:5.0,health_ratio:0.0}
 function manacore:internal/damage/calc with storage manacore:work a
 execute store result score #t manacore.math run data get storage manacore:out r.damage 1000
-tellraw @s [{"text":"1. 伤害公式(期望 37500): ","color":"gray"},{"score":{"name":"#t","objective":"manacore.math"}}]
+tellraw @s [{"text":"1a. 攻击力通道(期望 37500): ","color":"gray"},{"score":{"name":"#t","objective":"manacore.math"}}]
+
+# --- 用例1b: 三通道相加(最大魔力 x0.5 + 攻击力 x2 + 固定 5) ---
+#   最大魔力设 100 -> 100x0.5 = 50; 攻击力 10x2 = 20; +5 = 75 (期望 75000)
+$data modify storage manacore:players "$(uuid)".stats.max_mana set value 100.0
+$data modify storage manacore:work a set value {uuid:"$(uuid)",max_mana_mul:0.5,attack_mul:2.0,custom_damage:5.0,independent_multiplier:1.0}
+function manacore:internal/damage/calc with storage manacore:work a
+execute store result score #t manacore.math run data get storage manacore:out r.damage 1000
+tellraw @s [{"text":"1b. 三通道相加(期望 75000): ","color":"gray"},{"score":{"name":"#t","objective":"manacore.math"}}]
 
 # --- 用例2: 冷却 ---
 $data modify storage manacore:players "$(uuid)".stats.cooldown_reduction set value 0.0

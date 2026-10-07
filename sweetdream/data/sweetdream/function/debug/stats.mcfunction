@@ -13,12 +13,13 @@
 # 【★ 这个文件不含任何宏 ★】
 #   全部走前置包接口: api/player/self_uuid · api/stats/export · api/mana/get ·
 #   api/mana/regen/get · api/formation/count —— 它们把 uuid 当**数据**收,
-#   调用方一个 $(变量) 都不用写。唯一要按 uuid 拼路径的(风行下次加成)
-#   交给小宏 debug/wg_row, 用 zx:work 传参。
+#   调用方一个 $(变量) 都不用写。
+#   (2026-10-07 前唯一要按 uuid 拼路径的"风行下次加成"由小宏 debug/wg_row 处理;
+#    那份槽位已去掉, 现在读玩家计分项 zx.mm_add 即可, wg_row 已删除。)
 # 【★ 面板字段是"平铺"的 ★】
 #   api/stats/export 导出的 manacore:out r.stats = 面板本体:
 #     current_mana / max_mana / base_attack / max_health / custom_damage /
-#     skill_multiplier / independent_multiplier / cooldown / cooldown_reduction /
+#     independent_multiplier / cooldown / cooldown_reduction /
 #     mana_regen / mana_regen_multiplier / formation_limit
 #   ⚠️ **没有** stats. 这一子层! 上一版写成 pl.stats.max_health, 路径永远读不到
 #     -> "面板和原版对不上"的报警对谁都是亮的(静默误报), 2026-10-03 修。
@@ -128,12 +129,56 @@ function sweetdream:debug/num_pair with storage zx:work np
 # ============================================================
 # ⑥ 伤害参数(技能往 api/damage/calc 里填的就是这几个)
 # ============================================================
+#   ★ 先把 lib/skill_mul/scan 跑掉 ★
+#     它算出三条通道倍率(smul_*)并把「最大魔力值技能倍率」通用加成折进去,
+#     **同时**让在身装备(愠怒)把"独立乘区"折进来 —— 而下面几行正要看那一行。
+#     以前 scan 排在"技能倍率"节里(在独立乘区行的**后面**), 于是面板那一行
+#     永远看不到愠怒的 ×1.20(2026-10-06 用户反馈: "愠怒是独立乘区")。
+#     scan 只写 zx:work, 提前跑没有副作用。
+function sweetdream:lib/skill_mul/scan
 tellraw @s [{"text":"── 伤害参数 ──","color":"dark_gray"}]
-data modify storage zx:work np set value {k1:"base_attack",l1:"基础攻击力",c1:"white",k2:"skill_multiplier",l2:"技能倍率",c2:"light_purple"}
+data modify storage zx:work np set value {k1:"base_attack",l1:"基础攻击力",c1:"white",k2:"custom_damage",l2:"固定伤害",c2:"red"}
 function sweetdream:debug/num_pair with storage zx:work np
-data modify storage zx:work np set value {k1:"custom_damage",l1:"固定伤害",c1:"red",k2:"independent_multiplier",l2:"独立乘区",c2:"gold"}
+data modify storage zx:work np set value {k1:"max_health",l1:"生命上限",c1:"red",k2:"independent_multiplier",l2:"独立乘区",c2:"gold"}
 function sweetdream:debug/num_pair with storage zx:work np
-tellraw @s [{"text":"  (基础攻击力 = 进世界那一刻的原版攻击力, 含当时手持的武器)","color":"dark_gray","italic":true}]
+
+# ---- ★ 技能倍率: 已拆成三条通道(2026-10-04) ★ ----
+#   框架里技能倍率不再是一个数, 而是三条通道各自乘完基数后相加
+#   (见 manacore/internal/damage/calc):
+#     最大魔力值技能倍率 max_mana_mul / 基础攻击力倍率 attack_mul / 其他倍率 other_mul
+#   这里显示的是"现在真的会乘上去的倍率":
+#     在身装备/超限给的乘区(目前 = 主手武器的超限伤害)
+#     + 最大魔力值那条**额外折进「最大魔力值技能倍率」通用加成**(风声 / 忘川彼岸 /
+#       无效, 一份 20 秒的玩家 buff; 2026-10-07 前它叫"待生效的风声加成")
+#   **不含技能自身的基率** —— 也就是"我这个流派现在整体被放大了多少"。
+#   数值由 lib/skill_mul/scan 现算, 换主手武器 / 通用加成到期后会跟着变。
+tellraw @s [{"text":"── 技能倍率(当前生效乘区) ──","color":"dark_gray"}]
+#   (三条通道的值已在上面 ⑥ 的"伤害参数"之前由 lib/skill_mul/scan 算好)
+data modify storage zx:work nr set value {k:"smul_mm",l:"最大魔力值技能倍率 ×",c:"aqua",s:""}
+function sweetdream:debug/num_row with storage zx:work nr
+data modify storage zx:work nr set value {k:"smul_atk",l:"基础攻击力倍率 ×",c:"gold",s:""}
+function sweetdream:debug/num_row with storage zx:work nr
+data modify storage zx:work nr set value {k:"smul_oth",l:"其他倍率 ×",c:"green",s:""}
+function sweetdream:debug/num_row with storage zx:work nr
+
+# ---- ★ 控制时长倍率(2026-10-06 加) ★ ----
+#   控制时长加成(受控时间)现在也收进了"倍率"这一节: 数值由 lib/ctrl_mul/pct 现算,
+#   和 lib/timestop / lib/freeze 结算时用的是**同一个文件** —— 面板显示的就是实际生效的。
+#   【取谁的值】控制时长加成挂在**目标**身上(白昼梦只贴非玩家活体) —— 面板是你的数据,
+#     所以取"16 格内最近一只带白昼梦的生物"来代表"你现在控制它时能多拿多少";
+#     附近没有这样的目标时显示 ×1.00(表示此刻没有可控制的对象在吃这份加成)。
+#   【口径说明写在 使用教程 §14.3.3】面板上不写灰字。
+#   【值是字符串】lib/ctrl_mul/pct 直接拼好 "1.20" 这种两位小数(避开双精度的长尾),
+#     num_row 的链路对字符串原样透传 —— 所以下面是把 cm.s 抄进 pl.ctrl_mul, 不是取数算。
+data remove storage zx:work cm
+data modify storage zx:work cm.target set value "@e[tag=zx.status.dream,distance=..16,sort=nearest,limit=1]"
+function sweetdream:lib/ctrl_mul/pct with storage zx:work cm
+data modify storage zx:work pl.ctrl_mul set from storage zx:work cm.s
+data modify storage zx:work nr set value {k:"ctrl_mul",l:"控制时长 ×",c:"light_purple",s:""}
+function sweetdream:debug/num_row with storage zx:work nr
+
+# 共振: 穿上且每术阵 +10%, 已并入上面三条通道(乘最终伤害 ≡ 三条各 ×k, 数学等价)
+execute unless score #res_pct zx.meta matches 100 run tellraw @s [{"text":"  共振：每术阵 +10%，已并入上面三条通道","color":"dark_gray"}]
 
 # ============================================================
 # ⑦ 原版属性 + 面板一致性检查
@@ -162,12 +207,11 @@ execute unless score #g_ph zx.meta = #g_vh zx.meta run tellraw @s [{"text":"  �
 tellraw @s [{"text":"── 回魔 ──","color":"dark_gray"}]
 data modify storage zx:work np set value {k1:"regen_total",l1:"每秒回魔",c1:"green",k2:"regen_add",l2:"装备额外",c2:"dark_green"}
 function sweetdream:debug/num_pair with storage zx:work np
-tellraw @s [{"text":"  (装备额外 = 静脉泵/桂冠/挽歌/黄昏套装这类直接加魔力的, 上一秒实收)","color":"dark_gray","italic":true}]
 
 # ============================================================
 # ⑨ 冷却 + 术阵
 # ============================================================
-data modify storage zx:work nr set value {k:"cd_pct",l:"冷却缩减",c:"yellow",s:"% (该数值 = 缩短的百分比)"}
+data modify storage zx:work nr set value {k:"cd_pct",l:"冷却缩减",c:"yellow",s:"%"}
 function sweetdream:debug/num_row with storage zx:work nr
 tellraw @s [{"text":"  术阵      ","color":"gray"},{"score":{"name":"#g_fcnt","objective":"zx.meta"},"color":"light_purple"},{"text":" / ","color":"dark_gray"},{"score":{"name":"#g_flim","objective":"zx.meta"},"color":"dark_purple"}]
 
@@ -175,14 +219,17 @@ tellraw @s [{"text":"  术阵      ","color":"gray"},{"score":{"name":"#g_fcnt",
 # ⑩ 在身装备的加成 —— 由注册表驱动(lib/reg/build), 穿着什么报什么
 # ============================================================
 tellraw @s [{"text":"── 在身装备的加成 ──","color":"dark_gray"}]
-tellraw @s [{"text":"  (只列穿在身上的; 新装备的加成往 lib/reg/build 的表里加一行)","color":"dark_gray","italic":true}]
 function sweetdream:debug/reg_unroll
 
-# 风行"下次技能加成"是按 uuid 存的比例值(不是计分项), 注册表放不进去 ——
-#   单独补一行。它必须按 uuid 拼路径, 所以交给小宏 debug/wg_row(用 zx:work sd 传参)。
-#   wg_row 内部自己判断风行武器在不在手上。
-data remove storage zx:work pl.wg_bonus
-function sweetdream:debug/wg_row with storage zx:work sd
+# 风行"下次技能加成"那一行(2026-10-07 改) —— 原来它是 zx:data wg_bonus 里一个按
+#   uuid 存的比例值, 注册表放不进去, 所以单独拆了个小宏 debug/wg_row 来补一行。
+#   现在那份槽位整体去掉: 加成变成玩家计分项 zx.mm_add(百分点), 直接读 @s 即可
+#   —— 不需要宏, wg_row.mcfunction 已删除。(曾有过 zx.mm_add_t 倒计时, 2026-10-08 作废)
+#   注意: 这个值**已经折进上面"最大魔力值技能倍率 ×"那一行**了, 这里单列出来只是为了
+#   让你看清"具体加了多少、还剩多久"。
+# 【这行读数已删】2026-10-08 用户说它"另起一行" —— 那个百分点本来就折进上面
+#   "最大魔力值技能倍率 ×"那一行(lib/mm_add/scan_mul 写进 smul_mm 加算池),
+#   再单独列一行带倒计时, 反而像另一套东西。要看单值走 /function sweetdream:debug/wind。
 
 # ============================================================
 # ⑪ 主手那把武器 + 它自己的冷却

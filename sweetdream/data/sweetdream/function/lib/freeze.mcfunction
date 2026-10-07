@@ -22,6 +22,18 @@
 
 $execute as $(target) run scoreboard players operation @s zx.fz_end = #now manacore.meta
 $execute as $(target) run scoreboard players add @s zx.fz_end $(ticks)
+# 控制时长倍率(受控时间加成, 单一真源 lib/ctrl_mul/pct, 2026-10-06 改; 说明见 lib/timestop)。
+#   以前这里写死 `ticks × #20 ÷ #100`, 与 lib/timestop 各写一份 -> 现在统一读 pct。
+#   直接加在结束时刻上(这里没有"取较长"的重入比较, 不存在被覆盖的问题)。
+#   ★ 判据必须交给 ctrl_mul/pct: 本函数的 @s 是调用者(玩家), 目标在 $(target) 里。
+#   ★ 负加成(未来的"控制时长 -X%")也走得通: 只看 #fz_x 是否为 0。
+$data modify storage zx:work cm.target set value "$(target)"
+function sweetdream:lib/ctrl_mul/pct with storage zx:work cm
+$scoreboard players set #fz_x zx.meta $(ticks)
+scoreboard players operation #fz_x zx.meta *= #cm_add zx.meta
+scoreboard players operation #fz_x zx.meta /= #100 zx.meta
+execute if score #cm_add zx.meta matches 1.. if score #fz_x zx.meta matches ..0 run scoreboard players set #fz_x zx.meta 1
+$execute as $(target) unless score #fz_x zx.meta matches 0 run scoreboard players operation @s zx.fz_end += #fz_x zx.meta
 $execute as $(target) run data modify entity @s TicksFrozen set value 140
 $execute as $(target) unless entity @s[tag=zx.freeze] run attribute @s minecraft:movement_speed modifier add sweetdream:freeze -1.0 add_multiplied_base
 $execute as $(target) run tag @s add zx.freeze

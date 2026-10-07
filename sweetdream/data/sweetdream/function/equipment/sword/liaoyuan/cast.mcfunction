@@ -34,8 +34,11 @@ scoreboard players add @s zx.ly_times 0
 # ② 只读检查: 冷却 + 魔力 250
 #    ★ 检查之前先过一道超限: 敲过超限的燎原要 325 蓝、冷却 62.5 秒 ——
 #      不在这里乘的话, 提示会说"需要 250", 实际却扣 325(见 overlimit/api/mod)。
+#    ★ 顺序不能反 ★ 先把基准值抄进 olv.mana, 再让 mod 覆盖 ——
+#      没敲超限时 mod 开头就 return, 不先抄的话提示会读成 0 / 陈旧值。
 data modify storage manacore:in arg set value {uuid:"",skill:"sweetdream:liaoyuan",mana:250.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
+data modify storage zx:work olv.mana set from storage manacore:in arg.mana
 function sweetdream:overlimit/api/mod
 function manacore:api/skill/check
 scoreboard players set #ly_need zx.meta 0
@@ -45,7 +48,8 @@ execute if data storage manacore:out r{reason:"mana"} run tellraw @s [{"text":"�
 execute unless data storage manacore:out r{success:1b} run return fail
 
 # ③ 扣魔力(超限后的值: zx:work olv.mana 由上面的 mod 抄好)
-#    先 set 成基准 250 再 from 覆盖 —— 万一 olv 读不到, 最坏也只是扣回原来的数, 不会扣 0。
+#    olv.mana 在 ② 里已经先写过基准 250, mod 只在"敲了超限"时覆盖它 ——
+#    所以这里读到的要么是 325(超限), 要么是 250(没超限), 不会是 0 / 陈旧值。
 data modify storage manacore:in arg set value {uuid:"",value:250.0}
 data modify storage manacore:in arg.value set from storage zx:work olv.mana
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid

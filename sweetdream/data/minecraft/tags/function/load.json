@@ -1,1 +1,9 @@
-{"values":["sweetdream:core/load","naturewind:load","sweetdream:equipment/sword/sickle_dreams/sweep/load"]}
+{
+  "values": [
+    "sweetdream:core/load",
+    "naturewind:load",
+    "sweetdream:equipment/sword/sickle_dreams/sweep/load",
+    "sweetdream:equipment/bow/cold_crow/model/load",
+    "sweetdream:equipment/staff/apocalypse/visual/load"
+  ]
+}

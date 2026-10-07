@@ -17,8 +17,14 @@
 
 execute unless data storage zx:work a.num run data modify storage zx:work a.num set value 0.0
 
-# 强制转成 double: 不管传进来的是 int / float / string, 都先归一化,
-# 这样后面"有没有后缀字符"这件事才是有意义的。
-execute store result storage zx:work a.num double 1 run data get storage zx:work a.num
-
+# ★ 这里**不要**再做"归一化成 double"★
+#   以前这里的下一句是:
+#       execute store result storage zx:work a.num double 1 run data get storage zx:work a.num
+#   本意是"不管传进来是 int / float / 字符串, 先转成 double 再判断后缀"。
+#   但 `data get` 作为**命令结果**只会给整数部分 —— 1.5 变 1、2.44 变 2, 于是
+#   面板上所有带小数的倍率被悄悄抹平(2026-10-04 用户反馈"下次技能加成 1",
+#   存档里的真值其实是 1.5)。而这一句其实毫无必要:
+#   宏渲染本来就会把任何数值类型渲染成它自己的样子(DoubleTag 1.5 -> "1.5" 或
+#   "1.5d", IntTag 21 -> "21"), plain_go 只负责砍掉可能存在的 d/f 后缀。
+#   传进来的永远是数值, 直接交给 plain_go 就行。
 function sweetdream:lib/num/plain_go with storage zx:work a

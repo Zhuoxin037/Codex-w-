@@ -11,12 +11,14 @@
 
 function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return fail
+function sweetdream:equipment/armor/dusk_dawn/is_ol
 
-# ① 靴子本身: 穿着 +180
+# ① 靴子本身: 穿着 +180(超限版 +250)
 scoreboard players set #dd_on zx.meta 0
 execute if items entity @s armor.feet netherite_boots[custom_data~{zx:["dusk_dawn"]}] run scoreboard players set #dd_on zx.meta 1
 scoreboard players set #want zx.meta 0
 execute if score #dd_on zx.meta matches 1 run scoreboard players set #want zx.meta 180
+execute if score #dd_on zx.meta matches 1 if score #dd_ol zx.meta matches 1 run scoreboard players set #want zx.meta 250
 scoreboard players operation #diff zx.meta = #want zx.meta
 scoreboard players operation #diff zx.meta -= @s zx.dd_mana
 scoreboard players set #src zx.meta 1

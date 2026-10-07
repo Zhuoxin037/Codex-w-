@@ -57,6 +57,14 @@ execute if data storage zx:reg b[44] run function sweetdream:debug/stat_row with
 execute if data storage zx:reg b[45] run function sweetdream:debug/stat_row with storage zx:reg b[45]
 execute if data storage zx:reg b[46] run function sweetdream:debug/stat_row with storage zx:reg b[46]
 execute if data storage zx:reg b[47] run function sweetdream:debug/stat_row with storage zx:reg b[47]
+execute if data storage zx:reg b[48] run function sweetdream:debug/stat_row with storage zx:reg b[48]
+execute if data storage zx:reg b[49] run function sweetdream:debug/stat_row with storage zx:reg b[49]
+execute if data storage zx:reg b[50] run function sweetdream:debug/stat_row with storage zx:reg b[50]
+execute if data storage zx:reg b[51] run function sweetdream:debug/stat_row with storage zx:reg b[51]
+execute if data storage zx:reg b[52] run function sweetdream:debug/stat_row with storage zx:reg b[52]
+execute if data storage zx:reg b[53] run function sweetdream:debug/stat_row with storage zx:reg b[53]
+execute if data storage zx:reg b[54] run function sweetdream:debug/stat_row with storage zx:reg b[54]
+execute if data storage zx:reg b[55] run function sweetdream:debug/stat_row with storage zx:reg b[55]
 
 # ---------- a 表: 永远显示 ----------
 execute if data storage zx:reg a[0] run function sweetdream:debug/stat_row_a with storage zx:reg a[0]

@@ -82,18 +82,13 @@ function manacore:api/mana/consume
 execute if data storage manacore:out r{success:0b} run data modify storage zx:work cc.uuid set from storage zx:data self.uuid
 execute if data storage manacore:out r{success:0b} run function sweetdream:equipment/bow/cold_crow/clear with storage zx:work cc
 execute if data storage manacore:out r{success:0b} run tellraw @s [{"text":"魔力不足 —— 这一箭没有冰凌效果","color":"red"}]
+execute if data storage manacore:out r{success:0b} run function sweetdream:equipment/bow/cold_crow/model/on_failed
 execute if data storage manacore:out r{success:0b} run return fail
 
 # ③ 算这一发的伤害(只有 3/4 层用得上, 但一起算省得两套代码)
-data modify storage manacore:in arg set value {uuid:"",key:"max_mana"}
+data modify storage manacore:in arg set value {uuid:"",max_mana_mul:0.1,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0}
+execute if score #tier zx.meta matches 4 run data modify storage manacore:in arg.max_mana_mul set value 0.25
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/stats/get
-data modify storage manacore:in arg set value {uuid:"",base_attack:-1.0,skill_multiplier:0.1,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0}
-execute if score #tier zx.meta matches 4 run data modify storage manacore:in arg.skill_multiplier set value 0.25
-data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-data modify storage manacore:in arg.base_attack set from storage manacore:out r.value
-data modify storage zx:work wg.uuid set from storage zx:data self.uuid
-function sweetdream:lib/max_mana_bonus with storage zx:work wg
 function manacore:api/damage/calc
 
 # ④ 把这一发的数据记在射手名下, 然后**立刻**沿准星探一次(见 store / cast / step)
@@ -132,3 +127,9 @@ execute at @s run particle minecraft:snowflake ~ ~1.3 ~ 0.5 0.4 0.5 0.02 12 norm
 execute at @s run particle minecraft:item_snowball ~ ~1.3 ~ 0.3 0.3 0.3 0.02 8 normal
 execute at @s run playsound minecraft:item.crossbow.shoot player @a ~ ~ ~ 0.7 1.2
 execute if score #tier zx.meta matches 4 run playsound minecraft:block.glass.break player @a ~ ~ ~ 0.8 1.5
+
+# 寒鸦模型：扣费成功后同步冰凌，第四发播放短暂霜光。
+function sweetdream:equipment/bow/cold_crow/model/on_shot
+
+# ⑦ 「启示录」记页: 同上。寒鸦按冰凌层数扣 20/50/120/320 —— 只有 120/320 那两发够 100 才记得到页。
+function sweetdream:equipment/staff/apocalypse/spend

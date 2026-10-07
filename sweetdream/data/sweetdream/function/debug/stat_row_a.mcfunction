@@ -9,8 +9,12 @@
 # 【它也被当通用"整数行"用】任何想打一行"标签 + 计分项数值 + 备注"的地方
 #   都可以直接 function ... with 一个小小的 {l,o,c,n,e}。
 #   ⚠️ 五个字段一个都不能少: 宏参数缺键时那条命令直接不跑(还不报错)。
+# 【三个分支】和 stat_row 一个规矩: e 在 names -> 打全名; e 在 gsent ->
+#   (e:"all" 的合计行)不打名字; 两个都不在 -> 红字 "(没登记中文名!)"。
 # ============================================================
 
 $execute if data storage zx:work eq.$(e) if data storage zx:reg names.$(e) run tellraw @s [{"text":"  $(l) · ","color":"gray"},{"nbt":"names.$(e)","storage":"zx:reg","color":"light_purple","italic":false},{"text":"  ","color":"gray"},{"score":{"name":"@s","objective":"$(o)"},"color":"$(c)"},{"text":"  $(n)","color":"dark_gray"}]
 
-$execute if data storage zx:work eq.$(e) unless data storage zx:reg names.$(e) run tellraw @s [{"text":"  $(l) · ","color":"gray"},{"text":"$(e)","color":"white"},{"text":"(没登记中文名!)","color":"dark_red"},{"text":"  ","color":"gray"},{"score":{"name":"@s","objective":"$(o)"},"color":"$(c)"},{"text":"  $(n)","color":"dark_gray"}]
+$execute if data storage zx:work eq.$(e) unless data storage zx:reg names.$(e) if data storage zx:reg gsent.$(e) run tellraw @s [{"text":"  $(l)  ","color":"gray"},{"score":{"name":"@s","objective":"$(o)"},"color":"$(c)"},{"text":"  $(n)","color":"dark_gray"}]
+
+$execute if data storage zx:work eq.$(e) unless data storage zx:reg names.$(e) unless data storage zx:reg gsent.$(e) run tellraw @s [{"text":"  $(l) · ","color":"gray"},{"text":"$(e)","color":"white"},{"text":"(没登记中文名!)","color":"dark_red"},{"text":"  ","color":"gray"},{"score":{"name":"@s","objective":"$(o)"},"color":"$(c)"},{"text":"  $(n)","color":"dark_gray"}]

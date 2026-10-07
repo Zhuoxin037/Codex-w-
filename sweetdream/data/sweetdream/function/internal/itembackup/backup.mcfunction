@@ -23,7 +23,7 @@
 # ============================================================
 
 # ① 主手是武器 -> 存进架子的主手槽(架子固定在主世界, 所以要切维度过去找它)
-$execute in minecraft:overworld if items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["itemreplace"]}] run item replace entity @e[tag=test_stand_$(uuid),limit=1] weapon.mainhand from entity @s weapon.mainhand
+$execute in minecraft:overworld if items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["itemreplace"]}] run item replace entity @e[distance=0..,tag=test_stand_$(uuid),limit=1] weapon.mainhand from entity @s weapon.mainhand
 
 # ② 副手是武器 -> 存进架子的副手槽
-$execute in minecraft:overworld if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["itemreplace"]}] run item replace entity @e[tag=test_stand_$(uuid),limit=1] weapon.offhand from entity @s weapon.offhand
+$execute in minecraft:overworld if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["itemreplace"]}] run item replace entity @e[distance=0..,tag=test_stand_$(uuid),limit=1] weapon.offhand from entity @s weapon.offhand

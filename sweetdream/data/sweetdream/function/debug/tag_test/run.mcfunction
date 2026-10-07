@@ -215,6 +215,27 @@ function sweetdream:tag/mark {target:"@e[type=minecraft:pig,tag=zx.tag_test_a]",
 function sweetdream:tag/mark {target:"@e[type=minecraft:pig,tag=zx.tag_test_a]",mark:"shixin"}
 function sweetdream:tag/mark {target:"@e[type=minecraft:pig,tag=zx.tag_test_a]",mark:"dream"}
 execute as @e[type=minecraft:pig,tag=zx.tag_test_a,limit=1] at @s run function sweetdream:debug/tag_test/check {expected:31,count:1,glyphs:5,case:"combination 31"}
+
+# ---- 淡出位回归(2026-10-06): 剩余 <=3 秒时掩码要**多出**该标签的淡出位 ----
+#   merge 31 是"五个标签全在"(位 0..4)。把某个标签的剩余秒数压到 3, 掩码应多出
+#   对应的淡出位: 流火 64 / 渊海 32 / 夜火 128 / 噬心 256 / 白昼梦 512。
+scoreboard players set @e[type=minecraft:pig,tag=zx.tag_test_a,limit=1] zx.tt.liuhuo 3
+execute as @e[type=minecraft:pig,tag=zx.tag_test_a,limit=1] at @s run function sweetdream:tag/icon_refresh
+execute as @e[type=minecraft:pig,tag=zx.tag_test_a,limit=1] at @s run function sweetdream:debug/tag_test/check {expected:95,count:1,glyphs:5,case:"dim bit liuhuo"}
+scoreboard players set @e[type=minecraft:pig,tag=zx.tag_test_a,limit=1] zx.tt.yuanhai 3
+scoreboard players set @e[type=minecraft:pig,tag=zx.tag_test_a,limit=1] zx.tt.yehuo 3
+scoreboard players set @e[type=minecraft:pig,tag=zx.tag_test_a,limit=1] zx.tt.shixin 3
+scoreboard players set @e[type=minecraft:pig,tag=zx.tag_test_a,limit=1] zx.tt.dream 3
+execute as @e[type=minecraft:pig,tag=zx.tag_test_a,limit=1] at @s run function sweetdream:tag/icon_refresh
+execute as @e[type=minecraft:pig,tag=zx.tag_test_a,limit=1] at @s run function sweetdream:debug/tag_test/check {expected:1023,count:1,glyphs:5,case:"dim bit all"}
+#   还原成满值(与 tag/mark_one 一致), 否则后面的用例会带着淡出位
+scoreboard players set @e[type=minecraft:pig,tag=zx.tag_test_a,limit=1] zx.tt.yuanhai 20
+scoreboard players set @e[type=minecraft:pig,tag=zx.tag_test_a,limit=1] zx.tt.liuhuo 15
+scoreboard players set @e[type=minecraft:pig,tag=zx.tag_test_a,limit=1] zx.tt.yehuo 10
+scoreboard players set @e[type=minecraft:pig,tag=zx.tag_test_a,limit=1] zx.tt.shixin 18
+scoreboard players set @e[type=minecraft:pig,tag=zx.tag_test_a,limit=1] zx.tt.dream 15
+execute as @e[type=minecraft:pig,tag=zx.tag_test_a,limit=1] at @s run function sweetdream:tag/icon_refresh
+execute as @e[type=minecraft:pig,tag=zx.tag_test_a,limit=1] at @s run function sweetdream:debug/tag_test/check {expected:31,count:1,glyphs:5,case:"dim bit cleared"}
 execute as @e[type=minecraft:pig,tag=zx.tag_test_b,limit=1] at @s run function sweetdream:debug/tag_test/check {expected:3,count:1,glyphs:2,case:"other owner unchanged"}
 execute as @e[tag=zx.tag_test_a,limit=1] run function sweetdream:tag/identity
 function sweetdream:debug/tag_test/duplicate with storage zx:tag owner

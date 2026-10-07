@@ -1,0 +1,12 @@
+# ============================================================
+# sweetdream:equipment/bow/sculk_echo/apply —— 取出"射手这一发"的数据(宏 {target,shooter,arrow})
+# ------------------------------------------------------------
+# 【执行者】被打中的那只生物
+# 【两层宏】先借 lib/uuid 拿射手 uuid, 再交给 fire。
+# ============================================================
+
+$execute as $(shooter) run function sweetdream:lib/uuid
+execute unless data storage zx:data self{ok:1b} run return 0
+data modify storage zx:work se.uuid set from storage zx:data self.uuid
+function sweetdream:equipment/bow/sculk_echo/snap_prep with storage zx:work se
+function sweetdream:equipment/bow/sculk_echo/fire with storage zx:work se

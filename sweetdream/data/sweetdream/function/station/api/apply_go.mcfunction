@@ -2,6 +2,7 @@
 # sweetdream:station/api/apply_go —— 真正动手(宏: st 里带 kind/id/cat/of/x/y/z)
 # ------------------------------------------------------------
 # 【先校验】升级走 upgrade/api/fit(查定义/类别/槽位/重复);
+#   无色石走 upgrade/api/fit_uncolor(查 up 非空 + 抓要消的那条);
 #   超限走 overlimit/api/fit(查定义/是不是这把武器/敲没敲过)。
 # 【校验不过】什么都不改, 直接把 reason 交给调用方(材料会被退回)。
 # 【过了怎么改到物品上】用一个**容器方块当工作台**(默认 0,-59,2 的箱子):
@@ -13,6 +14,7 @@
 # ============================================================
 
 execute if data storage zx:work st{kind:"upgrade"} run function sweetdream:upgrade/api/fit with storage zx:work st
+execute if data storage zx:work st{kind:"uncolor"} run function sweetdream:upgrade/api/fit_uncolor with storage zx:work st
 execute if data storage zx:work st{kind:"overlimit"} run function sweetdream:overlimit/api/fit with storage zx:work st
 execute unless data storage zx:out r{ok:1b} run return 0
 
@@ -21,11 +23,15 @@ $execute unless block $(x) $(y) $(z) #minecraft:shulker_boxes unless block $(x) 
 
 # ① 武器进工作台
 $item replace block $(x) $(y) $(z) container.0 from entity @s weapon.offhand
-# ② 只动一个字段: 升级 = 往 up 列表追加; 超限 = 写 ol
+# ② 只动一个字段: 升级 = **重建 up 列表**(同系替换占一槽, 2026-10-07 槽位改版,
+#    见 upgrade/api/up_rebuild —— 不再是盲目 append); 超限 = 写 ol;
+#    无色石 = 删掉最后一条升级 + 返还石头(fit_uncolor 已把要还的石头 id 抓到
+#    zx:work uc.id, 见 upgrade/api/uncolor_go)。
 #    ★ 第一次敲的时候物品上**根本没有 up 这个键**, 直接 append 会失败(静默):
-#      材料照样被消耗、但装备上什么都没写上去。所以先补一个空列表再追加。
+#      材料照样被消耗、但装备上什么都没写上去。所以先补一个空列表再动手。
 $execute if data storage zx:work st{kind:"upgrade"} unless data block $(x) $(y) $(z) Items[{Slot:0b}].components."minecraft:custom_data".up run data modify block $(x) $(y) $(z) Items[{Slot:0b}].components."minecraft:custom_data".up set value []
-$execute if data storage zx:work st{kind:"upgrade"} run data modify block $(x) $(y) $(z) Items[{Slot:0b}].components."minecraft:custom_data".up append value "$(id)"
+execute if data storage zx:work st{kind:"upgrade"} run function sweetdream:upgrade/api/up_rebuild with storage zx:work st
+execute if data storage zx:work st{kind:"uncolor"} run function sweetdream:upgrade/api/uncolor_go with storage zx:work st
 $execute if data storage zx:work st{kind:"overlimit"} run data modify block $(x) $(y) $(z) Items[{Slot:0b}].components."minecraft:custom_data".ol set value "$(of)"
 # ②.5 【名字和描述都要跟着变】光改数据、物品看上去还是老样子, 拿着会以为没生效。
 #      交给 station/api/lore_refresh 整段重建:

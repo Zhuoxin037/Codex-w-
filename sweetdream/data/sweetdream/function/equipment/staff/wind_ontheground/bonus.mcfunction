@@ -1,31 +1,31 @@
 # ============================================================
 # sweetdream:equipment/staff/wind_ontheground/bonus —— 风声超过 60 的奖励
 # ------------------------------------------------------------
-# 【宏参数】zx:work wg {uuid}   【执行者】施法者
+# 【谁调用它】burst_self ④(3 轮爆发打完的最后一轮)   【执行者】施法者
 # 【文案】若有超过 60 点「风声」, 每超出 1 点都会让"下一次自身使用最大魔力值
 #         相关的技能伤害"提升 1%。
-# 【怎么存】zx:data wg_bonus."<uuid>" = 加成比例(0.15 表示 +15%)。
-#   用"存一个比例"而不是"存一个点数", 是为了给别的技能用的时候只要乘一下就行。
-# 【谁吃它】所有"以自身最大魔力值结算"的技能, 统一走一行:
-#     function sweetdream:lib/max_mana_bonus with storage zx:work wg
-#   它把比例乘进 skill_multiplier(**普通乘区**, 不是独立乘区), 用完即删,
-#   只生效一次。已接: 风行(hit_pass / aura_hit)、横刀(dash_end)。
-#   ⚠️ 深海**不要**接 —— 它是"当前魔力 ×0.15", 不是最大魔力, 口径不同。
+# 【★ 2026-10-07 用户定稿: 不再存"下一次技能加成"★】
+#   原来这里往 zx:data wg_bonus."<uuid>" 写一个比例, 由 lib/max_mana_bonus 在
+#   下一次最大魔力值技能里乘掉、用完即删 —— 用户判定这与面板上的
+#   「最大魔力值技能倍率」**功能完全重复**, 要求去掉那套独立槽位,
+#   直接把增益算进通用乘区。所以现在改成:
+#     zx.mm_add  += (风声 - 60)      ← 百分点(加算), 没有倒计时
+#   加成由 lib/mm_add/hook_calc 在每次 api/damage/calc 时统一折进加算池的 mm 通道,
+#   ⇒ 生效期间**任何**以最大魔力值结算的技能都吃得到, 不再需要每个技能自己调一行。
+# 【★ 加算, 不是覆盖 ★】沿用原来的口径: 已有加成时**加上去**(不是覆盖)。
+# 【★ 本文件不再是宏函数 ★】原来要按 uuid 拼 wg_bonus 路径才写成宏; 现在加成
+#   存在玩家自己的计分项上, 一条 `$` 都不需要 —— 所以调用方也改成了普通调用
+#   (burst_self 里不再传 with storage zx:work wg)。
 # ============================================================
 
+# ① 超出量 = 风声 - 60
 scoreboard players operation #ex zx.meta = @s zx.wg_sound
 scoreboard players remove #ex zx.meta 60
 
-# 【加算, 不是覆盖】把这次的加成**加到**已经存着的那一份上, 而不是覆盖掉。
-#   于是"攒到两次"或"以后有别的来源也写同一个字段"时, 是
-#       百分比先相加 -> 再一起乘一次倍率      (加算)
-#   而不是
-#       各自乘一遍 (1+b1)×(1+b2)             (乘算)
-#   这样它才真的是"skill_multiplier 那一档里的加法项", 和其他技能倍率加成同性质。
-#   实现: 先把已有的加成按 x100 读进计分板, 加上这次的, 再写回(0.01 = "每超出一点 +1%")
-scoreboard players set #add zx.meta 0
-$execute if data storage zx:data wg_bonus."$(uuid)" store result score #add zx.meta run data get storage zx:data wg_bonus."$(uuid)" 100
-scoreboard players operation #ex zx.meta += #add zx.meta
-$execute store result storage zx:data wg_bonus."$(uuid)" double 0.01 run scoreboard players get #ex zx.meta
+# ② 加进「最大魔力值技能倍率」通用乘区槽, 并把时长顶到 20 秒
+#   ★ 先 `add ... 0` 保证玩家身上有这个分数 ★ —— 没有分数的玩家, 下面的
+#     `operation +=` 和不等于比较都可能不成立(计分板"没分数"不等于 0)。
+scoreboard players add @s zx.mm_add 0
+scoreboard players operation @s zx.mm_add += #ex zx.meta
 
-tellraw @s [{"text":"下一次以最大魔力结算的技能伤害 +","color":"aqua"},{"score":{"name":"#ex","objective":"zx.meta"},"color":"white"},{"text":"%","color":"aqua"},{"text":"  (合计, 加算)","color":"dark_gray"}]
+tellraw @s [{"text":"最大魔力值技能倍率 +","color":"aqua"},{"score":{"name":"#ex","objective":"zx.meta"},"color":"white"},{"text":"%","color":"aqua"},{"text":"  (合计, 加算, 下一次最大魔力值技能生效)","color":"dark_gray"}]

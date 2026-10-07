@@ -44,7 +44,7 @@ data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/cooldown/start
 
 # ⑥ 算伤害: 基础攻击力 ×4, 保底 15
-data modify storage manacore:in arg set value {uuid:"",skill_multiplier:4.0}
+data modify storage manacore:in arg set value {uuid:"",attack_mul:4.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 

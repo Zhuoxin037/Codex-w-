@@ -22,12 +22,8 @@ tag @e[tag=zx.de_hit] remove zx.de_hit
 tag @e[tag=zx.de_all] remove zx.de_all
 
 # ③ 这一波的伤害 = 当前魔力 ×0.15
-data modify storage manacore:in arg set value {uuid:"",key:"current_mana"}
+data modify storage manacore:in arg set value {uuid:"",other_mul:0.15,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/stats/get
-data modify storage manacore:in arg set value {uuid:"",base_attack:-1.0,skill_multiplier:0.15,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0}
-data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-data modify storage manacore:in arg.base_attack set from storage manacore:out r.value
 function manacore:api/damage/calc
 
 # ④ 每个源各结算一次(execute as 换成源的执行者, at @s 把位置也带过去)
