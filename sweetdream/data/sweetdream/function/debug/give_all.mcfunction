@@ -5,8 +5,8 @@
 #     python .workbuddy/_gen_give_all.py
 # 【用法】/function sweetdream:debug/give_all   或   /trigger zx.dbg_give
 #
-# 【为什么是 5 个盒子】潜影盒只有 27 格, 而东西一共 114 件
-#   (83 件装备 + 31 块强化石) —— 按每盒 27 件自动分包。
+# 【为什么是 5 个盒子】潜影盒只有 27 格, 而东西一共 132 件
+#   (83 件装备 + 49 块强化石) —— 按每盒 27 件自动分包。
 #
 # 【怎么做到的】走一个方块当中转站:
 #   ① 在下面这些坐标放空潜影盒方块(和强化台 0,-59,2 错开、同一个区块)
@@ -39,7 +39,7 @@ data modify block 0 -60 1 CustomName set value {"text":"sweetdream · 盒1 (27 �
 data modify block 0 -60 3 CustomName set value {"text":"sweetdream · 盒2 (27 件)","color":"light_purple","italic":false}
 data modify block 0 -60 5 CustomName set value {"text":"sweetdream · 盒3 (27 件)","color":"aqua","italic":false}
 data modify block 0 -60 7 CustomName set value {"text":"sweetdream · 盒4 (27 件)","color":"red","italic":false}
-data modify block 0 -60 9 CustomName set value {"text":"sweetdream · 盒5 (6 件)","color":"green","italic":false}
+data modify block 0 -60 9 CustomName set value {"text":"sweetdream · 盒5 (24 件)","color":"green","italic":false}
 #   【兜底提示】要是中转站没建成(区块没加载 / 你不在主世界), 后面全都会
 #   静默失败 —— 与其让你以为发了但没给, 不如直接说出来。
 execute unless block 0 -60 1 #minecraft:shulker_boxes run tellraw @s [{"text":"[调试] 中转站没建成: 盒子都没发出去。这条只支持主世界, 且那个坐标的区块得是加载的。","color":"red"}]
@@ -380,24 +380,78 @@ function sweetdream:upgrade/item/vision_o
 item replace block 0 -60 7 container.26 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
 
-# ---- ③ 盒 5: 6 件 ----
-function sweetdream:overlimit/item/brain_leech
+# ---- ③ 盒 5: 24 件 ----
+function sweetdream:overlimit/item/anion
 item replace block 0 -60 9 container.0 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:overlimit/item/dusk_dawn
+function sweetdream:overlimit/item/begonia
 item replace block 0 -60 9 container.1 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:overlimit/item/liuguang
+function sweetdream:overlimit/item/bone_erode
 item replace block 0 -60 9 container.2 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:overlimit/item/myriad
+function sweetdream:overlimit/item/brain_leech
 item replace block 0 -60 9 container.3 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:overlimit/item/spine_symbiote
+function sweetdream:overlimit/item/charge
 item replace block 0 -60 9 container.4 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:overlimit/item/stellar_elegy
+function sweetdream:overlimit/item/cold_crow
 item replace block 0 -60 9 container.5 from entity @s hotbar.0
+item replace entity @s hotbar.0 with minecraft:air
+function sweetdream:overlimit/item/deepsea_echo
+item replace block 0 -60 9 container.6 from entity @s hotbar.0
+item replace entity @s hotbar.0 with minecraft:air
+function sweetdream:overlimit/item/dionysus_helmet
+item replace block 0 -60 9 container.7 from entity @s hotbar.0
+item replace entity @s hotbar.0 with minecraft:air
+function sweetdream:overlimit/item/dream_reader
+item replace block 0 -60 9 container.8 from entity @s hotbar.0
+item replace entity @s hotbar.0 with minecraft:air
+function sweetdream:overlimit/item/dusk_dawn
+item replace block 0 -60 9 container.9 from entity @s hotbar.0
+item replace entity @s hotbar.0 with minecraft:air
+function sweetdream:overlimit/item/everfrost
+item replace block 0 -60 9 container.10 from entity @s hotbar.0
+item replace entity @s hotbar.0 with minecraft:air
+function sweetdream:overlimit/item/flame_brokenbody
+item replace block 0 -60 9 container.11 from entity @s hotbar.0
+item replace entity @s hotbar.0 with minecraft:air
+function sweetdream:overlimit/item/furnace_core
+item replace block 0 -60 9 container.12 from entity @s hotbar.0
+item replace entity @s hotbar.0 with minecraft:air
+function sweetdream:overlimit/item/hengdao
+item replace block 0 -60 9 container.13 from entity @s hotbar.0
+item replace entity @s hotbar.0 with minecraft:air
+function sweetdream:overlimit/item/liuguang
+item replace block 0 -60 9 container.14 from entity @s hotbar.0
+item replace entity @s hotbar.0 with minecraft:air
+function sweetdream:overlimit/item/myriad
+item replace block 0 -60 9 container.15 from entity @s hotbar.0
+item replace entity @s hotbar.0 with minecraft:air
+function sweetdream:overlimit/item/polarized_light
+item replace block 0 -60 9 container.16 from entity @s hotbar.0
+item replace entity @s hotbar.0 with minecraft:air
+function sweetdream:overlimit/item/red_lotus
+item replace block 0 -60 9 container.17 from entity @s hotbar.0
+item replace entity @s hotbar.0 with minecraft:air
+function sweetdream:overlimit/item/rogue_star
+item replace block 0 -60 9 container.18 from entity @s hotbar.0
+item replace entity @s hotbar.0 with minecraft:air
+function sweetdream:overlimit/item/sculk_echo
+item replace block 0 -60 9 container.19 from entity @s hotbar.0
+item replace entity @s hotbar.0 with minecraft:air
+function sweetdream:overlimit/item/shadow_blade
+item replace block 0 -60 9 container.20 from entity @s hotbar.0
+item replace entity @s hotbar.0 with minecraft:air
+function sweetdream:overlimit/item/sickle_dreams
+item replace block 0 -60 9 container.21 from entity @s hotbar.0
+item replace entity @s hotbar.0 with minecraft:air
+function sweetdream:overlimit/item/spine_symbiote
+item replace block 0 -60 9 container.22 from entity @s hotbar.0
+item replace entity @s hotbar.0 with minecraft:air
+function sweetdream:overlimit/item/stellar_elegy
+item replace block 0 -60 9 container.23 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
 
 # ---- ④ 先把玩家原本的 hotbar.0 还回去(再发盒子, 免得被顶掉) ----
@@ -417,4 +471,4 @@ setblock 0 -60 5 minecraft:air replace
 setblock 0 -60 7 minecraft:air replace
 setblock 0 -60 9 minecraft:air replace
 setblock 0 -60 2 minecraft:air replace
-tellraw @s [{"text":"[调试] 已发: 114 件东西, 共 5 个盒子。","color":"dark_gray"}]
+tellraw @s [{"text":"[调试] 已发: 132 件东西, 共 5 个盒子。","color":"dark_gray"}]

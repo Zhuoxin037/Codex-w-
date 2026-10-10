@@ -1,0 +1,31 @@
+{
+  "validation": {
+    "color_frame_context_combinations": 16640,
+    "hand_cubes_peak_two_slots": 828,
+    "whole_model_cubes": 663,
+    "user_display_preserved": true,
+    "single_entity_released_tick": 22,
+    "cast_frames_0_to_31_delivered": true,
+    "empty_recovery_correct": true,
+    "two_hands_switch_multiplayer_checked": true,
+    "projectile_shape_scale_gameplay_preserved": true,
+    "third_slot_reserved": true,
+    "trailing_item_components_preserved": true,
+    "all_references_legal": true,
+    "native_local_vertex_max_error": 1.0685311451976804e-06,
+    "installed_pose_matrix_max_tolerance": 3e-08,
+    "installed_resources_bytes": 2720918,
+    "game_tested": false
+  },
+  "deployment": {
+    "target_game": "D:\\PCL 正式版 2.10.0\\.minecraft\\versions\\1.21.5-Fabric 0.16.10",
+    "datapack_files": 16,
+    "target_save": "D:\\PCL 正式版 2.10.0\\.minecraft\\versions\\1.21.5-Fabric 0.16.10\\saves\\测试包体",
+    "deployed_at": "2026-10-09 21:38:37",
+    "game_tested": false,
+    "files_verified": 645,
+    "resource_files": 629
+  },
+  "checks_total_problems": 0,
+  "game_tested": false
+}

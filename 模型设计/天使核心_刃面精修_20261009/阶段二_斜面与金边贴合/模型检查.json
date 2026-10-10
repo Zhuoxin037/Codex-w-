@@ -1,0 +1,15 @@
+{
+  "cubes": 1432,
+  "groups": 26,
+  "true_tilted_bevel_cubes": 216,
+  "fitted_inlay_parts": 330,
+  "wraparound_gold_parts": 63,
+  "minimum_trim_face_clearance": 0.04499999999999993,
+  "user_deletions_preserved": true,
+  "core_and_haft_preserved": true,
+  "current_display_preserved": true,
+  "native_animation_editable": true,
+  "java_geometry_valid": true,
+  "deployed": false,
+  "game_tested": false
+}

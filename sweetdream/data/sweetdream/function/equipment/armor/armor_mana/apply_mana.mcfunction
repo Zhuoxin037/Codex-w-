@@ -18,12 +18,20 @@ function manacore:api/stats/add
 scoreboard players operation @s zx.am_mana += #diff zx.meta
 
 # ③ 夹紧当前魔力
-#   ★ 读不到就跳过 —— arg.value 的初值是 0.0, 要是拿它去 set 就等于**把魔力清空**。
+#   ★ 判据**不能**写 `execute if data storage manacore:out r.value` ★ (2026-10-08 修)
+#     那条守卫恒为真: manacore:internal/mana/get 会**无条件**把 out r.value 写成 0.0,
+#     而 core/boot 初始化 out r 时本来就带 value:0.0 -> 这个键永远存在。
+#     于是"读不到该玩家 current_mana"时会带着 0.0 去 set -> **把魔力清空**
+#     (正是这段注释本来想防的事故)。
+#     真正的"读到了" = 玩家记录里 stats.current_mana 字段在 -> 用它做判据。
 #     (不夹紧最坏只是显示成 340/220, 下一秒回魔/受伤就正常了; 清空是真事故。)
 data modify storage manacore:in arg set value {uuid:""}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/mana/get
-data modify storage manacore:in arg set value {uuid:"",value:0.0}
-data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-execute if data storage manacore:out r.value run data modify storage manacore:in arg.value set from storage manacore:out r.value
-execute if data storage manacore:out r.value run function manacore:api/mana/set
+scoreboard players set #mhas zx.meta 0
+data modify storage zx:work am.uuid set from storage zx:data self.uuid
+function sweetdream:equipment/armor/armor_mana/has_mana with storage zx:work am
+execute if score #mhas zx.meta matches 1 run data modify storage manacore:in arg set value {uuid:""}
+execute if score #mhas zx.meta matches 1 run data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
+execute if score #mhas zx.meta matches 1 run data modify storage manacore:in arg.value set from storage manacore:out r.value
+execute if score #mhas zx.meta matches 1 run function manacore:api/mana/set

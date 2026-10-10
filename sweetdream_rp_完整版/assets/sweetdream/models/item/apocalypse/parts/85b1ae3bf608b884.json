@@ -1,0 +1,141 @@
+{
+  "parent": "sweetdream:item/apocalypse/geometry/eaea3ec5de926ec1",
+  "display": {
+    "gui": {
+      "rotation": [
+        62.47891,
+        0.354197,
+        -7.992206
+      ],
+      "translation": [
+        0,
+        -0.7,
+        0
+      ],
+      "scale": [
+        0.9,
+        0.9,
+        0.9
+      ]
+    },
+    "ground": {
+      "rotation": [
+        -2.545833,
+        0.0,
+        -0.0
+      ],
+      "translation": [
+        0.0,
+        3.0,
+        0.0
+      ],
+      "scale": [
+        0.53333,
+        0.53333,
+        0.53333
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        -87.454167,
+        0.0,
+        180.0
+      ],
+      "translation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        0.83333,
+        0.83333,
+        0.83333
+      ]
+    },
+    "head": {
+      "rotation": [
+        -2.545833,
+        0.0,
+        -0.0
+      ],
+      "translation": [
+        0,
+        8,
+        0
+      ],
+      "scale": [
+        0.75,
+        0.75,
+        0.75
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        49.454167,
+        0.0,
+        -0.0
+      ],
+      "translation": [
+        -8.96,
+        -1,
+        -5.8
+      ],
+      "scale": [
+        0.7,
+        0.7,
+        0.7
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        49.454167,
+        -0.0,
+        0.0
+      ],
+      "translation": [
+        -8.96,
+        -1,
+        -5.8
+      ],
+      "scale": [
+        0.7,
+        0.7,
+        0.7
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        62.454167,
+        0.0,
+        -0.0
+      ],
+      "translation": [
+        0,
+        1,
+        0
+      ],
+      "scale": [
+        0.6,
+        0.6,
+        0.6
+      ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [
+        62.454167,
+        -0.0,
+        0.0
+      ],
+      "translation": [
+        0,
+        1,
+        0
+      ],
+      "scale": [
+        0.6,
+        0.6,
+        0.6
+      ]
+    }
+  }
+}

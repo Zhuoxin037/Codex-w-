@@ -1,0 +1,24 @@
+{
+  "source_cubes": 818,
+  "groups": 158,
+  "textures": 4,
+  "animations": [
+    "01_待机_轻柔持盘",
+    "02_施法_提色汇聚与飞出"
+  ],
+  "cast_duration_seconds": 1.6,
+  "empty_idle_visible_cubes": 628,
+  "whole_display_json": "D:\\数据包\\模型设计\\调色盘_阶段三\\显示调整示例\\assets\\palette\\models\\item\\palette.json",
+  "structure_checked": true,
+  "gameplay_unchanged": true,
+  "game_baked": false,
+  "gui_verified": false,
+  "deployed": false,
+  "two_colors_idle_cubes": 648,
+  "two_colors_cast_peak_cubes": 675,
+  "red_red_idle_cubes": 648,
+  "red_red_cast_peak_cubes": 675,
+  "third_slot_demo_idle_cubes": 656,
+  "third_slot_demo_cast_peak_cubes": 693,
+  "cast_recovers_exact_empty_palette": true
+}

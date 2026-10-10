@@ -1,0 +1,18 @@
+{
+  "frame_states": 60,
+  "cubes_per_state": 632,
+  "static_cubes": 248,
+  "animated_cubes": 384,
+  "composite_parts_max": 6,
+  "idle_fps": 5,
+  "cast_fps": 10,
+  "max_pointer_quantization_degrees": 10.999999999999993,
+  "small_fabric_rotations": "baked as axis-aligned cuboids; breathing scale and wave displacement preserved",
+  "shared_display": "sweetdream_rp/assets/sweetdream/models/item/sail/display.json",
+  "record_masks": 16,
+  "deployed": true,
+  "static_check_total": 0,
+  "shared_display_inheritance_verified": true,
+  "driver_frame_domain_verified": true,
+  "game_reload_verified": false
+}

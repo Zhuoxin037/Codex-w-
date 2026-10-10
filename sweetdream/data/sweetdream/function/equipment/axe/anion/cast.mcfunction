@@ -5,6 +5,15 @@
 # 【文案】消耗 40 魔力 / 冷却 30 秒。使用后对自身 6 格内的随机 3 个生物
 #   释放闪电，并对其造成相当于自身当前魔力值 ×0.1 的伤害。
 #
+# 【★ 超限·负离子 加在这把上的机制(逐字照抄 oldef."anion".lore)★】
+#   "使用后对自身 6 格内的**全部**生物释放闪电并对其造成相当于自身当前魔力值
+#    ×0.12 的伤害，1 秒后再释放闪电并对其相当于自身**最大**魔力值 ×0.08 的伤害。
+#    之后 8 秒内自身召唤闪电时闪电额外对落地处造成相当于自身当前魔力值 ×0.1 的伤害"
+#   落实: ①目标 随机3 -> 全部(⑥); ②倍率 0.1 -> 0.12(⑧);
+#         ③1 秒后的第二道雷(走 zx.an_2nd + core/tick, 见 second_strike);
+#         ④8 秒"雷劲"窗口(zx.an_boost=8, 见 lib/on_lightning 与 ol_bonus)。
+#   ★ 注意原文这两处的口径**不同**: 第一下是"当前魔力", 1 秒后那下是"最大魔力"。
+#
 # 【伤害口径 = other_mul(当前魔力)】框架的 other_mul 基数**默认就是当前魔力**
 #   (见 manacore/internal/damage/use_other) —— 所以只写 {other_mul:0.1} 即可。
 #   ★ 别写成 max_mana_mul(那是"最大魔力"), 文案写的是**当前**魔力。
@@ -36,6 +45,12 @@ advancement revoke @s only sweetdream:equipment/axe/anion
 function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return fail
 
+# ①' 超限快照: 手里这把是不是超限版(判一次存到玩家身上)
+#   ★ 为什么拍快照: 后面的 ⑨ 伤害、⑩ 的 8 秒窗口都发生在这一刻之后,
+#     而"手里那把"到那时可能已经不准了(见 RULES 的"施法快照")。
+function sweetdream:equipment/axe/anion/is_ol
+scoreboard players operation @s zx.an_ol = #an_ol zx.meta
+
 # ② 只读检查: 冷却 + 魔力 40
 data modify storage manacore:in arg set value {uuid:"",skill:"sweetdream:anion",mana:40.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
@@ -60,18 +75,24 @@ data modify storage manacore:in arg set value {uuid:"",skill:"sweetdream:anion",
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/cooldown/start
 
-# ⑥ 圈目标: 6 格内随机 3 只
+# ⑥ 圈目标: 基础版 = 6 格内随机 3 只; 超限版 = 6 格内**全部**
 #   ★ sort=random 每次求值都会重挑 ⇒ 必须**先冻结成标签**, 否则后面每用一次
 #     这个选择器就换一批人(闪电打 A, 伤害却落到 B 身上)。
 tag @e[tag=zx.an_hit] remove zx.an_hit
-execute at @s run tag @e[type=!#sweetdream:no_damage,distance=0.1..6,sort=random,limit=3] add zx.an_hit
+execute if score @s zx.an_ol matches 0 at @s run tag @e[type=!#sweetdream:no_damage,distance=0.1..6,sort=random,limit=3] add zx.an_hit
+execute if score @s zx.an_ol matches 1 at @s run tag @e[type=!#sweetdream:no_damage,distance=0.1..6] add zx.an_hit
 
 # ⑦ 闪电(逐个 at 目标放; 原版真闪电, 见头注释的注意事项)
-execute as @e[tag=zx.an_hit,distance=0..] at @s run summon minecraft:lightning_bolt ~ ~ ~
+#   ★ 必须带 zx.th_seen ★ 否则会被 tool/thunder/strike 的每刻扫描当"新雷"接管,
+#     给 6 格内每个持雷鸣的玩家追加一道连锁雷(2026-10-08 修)。
+#   ★ 紧接着那一行 = "自身召唤闪电"的公共收尾钩子(超限 8 秒雷劲挂在这儿)。
+execute at @e[tag=zx.an_hit,distance=0..] run summon minecraft:lightning_bolt ~ ~ ~ {Tags:["zx.th_seen"]}
+execute at @e[tag=zx.an_hit,distance=0..] run function sweetdream:lib/on_lightning
 
-# ⑧ 伤害: 当前魔力 ×0.1(执行者仍是玩家 -> 归属正确)
-data modify storage manacore:in arg set value {uuid:"",other_mul:0.1}
+# ⑧ 伤害: 基础版 当前魔力 ×0.1; 超限版 当前魔力 ×0.12(执行者仍是玩家 -> 归属正确)
+data modify storage manacore:in arg set value {uuid:"",other_mul:0.1,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
+execute if score @s zx.an_ol matches 1 run data modify storage manacore:in arg.other_mul set value 0.12
 function manacore:api/damage/calc
 data modify storage zx:in arg set value {target:"@e[tag=zx.an_hit,distance=0..]",damage:0.0,read:"manacore"}
 function sweetdream:api/damage
@@ -79,6 +100,15 @@ function sweetdream:api/damage
 # ⑨ 清临时标签(不管有没有打到都要清)
 tag @e[tag=zx.an_hit,distance=0..] remove zx.an_hit
 
-# ⑩ 表现
+# ⑩ 超限: 之后 8 秒的"雷劲"窗口 + 1 秒后的第二道雷(最大魔力 ×0.08)
+#   ①zx.an_boost = 还剩几秒的雷劲(lib/on_lightning 判它, lib/second 每秒 -1);
+#   ②zx.an_2nd  = 还有几刻放"1 秒后那道雷"(core/tick 每刻推, 见 second_strike)。
+execute if score @s zx.an_ol matches 1 run scoreboard players set @s zx.an_boost 8
+execute if score @s zx.an_ol matches 1 run scoreboard players set @s zx.an_2nd 20
+execute if score @s zx.an_ol matches 1 run tellraw @s [{"text":"超限·负离子 · 8 秒内自身闪电附带落点伤害","color":"light_purple"}]
+execute if score @s zx.an_ol matches 1 run playsound minecraft:block.beacon.activate player @a ~ ~ ~ 0.6 1.4
+scoreboard players set @s zx.an_ol 0
+
+# ⑪ 表现
 execute at @s run particle minecraft:electric_spark ~ ~1 ~ 1.2 0.8 1.2 0.08 40 normal
 execute at @s run playsound minecraft:item.trident.thunder player @a ~ ~ ~ 0.8 1.2

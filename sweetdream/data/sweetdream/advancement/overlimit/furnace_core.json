@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "furnace_core": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "ol_furnace_core"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:overlimit/apply/furnace_core"
+    }
+}

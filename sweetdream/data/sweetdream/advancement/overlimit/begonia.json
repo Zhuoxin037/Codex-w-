@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "begonia": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "ol_begonia"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:overlimit/apply/begonia"
+    }
+}

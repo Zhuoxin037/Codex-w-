@@ -17,12 +17,18 @@
 $execute unless entity @e[tag=zx.de_$(uuid)] run function sweetdream:equipment/sword/deepsea_echo/finish with storage zx:work de
 $execute unless entity @e[tag=zx.de_$(uuid)] run return 0
 
+# ①b 【超限标记】把"这次是不是超限版"抄到公共临时节点, 给 hit_area(范围) 和
+#      pay_mana(耗蓝) 读 —— 它们不是宏、拿不到 $(uuid), 只能读共享节点。
+#      ★ 只在本次连锁的范围内用, 不跨玩家(每人自己的记录里各存一份)。
+$data modify storage zx:work de.ol set from storage zx:data de."$(uuid)".ol
+
 # ② 清掉上一轮的临时标记
 tag @e[tag=zx.de_hit] remove zx.de_hit
 tag @e[tag=zx.de_all] remove zx.de_all
 
-# ③ 这一波的伤害 = 当前魔力 ×0.15
-data modify storage manacore:in arg set value {uuid:"",other_mul:0.15,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0}
+# ③ 这一波的伤害 = 当前魔力 ×0.15(基础版) / ×0.18(超限版)
+execute if data storage zx:work de{ol:1b} run data modify storage manacore:in arg set value {uuid:"",other_mul:0.18,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0}
+execute unless data storage zx:work de{ol:1b} run data modify storage manacore:in arg set value {uuid:"",other_mul:0.15,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 
@@ -50,8 +56,15 @@ $execute store result score #left zx.meta run data get storage zx:data de."$(uui
 scoreboard players remove #left zx.meta 1
 $execute store result storage zx:data de."$(uuid)".left int 1 run scoreboard players get #left zx.meta
 
-# 还要重复 -> 再花 110 魔力; 够就 1 秒后下一波, 不够就中断(并把标记清干净)
-execute if score #left zx.meta matches 1.. run function sweetdream:equipment/sword/deepsea_echo/pay_mana
+# ⑦ 【超限·深海的回响】次数用完了, 先问一句"这一波打到带「渊海」的生物了吗"
+#    有(且本次还没兑现过) -> 免费再重复一次(见 echo_extra: 抬回 left 并记 free:1b)
+#    没有 -> 什么都不做, 下面 ⑧ 自然走 finish
+execute if score #left zx.meta matches ..0 run function sweetdream:equipment/sword/deepsea_echo/echo_extra with storage zx:work de
+$execute store result score #left zx.meta run data get storage zx:data de."$(uuid)".left
+
+# ⑧ 还要继续 -> 收费(110 / 80)。免费那一波(free:1b)不扣蓝, 直接放行
+$execute if score #left zx.meta matches 1.. if data storage zx:data de."$(uuid)"{free:1b} run data modify storage manacore:out r.success set value 1b
+$execute if score #left zx.meta matches 1.. unless data storage zx:data de."$(uuid)"{free:1b} run function sweetdream:equipment/sword/deepsea_echo/pay_mana
 #   【为什么不是 schedule】见 cast ⑦ 的注释: 同名 schedule 会互相顶掉。
 #   这里只负责"把倒计时重置回 20", 真正每刻往下推的是 core/tick。
 execute if score #left zx.meta matches 1.. if data storage manacore:out r{success:1b} run scoreboard players set @s zx.de_t 20

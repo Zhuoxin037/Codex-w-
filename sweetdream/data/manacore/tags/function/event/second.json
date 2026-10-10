@@ -47,6 +47,12 @@
     "sweetdream:equipment/tool/mana_pump/second",
     "sweetdream:equipment/tool/bitter_cold/second",
     "sweetdream:equipment/tool/nullify/second",
-    "sweetdream:equipment/tool/wrath/second"
+    "sweetdream:equipment/tool/wrath/second",
+    "sweetdream:visual/staff_icon_sync",
+    "sweetdream:visual/crossbow_icon_sync",
+    "sweetdream:visual/sword_icon_sync",
+    "sweetdream:visual/axe_icon_sync",
+    "sweetdream:visual/armor_icon_sync",
+    "sweetdream:visual/tool_icon_sync"
   ]
 }

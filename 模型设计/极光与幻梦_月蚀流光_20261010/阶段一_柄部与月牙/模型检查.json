@@ -1,0 +1,61 @@
+{
+  "cubes": 536,
+  "faces": 3216,
+  "groups": 24,
+  "per_group": {
+    "紫皮握柄": 45,
+    "银色纵脊": 4,
+    "上护箍": 13,
+    "下护箍": 6,
+    "握柄": 0,
+    "柄尾银座": 9,
+    "柄尾紫晶": 62,
+    "柄尾": 0,
+    "连续剑根座": 7,
+    "护手侧翼": 6,
+    "中央紫晶托座": 6,
+    "中央紫晶": 52,
+    "中央紫晶背面": 52,
+    "中央紫晶背面托座": 6,
+    "护手": 0,
+    "月牙金属主体": 33,
+    "月牙正面斜面": 62,
+    "月牙背面斜面": 62,
+    "月牙双面嵌色": 32,
+    "单侧月牙": 0,
+    "近侧悬浮晶片": 42,
+    "远侧悬浮晶片": 37,
+    "两片悬晶": 0,
+    "总体": 0
+  },
+  "bounds": {
+    "min": [
+      -2.857139103321169,
+      -1.29,
+      -0.8672409237273023
+    ],
+    "max": [
+      2.0353532818854987,
+      7.796,
+      1.4829362847387018
+    ]
+  },
+  "source": "Blockbench 5.2.2 MCP 保存后的原生工程",
+  "checks": {
+    "group_ownership": true,
+    "texture_uvs": true,
+    "java_legal_rotations": true,
+    "java_coordinate_limits": true,
+    "native_export_match": true,
+    "blockbench_mcp_issue_count": 0,
+    "free_animation_workspace": true,
+    "animations_created": 0,
+    "deploy": false
+  },
+  "artifacts": {
+    "native": "D:\\数据包\\模型设计\\极光与幻梦_月蚀流光_20261010\\阶段一_柄部与月牙\\极光与幻梦_柄部_分组模型.bbmodel",
+    "java_display_project": "D:\\数据包\\模型设计\\极光与幻梦_月蚀流光_20261010\\阶段一_柄部与月牙\\极光与幻梦_柄部_整体显示调整.bbmodel",
+    "overall_json": "D:\\数据包\\模型设计\\极光与幻梦_月蚀流光_20261010\\阶段一_柄部与月牙\\显示调整示例\\assets\\auroradream\\models\\item\\aurora_dream_hilt.json",
+    "actual_preview": "D:\\数据包\\模型设计\\极光与幻梦_月蚀流光_20261010\\阶段一_柄部与月牙\\极光与幻梦_柄部_实际模型.png"
+  }
+}

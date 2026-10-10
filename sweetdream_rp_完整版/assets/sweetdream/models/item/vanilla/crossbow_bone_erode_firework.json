@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/crossbow",
+  "textures": {
+    "layer0": "sweetdream:item/vanilla/crossbow_bone_erode_firework"
+  }
+}

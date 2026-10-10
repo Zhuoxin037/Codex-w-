@@ -30,6 +30,13 @@ advancement revoke @s only sweetdream:upgrade/attack
 execute if score @s zx.up_lt = #now manacore.meta run return 0
 scoreboard players operation @s zx.up_lt = #now manacore.meta
 
+# 【通用工具 · 平A 蓄力判定(2026-10-10)】算"这一发平A的蓄力", 出参 #atk_full / #atk_pct,
+#   用法与口径见 lib/atk_charge 的文件头。
+#   ★ 必须放在上面那条"每刻只算一次"的去重**之后** —— 一记横扫打多只时,
+#     第 2 只的 gap 会变成 0(工具自己写了记录), 排前面就会读到假的"未蓄满"。
+#   ★ 现在**没有任何武器读 #atk_full**, 所以对玩法零影响; 只是把数值算出来备用 + 供自测。
+function sweetdream:lib/atk_charge
+
 function sweetdream:upgrade/api/bonus_held
 
 # 【★ 效果开关要在 bonus_held 之后立刻读出来 ★】zx:out 是全包共用的出口节点,

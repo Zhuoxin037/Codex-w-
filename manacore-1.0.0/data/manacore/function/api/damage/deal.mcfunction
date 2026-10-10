@@ -11,7 +11,9 @@
 # 【什么时候用】技能效果很简单(就是打一下)时用 deal;
 #   要复杂流程(位移/多段/条件分支)时建议 calc + apply 分开调。
 # ============================================================
-data modify storage manacore:work a set value {uuid:"",base_attack:-1.0,other_base:-1.0,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0,damage:0.0,target:"",type:"minecraft:player_attack"}
+# 【★ 默认值里不要写 target:"" ★】理由同 api/damage/apply: 空串算"存在",
+#   会把"没给 target = 只算不打"变成"走进 apply 后解析失败、整段静默不打"。
+data modify storage manacore:work a set value {uuid:"",base_attack:-1.0,other_base:-1.0,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0,damage:0.0,type:"minecraft:player_attack"}
 data modify storage manacore:work a merge from storage manacore:in arg
 function manacore:api/player/ensure
 execute if data storage manacore:work a.uuid run function manacore:internal/damage/deal with storage manacore:work a

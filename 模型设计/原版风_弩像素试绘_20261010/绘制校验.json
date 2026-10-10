@@ -1,0 +1,14 @@
+{
+  "redrawn_ids": [
+    "lucid_dream",
+    "rainbow"
+  ],
+  "redrawn_textures": 12,
+  "other_24_textures_unchanged": true,
+  "excluded_ids": [
+    "cold_crow"
+  ],
+  "game_bound": false,
+  "stock_fixed": true,
+  "zip_verified": true
+}

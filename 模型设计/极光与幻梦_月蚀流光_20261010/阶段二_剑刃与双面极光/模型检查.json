@@ -1,0 +1,56 @@
+{
+  "errors": [],
+  "native_cubes": 733,
+  "runtime_cubes": 739,
+  "groups": 36,
+  "editable_animations": 2,
+  "runtime_parts": {
+    "body": 500,
+    "aurora": 100,
+    "ring": 120,
+    "near": 10,
+    "far": 9
+  },
+  "pose_bake_max_error": 1.7763568394002505e-15,
+  "ring_origin": [
+    0.15,
+    0.2,
+    0.3
+  ],
+  "ring_rotation": [
+    -62.5,
+    0,
+    0
+  ],
+  "idle_frames": 24,
+  "cast_frames": 32,
+  "texture_frames": 32,
+  "runtime_bytes": 5218085,
+  "game_tested": false,
+  "subtle_animation_note": "MCP humanoid analyzer flags sub-0.5-unit motion; small ambient float is intentional.",
+  "deployment": {
+    "deployed_at": "2026-10-10 02:30:47",
+    "target_save": "D:\\PCL 正式版 2.10.0\\.minecraft\\versions\\1.21.5-Fabric 0.16.10\\saves\\测试包体",
+    "target_game": "D:\\PCL 正式版 2.10.0\\.minecraft\\versions\\1.21.5-Fabric 0.16.10",
+    "files_verified": 97,
+    "datapack_files": 19,
+    "game_tested": false,
+    "resource_files": 78
+  },
+  "state_verification": {
+    "passed": true,
+    "checks": [
+      "missing idle scores",
+      "both hands",
+      "frames 0..32 received",
+      "hold not interrupted by reset",
+      "new sword during hold",
+      "8-tick bell pulse",
+      "end cleanup",
+      "two-player isolation",
+      "missing cast score cleanup"
+    ],
+    "live_minecraft_parser": false
+  },
+  "rendered_face_overlap_count": 0
+}

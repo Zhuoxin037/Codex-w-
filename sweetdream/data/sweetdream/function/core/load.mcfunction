@@ -69,6 +69,10 @@ execute unless data storage zx:config obj_rb_t run data modify storage zx:config
 #   zx.fi_ft = 「裂缝」marker 的剩余秒数(5 -> 0 后 kill, 由 lib/second 每秒 -1)
 execute unless data storage zx:config obj_fi_ft run scoreboard objectives add zx.fi_ft dummy
 execute unless data storage zx:config obj_fi_ft run data modify storage zx:config obj_fi_ft set value 1b
+# 天使核心(2026-10-08 新增表现):
+#   zx.ab_t = 「圣光柱」(受伤生物处升起的光柱 item_display)的剩余秒数(2 -> 0 后 kill, 由 lib/second 每秒 -1)
+execute unless data storage zx:config obj_ab_t run scoreboard objectives add zx.ab_t dummy
+execute unless data storage zx:config obj_ab_t run data modify storage zx:config obj_ab_t set value 1b
 # 释梦(2026-10-07 批2):
 #   zx.dr_life = 「入梦体」marker 的安全寿命(600 tick, 由 core/tick 每刻 -1, 归零自毁)
 execute unless data storage zx:config obj_dr_life run scoreboard objectives add zx.dr_life dummy
@@ -125,6 +129,10 @@ execute unless data storage zx:config obj_tc_bs run scoreboard objectives add zx
 execute unless data storage zx:config obj_tc_bs run data modify storage zx:config obj_tc_bs set value 1b
 execute unless data storage zx:config obj_tc_ang run scoreboard objectives add zx.tc_ang dummy
 execute unless data storage zx:config obj_tc_ang run data modify storage zx:config obj_tc_ang set value 1b
+#   zx.tc_end  = 术阵 marker 的**绝对到期 tick**(gametime + 持续秒数×20; R03 卸载补偿用:
+#     区块卸载期间全局时钟照走, marker 重新加载时按它补一刀, 免得术阵比框架记录的多活)
+execute unless data storage zx:config obj_tc_end run scoreboard objectives add zx.tc_end dummy
+execute unless data storage zx:config obj_tc_end run data modify storage zx:config obj_tc_end set value 1b
 # 苍蓝星(2026-10-07 批2):
 #   zx.as_lt  = "每次攻击"去重戳
 #   zx.as_x2  = 「本武器伤害倍率翻倍」待生效标记(1 = 攒着; 下一次技能消费后清零)
@@ -154,11 +162,17 @@ execute unless data storage zx:config obj_rl_t run data modify storage zx:config
 #   zx.ch_end = 「共鸣水晶」(marker)的到期时刻(框架时钟; 8 秒后自毁)
 execute unless data storage zx:config obj_ch_end run scoreboard objectives add zx.ch_end dummy
 execute unless data storage zx:config obj_ch_end run data modify storage zx:config obj_ch_end set value 1b
+#   zx.ch_cd  = 「共鸣水晶」"法术穿过"的节流倒计时(每触发一次压 10 tick = 0.5 秒;
+#               用户 2026-10-09 定: 可以持续触发, 但每 0.5 秒最多一次)
+execute unless data storage zx:config obj_ch_cd run scoreboard objectives add zx.ch_cd dummy
+execute unless data storage zx:config obj_ch_cd run data modify storage zx:config obj_ch_cd set value 1b
 # 调色盘(2026-10-07 批3):
 #   zx.pal_c1 / zx.pal_c2 = 玩家身上两个"颜色槽"(0 空 / 1 红 / 2 黄 / 3 蓝)
-#   zx.pal_id / zx.pal_rng / zx.pal_thr / zx.pal_mul / zx.pal_blu / zx.pal_n / zx.pal_life
-#       = “色彩”marker 的参数: id / 半径 / 阀值 / 伤害倍率(1+红数) / 蓝数 / 已打数 / 剩余寿命
+#   zx.pal_id / zx.pal_rng / zx.pal_thr / zx.pal_mul / zx.pal_blu / zx.pal_n
+#       = “色彩”光球的参数: id / 半径 / 阀值 / 伤害倍率(1+红数) / 蓝数 / 已打数
 #   zx.pal_hit = 贴在生物身上: 最后一次打它的“色彩”id(用来跳过"已攻击过的生物")
+#   ★ 2026-10-08: 原 zx.pal_life / zx.pal_end(寿命) **已全部删掉** ——
+#     文案里"色彩"只有两个自毁条件(离自身 12 格 / 打满阀值), 没有时间限制。
 execute unless data storage zx:config obj_pal_c1 run scoreboard objectives add zx.pal_c1 dummy
 execute unless data storage zx:config obj_pal_c1 run data modify storage zx:config obj_pal_c1 set value 1b
 execute unless data storage zx:config obj_pal_c2 run scoreboard objectives add zx.pal_c2 dummy
@@ -175,14 +189,15 @@ execute unless data storage zx:config obj_pal_blu run scoreboard objectives add 
 execute unless data storage zx:config obj_pal_blu run data modify storage zx:config obj_pal_blu set value 1b
 execute unless data storage zx:config obj_pal_n run scoreboard objectives add zx.pal_n dummy
 execute unless data storage zx:config obj_pal_n run data modify storage zx:config obj_pal_n set value 1b
-execute unless data storage zx:config obj_pal_life run scoreboard objectives add zx.pal_life dummy
-execute unless data storage zx:config obj_pal_life run data modify storage zx:config obj_pal_life set value 1b
 execute unless data storage zx:config obj_pal_hit run scoreboard objectives add zx.pal_hit dummy
 execute unless data storage zx:config obj_pal_hit run data modify storage zx:config obj_pal_hit set value 1b
 # 海棠(2026-10-07 批3):
 #   zx.bg_t = 漩涡 marker 的剩余秒数(8 -> 0, 归零在 vortex_end 结算)
 execute unless data storage zx:config obj_bg_t run scoreboard objectives add zx.bg_t dummy
 execute unless data storage zx:config obj_bg_t run data modify storage zx:config obj_bg_t set value 1b
+# 海棠超限(2026-10-10 批 G): zx.bg_ol = 施法那刻"手里是不是超限版"的快照(玩家身上)
+execute unless data storage zx:config obj_bg_ol run scoreboard objectives add zx.bg_ol dummy
+execute unless data storage zx:config obj_bg_ol run data modify storage zx:config obj_bg_ol set value 1b
 # 蛊毒(2026-10-07 批3):
 #   zx.gp_t = 被选中的「噬心」目标身上: 本轮还剩几秒(6 -> 0, 归零在 gp_end 结算)
 execute unless data storage zx:config obj_gp_t run scoreboard objectives add zx.gp_t dummy
@@ -257,6 +272,27 @@ execute unless data storage zx:config obj_up_at run scoreboard objectives add zx
 execute unless data storage zx:config obj_up_at run data modify storage zx:config obj_up_at set value 1b
 execute unless data storage zx:config obj_up_hp run scoreboard objectives add zx.up_hp dummy
 execute unless data storage zx:config obj_up_hp run data modify storage zx:config obj_up_hp set value 1b
+# R02 死亡账本自愈(2026-10-10):
+#   zx.deaths  = 原版死亡计数(criterion minecraft.custom:minecraft.deaths) —— 死亡探针;
+#                死亡会重建玩家实体, 原版属性修饰符丢、计分板账本还在 ⇒ 账本失配。
+#   zx.dc_last = 上次自愈时见到的死亡数(和 zx.deaths 一比就知道"这一秒死过没有")
+execute unless data storage zx:config obj_deaths run scoreboard objectives add zx.deaths minecraft.custom:minecraft.deaths
+execute unless data storage zx:config obj_deaths run data modify storage zx:config obj_deaths set value 1b
+execute unless data storage zx:config obj_dc_last run scoreboard objectives add zx.dc_last dummy
+execute unless data storage zx:config obj_dc_last run data modify storage zx:config obj_dc_last set value 1b
+# O02 性能(2026-10-11, 依据 spark 剖析):
+#   zx.hp_c = 原版生命 criterion(minecraft.health) —— 原版自动同步, 读它是纯计分板
+#             操作(免费)。之前"活着吗/血多少"用 `data get entity @s Health` 读,
+#             而**任何 data ... entity 都会把整个玩家(54 格背包+组件+lore)完整
+#             序列化成 NBT** —— 观测镜面板每刻一次 + 账本自愈每人每秒一次,
+#             剖析里它就是最大热点(NbtPredicate.entityToNbt 整条链)。
+#   ★ 只拿它判"活着/死了"(>=1)和面板显示 —— 不做精确血量运算
+#     (criterion 的刻度是 ×2 还是原值没有先例背书, 别依赖)。
+execute unless data storage zx:config obj_hp_c run scoreboard objectives add zx.hp_c health
+execute unless data storage zx:config obj_hp_c run data modify storage zx:config obj_hp_c set value 1b
+#   zx.hp_show = 面板"当前生命"的每秒缓存(观测镜 cache 写, render_go 读)
+execute unless data storage zx:config obj_hp_show run scoreboard objectives add zx.hp_show dummy
+execute unless data storage zx:config obj_hp_show run data modify storage zx:config obj_hp_show set value 1b
 # 升级系统 · 冷却石(2026-10-07):
 #   zx.cdr   = 上一次写进 manacore 的 cooldown_reduction(×1000), 一样就跳过写入
 #   zx.msp_c = 魔力沸涌的"攒秒"计数器(够 every 秒才真的减一次冷却)
@@ -280,6 +316,17 @@ execute unless data storage zx:config obj_dio_mana run scoreboard objectives add
 execute unless data storage zx:config obj_dio_mana run data modify storage zx:config obj_dio_mana set value 1b
 execute unless data storage zx:config obj_dio_regen run scoreboard objectives add zx.dio_regen dummy
 execute unless data storage zx:config obj_dio_regen run data modify storage zx:config obj_dio_regen set value 1b
+# 桂冠超限(2026-10-10 批 H):
+#   zx.dio_wine = 「酒浆」层数(最多 10) / zx.dio_ramt = 每秒回魔量(80/60/80 三种)
+#   zx.dio_emp  = 技能伤害+30% 还剩几秒 / zx.dio_ih = 瞬间治疗Ⅳ还剩几秒(期间不可再触发)
+execute unless data storage zx:config obj_dio_wine run scoreboard objectives add zx.dio_wine dummy
+execute unless data storage zx:config obj_dio_wine run data modify storage zx:config obj_dio_wine set value 1b
+execute unless data storage zx:config obj_dio_ramt run scoreboard objectives add zx.dio_ramt dummy
+execute unless data storage zx:config obj_dio_ramt run data modify storage zx:config obj_dio_ramt set value 1b
+execute unless data storage zx:config obj_dio_emp run scoreboard objectives add zx.dio_emp dummy
+execute unless data storage zx:config obj_dio_emp run data modify storage zx:config obj_dio_emp set value 1b
+execute unless data storage zx:config obj_dio_ih run scoreboard objectives add zx.dio_ih dummy
+execute unless data storage zx:config obj_dio_ih run data modify storage zx:config obj_dio_ih set value 1b
 
 # 风行于大地之上专用: 风声层数 / aura 加了多少最大魔力 / aura 剩余秒数 / 3 轮爆发剩几轮
 execute unless data storage zx:config obj_wg_sound run scoreboard objectives add zx.wg_sound dummy
@@ -324,18 +371,70 @@ execute unless data storage zx:config obj_chg_on run data modify storage zx:conf
 execute unless data storage zx:config obj_sd_lock run scoreboard objectives add zx.sd_lock dummy
 execute unless data storage zx:config obj_sd_lock run data modify storage zx:config obj_sd_lock set value 1b
 
-# 深海的回响 · 释放动画
-#   zx.de_cast = 每个玩家自己的动画帧号: 0..31 = cast_00..cast_31,
-#                满 33 时被 anim/end 清掉。多人同时施法各播各的, 不互相串。
-#   三个假玩家常量挂在 zx.meta 上, 给 item_modifier 当"名字写死"的 score provider:
-#     #decast = anim/tick 每 tick 从 @s 抄进来的当前帧号
-#     #deidle = 32, 归位位 —— range_dispatch 的 threshold 32 那一条 = 原待机模型
-#     #dezero = 0, 占位。floats[0] 深海用不到, 但 replace_section 写满两个值
-#               比只写一个更靠近风行的已验证写法(那边也是两个值)。
+# 引梦镰 / 横刀 的"施法快照: 这把是不是超限版"(1/0)
+#   ★ 为什么非要存玩家身上: 这两件的伤害都在施法**之后**才结算(镰刀 4 tick 后的
+#     挥击帧、横刀 12 tick 后的落点), 那时武器已经被通用回手挪走了, 再判手里那把
+#     一定判错。所以 cast 里拍一次, 结算处读它, 读完清掉。
+execute unless data storage zx:config obj_sd_ol run scoreboard objectives add zx.sd_ol dummy
+execute unless data storage zx:config obj_sd_ol run data modify storage zx:config obj_sd_ol set value 1b
+execute unless data storage zx:config obj_hd_ol run scoreboard objectives add zx.hd_ol dummy
+execute unless data storage zx:config obj_hd_ol run data modify storage zx:config obj_hd_ol set value 1b
+# 影刃 的施法快照同理 —— 而且它的兑现时机更靠后(**换武器之后再击杀**),
+#   那时手里必然不是影刃, 重判 is_ol 必为 0(2026-10-08 修: 超限击杀分支整个走不到)。
+execute unless data storage zx:config obj_sb_ol run scoreboard objectives add zx.sb_ol dummy
+execute unless data storage zx:config obj_sb_ol run data modify storage zx:config obj_sb_ol set value 1b
+
+# 红莲(超限) 的施法快照 + "流火雨"计时(2026-10-09 批 F1)
+#   zx.rl_ol   = 这把是不是超限版(cast 拍, 连击最后一段打完由 tick_step 清)
+#                ★ 不能 cast 里清 —— recalc/hit_* 每一段都要读它。
+#   zx.rl_rain = 超限版"消耗 >= 6 层"那 5 秒流火雨还剩几发(起手 4, 每秒 -1)
+execute unless data storage zx:config obj_rl_ol run scoreboard objectives add zx.rl_ol dummy
+execute unless data storage zx:config obj_rl_ol run data modify storage zx:config obj_rl_ol set value 1b
+execute unless data storage zx:config obj_rl_rain run scoreboard objectives add zx.rl_rain dummy
+execute unless data storage zx:config obj_rl_rain run data modify storage zx:config obj_rl_rain set value 1b
+
+# 超•负•荷(超限) 的五个账(2026-10-09 批 F1; 后两个是 2026-10-10 补的回收账本)
+#   zx.chg_ol   = 这次施法是不是超限版(cast 拍; tick/hit/end 都读它)
+#   zx.chg_mode = **第二形态开关(0/1)**: = "当前正处于超载阶段" —— 闪电落点追加伤害 +
+#                 攻击反噬 + **状态期间冷却冻结**(只在第二形态 chg_mode=1 时冻;
+#                 第一阶段/第一形态不冻, 冷却照常自然走) +
+#                 打够把冷却压到 0 才在状态结束时自动再开。
+#                 ★ 它**会退**: 超载真的结束那一拍 `end -> mode_off` 置回 0(2026-10-10
+#                   用户定稿, 之前是"进了就不退" ⇒ 加成焊在身上)。
+#                 (2026-10-10 删 mode_tick; 见 tick ③ / freeze_cd / end_ol / mode_off)
+#   zx.chg_atk  = 第二形态"加了 base_attack 多少"× 100(整数账本, mode_on 写 / mode_off 读)
+#   zx.chg_mm   = 第二形态"当时的 max_mana"    × 100(整数账本, 同上; 加的是 ×0.005 = ×0.5)
+#                 ★ 为什么要有账本: 那两条加成是 `stats/add` 加在**玩家存档属性**上的,
+#                   不是效果、不会自己过期 ⇒ 收回时必须按账本**原样**减, 不能读面板反推
+#                   (面板里混着别的装备加成, 反推会连别人的一起减掉)。
+execute unless data storage zx:config obj_chg_ol run scoreboard objectives add zx.chg_ol dummy
+execute unless data storage zx:config obj_chg_ol run data modify storage zx:config obj_chg_ol set value 1b
+execute unless data storage zx:config obj_chg_mode run scoreboard objectives add zx.chg_mode dummy
+execute unless data storage zx:config obj_chg_mode run data modify storage zx:config obj_chg_mode set value 1b
+execute unless data storage zx:config obj_chg_atk run scoreboard objectives add zx.chg_atk dummy
+execute unless data storage zx:config obj_chg_atk run data modify storage zx:config obj_chg_atk set value 1b
+execute unless data storage zx:config obj_chg_mm run scoreboard objectives add zx.chg_mm dummy
+execute unless data storage zx:config obj_chg_mm run data modify storage zx:config obj_chg_mm set value 1b
+
+# 负离子(超限) 的两个账(2026-10-09 批 F1)
+#   zx.an_ol    = 这次施法是不是超限版(cast 拍, 用完即清)
+#   zx.an_boost = "8 秒雷劲"还剩几秒(lib/on_lightning 判, lib/second 每秒 -1)
+#   zx.an_2nd   = 1 秒后那道雷还有几刻(core/tick 每刻推, 见 second_strike)
+execute unless data storage zx:config obj_an_ol run scoreboard objectives add zx.an_ol dummy
+execute unless data storage zx:config obj_an_ol run data modify storage zx:config obj_an_ol set value 1b
+execute unless data storage zx:config obj_an_boost run scoreboard objectives add zx.an_boost dummy
+execute unless data storage zx:config obj_an_boost run data modify storage zx:config obj_an_boost set value 1b
+execute unless data storage zx:config obj_an_2nd run scoreboard objectives add zx.an_2nd dummy
+execute unless data storage zx:config obj_an_2nd run data modify storage zx:config obj_an_2nd set value 1b
+
+# 深海的回响 · 连续水刃：96 帧待机、48 帧施法，复用原有施法标记与入口。
 execute unless data storage zx:config obj_de_cast run scoreboard objectives add zx.de_cast dummy
 execute unless data storage zx:config obj_de_cast run data modify storage zx:config obj_de_cast set value 1b
-scoreboard players set #deidle zx.meta 32
+execute unless data storage zx:config obj_de_wave run scoreboard objectives add zx.de_wave dummy
+execute unless data storage zx:config obj_de_wave run data modify storage zx:config obj_de_wave set value 1b
+scoreboard players set #deidle zx.meta 48
 scoreboard players set #dezero zx.meta 0
+scoreboard players set #dewave zx.meta 0
 # zx.de_t: 深海连锁每人自己的倒计时(还剩几 tick 推下一波)。
 #   【为什么不用 schedule】见 cast ⑦ —— 同名 schedule 是全局一个槽, 会互相顶掉。
 execute unless data storage zx:config obj_de_t run scoreboard objectives add zx.de_t dummy
@@ -462,12 +561,18 @@ execute unless data storage zx:config damage_type run data modify storage zx:con
 kill @e[tag=zx.ball]
 # 同理: 清掉残留的「共鸣水晶」marker(批3 共鸣), 免得 /reload 后留下孤儿。
 kill @e[tag=zx.ch_cry]
-# 同理: 清掉残留的“色彩”marker(批3 调色盘)。
+# 同理: 清掉残留的“色彩”item_display(批3 调色盘; 2026-10-08 从 marker 换成可见光球)。
 kill @e[tag=zx.pal_col]
-# 同理: 清掉残留的“漩涡”marker(批3 海棠)。
+# 同理: 清掉残留的“漩涡”item_display(批3 海棠; 2026-10-08 从 marker 换成蓝色漩涡贴图)。
 kill @e[tag=zx.bg_vtx]
 # 同理: 清掉残留的“旋风”marker(批3 风帆)。
 kill @e[tag=zx.sl_vtx]
+# ★ 批 D 的「陨石」(zx.mt_rock) 和「领域」(zx.tc_dom) 故意**不在这里清** ★
+#   · 陨石: 只活 4 刻, 靠 core/tick 的每刻链推进 —— /reload 后链会重跑, 它自己会落地收尾,
+#     清掉反而会在半空"凭空消失"。没有孤儿风险就不需要这个兜底。
+#   · 领域: 术阵 marker(zx.tc_field)本来就不在 reload 清理名单里(和裂缝/万念领域一样),
+#     领域实体也一样能跨 reload 存活 —— 它该继续躺在术阵上。清掉它 = 术阵还在、圈没了。
+#     万一是 marker 被清掉的情况, core/tick 那句"附近没有术阵就自杀"下一瞬就收掉它。
 
 # ============================================================
 # 把备份架子住的区块永久加载
@@ -486,6 +591,9 @@ execute in minecraft:overworld run forceload add 0 0
 # 升级 / 超限 的定义表(框架, 见 升级与超限系统-设计.md)
 function sweetdream:upgrade/def/load
 function sweetdream:overlimit/def/load
+
+# 标签体系的运行时反查表(批 A; 三张表 tgdef / tge / tgidx, 见 标签体系-设计.md)
+function sweetdream:tg/def/load
 
 # 技能倍率三条通道的"口径表"(只给面板归类用, 见 lib/skill_mul/def)
 function sweetdream:lib/skill_mul/def
@@ -522,6 +630,7 @@ execute unless data storage zx:config obj_em_seen run data modify storage zx:con
 # 焚舟实际点火次数(用来核对"点了几次火 vs 余烬转了几次")
 execute unless data storage zx:config obj_im_ignite run scoreboard objectives add zx.im_ignite dummy
 execute unless data storage zx:config obj_im_ignite run data modify storage zx:config obj_im_ignite set value 1b
+execute unless data storage zx:config obj_em_mana50 run scoreboard objectives add zx.em_mana50 dummy
 execute unless data storage zx:config obj_em_mana50 run data modify storage zx:config obj_em_mana50 set value 1b
 # 脑髓蛭: 魔力上限账本 / 回魔修正是否已挂 / 攻击力账本
 execute unless data storage zx:config obj_bl_mana run scoreboard objectives add zx.bl_mana dummy
@@ -653,6 +762,11 @@ execute unless data storage zx:config obj_rm_t run data modify storage zx:config
 # 陨星(meteor): mt_on = 陨星状态还剩几秒(玩家身上)
 execute unless data storage zx:config obj_mt_on run scoreboard objectives add zx.mt_on dummy
 execute unless data storage zx:config obj_mt_on run data modify storage zx:config obj_mt_on set value 1b
+#   ★ 批 D 新增: mt_rk = 落下来的那颗「陨石」还剩几刻落地(0..4) —— 记在陨石实体自己身上
+#     (2026-10-08)。见 meteor/rock + rock_tick + core/tick。
+#     ⚠️ 名字别叫 zx.mr_t —— 那个是漫步冥河的计分项, 占用中。
+execute unless data storage zx:config obj_mt_rk run scoreboard objectives add zx.mt_rk dummy
+execute unless data storage zx:config obj_mt_rk run data modify storage zx:config obj_mt_rk set value 1b
 # 天穹(skyvault): sv_launch = 跃升后还需几 tick 才能再次施放(0/无 = 可以起手)
 execute unless data storage zx:config obj_sv_launch run scoreboard objectives add zx.sv_launch dummy
 execute unless data storage zx:config obj_sv_launch run data modify storage zx:config obj_sv_launch set value 1b
@@ -696,6 +810,9 @@ execute unless data storage zx:config obj_fc_ash run scoreboard objectives add z
 execute unless data storage zx:config obj_fc_ash run data modify storage zx:config obj_fc_ash set value 1b
 execute unless data storage zx:config obj_fc_t run scoreboard objectives add zx.fc_t dummy
 execute unless data storage zx:config obj_fc_t run data modify storage zx:config obj_fc_t set value 1b
+# 炉心超限(2026-10-10 批 H): zx.fc_hold = 「燃灰」12 层冻结还剩几秒(结束时直接降到 8 层)
+execute unless data storage zx:config obj_fc_hold run scoreboard objectives add zx.fc_hold dummy
+execute unless data storage zx:config obj_fc_hold run data modify storage zx:config obj_fc_hold set value 1b
 
 # ---- 第五批(2026-10-05)第一批效果: 万念 / 千散 的换手 ----
 #   zx.mq_wait = 预约后还剩几 tick 才动刀(等通用回手线跑完, 见 myriad/swap)
@@ -759,6 +876,13 @@ execute unless data storage zx:config obj_ag_end run data modify storage zx:conf
 # 偏振光(polarized_light): zx.pl_t = 光束还剩几秒(玩家身上, 0 = 没在放)
 execute unless data storage zx:config obj_pl_t run scoreboard objectives add zx.pl_t dummy
 execute unless data storage zx:config obj_pl_t run data modify storage zx:config obj_pl_t set value 1b
+# 偏振光超限(2026-10-10 批 G):
+#   zx.pl_ol = 施法那刻"是不是超限版"的快照(second/core-tick 的分流判据, 每次施法都写)
+#   zx.pl_ct = 超限版 0.5 秒闸的计数器(10 刻 = 一次结算)
+execute unless data storage zx:config obj_pl_ol run scoreboard objectives add zx.pl_ol dummy
+execute unless data storage zx:config obj_pl_ol run data modify storage zx:config obj_pl_ol set value 1b
+execute unless data storage zx:config obj_pl_ct run scoreboard objectives add zx.pl_ct dummy
+execute unless data storage zx:config obj_pl_ct run data modify storage zx:config obj_pl_ct set value 1b
 # 启示录(apocalypse):
 #   zx.ap_pre = 每刻魔力快照(×100, 判"这次技能消耗了多少蓝"用, 见 apocalypse/snap)
 #   zx.ap_on  = 灾示状态还剩几秒(玩家身上, 0 = 没在灾示)
@@ -954,6 +1078,18 @@ execute unless data storage zx:config obj_dbg_menu run data modify storage zx:co
 execute unless data storage zx:config obj_dbg_give run scoreboard objectives add zx.dbg_give trigger
 execute unless data storage zx:config obj_dbg_give run data modify storage zx:config obj_dbg_give set value 1b
 
+# ---- C01 · 开发模式开关(发布配置) ----
+#   #dev zx.meta = 1 = 开发构建(默认): 调试的"管理类"入口(发物 zx.dbg_give / 回魔 zx.dbg_mana /
+#       清冷却 zx.dbg_cd / 术阵 ±1 zx.dbg_fadd|fdel)对**所有在线玩家**开放。
+#   #dev zx.meta = 0 = 发布构建: 上面那几个入口**只对带 zx.admin 标签的玩家**开放。
+#   ★ 只读入口(stats / worn / raw / diff / menu)两种模式下都对所有玩家开放 —— 它们不改世界状态。
+#   ★ 【发布前怎么关】把下面这行的 1 改成 0 再 /reload; 或游戏里直接
+#       /scoreboard players set #dev zx.meta 0        (写进发布说明, 见 C02)
+#   ★ dev_flag 是"只初始化一次"的标记: storage 跨 /reload 保留, 所以游戏里改过的 #dev
+#      不会被 reload 冲回默认值。想复位就 /data remove storage zx:config dev_flag 再 reload。
+execute unless data storage zx:config dev_flag run scoreboard players set #dev zx.meta 1
+execute unless data storage zx:config dev_flag run data modify storage zx:config dev_flag set value 1b
+
 # ---- 通用数值注册表 ----
 #   把"debug/stats 要显示哪些加成"从写死的代码变成一张表, 见 lib/reg/build。
 #   ★ 以后加了新装备/新武器有加成, 只改 lib/reg/build 一处 ★
@@ -1032,3 +1168,72 @@ data modify storage zx:anim sea_out6 set value [[5.971f,1.0f,5.971f],[5.887f,1.0
 data modify storage zx:anim sea_in4 set value [[0.809f,1.0f,0.809f],[1.282f,1.0f,1.282f],[1.716f,1.0f,1.716f],[2.112f,1.0f,2.112f],[2.471f,1.0f,2.471f],[2.792f,1.0f,2.792f],[3.075f,1.0f,3.075f],[3.321f,1.0f,3.321f],[3.528f,1.0f,3.528f],[3.698f,1.0f,3.698f],[3.830f,1.0f,3.830f],[3.925f,1.0f,3.925f],[3.981f,1.0f,3.981f],[4.000f,1.0f,4.000f]]
 data modify storage zx:anim sea_out4 set value [[3.981f,1.0f,3.981f],[3.925f,1.0f,3.925f],[3.830f,1.0f,3.830f],[3.698f,1.0f,3.698f],[3.528f,1.0f,3.528f],[3.321f,1.0f,3.321f],[3.075f,1.0f,3.075f],[2.792f,1.0f,2.792f],[2.471f,1.0f,2.471f],[2.112f,1.0f,2.112f],[1.716f,1.0f,1.716f],[1.282f,1.0f,1.282f],[0.809f,1.0f,0.809f],[0.300f,1.0f,0.300f]]
 
+
+# 极光与幻梦 · 月蚀流光模型动画接线
+execute unless data storage zx:config obj_ad_cast run scoreboard objectives add zx.ad_cast dummy
+execute unless data storage zx:config obj_ad_cast run data modify storage zx:config obj_ad_cast set value 1b
+execute unless data storage zx:config obj_ad_idle run scoreboard objectives add zx.ad_idle dummy
+execute unless data storage zx:config obj_ad_idle run data modify storage zx:config obj_ad_idle set value 1b
+execute unless data storage zx:config obj_ad_wait run scoreboard objectives add zx.ad_wait dummy
+execute unless data storage zx:config obj_ad_wait run data modify storage zx:config obj_ad_wait set value 1b
+execute unless data storage zx:config obj_ad_pulse run scoreboard objectives add zx.ad_pulse dummy
+execute unless data storage zx:config obj_ad_pulse run data modify storage zx:config obj_ad_pulse set value 1b
+scoreboard players set #adidle zx.meta 64
+scoreboard players set #adhold zx.meta 32
+scoreboard players set #adpulse zx.meta 33
+scoreboard players set #adphase zx.meta 0
+scoreboard players set #adframe zx.meta 0
+# 极光与幻梦 · 月蚀流光模型动画接线 / END
+
+# ---- 通用工具 · 平A 蓄力判定(2026-10-10) ----
+#   zx.atk_lt = 玩家身上: 最近一次**命中**的游戏刻(由 lib/atk_charge 维护, 全包共用一份)。
+#   ★ 蓄力是玩家属性、不分武器, 所以不用"每武器一个刻戳"。
+execute unless data storage zx:config obj_atk_lt run scoreboard objectives add zx.atk_lt dummy
+execute unless data storage zx:config obj_atk_lt run data modify storage zx:config obj_atk_lt set value 1b
+#   zx.atk_gt = 玩家身上: "本刻已算过蓄力"的刻戳(同一记平A的多个入口共享一次计算, 见 lib/atk_charge 头部)。
+execute unless data storage zx:config obj_atk_gt run scoreboard objectives add zx.atk_gt dummy
+execute unless data storage zx:config obj_atk_gt run data modify storage zx:config obj_atk_gt set value 1b
+#   zx.atk_ok = 玩家身上: 本刻"是否满蓄力"的玩家级拷贝 —— ★ 全包各平A被动闸门读它。
+execute unless data storage zx:config obj_atk_ok run scoreboard objectives add zx.atk_ok dummy
+execute unless data storage zx:config obj_atk_ok run data modify storage zx:config obj_atk_ok set value 1b
+#   lib/atk_charge 的两个判据常数: 20 刻 × 攻速×100 = 2000
+scoreboard players set #atk_k2000 zx.meta 2000
+scoreboard players set #atk_k20 zx.meta 20
+
+# ---- (zx.stand_miss 已随 O03 删除) ----
+#   2026-10-11 O03 改造: 备份盔甲架整个体系退役(备份进 zx:ret 存储 + 临时架中转,
+#   见 internal/itembackup/backup.mcfunction), "连续丢失计数"随之作废。
+#   老存档里残留的 zx.stand_miss 目标和固定盔甲架(0.5,-60,0.5)无害, 不必清理。
+# ---- 公共输入口的备份栈: 每次加载清空(2026-10-10, 修 F15 的配套) ----
+#   zx:bak in 是 sweetdream:lib/in_bak 用的**栈**(list, 栈顶 = 下标 0)。
+#   ★ 为什么要在 load 里清:
+#     ① /reload **不会**清 /data storage(只有退出世界才清), 上一轮残留的栈会跟着进来;
+#     ② 2026-10-10 之前它是"单层 compound", 老结构残留会让新的 prepend 直接失败
+#        ⇒ 备份静默丢失。在这里一次性删干净, in_bak 就不必自己判类型。
+#   函数执行是同步的, load 不可能在别人的 in_bak / in_restore 中间插进来, 清得安全。
+data remove storage zx:bak in
+
+# ---- 回手(消耗型武器)的持久记账(2026-10-10, 修 R01 / R06) ----
+#   ★ 为什么用【计分项】而不是实体 tag:
+#       tag 随实体消失 —— 玩家在"消耗 -> 回手"这 1 tick 之间掉线/死亡重生,
+#       tag 就没了, 每秒那条兜底(internal/itembackup/recover)会判错手,
+#       于是把备份那把刀写进错误的槽位。计分项是挂在玩家名下的持久数据,
+#       重连/重生都还在, 兜底才能做出正确判断。
+#   zx.ret_slot = **这一下是从哪一格消耗掉的**, 取值:
+#        0..8  = 主手, 值为消耗那一刻的快捷栏下标(SelectedItemSlot)
+#        -1    = 这一下是副手放的(副手没有"选中格"概念, 写回 weapon.offhand)
+#        -2    = 没有待归还(回手成功或倒计时放弃后复位)
+#   ★ 老版本没有它, 回手写 weapon.mainhand(= **当前选中**的快捷栏格) ——
+#     消耗后 1 tick 内滚轮切一下格子, 武器就会被塞进新选中的那一格,
+#     **把那一格原有的物品直接顶掉**(item replace 不掉落, 凭空消失)。见 R01。
+execute unless data storage zx:config obj_ret_slot run scoreboard objectives add zx.ret_slot dummy
+execute unless data storage zx:config obj_ret_slot run data modify storage zx:config obj_ret_slot set value 1b
+
+#   zx.ret_pend = 待归还**倒计时(单位: 秒)**。
+#        0      = 没有待归还
+#        1..20  = 还有待归还, 每秒由 recover 重试一次, 归零就放弃
+#   ★ 为什么要有倒计时而不是一直重试: 万一某个极端时序让目标格长期占用,
+#     不加倒计时的话这个标记会永久挂着, 之后每秒都白扫一遍这个玩家。
+#     20 秒足够覆盖"掉线重连 / 死亡重生 / 临时挪走占位的物品"这几种情况。
+execute unless data storage zx:config obj_ret_pend run scoreboard objectives add zx.ret_pend dummy
+execute unless data storage zx:config obj_ret_pend run data modify storage zx:config obj_ret_pend set value 1b

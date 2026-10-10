@@ -6,21 +6,13 @@
         "type": "minecraft:score",
         "target": {
           "type": "minecraft:fixed",
-          "name": "#dezero"
-        },
-        "score": "zx.meta"
-      },
-      {
-        "type": "minecraft:score",
-        "target": {
-          "type": "minecraft:fixed",
           "name": "#deidle"
         },
         "score": "zx.meta"
       }
     ],
     "mode": "replace_section",
-    "offset": 0,
-    "size": 2
+    "offset": 1,
+    "size": 1
   }
 }

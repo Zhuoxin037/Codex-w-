@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "rogue_star": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "ol_rogue_star"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:overlimit/apply/rogue_star"
+    }
+}

@@ -1,0 +1,348 @@
+{
+  "credit": "天使核心：渐散金白圣光、上行金丝、落点光环；每柱一个实体。",
+  "ambientocclusion": false,
+  "gui_light": "front",
+  "textures": {
+    "core": "sweetdream:item/light_core_v3",
+    "glow": "sweetdream:item/light_glow_v3",
+    "thread": "sweetdream:item/light_thread_v3",
+    "seal": "sweetdream:item/light_seal_v3",
+    "particle": "sweetdream:item/light_core_v3",
+    "origin": "sweetdream:item/light_origin_v3"
+  },
+  "elements": [
+    {
+      "name": "高斯暖白光芯",
+      "from": [
+        2,
+        0,
+        7.99
+      ],
+      "to": [
+        14,
+        16,
+        8.01
+      ],
+      "shade": false,
+      "light_emission": 15,
+      "faces": {
+        "north": {
+          "texture": "#core",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#core",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      },
+      "rotation": {
+        "axis": "y",
+        "angle": -45,
+        "origin": [
+          8,
+          8,
+          8
+        ]
+      }
+    },
+    {
+      "name": "高斯暖白光芯",
+      "from": [
+        2,
+        0,
+        7.99
+      ],
+      "to": [
+        14,
+        16,
+        8.01
+      ],
+      "shade": false,
+      "light_emission": 15,
+      "faces": {
+        "north": {
+          "texture": "#core",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#core",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "高斯暖白光芯",
+      "from": [
+        2,
+        0,
+        7.99
+      ],
+      "to": [
+        14,
+        16,
+        8.01
+      ],
+      "shade": false,
+      "light_emission": 15,
+      "faces": {
+        "north": {
+          "texture": "#core",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#core",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      },
+      "rotation": {
+        "axis": "y",
+        "angle": 45,
+        "origin": [
+          8,
+          8,
+          8
+        ]
+      }
+    },
+    {
+      "name": "高斯暖白光芯_侧面",
+      "from": [
+        7.99,
+        0,
+        2
+      ],
+      "to": [
+        8.01,
+        16,
+        14
+      ],
+      "shade": false,
+      "light_emission": 15,
+      "faces": {
+        "east": {
+          "texture": "#core",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#core",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "柔光_正面",
+      "from": [
+        2,
+        0,
+        7.99
+      ],
+      "to": [
+        14,
+        16,
+        8.01
+      ],
+      "shade": false,
+      "light_emission": 15,
+      "faces": {
+        "north": {
+          "texture": "#glow",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#glow",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "柔光_侧面",
+      "from": [
+        7.99,
+        0,
+        2
+      ],
+      "to": [
+        8.01,
+        16,
+        14
+      ],
+      "shade": false,
+      "light_emission": 15,
+      "faces": {
+        "east": {
+          "texture": "#glow",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#glow",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "上行金丝_正面",
+      "from": [
+        3,
+        0,
+        7.97
+      ],
+      "to": [
+        13,
+        16,
+        8.03
+      ],
+      "shade": false,
+      "light_emission": 15,
+      "faces": {
+        "north": {
+          "texture": "#thread",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#thread",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "上行金丝_侧面",
+      "from": [
+        7.97,
+        0,
+        3
+      ],
+      "to": [
+        8.03,
+        16,
+        13
+      ],
+      "shade": false,
+      "light_emission": 15,
+      "faces": {
+        "east": {
+          "texture": "#thread",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#thread",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "落点圣光环",
+      "from": [
+        -4,
+        0.018,
+        -4
+      ],
+      "to": [
+        20,
+        0.022,
+        20
+      ],
+      "shade": false,
+      "light_emission": 15,
+      "faces": {
+        "up": {
+          "texture": "#seal",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#seal",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -13,6 +13,10 @@
 # 【为什么每秒不是每刻】"手持自动点燃"是状态维持, 每秒扫一次足够, 也没必要每刻读魔力。
 # ============================================================
 
+# ★ 外观兜底: 先把手持的火种按当前状态刷一遍(拿到剑 / 换到手 / 刚进世界 —— 1 秒内补上模型)
+#   状态翻转的当刻另外在 burn / dark 里各调一次, 所以这里只负责"漏网的一秒"。
+function sweetdream:equipment/sword/tinder/visual/sync
+
 # 主手必须是火种(手持 = 主手拿着)
 execute unless items entity @s weapon.mainhand netherite_sword[custom_data~{zx:["tinder"]}] run return 0
 
@@ -36,5 +40,7 @@ execute if data storage manacore:out r{success:0b} run return 0
 
 # 点燃
 scoreboard players set @s zx.td_on 1
+#   ★ 当刻同步外观(顶部那次 sync 跑在点燃之前, 那时还是熄灭态)
+function sweetdream:equipment/sword/tinder/visual/sync
 execute at @s run particle minecraft:flame ~ ~1 ~ 0.5 0.6 0.5 0.02 24 normal
 execute at @s run playsound minecraft:item.firecharge.use player @a ~ ~ ~ 0.9 1.0

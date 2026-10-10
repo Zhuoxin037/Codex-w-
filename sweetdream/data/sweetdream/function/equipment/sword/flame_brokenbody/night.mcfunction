@@ -12,10 +12,8 @@
 # ① 数一数有几只
 execute store result score #n zx.meta run execute if entity @e[tag=zx.fb_night]
 
-# ② 冷却立即结束(不是"减 3 秒", 是直接归零)
-data modify storage manacore:in arg set value {uuid:"",skill:"sweetdream:flame_brokenbody"}
-data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/cooldown/reset
+# ② 冷却立即结束 —— 2026-10-08: 挪到 cast ⑧-3 统一刷(那里还覆盖"只有流火"的情况)
+#   (留个空位, 免得以后有人又在这里刷一遍)
 
 # ③ 吸收: 每只 +1 熔浆, 并把「夜火」摘掉
 scoreboard players operation @s zx.fb_lava += #n zx.meta

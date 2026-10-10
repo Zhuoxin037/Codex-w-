@@ -41,7 +41,18 @@ execute at @s run function sweetdream:api/damage
 tag @e[tag=zx.ac_c] remove zx.status.shenghen
 scoreboard players reset @e[tag=zx.ac_c] zx.sh_t
 execute at @e[tag=zx.ac_c] run particle minecraft:enchant ~ ~1 ~ 0.3 0.3 0.3 0.05 12 normal
-execute at @s run playsound minecraft:block.beacon.deactivate player @a ~ ~ ~ 0.7 1.3
+# 「圣痕」被引爆: 在每个中心生物脚下升起一道圣光柱(2026-10-08)
+#   ★ 必须 `as ... at @s`: beam 里用 `at @s` 定位 —— 只写 `at @e[...]` 的话 @s 还是施法者,
+#     光柱会全堆在玩家脚下(RULES 坑 61/62)。
+execute as @e[tag=zx.ac_c,distance=0..] at @s run function sweetdream:equipment/axe/angel_core/beam
+# 【引爆音效 2026-10-08 改版】用户: "音效没有啥感觉, 没力气"。
+#   原来这一下是 `block.beacon.deactivate 0.7 1.3` —— 那是**关机**的泄气音, 方向完全反了。
+#   现在换成一记重击的三层(响在施法者处 = "我这一下砸出去了"):
+#     lightning_bolt.impact(落雷撞击, 低沉) + bell.use(压低的大钟 = 圣/庄严)
+#     + generic.explode(爆开, 音高 1.35 收短)
+execute at @s run playsound minecraft:entity.lightning_bolt.impact player @a ~ ~ ~ 0.90 0.85
+execute at @s run playsound minecraft:block.bell.use player @a ~ ~ ~ 0.90 0.60
+execute at @s run playsound minecraft:entity.generic.explode player @a ~ ~ ~ 0.65 1.35
 
 tag @e[tag=zx.ac_c] remove zx.ac_c
 tag @e[tag=zx.ac_aoe] remove zx.ac_aoe

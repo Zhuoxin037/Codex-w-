@@ -381,7 +381,7 @@ execute unless score #d_old zx.meta = #d_new zx.meta run tellraw @s [{"text":"  
 execute unless score #d_old zx.meta = #d_new zx.meta run scoreboard players add #d_n zx.meta 1
 
 # --- 魔力上限 ---
-$execute store result score #d_new zx.meta run data get storage manacore:players."$(uuid)".stats.max_mana
+$execute store result score #d_new zx.meta run data get storage manacore:players "$(uuid)".stats.max_mana
 $execute if data storage zx:data snap."$(uuid)".o38 store result score #d_old zx.meta run data get storage zx:data snap."$(uuid)".o38
 $execute unless data storage zx:data snap."$(uuid)".o38 run scoreboard players set #d_old zx.meta 0
 $execute store result storage zx:data snap."$(uuid)".o38 int 1 run scoreboard players get #d_new zx.meta
@@ -389,7 +389,7 @@ execute unless score #d_old zx.meta = #d_new zx.meta run tellraw @s [{"text":"  
 execute unless score #d_old zx.meta = #d_new zx.meta run scoreboard players add #d_n zx.meta 1
 
 # --- 基础攻击力 ---
-$execute store result score #d_new zx.meta run data get storage manacore:players."$(uuid)".stats.base_attack
+$execute store result score #d_new zx.meta run data get storage manacore:players "$(uuid)".stats.base_attack
 $execute if data storage zx:data snap."$(uuid)".o39 store result score #d_old zx.meta run data get storage zx:data snap."$(uuid)".o39
 $execute unless data storage zx:data snap."$(uuid)".o39 run scoreboard players set #d_old zx.meta 0
 $execute store result storage zx:data snap."$(uuid)".o39 int 1 run scoreboard players get #d_new zx.meta
@@ -397,7 +397,7 @@ execute unless score #d_old zx.meta = #d_new zx.meta run tellraw @s [{"text":"  
 execute unless score #d_old zx.meta = #d_new zx.meta run scoreboard players add #d_n zx.meta 1
 
 # --- 技能倍率 ---
-$execute store result score #d_new zx.meta run data get storage manacore:players."$(uuid)".stats.skill_multiplier
+$execute store result score #d_new zx.meta run data get storage manacore:players "$(uuid)".stats.skill_multiplier
 $execute if data storage zx:data snap."$(uuid)".o40 store result score #d_old zx.meta run data get storage zx:data snap."$(uuid)".o40
 $execute unless data storage zx:data snap."$(uuid)".o40 run scoreboard players set #d_old zx.meta 0
 $execute store result storage zx:data snap."$(uuid)".o40 int 1 run scoreboard players get #d_new zx.meta
@@ -405,7 +405,7 @@ execute unless score #d_old zx.meta = #d_new zx.meta run tellraw @s [{"text":"  
 execute unless score #d_old zx.meta = #d_new zx.meta run scoreboard players add #d_n zx.meta 1
 
 # --- 独立乘区 ---
-$execute store result score #d_new zx.meta run data get storage manacore:players."$(uuid)".stats.independent_multiplier
+$execute store result score #d_new zx.meta run data get storage manacore:players "$(uuid)".stats.independent_multiplier
 $execute if data storage zx:data snap."$(uuid)".o41 store result score #d_old zx.meta run data get storage zx:data snap."$(uuid)".o41
 $execute unless data storage zx:data snap."$(uuid)".o41 run scoreboard players set #d_old zx.meta 0
 $execute store result storage zx:data snap."$(uuid)".o41 int 1 run scoreboard players get #d_new zx.meta
@@ -413,7 +413,7 @@ execute unless score #d_old zx.meta = #d_new zx.meta run tellraw @s [{"text":"  
 execute unless score #d_old zx.meta = #d_new zx.meta run scoreboard players add #d_n zx.meta 1
 
 # --- 固定伤害 ---
-$execute store result score #d_new zx.meta run data get storage manacore:players."$(uuid)".stats.custom_damage
+$execute store result score #d_new zx.meta run data get storage manacore:players "$(uuid)".stats.custom_damage
 $execute if data storage zx:data snap."$(uuid)".o42 store result score #d_old zx.meta run data get storage zx:data snap."$(uuid)".o42
 $execute unless data storage zx:data snap."$(uuid)".o42 run scoreboard players set #d_old zx.meta 0
 $execute store result storage zx:data snap."$(uuid)".o42 int 1 run scoreboard players get #d_new zx.meta
@@ -421,7 +421,7 @@ execute unless score #d_old zx.meta = #d_new zx.meta run tellraw @s [{"text":"  
 execute unless score #d_old zx.meta = #d_new zx.meta run scoreboard players add #d_n zx.meta 1
 
 # --- 面板生命上限 ---
-$execute store result score #d_new zx.meta run data get storage manacore:players."$(uuid)".stats.max_health
+$execute store result score #d_new zx.meta run data get storage manacore:players "$(uuid)".stats.max_health
 $execute if data storage zx:data snap."$(uuid)".o43 store result score #d_old zx.meta run data get storage zx:data snap."$(uuid)".o43
 $execute unless data storage zx:data snap."$(uuid)".o43 run scoreboard players set #d_old zx.meta 0
 $execute store result storage zx:data snap."$(uuid)".o43 int 1 run scoreboard players get #d_new zx.meta
@@ -429,7 +429,7 @@ execute unless score #d_old zx.meta = #d_new zx.meta run tellraw @s [{"text":"  
 execute unless score #d_old zx.meta = #d_new zx.meta run scoreboard players add #d_n zx.meta 1
 
 # --- 冷却缩减 ---
-$execute store result score #d_new zx.meta run data get storage manacore:players."$(uuid)".stats.cooldown_reduction
+$execute store result score #d_new zx.meta run data get storage manacore:players "$(uuid)".stats.cooldown_reduction
 $execute if data storage zx:data snap."$(uuid)".o44 store result score #d_old zx.meta run data get storage zx:data snap."$(uuid)".o44
 $execute unless data storage zx:data snap."$(uuid)".o44 run scoreboard players set #d_old zx.meta 0
 $execute store result storage zx:data snap."$(uuid)".o44 int 1 run scoreboard players get #d_new zx.meta

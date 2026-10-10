@@ -1,150 +1,464 @@
 {
- "credit": "终末天启·实体光柱(以撒风: 白亮实心核 + 半透明暖白外辉)。元素沿 model Z 铺 0..16px = 1 格, 由 beam_new 的 transformation scale [1,1,16] 拉成 16 格长条; 模型在 display 上以实体位置为中心, 所以条子在视线方向前后各 8 格 —— 生成点定在 '眼睛下方 0.45、前方 8 格', 整条正好从眼前铺到 16 格外。★ 别改 from/to 的 z 跨度(改了'中心对齐'就破了, 光柱会从半截处开始); ★ 贴图必须是四边对称的软边图(见 _gen_fr_beam.py 的说明), 换成平贴图 (白混凝土/白玻璃)就退回'塑料棍'观感。",
- "ambientocclusion": false,
- "gui_light": "front",
- "textures": {
-  "glow": "sweetdream:item/fr_beam_glow",
-  "core": "sweetdream:item/fr_beam_core",
-  "particle": "sweetdream:item/fr_beam_glow"
- },
- "elements": [
-  {
-   "name": "光柱_外辉(暖白渐隐)",
-   "from": [
-    2,
-    2,
-    0
-   ],
-   "to": [
-    14,
-    14,
-    16
-   ],
-   "faces": {
-    "down": {
-     "texture": "#glow",
-     "uv": [
-      0,
-      0,
-      16,
-      16
-     ]
-    },
-    "up": {
-     "texture": "#glow",
-     "uv": [
-      0,
-      0,
-      16,
-      16
-     ]
-    },
-    "north": {
-     "texture": "#glow",
-     "uv": [
-      0,
-      0,
-      16,
-      16
-     ]
-    },
-    "south": {
-     "texture": "#glow",
-     "uv": [
-      0,
-      0,
-      16,
-      16
-     ]
-    },
-    "west": {
-     "texture": "#glow",
-     "uv": [
-      0,
-      0,
-      16,
-      16
-     ]
-    },
-    "east": {
-     "texture": "#glow",
-     "uv": [
-      0,
-      0,
-      16,
-      16
-     ]
-    }
-   }
+  "credit": "终末天启：连续白金光芯与朝前流动的金丝；保留原 16 格长度及视线跟随。",
+  "ambientocclusion": false,
+  "gui_light": "front",
+  "textures": {
+    "core": "sweetdream:item/light_core_v3",
+    "glow": "sweetdream:item/light_glow_v3",
+    "thread": "sweetdream:item/light_thread_v3",
+    "seal": "sweetdream:item/light_seal_v3",
+    "particle": "sweetdream:item/light_core_v3",
+    "origin": "sweetdream:item/light_origin_v3"
   },
-  {
-   "name": "光柱_亮核(纯白渐隐, 比外辉短一截)",
-   "from": [
-    5,
-    5,
-    2
-   ],
-   "to": [
-    11,
-    11,
-    14
-   ],
-   "faces": {
-    "down": {
-     "texture": "#core",
-     "uv": [
-      0,
-      0,
-      16,
-      16
-     ]
+  "elements": [
+    {
+      "name": "高斯暖白光芯",
+      "from": [
+        2,
+        7.99,
+        0
+      ],
+      "to": [
+        14,
+        8.01,
+        16
+      ],
+      "shade": false,
+      "light_emission": 15,
+      "faces": {
+        "up": {
+          "texture": "#core",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "rotation": 180
+        },
+        "down": {
+          "texture": "#core",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      },
+      "rotation": {
+        "axis": "z",
+        "angle": -45,
+        "origin": [
+          8,
+          8,
+          8
+        ]
+      }
     },
-    "up": {
-     "texture": "#core",
-     "uv": [
-      0,
-      0,
-      16,
-      16
-     ]
+    {
+      "name": "高斯暖白光芯",
+      "from": [
+        2,
+        7.99,
+        0
+      ],
+      "to": [
+        14,
+        8.01,
+        16
+      ],
+      "shade": false,
+      "light_emission": 15,
+      "faces": {
+        "up": {
+          "texture": "#core",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "rotation": 180
+        },
+        "down": {
+          "texture": "#core",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
     },
-    "north": {
-     "texture": "#core",
-     "uv": [
-      0,
-      0,
-      16,
-      16
-     ]
+    {
+      "name": "高斯暖白光芯",
+      "from": [
+        2,
+        7.99,
+        0
+      ],
+      "to": [
+        14,
+        8.01,
+        16
+      ],
+      "shade": false,
+      "light_emission": 15,
+      "faces": {
+        "up": {
+          "texture": "#core",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "rotation": 180
+        },
+        "down": {
+          "texture": "#core",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      },
+      "rotation": {
+        "axis": "z",
+        "angle": 45,
+        "origin": [
+          8,
+          8,
+          8
+        ]
+      }
     },
-    "south": {
-     "texture": "#core",
-     "uv": [
-      0,
-      0,
-      16,
-      16
-     ]
+    {
+      "name": "高斯暖白光芯_侧面",
+      "from": [
+        7.99,
+        2,
+        0
+      ],
+      "to": [
+        8.01,
+        14,
+        16
+      ],
+      "shade": false,
+      "light_emission": 15,
+      "faces": {
+        "east": {
+          "texture": "#core",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "rotation": 270
+        },
+        "west": {
+          "texture": "#core",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "rotation": 90
+        }
+      }
     },
-    "west": {
-     "texture": "#core",
-     "uv": [
-      0,
-      0,
-      16,
-      16
-     ]
+    {
+      "name": "柔光_正面",
+      "from": [
+        2,
+        7.99,
+        0
+      ],
+      "to": [
+        14,
+        8.01,
+        16
+      ],
+      "shade": false,
+      "light_emission": 15,
+      "faces": {
+        "up": {
+          "texture": "#glow",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "rotation": 180
+        },
+        "down": {
+          "texture": "#glow",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
     },
-    "east": {
-     "texture": "#core",
-     "uv": [
-      0,
-      0,
-      16,
-      16
-     ]
+    {
+      "name": "柔光_侧面",
+      "from": [
+        7.99,
+        2,
+        0
+      ],
+      "to": [
+        8.01,
+        14,
+        16
+      ],
+      "shade": false,
+      "light_emission": 15,
+      "faces": {
+        "east": {
+          "texture": "#glow",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "rotation": 270
+        },
+        "west": {
+          "texture": "#glow",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "rotation": 90
+        }
+      }
+    },
+    {
+      "name": "上行金丝_正面",
+      "from": [
+        3,
+        7.970000000000001,
+        0
+      ],
+      "to": [
+        13,
+        8.030000000000001,
+        16
+      ],
+      "shade": false,
+      "light_emission": 15,
+      "faces": {
+        "up": {
+          "texture": "#thread",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "rotation": 180
+        },
+        "down": {
+          "texture": "#thread",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "上行金丝_侧面",
+      "from": [
+        7.97,
+        3,
+        0
+      ],
+      "to": [
+        8.03,
+        13,
+        16
+      ],
+      "shade": false,
+      "light_emission": 15,
+      "faces": {
+        "east": {
+          "texture": "#thread",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "rotation": 270
+        },
+        "west": {
+          "texture": "#thread",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "rotation": 90
+        }
+      }
+    },
+    {
+      "name": "脉冲光环",
+      "from": [
+        3,
+        3,
+        1.995
+      ],
+      "to": [
+        13,
+        13,
+        2.005
+      ],
+      "shade": false,
+      "light_emission": 15,
+      "faces": {
+        "north": {
+          "texture": "#seal",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#seal",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "脉冲光环",
+      "from": [
+        3,
+        3,
+        7.995
+      ],
+      "to": [
+        13,
+        13,
+        8.005
+      ],
+      "shade": false,
+      "light_emission": 15,
+      "faces": {
+        "north": {
+          "texture": "#seal",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#seal",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "脉冲光环",
+      "from": [
+        3,
+        3,
+        13.995
+      ],
+      "to": [
+        13,
+        13,
+        14.005
+      ],
+      "shade": false,
+      "light_emission": 15,
+      "faces": {
+        "north": {
+          "texture": "#seal",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#seal",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "name": "脸前_简洁金白法阵",
+      "from": [
+        -8,
+        -8,
+        0.545
+      ],
+      "to": [
+        24,
+        24,
+        0.555
+      ],
+      "shade": false,
+      "light_emission": 15,
+      "faces": {
+        "north": {
+          "texture": "#origin",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#origin",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
     }
-   }
-  }
- ]
+  ]
 }

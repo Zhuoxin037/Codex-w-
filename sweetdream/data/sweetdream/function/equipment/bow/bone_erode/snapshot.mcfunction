@@ -1,9 +1,9 @@
 # ============================================================
 # sweetdream:equipment/bow/bone_erode/snapshot —— 把"这一发"写进箭自己身上(宏)
 # ------------------------------------------------------------
-# 【宏参数】zx:work be {dmg,u0,u1,u2,u3}
+# 【宏参数】zx:work be {dmg,ol,u0,u1,u2,u3}
 # 【执行者】那支**刚射出去**的箭(tag=!zx.cc_seen 精确挑出来)
 # 【写哪】实体 data.zx.be —— 逐箭快照, 命中时优先读它(连射不被后发覆盖)。
 # ============================================================
 
-$data modify entity @s data.zx.be set value {ok:1b,dmg:$(dmg),u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+$data modify entity @s data.zx.be set value {ok:1b,dmg:$(dmg),ol:$(ol),u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}

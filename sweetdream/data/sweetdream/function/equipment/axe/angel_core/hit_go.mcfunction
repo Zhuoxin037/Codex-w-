@@ -46,6 +46,16 @@ execute if data storage manacore:out r{success:0b} run tag @e[tag=zx.ac_t] remov
 execute if data storage manacore:out r{success:0b} run return 0
 
 # ⑥ 只给"还没有圣痕"的加(已有的不重复给), 音效响一次
+# 【音效 2026-10-08 改版】用户: "音效没有啥感觉, 没力气"。
+#   原来只有 `block.amethyst_block.chime 0.6 1.6` —— 音量 0.6、音高 1.6,
+#   又轻又尖, 就是"叮"一下。现在改成"刻印/祝福"三层:
+#     ① amethyst_block.chime  —— 亮片, 听得出"光"
+#     ② enchantment_table.use —— 附魔台的过气声, 一记"刻上去"的动作感
+#     ③ beacon.activate ×1.5  —— 抬高的启明音, 给一点向上的力量
+#   ★ 位置仍是 `at @s`(玩家处): 这是"我打出这一下"的反馈, 该响在自己身上;
+#     光柱/命中那些响在**生物处**的声由 beam / dmg2 各自负责。
 execute as @e[tag=zx.ac_t] unless entity @s[tag=zx.status.shenghen] run function sweetdream:equipment/axe/angel_core/mark
-execute at @s run playsound minecraft:block.amethyst_block.chime player @a ~ ~ ~ 0.6 1.6
+execute at @s run playsound minecraft:block.amethyst_block.chime player @a ~ ~ ~ 1.00 1.30
+execute at @s run playsound minecraft:block.enchantment_table.use player @a ~ ~ ~ 0.85 1.25
+execute at @s run playsound minecraft:block.beacon.activate player @a ~ ~ ~ 0.75 1.50
 tag @e[tag=zx.ac_t] remove zx.ac_t

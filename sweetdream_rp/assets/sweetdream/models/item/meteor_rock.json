@@ -1,0 +1,425 @@
+{
+ "credit": "陨星·陨石(9 块不规则碎石拼成, 各自绕**自己中心**翻一个身, 轮廓与贴图接缝都错开)。★ 元素刻意不写 uv ⇒ 走 auto-uv, 每块各自取贴图不同部位, 不会每块长得一样。★ ★ MC 1.21.5 的 rotation.angle 只有 -45/-22.5/0/22.5/45 五个合法值 —— 写 22 或 38 会让**整份模型加载失败**(游戏里是一坨'紫黑方块')。2026-10-08 踩过。★ 原点用**各自中心**而不是(8,8,8): 角度上限收到 45 之后, 再绕公共原点转会把块甩出去、散架。★ MC 的元素 rotation 一次只能挂**一个轴**(多轴必须拆元素), 所以靠'不同块用不同轴+正负号'造不规则。★ 尺寸: 物品模型 [0,16] 以实体位置为中心 + 均匀 scale ⇒ 16 单位 = scale 那么多格; 数据包侧 scale 1.4 ⇒ 陨石约 1.4 格。★ 落地炸开在数据包侧(meteor/rock_tick), 这里只管那块石头。",
+ "ambientocclusion": false,
+ "gui_light": "front",
+ "textures": {
+  "rock": "sweetdream:item/meteor_rock",
+  "particle": "sweetdream:item/meteor_rock"
+ },
+ "elements": [
+  {
+   "name": "核",
+   "from": [
+    3.5,
+    3,
+    3.5
+   ],
+   "to": [
+    12.5,
+    12,
+    12.5
+   ],
+   "faces": {
+    "down": {
+     "texture": "#rock"
+    },
+    "up": {
+     "texture": "#rock"
+    },
+    "north": {
+     "texture": "#rock"
+    },
+    "south": {
+     "texture": "#rock"
+    },
+    "west": {
+     "texture": "#rock"
+    },
+    "east": {
+     "texture": "#rock"
+    }
+   },
+   "rotation": {
+    "origin": [
+     8.0,
+     7.5,
+     8.0
+    ],
+    "axis": "y",
+    "angle": 22.5
+   }
+  },
+  {
+   "name": "左突块",
+   "from": [
+    0,
+    4.5,
+    4
+   ],
+   "to": [
+    5,
+    10,
+    10
+   ],
+   "faces": {
+    "down": {
+     "texture": "#rock"
+    },
+    "up": {
+     "texture": "#rock"
+    },
+    "north": {
+     "texture": "#rock"
+    },
+    "south": {
+     "texture": "#rock"
+    },
+    "west": {
+     "texture": "#rock"
+    },
+    "east": {
+     "texture": "#rock"
+    }
+   },
+   "rotation": {
+    "origin": [
+     2.5,
+     7.25,
+     7.0
+    ],
+    "axis": "x",
+    "angle": 22.5
+   }
+  },
+  {
+   "name": "右突块",
+   "from": [
+    10,
+    2,
+    2
+   ],
+   "to": [
+    16,
+    7,
+    8
+   ],
+   "faces": {
+    "down": {
+     "texture": "#rock"
+    },
+    "up": {
+     "texture": "#rock"
+    },
+    "north": {
+     "texture": "#rock"
+    },
+    "south": {
+     "texture": "#rock"
+    },
+    "west": {
+     "texture": "#rock"
+    },
+    "east": {
+     "texture": "#rock"
+    }
+   },
+   "rotation": {
+    "origin": [
+     13.0,
+     4.5,
+     5.0
+    ],
+    "axis": "y",
+    "angle": -45
+   }
+  },
+  {
+   "name": "顶块",
+   "from": [
+    4,
+    11,
+    5
+   ],
+   "to": [
+    11.5,
+    16.5,
+    11.5
+   ],
+   "faces": {
+    "down": {
+     "texture": "#rock"
+    },
+    "up": {
+     "texture": "#rock"
+    },
+    "north": {
+     "texture": "#rock"
+    },
+    "south": {
+     "texture": "#rock"
+    },
+    "west": {
+     "texture": "#rock"
+    },
+    "east": {
+     "texture": "#rock"
+    }
+   },
+   "rotation": {
+    "origin": [
+     7.75,
+     13.75,
+     8.25
+    ],
+    "axis": "z",
+    "angle": 22.5
+   }
+  },
+  {
+   "name": "上碎块",
+   "from": [
+    10.5,
+    9,
+    9.5
+   ],
+   "to": [
+    15.5,
+    14,
+    15
+   ],
+   "faces": {
+    "down": {
+     "texture": "#rock"
+    },
+    "up": {
+     "texture": "#rock"
+    },
+    "north": {
+     "texture": "#rock"
+    },
+    "south": {
+     "texture": "#rock"
+    },
+    "west": {
+     "texture": "#rock"
+    },
+    "east": {
+     "texture": "#rock"
+    }
+   },
+   "rotation": {
+    "origin": [
+     13.0,
+     11.5,
+     12.25
+    ],
+    "axis": "x",
+    "angle": -22.5
+   }
+  },
+  {
+   "name": "下碎块",
+   "from": [
+    1.5,
+    1,
+    8.5
+   ],
+   "to": [
+    7.5,
+    6,
+    14.5
+   ],
+   "faces": {
+    "down": {
+     "texture": "#rock"
+    },
+    "up": {
+     "texture": "#rock"
+    },
+    "north": {
+     "texture": "#rock"
+    },
+    "south": {
+     "texture": "#rock"
+    },
+    "west": {
+     "texture": "#rock"
+    },
+    "east": {
+     "texture": "#rock"
+    }
+   },
+   "rotation": {
+    "origin": [
+     4.5,
+     3.5,
+     11.5
+    ],
+    "axis": "z",
+    "angle": -45
+   }
+  },
+  {
+   "name": "前突块",
+   "from": [
+    2.5,
+    6.5,
+    10.5
+   ],
+   "to": [
+    8.5,
+    12,
+    16
+   ],
+   "faces": {
+    "down": {
+     "texture": "#rock"
+    },
+    "up": {
+     "texture": "#rock"
+    },
+    "north": {
+     "texture": "#rock"
+    },
+    "south": {
+     "texture": "#rock"
+    },
+    "west": {
+     "texture": "#rock"
+    },
+    "east": {
+     "texture": "#rock"
+    }
+   },
+   "rotation": {
+    "origin": [
+     5.5,
+     9.25,
+     13.25
+    ],
+    "axis": "y",
+    "angle": 45
+   }
+  },
+  {
+   "name": "后碎块",
+   "from": [
+    1,
+    8,
+    0.5
+   ],
+   "to": [
+    6.5,
+    13,
+    5.5
+   ],
+   "faces": {
+    "down": {
+     "texture": "#rock"
+    },
+    "up": {
+     "texture": "#rock"
+    },
+    "north": {
+     "texture": "#rock"
+    },
+    "south": {
+     "texture": "#rock"
+    },
+    "west": {
+     "texture": "#rock"
+    },
+    "east": {
+     "texture": "#rock"
+    }
+   },
+   "rotation": {
+    "origin": [
+     3.75,
+     10.5,
+     3.0
+    ],
+    "axis": "x",
+    "angle": -45
+   }
+  },
+  {
+   "name": "侧小块",
+   "from": [
+    11.5,
+    11,
+    3
+   ],
+   "to": [
+    16,
+    15,
+    7.5
+   ],
+   "faces": {
+    "down": {
+     "texture": "#rock"
+    },
+    "up": {
+     "texture": "#rock"
+    },
+    "north": {
+     "texture": "#rock"
+    },
+    "south": {
+     "texture": "#rock"
+    },
+    "west": {
+     "texture": "#rock"
+    },
+    "east": {
+     "texture": "#rock"
+    }
+   },
+   "rotation": {
+    "origin": [
+     13.75,
+     13.0,
+     5.25
+    ],
+    "axis": "z",
+    "angle": -22.5
+   }
+  }
+ ],
+ "display": {
+  "ground": {
+   "rotation": [
+    0,
+    0,
+    0
+   ],
+   "translation": [
+    0,
+    2,
+    0
+   ],
+   "scale": [
+    0.25,
+    0.25,
+    0.25
+   ]
+  },
+  "gui": {
+   "rotation": [
+    30,
+    45,
+    0
+   ],
+   "translation": [
+    0,
+    0,
+    0
+   ],
+   "scale": [
+    0.3,
+    0.3,
+    0.3
+   ]
+  }
+ }
+}

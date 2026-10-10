@@ -28,9 +28,13 @@ execute if items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["itemrep
 execute unless items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["itemreplace"]}] if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["itemreplace"]}] run tellraw @s [{"text":"③ 下一刀会被判成: 副手触发 -> 还回副手","color":"aqua"}]
 execute unless items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["itemreplace"]}] unless items entity @s weapon.offhand *[minecraft:custom_data~{zx:["itemreplace"]}] run tellraw @s [{"text":"③ 手上没有本包武器, 右键不会触发回手","color":"dark_gray"}]
 
-# ④ 上一次的槽位标记(回手做完就该是 0)
-execute if entity @s[tag=zx.ret_off] run tellraw @s [{"text":"④ 残留标记 zx.ret_off: 在(上一次是副手, 或回手没跑到)","color":"yellow"}]
-execute unless entity @s[tag=zx.ret_off] run tellraw @s [{"text":"④ 残留标记 zx.ret_off: 无 ✓","color":"dark_gray"}]
+# ④ 上一次的回手记账(2026-10-10 起读计分项: tag 会随实体消失, 重连后查不到)
+#    -2 = 干净(无待归还) / -1 = 上一次是副手 / 0..8 = 上一次应还到 hotbar.<n>
+execute if score @s zx.ret_slot matches -2 run tellraw @s [{"text":"④ 回手记账: 干净 ✓(无待归还)","color":"dark_gray"}]
+execute if score @s zx.ret_slot matches -1 run tellraw @s [{"text":"④ 回手记账: 上一次是副手(zx.ret_slot=-1)","color":"aqua"}]
+execute if score @s zx.ret_slot matches 0..8 run tellraw @s [{"text":"④ 回手记账: 上一次应还到快捷栏 "},{"score":{"name":"@s","objective":"zx.ret_slot"}},{"text":" 号格","color":"aqua"}]
+execute unless score @s zx.ret_slot matches -2..8 run tellraw @s [{"text":"④ 回手记账: 异常值(effect_2 会走老行为兜底)","color":"red"}]
+execute if score @s zx.ret_pend matches 1.. run tellraw @s [{"text":"   还有待归还, 倒计时 "},{"score":{"name":"@s","objective":"zx.ret_pend"}},{"text":" 秒(recover 每秒重试)","color":"yellow"}]
 
 # ⑤ 盔甲架备份(要宏, 因为架子标签里带 UUID)
 function sweetdream:lib/uuid

@@ -22,10 +22,17 @@
 # ⓪ 撤销自己的进度
 advancement revoke @s only sweetdream:equipment/sword/liuguang
 
-# ⓪.5 【超限分流】敲过超限石(custom_data.ol)的流光, 右键放的是「超限·流光」,
+# ⓪.5 【超限分流】敲过超限石(ol:"liuguang")的流光, 右键放的是「超限·流光」,
 #      原版技能被它顶掉 —— 见 equipment/sword/liuguang/overlimit。
-execute if data entity @s SelectedItem.components."minecraft:custom_data".ol run function sweetdream:equipment/sword/liuguang/overlimit
-execute if data entity @s SelectedItem.components."minecraft:custom_data".ol run return 0
+#   ★ 主副手都要判, 判据用 items 复合谓词 (2026-10-08 修) —— 照 myriad/is_ol 的标准写法。
+#     旧写法读 SelectedItem(只有主手那条虚拟只读路径), 而且只判 .ol 键在不在、
+#     不判 ol 是不是 "liuguang": 主手空着/拿着普通剑、**副手是超限·流光**时,
+#     会走成基础流光(20 蓝 / 1 目标 / 20 秒), 而不是超限的 120 蓝 / 4 目标 / 8 秒。
+scoreboard players set #lg_ol zx.meta 0
+execute if items entity @s weapon.mainhand iron_sword[minecraft:custom_data~{zx:["liuguang"],ol:"liuguang"}] run scoreboard players set #lg_ol zx.meta 1
+execute if items entity @s weapon.offhand iron_sword[minecraft:custom_data~{zx:["liuguang"],ol:"liuguang"}] run scoreboard players set #lg_ol zx.meta 1
+execute if score #lg_ol zx.meta matches 1 run function sweetdream:equipment/sword/liuguang/overlimit
+execute if score #lg_ol zx.meta matches 1 run return 0
 
 # ① 拿 uuid
 function sweetdream:lib/uuid

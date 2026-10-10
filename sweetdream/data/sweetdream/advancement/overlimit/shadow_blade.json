@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "shadow_blade": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "ol_shadow_blade"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:overlimit/apply/shadow_blade"
+    }
+}

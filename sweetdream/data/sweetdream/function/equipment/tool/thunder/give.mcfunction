@@ -18,4 +18,4 @@
 # 【手写文件】不是 _gen_batch5.py 的产物, 别被生成器覆盖。
 # ============================================================
 
-give @s recovery_compass[max_stack_size=1,item_name={text:"雷鸣",bold:true,color:yellow},lore=[{"text":"✦ 被动技能","color":"gold","bold":true,"italic":false},{"text":"持于副手时，自身 6 格内的生物受到雷击","color":"gray","italic":false},{"text":"后，则在 1 秒后在原地再次释放一道闪电，","color":"gray","italic":false},{"text":"闪电额外造成相当于自身最大魔力值","color":"gray","italic":false},{"text":"×0.03 的伤害。","color":"gray","italic":false}],custom_data={zx:["thunder","tool"]}]
+give @s recovery_compass[max_stack_size=1,item_name={text:"雷鸣",bold:true,color:yellow},lore=[{"text":"✦ 被动技能","color":"gold","bold":true,"italic":false},{"text":"持于副手时，自身 6 格内的生物受到雷击","color":"gray","italic":false},{"text":"后，则在 1 秒后在原地再次释放一道闪电，","color":"gray","italic":false},{"text":"闪电额外造成相当于自身最大魔力值","color":"gray","italic":false},{"text":"×0.03 的伤害。","color":"gray","italic":false}],custom_data={zx:["thunder","tool"],tags:["max_mana"]},minecraft:item_model="sweetdream:tool_thunder"]

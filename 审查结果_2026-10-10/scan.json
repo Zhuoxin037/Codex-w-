@@ -1,0 +1,309 @@
+{
+  "stats": {
+    "manacore-1.0.0": {
+      "files": 277,
+      "bytes": 326304,
+      "extensions": {
+        ".mcmeta": 1,
+        ".md": 1,
+        ".mcfunction": 262,
+        ".json": 13
+      }
+    },
+    "sweetdream": {
+      "files": 1564,
+      "bytes": 3274870,
+      "extensions": {
+        ".mcmeta": 1,
+        ".md": 2,
+        ".json": 250,
+        ".mcfunction": 1311
+      }
+    },
+    "sweetdream_rp_完整版": {
+      "files": 7550,
+      "bytes": 92500817,
+      "extensions": {
+        ".mcmeta": 36,
+        ".png": 309,
+        ".py": 1,
+        ".json": 7198,
+        ".bak-before-cast": 2,
+        ".bak-before-swapfix": 1,
+        ".bak": 1,
+        ".broken-256f": 1,
+        ".broken-84f": 1
+      }
+    },
+    "zip": {
+      "files": 7550,
+      "bytes": 11806894,
+      "corrupt_entry": null
+    },
+    "tick": {
+      "direct_commands": 113,
+      "entity_selectors": 67,
+      "player_selectors": 36
+    },
+    "equipment": {
+      "armor": 25,
+      "axe": 15,
+      "bow": 6,
+      "staff": 12,
+      "sword": 17,
+      "tool": 8
+    },
+    "upgrade_items": 25,
+    "overlimit_items": 24
+  },
+  "issues": {},
+  "largest_models": [
+    [
+      1952,
+      "sweetdream_rp_完整版/assets/flameremnant/models/item/sword.json"
+    ],
+    [
+      998,
+      "sweetdream_rp_完整版/assets/deepseaecho/models/item/sword.json"
+    ],
+    [
+      990,
+      "sweetdream_rp_完整版/assets/angelcore/models/item/axe.json"
+    ],
+    [
+      981,
+      "sweetdream_rp_完整版/assets/angelcore/models/item/parts/body.json"
+    ],
+    [
+      910,
+      "sweetdream_rp_完整版/assets/deepseaecho/models/item/liquid/base.json"
+    ],
+    [
+      739,
+      "sweetdream_rp_完整版/assets/sweetdream/models/item/aurora_dream.json"
+    ],
+    [
+      691,
+      "sweetdream_rp_完整版/assets/coldcrow/models/item/crossbow.json"
+    ],
+    [
+      663,
+      "sweetdream_rp_完整版/assets/palette/models/item/palette.json"
+    ],
+    [
+      647,
+      "sweetdream_rp_完整版/assets/dreamscythe/models/item/sickle.json"
+    ],
+    [
+      635,
+      "sweetdream_rp_完整版/assets/palette/models/item/frames/base_118.json"
+    ],
+    [
+      635,
+      "sweetdream_rp_完整版/assets/palette/models/item/frames/base_117.json"
+    ],
+    [
+      635,
+      "sweetdream_rp_完整版/assets/palette/models/item/frames/base_116.json"
+    ],
+    [
+      635,
+      "sweetdream_rp_完整版/assets/palette/models/item/frames/base_115.json"
+    ],
+    [
+      635,
+      "sweetdream_rp_完整版/assets/palette/models/item/frames/base_114.json"
+    ],
+    [
+      635,
+      "sweetdream_rp_完整版/assets/palette/models/item/frames/base_113.json"
+    ],
+    [
+      635,
+      "sweetdream_rp_完整版/assets/palette/models/item/frames/base_112.json"
+    ],
+    [
+      635,
+      "sweetdream_rp_完整版/assets/palette/models/item/frames/base_111.json"
+    ],
+    [
+      635,
+      "sweetdream_rp_完整版/assets/palette/models/item/frames/base_110.json"
+    ],
+    [
+      632,
+      "sweetdream_rp_完整版/assets/sail/models/item/staff.json"
+    ],
+    [
+      629,
+      "sweetdream_rp_完整版/assets/palette/models/item/frames/base_122.json"
+    ],
+    [
+      629,
+      "sweetdream_rp_完整版/assets/palette/models/item/frames/base_121.json"
+    ],
+    [
+      629,
+      "sweetdream_rp_完整版/assets/palette/models/item/frames/base_120.json"
+    ],
+    [
+      629,
+      "sweetdream_rp_完整版/assets/palette/models/item/frames/base_119.json"
+    ],
+    [
+      628,
+      "sweetdream_rp_完整版/assets/palette/models/item/frames/base_131.json"
+    ],
+    [
+      628,
+      "sweetdream_rp_完整版/assets/palette/models/item/frames/base_130.json"
+    ],
+    [
+      628,
+      "sweetdream_rp_完整版/assets/palette/models/item/frames/base_129.json"
+    ],
+    [
+      628,
+      "sweetdream_rp_完整版/assets/palette/models/item/frames/base_128.json"
+    ],
+    [
+      628,
+      "sweetdream_rp_完整版/assets/palette/models/item/frames/base_127.json"
+    ],
+    [
+      628,
+      "sweetdream_rp_完整版/assets/palette/models/item/frames/base_126.json"
+    ],
+    [
+      628,
+      "sweetdream_rp_完整版/assets/palette/models/item/frames/base_125.json"
+    ]
+  ],
+  "largest_functions": [
+    [
+      646,
+      "sweetdream:core/load",
+      "sweetdream/data/sweetdream/function/core/load.mcfunction"
+    ],
+    [
+      429,
+      "sweetdream:debug/give_all",
+      "sweetdream/data/sweetdream/function/debug/give_all.mcfunction"
+    ],
+    [
+      340,
+      "sweetdream:debug/diff_go",
+      "sweetdream/data/sweetdream/function/debug/diff_go.mcfunction"
+    ],
+    [
+      286,
+      "sweetdream:equipment/sword/sickle_dreams/sweep/fx/h09",
+      "sweetdream/data/sweetdream/function/equipment/sword/sickle_dreams/sweep/fx/h09.mcfunction"
+    ],
+    [
+      250,
+      "sweetdream:debug/tag_test/run",
+      "sweetdream/data/sweetdream/function/debug/tag_test/run.mcfunction"
+    ],
+    [
+      184,
+      "sweetdream:lib/reg/build",
+      "sweetdream/data/sweetdream/function/lib/reg/build.mcfunction"
+    ],
+    [
+      138,
+      "sweetdream:tg/def/load",
+      "sweetdream/data/sweetdream/function/tg/def/load.mcfunction"
+    ],
+    [
+      136,
+      "sweetdream:lib/rearm",
+      "sweetdream/data/sweetdream/function/lib/rearm.mcfunction"
+    ],
+    [
+      122,
+      "sweetdream:equipment/sword/sickle_dreams/sweep/fx/h13",
+      "sweetdream/data/sweetdream/function/equipment/sword/sickle_dreams/sweep/fx/h13.mcfunction"
+    ],
+    [
+      115,
+      "sweetdream:equipment/sword/sickle_dreams/sweep/fx/h12",
+      "sweetdream/data/sweetdream/function/equipment/sword/sickle_dreams/sweep/fx/h12.mcfunction"
+    ],
+    [
+      113,
+      "sweetdream:core/tick",
+      "sweetdream/data/sweetdream/function/core/tick.mcfunction"
+    ],
+    [
+      111,
+      "sweetdream:equipment/sword/sickle_dreams/sweep/fx/h08",
+      "sweetdream/data/sweetdream/function/equipment/sword/sickle_dreams/sweep/fx/h08.mcfunction"
+    ],
+    [
+      110,
+      "sweetdream:debug/stats",
+      "sweetdream/data/sweetdream/function/debug/stats.mcfunction"
+    ],
+    [
+      108,
+      "sweetdream:equipment/sword/sickle_dreams/sweep/fx/h11",
+      "sweetdream/data/sweetdream/function/equipment/sword/sickle_dreams/sweep/fx/h11.mcfunction"
+    ],
+    [
+      107,
+      "sweetdream:upgrade/api/bonus_take",
+      "sweetdream/data/sweetdream/function/upgrade/api/bonus_take.mcfunction"
+    ],
+    [
+      106,
+      "sweetdream:equipment/sword/sickle_dreams/sweep/fx/h07",
+      "sweetdream/data/sweetdream/function/equipment/sword/sickle_dreams/sweep/fx/h07.mcfunction"
+    ],
+    [
+      94,
+      "sweetdream:equipment/sword/sickle_dreams/sweep/fx/h10",
+      "sweetdream/data/sweetdream/function/equipment/sword/sickle_dreams/sweep/fx/h10.mcfunction"
+    ],
+    [
+      88,
+      "sweetdream:debug/snap_save",
+      "sweetdream/data/sweetdream/function/debug/snap_save.mcfunction"
+    ],
+    [
+      71,
+      "sweetdream:equipment/armor/furnace_core/passive",
+      "sweetdream/data/sweetdream/function/equipment/armor/furnace_core/passive.mcfunction"
+    ],
+    [
+      68,
+      "sweetdream:equipment/staff/wind_ontheground/skill",
+      "sweetdream/data/sweetdream/function/equipment/staff/wind_ontheground/skill.mcfunction"
+    ],
+    [
+      66,
+      "sweetdream:equipment/staff/palette/skill",
+      "sweetdream/data/sweetdream/function/equipment/staff/palette/skill.mcfunction"
+    ],
+    [
+      66,
+      "sweetdream:equipment/axe/skyvault/impact",
+      "sweetdream/data/sweetdream/function/equipment/axe/skyvault/impact.mcfunction"
+    ],
+    [
+      64,
+      "sweetdream:debug/reg_unroll",
+      "sweetdream/data/sweetdream/function/debug/reg_unroll.mcfunction"
+    ],
+    [
+      60,
+      "sweetdream:equipment/sword/sickle_dreams/sweep/fx/h05",
+      "sweetdream/data/sweetdream/function/equipment/sword/sickle_dreams/sweep/fx/h05.mcfunction"
+    ],
+    [
+      57,
+      "sweetdream:lib/skill_mul/def",
+      "sweetdream/data/sweetdream/function/lib/skill_mul/def.mcfunction"
+    ]
+  ]
+}

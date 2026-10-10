@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "sweetdream:item/vanilla/staff_final_revelation"
+  }
+}

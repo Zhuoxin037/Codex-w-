@@ -19,7 +19,9 @@
 #   #manacore:event/formation_create 里做。
 # ============================================================
 # 出参: manacore:out.success / out.reason / out.index
-data modify storage manacore:work a set value {uuid:"",id:"",type:"default",duration:0,duration_seconds:0.0}
+# 【★ 默认值里不要写 id:"" ★】空串在 `if data` 里算"存在" —— 调用方忘给 id 时会静默
+#   建出一个 `id:""` 的术阵白占一个槽位(slot_one 只判 .id 在不在, count_one 照收)。
+data modify storage manacore:work a set value {uuid:"",type:"default",duration:0,duration_seconds:0.0}
 data modify storage manacore:work a merge from storage manacore:in arg
 data modify storage manacore:out r.success set value 0b
 data modify storage manacore:out r.reason set value ""

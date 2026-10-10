@@ -1,0 +1,383 @@
+{
+  "phase": "五把像素弩已绑定完整版，寒鸦保留",
+  "hand_authored": true,
+  "image_generation_used": false,
+  "game_bound": true,
+  "item_count": 6,
+  "texture_count": 36,
+  "approved_sample_unchanged": true,
+  "excluded_ids": [
+    "cold_crow"
+  ],
+  "items": [
+    {
+      "id": "sculk_echo",
+      "name": "幽匿残响",
+      "motif": "幽匿青纹 / 回声晶核",
+      "resolution": [
+        16,
+        16
+      ],
+      "skill_lore": [
+        "✦ 主动技能",
+        "魔力 100",
+        " ",
+        "每次射击会额外积攒 10 点「悲鸣」（上限 50 点）",
+        " ",
+        "✦ 悲鸣",
+        "每次射击后都会对被射击的生物的 2 格内额外造成相当于自身基础攻击力 ×「悲鸣」值 ×0.1 的伤害，同时对发射路径周围 2 格的敌人每刻造成相当于「悲鸣」值 ×0.1 的伤害。每 1 点「悲鸣」会使该伤害有 1% 概率造成三倍伤害，触发后清除全部「悲鸣」。"
+      ],
+      "existing_model": null,
+      "game_bound": true,
+      "excluded_from_binding": false,
+      "states": [
+        {
+          "state": "standby",
+          "label": "待机",
+          "file": "D:\\数据包\\模型设计\\原版风_弩像素试绘_20261010\\贴图\\幽匿残响\\standby.png",
+          "sha256": "33ebc157d232d0c5e9111ae47c64202b1bd05d6a31b43921959dff636a243f16"
+        },
+        {
+          "state": "pulling_0",
+          "label": "拉弦 I",
+          "file": "D:\\数据包\\模型设计\\原版风_弩像素试绘_20261010\\贴图\\幽匿残响\\pulling_0.png",
+          "sha256": "38cb032fcea04ecd58efe42fafa24f9aa2dacfc88f87de8279afaa035148043a"
+        },
+        {
+          "state": "pulling_1",
+          "label": "拉弦 II",
+          "file": "D:\\数据包\\模型设计\\原版风_弩像素试绘_20261010\\贴图\\幽匿残响\\pulling_1.png",
+          "sha256": "5ef207793b54b15b6b555c339a50cbd6c317cef550dae81a4090f98a2b97dbfd"
+        },
+        {
+          "state": "pulling_2",
+          "label": "拉弦 III",
+          "file": "D:\\数据包\\模型设计\\原版风_弩像素试绘_20261010\\贴图\\幽匿残响\\pulling_2.png",
+          "sha256": "6223c944386192f63744e37b90c75232a946480150d6ab1ba79e96d4cc7023ff"
+        },
+        {
+          "state": "arrow",
+          "label": "已装填箭矢",
+          "file": "D:\\数据包\\模型设计\\原版风_弩像素试绘_20261010\\贴图\\幽匿残响\\arrow.png",
+          "sha256": "748c7fa4613f0823dcb01f15a528b8a008c289828690ba309bf2154fa7548342"
+        },
+        {
+          "state": "firework",
+          "label": "已装填烟花",
+          "file": "D:\\数据包\\模型设计\\原版风_弩像素试绘_20261010\\贴图\\幽匿残响\\firework.png",
+          "sha256": "4131b33fd8369d8b65cae73650f0f6611f7b0a3d87c571fd0ab1e43b6af96ae1"
+        }
+      ],
+      "bound_item_model": "sweetdream:crossbow_sculk_echo"
+    },
+    {
+      "id": "bone_erode",
+      "name": "蚀骨",
+      "motif": "骨质包角 / 暗红裂纹",
+      "resolution": [
+        16,
+        16
+      ],
+      "skill_lore": [
+        "✦ 主动技能",
+        "魔力 20%",
+        " ",
+        "每次射击都会对被射击的生物的 2 格内的全部生物造成相当于本次射击所消耗的魔力值 ×0.4 的伤害。"
+      ],
+      "existing_model": null,
+      "game_bound": true,
+      "excluded_from_binding": false,
+      "states": [
+        {
+          "state": "standby",
+          "label": "待机",
+          "file": "D:\\数据包\\模型设计\\原版风_弩像素试绘_20261010\\贴图\\蚀骨\\standby.png",
+          "sha256": "99061d1aeb0b6c22427cd078b72c7c78184bd35bd4ea2c6cebe4e7df3fa81b70"
+        },
+        {
+          "state": "pulling_0",
+          "label": "拉弦 I",
+          "file": "D:\\数据包\\模型设计\\原版风_弩像素试绘_20261010\\贴图\\蚀骨\\pulling_0.png",
+          "sha256": "2f79462b8ec88770522aa3a69a565329c66050937fd2e5314d6e07d641613c04"
+        },
+        {
+          "state": "pulling_1",
+          "label": "拉弦 II",
+          "file": "D:\\数据包\\模型设计\\原版风_弩像素试绘_20261010\\贴图\\蚀骨\\pulling_1.png",
+          "sha256": "e5758ad0222e932dcba3673422e2b11a29695d85b6884f0eca97ebf581106ecd"
+        },
+        {
+          "state": "pulling_2",
+          "label": "拉弦 III",
+          "file": "D:\\数据包\\模型设计\\原版风_弩像素试绘_20261010\\贴图\\蚀骨\\pulling_2.png",
+          "sha256": "51fa4780162edc586686416c0166ff1257736f3dc0e882754ee7af8124e24d5c"
+        },
+        {
+          "state": "arrow",
+          "label": "已装填箭矢",
+          "file": "D:\\数据包\\模型设计\\原版风_弩像素试绘_20261010\\贴图\\蚀骨\\arrow.png",
+          "sha256": "a97dcea4c0b28792746781143bd507b385e40069a5d7f698839ceea27acf664d"
+        },
+        {
+          "state": "firework",
+          "label": "已装填烟花",
+          "file": "D:\\数据包\\模型设计\\原版风_弩像素试绘_20261010\\贴图\\蚀骨\\firework.png",
+          "sha256": "bf96d40678156509e8db76d737756e5c18ace5aa44fa666385ebe49c91544952"
+        }
+      ],
+      "bound_item_model": "sweetdream:crossbow_bone_erode"
+    },
+    {
+      "id": "cold_crow",
+      "name": "寒鸦",
+      "motif": "霜蓝弩臂 / 鸦羽木托",
+      "resolution": [
+        16,
+        16
+      ],
+      "skill_lore": [
+        "✦ 主动技能",
+        "魔力 20 / 50 / 120 / 320",
+        "（按「冰凌」层数）",
+        " ",
+        "每次射击都会积攒一点「冰凌」。每次射",
+        "击都会根据弓目前的「冰凌」而改变魔力",
+        "消耗及射击效果。",
+        " ",
+        "✦ 冰凌",
+        "● 一层：使被命中的生物冰冻 2 秒。",
+        "● 二层：使被命中的生物的 2 格内的全",
+        "   部生物冰冻 2 秒。",
+        "● 三层：使被命中的生物的 3 格内的全",
+        "   部生物冰冻 2 秒，并对其造成相当于",
+        "   自身最大魔力值 ×0.1 的伤害。",
+        "● 四层：使被命中的生物的 4 格内的全",
+        "   部生物冰冻 3 秒，并对其造成相当于",
+        "   自身最大魔力值 ×0.25 的伤害。之后",
+        "   清空全部「冰凌」。"
+      ],
+      "existing_model": "coldcrow:crossbow",
+      "game_bound": false,
+      "excluded_from_binding": true,
+      "states": [
+        {
+          "state": "standby",
+          "label": "待机",
+          "file": "D:\\数据包\\模型设计\\原版风_弩像素试绘_20261010\\贴图\\寒鸦\\standby.png",
+          "sha256": "3cd253d63999a21139593336948e91376834e2a141506d0785a1f466372f8973"
+        },
+        {
+          "state": "pulling_0",
+          "label": "拉弦 I",
+          "file": "D:\\数据包\\模型设计\\原版风_弩像素试绘_20261010\\贴图\\寒鸦\\pulling_0.png",
+          "sha256": "442328b86217a7e27223634a36e0540f114d5f23f7e31988b1180f1453caf735"
+        },
+        {
+          "state": "pulling_1",
+          "label": "拉弦 II",
+          "file": "D:\\数据包\\模型设计\\原版风_弩像素试绘_20261010\\贴图\\寒鸦\\pulling_1.png",
+          "sha256": "7f3e6421f575776944ba60d7e48497c439baeb9582e08853f09162f40aca2b62"
+        },
+        {
+          "state": "pulling_2",
+          "label": "拉弦 III",
+          "file": "D:\\数据包\\模型设计\\原版风_弩像素试绘_20261010\\贴图\\寒鸦\\pulling_2.png",
+          "sha256": "3af06df63d1d9a5a13c073193388df71a78f15fb406e7dab48f9e87ad7dcdcde"
+        },
+        {
+          "state": "arrow",
+          "label": "已装填箭矢",
+          "file": "D:\\数据包\\模型设计\\原版风_弩像素试绘_20261010\\贴图\\寒鸦\\arrow.png",
+          "sha256": "35c15ae8a8086377f9d71e0da34b8e34cbaa652c6c63d5a09502a86c64ac9b6d"
+        },
+        {
+          "state": "firework",
+          "label": "已装填烟花",
+          "file": "D:\\数据包\\模型设计\\原版风_弩像素试绘_20261010\\贴图\\寒鸦\\firework.png",
+          "sha256": "0d42684a31b0fbb9e0cf7a9e4e314924ab7f55aeb67b7cfad0c1076de7325c3e"
+        }
+      ]
+    },
+    {
+      "id": "lucid_dream",
+      "name": "清醒梦",
+      "motif": "睁开的梦瞳 / 梦回刻纹",
+      "resolution": [
+        16,
+        16
+      ],
+      "skill_lore": [
+        "✦ 主动技能",
+        "魔力 180",
+        " ",
+        "每次射击若射击附加了「白昼梦」效果或处于时停状态的生物，则累计一层「梦回」（最多为 5 层）。",
+        " ",
+        "✦ 梦回",
+        "当「梦回」达到 3 层及以上后，再次射击附有「白昼梦」的生物时对其造成相当于自身当前魔力值 ×0.X 的伤害，之后清除该生物的「白昼梦」并清除自身「梦回」，之后召唤一个术阵。召唤术阵后该生物每次受到攻击都会使自身 2 格内的全部生物额外受到一次相当于自身最大魔力值 ×0.0X 的真实伤害，持续 X 秒。若持续时间内该生物被附加了「白昼梦」效果，则消耗「白昼梦」效果且技能持续时间延长 X 秒（X 为「梦回」层数）。"
+      ],
+      "existing_model": null,
+      "game_bound": true,
+      "excluded_from_binding": false,
+      "states": [
+        {
+          "state": "standby",
+          "label": "待机",
+          "file": "D:\\数据包\\模型设计\\原版风_弩像素试绘_20261010\\贴图\\清醒梦\\standby.png",
+          "sha256": "cfb4f0326afe8b0d3ed37327d77fefcde8f0cecff931f717ec6caa602f524557"
+        },
+        {
+          "state": "pulling_0",
+          "label": "拉弦 I",
+          "file": "D:\\数据包\\模型设计\\原版风_弩像素试绘_20261010\\贴图\\清醒梦\\pulling_0.png",
+          "sha256": "662a97d911a4159ce0488166c5f7dfa9831e77a0cd5df7a77426b823f9acb358"
+        },
+        {
+          "state": "pulling_1",
+          "label": "拉弦 II",
+          "file": "D:\\数据包\\模型设计\\原版风_弩像素试绘_20261010\\贴图\\清醒梦\\pulling_1.png",
+          "sha256": "9e518c725a09b4f85260ded16f35c1e736384161b666a704d802fe1f4f704d28"
+        },
+        {
+          "state": "pulling_2",
+          "label": "拉弦 III",
+          "file": "D:\\数据包\\模型设计\\原版风_弩像素试绘_20261010\\贴图\\清醒梦\\pulling_2.png",
+          "sha256": "5d648c9d60aeb2fca9473397d9e98c85ce6f720943fb78c87a80f481d65cec55"
+        },
+        {
+          "state": "arrow",
+          "label": "已装填箭矢",
+          "file": "D:\\数据包\\模型设计\\原版风_弩像素试绘_20261010\\贴图\\清醒梦\\arrow.png",
+          "sha256": "7f4a94b9da275214380700030d0f9e11bbca306880cc8df13f717ff7538e5fb0"
+        },
+        {
+          "state": "firework",
+          "label": "已装填烟花",
+          "file": "D:\\数据包\\模型设计\\原版风_弩像素试绘_20261010\\贴图\\清醒梦\\firework.png",
+          "sha256": "63f5a1ae59ad097e6099b3edcd00719bedb52578617cadc97f876e85eb6ed2c2"
+        }
+      ],
+      "bound_item_model": "sweetdream:crossbow_lucid_dream"
+    },
+    {
+      "id": "rainbow",
+      "name": "虹彩",
+      "motif": "连续五色虹纹 / 合色棱镜",
+      "resolution": [
+        16,
+        16
+      ],
+      "skill_lore": [
+        "✦ 主动技能",
+        "魔力 580",
+        " ",
+        "每次射击若射击到了生物，则使附着 10 秒「漫彩」。期间若其有「流火」、「夜火」、「渊海」、「白昼梦」、「噬心」中任意一个效果则消耗该效果并使其受到相当于自身最大生命值 ×0.1 的伤害，之后使「漫彩」效果 -1 秒。若「漫彩」效果在 5 秒内结束则对其 2 格内的生物造成一次相当于其最大生命值 ×0.2 的伤害。"
+      ],
+      "existing_model": null,
+      "game_bound": true,
+      "excluded_from_binding": false,
+      "states": [
+        {
+          "state": "standby",
+          "label": "待机",
+          "file": "D:\\数据包\\模型设计\\原版风_弩像素试绘_20261010\\贴图\\虹彩\\standby.png",
+          "sha256": "c56a47b496337b24960248468c380122a1d9a2f96582b56151079acaf5986d3e"
+        },
+        {
+          "state": "pulling_0",
+          "label": "拉弦 I",
+          "file": "D:\\数据包\\模型设计\\原版风_弩像素试绘_20261010\\贴图\\虹彩\\pulling_0.png",
+          "sha256": "6b224a24e34757ef888b1bbe6b903ea2177d2944038ee851ca1956bd577866d3"
+        },
+        {
+          "state": "pulling_1",
+          "label": "拉弦 II",
+          "file": "D:\\数据包\\模型设计\\原版风_弩像素试绘_20261010\\贴图\\虹彩\\pulling_1.png",
+          "sha256": "6ddf765222003bf0fa6b54b3a7c088bd133807514031209e9a149724510f6424"
+        },
+        {
+          "state": "pulling_2",
+          "label": "拉弦 III",
+          "file": "D:\\数据包\\模型设计\\原版风_弩像素试绘_20261010\\贴图\\虹彩\\pulling_2.png",
+          "sha256": "74b4015f4f32ec5911a339542fca50d31c3f2ea157e7a551b4b61f432c090586"
+        },
+        {
+          "state": "arrow",
+          "label": "已装填箭矢",
+          "file": "D:\\数据包\\模型设计\\原版风_弩像素试绘_20261010\\贴图\\虹彩\\arrow.png",
+          "sha256": "6c2372ba310616205b1819edbace854362425c90cffcf210c19df456d67a8eee"
+        },
+        {
+          "state": "firework",
+          "label": "已装填烟花",
+          "file": "D:\\数据包\\模型设计\\原版风_弩像素试绘_20261010\\贴图\\虹彩\\firework.png",
+          "sha256": "64b3d8f44f0b4c26ec3696332178dab343749797aebb34d4380889e2d4dcabb3"
+        }
+      ],
+      "bound_item_model": "sweetdream:crossbow_rainbow"
+    },
+    {
+      "id": "arc",
+      "name": "电弧",
+      "motif": "铜箍木身 / 折线电纹",
+      "resolution": [
+        16,
+        16
+      ],
+      "skill_lore": [
+        "✦ 主动技能",
+        "魔力 30",
+        " ",
+        "每次射击都会对被攻击的生物附加",
+        "「电刺」效果。若附有「电刺」的生物 6",
+        "格内有另一个附有「电刺」的生物，则立",
+        "即在他们之间产生一道 1 格宽的电线并对",
+        "沿途的生物及他们自身造成一次相当于自",
+        "身基础攻击力 ×2+ 当前魔力值 ×0.03 的",
+        "伤害，之后移除「电刺」。"
+      ],
+      "existing_model": null,
+      "game_bound": true,
+      "excluded_from_binding": false,
+      "states": [
+        {
+          "state": "standby",
+          "label": "待机",
+          "file": "D:\\数据包\\模型设计\\原版风_弩像素试绘_20261010\\贴图\\电弧\\standby.png",
+          "sha256": "320a0c7e0be025cf243779f340be3c2b13b734e76f4dd8a48280bd6bc8a5f48e"
+        },
+        {
+          "state": "pulling_0",
+          "label": "拉弦 I",
+          "file": "D:\\数据包\\模型设计\\原版风_弩像素试绘_20261010\\贴图\\电弧\\pulling_0.png",
+          "sha256": "8597ed7098e4c22d7fd6415c13f21374354c185fe189eba442f9a4a6c8f3372b"
+        },
+        {
+          "state": "pulling_1",
+          "label": "拉弦 II",
+          "file": "D:\\数据包\\模型设计\\原版风_弩像素试绘_20261010\\贴图\\电弧\\pulling_1.png",
+          "sha256": "a86d36c3624a84c9253850470dfdeb5c950b394ecd6a1f2742cef36e9087bbe4"
+        },
+        {
+          "state": "pulling_2",
+          "label": "拉弦 III",
+          "file": "D:\\数据包\\模型设计\\原版风_弩像素试绘_20261010\\贴图\\电弧\\pulling_2.png",
+          "sha256": "13f3164c94abfe005b7d56730594e838d0215a719cecafb31b5f7a7aea2cd88e"
+        },
+        {
+          "state": "arrow",
+          "label": "已装填箭矢",
+          "file": "D:\\数据包\\模型设计\\原版风_弩像素试绘_20261010\\贴图\\电弧\\arrow.png",
+          "sha256": "0d5acad1ecdfc09945b93292321c7d48c832c28b26e4198030df07f0f3703916"
+        },
+        {
+          "state": "firework",
+          "label": "已装填烟花",
+          "file": "D:\\数据包\\模型设计\\原版风_弩像素试绘_20261010\\贴图\\电弧\\firework.png",
+          "sha256": "155983b8daab87521626fa21d6ac7e7bd985af4fdf560277b0b23503477d9d48"
+        }
+      ],
+      "bound_item_model": "sweetdream:crossbow_arc"
+    }
+  ],
+  "bound_count": 5
+}

@@ -13,15 +13,20 @@
 # 清掉上一轮残留(理论上由 hit_due 清过; 这里是"中途被打断"的兜底)
 $tag @e[tag=zx.rs_$(uuid)] remove zx.rs_$(uuid)
 
-# 锁定: 10 格内就近取 3 个(③ 已保证至少 1 个)
-$tag @e[type=!#sweetdream:no_damage,distance=0.1..10,sort=nearest,limit=3] add zx.rs_$(uuid)
+# 锁定: 10 格内就近取目标(③ 已保证至少 1 个)
+#   【基础版】只锁 3 个 —— 文案: "锁定自身 10 格范围内的 **3 个**生物"
+#   【超限版】锁定**全部** —— 文案: "锁定自身 10 格范围内的**全部**生物"
+#   ★ 两条只差一个 limit, 靠宏入参 ol 分流; 不写 limit 就是"范围内全部"。
+$execute if data storage zx:work a{ol:0b} run tag @e[type=!#sweetdream:no_damage,distance=0.1..10,sort=nearest,limit=3] add zx.rs_$(uuid)
+$execute if data storage zx:work a{ol:1b} run tag @e[type=!#sweetdream:no_damage,distance=0.1..10,sort=nearest] add zx.rs_$(uuid)
 
 # 到点时刻: 现在 + 60 tick(3 秒)。存进记录, 由 lib/second 每秒扫。
 scoreboard players operation #rs_due zx.meta = #now manacore.meta
 scoreboard players add #rs_due zx.meta 60
 
-# 记账(施法者名下)
-$data modify storage zx:data rs."$(uuid)" set value {damage:0.0,u0:0,u1:0,u2:0,u3:0,due:0}
+# 记账(施法者名下)。ol 要带到 3 秒后的 hit_due —— 它决定"打一次还是两次"。
+$data modify storage zx:data rs."$(uuid)" set value {damage:0.0,u0:0,u1:0,u2:0,u3:0,due:0,ol:0b}
+$execute if data storage zx:work a{ol:1b} run data modify storage zx:data rs."$(uuid)".ol set value 1b
 $data modify storage zx:data rs."$(uuid)".damage set value $(damage)
 $data modify storage zx:data rs."$(uuid)".u0 set from storage manacore:players "$(uuid)".u0
 $data modify storage zx:data rs."$(uuid)".u1 set from storage manacore:players "$(uuid)".u1

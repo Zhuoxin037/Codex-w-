@@ -13,6 +13,12 @@
 # ============================================================
 
 advancement revoke @s only sweetdream:equipment/armor/lethe_shore_hit
+# ---- 满蓄力闸(2026-10-10, 全包统一口径) ----
+#   平A 没**蓄满力**这一发就不触发本被动。判定与出参见 lib/atk_charge 头部
+#   (每刻只算一次 + 玩家级 `@s zx.atk_ok`)。
+#   ★ 必须排在 revoke 之后: lib/rearm 契约要求 revoke 是奖励函数第一非注释行。
+function sweetdream:lib/atk_charge
+execute unless score @s zx.atk_ok matches 1 run return 0
 
 # ① 没穿沉溺忘川就没这事
 execute unless items entity @s armor.feet *[minecraft:custom_data~{zx:["lethe_shore"]}] run return 0

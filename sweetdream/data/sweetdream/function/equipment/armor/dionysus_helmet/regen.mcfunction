@@ -13,8 +13,10 @@
 function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return fail
 
-data modify storage manacore:in arg set value {uuid:"",value:80.0}
+# 回多少: zx.dio_ramt(每秒金额, 由触发方写 —— 基础受伤 80 / 超限受伤 60 / 超限攻击触发 80)
+data modify storage manacore:in arg set value {uuid:"",value:0.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
+execute store result storage manacore:in arg.value double 1 run scoreboard players get @s zx.dio_ramt
 function manacore:api/mana/add
 
 # 记进"装备额外回魔"账本(见 core/load 的注释)

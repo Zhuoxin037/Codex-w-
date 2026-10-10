@@ -460,6 +460,132 @@
           "type": "minecraft:model",
           "model": "sweetdream:item/stone/ol_dusk_dawn"
         }
+      },
+      {
+        "threshold": 32.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "sweetdream:item/stone/ol_rogue_star"
+        }
+      },
+      {
+        "threshold": 33.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "sweetdream:item/stone/ol_shadow_blade"
+        }
+      },
+      {
+        "threshold": 34.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "sweetdream:item/stone/ol_deepsea_echo"
+        }
+      },
+      {
+        "threshold": 35.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "sweetdream:item/stone/ol_everfrost"
+        }
+      },
+      {
+        "threshold": 36.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "sweetdream:item/stone/ol_flame_brokenbody"
+        }
+      },
+      {
+        "threshold": 37.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "sweetdream:item/stone/ol_sickle_dreams"
+        }
+      },
+      {
+        "threshold": 38.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "sweetdream:item/stone/ol_hengdao"
+        }
+      },
+      {
+        "threshold": 39.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "sweetdream:item/stone/ol_red_lotus"
+        }
+      },
+      {
+        "threshold": 40.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "sweetdream:item/stone/ol_charge"
+        }
+      },
+      {
+        "threshold": 41.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "sweetdream:item/stone/ol_anion"
+        }
+      },
+      {
+        "threshold": 42.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "sweetdream:item/stone/ol_cold_crow"
+        }
+      },
+      {
+        "threshold": 43.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "sweetdream:item/stone/ol_bone_erode"
+        }
+      },
+      {
+        "threshold": 44.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "sweetdream:item/stone/ol_sculk_echo"
+        }
+      },
+      {
+        "threshold": 45.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "sweetdream:item/stone/ol_dream_reader"
+        }
+      },
+      {
+        "threshold": 46.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "sweetdream:item/stone/ol_begonia"
+        }
+      },
+      {
+        "threshold": 47.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "sweetdream:item/stone/ol_polarized_light"
+        }
+      },
+      {
+        "threshold": 48.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "sweetdream:item/stone/ol_dionysus_helmet"
+        }
+      },
+      {
+        "threshold": 49.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "sweetdream:item/stone/ol_furnace_core"
+        }
       }
     ]
   }

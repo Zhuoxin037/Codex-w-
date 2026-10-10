@@ -3,9 +3,11 @@
 # ------------------------------------------------------------
 # 【谁调用它】thunderclap/hit(②), 执行者 = 施法者, 位置 = 施法者
 # 【做什么】
-#   ① X = 天煌 ×0.005(×5 ÷100 ÷10), 下限 1
-#   ② 消耗 = min(当前魔力, 天煌点数); 文案: 魔力不足时"视天煌点数为消耗的魔力总数"
-#      (也就是 X 始终按天煌算, 只是实际扣的魔力被钳到可用值)
+#   ① 消耗 = min(当前魔力, 天煌点数); X = **实际消耗** ×0.005(×5 ÷100 ÷10), 下限 1
+#      ★ 口径(2026-10-08 用户定稿 a): 文案"若魔力值不足则本次攻击视消耗的魔力总数为
+#        「天煌」点数" —— 即魔力不足时把"消耗的魔力"当作天煌点数, X 按**实际消耗**算。
+#        魔力充足 ⇒ 消耗 = 天煌(X 与旧版一致); 魔力不足 ⇒ 消耗 = 当前魔力(X 随之变小)。
+#   ② 扣除这 min(魔力, 天煌) 点魔力
 #   ③ 清空「天煌」
 #   ④ 在被击者(当前 zx.victim)所在处生成半径 6 的术阵 marker, 持续 X×2 秒
 #   ⑤ 置 zx.tc_on = 1("术阵结束前不能再开")
@@ -15,14 +17,7 @@
 function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return fail
 
-# ① X = 天煌 ×0.005, 下限 1
-scoreboard players operation #tc_x zx.meta = @s zx.tc_n
-scoreboard players operation #tc_x zx.meta *= #5 zx.meta
-scoreboard players operation #tc_x zx.meta /= #100 zx.meta
-scoreboard players operation #tc_x zx.meta /= #10 zx.meta
-execute unless score #tc_x zx.meta matches 1.. run scoreboard players set #tc_x zx.meta 1
-
-# ② 读当前魔力, 消耗 min(魔力, 天煌点数)
+# ① 读当前魔力 -> #tc_m; 本次实际消耗 #tc_use = min(魔力, 天煌点数); X = #tc_use ×0.005, 下限 1
 data modify storage manacore:in arg set value {uuid:"",key:"current_mana"}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/stats/get
@@ -30,6 +25,13 @@ scoreboard players set #tc_m zx.meta 0
 execute store result score #tc_m zx.meta run data get storage manacore:out r.value
 scoreboard players operation #tc_use zx.meta = @s zx.tc_n
 scoreboard players operation #tc_use zx.meta < #tc_m zx.meta
+scoreboard players operation #tc_x zx.meta = #tc_use zx.meta
+scoreboard players operation #tc_x zx.meta *= #5 zx.meta
+scoreboard players operation #tc_x zx.meta /= #100 zx.meta
+scoreboard players operation #tc_x zx.meta /= #10 zx.meta
+execute unless score #tc_x zx.meta matches 1.. run scoreboard players set #tc_x zx.meta 1
+
+# ② 扣除这 min(魔力, 天煌) 点魔力
 data modify storage manacore:in arg set value {uuid:"",value:0.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 execute store result storage manacore:in arg.value double 1 run scoreboard players get #tc_use zx.meta
@@ -41,10 +43,21 @@ scoreboard players set @s zx.tc_n 0
 # ④ 组装术阵 marker 的宏参数(X / 持续秒数 / 施法者 uuid 文本 + 四整数)
 scoreboard players operation #tc_dur zx.meta = #tc_x zx.meta
 scoreboard players operation #tc_dur zx.meta *= #2 zx.meta
+# ④-b 【R03】绝对到期 tick = 当前 gametime + 持续秒数×20, 一并写进 marker。
+#   marker 上的 zx.tc_ft 只在它**被加载**时才每秒 -1; 区块卸载期间全局时钟照走,
+#   框架术阵(duration_seconds)按绝对时间到期 ⇒ 重进后 marker 会比框架多活一段。
+#   marker 额外存一个"几点几分该收摊", field_tick 重加载时立刻核对过期(见那里)。
+#   ★ gametime 存计分项(整型)在约 1242 天后会触 int32 上界 —— 与包内 #now 去重戳同款口径。
+execute store result score #tc_et zx.meta run time query gametime
+scoreboard players operation #tc_tmp zx.meta = #tc_dur zx.meta
+scoreboard players operation #tc_tmp zx.meta *= #20 zx.meta
+scoreboard players operation #tc_et zx.meta += #tc_tmp zx.meta
 data modify storage zx:work tcf.x set value 0
 execute store result storage zx:work tcf.x int 1 run scoreboard players get #tc_x zx.meta
 data modify storage zx:work tcf.dur set value 0
 execute store result storage zx:work tcf.dur int 1 run scoreboard players get #tc_dur zx.meta
+data modify storage zx:work tcf.et set value 0
+execute store result storage zx:work tcf.et int 1 run scoreboard players get #tc_et zx.meta
 data modify storage zx:work tcf.uu set from storage zx:data self.uuid
 data modify storage zx:work tcf.u0 set from entity @s UUID[0]
 data modify storage zx:work tcf.u1 set from entity @s UUID[1]

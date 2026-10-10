@@ -1,0 +1,13 @@
+[
+  {
+    "function": "minecraft:set_components",
+    "components": {"minecraft:item_model": "angelcore:axe"}
+  },
+  {
+    "function": "minecraft:set_custom_model_data",
+    "floats": {
+      "values": [{"type": "minecraft:score", "target": {"type": "minecraft:fixed", "name": "#frame"}, "score": "zx.acvf"}],
+      "mode": "replace_section", "offset": 0, "size": 1
+    }
+  }
+]

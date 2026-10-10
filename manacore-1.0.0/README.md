@@ -88,7 +88,8 @@ datapacks/manacore-1.0.0/data/... (没有 pack.mcmeta) ← 少了元数据文件
   `/reload` 后日志里 `Failed to load ...` 的行发出来即可定位到具体文件。
 - **也没反应** → 说明是放置层级或版本兼容问题：
   检查 `pack.mcmeta` 是否在 `datapacks/<文件夹>/` 的第一层，
-  以及游戏版本是否在 1.21 ~ 1.21.8 之间（本包声明的 `supported_formats` 是 48~81）。
+  以及游戏版本是否是 **Java 1.21.5**（本包 `pack.mcmeta` 声明的 `supported_formats` 是
+  `71 ~ 71`，即**只验证过 1.21.5**；其他版本可能加载但不受支持）。
 
 ### 卸载
 
@@ -177,6 +178,7 @@ execute if data storage manacore:out r {reason:"mana"} run tellraw @s {"text":"�
 | --- | --- |
 | `manacore:config` | 配置与"新玩家默认模板" |
 | `manacore:players` | **玩家数据主体，键 = UUID 文本** |
+| `manacore:players_all` | **UUID 终身清单**（`list` = **裸 uuid 字符串**，如 `["069a79f4-…", "…"]`，含已离线玩家）；`debug/reset_all` 靠它清掉索引之外的离线残留。登记只在 **5 个"建记录口"**：`internal/player/create` / `internal/join/new` / `internal/debug/reset_one` / `internal/uuid/migrate` / `internal/uuid/join` —— **不要**放进 `join/register` 或 `leave/body`（每次都跑 + 裸串判不了重 ⇒ 清单无限增长） |
 | `manacore:index` | 槽位号 → UUID 的索引（用于遍历/离线检测） |
 | `manacore:free_slots` | 槽位回收池 |
 | `manacore:in` | **公开输入**（读 `arg` 节点，见下方寻址规则） |
@@ -187,7 +189,13 @@ execute if data storage manacore:out r {reason:"mana"} run tellraw @s {"text":"�
 > **NBT 寻址规则（很重要）**
 > Minecraft 里"存储名"和"路径"是**两个用空格分开的参数**，不能写成 `manacore:work.a`。
 > 正确写法：`data modify storage manacore:work a set value {...}`（存储 = `manacore:work`，路径 = `a`）。
-> 写成 `manacore:work.a` 会被整体当成一个存储名，命令直接在**加载期**报错、整个函数失效。
+> 粘连写法有两种结局（2026-10-10 实测补齐）：
+>
+> | 粘连后剩下的"存储名" | 结局 |
+> | --- | --- |
+> | 不是合法资源位置（含 `"` `$` 等） | **加载期**报错、整个函数失效 |
+> | 恰好仍是合法资源位置（如 `players."<uuid>"` → 存储名变成 `players.`，多一个尾点） | **静默**读写另一个存储：函数照常加载、不报错，只是永远取不到值 |
+>
 > 本框架统一约定：
 >
 > | 访问对象 | 写法 |
@@ -197,7 +205,7 @@ execute if data storage manacore:out r {reason:"mana"} run tellraw @s {"text":"�
 > | 玩家数据 | `storage manacore:players "<uuid>"...` |
 > | 槽位索引 | `storage manacore:index "<槽位>"...` |
 > | 宏参数节点 | `with storage manacore:work a` |
-| `manacore:work` `manacore:macro` | 内部宏参数节点与临时数据 |
+> | 内部临时 | `storage manacore:work` / `storage manacore:macro` |
 
 ### 5.2 玩家记录长什么样
 

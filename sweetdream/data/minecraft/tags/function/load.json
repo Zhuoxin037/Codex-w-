@@ -4,6 +4,10 @@
     "naturewind:load",
     "sweetdream:equipment/sword/sickle_dreams/sweep/load",
     "sweetdream:equipment/bow/cold_crow/model/load",
-    "sweetdream:equipment/staff/apocalypse/visual/load"
+    "sweetdream:equipment/staff/apocalypse/visual/load",
+    "sweetdream:equipment/staff/sail/visual/load",
+    "sweetdream:equipment/staff/palette/visual/load",
+    "sweetdream:equipment/axe/angel_core/visual/load",
+    "sweetdream:visual/load"
   ]
 }

@@ -1,0 +1,54 @@
+{
+  "resource_pack": "sweetdream_rp_完整版",
+  "bound_count": 8,
+  "items": [
+    {
+      "id": "chime",
+      "name": "共鸣",
+      "item_model": "sweetdream:chime"
+    },
+    {
+      "id": "polarized_light",
+      "name": "偏振光",
+      "item_model": "sweetdream:polarized_light"
+    },
+    {
+      "id": "delusion",
+      "name": "惑梦",
+      "item_model": "sweetdream:delusion"
+    },
+    {
+      "id": "fallen_dream",
+      "name": "堕梦",
+      "item_model": "sweetdream:fallen_dream"
+    },
+    {
+      "id": "begonia",
+      "name": "海棠",
+      "item_model": "sweetdream:begonia"
+    },
+    {
+      "id": "gu_poison",
+      "name": "蛊毒",
+      "item_model": "sweetdream:gu_poison"
+    },
+    {
+      "id": "twilight",
+      "name": "暮光",
+      "item_model": "sweetdream:twilight"
+    },
+    {
+      "id": "final_revelation",
+      "name": "终末天启",
+      "item_model": "sweetdream:final_revelation"
+    }
+  ],
+  "excluded_ids": [
+    "wind_ontheground",
+    "apocalypse",
+    "palette",
+    "sail"
+  ],
+  "excluded_note": "风行/启示录/调色盘/风帆保留原有外观，对应4张像素图只作预览",
+  "old_items": "主手/副手旧物品在每秒检查时仅补item_model，保留升级与技能数据"
+}

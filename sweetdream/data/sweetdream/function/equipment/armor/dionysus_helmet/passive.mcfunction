@@ -17,9 +17,11 @@ execute unless data storage zx:data self{ok:1b} run return fail
 scoreboard players set #dio_on zx.meta 0
 execute if items entity @s armor.head netherite_helmet[custom_data~{zx:["dionysus_helmet"]}] run scoreboard players set #dio_on zx.meta 1
 
-# ③ 目标值: 戴着就是 200, 否则 0; 再和账本求差
+# ③ 目标值: 基础 200 / 超限 240(超限·狄俄尼索斯之桂冠: "自身魔力上限+240"),
+#   再和账本求差
 scoreboard players set #want zx.meta 0
 execute if score #dio_on zx.meta matches 1 run scoreboard players set #want zx.meta 200
+execute if items entity @s armor.head *[minecraft:custom_data~{zx:["dionysus_helmet"],ol:"dionysus_helmet"}] run scoreboard players set #want zx.meta 240
 scoreboard players operation #diff zx.meta = #want zx.meta
 scoreboard players operation #diff zx.meta -= @s zx.dio_mana
 execute unless score #diff zx.meta matches 0 run function sweetdream:equipment/armor/dionysus_helmet/apply_mana

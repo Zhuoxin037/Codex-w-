@@ -1,0 +1,11 @@
+# ============================================================
+# sweetdream:overlimit/item/charge —— 给一块「超限·超•负•荷」
+# ------------------------------------------------------------
+# 【custom_data】只写一个标记 ol_charge :
+#   进度 advancement/overlimit/charge 靠它认"右键用掉了哪块超限石"。
+# 【底座】recovery_compass + custom_model_data={floats:[40.0f]}(八芒星, 编号 40)。
+#   编号表和 .workbuddy/_gen_stone_icons.py 的 CMD 对应, 改一边要改两边。
+# 【适用】只有「超•负•荷」能敲(见 overlimit/api/fit: 副手 zx 必须含 超•负•荷 且还没敲过 ol)。
+# ============================================================
+
+give @s recovery_compass[max_stack_size=1,item_name={text:"超限·超•负•荷",bold:true,color:light_purple},custom_model_data={floats:[40.0f]},lore=[{"text":"✦ 超限石","color":"gold","bold":true,"italic":false},{"text":"","italic":false,"extra":[{"text":"适用于 ","color":"gray"},{"text":"超•负•荷","color":"blue"},{"text":"   ·   ","color":"dark_gray"},{"text":"前置 ","color":"gray"},{"text":"尚未超限","color":"aqua"}]},{"text":" ","italic":false},{"text":"敲入后超•负•荷更名为「超限·超•负•","color":"gray","italic":false},{"text":"荷」，被动技能变为：主手持时，自身获","color":"gray","italic":false},{"text":"得迅捷Ⅱ。主动技能变为：使用后召唤一","color":"gray","italic":false},{"text":"个术阵。之后自身获得常态的迅捷 3 效果。","color":"gray","italic":false},{"text":"每秒都会对自身 8 格内 2 格外的随机 2","color":"gray","italic":false},{"text":"个生物释放闪电，当自身攻击到生物后则","color":"gray","italic":false},{"text":"立即对其释放三次闪电并对其 1 格内的全","color":"gray","italic":false},{"text":"部生物造成相当于自身当前魔力值 ×0.08","color":"gray","italic":false},{"text":"的伤害，之后使该武器技能冷却时间 -4","color":"gray","italic":false},{"text":"秒。该状态持续 15 秒。该状态结束后若","color":"gray","italic":false},{"text":"该技能完成冷却，则自动使用且该技能停","color":"gray","italic":false},{"text":"止正常冷却缩减，之后自身攻击力增加相","color":"gray","italic":false},{"text":"当于自身当前基础攻击力的数值，最大魔","color":"gray","italic":false},{"text":"力值增加相当于自身当前最大魔力值 ×0.5","color":"gray","italic":false},{"text":"的数值，且自身每次召唤闪电时都会对落","color":"gray","italic":false},{"text":"点处的生物造成相当于自身基础攻击力 ×3","color":"gray","italic":false},{"text":"的伤害。但每次攻击都会对自身造成相当","color":"gray","italic":false},{"text":"于自身最大生命值 ×0.05 的伤害。","color":"gray","italic":false}],custom_data={zx:["ol_charge"]},consumable={animation:"none",consume_seconds:0,has_consume_particles:false,sound:"block.bamboo_wood_button.click_off"}]

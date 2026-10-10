@@ -41,10 +41,14 @@ execute if score #se_pdmg zx.meta matches ..0 run return 0
 scoreboard players set #se_pcry zx.meta 0
 execute store result score #se_pcry zx.meta run data get entity @s data.zx.se.cry
 
-# ④ 圈范围: 以箭为中心 2 格
+# ④ 圈范围: 以箭为中心 2 格(超限版 3 格 —— 半径写死在选择器里, 只能分两条)
 # 【★ 要 distance=0.. ★】se_path 是本刻在这个维度里现打的临时标记, 清理也锁在这个维度。
+# 【ol 从哪来】箭自带的逐箭快照 data.zx.se.ol(离弦时拍的); 读不到就当基础版。
+scoreboard players set #se_ol zx.meta 0
+execute store result score #se_ol zx.meta run data get entity @s data.zx.se.ol 1
 tag @e[distance=0..,tag=zx.se_path] remove zx.se_path
-execute at @s positioned ~-2.5 ~-2.5 ~-2.5 run tag @e[type=!#sweetdream:no_damage,dx=5.0,dy=5.0,dz=5.0] add zx.se_path
+execute if score #se_ol zx.meta matches 0 at @s positioned ~-2.5 ~-2.5 ~-2.5 run tag @e[type=!#sweetdream:no_damage,dx=5.0,dy=5.0,dz=5.0] add zx.se_path
+execute if score #se_ol zx.meta matches 1 at @s positioned ~-3.5 ~-3.5 ~-3.5 run tag @e[type=!#sweetdream:no_damage,dx=7.0,dy=7.0,dz=7.0] add zx.se_path
 
 # ⑤ 打伤害(带射手归属; 三倍按每刻一次统一 roll)
 function sweetdream:equipment/bow/sculk_echo/path_roll

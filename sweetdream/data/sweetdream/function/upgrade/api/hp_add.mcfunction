@@ -22,3 +22,11 @@ scoreboard players operation @s zx.up_hp += #diff zx.meta
 execute if score @s zx.up_hp matches 1.. run data modify storage zx:work x set value {v:0}
 execute if score @s zx.up_hp matches 1.. store result storage zx:work x.v int 1 run scoreboard players get @s zx.up_hp
 execute if score @s zx.up_hp matches 1.. run function sweetdream:upgrade/api/hp_attr with storage zx:work x
+
+# ③ 夹当前生命(2026-10-08 补): 上限被摘小(脱下硬化装备)之后, 当前生命可能还停在
+#    新上限之上 —— 原版**不会**自动把血扣下来, 会显示成 30/20 这种脏值。
+#    只在"当前 > 上限"时动手, 上限变大时条件不成立, 不会误回血。
+#    ⚠️ 必须排在 ①② 都做完之后, 才读得到"真正的最终上限"(furnace_core/apply_hp 同款)。
+execute store result score #maxhp zx.meta run attribute @s minecraft:max_health get
+execute store result score #curhp zx.meta run data get entity @s Health
+execute if score #curhp zx.meta > #maxhp zx.meta run execute store result entity @s Health double 1 run scoreboard players get #maxhp zx.meta

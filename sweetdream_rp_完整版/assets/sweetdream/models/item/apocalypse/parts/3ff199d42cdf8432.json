@@ -1,0 +1,141 @@
+{
+  "parent": "sweetdream:item/apocalypse/geometry/9d4e3c4424481a0e",
+  "display": {
+    "gui": {
+      "rotation": [
+        63.751378,
+        0.196584,
+        -8.945858
+      ],
+      "translation": [
+        0,
+        -0.7,
+        0
+      ],
+      "scale": [
+        0.9,
+        0.9,
+        0.9
+      ]
+    },
+    "ground": {
+      "rotation": [
+        -1.263827,
+        0.020911,
+        -0.947769
+      ],
+      "translation": [
+        0.0,
+        3.0,
+        0.0
+      ],
+      "scale": [
+        0.53333,
+        0.53333,
+        0.53333
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        -88.736173,
+        -0.020911,
+        179.052231
+      ],
+      "translation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        0.83333,
+        0.83333,
+        0.83333
+      ]
+    },
+    "head": {
+      "rotation": [
+        -1.263827,
+        0.020911,
+        -0.947769
+      ],
+      "translation": [
+        0,
+        8,
+        0
+      ],
+      "scale": [
+        0.75,
+        0.75,
+        0.75
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        27.727409,
+        -17.345538,
+        15.676247
+      ],
+      "translation": [
+        1.5,
+        2.0,
+        -3.5
+      ],
+      "scale": [
+        0.7,
+        0.7,
+        0.7
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        27.739946,
+        -17.385612,
+        17.575528
+      ],
+      "translation": [
+        1.5,
+        2.0,
+        -3.5
+      ],
+      "scale": [
+        0.7,
+        0.7,
+        0.7
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        63.736173,
+        0.020911,
+        -0.947769
+      ],
+      "translation": [
+        0,
+        1,
+        0
+      ],
+      "scale": [
+        0.6,
+        0.6,
+        0.6
+      ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [
+        63.736173,
+        -0.020911,
+        0.947769
+      ],
+      "translation": [
+        0,
+        1,
+        0
+      ],
+      "scale": [
+        0.6,
+        0.6,
+        0.6
+      ]
+    }
+  }
+}

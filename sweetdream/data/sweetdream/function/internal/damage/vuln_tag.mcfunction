@@ -22,6 +22,17 @@ execute unless data storage zx:work a.num unless data storage zx:work a.damage r
 scoreboard players set #vt zx.meta 0
 execute if data storage zx:work a.num store result score #vt zx.meta run data get storage zx:work a.num 1000
 execute unless data storage zx:work a.num store result score #vt zx.meta run data get storage zx:work a.damage 1000
+# 【★ R05 整数上界保护(2026-10-10)★】
+#   #vt 此刻 = 伤害 ×1000, 下一步就要 ×115。计分板是 **int32**,
+#   中间值越过 2,147,483,647 会**回绕成负数** —— 不报错, 只是结果变成天文数字或负值。
+#   按原写法, 伤害 ≈ 18,674 就已触界(1000 × 115 = 115,000; 2.1e9 ÷ 115,000 ≈ 18,673)。
+#   ★ 为什么是"钳到动态上限"而不是"改成先 ÷100 再 ×115":
+#     先除会把 45.67 砍成 45 —— 为防一个极端数值而让**常态**丢掉两位小数精度, 不划算。
+#     这里算出 INT32_MAX ÷ 115 当上限, 常态(≤ 18,673 伤害)一行都不改。
+scoreboard players set #vt_cap zx.meta 2147483647
+scoreboard players operation #vt_cap zx.meta /= #115 zx.meta
+execute if score #vt zx.meta > #vt_cap zx.meta run scoreboard players operation #vt zx.meta = #vt_cap zx.meta
+
 scoreboard players operation #vt zx.meta *= #115 zx.meta
 scoreboard players operation #vt zx.meta /= #100 zx.meta
 execute store result storage zx:work a.num double 0.001 run scoreboard players get #vt zx.meta

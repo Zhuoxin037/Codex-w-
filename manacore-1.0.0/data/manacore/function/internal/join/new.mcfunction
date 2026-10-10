@@ -11,6 +11,8 @@
 #         注意: 只影响之后新注册的玩家; 老玩家用 join/existing 的补齐逻辑。
 # ------------------------------------------------------------
 function manacore:internal/slot/alloc
+# 【F04 修】槽位耗尽(alloc 置了 #slot_full) -> 不建记录、不登记, 下一秒自然重试
+execute if score #slot_full manacore.meta matches 1 run return 0
 execute store result storage manacore:work a.slot int 1 run scoreboard players get @s manacore.slot
 data modify storage manacore:work record set from storage manacore:config defaults
 
@@ -31,4 +33,8 @@ data modify storage manacore:work record.u2 set from storage manacore:work a.u2
 data modify storage manacore:work record.u3 set from storage manacore:work a.u3
 execute if data storage manacore:config settings{debug_default:1b} run data modify storage manacore:work record.debug set value 1b
 $data modify storage manacore:players "$(uuid)" set from storage manacore:work record
+# 【★ 登记"终身清单"(2026-10-10 修 F16)★】见 internal/player/create 的说明:
+#   索引条目会随离线被删, 记录会留下 ⇒ 清档要靠这张"可遍历名单"。
+#   这里是 5 个"建记录口"之一(新玩家首次注册), 天然只登记一次, 不用判重。
+$data modify storage manacore:players_all list append value "$(uuid)"
 function manacore:internal/join/register with storage manacore:work a

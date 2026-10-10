@@ -28,16 +28,16 @@ execute if entity @s[tag=zx.status.dream] run scoreboard players set #dmk zx.met
 scoreboard players set #stg zx.meta 0
 execute if entity @s[scores={zx.stg=1..}] store result score #stg zx.meta run scoreboard players get @s zx.stg
 
-# ①.5b ★ 复原 deal 的入参(基准 = zx:work ob) ★
+# ①.5b ★ 整份复原 deal 的入参(基准 = zx:work ob) ★
 #   num_str / type / u0..u3 是 deal 那条宏的参数; damage 是下面 stg_mul 的底数。
-#   全部从 ob 拉, 保证本只目标不受"上一只改过的 a"影响。
-execute if data storage zx:work ob.num_str run data modify storage zx:work a.num_str set from storage zx:work ob.num_str
-execute if data storage zx:work ob.type run data modify storage zx:work a.type set from storage zx:work ob.type
-execute if data storage zx:work ob.u0 run data modify storage zx:work a.u0 set from storage zx:work ob.u0
-execute if data storage zx:work ob.u1 run data modify storage zx:work a.u1 set from storage zx:work ob.u1
-execute if data storage zx:work ob.u2 run data modify storage zx:work a.u2 set from storage zx:work ob.u2
-execute if data storage zx:work ob.u3 run data modify storage zx:work a.u3 set from storage zx:work ob.u3
-execute if data storage zx:work ob.damage run data modify storage zx:work a.damage set from storage zx:work ob.damage
+#   ★★ 2026-10-10 修 F08: 原来是"挑字段恢复", **漏了 num** ★★
+#     stg_mul / vuln_tag 都是"读 a.num 当底数、再写回 a.num"的**累积式**改写。
+#     只恢复 damage/num_str 不恢复 num ⇒ 第二只带易伤(夜火/噬心)的目标会在
+#     **第一只放大后的 num** 上再乘一次: 100 → 115 → 132.25 … 越往后越离谱,
+#     而且结果取决于选择器遍历顺序(换个目标顺序数值就变)。
+#     改成**整份 set from ob**: ob 是这批伤害的不可变快照(见 with_from),
+#     每只目标开打前一律拉回它, 中途谁改过 a 都不影响, 与目标顺序无关。
+data modify storage zx:work a set from storage zx:work ob
 
 # ①.5c 天穹「升痕」加伤: 目标带升痕 + 这一击"来自比它更高处" -> 本次伤害 ×(1+5%×层数)
 #   【开销】平时(目标没升痕)只多一条选择器判定; 走这条的只有被天穹打过、且被居高临下

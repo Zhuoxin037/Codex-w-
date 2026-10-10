@@ -40,7 +40,18 @@ desktop.ini
 /logs/
 
 # ---- WorkBuddy 工作目录 ----
-# 里面是离线工具链(check.py / lore_fmt.py …)、记忆笔记、渲染产物(20M+),
-# 都是本地开发用的, 不属于数据包本体。数据包本体在 manacore-1.0.0 /
-# sweetdream / sweetdream_rp 三个目录里。
-/.workbuddy/
+# 里面是离线工具链(check.py / lore_fmt.py …)、记忆笔记、渲染产物(200M+),
+# 大部分是本地开发用的, 不属于数据包本体。
+#
+# ★ 2026-10-10(O09): **构建/校验工具链要进版本控制** —— 发布产物不能取决于
+#   "本机恰好有 .workbuddy 里某个脚本"; 换台机器 clone 下来必须能重建。
+#   所以这里改成"只忽略目录内容", 再对工具链脚本做白名单(! 取反)。
+#   仍然忽略: 渲染产物 / 记忆笔记 / __pycache__ / backup 等。
+/.workbuddy/*
+!/.workbuddy/_*.py
+!/.workbuddy/build_*.py
+!/.workbuddy/draw_*.py
+!/.workbuddy/gen_*.py
+!/.workbuddy/check*.py
+!/.workbuddy/lore_fmt.py
+!/.workbuddy/*.ps1

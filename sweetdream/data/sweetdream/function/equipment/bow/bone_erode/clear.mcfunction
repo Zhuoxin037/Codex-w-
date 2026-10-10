@@ -5,4 +5,4 @@
 #   整条重写成 dmg:0(而不是 remove), 保证命中时读得到且一定是 0。
 # ============================================================
 
-$data modify storage zx:data be."$(uuid)" set value {dmg:0.0,u0:0,u1:0,u2:0,u3:0}
+$data modify storage zx:data be."$(uuid)" set value {dmg:0.0,ol:0b,u0:0,u1:0,u2:0,u3:0}

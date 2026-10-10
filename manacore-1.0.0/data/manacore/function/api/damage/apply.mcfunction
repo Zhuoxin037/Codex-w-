@@ -13,6 +13,9 @@
 #   from   : 攻击者选择器, 省略则按 uuid 自动推导(推不出来就用 @s)
 # 【说明】内部用 /damage 命令实现, 因此支持伤害类型/击退/击杀归属。
 # ============================================================
-data modify storage manacore:work a set value {uuid:"",target:"",damage:0.0,type:"minecraft:player_attack"}
+# 【★ 默认值里不要写 target:"" ★】空串在 `if data` 里算"**存在**" —— 不给 target 时
+#   会一路走进 internal/damage/apply, 展开成 `execute as  run damage @s ...` 解析失败,
+#   整段静默不打伤害(而不是上面写的"没给就跳过")。2026-10-08 修: 直接不设默认键。
+data modify storage manacore:work a set value {uuid:"",damage:0.0,type:"minecraft:player_attack"}
 data modify storage manacore:work a merge from storage manacore:in arg
 execute if data storage manacore:work a.target run function manacore:internal/damage/apply with storage manacore:work a

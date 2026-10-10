@@ -1,0 +1,11 @@
+{
+  "native_routing_matches_1_21_5": true,
+  "routing_samples": 55,
+  "approved_36_sprites_unchanged": true,
+  "only_item_model_added_to_give": true,
+  "legacy_migration_only_sets_item_model": true,
+  "prior_resource_assets_unchanged": true,
+  "datapack_changed_files": 13,
+  "cold_crow_unchanged": true,
+  "live_game_tested": false
+}

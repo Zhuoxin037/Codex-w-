@@ -16,7 +16,7 @@
 # 【★ 目标没有就不放 ★】16 格内一只「渊海」都没有 -> 整个技能不成立(不扣蓝、不进冷却),
 #   和惑梦同一套口径。
 # 【“以自身为中心”= 以那只生物自身为中心】每只被选中的生物在原地生成一个漩涡
-#   (漩涡 = 位置真相 marker, 见 vortex_make); 之后每秒拉 4 格内的生物回中心。
+#   (漩涡 = item_display 本体, 坐标即位置真相, 见 vortex_make); 之后每秒拉 4 格内的生物回中心。
 # 【“清除「渊海」”】在漩涡结束时(见 vortex_end)对中心 2 格内带「渊海」的生物
 #   走 lib/mark_consume 摘掉(让余烬/永恒的消耗被动收得到信号)。
 # ============================================================
@@ -27,6 +27,12 @@ advancement revoke @s only sweetdream:equipment/staff/begonia
 # ① 拿 uuid
 function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return fail
+
+# ①' 超限快照: 手里这把是不是超限版海棠(漩涡的范围/结算/增强/冷却全看它)
+#   ★ 为什么拍快照: 漩涡是"施法之后"才结算的(8 秒寿命), 到那时手里不一定还是海棠。
+#     快照抄进每只漩涡的 data.zx.bg.ol(见 ⑦), 之后 vortex_tick/vortex_end 各自查自己那份。
+function sweetdream:equipment/staff/begonia/is_ol
+scoreboard players operation @s zx.bg_ol = #bg_ol zx.meta
 
 # ①.2 拍下超限乘区
 function sweetdream:overlimit/api/snap
@@ -69,12 +75,14 @@ data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/formation/create
 
 # ⑦ 记释释放者的 uuid / u0..u3(漩涡结算与归属要用; 每只漩涡各存一份)
-data modify storage zx:work bgv set value {uuid:"",u0:0,u1:0,u2:0,u3:0}
+#    + 超限快照(ol: 0b/1b) —— vortex_make(直径)/vortex_tick(拉扯半径)/vortex_end(结算)都读它
+data modify storage zx:work bgv set value {uuid:"",u0:0,u1:0,u2:0,u3:0,ol:0b}
 data modify storage zx:work bgv.uuid set from storage zx:data self.uuid
 data modify storage zx:work bgv.u0 set from entity @s UUID[0]
 data modify storage zx:work bgv.u1 set from entity @s UUID[1]
 data modify storage zx:work bgv.u2 set from entity @s UUID[2]
 data modify storage zx:work bgv.u3 set from entity @s UUID[3]
+execute if score @s zx.bg_ol matches 1 run data modify storage zx:work bgv.ol set value 1b
 
 # ⑧ 每只被选中的「渊海」生物原地生成一个漩涡
 execute as @e[tag=zx.bg_src,distance=0..] at @s run function sweetdream:equipment/staff/begonia/vortex_make

@@ -29,6 +29,17 @@ advancement revoke @s only sweetdream:equipment/sword/deepsea_echo
 function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return fail
 
+# ①b 【超限】手里这把是不是超限版 —— 决定 范围(3/4 格) · 倍率(×0.15/×0.18) ·
+#     重复耗蓝(110/80) · 有没有「渊海」免费再重复。
+#     存进 zx:work de.ol 给 seed 抄进这次连锁的记录里(后面的文件都不是宏,
+#     只能读 zx:work de.ol 这个共享节点, 见 wave_go ①b)。
+#     ★ 和 passive 那条"物品栏里给水下呼吸"分开: 那是一条**被动**, 判的是背包;
+#       这里判的是"手上拿着哪一把" —— 手上基础版 + 背包里躺着超限版时,
+#       被动照常生效, 但技能按基础版结算。
+function sweetdream:equipment/sword/deepsea_echo/is_ol
+data modify storage zx:work de set value {uuid:"",ol:0b}
+execute if score #de_ol zx.meta matches 1 run data modify storage zx:work de.ol set value 1b
+
 # ② 只读检查: 冷却 + 魔力 350
 data modify storage manacore:in arg set value {uuid:"",skill:"sweetdream:deepsea_echo",mana:350.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
@@ -75,10 +86,10 @@ function sweetdream:equipment/sword/deepsea_echo/seed with storage zx:work de
 tag @s add zx.de_run
 scoreboard players set @s zx.de_t 20
 
-# ⑧ 播放释放动画(32 tick = 1.6 秒)
+# ⑧ 播放连续水刃释放动画(48 tick = 2.4 秒)
 #   【为什么放最后】前面 ①-⑥ 任何一步 return fail, 技能就没有成立, 不该有动画。
 #   【为什么和时间轴对得上】动画从这一刻起算, 第 20 tick 正好是技能第一波水链
 #     落地(1 秒 = 20 tick), anim/fx 在那一帧单独加了一圈最亮的环 ——
-#     于是"护手炸开"和"水链打到人"在视觉上是同一件事。
+#     于是原有水花粒子和"水链打到人"仍在同一条时间轴上。
 #   【它自己会收尾】anim/end 摘 tag; 中途把剑丢了也不会卡住(见 anim/end 注释)。
 function sweetdream:equipment/sword/deepsea_echo/anim/start

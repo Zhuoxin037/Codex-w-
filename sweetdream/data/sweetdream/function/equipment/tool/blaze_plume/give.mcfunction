@@ -15,4 +15,4 @@
 # 【手写文件】不是 _gen_batch5.py 的产物, 别被生成器覆盖。
 # ============================================================
 
-give @s recovery_compass[max_stack_size=1,item_name={text:"炽翎",bold:true,color:red},lore=[{"text":"✦ 被动技能","color":"gold","bold":true,"italic":false},{"text":"持于副手时，自身攻击处于燃烧状态的生","color":"gray","italic":false},{"text":"物后会使其燃烧状态 +1 秒。攻击有","color":"gray","italic":false},{"text":"「流火」效果的生物时使其燃烧 1 秒。","color":"gray","italic":false}],custom_data={zx:["blaze_plume","tool"]}]
+give @s recovery_compass[max_stack_size=1,item_name={text:"炽翎",bold:true,color:red},lore=[{"text":"✦ 被动技能","color":"gold","bold":true,"italic":false},{"text":"持于副手时，自身攻击处于燃烧状态的生","color":"gray","italic":false},{"text":"物后会使其燃烧状态 +1 秒。攻击有","color":"gray","italic":false},{"text":"「流火」效果的生物时使其燃烧 1 秒。","color":"gray","italic":false}],custom_data={zx:["blaze_plume","tool"],tags:["liuhuo","debuff"]},minecraft:item_model="sweetdream:tool_blaze_plume"]

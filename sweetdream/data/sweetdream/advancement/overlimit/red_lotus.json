@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "red_lotus": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "ol_red_lotus"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:overlimit/apply/red_lotus"
+    }
+}

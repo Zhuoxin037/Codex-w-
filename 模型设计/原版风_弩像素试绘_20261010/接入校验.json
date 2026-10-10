@@ -1,0 +1,21 @@
+{
+  "bound_count": 5,
+  "bound_ids": [
+    "arc",
+    "bone_erode",
+    "lucid_dream",
+    "rainbow",
+    "sculk_echo"
+  ],
+  "excluded_ids": [
+    "cold_crow"
+  ],
+  "states_per_item": 6,
+  "full_pack_files": 7314,
+  "synced_dp_files": 13,
+  "source_game_zip_match": true,
+  "prior_resource_assets_unchanged": true,
+  "backup": "D:\\数据包\\.workbuddy\\backup\\crossbow-icons-bind-20261010-044308",
+  "game_target": "D:\\PCL 正式版 2.10.0\\.minecraft\\versions\\1.21.5-Fabric 0.16.10",
+  "live_reload_tested": false
+}

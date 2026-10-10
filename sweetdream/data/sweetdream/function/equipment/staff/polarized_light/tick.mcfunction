@@ -13,20 +13,28 @@
 # 【倒计时】放在最后: 先干活再扣, zx.pl_t 减到 0 自然停驱动。
 # ============================================================
 
-# ① 锁 10 格内最近的一个生物(#sweetdream:no_damage 含玩家 → 不会锁到自己)
+# ① 锁目标(#sweetdream:no_damage 含玩家 → 不会锁到自己)
+#   基础: 10 格内最近 1 个; 超限: **12 格内最近 3 个**(三道光线各锁一个)。
+#   ★ "每秒(基础)/每 0.5 秒(超限)重新挑" —— 不是施法时锁死, 怪走了就换目标。
 tag @e[tag=zx.pl_lock] remove zx.pl_lock
-execute at @s run tag @e[type=!#sweetdream:no_damage,distance=..10,sort=nearest,limit=1] add zx.pl_lock
+execute unless score @s zx.pl_ol matches 1 run tag @e[type=!#sweetdream:no_damage,distance=..10,sort=nearest,limit=1] add zx.pl_lock
+execute if score @s zx.pl_ol matches 1 run tag @e[type=!#sweetdream:no_damage,distance=..12,sort=nearest,limit=3] add zx.pl_lock
 
-# ② 有目标才算伤害(当前魔力 ×0.05)
+# ② 有目标才算伤害(当前魔力 ×0.05; 目标 = 全部锁定的, 基础 1 个 / 超限 3 个)
 execute if entity @e[tag=zx.pl_lock,limit=1] run function sweetdream:equipment/staff/polarized_light/tick_go
 
-# ③ 被锁定的生物获得缓慢Ⅱ(2 秒, 每秒续)
-execute as @e[tag=zx.pl_lock] run effect give @s minecraft:slowness 2 1 true
+# ③ 被锁定的生物获得缓慢(基础: Ⅱ, 2 秒; 超限: **Ⅲ**, 1 秒 —— 0.5 秒一次的节奏,
+#   给 1 秒余量肉眼上就是"被锁定就一直缓着", 光束结束 1 秒后自然消退)
+execute unless score @s zx.pl_ol matches 1 run execute as @e[tag=zx.pl_lock] run effect give @s minecraft:slowness 2 1 true
+execute if score @s zx.pl_ol matches 1 run execute as @e[tag=zx.pl_lock] run effect give @s minecraft:slowness 1 2 true
 
-# ④ 光线表现: 施法者眼睛一小簇 + 目标身上一小簇, 中途用 sonid 尘连线感
-execute at @s anchored eyes run particle minecraft:end_rod ^ ^ ^0.8 0.06 0.06 0.06 0.0 3 normal
-execute as @e[tag=zx.pl_lock] at @s run particle minecraft:end_rod ~ ~1 ~ 0.25 0.25 0.25 0.01 8 normal
-execute as @e[tag=zx.pl_lock] at @s run particle minecraft:electric_spark ~ ~1 ~ 0.3 0.3 0.3 0.02 6 normal
+# ④ 光线表现: **整条光线**已经挪到 beam(每刻递归铺, 见 beam / beam_step)。
+#   原来这里是"玩家眼前一小簇 + 目标身上两簇", 中间是空的 —— 2026-10-09 用户
+#   要求"持续射向目标生物", 所以整条线改成每刻铺(粒子寿命 < 1 秒, 每秒铺一次
+#   会一闪就没)。
+#   这里只留"被锁定目标身上"的一圈命中脉冲(每秒一次), 用来标出"这一秒打的是它"。
+execute as @e[tag=zx.pl_lock] at @s run particle minecraft:end_rod ~ ~1 ~ 0.3 0.4 0.3 0.01 8 normal
+execute as @e[tag=zx.pl_lock] at @s run particle minecraft:electric_spark ~ ~1 ~ 0.35 0.45 0.35 0.02 6 normal
 
 # ⑤ 倒计时
 scoreboard players remove @s zx.pl_t 1

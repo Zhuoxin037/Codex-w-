@@ -20,9 +20,10 @@
 #   而不是
 #     ×(1 + 0.1n) × 1.3        ← 旧写法(各自乘一次 = 独立乘区), 偏大
 #   几种加成都在池子里相加, 谁也不比谁"乘得早"。
-# 【为什么三条通道都写】文案是"技能的伤害 +10%" —— 不挑口径。
-#   写满 mm/atk/oth 之后由 apply 只取"本次技能真正用到的那条", 所以最终
-#   等价于"把三条通道各 ×(1+0.1n)", 与文案一致。
+# 【为什么"不挑口径"现在交给 lib/dmg_add_put_any(修 F14)】
+#   文案是"技能的伤害 +10%" —— 不挑通道。旧写法三条各写一份, 在**多通道技能**上
+#   会把同一份 10n 算两次(总伤害 ×(1+2×10n%))。现在由 dmg_add_put_any 读
+#   zx:work ch 快照, 只写"本次技能第一条真正用到的通道", 多通道也只算一次。
 # ============================================================
 
 # ⓪ 不是玩家(法球 / 箭 / 命令方块在算伤害) -> 不参与
@@ -45,12 +46,11 @@ execute unless score #n zx.meta matches 1.. run return 0
 scoreboard players operation #pct zx.meta = #n zx.meta
 scoreboard players operation #pct zx.meta *= #10 zx.meta
 
-# ④ 写进加算池: 三条通道各 +10n%
+# ④ 写进加算池: ★ 只写"本次技能真正用到的那条通道" ★
+#    ★★ 2026-10-10 修 F14: 原来是 mm/atk/oth **三条各写一份** ——
+#       单通道技能没问题, 但多通道技能(mm+atk 各出一部分)会把同一份 10n
+#       算两次: 总伤害 ×(1+2×10n%)。现在交给 lib/dmg_add_put_any:
+#       它读 zx:work ch 快照, 只写第一条非 0 的通道, 多通道也只算一次。
 #    ★ 不再直接乘 r.damage ★ 那是"独立乘区"的落点, 会让共振和漫步冥河相乘。
 execute store result storage zx:work put.pct int 1 run scoreboard players get #pct zx.meta
-data modify storage zx:work put.ch set value "mm"
-function sweetdream:lib/dmg_add_put with storage zx:work put
-data modify storage zx:work put.ch set value "atk"
-function sweetdream:lib/dmg_add_put with storage zx:work put
-data modify storage zx:work put.ch set value "oth"
-function sweetdream:lib/dmg_add_put with storage zx:work put
+function sweetdream:lib/dmg_add_put_any

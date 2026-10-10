@@ -24,10 +24,13 @@
 #   target                 目标选择器, 省略=只算伤害不打
 #   type                   伤害类型, 默认 minecraft:player_attack(吃护甲)
 #   from                   攻击者选择器, 省略自动推导
-# 【出参】out.success / out.reason("cooldown"/"mana"/"ok")
+# 【出参】out.success / out.reason("cooldown"/"mana"/"ok"/"invalid_uuid"/"invalid_skill")
 #         out.damage / out.remaining(冷却剩余)
 # 【失败时什么都不会发生】不会扣蓝、不会进冷却 —— 因为这两步都在
-#   out.success 判定之后。
+#   out.success 判定之后; 参数非法时更是在最前面就 return 了。
+# 【★ 必填校验(2026-10-10, 修 F19)★】uuid / skill 必须是**非空串**。
+#   默认值里就是空串, 所以不能拿"字段存在"当校验(空串也存在), 要用复合匹配
+#   {uuid:""} 取反。非法参数直接 reason=invalid_*, 不扣蓝、不进冷却、不建记录。
 # ============================================================
 # 入参: manacore:in {uuid, skill, mana, cooldown|cooldown_seconds, reduce, consume,
 #                     max_mana_mul, attack_mul, other_mul, base_attack, other_base,
@@ -37,6 +40,10 @@
 data modify storage manacore:work a set value {uuid:"",skill:"",mana:0.0,cooldown:0,cooldown_seconds:0.0,reduce:1b,consume:1b,base_attack:-1.0,other_base:-1.0,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0,type:"minecraft:player_attack"}
 data modify storage manacore:work a merge from storage manacore:in arg
 data modify storage manacore:out r.success set value 0b
-data modify storage manacore:out r.reason set value ""
+data modify storage manacore:out r.reason set value "invalid"
+execute if data storage manacore:work a{uuid:""} run data modify storage manacore:out r.reason set value "invalid_uuid"
+execute if data storage manacore:work a{uuid:""} run return 0
+execute if data storage manacore:work a{skill:""} run data modify storage manacore:out r.reason set value "invalid_skill"
+execute if data storage manacore:work a{skill:""} run return 0
 function manacore:api/player/ensure
-execute if data storage manacore:work a.uuid if data storage manacore:work a.skill run function manacore:internal/skill/cast with storage manacore:work a
+function manacore:internal/skill/cast with storage manacore:work a

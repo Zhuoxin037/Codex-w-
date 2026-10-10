@@ -1,0 +1,15 @@
+{
+  "empty_visible_cubes": 628,
+  "source_cubes": 712,
+  "red_red_visible_cubes": 648,
+  "yellow_blue_visible_cubes": 648,
+  "three_slots_visible_cubes": 656,
+  "groups": 46,
+  "textures": 4,
+  "animations": 0,
+  "unique_group_ids": true,
+  "structure_checked": true,
+  "java_static_export_checked": true,
+  "gui_verified": false,
+  "deployed": false
+}

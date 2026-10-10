@@ -27,7 +27,12 @@
 #
 # 【★ 加新入口要做四件事 ★】
 #   ① core/load 里建 trigger 计分项  ② 这个文件加一行路由
-#   ③ debug/second 加一行 enable     ④ lib/reg/build 的 tg 表加一条(菜单才看得见)
+#   ③ debug/second 加一行 enable(管理类要加到 debug/enable_admin)
+#   ④ lib/reg/build 的 tg 表加一条(菜单才看得见)
+#
+# 【C01 · 管理类入口的权限】发布服务器上不该让普通玩家发物/改数值。
+#   本文件把路由分成两段: 上段是只读入口(人人可用), 下段(③)是管理类,
+#   只有在"开发模式"或"带 zx.admin 标签"时才路由。默认值与开关见 core/load 的 C01 段。
 # ============================================================
 
 execute as @a[scores={zx.dbg_menu=1..}] run function sweetdream:debug/tg_menu
@@ -35,8 +40,20 @@ execute as @a[scores={zx.dbg_stats=1..}] run function sweetdream:debug/tg_stats
 execute as @a[scores={zx.dbg_worn=1..}] run function sweetdream:debug/tg_worn
 execute as @a[scores={zx.dbg_diff=1..}] run function sweetdream:debug/tg_diff
 execute as @a[scores={zx.dbg_raw=1..}] run function sweetdream:debug/tg_raw
-execute as @a[scores={zx.dbg_cd=1..}] run function sweetdream:debug/tg_cd
-execute as @a[scores={zx.dbg_mana=1..}] run function sweetdream:debug/tg_mana
-execute as @a[scores={zx.dbg_fadd=1..}] run function sweetdream:debug/tg_fadd
-execute as @a[scores={zx.dbg_fdel=1..}] run function sweetdream:debug/tg_fdel
-execute as @a[scores={zx.dbg_give=1..}] run function sweetdream:debug/tg_give
+
+# ---- ③ 管理类入口(C01: 改背包/数值/世界, 按权限路由) ----
+#   开发模式(#dev zx.meta = 1) → 谁按都行; 发布模式 → 只认 zx.admin 标签。
+#   ★ 两条只会有其中一条真正执行: 上面那条跑完会把分数归 0(见各 tg_* 头注释),
+#     于是下面这条的 scores 匹配就不再命中; 反之 #dev=0 时上面那条整个被 if 挡掉。
+#   ★ 光看 enable 其实已经够(没 enable 玩家敲 /trigger 会被原版拒), 这里是**第二道**:
+#     防的是"有人用 /scoreboard 直接把自己的分数设成 1"这种旁路。
+execute if score #dev zx.meta matches 1 as @a[scores={zx.dbg_cd=1..}] run function sweetdream:debug/tg_cd
+execute unless score #dev zx.meta matches 1 as @a[scores={zx.dbg_cd=1..},tag=zx.admin] run function sweetdream:debug/tg_cd
+execute if score #dev zx.meta matches 1 as @a[scores={zx.dbg_mana=1..}] run function sweetdream:debug/tg_mana
+execute unless score #dev zx.meta matches 1 as @a[scores={zx.dbg_mana=1..},tag=zx.admin] run function sweetdream:debug/tg_mana
+execute if score #dev zx.meta matches 1 as @a[scores={zx.dbg_fadd=1..}] run function sweetdream:debug/tg_fadd
+execute unless score #dev zx.meta matches 1 as @a[scores={zx.dbg_fadd=1..},tag=zx.admin] run function sweetdream:debug/tg_fadd
+execute if score #dev zx.meta matches 1 as @a[scores={zx.dbg_fdel=1..}] run function sweetdream:debug/tg_fdel
+execute unless score #dev zx.meta matches 1 as @a[scores={zx.dbg_fdel=1..},tag=zx.admin] run function sweetdream:debug/tg_fdel
+execute if score #dev zx.meta matches 1 as @a[scores={zx.dbg_give=1..}] run function sweetdream:debug/tg_give
+execute unless score #dev zx.meta matches 1 as @a[scores={zx.dbg_give=1..},tag=zx.admin] run function sweetdream:debug/tg_give

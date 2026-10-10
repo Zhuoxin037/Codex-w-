@@ -31,6 +31,16 @@ execute unless data storage zx:data self{ok:1b} run return fail
 #   ★ 没分数的目标在 `if score ... matches` 里判不出来 —— 不建这一下,
 #     强化判定会永远失败(这次就是这么栽的)。
 scoreboard players add @s zx.sd_lock 0
+scoreboard players add @s zx.sd_ol 0
+
+# ①.6 ★ 超限快照 ★ 真正的结算在 4 tick 后的挥击帧(见 sweep/start), 那时手里的
+#      镰刀已经被通用回手挪走了 —— 所以拍成玩家计分项 zx.sd_ol, 强化段读它。
+#      【超限·引梦镰 加在这把上的机制(逐字照抄 oldef."sickle_dreams".lore)】
+#        强化那一下从"最大魔力 ×0.2" 提到 "最大魔力 ×0.25";
+#        其余(基础 ×0.05 / 附噬心 / 3*5 范围 / 时停 2 秒 / 摘噬心 / 8 秒锁)与基础版一致。
+function sweetdream:equipment/sword/sickle_dreams/is_ol
+scoreboard players set @s zx.sd_ol 0
+execute if score #sd_ol zx.meta matches 1 run scoreboard players set @s zx.sd_ol 1
 
 # ② 只读检查: 冷却 + 魔力 300
 data modify storage manacore:in arg set value {uuid:"",skill:"sweetdream:sickle_dreams",mana:300.0}
@@ -61,7 +71,14 @@ function sweetdream:equipment/sword/sickle_dreams/area_base
 #   实测不稳。换成"逐个问"的写法: as @e[...] if entity @s[tag=zx.status.shixin]
 #   (观测镜的判定就是这么写的, 那个是验证过的)
 scoreboard players set #sd_enh zx.meta 0
-execute unless score @s zx.sd_lock matches 1.. as @e[tag=zx.sd_hit] if entity @s[tag=zx.status.shixin] run scoreboard players set #sd_enh zx.meta 1
+#   【★ 超限版不吃这个 8 秒锁(2026-10-08 修)】
+#     基础版 lore 明写"触发强化攻击后则在 8 秒内不可再次触发强化攻击";
+#     超限版那整段 lore 里**没有这句话** ⇒ 超限版不该被锁卡住
+#     (玩家报: 范围内明明有噬心却死活不强化)。
+#     而且超限版的节奏本来就有自限制: 强化会把「噬心」消耗掉, 下一次必须先
+#     重新附加才能再强化 —— 不需要额外再上锁。
+execute if score @s zx.sd_ol matches 1 as @e[tag=zx.sd_hit] if entity @s[tag=zx.status.shixin] run scoreboard players set #sd_enh zx.meta 1
+execute if score @s zx.sd_ol matches 0 unless score @s zx.sd_lock matches 1.. as @e[tag=zx.sd_hit] if entity @s[tag=zx.status.shixin] run scoreboard players set #sd_enh zx.meta 1
 
 # ⑥.5 记下"这一下是从哪只手放的"
 #   【为什么必须在这里判】右键使用时, 消耗流程还没收尾 —— 物品仍在手上。

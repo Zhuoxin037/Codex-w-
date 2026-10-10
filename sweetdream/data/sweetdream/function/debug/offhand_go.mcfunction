@@ -1,17 +1,16 @@
 # ============================================================
-# sweetdream:debug/offhand_go —— 查盔甲架两个槽位的备份(宏 {uuid})
+# sweetdream:debug/offhand_go —— 查备份快照的两份快照(宏 {uuid})
 # ------------------------------------------------------------
 # 【谁调用它】debug/offhand, 拿 UUID 用; 也可以自己调
-# 【为什么必须宏】架子的标签是 test_stand_<uuid>, 而选择器里不能写动态值,
+# 【为什么必须宏】快照键是 zx:ret p."<uuid>"... , 存储路径里不能写动态值,
 #   只能用宏把 UUID "烤"进命令里。
-# 【架子在哪】固定住在主世界 (0.5,-60,0.5), 所以查它一律要切到主世界。
+# 【★ O03(2026-10-11): 架子换成了存储快照 ★】备份在 zx:ret p."<uuid>".mainhand
+#   / .offhand, 不再有任何实体架子; 老存档里 0.5,-60,0.5 的旧架子是残留物, 无用。
 # ============================================================
 
-# ⑤ 架子的主手槽
-$execute in minecraft:overworld unless entity @e[distance=0..,tag=test_stand_$(uuid)] run tellraw @s [{"text":"⑤ 备份盔甲架: 不存在(等 2 秒自愈, 或重进一次)","color":"red"}]
-$execute in minecraft:overworld if items entity @e[distance=0..,tag=test_stand_$(uuid),limit=1] weapon.mainhand * run tellraw @s [{"text":"⑤ 架子 主手槽: 有备份 ✓","color":"green"}]
-$execute in minecraft:overworld unless items entity @e[distance=0..,tag=test_stand_$(uuid),limit=1] weapon.mainhand * run tellraw @s [{"text":"⑤ 架子 主手槽: 空","color":"gray"}]
-$execute in minecraft:overworld if items entity @e[distance=0..,tag=test_stand_$(uuid),limit=1] weapon.offhand * run tellraw @s [{"text":"⑥ 架子 副手槽: 有备份 ✓","color":"green"}]
-$execute in minecraft:overworld unless items entity @e[distance=0..,tag=test_stand_$(uuid),limit=1] weapon.offhand * run tellraw @s [{"text":"⑥ 架子 副手槽: 空","color":"gray"}]
+$execute unless data storage zx:ret p."$(uuid)".mainhand.id run tellraw @s [{"text":"⑤ 快照 主手: 空","color":"gray"}]
+$execute if data storage zx:ret p."$(uuid)".mainhand.id run tellraw @s [{"text":"⑤ 快照 主手: 有备份 ✓ ","color":"green"},{nbt:"p.\"$(uuid)\".mainhand.id","storage":"zx:ret","color":"white"}]
+$execute unless data storage zx:ret p."$(uuid)".offhand.id run tellraw @s [{"text":"⑥ 快照 副手: 空","color":"gray"}]
+$execute if data storage zx:ret p."$(uuid)".offhand.id run tellraw @s [{"text":"⑥ 快照 副手: 有备份 ✓ ","color":"green"},{nbt:"p.\"$(uuid)\".offhand.id","storage":"zx:ret","color":"white"}]
 
-tellraw @s [{"text":"   副手拿着武器但⑥是空 -> 备份没做成, 用了就会消失","color":"dark_gray"}]
+tellraw @s [{"text":"   拿着武器但快照是空 -> 备份没做成, 用了就会消失","color":"dark_gray"}]

@@ -42,6 +42,8 @@
 # 【为什么要走宏参数】倍率/固定伤害在不同技能里完全不同, 用宏参数传进来
 #   就能"一个函数服务所有技能", 不必为每个技能写一份计算函数。
 # 【出参】manacore:out.damage; 并抛 #manacore:event/damage_calc 供外部改算
+# 【★ 事件前后会备份/恢复 manacore:work a ★】见第 ⑥ 步 —— 事件里的 hook 会通过
+#   api/* 重置这个入参节点, 不还回去调用方(skill/go、damage/deal)就读不到 target 了。
 # ============================================================
 
 # ---- ① 旧字段兼容 + 补默认(直接调 internal 时也自给自足) ----
@@ -101,4 +103,23 @@ execute if score #dmg manacore.math matches ..0 run scoreboard players set #dmg 
 execute store result storage manacore:out r.damage double 0.001 run scoreboard players get #dmg manacore.math
 $data modify storage manacore:ctx uuid set value "$(uuid)"
 data modify storage manacore:ctx reason set value "calc"
+# ---- ⑥ 抛事件, 并把调用上下文原样还回去(2026-10-10, 修 F07) ----
+# 【★★ 为什么非备份不可 ★★】
+#   事件里的 hook(共振 / 漫步冥河 / 炽天使之翼 / 狄俄尼索斯之冠 / …)会调 manacore
+#   的公开 API, 而**每个** api/* 的第一行都是
+#       `data modify storage manacore:work a set value {...}`
+#   —— 直接把本函数的入参节点整个重置成它自己那套默认值。
+#   可调用方在 calc 返回之后还要接着用这个节点:
+#     · internal/skill/go    -> 读 a.target 决定"打不打", 再用 a 调 damage/apply
+#     · internal/damage/deal -> 同上(calc 后立刻读 a.target)
+#   ⇒ 不还回去的话: 只要施法者身上带了任何一件"会在 calc 事件里调 API"的装备,
+#     **带 target 的技能就一次都打不出伤害**, 而且完全静默 —— 选择器读不到 target,
+#     整段跳过, 零日志。玩家看到的是"穿了共振/漫步之后, 技能只有特效没伤害"。
+# 【只还 a, 不还 out】事件里的 hook 正是要改 out.damage(见 lib/dmg_add_apply),
+#   连 out 一起恢复等于把它们的加算/独立乘区全抹掉。
+# 【为什么用 ctx 这个节点名】manacore:work 下没有别的 ctx 用途(已 grep 确认);
+#   ctx 里只放这一份快照, 事件返回后立刻删, 不留给下一次。
+data modify storage manacore:work ctx set from storage manacore:work a
 function #manacore:event/damage_calc
+data modify storage manacore:work a set from storage manacore:work ctx
+data remove storage manacore:work ctx

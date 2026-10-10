@@ -3,6 +3,16 @@
         "hit_dream": {
             "trigger": "player_hurt_entity",
             "conditions": {
+                "damage": {
+                    "type": {
+                        "tags": [
+                            {
+                                "expected": true,
+                                "id": "minecraft:is_player_attack"
+                            }
+                        ]
+                    }
+                },
                 "entity": {
                     "nbt": "{Tags:[\"zx.status.dream\"]}"
                 }

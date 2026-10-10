@@ -1,0 +1,34 @@
+[
+  {
+    "function": "minecraft:set_components",
+    "components": {
+      "minecraft:item_model": "sweetdream:aurora_dream"
+    }
+  },
+  {
+    "function": "minecraft:set_custom_model_data",
+    "floats": {
+      "values": [
+        {
+          "type": "minecraft:score",
+          "target": {
+            "type": "minecraft:fixed",
+            "name": "#adphase"
+          },
+          "score": "zx.meta"
+        },
+        {
+          "type": "minecraft:score",
+          "target": {
+            "type": "minecraft:fixed",
+            "name": "#adframe"
+          },
+          "score": "zx.meta"
+        }
+      ],
+      "mode": "replace_section",
+      "offset": 0,
+      "size": 2
+    }
+  }
+]

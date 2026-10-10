@@ -225,8 +225,11 @@ data modify storage zx:reg a append value {l:"风声",o:"zx.wg_sound",c:"light_p
 # ============================================================
 data modify storage zx:reg layer set value []
 
-# ---- 炉心「燃灰」(最多 10 层) ----
-data modify storage zx:reg layer append value {o:"zx.fc_ash",l:"燃灰",c:"yellow",e:"furnace_core",n:"",max:10}
+# ---- 炉心「燃灰」★ 不在这张表里 ★ ----
+#   它的上限**随超限变**(基础 10 / 超限 12), 而本表的 max 是**写死的常数**(一行只能给
+#   一个上限) —— 写 10 则超限显示错, 写 12 则基础版显示错。所以搬到
+#   equipment/armor/furnace_core/look_seg(观测镜里"装备专属段"的口径), 由
+#   "身上这件是不是超限版"现选 10 / 12。★ 别再加回这张表(会显示成两份"燃灰")。
 # ---- 寒鸦「冰凌」(最多 4 层) ----
 data modify storage zx:reg layer append value {o:"zx.cc_ice",l:"冰凌",c:"blue",e:"cold_crow",n:"",max:4}
 # ---- 烈火残躯「熔浆」(无硬上限, 由技能消耗) ----
@@ -260,6 +263,17 @@ data modify storage zx:reg layer append value {o:"zx.as_x2",l:"翻倍",c:"blue",
 #     是"换手两用": 拿到千散时本该照样看见剑魂, 少登记一条就是"换个手 层数消失了"。
 data modify storage zx:reg layer append value {o:"zx.mq_soul",l:"剑魂",c:"light_purple",e:"myriad",n:"个",max:5}
 data modify storage zx:reg layer append value {o:"zx.mq_soul",l:"剑魂",c:"light_purple",e:"qiansan",n:"个",max:5}
+# ---- 万念 / 千散「居合」(居合期内每切换一次 +1 层; 下一次技能伤害 = ×(1 + 0.20×层数), 独立乘区) ----
+#   ★ 与剑魂同款: e 只能填一个 id, 而这两把是"换手两用"(居合期来回切) —— 两把各登记一条,
+#     少一条就是"换个手 层数消失了"。无硬上限(层数 = 3 秒内切换次数) -> max:0 只显示当前层数。
+data modify storage zx:reg layer append value {o:"zx.mq_jb",l:"居合",c:"gold",e:"myriad",n:"层",max:0}
+data modify storage zx:reg layer append value {o:"zx.mq_jb",l:"居合",c:"gold",e:"qiansan",n:"层",max:0}
+# ---- 狄俄尼索斯之桂冠「酒浆」(最多 10 层; 受击 / 满蓄力攻击攒层, 5 层换一次爆发) ----
+#   ★ 玩家 2026-10-10: "酒浆没有在观测镜显示" —— 批次 H 实装了「酒浆」经济却没登记观测镜。
+data modify storage zx:reg layer append value {o:"zx.dio_wine",l:"酒浆",c:"light_purple",e:"dionysus_helmet",n:"层",max:10}
+# ---- 风行于大地之上「风声」(点数, 无硬上限; 召唤术阵后每命中一个生物 +1, >60 触发加成) ----
+#   上限是动态阈值(60)而非硬顶, 且点数会冲到很大 -> max:0 只显示当前点数, 不摆 "x/N"。
+data modify storage zx:reg layer append value {o:"zx.wg_sound",l:"风声",c:"white",e:"wind_ontheground",n:"点",max:0}
 
 
 # ============================================================

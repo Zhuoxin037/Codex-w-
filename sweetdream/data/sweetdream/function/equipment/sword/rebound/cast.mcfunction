@@ -23,10 +23,6 @@
 # ⓪ 撤销自己的进度
 advancement revoke @s only sweetdream:equipment/sword/rebound
 
-# ⓪' 清掉上一轮可能残留的"重复"状态(正常 1 秒内就打完了; 防退游戏/被打断留下残值)
-scoreboard players reset @s zx.rb_t
-scoreboard players reset @s zx.rb_rep
-
 # ① 拿 uuid
 function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return fail
@@ -55,6 +51,15 @@ execute if data storage manacore:out r{success:0b} run return fail
 data modify storage manacore:in arg set value {uuid:"",skill:"sweetdream:rebound",cooldown_seconds:12.0,reduce:1b}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/cooldown/start
+
+# ⑤' 到这里才算"这一发真的放出去了", 现在才清上一轮的连击残值(正常 1 秒内打完;
+#   防退游戏/被打断留下残值)。
+#   ★★ 2026-10-10 修 F11: 原来这三行在**最前面**(校验之前) ★★
+#     于是"冷却中再右键"这种**注定失败**的尝试, 也会先把上一轮**还没打完**的
+#     连击队列(rb_t / rb_rep)清掉 —— 白丢后面几段。校验失败必须无副作用,
+#     所以搬到这里: 扣完蓝、记完冷却 = 确定要放, 才允许覆盖旧队列。
+scoreboard players reset @s zx.rb_t
+scoreboard players reset @s zx.rb_rep
 
 # ⑥ 算伤害: 基础攻击力 ×2 (写进 zx:work rba.damage, 就是下面 strike 的宏参数)
 function sweetdream:equipment/sword/rebound/recalc

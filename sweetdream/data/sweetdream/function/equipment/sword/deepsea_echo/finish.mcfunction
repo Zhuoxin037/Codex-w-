@@ -19,6 +19,10 @@ tag @s remove zx.de_run
 scoreboard players set @s zx.de_t 0
 tag @e[tag=zx.de_hit] remove zx.de_hit
 tag @e[tag=zx.de_all] remove zx.de_all
+# 【超限】"本次已兑现过渊海加成"的生物标记 —— 它是**这条链内**的局部标记,
+#   链一结束就清掉, 下次施法重新开始(见 echo_extra 的注释: 不这么做的话
+#   文案第二句"之后该技能每攻击到…都会重复一次"就永远不可能生效)。
+tag @e[tag=zx.de_spent] remove zx.de_spent
 
 # 收尾音: 潮涌核心关闭的那一声(和起手那声是一对)
 execute at @s run playsound minecraft:block.conduit.deactivate player @a ~ ~ ~ 0.7 1.2

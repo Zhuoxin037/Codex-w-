@@ -1,0 +1,11 @@
+{
+  "function": "minecraft:set_components",
+  "components": {
+    "minecraft:item_model": "sweetdream:armor_spirit_sight",
+    "minecraft:equippable": {
+      "slot": "head",
+      "asset_id": "sweetdream:armor_spirit_sight",
+      "equip_sound": "minecraft:item.armor.equip_iron"
+    }
+  }
+}

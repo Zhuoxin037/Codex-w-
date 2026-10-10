@@ -1,12 +1,12 @@
 # ============================================================
-# sweetdream:equipment/sword/deepsea_echo/pay_mana —— 重复一次要花的 110 魔力
+# sweetdream:equipment/sword/deepsea_echo/pay_mana —— 重复一次要花的魔力
 # ------------------------------------------------------------
 # 【执行者】施法者    【出参】manacore:out r.success (由 wave_go 判)
-# 【为什么单独一个文件】consume 要三行, 没法塞进 execute if ... run 里。
-# 【扣不动就不扣】api/mana/consume 要么全扣要么一点不扣, 所以不足时
-#   不会出现"扣了一半"的情况, 连锁直接在 wave_go 里中断。
+# 【金额】基础版 110 / 超限版 80(文案: "每次重复都会消耗自身 **80** 魔力值")。
+#   ★ ol 由 wave_go 每波开头写进 zx:work de.ol; 这里只是读。
 # ============================================================
 
-data modify storage manacore:in arg set value {uuid:"",value:110.0}
+execute if data storage zx:work de{ol:1b} run data modify storage manacore:in arg set value {uuid:"",value:80.0}
+execute unless data storage zx:work de{ol:1b} run data modify storage manacore:in arg set value {uuid:"",value:110.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/mana/consume

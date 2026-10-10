@@ -1,0 +1,18 @@
+{
+  "before_cubes": 1879,
+  "source_cubes": 998,
+  "fixed_cubes_shared": 910,
+  "water_cubes_per_frame": 88,
+  "symmetry_pairs_merged": 539,
+  "buried_cubes_removed": 46,
+  "water_highlight_cubes_folded_into_UV": 256,
+  "groups": 143,
+  "connected_water_bands": 88,
+  "idle_frames": 96,
+  "cast_frames": 48,
+  "display_preserved": true,
+  "gameplay_untouched": true,
+  "deployed": true,
+  "game_tested": false,
+  "resource_files_verified": 151
+}

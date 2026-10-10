@@ -18,4 +18,4 @@
 # 【手写文件】不是 _gen_batch5.py 的产物, 别被生成器覆盖。
 # ============================================================
 
-give @s recovery_compass[max_stack_size=1,item_name={text:"愠怒",bold:true,color:dark_red},lore=[{"text":"✦ 被动技能","color":"gold","bold":true,"italic":false},{"text":"持于副手时，若自身血量低于 20%，则自","color":"gray","italic":false},{"text":"身获得常态的抗性提升Ⅰ，之后自身有关","color":"gray","italic":false},{"text":"最大魔力值的技能伤害提升 20%","color":"gray","italic":false},{"text":"（独立乘区）。","color":"gray","italic":false}],custom_data={zx:["wrath","tool"]}]
+give @s recovery_compass[max_stack_size=1,item_name={text:"愠怒",bold:true,color:dark_red},lore=[{"text":"✦ 被动技能","color":"gold","bold":true,"italic":false},{"text":"持于副手时，若自身血量低于 20%，则自","color":"gray","italic":false},{"text":"身获得常态的抗性提升Ⅰ，之后自身有关","color":"gray","italic":false},{"text":"最大魔力值的技能伤害提升 20%","color":"gray","italic":false},{"text":"（独立乘区）。","color":"gray","italic":false}],custom_data={zx:["wrath","tool"],tags:["max_mana","buff","indep_mul"]},minecraft:item_model="sweetdream:tool_wrath"]

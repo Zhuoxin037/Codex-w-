@@ -2,6 +2,9 @@
 
 # ① 冷冻到点 -> 解冻
 execute as @e[distance=0..,tag=zx.freeze] if score @s zx.fz_end <= #now manacore.meta run function sweetdream:lib/unfreeze_one
+#    【兜底】和下面时停那条同款: 带了 zx.freeze 却没有 zx.fz_end 的(计时被外力清掉),
+#      上面的 `<=` 会因"分数不存在"而失败 -> 永远解不开。2026-10-09 补。
+execute as @e[distance=0..,tag=zx.freeze] unless score @s zx.fz_end = @s zx.fz_end run function sweetdream:lib/unfreeze_one
 
 # ② 时停到点 -> 先标出来, 让应用层接一下, 再真正解除
 #    【为什么要多"标一下"这一步】zx.stop 一摘掉就再也分不出"刚结束的"和

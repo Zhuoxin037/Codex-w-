@@ -4,8 +4,11 @@
 # 【文案】消耗 80 魔力 / 冷却 20 秒。使用后召唤一个术阵。之后自身持续发射
 #   一道光线且每秒对自身 10 格内离自己最近的一个生物造成一次相当于自身
 #   当前魔力值 ×0.05 的伤害, 且被锁定的生物获得缓慢Ⅱ效果。该效果持续 5 秒。
-# 【"持续发射一道光线"是表现层】伤害走每秒一次的检测(second 驱动 tick),
-#   光线只是粒子(见 tick 的 fx 段)。
+# 【"持续发射一道光线"是表现层】伤害走每秒一次的检测(second 驱动 tick);
+#   光线本身每刻铺一条真的(见 beam / beam_step, 由 core/tick 每刻驱动) ——
+#   原来只做了"两端各一小簇", 2026-10-09 用户要求"持续射向目标生物"。
+#   ★ 这道光线照到"自己人的共鸣水晶"时会触发共鸣的"法术穿过"
+#     (给水晶打 zx.ch_beam 戳, 见 beam_step ② 与 chime/pass_set)。
 # 【状态】zx.pl_t = 还剩几秒(玩家身上)。每秒由 second 驱动 tick:
 #   重新锁 10 格内最近 → 伤害 → 缓慢Ⅱ → 粒子 → 倒计时; 到 0 自然结束。
 # ============================================================
@@ -16,6 +19,12 @@ advancement revoke @s only sweetdream:equipment/staff/polarized_light
 # ① 拿 uuid
 function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return fail
+
+# ①' 超限快照: 手里这把是不是超限版偏振光(三道光/0.5秒/3目标/12格/缓慢Ⅲ全看它)
+#   ★ 必须每次都写(0 或 1): second 与 core/tick 的分流选择器都拿它当判据 ——
+#     不写的话老玩家身上没这个分数, "zx.pl_ol=0" 匹配不上, 光束直接不跑。
+function sweetdream:equipment/staff/polarized_light/is_ol
+scoreboard players operation @s zx.pl_ol = #pl_ol zx.meta
 
 # ①.2 拍下超限乘区
 function sweetdream:overlimit/api/snap
@@ -51,8 +60,9 @@ data modify storage manacore:in arg set value {uuid:"",id:"sweetdream:polarized_
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/formation/create
 
-# ⑥ 点火: 光束状态 5 秒(每秒由 second 驱动 tick)
+# ⑥ 点火: 光束状态 5 秒(基础版每秒由 second 驱动 tick; 超限版每 0.5 秒由 core/tick 驱动)
 scoreboard players set @s zx.pl_t 5
+scoreboard players set @s zx.pl_ct 0
 
 # ⑦ 表现
 execute at @s run playsound minecraft:block.beacon.power_select player @a ~ ~ ~ 0.7 1.8

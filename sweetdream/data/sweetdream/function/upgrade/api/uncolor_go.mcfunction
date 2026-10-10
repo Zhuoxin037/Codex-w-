@@ -1,5 +1,5 @@
 # ============================================================
-# sweetdream:upgrade/api/uncolor_go —— 无色石: 删掉最近敲入的升级(宏 {x,y,z,...})
+# sweetdream:upgrade/api/uncolor_go —— 无色石: 删掉最近敲入的升级
 # ------------------------------------------------------------
 # 【谁调用它】station/api/apply_go(st.kind = "uncolor"; fit_uncolor 已通过)
 # 【做法】重建 up 列表: 保留槽号 < #uc_last 的条目(和敲入的 up_rebuild 同思路,
@@ -13,6 +13,8 @@
 #   记进 zx:work kept."<id>", uncolor_give 跳过它们。
 # 【为什么属性不用手动重算】护甲/生命/冷却那些账都是 upgrade/second 每秒按
 #   物品身上的 up 现算的 —— 列表一变, 下一秒自动回到正确值。
+# 【改的是哪一件】中转架 @e[tag=zx.st_tmp,limit=1] 主手上那一件
+#   (2026-10-08 前是"工作台箱子 0,-59,2"那一格 —— 那个箱子已经废掉了)。
 # 【执行者】玩家
 # ============================================================
 
@@ -24,20 +26,20 @@ data remove storage zx:work kept
 # #uc_d = uncolor_give 的递归深度计数(它自己会 +1, 这里归零)
 scoreboard players set #uc_d zx.meta 0
 scoreboard players set #uc_i zx.meta 0
-$execute if score #uc_i zx.meta < #uc_last zx.meta run data modify storage zx:work uc.keep set from block $(x) $(y) $(z) Items[{Slot:0b}].components."minecraft:custom_data".up[0]
+execute if score #uc_i zx.meta < #uc_last zx.meta run data modify storage zx:work uc.keep set from entity @e[tag=zx.st_tmp,limit=1] equipment.mainhand.components."minecraft:custom_data".up[0]
 execute if score #uc_i zx.meta < #uc_last zx.meta run function sweetdream:upgrade/api/uncolor_keep with storage zx:work uc
 scoreboard players set #uc_i zx.meta 1
-$execute if score #uc_i zx.meta < #uc_last zx.meta run data modify storage zx:work uc.keep set from block $(x) $(y) $(z) Items[{Slot:0b}].components."minecraft:custom_data".up[1]
+execute if score #uc_i zx.meta < #uc_last zx.meta run data modify storage zx:work uc.keep set from entity @e[tag=zx.st_tmp,limit=1] equipment.mainhand.components."minecraft:custom_data".up[1]
 execute if score #uc_i zx.meta < #uc_last zx.meta run function sweetdream:upgrade/api/uncolor_keep with storage zx:work uc
 scoreboard players set #uc_i zx.meta 2
-$execute if score #uc_i zx.meta < #uc_last zx.meta run data modify storage zx:work uc.keep set from block $(x) $(y) $(z) Items[{Slot:0b}].components."minecraft:custom_data".up[2]
+execute if score #uc_i zx.meta < #uc_last zx.meta run data modify storage zx:work uc.keep set from entity @e[tag=zx.st_tmp,limit=1] equipment.mainhand.components."minecraft:custom_data".up[2]
 execute if score #uc_i zx.meta < #uc_last zx.meta run function sweetdream:upgrade/api/uncolor_keep with storage zx:work uc
 scoreboard players set #uc_i zx.meta 3
-$execute if score #uc_i zx.meta < #uc_last zx.meta run data modify storage zx:work uc.keep set from block $(x) $(y) $(z) Items[{Slot:0b}].components."minecraft:custom_data".up[3]
+execute if score #uc_i zx.meta < #uc_last zx.meta run data modify storage zx:work uc.keep set from entity @e[tag=zx.st_tmp,limit=1] equipment.mainhand.components."minecraft:custom_data".up[3]
 execute if score #uc_i zx.meta < #uc_last zx.meta run function sweetdream:upgrade/api/uncolor_keep with storage zx:work uc
 
 # 写回(消到 0 条就是空列表 —— data get 空表 = 0 条, 后面的判据都成立)
-$data modify block $(x) $(y) $(z) Items[{Slot:0b}].components."minecraft:custom_data".up set from storage zx:work newlist
+data modify entity @e[tag=zx.st_tmp,limit=1] equipment.mainhand.components."minecraft:custom_data".up set from storage zx:work newlist
 
 # 把"被消的那条 + 它的全部前置"还给玩家(zx:work uc.id = 被消那条, 递归游标走 ucnext)
 function sweetdream:upgrade/api/uncolor_give with storage zx:work uc

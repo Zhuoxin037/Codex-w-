@@ -14,8 +14,12 @@
 # ============================================================
 
 # ---- 攻击 / 生命 / 魔力 ----
+# 【O02(2026-10-11)】★ 本函数现在是"每刻轻量层": 全部只读计分板/命令存储 ——
+#   免序列化。以前这里的 `data get entity @s Health` 和 6 次 equip_scan、
+#   SelectedItem.skill 判定都是每刻一次全玩家 NBT 序列化(spark 剖析最大热点),
+#   全部挪到了 equipment/tool/look/cache(每秒, lib/second 调)。
 $execute store result score #v_atk zx.meta run data get storage manacore:players "$(uuid)".stats.base_attack
-execute store result score #v_hp zx.meta run data get entity @s Health
+scoreboard players operation #v_hp zx.meta = @s zx.hp_show
 $execute store result score #v_hpmax zx.meta run data get storage manacore:players "$(uuid)".stats.max_health
 $execute store result score #v_mana zx.meta run data get storage manacore:players "$(uuid)".stats.current_mana
 $execute store result score #v_manamax zx.meta run data get storage manacore:players "$(uuid)".stats.max_mana
@@ -35,15 +39,10 @@ execute if data storage zx:look saved_in run data modify storage manacore:in arg
 execute if data storage zx:look saved_in run data remove storage zx:look saved_in
 
 # ---- 冷却: 看"手上拿的那把武器"还剩多久 ----
-# 【为什么改成看主手物品】以前记的是"最近放过的技能", 于是你切到别的武器,
-#   面板上还挂着上一把的冷却, 很别扭。现在直接读主手物品自带的 custom_data.skill:
-#     手里是带 skill 的武器 -> 显示它那条冷却
-#     其他(空手 / 观测镜 / 别的道具) -> 显示 0
-# 【为什么不会报错】空手时 SelectedItem 整个不存在, 主手是别的道具时没有 skill
-#   这个字段 —— 两种情况都被下面那句 if data 守卫挡住, 不会让函数中断。
-# 【观测镜自己】它是 paper, 身上没有 skill 字段, 所以拿着它时显示 0(符合预期)。
+# 【O02】skill 字段由 cache 每秒缓存(zx:look cache.skill), 这里只读存储。
+#   空手 / 拿别的道具时 cache.skill 不存在 ⇒ 走下面的守卫, 显示 0(和原来一致)。
 data remove storage zx:work a.skill
-execute if data entity @s SelectedItem.components."minecraft:custom_data".skill run data modify storage zx:work a.skill set from entity @s SelectedItem.components."minecraft:custom_data".skill
+execute if data storage zx:look cache.skill run data modify storage zx:work a.skill set from storage zx:look cache.skill
 
 scoreboard players set #v_cd zx.meta 0
 scoreboard players set #v_end zx.meta 0
@@ -67,15 +66,30 @@ execute if data storage zx:work a.skill run function sweetdream:equipment/tool/l
 #   ⚠️ 别把它改回 [] : check.py 规则 45(nbtempty) 专盯这条。
 data remove storage zx:look xline
 data modify storage zx:look xline set value [{"text":""}]
+# 【O02】6 次 equip_scan 挪进 cache(每秒) —— 这里只把缓存的名单搬进 zx:work eq。
+#   ↓↓↓ 原实现(每刻 6×"if data entity + data modify from entity" = 最多 12 次全玩家
+#   NBT 序列化)整段保留在 cache.mcfunction 里, 这里只读缓存:
 data remove storage zx:work eq
+execute if data storage zx:look cache.eq run data modify storage zx:work eq set from storage zx:look cache.eq
 scoreboard players set #ly_first zx.meta 1
-function sweetdream:debug/equip_scan {p:"SelectedItem"}
-function sweetdream:debug/equip_scan {p:"equipment.offhand"}
-function sweetdream:debug/equip_scan {p:"equipment.head"}
-function sweetdream:debug/equip_scan {p:"equipment.chest"}
-function sweetdream:debug/equip_scan {p:"equipment.legs"}
-function sweetdream:debug/equip_scan {p:"equipment.feet"}
+# ---- 装备专属「段」: 值不是"常数上限"的机制, 走各自的段函数 ----
+# 【为什么要这个】layer 表只会画「标签 当前值/上限」, 而且上限 `max` 是**写死的常数**
+#   —— 一个装备只能有一个上限。这两类都不进表, 各开一个段函数自己往 xline 追加:
+#     · 调色盘「色彩」: 存的是**色码**(1 红 / 2 黄 / 3 蓝), 摆个 "2/3" 等于没标;
+#     · 炉心「燃灰」:   上限**随超限变**(基础 10 / 超限 12), 写死一个数必错一个。
+#   ★ 顺序有讲究 ★
+#     · 调色盘段要在 layer_unroll **之后**(它显示在最右);
+#     · 炉心段要在 layer_unroll **之前** —— 它原本是 layer[0], 靠 #ly_first
+#       抢到"层数段第一名"的位置, 放在后面会变成"层数段最后一名"。
+#   (两段都复用 #ly_first 那套分隔符协议, 见 layer_row 头注释)
+execute if data storage zx:work eq.furnace_core run function sweetdream:equipment/armor/furnace_core/look_seg
+
+# ---- 层数段 ----
 function sweetdream:lib/look/layer_unroll
+
+# ---- 装备专属「文字型段」: 值不是数字的机制, 走各自的段函数 ----
+# 【必须在 layer_unroll 之后】段与段靠 #ly_first 排先后; 放在层数段后面 = 显示在最右。
+execute if data storage zx:work eq.palette run function sweetdream:equipment/staff/palette/look_seg
 
 # ---- 画出来 ----
 # 【一行怎么画】攻击/生命/魔力/术阵/冷却 + (有层数时)分隔符 + 层数。

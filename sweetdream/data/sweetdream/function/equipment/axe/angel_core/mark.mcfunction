@@ -15,3 +15,10 @@ tag @s add zx.status.shenghen
 scoreboard players set @s zx.sh_t 15
 execute at @s run particle minecraft:end_rod ~ ~1.2 ~ 0.3 0.4 0.3 0.02 8 normal
 execute at @s run particle minecraft:enchanted_hit ~ ~1.2 ~ 0.3 0.4 0.3 0.02 6 normal
+
+# 获得「圣痕」的瞬间: **不立圣光柱**(用户 2026-10-08 定稿: 柱子只留给「引爆」那一下)。
+#   理由: 被动是"每次平A给 8 格内最近 3 只挂圣痕" ⇒ 一次平A最多同时立 3 根大柱子,
+#   刷屏且掉价。这里改成一记"刻印"的小光(脚下暖白光点 + 一道往上收的光丝),
+#   大柱子由 dmg2 ⑤(圣痕被引爆)负责。
+execute at @s run particle minecraft:end_rod ~ ~0.15 ~ 0.30 0.05 0.30 0.06 18 normal
+execute at @s run particle minecraft:dust{color:[1.0,0.97,0.86],scale:1.5} ~ ~0.8 ~ 0.35 0.55 0.35 0.0 10 normal

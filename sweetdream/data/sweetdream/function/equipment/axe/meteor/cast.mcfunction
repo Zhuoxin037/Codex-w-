@@ -13,6 +13,10 @@
 # ⓪ 撤销自己的进度
 advancement revoke @s only sweetdream:equipment/axe/meteor
 
+# ⓪.5 【必须主手】(2026-10-08 修) —— tick/second 那边只认主手, 副手放的话会
+#      "全额付费(300 蓝 + 30 秒冷却)后约 1 tick 被 end 撤销"。这里先挡掉。
+execute unless items entity @s weapon.mainhand diamond_axe[minecraft:custom_data~{zx:["meteor"]}] run return fail
+
 # ① 拿 uuid + 先把状态计分项建出来(没分数的目标 matches 判不出来)
 function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return fail

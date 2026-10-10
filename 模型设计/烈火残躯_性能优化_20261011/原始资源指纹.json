@@ -1,0 +1,18 @@
+{
+  "assets/flameremnant/items/sword.json": "152b48ac5726c548b7ccd9acf89ab2dc324ff8f1f49b15209320a351f44a136a",
+  "assets/flameremnant/models/item/sword.json": "72e3dd484a22d8c4b4189d93476419efbfca910790adad211a6a273ff29a63e2",
+  "assets/flameremnant/textures/item/body.png": "6af7d5350795072dc8cf4a40387ab0cb6395ae460f99e1c790051aac07e43d72",
+  "assets/flameremnant/textures/item/flame_flow.png": "7ee9a44779bb0251f291ceef1d4649590f7882a10350d337920938fb70b2fc2c",
+  "assets/flameremnant/textures/item/flame_flow.png.mcmeta": "5ca5e36735d5720eff6ba46f9d9bf8e4aafec7fd42ac891c5ab7defaea566add",
+  "assets/flameremnant/textures/item/flow.png": "a574f13fe9eee792093a0e57f53652dff78345d45924439b690bc308ed14902f",
+  "assets/flameremnant/textures/item/flow.png.mcmeta": "ae617a172fed77b922aa5b92f4cc3dd4e4a1810d123a8893119b918fbb1e8ff6",
+  "assets/flameremnant/textures/item/forge.png": "321041c47c16cc55acec4d144390d0644025cfa99e57d5fd7c48290f9e7f655e",
+  "assets/flameremnant/textures/item/magma.png": "4386da821f9abbb874ea7d39a6f30065f0dbe6b05a823a2dfbc032c767e2f7cc",
+  "assets/flameremnant/textures/item/magma.png.mcmeta": "ae617a172fed77b922aa5b92f4cc3dd4e4a1810d123a8893119b918fbb1e8ff6",
+  "assets/flameremnant/textures/item/optimized_flow.png": "0776490871abd38c95379d8460021f7842fe6d41d42bbe3b12b45d8db8245729",
+  "assets/flameremnant/textures/item/optimized_flow.png.mcmeta": "5ca5e36735d5720eff6ba46f9d9bf8e4aafec7fd42ac891c5ab7defaea566add",
+  "assets/flameremnant/textures/item/optimized_static.png": "2c3a56b31546667c12c4bdee8d555480d04b290b5f6b2609b3bdb4f07777e2b6",
+  "assets/flameremnant/textures/item/sculpt.png": "6c85a57652f3a2c697f33e0c24615ff06575e8f87bee835c67ae6693d7321d97",
+  "assets/flameremnant/textures/item/wave.png": "c0a490c36d9ef05257bdbd764cf2d28485c3ea40a7fd79616efa1d49581a3f36",
+  "assets/flameremnant/textures/item/wave.png.mcmeta": "088e4c9930b760e30086d5e40057ab5fc6f24751830e44f368852bc7bd06de5c"
+}

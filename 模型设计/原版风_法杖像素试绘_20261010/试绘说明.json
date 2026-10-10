@@ -1,0 +1,13 @@
+{
+  "item": "chime",
+  "name": "共鸣",
+  "resolution": [
+    16,
+    16
+  ],
+  "opaque_pixels": 67,
+  "palette_colors": 10,
+  "hand_authored": true,
+  "game_bound": false,
+  "phase": "单张风格审阅"
+}

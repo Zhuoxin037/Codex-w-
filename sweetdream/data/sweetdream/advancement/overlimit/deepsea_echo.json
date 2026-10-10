@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "deepsea_echo": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "ol_deepsea_echo"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:overlimit/apply/deepsea_echo"
+    }
+}

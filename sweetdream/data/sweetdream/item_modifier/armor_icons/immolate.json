@@ -1,0 +1,11 @@
+{
+  "function": "minecraft:set_components",
+  "components": {
+    "minecraft:item_model": "sweetdream:armor_immolate",
+    "minecraft:equippable": {
+      "slot": "feet",
+      "asset_id": "sweetdream:armor_immolate",
+      "equip_sound": "minecraft:item.armor.equip_netherite"
+    }
+  }
+}

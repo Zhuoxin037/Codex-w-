@@ -58,8 +58,10 @@ data modify storage zx:config wchan.tinder set value {mm:0b,atk:0b,oth:1b}
 data modify storage zx:config wchan.rebound set value {mm:0b,atk:1b,oth:0b}
 
 # ---- 斧 / 弓 / 法杖 ----
-# 超·负·荷: 当前魔力 ×0.05
-data modify storage zx:config wchan.charge set value {mm:0b,atk:0b,oth:1b}
+# 超·负·荷: 当前魔力 ×0.05(other)
+#   ★ 超限(2026-10-09 批 F1)又多了两条: ②落点追加 = 基础攻击力 ×3(atk),
+#     ③所以现在是 oth + atk 两条通道(面板要把两边都列出来)。
+data modify storage zx:config wchan.charge set value {mm:0b,atk:1b,oth:1b}
 # 沉渊: 无增益 = 当前魔力 ×0.08(other), 有增益 = 最大魔力 ×0.08(mm) -> 两条都走
 data modify storage zx:config wchan.chenyuan set value {mm:1b,atk:0b,oth:1b}
 # 天使核心: 第一段 基础攻击力 ×8(atk), 第二段 最大魔力 ×0.08(mm)
@@ -134,7 +136,10 @@ data modify storage zx:config wchan.thunder set value {mm:1b,atk:0b,oth:0b}
 
 # ---- 第三批效果(2026-10-06 晚): 负离子(斧) ----
 # 负离子: 主动 = 自身**当前**魔力 ×0.1(other_mul, 基数默认就是当前魔力)
-data modify storage zx:config wchan.anion set value {mm:0b,atk:0b,oth:1b}
+#   ★ 超限(2026-10-09 批 F1): ①主伤 → 当前魔力 ×0.12(other);
+#     ②1 秒后那道雷 = **最大**魔力 ×0.08(mm) —— 所以现在是 oth + mm 两条通道。
+#     ③"8 秒雷劲"的落点追加也是当前魔力 ×0.1(other), 与 ① 同一条通道。
+data modify storage zx:config wchan.anion set value {mm:1b,atk:0b,oth:1b}
 
 # ---- 第三批效果(2026-10-06 晚): 终末天启(法杖) ----
 # 终末天启: 普攻是固定 20 点(不走通道); 光柱每秒 最大魔力 ×0.1 / 收尾 ×0.2 都是 mm

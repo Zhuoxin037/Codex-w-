@@ -1,0 +1,10 @@
+{
+  "pack": {
+    "pack_format": 55,
+    "supported_formats": {
+      "min_inclusive": 55,
+      "max_inclusive": 55
+    },
+    "description": "sweetdream 武器模型 · 完整版（原版风物品 + 13 件剑图标（含火种两态） + 14 件斧图标 + 8 张手绘法杖 + 5 把六状态像素弩 + 盔甲 25 件（图标 + 穿戴层） + 副手 7 件图标，保留独立 3D 模型，自包含）"
+  }
+}

@@ -16,4 +16,4 @@
 # 【手写文件】不是 _gen_batch5.py 的产物, 别被生成器覆盖。
 # ============================================================
 
-give @s recovery_compass[max_stack_size=1,item_name={text:"体外魔力泵",bold:true,color:light_purple},lore=[{"text":"✦ 被动技能","color":"gold","bold":true,"italic":false},{"text":"持于副手时，自身最大魔力值 +120。","color":"gray","italic":false}],custom_data={zx:["mana_pump","tool"]}]
+give @s recovery_compass[max_stack_size=1,item_name={text:"体外魔力泵",bold:true,color:light_purple},lore=[{"text":"✦ 被动技能","color":"gold","bold":true,"italic":false},{"text":"持于副手时，自身最大魔力值 +120。","color":"gray","italic":false}],custom_data={zx:["mana_pump","tool"],tags:["max_mana"]},minecraft:item_model="sweetdream:tool_mana_pump"]

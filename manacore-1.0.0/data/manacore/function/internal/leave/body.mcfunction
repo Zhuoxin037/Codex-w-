@@ -10,6 +10,10 @@
 #      有机会销毁实体/粒子), 再抛 #manacore:event/player_leave
 # 【保留什么】魔力、属性、冷却数据都会保留——玩家重新上线后接着用。
 #         冷却用的是绝对时间戳, 离线期间自然走完。
+# 【★ 2026-10-10 补(修 F16)★】④ 删掉索引条目之后, 这份记录就只剩
+#   debug/reset_all 的"终身清单"(manacore:players_all.list)能找到了 ——
+#   但清单**不在这里**登记: 本函数每次离线都会跑, 而清单元素是裸字符串、判不了重,
+#   在这里登记会每离线一次长一条。清单统一在"建记录处"登记(见 internal/player/create)。
 # ------------------------------------------------------------
 $data modify storage manacore:players "$(uuid)".session set value 0b
 $data modify storage manacore:players "$(uuid)".slot set value 0

@@ -7,6 +7,8 @@
     "sweetdream:equipment/armor/styx_walk/hook_calc",
     "sweetdream:equipment/tool/seraph_wing/hook_calc",
     "sweetdream:lib/mm_add/hook_calc",
+    "sweetdream:equipment/staff/begonia/hook_calc",
+    "sweetdream:equipment/armor/dionysus_helmet/hook_calc",
     "sweetdream:lib/dmg_add_apply",
     "sweetdream:equipment/tool/wrath/hook_calc"
   ]

@@ -15,9 +15,10 @@ $execute unless data storage zx:data rs."$(uuid)" run return 0
 $execute store result score #rs_at zx.meta run data get storage zx:data rs."$(uuid)".due
 execute if score #now manacore.meta < #rs_at zx.meta run return 0
 
-# 把这一批的伤害值抄进临时节点, 交给 aoe 宏
-data modify storage zx:work rsh set value {damage:0.0}
+# 把这一批的伤害值(以及"超限与否")抄进临时节点, 交给 aoe 宏
+data modify storage zx:work rsh set value {damage:0.0,ol:0b}
 $data modify storage zx:work rsh.damage set from storage zx:data rs."$(uuid)".damage
+$data modify storage zx:work rsh.ol set from storage zx:data rs."$(uuid)".ol
 
 # 对**每个被锁目标**各结算一次: 以目标为圆心, 2 格内的全部生物吃这一下
 $execute at @e[tag=zx.rs_$(uuid),distance=0..] run function sweetdream:equipment/sword/rogue_star/aoe with storage zx:work rsh

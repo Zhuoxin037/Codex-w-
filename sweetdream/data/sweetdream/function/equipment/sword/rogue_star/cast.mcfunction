@@ -29,6 +29,11 @@ advancement revoke @s only sweetdream:equipment/sword/rogue_star
 function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return fail
 
+# ①b 【超限】手里这把是不是超限版(决定"锁定几个 / 打几次 / 保底多少")
+#   基础版: 锁定 3 个 · 打 1 次 · 保底 12
+#   超限版: 锁定**全部** · 打**两次** · 保底 16(见下面 ⑥ 和 lock / aoe)
+function sweetdream:equipment/sword/rogue_star/is_ol
+
 # ② 只读检查: 冷却好没好 + 魔力 200
 data modify storage manacore:in arg set value {uuid:"",skill:"sweetdream:rogue_star",mana:200.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
@@ -54,17 +59,22 @@ data modify storage manacore:in arg set value {uuid:"",skill:"sweetdream:rogue_s
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/cooldown/start
 
-# ⑥ 算伤害: 基础攻击力 ×4
-data modify storage manacore:in arg set value {uuid:"",attack_mul:4.0}
+# ⑥ 算伤害: 基础攻击力 ×4(基础和超限同倍率, 变的是"打几次")
+data modify storage manacore:in arg set value {uuid:"",attack_mul:4.0,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
-#   保底 12: 小于等于 11 就抬到 12(写在 out 上, 后面宏层直接读它)
+#   保底: 基础版 12 / 超限版 16(算完抬一手, 写在 out 上, 后面宏层直接读它)
 execute store result score #dmg zx.meta run data get storage manacore:out r.damage 1
-execute if score #dmg zx.meta matches ..11 run data modify storage manacore:out r.damage set value 12.0
+execute unless score #rs_ol zx.meta matches 1 if score #dmg zx.meta matches ..11 run data modify storage manacore:out r.damage set value 12.0
+execute if score #rs_ol zx.meta matches 1 if score #dmg zx.meta matches ..15 run data modify storage manacore:out r.damage set value 16.0
 
-# ⑦ 锁定 3 个 + 记账 + 表现(全在宏层, 因为标记名字里要带自己的 UUID)
+# ⑦ 锁定 + 记账 + 表现(全在宏层, 因为标记名字里要带自己的 UUID)
+#    ol 一并带下去: lock 靠它定"锁几个", 并记进 zx:data rs.<uuid>.ol
+#    供 3 秒后的 hit_due 决定"打一次还是两次"。
+data modify storage zx:work a set value {uuid:"",damage:0.0,ol:0b}
 data modify storage zx:work a.uuid set from storage zx:data self.uuid
 data modify storage zx:work a.damage set from storage manacore:out r.damage
+execute if score #rs_ol zx.meta matches 1 run data modify storage zx:work a.ol set value 1b
 function sweetdream:equipment/sword/rogue_star/lock with storage zx:work a
 
 # 宏层没锁定成功(理论上不会, ③ 已经拦过一次)就到此为止

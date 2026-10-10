@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "dionysus_helmet": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "ol_dionysus_helmet"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:overlimit/apply/dionysus_helmet"
+    }
+}

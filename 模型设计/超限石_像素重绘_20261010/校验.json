@@ -1,0 +1,14 @@
+{
+  "textures": 24,
+  "rgba_unique": 24,
+  "grayscale_unique": 24,
+  "theme_masks_unique": 24,
+  "binary_alpha": true,
+  "resolution": [
+    16,
+    16
+  ],
+  "archive_ok": true,
+  "existing_bindings_checked": 24,
+  "game_assets_changed": false
+}

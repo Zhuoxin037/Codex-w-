@@ -19,6 +19,20 @@ advancement revoke @s only sweetdream:equipment/sword/shadow_blade
 function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return fail
 
+# ①b 【超限】手里这把是不是超限版 —— 决定伤害倍率(×2 / ×8)
+#     和击杀那一支(见 kill ①b)各判一次: 放技能时和击杀时手里可能已经不是同一把,
+#     所以不复用同一个快照。
+function sweetdream:equipment/sword/shadow_blade/is_ol
+# ★★ 施法快照(2026-10-08 修) ★★
+#   旧注释写的是"放技能时和击杀时各判一次, 不复用快照" —— 那是错的:
+#   超限·影刃的击杀兑现**就是**发生在换武器之后(文案: 用别的武器击杀减它的冷却),
+#   那时手里根本不是影刃, is_ol 必然判 0 ⇒ 整支兑现走不到(玩家报"被动未生效")。
+#   所以这里把"施法这一刻"的结果存进玩家 zx.sb_ol, kill 那边读快照。
+#   (和万念 zx.mq_ol / 横刀 zx.hd_ol / 引梦镰 zx.sd_ol 同一套口径。)
+scoreboard players add @s zx.sb_ol 0
+scoreboard players set @s zx.sb_ol 0
+execute if score #sb_ol zx.meta matches 1 run scoreboard players set @s zx.sb_ol 1
+
 # ② 只读检查: 冷却 + 魔力 120
 data modify storage manacore:in arg set value {uuid:"",skill:"sweetdream:shadow_blade",mana:120.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
@@ -61,9 +75,10 @@ execute at @e[tag=zx.sb_t,limit=1] run tp @s ~ ~ ~
 scoreboard players operation @s zx.sb_end = #now manacore.meta
 scoreboard players add @s zx.sb_end 100
 
-# ⑨ 伤害 = 基础攻击力 ×2
+# ⑨ 伤害 = 基础攻击力 ×2(基础版) / ×8(超限版)
 #    走框架的"基础攻击力倍率"通道(attack_mul): 基数 = 面板 base_attack(含主手武器)。
-data modify storage manacore:in arg set value {uuid:"",attack_mul:2.0}
+execute if score #sb_ol zx.meta matches 1 run data modify storage manacore:in arg set value {uuid:"",attack_mul:8.0,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0}
+execute unless score #sb_ol zx.meta matches 1 run data modify storage manacore:in arg set value {uuid:"",attack_mul:2.0,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:in arg set value {target:"@e[tag=zx.sb_t,limit=1]",read:"manacore"}

@@ -1,0 +1,3 @@
+# 两手同时持有时也可正确更新；modifier 保留名称、附魔、技能等全部其他组件。
+$execute if items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["angel_core"]}] unless items entity @s weapon.mainhand *[minecraft:item_model="angelcore:axe",minecraft:custom_model_data={floats:[$(frame).0f]}] run item modify entity @s weapon.mainhand sweetdream:angel_core_visual
+$execute if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["angel_core"]}] unless items entity @s weapon.offhand *[minecraft:item_model="angelcore:axe",minecraft:custom_model_data={floats:[$(frame).0f]}] run item modify entity @s weapon.offhand sweetdream:angel_core_visual

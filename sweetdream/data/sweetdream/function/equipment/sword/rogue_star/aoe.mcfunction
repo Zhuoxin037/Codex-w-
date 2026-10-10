@@ -11,6 +11,12 @@
 $data modify storage zx:in arg set value {target:"@e[type=!#sweetdream:no_damage,distance=..2]",damage:$(damage)}
 function sweetdream:api/damage
 
+# 【超限·游星】再打**一次**同样的伤害(文案: "造成**两次**相当于自身基础攻击力
+#   ×4 的伤害")。zx:in arg 还在, 直接再调一次即可 —— 不用重写入参。
+#   ★ 同一 tick 的两段不会互相吃掉: sweetdream:skill 这个伤害类型被加进了
+#     原版 minecraft:bypasses_cooldown 标签(见 api/damage 的说明)。
+execute if data storage zx:work rsh{ol:1b} run function sweetdream:api/damage
+
 # 表现: 落点一圈星辉炸开
 particle minecraft:explosion ~ ~1 ~ 0.3 0.3 0.3 0.05 12 normal
 particle minecraft:end_rod ~ ~1 ~ 0.6 0.6 0.6 0.05 20 normal

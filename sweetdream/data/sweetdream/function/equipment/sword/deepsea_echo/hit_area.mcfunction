@@ -12,12 +12,16 @@
 # 【伤害数值】来自 manacore:out r.damage(wave_go 刚算好), 这里直接 read。
 # ============================================================
 
-# ① 标出这一个源周围 3 格的生物(tag=!zx.de_all: 本波已经打过的跳过 —— 优化建议第 5 条)
+# ① 标出这一个源周围的生物(tag=!zx.de_all: 本波已经打过的跳过 —— 优化建议第 5 条)
+#    【范围】基础版 3 格 / 超限版 4 格(文案: "对其 **4 格**范围内的全部生物")。
+#    ★ ol 由 wave_go 每波开头写进 zx:work de.ol(见 wave_go ①b)。
 tag @e[tag=zx.de_hit] remove zx.de_hit
-tag @e[type=!#sweetdream:no_damage,tag=!zx.de_all,distance=..3] add zx.de_hit
+execute if data storage zx:work de{ol:1b} run tag @e[type=!#sweetdream:no_damage,tag=!zx.de_all,distance=..4] add zx.de_hit
+execute unless data storage zx:work de{ol:1b} run tag @e[type=!#sweetdream:no_damage,tag=!zx.de_all,distance=..3] add zx.de_hit
 
-# ①.5 范围特效: 把"半径 3 的水球"画出来(执行者/位置就是当前这个源)
-function sweetdream:equipment/sword/deepsea_echo/sfx_ring3
+# ①.5 范围特效: 把"水球"按同样的半径画出来(执行者/位置就是当前这个源)
+execute if data storage zx:work de{ol:1b} run function sweetdream:equipment/sword/deepsea_echo/sfx_ring4
+execute unless data storage zx:work de{ol:1b} run function sweetdream:equipment/sword/deepsea_echo/sfx_ring3
 
 # ② 逐个打出去(api/damage 内部会用 execute as 把范围选择器展开成单个实体)
 data modify storage zx:in arg set value {target:"@e[tag=zx.de_hit]",read:"manacore"}

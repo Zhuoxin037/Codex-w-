@@ -37,11 +37,15 @@ execute store result score #cdex zx.meta run data get storage zx:out r.cdex
 scoreboard players set #msp zx.meta 0
 execute store result score #msp zx.meta run data get storage zx:out r.ms_pct
 
-# ---- 三样全 0 = 主手这把没敲过冷却类升级, 一件都不用做 ----
-execute if score #cdr zx.meta matches 0 if score #cdex zx.meta matches 0 if score #msp zx.meta matches 0 run return 0
-
 # ---- ① 落冷却缩减(变了才写) ----
+#   ★ 这一步必须排在下面那条"三样全 0 就提前 return"**之前** —— 顺序敏感, 别改回去。
+#   反例(2026-10-08 修): 脱掉冷却剂武器后 #cdr 归 0 -> 先 return -> 永远走不到这里
+#   -> 面板里的 cooldown_reduction 永久停在旧值(所有技能永远短 XX% 冷却),
+#   而它存在 manacore:players 里, 重登也不掉。
 execute unless score #cdr zx.meta = @s zx.cdr run function sweetdream:upgrade/api/cd_stat
+
+# ---- 三样全 0 = 主手这把没敲过冷却类升级, 后面的事情一件都不用做 ----
+execute if score #cdr zx.meta matches 0 if score #cdex zx.meta matches 0 if score #msp zx.meta matches 0 run return 0
 
 # ---- 取"本武器释放的技能"id(工具/空手没有 skill 字段, 就到此为止) ----
 #    ⚠️ 这里**不能**把 skill 预置成 "" —— 那样子键存在, "set from" 失败时

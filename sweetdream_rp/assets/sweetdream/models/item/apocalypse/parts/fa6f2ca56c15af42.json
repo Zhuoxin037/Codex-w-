@@ -1,1 +1,141 @@
-{"parent":"sweetdream:item/apocalypse/geometry/7162e0b1954acab6","display":{"gui":{"rotation":[-124.141044,48.5023,-167.875065],"translation":[0,-0.7,0],"scale":[0.9,0.9,0.9]},"ground":{"rotation":[-180.0,49.142857,-180.0],"translation":[0,3,0],"scale":[0.533333,0.533333,0.533333]},"fixed":{"rotation":[90.0,-49.142857,-0.0],"translation":[0,0,0],"scale":[0.833333,0.833333,0.833333]},"head":{"rotation":[-180.0,49.142857,-180.0],"translation":[0,8,0],"scale":[0.75,0.75,0.75]},"firstperson_righthand":{"rotation":[-128.0,49.142857,-180.0],"translation":[-8.96,-1.000000000001786,-5.8],"scale":[0.7,0.7,0.7]},"firstperson_lefthand":{"rotation":[-128.0,-49.142857,180.0],"translation":[-8.96,-1.000000000001786,-5.8],"scale":[0.7,0.7,0.7]},"thirdperson_righthand":{"rotation":[-115.0,49.142857,-180.0],"translation":[0,1,0],"scale":[0.6,0.6,0.6]},"thirdperson_lefthand":{"rotation":[-115.0,-49.142857,180.0],"translation":[0,1,0],"scale":[0.6,0.6,0.6]}}}
+{
+  "parent": "sweetdream:item/apocalypse/geometry/7162e0b1954acab6",
+  "display": {
+    "gui": {
+      "rotation": [
+        -124.141044,
+        48.5023,
+        -167.875065
+      ],
+      "translation": [
+        0,
+        -0.7,
+        0
+      ],
+      "scale": [
+        0.9,
+        0.9,
+        0.9
+      ]
+    },
+    "ground": {
+      "rotation": [
+        -180.0,
+        49.142857,
+        -180.0
+      ],
+      "translation": [
+        0.0,
+        3.0,
+        0.0
+      ],
+      "scale": [
+        0.53333,
+        0.53333,
+        0.53333
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        90.0,
+        -49.142857,
+        -0.0
+      ],
+      "translation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": [
+        0.83333,
+        0.83333,
+        0.83333
+      ]
+    },
+    "head": {
+      "rotation": [
+        -180.0,
+        49.142857,
+        -180.0
+      ],
+      "translation": [
+        0,
+        8,
+        0
+      ],
+      "scale": [
+        0.75,
+        0.75,
+        0.75
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        -128.0,
+        49.142857,
+        -180.0
+      ],
+      "translation": [
+        -8.96,
+        -1.000000000001786,
+        -5.8
+      ],
+      "scale": [
+        0.7,
+        0.7,
+        0.7
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        -128.0,
+        -49.142857,
+        180.0
+      ],
+      "translation": [
+        -8.96,
+        -1.000000000001786,
+        -5.8
+      ],
+      "scale": [
+        0.7,
+        0.7,
+        0.7
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        -115.0,
+        49.142857,
+        -180.0
+      ],
+      "translation": [
+        0,
+        1,
+        0
+      ],
+      "scale": [
+        0.6,
+        0.6,
+        0.6
+      ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [
+        -115.0,
+        -49.142857,
+        180.0
+      ],
+      "translation": [
+        0,
+        1,
+        0
+      ],
+      "scale": [
+        0.6,
+        0.6,
+        0.6
+      ]
+    }
+  }
+}

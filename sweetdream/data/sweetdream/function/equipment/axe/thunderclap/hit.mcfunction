@@ -7,7 +7,8 @@
 #   "自身攻击生物后立即消耗全部「天煌」并消耗等量的魔力，之后在其位置生成一个半径 6 格的
 #    术阵，在该术阵结束前不能再生成另一个术阵。在该术阵内的生物每受到一次攻击则立即有 X
 #    道闪电对其造成伤害，每道闪电的伤害为自身最大魔力值 ×0.1。生物每受到 10 次雷击则损失
-#    自身 10% 最大生命值，共持续 X×2 秒（X 为「天煌」×0.005）。"
+#    自身 10% 最大生命值，共持续 X×2 秒（X 为「天煌」×0.005）。若魔力值不足则本次攻击
+#    视消耗的魔力总数为「天煌」点数。"
 # 【★ 四要素 ★】
 #   ① 触发: 平A命中(手里是威霆)。
 #   ② 目标范围: 被击的那一只(生成术阵于其位置); 之后"在术阵(半径 6)内的生物"。
@@ -20,6 +21,12 @@
 # ============================================================
 
 advancement revoke @s only sweetdream:equipment/axe/thunderclap_hit
+# ---- 满蓄力闸(2026-10-10, 全包统一口径) ----
+#   平A 没**蓄满力**这一发就不触发本被动。判定与出参见 lib/atk_charge 头部
+#   (每刻只算一次 + 玩家级 `@s zx.atk_ok`)。
+#   ★ 必须排在 revoke 之后: lib/rearm 契约要求 revoke 是奖励函数第一非注释行。
+function sweetdream:lib/atk_charge
+execute unless score @s zx.atk_ok matches 1 run return 0
 
 # 武器门控: 主手或副手是威霆
 scoreboard players set #tc_ok zx.meta 0
@@ -40,7 +47,7 @@ execute if score @s zx.tc_on matches 1 run function sweetdream:equipment/axe/thu
 execute if score @s zx.tc_on matches 1 run tag @e[tag=zx.victim,distance=0..] remove zx.victim
 execute if score @s zx.tc_on matches 1 run return 0
 
-# ② 没术阵 + 天煌 >0 -> 消耗天煌与等量魔力, 在被击者处开一个术阵
+# ② 没术阵 + 天煌 >0 -> 扣除 min(魔力,天煌) 点魔力并在被击者处开一个术阵(X 按实际消耗算)
 execute if score @s zx.tc_n matches ..0 run return 0
 function sweetdream:equipment/axe/thunderclap/open
 tag @e[tag=zx.victim,distance=0..] remove zx.victim

@@ -36,6 +36,8 @@ function sweetdream:api/damage
 
 # ② 变为燃烧状态
 scoreboard players set @s zx.td_on 1
+#   ★ 当刻就换成"燃烧"外观(不等下一秒 second 的兜底): 点着了, 剑要立刻烧起来
+function sweetdream:equipment/sword/tinder/visual/sync
 
 # 表现: 身上腾起火焰(烧起来了)
 execute at @s run particle minecraft:flame ~ ~1 ~ 0.4 0.6 0.4 0.03 20 normal

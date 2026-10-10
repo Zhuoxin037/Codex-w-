@@ -1,0 +1,42 @@
+{
+  "deployment": {
+    "deployed_at": "2026-10-09 22:00:29",
+    "files_verified": 150,
+    "resource_files": 150,
+    "target_game": "D:\\PCL 正式版 2.10.0\\.minecraft\\versions\\1.21.5-Fabric 0.16.10",
+    "datapack_files": 0,
+    "game_tested": false,
+    "target_save": "D:\\PCL 正式版 2.10.0\\.minecraft\\versions\\1.21.5-Fabric 0.16.10\\saves\\测试包体"
+  },
+  "geometry_validation": {
+    "water_band_frames_checked": 18432,
+    "all_water_inside_steel_thickness": true,
+    "water_attached_to_both_edges": true,
+    "both_water_surfaces_present": true,
+    "front_static_elements_preserved": 956,
+    "datapack_byte_identical": true,
+    "total_cubes": 1879,
+    "game_tested": false
+  },
+  "binding_validation": {
+    "resource_files_checked": 150,
+    "idle_cycle": true,
+    "all_48_cast_frames_visible": true,
+    "cast_not_overwritten_by_idle": true,
+    "switch_hands_recovers": true,
+    "multiplayer_independent": true,
+    "trailing_components_preserved": true,
+    "original_skill_commands_preserved": true,
+    "original_particle_commands_and_frame20_preserved": true,
+    "display_preserved": true,
+    "game_tested": false
+  },
+  "native_java_validation": {
+    "sampled_frames": 4,
+    "water_cubes_per_frame": 384,
+    "maximum_native_to_java_coordinate_error": 5.000000005139782e-07,
+    "actual_resource_render": "D:\\数据包\\模型设计\\深海回响_旧稿重建_20261009\\阶段五_双面嵌边水刃\\游戏产物回渲.png"
+  },
+  "checks_total_problems": 0,
+  "game_tested": false
+}

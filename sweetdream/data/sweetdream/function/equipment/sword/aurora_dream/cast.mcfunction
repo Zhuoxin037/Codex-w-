@@ -56,9 +56,17 @@ execute at @s run particle minecraft:witch ~ ~1 ~ 2.8 0.8 2.8 0.02 40 normal
 execute at @s run particle minecraft:electric_spark ~ ~1.2 ~ 2.2 0.6 2.2 0.03 30 normal
 execute at @s run playsound minecraft:block.beacon.activate player @a ~ ~ ~ 1.0 1.5
 execute at @s run playsound minecraft:entity.illusioner.cast_spell player @a ~ ~ ~ 0.9 1.0
-execute at @s run playsound minecraft:block.bell.use player @a ~ ~ ~ 0.8 1.4
-execute at @s run playsound minecraft:block.amethyst_block.chime player @a ~ ~ ~ 0.5 1.8
+# 起手这一声钟 = 时间轴上的"第 0 秒"(后面 4/8 秒由 aurora_dream/bell 补, 所以别在这儿
+#   再想"要不要多响一声"). 音色与 bell_sfx **完全一致**(2026-10-09 按玩家参考命令定版:
+#   block.bell.use / 通道 block / 音量 0.1 / 音调 0.3 / 最小音量 0.1 —— 单音色, 无泛音)。
+execute at @s run playsound minecraft:block.bell.use block @a ~ ~ ~ 0.1 0.3 0.1
 
-# ⑧ 时停期间每隔 3 秒响一次飘渺钟声 + 持续铺极光粒子
-#   倒计时挂 zx.ad_bell(秒), 由 lib/second 每秒推进(见 aurora_dream/bell)。
+# ⑧ 时停期间**稳定每 4 秒**响一次飘渺钟声 + 持续铺极光粒子
+#   起手那声已经由 ⑦ 播过了, 所以这里只需要把倒计时推到 12 —— aurora_dream/bell 会在
+#   剩下的 4/8 秒各补一声(时间轴 4/8 秒), 三声间隔全是 4 秒。★ 别再补"第 0 声", 会双响。
+#   倒计时挂 zx.ad_bell(秒), 由 lib/second 每秒推进。
 scoreboard players set @s zx.ad_bell 12
+
+# 极光与幻梦 · 月蚀流光施法模型
+function sweetdream:equipment/sword/aurora_dream/anim/start
+# 极光与幻梦 · 月蚀流光施法模型 / END

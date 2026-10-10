@@ -1,0 +1,11 @@
+{
+  "function": "minecraft:set_components",
+  "components": {
+    "minecraft:item_model": "sweetdream:armor_fade",
+    "minecraft:equippable": {
+      "slot": "legs",
+      "asset_id": "sweetdream:armor_fade",
+      "equip_sound": "minecraft:item.armor.equip_iron"
+    }
+  }
+}

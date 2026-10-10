@@ -14,7 +14,10 @@
 #         之后光 /reload 不够, 必须退出世界再进来(这是很多人栽的坑)
 #   ② data/minecraft/tags/damage_type/bypasses_cooldown.json 里有没有 sweetdream:skill
 #         没有的话(或者上面那行报过"missing following references"), 第二下必被吃
-#   实在要先跑起来, 就临时退回原版平砍类型(代价是多段伤害又会被无敌帧吃):
+#   实在要先跑起来, 就临时退回原版平砍类型 —— ⚠️ 2026-10-10 起 `minecraft:player_attack`
+#     也已被加进 bypasses_cooldown（为了让玩家普攻不被无敌帧吃）, 所以这条退路
+#     **不再能"关掉" bypass**（两下仍会全生效）。真要测"被吃掉"的样子, 得另注册一个
+#     不加进标签的伤害类型再指过去:
 #     /data modify storage zx:config damage_type set value "minecraft:player_attack"
 #     /reload
 # 【注意】别拿快死的生物测(第二下把它打死就读不到血了, 报的是 0)。

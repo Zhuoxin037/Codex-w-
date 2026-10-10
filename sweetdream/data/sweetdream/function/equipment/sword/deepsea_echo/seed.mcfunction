@@ -38,9 +38,10 @@ function sweetdream:equipment/sword/deepsea_echo/sfx_ring12
 
 
 
-# 记下"总共还要推进几波"。
+# 记下"总共还要推进几波" + "这次是不是超限版"。
 #   文案是"重复 2 次后结束" = 初次 1 波 + 重复 2 波 = 共 3 波。
 #   left 在 wave_go 里每波减 1, 减到 0 就收尾; 所以这里填 3。
-#   (110 魔力是在"要开下一波"的时候才扣, 所以正好扣 2 次 = 重复 2 次。)
 #   想改成"重复 N 次"就把这个数改成 N+1。
-$data modify storage zx:data de."$(uuid)" set value {left:3}
+#   ★ ol 由 cast ①b 写进 zx:work de.ol(那边才是"看手里那把"的地方)。
+$data modify storage zx:data de."$(uuid)" set value {left:3,ol:0b}
+$execute if data storage zx:work de{ol:1b} run data modify storage zx:data de."$(uuid)".ol set value 1b

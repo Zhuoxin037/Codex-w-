@@ -1,0 +1,11 @@
+{
+  "function": "minecraft:set_components",
+  "components": {
+    "minecraft:item_model": "sweetdream:armor_furnace_core",
+    "minecraft:equippable": {
+      "slot": "chest",
+      "asset_id": "sweetdream:armor_furnace_core",
+      "equip_sound": "minecraft:item.armor.equip_netherite"
+    }
+  }
+}

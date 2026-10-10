@@ -9,6 +9,8 @@
 # ============================================================
 
 data modify storage manacore:in arg set value {uuid:"",other_mul:0.05,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0}
+# 超限: 倍率 ×0.05 -> ×0.08(执行者仍是玩家, 读得到 zx.chg_ol 这个施法快照)
+execute if score @s zx.chg_ol matches 1 run data modify storage manacore:in arg.other_mul set value 0.08
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 

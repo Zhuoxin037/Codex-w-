@@ -16,7 +16,10 @@
 #   ① 触发 = 潜行右键;
 #   ② 目标范围 = 生成的“色彩”自身会去追生物(见 color_body), 技能本身不打人;
 #   ③ 次数 = 生成 1 个“色彩”;
-#   ④ 时长 = 无固定时长, 由"离自身超范围 / 打满阀值"决定(见 color_body)。
+#   ④ 时长 = 无固定时长, 由"离自身 12 格远 / 打满可攻击阀值"决定(见 color_body ② 与 color_hit ⑥);
+#      ★ 2026-10-08 用户定: **没有时间限制** —— 不加任何"兜底寿命/倒计时"。
+# 【不登记术阵】"色彩"是会飞出去打人的光球, 没有地面范围可言 ⇒ **不占术阵槽**
+#   (2026-10-08 删除; 原委见第 ⑤ 步)。
 # 【颜色 → 参数(实装口径)】
 #   红(每 1 个): 伤害倍率 +1 倍 → 伤害 = 最大魔力 ×0.1 ×(1 + 红数)
 #   黄(每 1 个): 追踪范围 +8 格, 可攻击阀值 +3 个
@@ -25,8 +28,9 @@
 #     后续每次攒色都没意义 —— 与"每次普攻命中后都会随机积攒"的积累设计矛盾。
 # 【“自身”= 释放者】三处都以释放者为准: 范围/阀值派生、伤害基数、150 魔力与冷却。
 # 【延迟结算不看超限】伤害由 color_hit 每刻现算(不走超限乘区), 和偏振光的每秒结算同款。
-# 【★ 位置/归属 ★】“色彩”是 marker(位置真相); color_body 全程按 marker 坐标算,
-#   伤害用 marker 里存的 u0..u3 反查释放者做归属(见 color_hit)。
+# 【★ 位置/归属 ★】“色彩”是 item_display(可见小光球; 坐标 = 位置真相, 见 RULES §48);
+#   color_body 全程按它的坐标算, 伤害用 data.zx.pal 里存的 u0..u3 反查释放者做归属
+#   (见 color_hit)。2026-10-08 从 marker 换成 item_display(用户: 主动技能没召唤召唤物)。
 # ============================================================
 
 # ⓪ 撤销自己的进度(不撤的话只有第一次右键会触发)
@@ -65,10 +69,12 @@ data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function sweetdream:overlimit/api/mod
 function manacore:api/cooldown/start
 
-# ⑤ 召唤术阵(10 秒表现; 和“色彩”的存在期大致对齐)
-data modify storage manacore:in arg set value {uuid:"",id:"sweetdream:palette",type:"palette",duration_seconds:10.0}
-data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/formation/create
+# ⑤ (已删除) 原来这里给"色彩"登记一个 10 秒的术阵。
+#   ★ 2026-10-08 用户: "用调色盘的技能后不知道为什么会占一个术阵位置"。
+#   术阵是"**地面上的区域场**"的登记借口(有 id / type / 半径, 有自己的槽位上限);
+#   而"色彩"是一个**会自己飞出去打人的光球**, 根本没有地面范围可言 ——
+#   登记它除了白占一个术阵槽(默认上限 3, 和其他技能共用)之外没有任何用处。
+#   ⇒ 整个删掉。技能与"色彩"的生命周期完全不依赖它。
 
 # ⑥ 数颜色: 红/黄/蓝 各几个(zx.pal_c1 / zx.pal_c2 两个槽)
 scoreboard players set #pal_red zx.meta 0
@@ -94,29 +100,48 @@ scoreboard players operation #pal_thr zx.meta = #pal_yel zx.meta
 scoreboard players operation #pal_thr zx.meta *= #3 zx.meta
 scoreboard players add #pal_thr zx.meta 5
 
-# ⑧ 生成“色彩” marker(眼睛前方一点, 免得卡在脚底)
-execute anchored eyes run summon minecraft:marker ^ ^ ^1.5 {Tags:["zx.pal_col","zx.pal_new"],data:{}}
-data modify entity @n[limit=1,tag=zx.pal_new] data.zx.pal set value {uuid:"",u0:0,u1:0,u2:0,u3:0,c:0}
+# ⑧ 生成“色彩” —— item_display 小光球(眼睛前方一点, 免得卡在脚底)
+#   ★ 2026-10-08 用户: “主动技能没有召唤召唤物”。原来这里是**隐形 marker**,
+#     玩家只看到几颗 dust ⇒ 观感上"什么都没召唤出来"。改成 item_display +
+#     billboard:"center"(竖平面永远正对摄像机), 按色码挑贴图(pal_orb_{r,y,b,w})。
+#   ★ 逻辑不变: 位置真相仍在实体坐标上; 归属/参数照样写进 data.zx.pal
+#     (display 实体同样吃 `data` 标签, 见 RULES §48 —— 暗海/暗潮同款)。
+#   ★ 模型 = components."minecraft:item_model"(RULES §48: 自定义模型只能这么挂)。
+#   ★ 值写 **items/ 下的定义名**(sweetdream:pal_orb_w), 不是 item/ 下的几何名 ——
+#     item_model 解析到 `assets/<ns>/items/<名>.json`(sea/tide/fr_beam/withered_wood 同款)。
+execute anchored eyes run summon minecraft:item_display ^ ^ ^1.5 {Tags:["zx.pal_col","zx.pal_new"],item:{id:"minecraft:stick",count:1,components:{"minecraft:item_model":"sweetdream:pal_orb_w"}},brightness:{sky:15,block:15},interpolation_duration:0,billboard:"fixed",view_range:2.0f,transformation:{translation:[0.0f,0.0f,0.0f],scale:[0.6f,0.6f,0.6f],left_rotation:[0.0f,0.0f,0.0f,1.0f],right_rotation:[0.0f,0.0f,0.0f,1.0f]}}
+data modify entity @n[limit=1,tag=zx.pal_new] data.zx.pal set value {uuid:"",u0:0,u1:0,u2:0,u3:0,c:0,c2:0}
 data modify entity @n[limit=1,tag=zx.pal_new] data.zx.pal.uuid set from storage zx:data self.uuid
 data modify entity @n[limit=1,tag=zx.pal_new] data.zx.pal.u0 set from entity @s UUID[0]
 data modify entity @n[limit=1,tag=zx.pal_new] data.zx.pal.u1 set from entity @s UUID[1]
 data modify entity @n[limit=1,tag=zx.pal_new] data.zx.pal.u2 set from entity @s UUID[2]
 data modify entity @n[limit=1,tag=zx.pal_new] data.zx.pal.u3 set from entity @s UUID[3]
-#   外观色码 c = c1(c1 为空时取 c2), 仅用于表现
+#   外观色码 c = c1(c1 为空时取 c2), 仅用于表现(贴图)
 execute store result entity @n[limit=1,tag=zx.pal_new] data.zx.pal.c int 1 run scoreboard players get @s zx.pal_c1
 execute if score @s zx.pal_c1 matches 0 run execute store result entity @n[limit=1,tag=zx.pal_new] data.zx.pal.c int 1 run scoreboard players get @s zx.pal_c2
-#   参数落到 marker 的计分项
+#   ★ 次色 c2 —— **仅当两个色槽都有颜色**时才有值(其余情况保持 0),
+#     专供"双色拖尾"(color_body ⑤ 的 fx_second)。这就是"有两种颜色就加两种"的另一半:
+#     单色光球的 c2 = 0 ⇒ 只拖一条; 两色光球 c2 = 第二个色 ⇒ 主色 + 次色两条并排。
+execute if score @s zx.pal_c1 matches 1.. run execute store result entity @n[limit=1,tag=zx.pal_new] data.zx.pal.c2 int 1 run scoreboard players get @s zx.pal_c2
+# Paired 3D pigment crystal; both colours are visual facets of the same entity.
+execute as @n[limit=1,tag=zx.pal_new] at @s run function sweetdream:equipment/staff/palette/visual/color_init
+execute as @n[limit=1,tag=zx.pal_new] run function sweetdream:equipment/staff/palette/visual/color_prepare
+#   参数落到实体的计分项
 scoreboard players operation @n[limit=1,tag=zx.pal_new] zx.pal_mul = #pal_mul zx.meta
 scoreboard players operation @n[limit=1,tag=zx.pal_new] zx.pal_rng = #pal_rng zx.meta
 scoreboard players operation @n[limit=1,tag=zx.pal_new] zx.pal_thr = #pal_thr zx.meta
 scoreboard players operation @n[limit=1,tag=zx.pal_new] zx.pal_blu = #pal_blu zx.meta
 scoreboard players set @n[limit=1,tag=zx.pal_new] zx.pal_n 0
-#   安全寿命 30 秒(文案没给时限; 没目标时免得 marker 永远飘着)
-scoreboard players set @n[limit=1,tag=zx.pal_new] zx.pal_life 600
+#   ★ 2026-10-08 删: 这里原来写一个"30 秒兜底寿命" zx.pal_end = #now + 600。
+#     用户: "他还会随着时间消失, 但我不想让它随着时间消失, 而是严格按照我的描述来"。
+#     文案只给了两个自毁条件(离自身 12 格 / 打满阀值), 没有时间限制 ⇒ 整个删掉。
+#     于是"色彩"能活多久完全由 ②(出界) 与 color_hit ⑥(打满) 决定。
 #   唯一 id(标记"已被这个色彩打过"的生物用)
 scoreboard players add #pal_uid zx.meta 1
 scoreboard players operation @n[limit=1,tag=zx.pal_new] zx.pal_id = #pal_uid zx.meta
 tag @n[limit=1,tag=zx.pal_new] remove zx.pal_new
+
+function sweetdream:equipment/staff/palette/visual/begin
 
 # ⑨ 清空调色盘上的颜色(“色彩”把它们消耗掉了)
 scoreboard players set @s zx.pal_c1 0

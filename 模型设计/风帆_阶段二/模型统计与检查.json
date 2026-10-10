@@ -1,0 +1,15 @@
+{
+  "cuboids": 632,
+  "faces": 3792,
+  "groups": 63,
+  "textures": 3,
+  "animations": [
+    "01_待机_轻风鼓帆",
+    "02_施法_阵风鼓帆"
+  ],
+  "structure_checked": true,
+  "static_java_export_checked": true,
+  "animation_runtime_baked": false,
+  "gui_verified": false,
+  "deployed": false
+}

@@ -4,8 +4,9 @@
 # 【谁调用它】sweetdream:core/tick:
 #   execute as @a[scores={zx.hush=1..}] at @s run function ...
 # 【还剩几步】就是玩家自己在 zx.hush 上的分数(16 步 × 0.5 = 8 格)。
-#   用计分项而不是 storage: 天然"每人一份", 不用按 UUID 拼路径, 于是"推进"
-#   这一层完全不需要宏函数 —— 少一层就少一类坑(同横刀 dash_tick)。
+#   用计分项而不是 storage: 天然"每人一份", 不用按 UUID 拼路径。
+#   ★ 只有 ②③ 的"去程标记"要按施法者 uuid 拼 tag ⇒ 单独抽成宏子函数 dash_mark;
+#     其余部分(①④⑤ 的推进)仍然非宏 —— 少一层就少一类坑(同横刀 dash_tick)。
 # 【★ 2026-10-07 改版: 撞到生物**不停**, 但每碰到一次都当场打一片】
 #   停法只有两种: ① 方块挡路 ② 走完 16 步。
 #   路上碰到生物: 见 ③ —— 身边 3 格内出现"本局还没打过的生物"就触发一次,
@@ -17,23 +18,23 @@
 # 【每步 0.5 格】比原来的 0.25 快一倍(8 格 = 16 刻 = 0.8 秒)。方块挡路的探针
 #   就在落点上(^ ^ ^0.5), 整数格宽 1 的墙一定会在落点被探到, 不会穿过去。
 # 【半径】去程"碰到"与"打一片"都用 3 格(碰到生物就对身边 3 格内全部生物结算);
-#   回程用 1.5 格 —— 那是"从旁边掠过"的路径走廊(见 ② 与 back_finish)。
+#   回程用 1.5 格 —— 那是"从旁边掠过"的路径走廊(见 dash_mark ② 与 back_finish)。
 # ============================================================
 
 # ① 方块挡路: 脚那格 / 头那格不是可穿过方块 -> 停
 execute rotated ~ 0 positioned ^ ^ ^0.5 unless block ~ ~ ~ #minecraft:replaceable run scoreboard players set @s zx.hush 0
 execute rotated ~ 0 positioned ^ ^ ^0.5 unless block ~ ~1 ~ #minecraft:replaceable run scoreboard players set @s zx.hush 0
 
-# ② 记下"路径上的生物"(1.5 格内) —— 闪回落地时由 back_finish 结算 ×0.2
-execute as @e[type=!#sweetdream:no_damage,distance=..1.5] run tag @s add zx.hs_path
-
-# ③ ★ 碰到生物: 身边 3 格内只要出现"本局还没打过的生物", 就触发一次范围伤害 ★
-#   先给"3 格内还没被本局打过(tag=!zx.hs_hit)"的生物挂临时标签 zx.hs_new;
-#   真有新的才调 touch_dmg —— 它对 3 格内**全部**生物结算 最大魔力值 ×0.1,
-#   并把 3 格内全部生物都标成 zx.hs_hit(本局已覆盖) ⇒ 冲进同一群怪只触发一次,
-#   不会每刻刷。zx.hs_hit 每次施法由 cast 开头全局清一遍, 保证下一局又能打。
-execute as @e[type=!#sweetdream:no_damage,tag=!zx.hs_hit,distance=..3] run tag @s add zx.hs_new
-execute if entity @e[type=!#sweetdream:no_damage,tag=zx.hs_new,distance=..3] run function sweetdream:equipment/sword/hush/touch_dmg
+# ②③ ★ 去程标记(路径 + 命中) —— 按施法者 uuid 隔离, 实现见 dash_mark ★
+#   标记名一律带施法者 uuid 后缀(zx.hs_path_<uuid> / zx.hs_hit_<uuid> /
+#   zx.hs_new_<uuid>), 于是"多人同时施放"天然互不干扰 —— 老实现是全局同名标签:
+#   B 施放会清掉 A 的标记; 两人打同一群怪时 A 的 zx.hs_hit 又会让 B 漏掉命中。
+#   要往选择器里拼 uuid 必须走宏函数, 所以这一段抽成 dash_mark; 这里现取自己的
+#   uuid 抄进 zx:work hs(和 cast / back_step 用的是同一个节点), 再调它。
+#   ★ 拿不到 uuid(理论上不会)就整段跳过, 不阻断推进(①④⑤ 照常)。
+function sweetdream:lib/uuid
+execute if data storage zx:data self{ok:1b} run data modify storage zx:work hs.uuid set from storage zx:data self.uuid
+execute if data storage zx:data self{ok:1b} run function sweetdream:equipment/sword/hush/dash_mark with storage zx:work hs
 
 # ④ 还能走就挪一步(0.5 格), 再把剩余步数减 1
 execute if score @s zx.hush matches 1.. rotated ~ 0 run tp @s ^ ^ ^0.5

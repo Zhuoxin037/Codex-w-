@@ -1,0 +1,348 @@
+{
+  "hand_animation_on_swap": false,
+  "model": {
+    "type": "minecraft:composite",
+    "models": [
+      {
+        "type": "minecraft:model",
+        "model": "coldcrow:item/body"
+      },
+      {
+        "type": "minecraft:select",
+        "property": "minecraft:charge_type",
+        "cases": [
+          {
+            "when": "arrow",
+            "model": {
+              "type": "minecraft:composite",
+              "models": [
+                {
+                  "type": "minecraft:model",
+                  "model": "coldcrow:item/pull_12"
+                },
+                {
+                  "type": "minecraft:model",
+                  "model": "coldcrow:item/arrow"
+                }
+              ]
+            }
+          },
+          {
+            "when": "rocket",
+            "model": {
+              "type": "minecraft:composite",
+              "models": [
+                {
+                  "type": "minecraft:model",
+                  "model": "coldcrow:item/pull_12"
+                },
+                {
+                  "type": "minecraft:model",
+                  "model": "coldcrow:item/rocket"
+                }
+              ]
+            }
+          }
+        ],
+        "fallback": {
+          "type": "minecraft:condition",
+          "property": "minecraft:using_item",
+          "on_false": {
+            "type": "minecraft:model",
+            "model": "coldcrow:item/pull_00"
+          },
+          "on_true": {
+            "type": "minecraft:range_dispatch",
+            "property": "minecraft:crossbow/pull",
+            "fallback": {
+              "type": "minecraft:model",
+              "model": "coldcrow:item/pull_00"
+            },
+            "entries": [
+              {
+                "threshold": 0.08333333333333333,
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "coldcrow:item/pull_01"
+                }
+              },
+              {
+                "threshold": 0.16666666666666666,
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "coldcrow:item/pull_02"
+                }
+              },
+              {
+                "threshold": 0.25,
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "coldcrow:item/pull_03"
+                }
+              },
+              {
+                "threshold": 0.3333333333333333,
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "coldcrow:item/pull_04"
+                }
+              },
+              {
+                "threshold": 0.4166666666666667,
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "coldcrow:item/pull_05"
+                }
+              },
+              {
+                "threshold": 0.5,
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "coldcrow:item/pull_06"
+                }
+              },
+              {
+                "threshold": 0.5833333333333334,
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "coldcrow:item/pull_07"
+                }
+              },
+              {
+                "threshold": 0.6666666666666666,
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "coldcrow:item/pull_08"
+                }
+              },
+              {
+                "threshold": 0.75,
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "coldcrow:item/pull_09"
+                }
+              },
+              {
+                "threshold": 0.8333333333333334,
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "coldcrow:item/pull_10"
+                }
+              },
+              {
+                "threshold": 0.9166666666666666,
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "coldcrow:item/pull_11"
+                }
+              },
+              {
+                "threshold": 1.0,
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "coldcrow:item/pull_12"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "type": "minecraft:select",
+        "property": "minecraft:display_context",
+        "cases": [
+          {
+            "when": [
+              "firstperson_righthand",
+              "firstperson_lefthand",
+              "thirdperson_righthand",
+              "thirdperson_lefthand"
+            ],
+            "model": {
+              "type": "minecraft:range_dispatch",
+              "property": "minecraft:custom_model_data",
+              "index": 1,
+              "fallback": {
+                "type": "minecraft:range_dispatch",
+                "property": "minecraft:custom_model_data",
+                "index": 0,
+                "fallback": {
+                  "type": "minecraft:model",
+                  "model": "coldcrow:item/ice_0"
+                },
+                "entries": [
+                  {
+                    "threshold": 1,
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "coldcrow:item/ice_1"
+                    }
+                  },
+                  {
+                    "threshold": 2,
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "coldcrow:item/ice_2"
+                    }
+                  },
+                  {
+                    "threshold": 3,
+                    "model": {
+                      "type": "minecraft:model",
+                      "model": "coldcrow:item/ice_3"
+                    }
+                  }
+                ]
+              },
+              "entries": [
+                {
+                  "threshold": 1,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "coldcrow:item/ice_3"
+                  }
+                },
+                {
+                  "threshold": 4,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "coldcrow:item/ice_2"
+                  }
+                },
+                {
+                  "threshold": 6,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "coldcrow:item/ice_1"
+                  }
+                },
+                {
+                  "threshold": 8,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "coldcrow:item/ice_0"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "fallback": {
+          "type": "minecraft:range_dispatch",
+          "property": "minecraft:custom_model_data",
+          "index": 0,
+          "fallback": {
+            "type": "minecraft:model",
+            "model": "coldcrow:item/ice_0"
+          },
+          "entries": [
+            {
+              "threshold": 1,
+              "model": {
+                "type": "minecraft:model",
+                "model": "coldcrow:item/ice_1"
+              }
+            },
+            {
+              "threshold": 2,
+              "model": {
+                "type": "minecraft:model",
+                "model": "coldcrow:item/ice_2"
+              }
+            },
+            {
+              "threshold": 3,
+              "model": {
+                "type": "minecraft:model",
+                "model": "coldcrow:item/ice_3"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "minecraft:select",
+        "property": "minecraft:display_context",
+        "cases": [
+          {
+            "when": [
+              "firstperson_righthand",
+              "firstperson_lefthand",
+              "thirdperson_righthand",
+              "thirdperson_lefthand"
+            ],
+            "model": {
+              "type": "minecraft:range_dispatch",
+              "property": "minecraft:custom_model_data",
+              "index": 1,
+              "fallback": {
+                "type": "minecraft:empty"
+              },
+              "entries": [
+                {
+                  "threshold": 1,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "coldcrow:item/flash_1"
+                  }
+                },
+                {
+                  "threshold": 2,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "coldcrow:item/flash_2"
+                  }
+                },
+                {
+                  "threshold": 3,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "coldcrow:item/flash_3"
+                  }
+                },
+                {
+                  "threshold": 4,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "coldcrow:item/flash_4"
+                  }
+                },
+                {
+                  "threshold": 5,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "coldcrow:item/flash_5"
+                  }
+                },
+                {
+                  "threshold": 6,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "coldcrow:item/flash_6"
+                  }
+                },
+                {
+                  "threshold": 7,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "coldcrow:item/flash_7"
+                  }
+                },
+                {
+                  "threshold": 8,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "coldcrow:item/flash_8"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "fallback": {
+          "type": "minecraft:empty"
+        }
+      }
+    ]
+  }
+}

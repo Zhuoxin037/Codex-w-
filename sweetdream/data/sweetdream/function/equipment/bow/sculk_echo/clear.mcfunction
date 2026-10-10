@@ -5,4 +5,4 @@
 #   整条重写(= 0 伤害), 保证命中时读得到且一定是 0。
 # ============================================================
 
-$data modify storage zx:data se."$(uuid)" set value {hit_dmg:0.0,path_dmg:0.0,cry:0,u0:0,u1:0,u2:0,u3:0}
+$data modify storage zx:data se."$(uuid)" set value {hit_dmg:0.0,path_dmg:0.0,cry:0,ol:0b,u0:0,u1:0,u2:0,u3:0}

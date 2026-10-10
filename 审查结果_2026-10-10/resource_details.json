@@ -1,0 +1,150 @@
+{
+  "model_count": 7034,
+  "item_definitions": 136,
+  "unused_models": 692,
+  "unused_model_bytes": 20613137,
+  "unused_examples": [
+    "angelcore:item/axe",
+    "angelcore:item/frames/idle_00",
+    "angelcore:item/frames/idle_01",
+    "angelcore:item/frames/idle_02",
+    "angelcore:item/frames/idle_03",
+    "angelcore:item/frames/idle_04",
+    "angelcore:item/frames/idle_05",
+    "angelcore:item/frames/idle_06",
+    "angelcore:item/frames/idle_07",
+    "angelcore:item/frames/idle_08",
+    "angelcore:item/frames/idle_09",
+    "angelcore:item/frames/idle_10",
+    "angelcore:item/frames/idle_11",
+    "angelcore:item/frames/idle_12",
+    "angelcore:item/frames/idle_13",
+    "angelcore:item/frames/idle_14",
+    "angelcore:item/frames/idle_15",
+    "angelcore:item/frames/idle_16",
+    "angelcore:item/frames/idle_17",
+    "angelcore:item/frames/idle_18",
+    "angelcore:item/frames/idle_19",
+    "angelcore:item/frames/idle_20",
+    "angelcore:item/frames/idle_21",
+    "angelcore:item/frames/idle_22",
+    "angelcore:item/frames/idle_23",
+    "angelcore:item/frames/idle_24",
+    "angelcore:item/frames/idle_25",
+    "angelcore:item/frames/idle_26",
+    "angelcore:item/frames/idle_27",
+    "angelcore:item/frames/idle_28"
+  ],
+  "namespace_models": {
+    "angelcore": {
+      "files": 35,
+      "bytes": 2961503,
+      "elements": 2253
+    },
+    "coldcrow": {
+      "files": 29,
+      "bytes": 4084761,
+      "elements": 7514
+    },
+    "deepseaecho": {
+      "files": 146,
+      "bytes": 5361050,
+      "elements": 14580
+    },
+    "dreamscythe": {
+      "files": 35,
+      "bytes": 343489,
+      "elements": 647
+    },
+    "flameremnant": {
+      "files": 1,
+      "bytes": 1067353,
+      "elements": 1952
+    },
+    "naturewind": {
+      "files": 36,
+      "bytes": 6208186,
+      "elements": 17256
+    },
+    "palette": {
+      "files": 1316,
+      "bytes": 22382474,
+      "elements": 55741
+    },
+    "sail": {
+      "files": 67,
+      "bytes": 28272556,
+      "elements": 23924
+    },
+    "sweetdream": {
+      "files": 5369,
+      "bytes": 17274973,
+      "elements": 23160
+    }
+  },
+  "validation_counts": {
+    "unknown_vanilla_sound": 2
+  },
+  "validation_examples": {
+    "unknown_vanilla_sound": [
+      [
+        "sweetdream:equipment/armor/fade/go",
+        27,
+        "entity.allay.item_throw"
+      ],
+      [
+        "sweetdream:equipment/bow/lucid_dream/big",
+        80,
+        "entity.evoker.cast"
+      ]
+    ]
+  },
+  "static_items": {
+    "angelcore:axe": {
+      "type": "minecraft:model",
+      "model": "angelcore:item/vanilla/axe"
+    },
+    "sail:staff": {
+      "type": "minecraft:model",
+      "model": "sail:item/vanilla/staff"
+    },
+    "sweetdream:aurora_dream": {
+      "type": "minecraft:model",
+      "model": "sweetdream:item/vanilla/aurora_dream"
+    },
+    "sweetdream:look": {
+      "type": "minecraft:model",
+      "model": "sweetdream:item/vanilla/look"
+    }
+  },
+  "extra_files": [
+    {
+      "path": "tools/make_icons.py",
+      "bytes": 6335
+    },
+    {
+      "path": "assets/deepseaecho/items/sword.json.bak-before-cast",
+      "bytes": 69
+    },
+    {
+      "path": "assets/deepseaecho/items/sword.json.bak-before-swapfix",
+      "bytes": 5473
+    },
+    {
+      "path": "assets/deepseaecho/textures/item/deepsea_blade.png.bak",
+      "bytes": 39548
+    },
+    {
+      "path": "assets/deepseaecho/textures/item/deepsea_blade.png.broken-256f",
+      "bytes": 39548
+    },
+    {
+      "path": "assets/deepseaecho/textures/item/deepsea_blade.png.broken-84f",
+      "bytes": 46118
+    },
+    {
+      "path": "assets/naturewind/items/staff.json.bak-before-cast",
+      "bytes": 2359
+    }
+  ]
+}

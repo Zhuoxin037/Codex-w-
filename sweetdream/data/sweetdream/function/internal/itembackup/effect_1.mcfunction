@@ -3,6 +3,8 @@
 # ------------------------------------------------------------
 # 【触发】进度 sweetdream:itembackup/consume(consume_item) 的 rewards
 # 【流程】撤进度 -> 取自己的 UUID -> 判定槽位 -> 快照 -> 打标签 -> 延迟 1 tick 回手
+#   (O03 后快照进 zx:ret 存储, 见 backup.mcfunction; 老的每刻 tick 备份线已删,
+#    每秒安全网挂 lib/second)
 # ------------------------------------------------------------
 # 【为什么必须延迟】consume_item 的奖励是在"消耗还没走完"的时候触发的。
 #   等奖励函数跑完, 游戏还会把那个槽位设成消耗后的结果(空), 会把我们刚放回去的
@@ -31,10 +33,32 @@ execute unless data storage zx:data self{ok:1b} run return fail
 tag @s remove zx.ret_off
 execute unless items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["itemreplace"]}] if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["itemreplace"]}] run tag @s add zx.ret_off
 
+# 【①b 持久化"从哪一格消耗"(修 R01 / R06)】
+#   趁这一刻东西还在手上、SelectedItemSlot 还没变, 把它记进计分项。
+#   ★ tag zx.ret_off 只是**本 tick 内**的快判(包里有 9 处拿它做门控, 语义不动);
+#     跨 tick 的判断一律读 zx.ret_slot —— tag 会随实体消失, 计分项不会
+#     (详见 effect_2 与 recover 的头部说明)。
+#   取值约定: 0..8 = 主手(快捷栏下标) / -1 = 副手 / -2 = 无待归还。
+scoreboard players set @s zx.ret_slot -2
+execute if entity @s[tag=zx.ret_off] run scoreboard players set @s zx.ret_slot -1
+# ★★ 字段名是 Selected**Item**Slot, 不是 SelectedSlot ★★
+#   2026-10-10 事故: 第一版写成 `data get entity @s SelectedSlot` —— 该字段不存在,
+#   data get 抛错 ⇒ **本函数从这一行起中断** ⇒ 备份没做、schedule 没排
+#   ⇒ 武器被消耗后再也没人还(玩家反馈"消耗型武器右键没有正常回手")。
+#   ★ 先例: equipment/sword/sickle_dreams/sweep/start 第 14 行
+#     `data modify storage zx:sweep record.slot set from entity @s SelectedItemSlot`。
+#   ★ 这类"字段名写错"在**非宏行**里是运行时错误、不进 latest.log, 只能靠先例/守门。
+#     守门: check.py 的 `selfield` 规则(拦裸 `SelectedSlot`)。
+execute unless entity @s[tag=zx.ret_off] store result score @s zx.ret_slot run data get entity @s SelectedItemSlot
+#   待归还倒计时: 主路的 return 会在 1 tick 后把它清成 0;
+#   万一主路没跑到(掉线 / 当刻死亡), recover 每秒重试直到它归零。
+scoreboard players set @s zx.ret_pend 20
+
 # ② 立刻快照一次
-#   每刻那条 tick 备份已经够了, 但碰上"刚把武器换到副手就右键"这种极限时序,
-#   它有可能还没跑到。而此刻消耗还没走完、东西还在手上, 是【最准】的备份时机。
-#   两份备份写进架子的同一个槽位, 内容一致, 不会互相打架。
+#   此刻消耗还没走完、东西还在手上, 是【最准】的备份时机(O03 后快照写进
+#   zx:ret 存储的主手/副手两个键, 见 backup.mcfunction)。
+#   lib/second 的每秒快照是兜底; 这里的这一份保证"刚换到副手就右键"这类
+#   极限时序也拍得到。
 data modify storage zx:work a.uuid set from storage zx:data self.uuid
 function sweetdream:internal/itembackup/backup with storage zx:work a
 

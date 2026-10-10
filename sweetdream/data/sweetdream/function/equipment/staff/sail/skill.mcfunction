@@ -13,7 +13,7 @@
 #   ③ 次数 = 1 个旋风(每 3 秒脉冲一次);
 #   ④ 时长 = 15 秒(每秒由 second -> whirl_tick 推)。
 # 【"再次使用技能"】旋风进行中(zx.sl_vt >= 1)再按技能 -> 走 recall 分支
-#   (把被记录的生物拽到身边)。见 recall 的说明。
+#   (把**旋风**召唤到身边 —— 不是把被记录的生物拽过来, 见 recall / find_whirl)。
 # 【★ 被记录的生物不在了就不放 ★】既省钱也避免生成空旋风。
 # ============================================================
 
@@ -91,6 +91,7 @@ execute at @e[tag=zx.sl_found,distance=0..,limit=1] run function sweetdream:equi
 
 # ⑪ 标记"旋风进行中"(供"再次使用技能"识别)
 scoreboard players set @s zx.sl_vt 15
+function sweetdream:equipment/staff/sail/visual/begin
 
 # ⑫ 表现 + 清理临时标记
 execute at @e[tag=zx.sl_found,distance=0..,limit=1] run particle minecraft:small_gust ~ ~1 ~ 0.6 0.6 0.6 0.1 20 normal

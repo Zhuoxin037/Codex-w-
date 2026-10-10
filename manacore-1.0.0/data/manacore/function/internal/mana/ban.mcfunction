@@ -14,4 +14,8 @@ execute if score #dur manacore.math matches ..0 run function manacore:internal/m
 execute if score #dur manacore.math matches ..0 run function manacore:internal/mana/ban_perm with storage manacore:work a
 execute if score #dur manacore.math matches 1.. run scoreboard players operation #dur manacore.math += #now manacore.meta
 $execute if score #dur manacore.math matches 1.. store result storage manacore:players "$(uuid)".flags.regen_ban_end int 1 run scoreboard players get #dur manacore.math
-$execute if score #dur manacore.math matches 1.. modify storage manacore:players "$(uuid)".flags.no_regen set value 0b
+# ★ 这一行原本写成 `… matches 1.. modify storage …` —— 既漏 `run` 又漏 `data`。
+#   `modify` 不是 execute 的子命令(第 16 行的 `store` 才是, 所以那边不用 run);
+#   而且这是 `$` 宏行 ⇒ **加载期不解析**, 不会变 Failed to load function,
+#   只在运行时中断 ⇒ "限时禁疗"永远清不掉永久标记 no_regen(静默)。守门: norun 规则。
+$execute if score #dur manacore.math matches 1.. run data modify storage manacore:players "$(uuid)".flags.no_regen set value 0b

@@ -44,6 +44,18 @@ execute store result score #mn zx.meta run data get storage manacore:out r.value
 # ③ 必须**高于** 50 -> 定点 ×100 就是 > 5000
 execute unless score #mn zx.meta matches 5001.. run return 0
 
+# ③.5 ★★ "本次附着的标签不可再触发该效果"(lore 末句, 2026-10-08 补) ★★
+#   旧实现只有"穿永恒就无限补" —— 于是同一个标签可以被永恒反复补回,
+#   只要魔力够就永远掉不下来(玩家报: 和文本不符)。
+#   【做法】每次永恒成功附着后, 给那只生物打一个"这是我补的"标记 zx.et_<标签名>;
+#   下次这个标签再被消耗时, 认出标记 -> 本次**不**补(让它正常被消耗掉),
+#   并把这个标记清掉 —— 于是"我补的那一次"用掉了, 之后正常途径附着的又能再补。
+#   标记按标签名分开记, 免得"渊海补的那次"把"流火"也一起挡了。
+scoreboard players set #et_again zx.meta 0
+$execute as $(target) if entity @s[tag=zx.et_$(mark)] run scoreboard players add #et_again zx.meta 1
+$execute as $(target) if entity @s[tag=zx.et_$(mark)] run tag @s remove zx.et_$(mark)
+execute if score #et_again zx.meta matches 1.. run return 0
+
 # ④ 扣 50(consume 保证"要么完整扣、要么不扣")
 data modify storage manacore:in arg set value {uuid:"",value:50.0}
 data modify storage manacore:in arg.uuid set from storage zx:work etr.uuid
@@ -52,6 +64,8 @@ execute unless data storage manacore:out r{success:1b} run return 0
 
 # ⑤ 再次附着: 公共接口刷新标签(租约 + 图标一起回来)
 $function sweetdream:tag/mark {target:"$(target)",mark:"$(mark)"}
+#   打上"这是我补的" —— 下一次这个标签被消耗时不再触发永恒(见 ③.5)
+$execute as $(target) run tag @s add zx.et_$(mark)
 
 # ⑥ 告诉调用方"已补回"(lib/mark_take 靠它决定不再摘标签、不给余烬被动)
 data modify storage zx:work mc.done set value 1b

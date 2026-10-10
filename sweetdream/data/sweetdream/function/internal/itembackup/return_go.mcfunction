@@ -11,6 +11,13 @@ function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return fail
 
 data modify storage zx:work a.uuid set from storage zx:data self.uuid
+# ★ effect_2 的第二个宏参数 $(slot): 回手写回哪一格(见 effect_2 头部说明)。
+#   漏掉 => 含 $(slot) 的行取不到变量 => 整个宏函数运行时作废, 武器凭空消失。
+# ★ 先塞一个安全值 0, 只有"真的是主手"时才换成真槽位 —— 因为 $(slot) 是**文本替换**:
+#   副手(zx.ret_slot = -1)时若不钳, 替换出来的就是非法的 `hotbar.-1`。
+#   两条路径兴许被 execute 的条件拦住不执行, 但让文本永远合法更省心。
+data modify storage zx:work a.slot set value 0
+execute if score @s zx.ret_slot matches 0..8 store result storage zx:work a.slot int 1 run scoreboard players get @s zx.ret_slot
 function sweetdream:internal/itembackup/effect_2 with storage zx:work a
 
 # 回手做完了, 槽位标记就用不着了 —— 留着会污染下一次判定。

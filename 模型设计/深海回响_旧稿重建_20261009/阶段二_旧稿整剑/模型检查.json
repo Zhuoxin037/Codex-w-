@@ -1,0 +1,10 @@
+{
+  "cubes": 1192,
+  "groups": 64,
+  "textures": 2,
+  "approved_guard_and_wide_root_preserved": true,
+  "user_display_preserved": true,
+  "java_static_checked": true,
+  "static_review_only": true,
+  "deployed": false
+}

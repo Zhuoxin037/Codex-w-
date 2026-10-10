@@ -21,14 +21,18 @@ execute as @a run scoreboard players operation @s zx.regen_last = @s zx.regen_ex
 scoreboard players set @a zx.regen_extra 0
 
 # ---- ② 重新打开所有 /trigger 调试入口 ----
-#   ★ 加了新入口, 记得在这里也加一行 enable ★
+#   ★ 加了新入口, 记得在这里(或 enable_admin)加一行 enable ★
+#
+#   【C01: 分两类, 按权限开关】
+#     只读类(stats/worn/raw/diff/menu): 只给玩家看信息, 两种模式下都对所有人开。
+#     管理类(cd/mana/fadd/fdel/give): 会改背包/数值/世界 —— 只在
+#        · 开发模式(#dev zx.meta = 1) → 对所有玩家开;
+#        · 发布模式(#dev zx.meta = 0) → 只对带 zx.admin 标签的玩家开。
+#     清单在 debug/enable_admin, 改那一处即可。
 scoreboard players enable @a zx.dbg_stats
 scoreboard players enable @a zx.dbg_worn
 scoreboard players enable @a zx.dbg_raw
 scoreboard players enable @a zx.dbg_diff
-scoreboard players enable @a zx.dbg_cd
-scoreboard players enable @a zx.dbg_mana
-scoreboard players enable @a zx.dbg_fadd
-scoreboard players enable @a zx.dbg_fdel
 scoreboard players enable @a zx.dbg_menu
-scoreboard players enable @a zx.dbg_give
+execute if score #dev zx.meta matches 1 as @a run function sweetdream:debug/enable_admin
+execute unless score #dev zx.meta matches 1 as @a[tag=zx.admin] run function sweetdream:debug/enable_admin

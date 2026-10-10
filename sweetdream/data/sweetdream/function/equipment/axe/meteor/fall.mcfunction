@@ -5,6 +5,8 @@
 # 【目标】① 自身攻击的那只(zx.victim)  ② 自身 2 格内随机的一只
 #   两只并成一个集合 zx.mt_hit 一起处理 —— 万一它俩是同一只也不会打两遍。
 # 【数值】基础攻击力 ×4(通道 attack_mul), 之后 2 秒缓慢Ⅱ(amplifier 1)。
+# 【④' 陨石实体(2026-10-08 批 D)】每只目标各降一颗 item_display 陨石, 从 7 格高
+#   0.2 秒砸到地面炸开(见 meteor/rock 与 rock_tick 的说明)。它只是表现, 伤害留在 ②。
 # ============================================================
 
 # ① 圈目标: 刚打中的那只 + 2 格内随机一只
@@ -31,5 +33,9 @@ execute at @e[tag=zx.mt_hit] run particle minecraft:lava ~ ~5 ~ 0.2 0.2 0.2 0.0 
 execute at @e[tag=zx.mt_hit] run particle minecraft:explosion ~ ~1 ~ 0.3 0.3 0.3 0.0 1 normal
 execute at @e[tag=zx.mt_hit] run particle minecraft:large_smoke ~ ~1 ~ 0.5 0.4 0.5 0.03 12 normal
 execute at @e[tag=zx.mt_hit] run playsound minecraft:entity.generic.explode player @a ~ ~ ~ 0.8 0.9
+
+# ④' 落下来的那颗陨石实体(2026-10-08 批 D) —— 从 7 格高处砸下来, 0.2 秒落地炸开。
+#   ★ 必须排在 ⑤ 摘 zx.mt_hit 之前: 它按 zx.mt_hit 定位(每只各一颗)。
+execute at @e[tag=zx.mt_hit] run function sweetdream:equipment/axe/meteor/rock
 
 tag @e[tag=zx.mt_hit] remove zx.mt_hit

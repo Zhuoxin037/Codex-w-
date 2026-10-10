@@ -8,5 +8,16 @@
 #   老的残缺键 = 十六进制的前 8 位, 正好就是 h0。
 # ============================================================
 
+# 【★ 2026-10-10 修复(静默失效)★】同 migrate: `storage manacore:players."…"` 漏了
+#   id 与路径之间的空格 ⇒ 解析成 id=`manacore:players.`, 迁到另一个存储上。
+#   本文件目前无调用方(拼连字符那套已被 uuid/build 的"纯 hex 键"取代),
+#   但仍按同一修法补空格, 免得将来被引用时踩同一个坑。
+#   ★ 一并提醒: uuid/build 已说明"拼连字符这一步实测不生效", 别再把本文件接回去。
+# ============================================================
+
 $data modify storage manacore:work a.uuid set value "$(h0)-$(h1)-$(h2)-$(h3)-$(h4)"
-$execute if data storage manacore:players."$(h0)" unless data storage manacore:players."$(h0)-$(h1)-$(h2)-$(h3)-$(h4)" run data modify storage manacore:players."$(h0)-$(h1)-$(h2)-$(h3)-$(h4)" set from storage manacore:players."$(h0)"
+$execute if data storage manacore:players "$(h0)" unless data storage manacore:players "$(h0)-$(h1)-$(h2)-$(h3)-$(h4)" run data modify storage manacore:players "$(h0)-$(h1)-$(h2)-$(h3)-$(h4)" set from storage manacore:players "$(h0)"
+# 【★ 登记"终身清单"(修 F16)★】同 migrate: 新建了键就要登记(见 internal/player/create)。
+#   ★ 条件必须逐字照抄上面那句的 if/unless(同 migrate 的 92 条重复事故),
+#   否则每次调用都会无条件长一条。
+$execute if data storage manacore:players "$(h0)" unless data storage manacore:players "$(h0)-$(h1)-$(h2)-$(h3)-$(h4)" run data modify storage manacore:players_all list append value "$(h0)-$(h1)-$(h2)-$(h3)-$(h4)"

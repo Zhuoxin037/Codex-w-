@@ -14,14 +14,16 @@
 #   相比"跨刻串味"的风险, 这点开销可以忽略(也省得再拆两个文件)。
 # ============================================================
 
-# 段1: 基础攻击力 ×1
+# 段1: 「流火」那一段 —— 基础 ×1 / 超限 ×1.5
 data modify storage manacore:in arg set value {uuid:"",attack_mul:1.0,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0}
+execute if score @s zx.rl_ol matches 1 run data modify storage manacore:in arg.attack_mul set value 1.5
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:work rl.dmg1 set from storage manacore:out r.damage
 
-# 段2: 基础攻击力 ×3
+# 段2: 「夜火」那一段 —— 基础 ×3 / 超限 ×4
 data modify storage manacore:in arg set value {uuid:"",attack_mul:3.0,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0}
+execute if score @s zx.rl_ol matches 1 run data modify storage manacore:in arg.attack_mul set value 4.0
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:work rl.dmg3 set from storage manacore:out r.damage

@@ -1,29 +1,31 @@
 # ============================================================
-# sweetdream:internal/itembackup/backup —— 把手里带 itemreplace 的武器备份到盔甲架
+# sweetdream:internal/itembackup/backup —— 把带 itemreplace 的武器快照进命令存储
 # ------------------------------------------------------------
-# 【宏参数】zx:work a {uuid}     【执行者】玩家本人(@s)
-# 【谁调用它】① 每刻那条 tick 线(itembackup/mainhand_1)
-#             ② 右键触发的那一刻(itembackup/effect_1, "消耗还没走完"的最准时机)
-# ------------------------------------------------------------
-# 【★ 主手 / 副手都要备份 ★】(本次修复的重点)
-#   老版本只备份主手(weapon.mainhand), 于是武器放副手右键时会连出两件事:
-#     ① 副手那把从来没进过架子 -> 消耗掉之后没人还它 -> **武器凭空消失**
-#     ② 架子里还留着上一次主手那把 -> 回手时又被塞进主手
-#        -> **把主手正在用的东西顶掉**(item replace 是覆盖, 不会掉地上)
-#   现在两个槽位各存各的, 回手时按"这一下是用哪只手放的"取回对应的那一份。
-#   (盔甲架有 weapon.mainhand / weapon.offhand 两个槽位, 正好够用)
-# 【为什么用 if items 而不是 nbt={SelectedItem:...}】
-#   SelectedItem 是玩家 NBT 里的老字段, 依赖内部结构; if items 是 1.20.5 起的
-#   官方语法, 直接读槽位 + 组件谓词, 和包里其它地方的 [custom_data~{zx:[...]}]
-#   写法也是一套, 更不容易被版本变动坑到。
-# 【为什么必须在"手上是 itemreplace 物品"时才备份】这个判断不能省:
-#   消耗流程跑完之后, 那个槽位会变成空气。要是不判断就每刻复制,
-#   下一 tick 就会把"空气"备份进架子, 回手自然什么都没有。
+# 【执行者】玩家本人(@s)。**普通函数**(宏变量 $(uuid) 的消费点在 snap_main/snap_off,
+#   本文件两行是静态门控 + with storage 转发 —— 行首带 $ 却没有 $(...) 会整个函数作废)
+# 【调用方】① 右键触发的那一刻(itembackup/effect_1, "消耗还没走完"的最准时机,
+#   调用前先把 zx:work a.uuid 备好)  ② lib/second 每秒一次 —— 走 backup_go 包装。
+#   两处都写 `function backup with storage zx:work a`: with 源合法, 参数由 snap 消费。
+# 【★ O03(2026-10-11): 备份从"固定盔甲架"搬进命令存储 ★】
+#   老设计: 每人一个 test_stand_<uuid> 盔甲架, 固定召在主世界 0.5,-60,0.5 ——
+#     · 依赖出生区块常驻加载(架子一卸载, 备份/回手全部静默失败 => 武器消失);
+#     · 每刻 6 次 `@e[distance=0..]` 全实体扫描(display 一多, 很贵)。
+#   新设计: 快照写进 zx:ret p."<uuid>".mainhand / .offhand —— 存储跟着存档走,
+#     跨死亡/重连/维度都在, 和实体加载状态彻底解耦。
+# 【★ 坑 95(2026-10-11 二次事故): 玩家物品不能直接 data 拷, 必须走 snap 中转 ★】
+#   玩家 NBT 实测(playerdata 解剖): equipment 复合只存**穿戴的盔甲**,
+#   主手/快捷栏物品在 Inventory 列表且主手是"选中的格"(无静态 NBT 路径)。
+#   O03 首版 `set from entity @s equipment.mainhand` 对玩家 = 路径不存在
+#   ⇒ 静默失败 ⇒ zx:ret 连键都没建出来(用户实测 `/data get storage zx:ret` = {})。
+#   修法: 门控命中后调 snap_main / snap_off —— 用 item replace(谓词语法, 对玩家
+#   合法)把武器拷上临时架, 再从盔甲架的 equipment.mainhand(生物路径)拷进存储。
+#   形态与 restore 完全对称(restore: 存储 -> 架 -> 玩家; snap: 玩家 -> 架 -> 存储)。
+# 【主手/副手各存各的】回手按"这一下是用哪只手放的"取对应那份(见 effect_2)。
 # 【为什么用 ~ 部分匹配】以后往 give 的 custom_data 里加字段, 这里不用跟着改。
 # ============================================================
 
-# ① 主手是武器 -> 存进架子的主手槽(架子固定在主世界, 所以要切维度过去找它)
-$execute in minecraft:overworld if items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["itemreplace"]}] run item replace entity @e[distance=0..,tag=test_stand_$(uuid),limit=1] weapon.mainhand from entity @s weapon.mainhand
+# ① 主手是武器 -> 快照主手
+execute if items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["itemreplace"]}] run function sweetdream:internal/itembackup/snap_main with storage zx:work a
 
-# ② 副手是武器 -> 存进架子的副手槽
-$execute in minecraft:overworld if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["itemreplace"]}] run item replace entity @e[distance=0..,tag=test_stand_$(uuid),limit=1] weapon.offhand from entity @s weapon.offhand
+# ② 副手是武器 -> 快照副手
+execute if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["itemreplace"]}] run function sweetdream:internal/itembackup/snap_off with storage zx:work a

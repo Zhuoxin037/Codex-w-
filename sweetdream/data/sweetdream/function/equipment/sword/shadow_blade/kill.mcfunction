@@ -14,6 +14,17 @@ advancement revoke @s only sweetdream:equipment/sword/shadow_blade_kill
 # ① 不在窗口内 -> 什么都不做
 execute unless score @s zx.sb_end > #now manacore.meta run return 0
 
+# ①b 【超限】走超限版那套击杀兑现(手持本武器 / 手持其他武器 两条分支), 收工
+#     基础版那套"必须手持影刃 + 返 60"不再适用 —— 超限文案换了整段。
+#     ★ 读的是**施法快照** zx.sb_ol(cast ①b 拍的), 不是重新判手里那把:
+#       超限版就是"换武器后再击杀", 此刻手里必然不是影刃, 重判必为 0。
+#   快照取出后**立刻清掉**: 一次施法只兑现一次(否则窗口内的后续击杀会一直重复减冷却)
+scoreboard players add @s zx.sb_ol 0
+scoreboard players operation #sb_snap zx.meta = @s zx.sb_ol
+scoreboard players reset @s zx.sb_ol
+execute if score #sb_snap zx.meta matches 1 run function sweetdream:equipment/sword/shadow_blade/kill_ol
+execute if score #sb_snap zx.meta matches 1 run return 0
+
 # ② 主手/副手都不是影刃 -> 不算(避免用别的武器蹭这个窗口)
 execute unless items entity @s weapon.mainhand diamond_sword[custom_data~{zx:["shadow_blade"]}] unless items entity @s weapon.offhand diamond_sword[custom_data~{zx:["shadow_blade"]}] run return 0
 

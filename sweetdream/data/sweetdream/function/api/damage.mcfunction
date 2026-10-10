@@ -21,6 +21,10 @@
 #   办法不冲突, 间隔够的话本来也不会丢。)
 #   想自己另注册别的类型: 照 skill.json 写一份, 再把自己加进
 #   data/minecraft/tags/damage_type/bypasses_cooldown.json 即可。
+#   ★ 2026-10-10: **原版平砍类型 `minecraft:player_attack` 也已加进同一个标签** ——
+#     目的是让**玩家普攻**不再被无敌帧吃掉（"高频自动伤害把平A目标锁死"的根源）。
+#     副作用: 过去拿"把默认类型退回 `player_attack`"来**关掉** bypass 的老办法**已失效**
+#     （它现在同样 bypass）；真要"不 bypass"得多注册一个类型并别加进标签。
 #   read    : 填 "manacore" 时, 忽略 damage, 直接从 manacore:out r.damage 取
 #             —— 这就是"把 manacore 算出来的伤害用进 /damage"的开关
 #   src     : **来源标记**(2026-10-06 加)。留空 = "ally"(我方技能, 默认);

@@ -24,4 +24,4 @@ function manacore:api/mana/add
 
 # ③ 一点反馈(看得见才好测)
 execute at @s run particle minecraft:reverse_portal ~ ~1 ~ 0.35 0.5 0.35 0.02 18 normal
-execute at @s run playsound minecraft:entity.allay.item_throw player @s ~ ~ ~ 0.5 1.2
+execute at @s run playsound minecraft:entity.allay.item_thrown player @s ~ ~ ~ 0.5 1.2

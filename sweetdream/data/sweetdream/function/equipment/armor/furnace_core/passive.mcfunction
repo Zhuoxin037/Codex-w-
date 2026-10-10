@@ -30,22 +30,35 @@ execute unless data storage zx:data self{ok:1b} run return fail
 scoreboard players set #on zx.meta 0
 execute if items entity @s armor.chest *[minecraft:custom_data~{zx:["furnace_core"]}] run scoreboard players set #on zx.meta 1
 
-# ③ 燃灰衰减: 每 3 秒 -1 层。没穿(或没层)时把计时清零 —— 不清的话
-#   脱下再穿上会立刻吃掉一层。
-execute if score #on zx.meta matches 1 if score @s zx.fc_ash matches 1.. run scoreboard players add @s zx.fc_t 1
-execute if score #on zx.meta matches 1 unless score @s zx.fc_ash matches 1.. run scoreboard players set @s zx.fc_t 0
-execute unless score #on zx.meta matches 1 run scoreboard players set @s zx.fc_t 0
-execute if score @s zx.fc_t matches 3.. run scoreboard players remove @s zx.fc_ash 1
-execute if score @s zx.fc_t matches 3.. run scoreboard players set @s zx.fc_t 0
+# ②' 超限与否(基础 100/10/5 + X最低3 + Y最低5 -> 超限 150/15/8 + X最低4 + Y最低7)
+scoreboard players set #ol zx.meta 0
+execute if items entity @s armor.chest *[minecraft:custom_data~{zx:["furnace_core"],ol:"furnace_core"}] run scoreboard players set #ol zx.meta 1
+
+# ③ 燃灰衰减: 每 3 秒 -1 层。★ 不管穿没穿都衰减 ★（2026-10-08 修）
+#   原先写成"没穿就把计时清零" ⇒ 脱下后衰减**永久冻结**: 攒满 10 层脱一会儿再穿回,
+#   面板 +300 魔力上限 / +40 攻击 / +50 生命 原样全在 —— 欠账永远不还。
+#   层数是"自然消退"的资源, 所以脱下也照走; 没层了才把计时清零(免得下次白吃一层)。
+#   ★ 超限(2026-10-10): 「燃灰」到 12 层 -> 12 秒内不再减层(fc_hold 倒计时),
+#     冻结结束那一拍**直接降到 8 层**, 之后照常每 3 秒 -1。
+#     "directly set 8" 放在 hold 1->0 的那一拍(用 #held 记"刚才还在冻结")。
+scoreboard players set #held zx.meta 0
+execute if score @s zx.fc_hold matches 1.. run scoreboard players set #held zx.meta 1
+execute if score #held zx.meta matches 1 run scoreboard players remove @s zx.fc_hold 1
+execute if score #held zx.meta matches 1 unless score @s zx.fc_hold matches 1.. run scoreboard players set @s zx.fc_ash 8
+execute unless score #held zx.meta matches 1 run execute if score @s zx.fc_ash matches 1.. run scoreboard players add @s zx.fc_t 1
+execute unless score #held zx.meta matches 1 run execute unless score @s zx.fc_ash matches 1.. run scoreboard players set @s zx.fc_t 0
+execute unless score #held zx.meta matches 1 run execute if score @s zx.fc_t matches 3.. run scoreboard players remove @s zx.fc_ash 1
+execute unless score #held zx.meta matches 1 run execute if score @s zx.fc_t matches 3.. run scoreboard players set @s zx.fc_t 0
 
 # ④ 参与计算的层数: 脱下就当 0 层(加成要跟着归零, 层数本身留着不删 ——
 #    再穿上时按剩下的层数继续, 而不是从头攒)
 scoreboard players set #ash zx.meta 0
 execute if score #on zx.meta matches 1 run scoreboard players operation #ash zx.meta = @s zx.fc_ash
 
-# ⑤ 魔力上限: 100 + 30 × 层数
+# ⑤ 魔力上限: 基础 100 + 30 × 层数 / 超限 150 + 30 × 层数
 scoreboard players set #want zx.meta 0
 execute if score #on zx.meta matches 1 run scoreboard players add #want zx.meta 100
+execute if score #ol zx.meta matches 1 run scoreboard players add #want zx.meta 50
 scoreboard players operation #tmp zx.meta = #ash zx.meta
 scoreboard players operation #tmp zx.meta *= #30 zx.meta
 scoreboard players operation #want zx.meta += #tmp zx.meta
@@ -69,8 +82,12 @@ scoreboard players operation #x zx.meta = #base zx.meta
 scoreboard players operation #x zx.meta /= #10 zx.meta
 scoreboard players operation #x zx.meta /= #100 zx.meta
 execute if score #x zx.meta matches ..2 run scoreboard players set #x zx.meta 3
+# 超限: X 最低 4(基础那行先跑, 超限这行只在 #ol=1 时把 ≤3 的抬到 4)
+execute if score #ol zx.meta matches 1 if score #x zx.meta matches ..3 run scoreboard players set #x zx.meta 4
 scoreboard players set #want zx.meta 0
 execute if score #on zx.meta matches 1 run scoreboard players add #want zx.meta 5
+# 超限: 基础攻击力基础值 5 -> 8(差值 +3)
+execute if score #ol zx.meta matches 1 run scoreboard players add #want zx.meta 3
 scoreboard players operation #tmp zx.meta = #x zx.meta
 scoreboard players operation #tmp zx.meta *= #ash zx.meta
 scoreboard players operation #want zx.meta += #tmp zx.meta
@@ -91,8 +108,12 @@ scoreboard players operation #y zx.meta = #hp zx.meta
 scoreboard players operation #y zx.meta /= #10 zx.meta
 scoreboard players operation #y zx.meta /= #100 zx.meta
 execute if score #y zx.meta matches ..4 run scoreboard players set #y zx.meta 5
+# 超限: Y 最低 7
+execute if score #ol zx.meta matches 1 if score #y zx.meta matches ..6 run scoreboard players set #y zx.meta 7
 scoreboard players set #want zx.meta 0
 execute if score #on zx.meta matches 1 run scoreboard players add #want zx.meta 10
+# 超限: 最大生命值基础值 10 -> 15(差值 +5)
+execute if score #ol zx.meta matches 1 run scoreboard players add #want zx.meta 5
 scoreboard players operation #tmp zx.meta = #y zx.meta
 scoreboard players operation #tmp zx.meta *= #ash zx.meta
 scoreboard players operation #want zx.meta += #tmp zx.meta

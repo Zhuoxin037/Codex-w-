@@ -8,3 +8,7 @@
 data modify storage manacore:work record set from storage manacore:config defaults
 $data modify storage manacore:work record.uuid set value "$(uuid)"
 $data modify storage manacore:players "$(uuid)" set from storage manacore:work record
+# 【★ 登记"终身清单"(修 F16)★】见 internal/player/create 的说明。
+#   这里会把已经不存在的记录**重建**出来, 所以也要登记(重复一条无害:
+#   清档时第二次 `data remove` 会因为路径不存在被 `execute if data` 挡掉)。
+$data modify storage manacore:players_all list append value "$(uuid)"

@@ -119,7 +119,9 @@ execute at @s as @e[type=#sweetdream:cc_arrow,tag=!zx.cc_seen,distance=..4] run 
 # function sweetdream:equipment/bow/cold_crow/cast with storage zx:work cc
 
 # ⑤ 冰凌: 1~3 层 +1; 第 4 层用掉后清空
-execute if score #tier zx.meta matches 4 run scoreboard players set @s zx.cc_ice 0
+#   【超限·寒鸦】打完第 4 层后, 若"射击后魔力 > 150"则再花 120 把冰凌退回 3 层
+#   (可连续满层)。非超限 / 魔力不够 -> 仍然是清空。判定与扣费都在 ol_refill 里。
+execute if score #tier zx.meta matches 4 run function sweetdream:equipment/bow/cold_crow/ol_refill
 execute unless score #tier zx.meta matches 4 run scoreboard players add @s zx.cc_ice 1
 
 # ⑥ 表现: 层数越高, 冰屑越多、音调越高

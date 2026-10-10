@@ -24,6 +24,32 @@
 #   清单在 lib/rearm; check.py 规则 27 盯着它的完整性。
 function sweetdream:lib/rearm
 
+# ============================================================
+# ★★ 调色盘(2026-10-07 批3): “色彩”每刻推进(到点自毁 / 出界 / 追最近生物 / 移动 / 命中结算)
+# ------------------------------------------------------------
+# 【★ 为什么必须排在最前面(紧跟 rearm)★】
+#   2026-10-08 用户报: "调色盘的自定义生物不会自己打人, 生成就呆在原地不动, 而且消除不掉"。
+#   离线读存档查到的**核心事实**: 那个光球的寿命计分项**一帧都没减过**、
+#   zx.pal_n 也没有分数 —— 即"推进段一次都没跑到过它"。
+#   症状与"这一段整段没轮到"完全一致: core/tick 后面越堆越多, 一旦某刻命令预算打满,
+#   **排在后面的整段静默跳过**(见上面 rearm 头部那起 2026-10-04 事故)。“色彩”的
+#   全部行为(出界自毁/追/打/到点收尾)都在这段里, 被跳过 = 光球死机且永不消失。
+#   ⇒ 提到最前面, 与 rearm 同级, 不再被后面的重活拖累。
+#   【★ 现在没有"每秒兜底"了 ★】原来还挂过一条 `palette/second` 的每秒兜底, 2026-10-08 已删:
+#     ① 它当时唯一的作用是"按 30 秒兜底寿命收尾", 而用户明确不要时间限制(见 color_body ①);
+#     ② 于是本段成了"色彩"**唯一**的每刻驱动 —— 放最前面这件事因此更要紧。
+#     (真要手工清场: 退世界重进 / `/reload`, core/load 末尾会 kill @e[tag=zx.pal_col]。)
+# 【★ 选择器**只按标签**, 不写 type= ★】
+#   光球的实体类型已经变过一次(marker -> item_display, 2026-10-08), 每次都回来改
+#   这里的 type= 就是给自己埋雷(改了 A 忘了 B ⇒ 整段匹配不到零个实体, 而且零日志)。
+#   按标签认人就没有这个问题。
+# 【★ 三维度各写一遍 + 每行 distance=0.. ★】#minecraft:tick 只在主世界跑;
+#   裸 @e 会跨维度搜索 —— 不锁维度的话同一个“色彩”会被三行各推一次(飞 3 倍速 / 打 3 份伤害)。
+# ============================================================
+execute in minecraft:overworld as @e[tag=zx.pal_col,distance=0..] at @s run function sweetdream:equipment/staff/palette/color_tick
+execute in minecraft:the_nether as @e[tag=zx.pal_col,distance=0..] at @s run function sweetdream:equipment/staff/palette/color_tick
+execute in minecraft:the_end as @e[tag=zx.pal_col,distance=0..] at @s run function sweetdream:equipment/staff/palette/color_tick
+
 # 【备份公共输入口】下面三套每刻逻辑都会写 manacore:in arg(观测镜要查术阵数量),
 #   不还回去的话你在聊天栏手填的参数每刻都被冲掉 —— 见 lib/in_bak。
 function sweetdream:lib/in_bak
@@ -52,6 +78,12 @@ execute as @a[scores={zx.rb_t=1..}] at @s run function sweetdream:equipment/swor
 #   必须在 lib/in_restore 之前 —— tick_step 里的 recalc 要用公共输入口 manacore:in arg。
 execute as @a[scores={zx.rl_t=1..}] at @s run function sweetdream:equipment/axe/red_lotus/tick_step
 
+# 负离子·超限(2026-10-09 批 F1): "1 秒后那道雷"的每刻倒计时(zx.an_2nd 20->0)
+#   ★ 为什么挂每刻而不是每秒: 每秒扫会把"1 秒后"落成 1~2 秒之间某一刻(同永霜那条)。
+#   ★ 筛 `zx.an_2nd=1..` 是天然停摆: 放完就减到 0, 不再被选中, 不用额外清。
+#   必须在 lib/in_restore 之前 —— second_strike 里的 calc 要用公共输入口 manacore:in arg。
+execute as @a[scores={zx.an_2nd=1..}] at @s run function sweetdream:equipment/axe/anion/second_strike
+
 # 苍蓝星(2026-10-07 批2): 主动第 2 段的 0.35 秒倒计时(zx.as_d 7->0 = 7 刻)
 #   ★ 用户口径: 主动两段依次隔 0.35 秒(同刻第二段会被受伤无敌帧吃掉)。
 #   ★ 筛 `zx.as_d=1..` 是天然停摆: 落地后 tick_step 统一把它清 0, 不再被选中。
@@ -79,18 +111,13 @@ execute in minecraft:the_end as @e[type=minecraft:marker,tag=zx.tc_strike,distan
 
 # 共鸣(2026-10-07 批3): "自身法球穿过共鸣水晶" —— 每刻扫水晶, 看有没有自己人的法球进来
 #   【为什么每刻】"穿过时立即"是刻级事件(法球每刻飞 0.75 格), 每秒轮询会漏。
+#   【★ 注意】pass_set 内部会把"找球"的 distance 基准**抬高 1.6 格**(水晶召唤在脚底、
+#     法球飞在眼睛高度, 三维 distance 光高度差就 >1.5 ⇒ 不抬恒不成立)。见 pass_set 头注释。
 #   【★ 三维度各写一遍 + 每行 distance=0.. ★】#minecraft:tick 只在主世界跑;
 #     裸 @e 会跨维度搜索 —— 不锁维度的话同一颗水晶会被三行各判一次(可能多打一份)。
 execute in minecraft:overworld as @e[type=minecraft:marker,tag=zx.ch_cry,distance=0..] at @s run function sweetdream:equipment/staff/chime/pass_check
 execute in minecraft:the_nether as @e[type=minecraft:marker,tag=zx.ch_cry,distance=0..] at @s run function sweetdream:equipment/staff/chime/pass_check
 execute in minecraft:the_end as @e[type=minecraft:marker,tag=zx.ch_cry,distance=0..] at @s run function sweetdream:equipment/staff/chime/pass_check
-
-# 调色盘(2026-10-07 批3): “色彩”每刻推进(寿命 / 出界 / 追最近生物 / 命中结算)
-#   【★ 三维度各写一遍 + 每行 distance=0.. ★】#minecraft:tick 只在主世界跑;
-#     裸 @e 会跨维度搜索 —— 不锁维度的话同一个“色彩”会被三行各推一次(飞 3 倍速 / 打 3 份伤害)。
-execute in minecraft:overworld as @e[type=minecraft:marker,tag=zx.pal_col,distance=0..] at @s run function sweetdream:equipment/staff/palette/color_tick
-execute in minecraft:the_nether as @e[type=minecraft:marker,tag=zx.pal_col,distance=0..] at @s run function sweetdream:equipment/staff/palette/color_tick
-execute in minecraft:the_end as @e[type=minecraft:marker,tag=zx.pal_col,distance=0..] at @s run function sweetdream:equipment/staff/palette/color_tick
 
 # 风帆(2026-10-08 改): 旋风的**形状**每刻画一帧(三条螺旋臂 + 漏斗收缩, 见 whirl_draw)
 #   【为什么必须每刻】每秒只闪一次 = "一团粒子凭空出现又消失", 转不起来;
@@ -102,17 +129,23 @@ execute in minecraft:overworld as @e[type=minecraft:marker,tag=zx.sl_vtx,distanc
 execute in minecraft:the_nether as @e[type=minecraft:marker,tag=zx.sl_vtx,distance=0..] at @s run function sweetdream:equipment/staff/sail/whirl_fx
 execute in minecraft:the_end as @e[type=minecraft:marker,tag=zx.sl_vtx,distance=0..] at @s run function sweetdream:equipment/staff/sail/whirl_fx
 
-# 释梦(2026-10-07 批2): 「入梦体」每刻推进(寿命/离主人 10 格自毁 / 认领目标 / 飞去咬人)
-#   【每刻先清"认领标记"】让入梦体**依次**认领各自最近的、还没被占的生物 ——
-#     先跑的那个把它最近的占掉, 后面的只能挑没被占的, 于是同一刻不会有两个盯上同一只。
+# 释梦(2026-10-07 批2; 2026-10-08 修"不同入梦体还是追同一只"):
+#   ①【占位标记每刻重建】zx.dr_claim 由**已绑定的入梦体**在自己的 pet_follow 里重新盖回来
+#      (先在上面三行清掉) —— 所以"占位"永远跟着真正在追它的那一个走, 不会留在死物上。
+#   ②【★ 必须分两遍跑, 顺序锁死 ★】先"已绑定(带 zx.dr_has)"的, 再"未绑定"的:
+#      若未绑定的先跑, 它会赶上"占位刚被清、老入梦体还没重建"的空窗, 把老入梦体的目标
+#      抢走(又变回"两个追同一只")。见 pet_tick 头注释。
 #   【★ 三维度各写一遍 + 每行 distance=0.. ★】#minecraft:tick 只在主世界跑;
 #     而裸 @e 会跨维度搜索 —— 不锁维度的话同一只入梦体会被三行各推一次(飞 3 倍速)。
 execute in minecraft:overworld run tag @e[distance=0..,tag=zx.dr_claim] remove zx.dr_claim
 execute in minecraft:the_nether run tag @e[distance=0..,tag=zx.dr_claim] remove zx.dr_claim
 execute in minecraft:the_end run tag @e[distance=0..,tag=zx.dr_claim] remove zx.dr_claim
-execute in minecraft:overworld as @e[distance=0..,tag=zx.dr_pet] at @s run function sweetdream:equipment/axe/dream_reader/pet_tick
-execute in minecraft:the_nether as @e[distance=0..,tag=zx.dr_pet] at @s run function sweetdream:equipment/axe/dream_reader/pet_tick
-execute in minecraft:the_end as @e[distance=0..,tag=zx.dr_pet] at @s run function sweetdream:equipment/axe/dream_reader/pet_tick
+execute in minecraft:overworld as @e[distance=0..,tag=zx.dr_pet,tag=zx.dr_has] at @s run function sweetdream:equipment/axe/dream_reader/pet_tick
+execute in minecraft:the_nether as @e[distance=0..,tag=zx.dr_pet,tag=zx.dr_has] at @s run function sweetdream:equipment/axe/dream_reader/pet_tick
+execute in minecraft:the_end as @e[distance=0..,tag=zx.dr_pet,tag=zx.dr_has] at @s run function sweetdream:equipment/axe/dream_reader/pet_tick
+execute in minecraft:overworld as @e[distance=0..,tag=zx.dr_pet,tag=!zx.dr_has] at @s run function sweetdream:equipment/axe/dream_reader/pet_tick
+execute in minecraft:the_nether as @e[distance=0..,tag=zx.dr_pet,tag=!zx.dr_has] at @s run function sweetdream:equipment/axe/dream_reader/pet_tick
+execute in minecraft:the_end as @e[distance=0..,tag=zx.dr_pet,tag=!zx.dr_has] at @s run function sweetdream:equipment/axe/dream_reader/pet_tick
 
 # 万念 / 千散 的延迟换手: 只对刚预约过的玩家跑(标签 zx.mq_swap, 见 myriad/swap)
 #   为什么必须排队等几 tick: 通用回手线会在 +1 tick 把备份塞回手里, 换早了会被覆盖。
@@ -131,10 +164,17 @@ execute in minecraft:overworld as @e[type=minecraft:marker,tag=zx.mq_f,distance=
 execute in minecraft:the_nether as @e[type=minecraft:marker,tag=zx.mq_f,distance=0..] at @s run function sweetdream:equipment/sword/myriad/domain_fx
 execute in minecraft:the_end as @e[type=minecraft:marker,tag=zx.mq_f,distance=0..] at @s run function sweetdream:equipment/sword/myriad/domain_fx
 
-# 深海的回响 · 释放动画: 只有施法中的玩家参与(zx.de_cast 从 0 走到 33, 共 34 tick)
-#   必须走每 tick 的节拍、不能借每秒被动 —— 释放动画要 20 fps 才不卡。
-#   这里不加 return 兜底: anim/end 自己会摘 tag, 中途把剑丢了也照样走完计数。
+# 深海的回响 · 待机与施法通道互斥；两手持剑的玩家只推进一次待机相位。
+execute as @a[tag=!zx.de_cast] if items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["deepsea_echo"]}] run function sweetdream:equipment/sword/deepsea_echo/anim/idle_tick
+execute as @a[tag=!zx.de_cast] unless items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["deepsea_echo"]}] if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["deepsea_echo"]}] run function sweetdream:equipment/sword/deepsea_echo/anim/idle_tick
 execute as @a[tag=zx.de_cast] run function sweetdream:equipment/sword/deepsea_echo/anim/tick
+
+# 极光与幻梦 · 月蚀流光模型动画接线
+execute as @a[tag=!zx.ad_cast] if items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["aurora_dream"]}] run function sweetdream:equipment/sword/aurora_dream/anim/idle_tick
+execute as @a[tag=!zx.ad_cast] unless items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["aurora_dream"]}] if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["aurora_dream"]}] run function sweetdream:equipment/sword/aurora_dream/anim/idle_tick
+execute as @a[tag=zx.ad_cast] run function sweetdream:equipment/sword/aurora_dream/anim/tick
+# 极光与幻梦 · 月蚀流光模型动画接线 / END
+
 
 # 深海的回响 · 连锁推进: 每人自己的倒计时 zx.de_t 归零就推一波(1 秒 = 20 tick)
 #   【为什么不用 schedule】schedule 按函数名排队 + 默认 replace, 两个人同时放
@@ -151,6 +191,12 @@ execute as @a[tag=zx.de_run,scores={zx.de_t=..0}] at @s run function sweetdream:
 execute in minecraft:overworld as @e[distance=0..,tag=zx.freeze] run function sweetdream:lib/freeze_hold
 execute in minecraft:the_nether as @e[distance=0..,tag=zx.freeze] run function sweetdream:lib/freeze_hold
 execute in minecraft:the_end as @e[distance=0..,tag=zx.freeze] run function sweetdream:lib/freeze_hold
+
+# 永霜 到点结算(2026-10-08: 从 lib/second 挪到这里)
+#   ★ 为什么必须每 tick: 冰冻写的是 60 tick(3 秒), 但原来只有每秒扫一次的
+#     lib/second 会去判"到点没" ⇒ 实际 3~4 秒才结算, 玩家体感"冻太久了"。
+#     这里每 tick 判一次, 3 秒就是 3 秒。开销可忽略(只对正在施法的玩家)。
+execute as @a[tag=zx.ef_casting] at @s run function sweetdream:equipment/sword/everfrost/hit_self
 
 # 法球(法杖类普攻的载体): 场上没有法球时这个选择器是空的, 开销为零
 #   为什么不用 @a 而是 @e: 法球是 minecraft:marker, 要靠它自己带的数据飞,
@@ -259,6 +305,24 @@ execute as @a[tag=zx.ac_delay,scores={zx.ac_d=..0}] at @s run function sweetdrea
 #   【开销】选择器带 zx.fr_t=1.., 没人在放光柱时这条完全不进函数。
 execute as @a[scores={zx.fr_t=1..}] at @s run function sweetdream:equipment/staff/final_revelation/beam
 
+# —— 偏振光 · 持续光线(2026-10-09 新增, 每刻) ——
+# 【为什么每刻】同上: 粒子寿命 < 1 秒, 每秒只铺一次 = 20 fps 里只有 1 帧有东西,
+#   看着"不算一条光线"。
+# 【做什么】沿"眼睛 -> 锁定目标"每 0.4 格撒光点(见 polarized_light/beam);
+#   顺带给照到的"自己人的共鸣水晶"打 zx.ch_beam 戳 -> 共鸣触发"法术穿过"。
+# 【开销】选择器带 zx.pl_t=1.., 没人在放光线时这条完全不进函数。
+execute as @a[scores={zx.pl_t=1..}] at @s run function sweetdream:equipment/staff/polarized_light/beam
+
+# 偏振光超限(批 G): 三道光线的伤害节奏是"每 0.5 秒", 每秒入口跟不上 ——
+#   由这里每刻推 10 刻闸(half), 到闸跑一次 tick(锁 3 目标/伤害/缓慢Ⅲ/倒计时)。
+#   基础版仍走 second(zx.pl_ol=0), 两边互不见面, 不会双倍伤害。
+execute as @a[scores={zx.pl_t=1..,zx.pl_ol=1}] at @s run function sweetdream:equipment/staff/polarized_light/half
+
+# 海棠超限(批 G): 漩涡增强检测 —— "若有生物在漩涡范围内死亡"。
+#   刚死的生物这一 tick 还在(Health:0.0f), 必须每刻查(每秒查会漏 19/20 的死亡)。
+#   裸 @e[tag=zx.bg_vtx] 带不了 distance 就没有维度问题: 全维度每只漩涡各处理一次。
+execute as @e[tag=zx.bg_vtx] at @s run function sweetdream:equipment/staff/begonia/vortex_death
+
 # —— 终末天启 · 实体光柱的寿命保险(每刻, 三维度各一遍) ——
 # 【续命制】放的时候 beam_go 每刻把光柱的 zx.fr_ref 续到 3; 这里每刻 -1,
 #   扣到 0 自杀。收尾函数漏调 / 玩家中途退游戏 / 实体被手动杀 —— 无论哪种
@@ -274,6 +338,31 @@ execute in minecraft:the_end as @e[type=item_display,tag=zx.fr_beam,distance=0..
 
 # 陨星: 熔星形态期间每刻检查"主手还是不是陨星", 换手立刻失效(见 meteor/tick)
 execute as @a[scores={zx.mt_on=1..}] run function sweetdream:equipment/axe/meteor/tick
+
+# 陨星(2026-10-08 批 D): 落下来的「陨石」每刻下降 + 到地炸开(见 meteor/rock_tick)
+#   【为什么每刻】"从 7 格高 0.2 秒砸下来"要 20 fps 才不卡; 4 刻就落地, 秒级轮询等于看不见。
+#   【★ 三维度各写一遍 + 每行 distance=0.. ★】#minecraft:tick 只在主世界跑;
+#     而裸 @e 会跨维度搜索 —— 不锁维度的话同一颗陨石会被三行各推一次(3 倍速下落)。
+#   【寿命】倒计时归零那刻自己 kill, 不需要额外的兜底计时。
+execute in minecraft:overworld as @e[type=item_display,tag=zx.mt_rock,distance=0..] at @s run function sweetdream:equipment/axe/meteor/rock_tick
+execute in minecraft:the_nether as @e[type=item_display,tag=zx.mt_rock,distance=0..] at @s run function sweetdream:equipment/axe/meteor/rock_tick
+execute in minecraft:the_end as @e[type=item_display,tag=zx.mt_rock,distance=0..] at @s run function sweetdream:equipment/axe/meteor/rock_tick
+
+# 威霆(2026-10-08 批 D): 「领域」实体跟着术阵走 —— 每刻扫一遍, 自己那座 marker
+#   不在了就自杀。
+#   【为什么不自己计时】领域的真相是术阵本身(半径 6 的判定用的也是 marker), 让领域
+#     去数自己的秒数等于维护第二份真相, 两边任何一处断了都查不出来。改成"看术阵还在不在"
+#     就永远不会错位: 术阵正常到点由 field_end 直接 kill(快路径), 这里只兜底
+#     "marker 被非正常清掉"(例如手动 /kill、区块异常)。
+#   【★ 2026-10-10 修 F17: 按 UUID 认亲, 不再用 distance=..2 ★】
+#     领域生成时把"所属 marker 自身的 UUID"写进 data.zx.m, 这里查的就是**那一座**;
+#     旧写法"附近 2 格内有没有 zx.tc_field"会把隔壁术阵的 marker 当成自己的,
+#     让已经该收的孤儿领域永远活着(域模型残留)。
+#   【三维度各写一遍】#minecraft:tick 只在主世界跑, 而 @e 只覆盖当前维度 ——
+#     不这么写的话, 在下界/末地召唤的领域永远不会被兜底。distance=0.. 只用来锁维度。
+execute in minecraft:overworld as @e[type=item_display,tag=zx.tc_dom,distance=0..] run function sweetdream:equipment/axe/thunderclap/domain_keep
+execute in minecraft:the_nether as @e[type=item_display,tag=zx.tc_dom,distance=0..] run function sweetdream:equipment/axe/thunderclap/domain_keep
+execute in minecraft:the_end as @e[type=item_display,tag=zx.tc_dom,distance=0..] run function sweetdream:equipment/axe/thunderclap/domain_keep
 
 # 启示录: 每刻魔力快照(该武器位于快捷栏时) —— cooldown_start 观察者靠
 #   "本刻开头的魔力 - 现在的魔力"算出这次技能实际消耗了多少蓝, 见 apocalypse/snap。

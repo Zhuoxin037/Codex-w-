@@ -77,5 +77,5 @@ $execute as $(target) run function sweetdream:equipment/bow/lucid_dream/mark_own
 # ⑨ 表现
 $execute at $(target) run particle minecraft:soul_fire_flame ~ ~1 ~ 1.2 0.8 1.2 0.1 40 normal
 $execute at $(target) run particle minecraft:end_rod ~ ~1 ~ 1.5 1.0 1.5 0.2 30 normal
-$execute at $(target) run playsound minecraft:entity.evoker.cast player @a ~ ~ ~ 1.2 0.8
+$execute at $(target) run playsound minecraft:entity.evoker.cast_spell player @a ~ ~ ~ 1.2 0.8
 $execute at $(target) run playsound minecraft:block.beacon.activate player @a ~ ~ ~ 1.0 1.6

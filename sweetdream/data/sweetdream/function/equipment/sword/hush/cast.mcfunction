@@ -21,9 +21,12 @@
 #     精确位置; 且 marker 天然"每人一个", 不用拼宏坐标字符串。
 #   ★ marker 只在"没跑完的极端情况"(玩家中途退游戏)才会残留 -> cast 开头先把
 #     自己名下的旧 marker 清一遍(按 uuid), 保证每人最多一个。
+#   ★ 突击标记(zx.hs_hit_<uuid> / zx.hs_path_<uuid> / zx.hs_new_<uuid>)同理:
+#     它们**带施法者 uuid**, 所以"多人同时施放"天然隔离(报告 F10); 清理也只清
+#     自己名下那一种, 不再像老实现那样全局清(会误删别人正在进行的突击)。
 # 【数值改哪】距离 = 这里的 16 与 dash_tick 的 0.5(16 × 0.5 = 8 格);
 #   倍率 = touch_dmg 的 0.1 / back_finish 的 0.2; 归位速度 = back_move 的 2.0;
-#   去程范围 = dash_tick ③ 与 touch_dmg 的 3 格; 回程走廊 = dash_tick ② 的 1.5 格。
+#   去程范围 = dash_mark ②③ 与 touch_dmg 的 3 格; 回程走廊 = dash_mark ② 的 1.5 格。
 # ============================================================
 
 advancement revoke @s only sweetdream:equipment/sword/hush
@@ -42,27 +45,29 @@ execute if data storage manacore:out r{reason:"cooldown"} run tellraw @s [{"text
 execute if data storage manacore:out r{reason:"mana"} run tellraw @s [{"text":"魔力不足(需要 200)","color":"red"}]
 execute unless data storage manacore:out r{success:1b} run return fail
 
-# ③ 清掉自己名下的旧原点 marker(极端情况下残留的), 再在起点留一个
+# ③ 清掉自己名下的旧残留(marker + 突击标记), 再在起点留一个
 #   ★ 这里要调宏函数(把 uuid 写进选择器), 所以先把 uuid 抄进 zx:work hs
 data modify storage zx:work hs.uuid set from storage zx:data self.uuid
 function sweetdream:equipment/sword/hush/org_clear with storage zx:work hs
+#   突击标记(zx.hs_hit_<uuid> / zx.hs_path_<uuid> / zx.hs_new_<uuid>)也按**自己的
+#   uuid** 清一遍 —— 正常一局由 back_finish 收尾; 只有"突击没跑完"(中途退游戏/
+#   被传送)才会残留。★ 只动自己的, 不碰别人正在进行的突击(见 tag_clear 的说明)。
+function sweetdream:equipment/sword/hush/tag_clear with storage zx:work hs
 
-summon minecraft:marker ~ ~ ~ {Tags:["zx.hs_org","zx.hs_new"]}
-data modify entity @n[limit=1,tag=zx.hs_new] data.zx.hs set value {uuid:""}
-data modify entity @n[limit=1,tag=zx.hs_new] data.zx.hs.uuid set from storage zx:data self.uuid
-tag @n[limit=1,tag=zx.hs_new] remove zx.hs_new
+#   ★ marker 的临时标签叫 zx.hs_mk(只在下面 4 行内存在), **不要**和去程用的
+#     "生物临时标记 zx.hs_new_<uuid>" 混为一谈 —— 两者名字相近但语义无关。
+summon minecraft:marker ~ ~ ~ {Tags:["zx.hs_org","zx.hs_mk"]}
+data modify entity @n[limit=1,tag=zx.hs_mk] data.zx.hs set value {uuid:""}
+data modify entity @n[limit=1,tag=zx.hs_mk] data.zx.hs.uuid set from storage zx:data self.uuid
+tag @n[limit=1,tag=zx.hs_mk] remove zx.hs_mk
 
 # ④ 起突进: 还剩 16 步(0.5 格/步 = 8 格)
 #   顺手清掉上一轮可能残留的归位状态(tag / 倒计时)
+#   (去程要用的两种标记已在 ③ 按 uuid 清过, 这里不再清 —— 老实现是全局清,
+#    会把别人正在进行的突击标记一起删掉, 见 tag_clear 的说明。)
 scoreboard players set @s zx.hush 16
 tag @s remove zx.hs_back
 scoreboard players reset @s zx.hush_bk
-#   再把场上的"本局已碰到(zx.hs_hit)"与"路径(zx.hs_path)"标签全局清一遍 ——
-#   正常一局由 back_finish 收尾; 只有"突击没跑完"(中途退游戏/被传送)才会残留。
-#   ★ 这里用裸 @e(跨全部维度)是**有意**的: 就是要把所有维度的一次清干净。
-#   ★ 别人的突击中途被清 → 影响最多 1 刻(他的 dash_tick 每刻都会重新打这两种标签)。
-tag @e[tag=zx.hs_hit] remove zx.hs_hit
-tag @e[tag=zx.hs_path] remove zx.hs_path
 
 # ⑤ 起手表现: 出鞘的"唰"
 execute at @s run playsound minecraft:entity.player.attack.sweep player @a ~ ~ ~ 1.0 1.3

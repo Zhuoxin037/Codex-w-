@@ -16,4 +16,4 @@
 # 【手写文件】不是 _gen_batch5.py 的产物, 别被生成器覆盖。
 # ============================================================
 
-give @s recovery_compass[max_stack_size=1,item_name={text:"炽天使之翼",bold:true,color:gold},lore=[{"text":"✦ 被动技能","color":"gold","bold":true,"italic":false},{"text":"持于副手时，自身有关基础攻击力的技能","color":"gray","italic":false},{"text":"伤害提升 50%。","color":"gray","italic":false}],custom_data={zx:["seraph_wing","tool"]}]
+give @s recovery_compass[max_stack_size=1,item_name={text:"炽天使之翼",bold:true,color:gold},lore=[{"text":"✦ 被动技能","color":"gold","bold":true,"italic":false},{"text":"持于副手时，自身有关基础攻击力的技能","color":"gray","italic":false},{"text":"伤害提升 50%。","color":"gray","italic":false}],custom_data={zx:["seraph_wing","tool"],tags:["base_atk","indep_mul"]},minecraft:item_model="sweetdream:tool_seraph_wing"]

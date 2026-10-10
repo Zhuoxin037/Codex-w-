@@ -1,0 +1,725 @@
+{
+  "hand_animation_on_swap": false,
+  "model": {
+    "type": "minecraft:composite",
+    "models": [
+      {
+        "type": "minecraft:model",
+        "model": "sail:item/parts/body"
+      },
+      {
+        "type": "minecraft:select",
+        "property": "minecraft:display_context",
+        "cases": [
+          {
+            "when": [
+              "firstperson_righthand",
+              "firstperson_lefthand",
+              "thirdperson_righthand",
+              "thirdperson_lefthand"
+            ],
+            "model": {
+              "type": "minecraft:range_dispatch",
+              "property": "minecraft:custom_model_data",
+              "index": 0,
+              "fallback": {
+                "type": "minecraft:model",
+                "model": "sail:item/frames/000"
+              },
+              "entries": [
+                {
+                  "threshold": 0,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/000"
+                  }
+                },
+                {
+                  "threshold": 1,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/001"
+                  }
+                },
+                {
+                  "threshold": 2,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/002"
+                  }
+                },
+                {
+                  "threshold": 3,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/003"
+                  }
+                },
+                {
+                  "threshold": 4,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/004"
+                  }
+                },
+                {
+                  "threshold": 5,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/005"
+                  }
+                },
+                {
+                  "threshold": 6,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/006"
+                  }
+                },
+                {
+                  "threshold": 7,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/007"
+                  }
+                },
+                {
+                  "threshold": 8,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/008"
+                  }
+                },
+                {
+                  "threshold": 9,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/009"
+                  }
+                },
+                {
+                  "threshold": 10,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/010"
+                  }
+                },
+                {
+                  "threshold": 11,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/011"
+                  }
+                },
+                {
+                  "threshold": 12,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/012"
+                  }
+                },
+                {
+                  "threshold": 13,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/013"
+                  }
+                },
+                {
+                  "threshold": 14,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/014"
+                  }
+                },
+                {
+                  "threshold": 15,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/015"
+                  }
+                },
+                {
+                  "threshold": 16,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/016"
+                  }
+                },
+                {
+                  "threshold": 17,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/017"
+                  }
+                },
+                {
+                  "threshold": 18,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/018"
+                  }
+                },
+                {
+                  "threshold": 19,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/019"
+                  }
+                },
+                {
+                  "threshold": 100,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/100"
+                  }
+                },
+                {
+                  "threshold": 101,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/101"
+                  }
+                },
+                {
+                  "threshold": 102,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/102"
+                  }
+                },
+                {
+                  "threshold": 103,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/103"
+                  }
+                },
+                {
+                  "threshold": 104,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/104"
+                  }
+                },
+                {
+                  "threshold": 105,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/105"
+                  }
+                },
+                {
+                  "threshold": 106,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/106"
+                  }
+                },
+                {
+                  "threshold": 107,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/107"
+                  }
+                },
+                {
+                  "threshold": 108,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/108"
+                  }
+                },
+                {
+                  "threshold": 109,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/109"
+                  }
+                },
+                {
+                  "threshold": 110,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/110"
+                  }
+                },
+                {
+                  "threshold": 111,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/111"
+                  }
+                },
+                {
+                  "threshold": 112,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/112"
+                  }
+                },
+                {
+                  "threshold": 113,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/113"
+                  }
+                },
+                {
+                  "threshold": 114,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/114"
+                  }
+                },
+                {
+                  "threshold": 115,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/115"
+                  }
+                },
+                {
+                  "threshold": 116,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/116"
+                  }
+                },
+                {
+                  "threshold": 117,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/117"
+                  }
+                },
+                {
+                  "threshold": 118,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/118"
+                  }
+                },
+                {
+                  "threshold": 119,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/119"
+                  }
+                },
+                {
+                  "threshold": 120,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/120"
+                  }
+                },
+                {
+                  "threshold": 121,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/121"
+                  }
+                },
+                {
+                  "threshold": 122,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/122"
+                  }
+                },
+                {
+                  "threshold": 123,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/123"
+                  }
+                },
+                {
+                  "threshold": 124,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/124"
+                  }
+                },
+                {
+                  "threshold": 125,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/125"
+                  }
+                },
+                {
+                  "threshold": 126,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/126"
+                  }
+                },
+                {
+                  "threshold": 127,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/127"
+                  }
+                },
+                {
+                  "threshold": 128,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/128"
+                  }
+                },
+                {
+                  "threshold": 129,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/129"
+                  }
+                },
+                {
+                  "threshold": 130,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/130"
+                  }
+                },
+                {
+                  "threshold": 131,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/131"
+                  }
+                },
+                {
+                  "threshold": 132,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/132"
+                  }
+                },
+                {
+                  "threshold": 133,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/133"
+                  }
+                },
+                {
+                  "threshold": 134,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/134"
+                  }
+                },
+                {
+                  "threshold": 135,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/135"
+                  }
+                },
+                {
+                  "threshold": 136,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/136"
+                  }
+                },
+                {
+                  "threshold": 137,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/137"
+                  }
+                },
+                {
+                  "threshold": 138,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/138"
+                  }
+                },
+                {
+                  "threshold": 139,
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "sail:item/frames/139"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "fallback": {
+          "type": "minecraft:model",
+          "model": "sail:item/frames/000"
+        }
+      },
+      {
+        "type": "minecraft:range_dispatch",
+        "property": "minecraft:custom_model_data",
+        "index": 1,
+        "fallback": {
+          "type": "minecraft:empty"
+        },
+        "entries": [
+          {
+            "threshold": 0,
+            "model": {
+              "type": "minecraft:empty"
+            }
+          },
+          {
+            "threshold": 1,
+            "model": {
+              "type": "minecraft:composite",
+              "models": [
+                {
+                  "type": "minecraft:model",
+                  "model": "sail:item/parts/record_0"
+                }
+              ]
+            }
+          },
+          {
+            "threshold": 2,
+            "model": {
+              "type": "minecraft:composite",
+              "models": [
+                {
+                  "type": "minecraft:model",
+                  "model": "sail:item/parts/record_1"
+                }
+              ]
+            }
+          },
+          {
+            "threshold": 3,
+            "model": {
+              "type": "minecraft:composite",
+              "models": [
+                {
+                  "type": "minecraft:model",
+                  "model": "sail:item/parts/record_0"
+                },
+                {
+                  "type": "minecraft:model",
+                  "model": "sail:item/parts/record_1"
+                }
+              ]
+            }
+          },
+          {
+            "threshold": 4,
+            "model": {
+              "type": "minecraft:composite",
+              "models": [
+                {
+                  "type": "minecraft:model",
+                  "model": "sail:item/parts/record_2"
+                }
+              ]
+            }
+          },
+          {
+            "threshold": 5,
+            "model": {
+              "type": "minecraft:composite",
+              "models": [
+                {
+                  "type": "minecraft:model",
+                  "model": "sail:item/parts/record_0"
+                },
+                {
+                  "type": "minecraft:model",
+                  "model": "sail:item/parts/record_2"
+                }
+              ]
+            }
+          },
+          {
+            "threshold": 6,
+            "model": {
+              "type": "minecraft:composite",
+              "models": [
+                {
+                  "type": "minecraft:model",
+                  "model": "sail:item/parts/record_1"
+                },
+                {
+                  "type": "minecraft:model",
+                  "model": "sail:item/parts/record_2"
+                }
+              ]
+            }
+          },
+          {
+            "threshold": 7,
+            "model": {
+              "type": "minecraft:composite",
+              "models": [
+                {
+                  "type": "minecraft:model",
+                  "model": "sail:item/parts/record_0"
+                },
+                {
+                  "type": "minecraft:model",
+                  "model": "sail:item/parts/record_1"
+                },
+                {
+                  "type": "minecraft:model",
+                  "model": "sail:item/parts/record_2"
+                }
+              ]
+            }
+          },
+          {
+            "threshold": 8,
+            "model": {
+              "type": "minecraft:composite",
+              "models": [
+                {
+                  "type": "minecraft:model",
+                  "model": "sail:item/parts/record_3"
+                }
+              ]
+            }
+          },
+          {
+            "threshold": 9,
+            "model": {
+              "type": "minecraft:composite",
+              "models": [
+                {
+                  "type": "minecraft:model",
+                  "model": "sail:item/parts/record_0"
+                },
+                {
+                  "type": "minecraft:model",
+                  "model": "sail:item/parts/record_3"
+                }
+              ]
+            }
+          },
+          {
+            "threshold": 10,
+            "model": {
+              "type": "minecraft:composite",
+              "models": [
+                {
+                  "type": "minecraft:model",
+                  "model": "sail:item/parts/record_1"
+                },
+                {
+                  "type": "minecraft:model",
+                  "model": "sail:item/parts/record_3"
+                }
+              ]
+            }
+          },
+          {
+            "threshold": 11,
+            "model": {
+              "type": "minecraft:composite",
+              "models": [
+                {
+                  "type": "minecraft:model",
+                  "model": "sail:item/parts/record_0"
+                },
+                {
+                  "type": "minecraft:model",
+                  "model": "sail:item/parts/record_1"
+                },
+                {
+                  "type": "minecraft:model",
+                  "model": "sail:item/parts/record_3"
+                }
+              ]
+            }
+          },
+          {
+            "threshold": 12,
+            "model": {
+              "type": "minecraft:composite",
+              "models": [
+                {
+                  "type": "minecraft:model",
+                  "model": "sail:item/parts/record_2"
+                },
+                {
+                  "type": "minecraft:model",
+                  "model": "sail:item/parts/record_3"
+                }
+              ]
+            }
+          },
+          {
+            "threshold": 13,
+            "model": {
+              "type": "minecraft:composite",
+              "models": [
+                {
+                  "type": "minecraft:model",
+                  "model": "sail:item/parts/record_0"
+                },
+                {
+                  "type": "minecraft:model",
+                  "model": "sail:item/parts/record_2"
+                },
+                {
+                  "type": "minecraft:model",
+                  "model": "sail:item/parts/record_3"
+                }
+              ]
+            }
+          },
+          {
+            "threshold": 14,
+            "model": {
+              "type": "minecraft:composite",
+              "models": [
+                {
+                  "type": "minecraft:model",
+                  "model": "sail:item/parts/record_1"
+                },
+                {
+                  "type": "minecraft:model",
+                  "model": "sail:item/parts/record_2"
+                },
+                {
+                  "type": "minecraft:model",
+                  "model": "sail:item/parts/record_3"
+                }
+              ]
+            }
+          },
+          {
+            "threshold": 15,
+            "model": {
+              "type": "minecraft:composite",
+              "models": [
+                {
+                  "type": "minecraft:model",
+                  "model": "sail:item/parts/record_0"
+                },
+                {
+                  "type": "minecraft:model",
+                  "model": "sail:item/parts/record_1"
+                },
+                {
+                  "type": "minecraft:model",
+                  "model": "sail:item/parts/record_2"
+                },
+                {
+                  "type": "minecraft:model",
+                  "model": "sail:item/parts/record_3"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

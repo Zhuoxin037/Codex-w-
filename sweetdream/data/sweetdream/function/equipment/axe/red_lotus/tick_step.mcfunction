@@ -22,5 +22,9 @@ function sweetdream:equipment/axe/red_lotus/step
 scoreboard players remove @s zx.rl_rep 1
 execute if score @s zx.rl_rep matches 1.. run scoreboard players set @s zx.rl_t 7
 
+# ③' 连击打完 -> 清掉这次施法的"超限快照"(cast ①' 拍的那个)
+#    ★ 不能在 cast 里清: 后面每一段的 recalc / hit_* 都还要读它。
+execute if score @s zx.rl_rep matches ..0 run scoreboard players set @s zx.rl_ol 0
+
 # 表现: 每段之间一声轻响, 让"还在连击"听得出来
 execute at @s run playsound minecraft:block.fire.ambient player @a ~ ~ ~ 0.5 1.3

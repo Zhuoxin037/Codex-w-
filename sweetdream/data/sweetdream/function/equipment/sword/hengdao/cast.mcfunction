@@ -4,6 +4,15 @@ advancement revoke @s only sweetdream:equipment/sword/hengdao
 function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return fail
 
+# ①.2 ★ 超限快照必须存到玩家身上 ★ 伤害是 12 tick 之后(dash_end)才结算的,
+#      那时手里那把已经不准了(可能已经换手/收回), 所以拍成计分项 zx.hd_ol。
+#      【超限·横刀 加在这把上的机制(逐字照抄 oldef."hengdao".lore)】
+#        基础版"最大魔力 ×0.08 打 2 格一次" -> 超限版"对附近 5 格内的全部生物
+#        造成**两次**最大魔力 ×0.1 的伤害", 且**击杀生物则重置冷却时间**。
+function sweetdream:equipment/sword/hengdao/is_ol
+scoreboard players set @s zx.hd_ol 0
+execute if score #hd_ol zx.meta matches 1 run scoreboard players set @s zx.hd_ol 1
+
 # ② 只读检查: 冷却好没好 + 魔力够不够
 #   【skill 绝对不能漏】api/skill/check 内部是"先看 skill 在不在, 在才去查冷却",
 #   漏了它这个接口什么都不做, out.success 也不会变成 1b —— 整把刀就哑了。

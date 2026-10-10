@@ -4,6 +4,7 @@
 # 【custom_data】
 #   "bone_erode" -> 装备 id, 进度 / 被动判定靠它认人
 #   ★ 判定一律写成 custom_data~{zx:["bone_erode"]}(部分匹配 + 独有标记)
+#   ★ 语义标签 = custom_data.tags(批 A; 词表/逐件表见 .workbuddy/_tags_data.py)
 # 【衍生物】幽匿残响那条线的副产物, 也能直接 give 出来测。
 # 【百分比消耗】消耗的是"本次射击所消耗的魔力值"的 20% —— 注意这是
 #   **按比例**扣, 不是固定 20 点, 别写成常数。
@@ -16,4 +17,4 @@
 # 【这个文件是生成的】改描述/数值请改 .workbuddy/_gen_batch5.py 再重跑,
 #   然后跑 `python .workbuddy/lore_fmt.py --write` 让规范器重新折行。
 # ============================================================
-give @s crossbow[item_name={text:"蚀骨",bold:true,color:gray},lore=[{"text":"✦ 主动技能","color":"gold","bold":true,"italic":false},{"text":"","italic":false,"extra":[{"text":"魔力 ","color":"gray"},{"text":"20%","color":"aqua"}]},{"text":" ","italic":false},{"text":"每次射击都会对被射击的生物的 2 格内的","color":"gray","italic":false},{"text":"全部生物造成相当于本次射击所消耗的魔","color":"gray","italic":false},{"text":"力值 ×0.4 的伤害。","color":"gray","italic":false}],unbreakable={},enchantments={"sweetdream:bone_erode":1},custom_data={zx:["bone_erode","bow"]},tooltip_display={hidden_components:["unbreakable","enchantments"]}]
+give @s crossbow[item_model="sweetdream:crossbow_bone_erode",item_name={text:"蚀骨",bold:true,color:gray},lore=[{"text":"✦ 主动技能","color":"gold","bold":true,"italic":false},{"text":"","italic":false,"extra":[{"text":"魔力 ","color":"gray"},{"text":"20%","color":"aqua"}]},{"text":" ","italic":false},{"text":"每次射击都会对被射击的生物的 2 格内的","color":"gray","italic":false},{"text":"全部生物造成相当于本次射击所消耗的魔","color":"gray","italic":false},{"text":"力值 ×0.4 的伤害。","color":"gray","italic":false}],unbreakable={},enchantments={"sweetdream:bone_erode":1},enchantment_glint_override=false,custom_data={zx:["bone_erode","bow"],tags:["cur_mana"]},tooltip_display={hidden_components:["unbreakable","enchantments"]}]

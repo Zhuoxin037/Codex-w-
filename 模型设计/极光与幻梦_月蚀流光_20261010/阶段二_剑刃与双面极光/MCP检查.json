@@ -1,0 +1,2548 @@
+{
+  "cubes": 733,
+  "groups": 36,
+  "textures": 3,
+  "texture_size": [
+    128,
+    128
+  ],
+  "animation_format": true,
+  "orientation": "The model FACES -z. Its own RIGHT is +x, its own LEFT is -x.",
+  "issue_count": 426,
+  "by_type": {
+    "no_texture": 346,
+    "coplanar_overlap": 80
+  },
+  "issues": [
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "down",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "east",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "连续薄刃体",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面连续刃脊",
+      "face": "west",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "cube": "双面嵌入极光",
+      "face": "up",
+      "issue": "no_texture"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面连续刃脊"
+      ],
+      "axis": "x",
+      "plane": -0.5425386597938144,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面凹槽包边"
+      ],
+      "axis": "x",
+      "plane": 0.5714948453608248,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.5425386597938144,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "双面连续刃脊",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.5425386597938144,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面连续刃脊"
+      ],
+      "axis": "x",
+      "plane": -0.5676159793814433,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面凹槽包边"
+      ],
+      "axis": "x",
+      "plane": 0.6144845360824742,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.5676159793814433,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "双面连续刃脊",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.5676159793814433,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面连续刃脊"
+      ],
+      "axis": "x",
+      "plane": -0.5926932989690721,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面凹槽包边"
+      ],
+      "axis": "x",
+      "plane": 0.6574742268041238,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.5926932989690721,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "双面连续刃脊",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.5926932989690721,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面连续刃脊"
+      ],
+      "axis": "x",
+      "plane": -0.6196999999999999,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面凹槽包边"
+      ],
+      "axis": "x",
+      "plane": 0.7364875,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.6196999999999999,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "双面连续刃脊",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.6197,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面连续刃脊"
+      ],
+      "axis": "x",
+      "plane": -0.6475,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面凹槽包边"
+      ],
+      "axis": "x",
+      "plane": 0.8303125,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.6475,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "双面连续刃脊",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.6475,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面连续刃脊"
+      ],
+      "axis": "x",
+      "plane": -0.6753,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面凹槽包边"
+      ],
+      "axis": "x",
+      "plane": 0.9241375000000001,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.6753,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "双面连续刃脊",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.6753,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面连续刃脊"
+      ],
+      "axis": "x",
+      "plane": -0.6824062499999999,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面凹槽包边"
+      ],
+      "axis": "x",
+      "plane": 1.0506874999999998,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.6824062499999999,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "双面连续刃脊",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.68240625,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面连续刃脊"
+      ],
+      "axis": "x",
+      "plane": -0.6853020833333332,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面凹槽包边"
+      ],
+      "axis": "x",
+      "plane": 1.1838958333333331,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.6853020833333332,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "双面连续刃脊",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.6853020833333333,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面连续刃脊"
+      ],
+      "axis": "x",
+      "plane": -0.6881979166666667,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面凹槽包边"
+      ],
+      "axis": "x",
+      "plane": 1.3171041666666663,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.6881979166666667,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "双面连续刃脊",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.6881979166666666,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面连续刃脊"
+      ],
+      "axis": "x",
+      "plane": -0.6824999999999999,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面凹槽包边"
+      ],
+      "axis": "x",
+      "plane": 1.371875,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.6824999999999999,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "双面连续刃脊",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.6825,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面连续刃脊"
+      ],
+      "axis": "x",
+      "plane": -0.6626428571428571,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面凹槽包边"
+      ],
+      "axis": "x",
+      "plane": 1.2974107142857143,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.6626428571428571,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "双面连续刃脊",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.6626428571428571,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面连续刃脊"
+      ],
+      "axis": "x",
+      "plane": -0.6445108695652175,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面凹槽包边"
+      ],
+      "axis": "x",
+      "plane": 1.2428641304347825,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.6445108695652175,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "双面连续刃脊",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.6445108695652174,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面连续刃脊"
+      ],
+      "axis": "x",
+      "plane": -0.626177536231884,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面凹槽包边"
+      ],
+      "axis": "x",
+      "plane": 1.2190307971014493,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.626177536231884,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "双面连续刃脊",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.6261775362318841,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面连续刃脊"
+      ],
+      "axis": "x",
+      "plane": -0.6046195652173914,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面凹槽包边"
+      ],
+      "axis": "x",
+      "plane": 1.1910054347826087,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.6046195652173914,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "双面连续刃脊",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.6046195652173914,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面连续刃脊"
+      ],
+      "axis": "x",
+      "plane": -0.5830615942028985,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面凹槽包边"
+      ],
+      "axis": "x",
+      "plane": 1.1629800724637682,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.5830615942028985,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "双面连续刃脊",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.5830615942028985,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面连续刃脊"
+      ],
+      "axis": "x",
+      "plane": -0.5615036231884059,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面凹槽包边"
+      ],
+      "axis": "x",
+      "plane": 1.1349547101449275,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.5615036231884059,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "双面连续刃脊",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.5615036231884059,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面连续刃脊"
+      ],
+      "axis": "x",
+      "plane": -0.5455241935483872,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面凹槽包边"
+      ],
+      "axis": "x",
+      "plane": 1.1147782258064518,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.5455241935483872,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "双面连续刃脊",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.5455241935483871,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面连续刃脊"
+      ],
+      "axis": "x",
+      "plane": -0.5359274193548387,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面凹槽包边"
+      ],
+      "axis": "x",
+      "plane": 1.103581989247312,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.5359274193548387,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "双面连续刃脊",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.5359274193548388,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面连续刃脊"
+      ],
+      "axis": "x",
+      "plane": -0.5263306451612904,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面凹槽包边"
+      ],
+      "axis": "x",
+      "plane": 1.0923857526881722,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.5263306451612904,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "双面连续刃脊",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.5263306451612904,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面连续刃脊"
+      ],
+      "axis": "x",
+      "plane": -0.516733870967742,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面凹槽包边"
+      ],
+      "axis": "x",
+      "plane": 1.0811895161290324,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "连续薄刃体",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.516733870967742,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    },
+    {
+      "issue": "coplanar_overlap",
+      "cubes": [
+        "双面连续刃脊",
+        "双面月银长棱"
+      ],
+      "axis": "x",
+      "plane": -0.5167338709677419,
+      "hint": "faces coplanar -> z-fight; offset one cube by >=0.1 on this axis"
+    }
+  ]
+}

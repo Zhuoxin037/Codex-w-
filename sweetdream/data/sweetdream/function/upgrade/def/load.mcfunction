@@ -28,11 +28,6 @@
 #   upgrade/item/<id>.mcfunction 与 advancement/upgrade/<id>.json。
 # ============================================================
 
-# ---- 老三条(补齐新字段保持结构一致; series 各自独立, 所以互不覆盖) ----
-data modify storage zx:config updef."sharp" set value {label:"锐利",cat:"sword",cat2:"",dmg:0.10,mana:0.0,cd:0.0,mm:0,mr:0,mh:0,mhp:0.0,tier:1,series:"sharp",req:"",note:"伤害 +10%"}
-data modify storage zx:config updef."efficiency" set value {label:"高效",cat:"sword",cat2:"",dmg:0.0,mana:-0.10,cd:0.0,mm:0,mr:0,mh:0,mhp:0.0,tier:1,series:"efficiency",req:"",note:"魔力消耗 -10%"}
-data modify storage zx:config updef."swift" set value {label:"迅捷",cat:"sword",cat2:"",dmg:0.0,mana:0.0,cd:-0.10,mm:0,mr:0,mh:0,mhp:0.0,tier:1,series:"swift",req:"",note:"冷却 -10%"}
-
 # ---- 魔力提升(盔甲) α -> β -> Ω: 上限递增, 高阶额外带每秒回魔 ----
 data modify storage zx:config updef."mana_up_a" set value {label:"魔力提升·α",cat:"armor",cat2:"",dmg:0.0,mana:0.0,cd:0.0,mm:20,mr:0,mh:0,mhp:0.0,tier:1,series:"mana_up",req:"",note:"魔力上限 +20"}
 data modify storage zx:config updef."mana_up_b" set value {label:"魔力提升·β",cat:"armor",cat2:"",dmg:0.0,mana:0.0,cd:0.0,mm:30,mr:2,mh:0,mhp:0.0,tier:2,series:"mana_up",req:"mana_up_a",note:"魔力上限 +30, 每秒 +2"}
@@ -56,8 +51,6 @@ data modify storage zx:config updef."mana_gain_o" set value {label:"魔力增殖
 #   见 upgrade/api/fit 与 station/api/apply(cat3/cat4 缺失时自动补空串)。
 # 【★ dmg 口径 ★】dmg 是**技能伤害**加算(由 lib/skill_mul 那条 damage_calc 链路上的
 #   upgrade/api/dmg_held 折进加算池)。愿景就是靠它。
-#   副作用(有意为之): 老石头"锐利 +10%"的 dmg 也从此真正生效了 —— 它的文案本来就是
-#   "伤害 +10%", 之前一直没接线(设计文档 §7 记的欠账)。
 # ============================================================
 
 # ---- 冷却剂(剑 / 斧 / 法杖) α -> β -> Ω: 主动技能冷却 -5/10/20% ----
@@ -100,7 +93,7 @@ data modify storage zx:config updef."vision_o" set value {label:"愿景·Ω",cat
 data modify storage zx:config updef."torch" set value {label:"火炬",cat:"sword",cat2:"axe",cat3:"",cat4:"",dmg:0.0,mana:0.0,cd:0.0,mm:0,mr:0,mh:0,mhp:0.0,ar:0,at:0,hp:0,cdex:0,tc:1,boil:0,nv:0,rg:0,ms:{pct:0,every:0},tier:1,series:"torch",req:"",note:"攻击带「流火」的目标时, 10% 转为「夜火」"}
 
 # ---- 沸腾(剑 / 斧): 冻结 + 燃烧 同时成立 -> 最大魔力 ×0.05 真实伤害 ----
-data modify storage zx:config updef."boil" set value {label:"沸腾",cat:"sword",cat2:"axe",cat3:"",cat4:"",dmg:0.0,mana:0.0,cd:0.0,mm:0,mr:0,mh:0,mhp:0.0,ar:0,at:0,hp:0,cdex:0,tc:0,boil:1,nv:0,rg:0,ms:{pct:0,every:0},tier:1,series:"boil",req:"",note:"攻击同时冻结+燃烧的目标时追加真实伤害"}
+data modify storage zx:config updef."boil" set value {label:"沸腾",cat:"sword",cat2:"axe",cat3:"",cat4:"",dmg:0.0,mana:0.0,cd:0.0,mm:0,mr:0,mh:0,mhp:0.0,ar:0,at:0,hp:0,cdex:0,tc:0,boil:1,nv:0,rg:0,ms:{pct:0,every:0},tier:1,series:"boil",req:"",note:"攻击同时处于冻结与燃烧的目标时, 追加 自身最大魔力值 ×0.05 真实伤害"}
 
 # ---- 夜视仪(头盔): 常驻夜视 ----
 data modify storage zx:config updef."night_vision" set value {label:"夜视仪",cat:"helmet",cat2:"",cat3:"",cat4:"",dmg:0.0,mana:0.0,cd:0.0,mm:0,mr:0,mh:0,mhp:0.0,ar:0,at:0,hp:0,cdex:0,tc:0,boil:0,nv:1,rg:0,ms:{pct:0,every:0},tier:1,series:"night_vision",req:"",note:"常驻夜视"}

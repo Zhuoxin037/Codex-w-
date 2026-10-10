@@ -1,0 +1,25 @@
+{
+  "candidate_ids": [
+    "sculk_echo",
+    "bone_erode",
+    "lucid_dream",
+    "rainbow",
+    "arc"
+  ],
+  "excluded_ids": [
+    "cold_crow"
+  ],
+  "excluded_note": "用户要求寒鸦保留现有游戏模型，不接入这套像素弩",
+  "redraw_review_ids": [
+    "lucid_dream",
+    "rainbow"
+  ],
+  "game_bound": true,
+  "approved_ids": [
+    "sculk_echo",
+    "bone_erode",
+    "lucid_dream",
+    "rainbow",
+    "arc"
+  ]
+}

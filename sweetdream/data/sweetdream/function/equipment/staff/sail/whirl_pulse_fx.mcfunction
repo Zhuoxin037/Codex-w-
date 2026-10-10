@@ -5,13 +5,16 @@
 # 【画什么】半径 5 的一圈 8 颗带色尘 —— 把"吸引 5 格内生物"这个**范围**画出来,
 #   让人一眼看出这一拍生效了。角度写死(不跟着 zx.sl_a 转), 是个稳定的圈。
 # 【颜色】同 whirl_draw: 交给 whirl_dot 按 zx.sl_m 分支(本拍刚附着的那一种)。
+# 【★ 高度跟 whirl_draw 一起放低(2026-10-08) ★】旋风 marker 在 ~+1, 所以这里用
+#   ^-0.80(落在地面上方 0.2 格, 不贴地以免闪面)。原先写 ^0.15 = 悬在 1.15 高空,
+#   跟"接地龙卷"的观感对不上。
 # ============================================================
 
-execute rotated ~0 0 positioned ^5.0 ^0.15 ^0 run function sweetdream:equipment/staff/sail/whirl_dot
-execute rotated ~45 0 positioned ^5.0 ^0.15 ^0 run function sweetdream:equipment/staff/sail/whirl_dot
-execute rotated ~90 0 positioned ^5.0 ^0.15 ^0 run function sweetdream:equipment/staff/sail/whirl_dot
-execute rotated ~135 0 positioned ^5.0 ^0.15 ^0 run function sweetdream:equipment/staff/sail/whirl_dot
-execute rotated ~180 0 positioned ^5.0 ^0.15 ^0 run function sweetdream:equipment/staff/sail/whirl_dot
-execute rotated ~225 0 positioned ^5.0 ^0.15 ^0 run function sweetdream:equipment/staff/sail/whirl_dot
-execute rotated ~270 0 positioned ^5.0 ^0.15 ^0 run function sweetdream:equipment/staff/sail/whirl_dot
-execute rotated ~315 0 positioned ^5.0 ^0.15 ^0 run function sweetdream:equipment/staff/sail/whirl_dot
+execute rotated ~0 0 positioned ^5.0 ^-0.80 ^0 run function sweetdream:equipment/staff/sail/whirl_dot
+execute rotated ~45 0 positioned ^5.0 ^-0.80 ^0 run function sweetdream:equipment/staff/sail/whirl_dot
+execute rotated ~90 0 positioned ^5.0 ^-0.80 ^0 run function sweetdream:equipment/staff/sail/whirl_dot
+execute rotated ~135 0 positioned ^5.0 ^-0.80 ^0 run function sweetdream:equipment/staff/sail/whirl_dot
+execute rotated ~180 0 positioned ^5.0 ^-0.80 ^0 run function sweetdream:equipment/staff/sail/whirl_dot
+execute rotated ~225 0 positioned ^5.0 ^-0.80 ^0 run function sweetdream:equipment/staff/sail/whirl_dot
+execute rotated ~270 0 positioned ^5.0 ^-0.80 ^0 run function sweetdream:equipment/staff/sail/whirl_dot
+execute rotated ~315 0 positioned ^5.0 ^-0.80 ^0 run function sweetdream:equipment/staff/sail/whirl_dot

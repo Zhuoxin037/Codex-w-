@@ -1,0 +1,11 @@
+{
+  "function": "minecraft:set_components",
+  "components": {
+    "minecraft:item_model": "sweetdream:armor_intravenous_pump",
+    "minecraft:equippable": {
+      "slot": "chest",
+      "asset_id": "sweetdream:armor_intravenous_pump",
+      "equip_sound": "minecraft:item.armor.equip_diamond"
+    }
+  }
+}

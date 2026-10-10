@@ -1,0 +1,2 @@
+$execute if items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["sail"]}] unless items entity @s weapon.mainhand *[minecraft:item_model="sail:staff",minecraft:custom_model_data={floats:[$(frame).0f,$(mask).0f]}] run item modify entity @s weapon.mainhand sweetdream:sail_visual
+$execute if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["sail"]}] unless items entity @s weapon.offhand *[minecraft:item_model="sail:staff",minecraft:custom_model_data={floats:[$(frame).0f,$(mask).0f]}] run item modify entity @s weapon.offhand sweetdream:sail_visual

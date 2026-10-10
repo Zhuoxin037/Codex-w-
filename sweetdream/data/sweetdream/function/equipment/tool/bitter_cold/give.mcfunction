@@ -17,4 +17,4 @@
 # 【手写文件】不是 _gen_batch5.py 的产物, 别被生成器覆盖。
 # ============================================================
 
-give @s recovery_compass[max_stack_size=1,item_name={text:"苦寒",bold:true,color:aqua},lore=[{"text":"✦ 被动技能","color":"gold","bold":true,"italic":false},{"text":"持于副手时，自身 8 格内的生物解除冻结","color":"gray","italic":false},{"text":"状态后获得 5 秒缓慢Ⅲ和虚弱Ⅲ，之后使","color":"gray","italic":false},{"text":"其附加「渊海」效果。自身 5 格内有","color":"gray","italic":false},{"text":"「渊海」效果的生物获得常态的缓慢Ⅱ效","color":"gray","italic":false},{"text":"果。","color":"gray","italic":false}],custom_data={zx:["bitter_cold","tool"]}]
+give @s recovery_compass[max_stack_size=1,item_name={text:"苦寒",bold:true,color:aqua},lore=[{"text":"✦ 被动技能","color":"gold","bold":true,"italic":false},{"text":"持于副手时，自身 8 格内的生物解除冻结","color":"gray","italic":false},{"text":"状态后获得 5 秒缓慢Ⅲ和虚弱Ⅲ，之后使","color":"gray","italic":false},{"text":"其附加「渊海」效果。自身 5 格内有","color":"gray","italic":false},{"text":"「渊海」效果的生物获得常态的缓慢Ⅱ效","color":"gray","italic":false},{"text":"果。","color":"gray","italic":false}],custom_data={zx:["bitter_cold","tool"],tags:["yuanhai","slow","debuff","apply"]},minecraft:item_model="sweetdream:tool_bitter_cold"]

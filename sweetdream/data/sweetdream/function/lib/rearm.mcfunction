@@ -15,17 +15,28 @@
 #   而且一个字都不报(真实事故: 2026-10-04 04:08:55 一次命令爆量, 把
 #   upgrade/attack 卡住 → 魔力增殖 α/β/Ω 的攻击回魔从此全死, 玩家以为"升级失效了")。
 #
-# 【怎么做】每刻对所有玩家撤销一遍这 79 条。
+# 【怎么做】每刻对所有玩家撤销一遍这 131 条。
 #   · 正常情况: 进度早被奖励函数自己撤掉了, 这里全是**空操作**(撤销一条未授予的
 #     进度什么都不发生), 所以本文件在健康状态下不产生任何行为变化;
 #   · 只有"奖励函数被跳过"这个死角里, 它才是唯一的救兵 —— 下一 tick 事件
 #     就能重新授予, 效果恢复(最多晚 1 tick, 玩家察觉不到)。
-#   · 成本: 79 条 revoke / tick, 相对预算 65536 可忽略。
+#   · 成本: 131 条 revoke / tick, 相对预算 65536 可忽略。
 #
 # 【★ 新增自撤销型进度时, 必须同步加到这里 ★】
 #   判据 = "奖励函数的第一个非注释行是 advancement revoke @s only 自己"
 #   (也就是 check.py 规则 5 认的那一类)。忘了加 → 那个进度迟早会卡死,
 #   而且是静默的。check.py 规则 27 专门盯这件事 + 盯 revoke 有没有排在 return 后面。
+#
+# 【★ 审查报告 O01 的核对结论(2026-10-10): 一条都不能删 ★】
+#   报告说"很多奖励函数本身已经先撤销自己的进度, 这类每 tick 兜底冗余" ——
+#   但按本包契约, **全部 131 条**的奖励函数都自撤销(规则 5 强制), 所以"自撤销"
+#   不构成删减依据: 这个文件的职责恰恰是兜住"自撤销没跑成"的那次(预算爆量 /
+#   排序错), 删了 = 复现 2026-10-04 的事故类别。
+#   · 真能省的只有"频率/位置"(每 2 tick 交替两半 / 改每秒), 但那是在拿
+#     "卡死后的恢复延迟"(1 tick -> 2 tick / 1 秒)换开销 —— 属于安全网改造,
+#     必须先有 profiler 数据(O02)证明它真是热点, 再经用户点头。
+#   · 按武器/状态过滤 @a 同样否决: 选择器判假(状态晚一拍)⇒ 那条进度永久卡死,
+#     正是本文件要防的事。
 # ============================================================
 
 advancement revoke @a only sweetdream:equipment/armor/brain_leech_attack
@@ -116,8 +127,9 @@ advancement revoke @a only sweetdream:equipment/axe/azure_star_hit
 advancement revoke @a only sweetdream:equipment/tool/blaze_plume_hit
 advancement revoke @a only sweetdream:equipment/tool/look
 advancement revoke @a only sweetdream:itembackup/consume
-advancement revoke @a only sweetdream:itembackup/mainhand
-advancement revoke @a only sweetdream:itembackup/summon
+#   (itembackup/mainhand 与 itembackup/summon 两条每刻进度循环已随 O03 改造删除:
+#    备份改走 storage 快照 + effect_1 精确时机 + lib/second 每秒安全网, 见
+#    internal/itembackup/backup.mcfunction 头注释。)
 advancement revoke @a only sweetdream:overlimit/brain_leech
 advancement revoke @a only sweetdream:overlimit/liuguang
 advancement revoke @a only sweetdream:overlimit/spine_symbiote
@@ -150,3 +162,25 @@ advancement revoke @a only sweetdream:upgrade/life_up_o
 advancement revoke @a only sweetdream:overlimit/stellar_elegy
 advancement revoke @a only sweetdream:overlimit/dusk_dawn
 advancement revoke @a only sweetdream:overlimit/myriad
+# ---- 批 E1 · 超限·剑(2026-10-08) ----
+advancement revoke @a only sweetdream:overlimit/rogue_star
+advancement revoke @a only sweetdream:overlimit/shadow_blade
+advancement revoke @a only sweetdream:overlimit/deepsea_echo
+advancement revoke @a only sweetdream:overlimit/everfrost
+advancement revoke @a only sweetdream:overlimit/flame_brokenbody
+advancement revoke @a only sweetdream:overlimit/sickle_dreams
+advancement revoke @a only sweetdream:overlimit/hengdao
+advancement revoke @a only sweetdream:overlimit/red_lotus
+advancement revoke @a only sweetdream:overlimit/charge
+advancement revoke @a only sweetdream:overlimit/anion
+# ---- 批 F2 · 超限·斧弩(2026-10-10) ----
+advancement revoke @a only sweetdream:overlimit/cold_crow
+advancement revoke @a only sweetdream:overlimit/bone_erode
+advancement revoke @a only sweetdream:overlimit/sculk_echo
+advancement revoke @a only sweetdream:overlimit/dream_reader
+# ---- 批 G/H · 超限·法杖/盔甲(2026-10-10) ----
+advancement revoke @a only sweetdream:overlimit/begonia
+advancement revoke @a only sweetdream:overlimit/polarized_light
+advancement revoke @a only sweetdream:overlimit/dionysus_helmet
+advancement revoke @a only sweetdream:overlimit/furnace_core
+advancement revoke @a only sweetdream:equipment/armor/dionysus_helmet_hit

@@ -32,6 +32,8 @@ execute at @e[tag=zx.victim,limit=1,distance=..32] as @e[type=!#sweetdream:no_da
 
 # ③ 熄灭该武器
 scoreboard players set @s zx.td_on 0
+#   ★ 当刻就换回"熄灭"外观(不等下一秒 second 的兜底): 火灭了, 剑要立刻冷下来
+function sweetdream:equipment/sword/tinder/visual/sync
 
 # 表现: 一圈火焰炸开 + 熄灭声
 execute at @e[tag=zx.victim,limit=1,distance=..32] run particle minecraft:flame ~ ~1 ~ 0.6 0.5 0.6 0.06 24 normal

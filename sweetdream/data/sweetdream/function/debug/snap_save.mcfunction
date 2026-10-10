@@ -85,13 +85,13 @@ scoreboard players add @s zx.floor_mana 0
 $execute store result storage zx:data snap."$(uuid)".o36 int 1 run scoreboard players get @s zx.floor_mana
 scoreboard players add @s zx.wg_sound 0
 $execute store result storage zx:data snap."$(uuid)".o37 int 1 run scoreboard players get @s zx.wg_sound
-$execute store result storage zx:data snap."$(uuid)".o38 int 1 run data get storage manacore:players."$(uuid)".stats.max_mana
-$execute store result storage zx:data snap."$(uuid)".o39 int 1 run data get storage manacore:players."$(uuid)".stats.base_attack
-$execute store result storage zx:data snap."$(uuid)".o40 int 1 run data get storage manacore:players."$(uuid)".stats.skill_multiplier
-$execute store result storage zx:data snap."$(uuid)".o41 int 1 run data get storage manacore:players."$(uuid)".stats.independent_multiplier
-$execute store result storage zx:data snap."$(uuid)".o42 int 1 run data get storage manacore:players."$(uuid)".stats.custom_damage
-$execute store result storage zx:data snap."$(uuid)".o43 int 1 run data get storage manacore:players."$(uuid)".stats.max_health
-$execute store result storage zx:data snap."$(uuid)".o44 int 1 run data get storage manacore:players."$(uuid)".stats.cooldown_reduction
+$execute store result storage zx:data snap."$(uuid)".o38 int 1 run data get storage manacore:players "$(uuid)".stats.max_mana
+$execute store result storage zx:data snap."$(uuid)".o39 int 1 run data get storage manacore:players "$(uuid)".stats.base_attack
+$execute store result storage zx:data snap."$(uuid)".o40 int 1 run data get storage manacore:players "$(uuid)".stats.skill_multiplier
+$execute store result storage zx:data snap."$(uuid)".o41 int 1 run data get storage manacore:players "$(uuid)".stats.independent_multiplier
+$execute store result storage zx:data snap."$(uuid)".o42 int 1 run data get storage manacore:players "$(uuid)".stats.custom_damage
+$execute store result storage zx:data snap."$(uuid)".o43 int 1 run data get storage manacore:players "$(uuid)".stats.max_health
+$execute store result storage zx:data snap."$(uuid)".o44 int 1 run data get storage manacore:players "$(uuid)".stats.cooldown_reduction
 $execute store result storage zx:data snap."$(uuid)".o45 int 1 run attribute @s minecraft:attack_damage get
 $execute store result storage zx:data snap."$(uuid)".o46 int 1 run attribute @s minecraft:max_health get
 $execute store result storage zx:data snap."$(uuid)".o47 int 1 run attribute @s minecraft:armor get

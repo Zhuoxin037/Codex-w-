@@ -24,7 +24,19 @@ $execute unless data storage manacore:players "$(uuid)".stats.mana_regen_multipl
 $execute unless data storage manacore:players "$(uuid)".stats.formation_limit run data modify storage manacore:players "$(uuid)".stats.formation_limit set value 3
 $execute unless data storage manacore:players "$(uuid)".flags.no_regen run data modify storage manacore:players "$(uuid)".flags.no_regen set value 0b
 $execute unless data storage manacore:players "$(uuid)".flags.regen_ban_end run data modify storage manacore:players "$(uuid)".flags.regen_ban_end set value 0
-data modify storage manacore:macro a set value {uuid:"",u0:0,u1:0,u2:0,u3:0,cur:0,slot:0}
+# 【u0..u3 也要补(2026-10-08 修)】原先只有 join/new 会写它 —— 老存档或 reset_one
+#   之后这四个整数缺失, 于是 damage/mk_from 拼出的 @a[nbt={UUID:[I;0,0,0,0]}] 匹配不到人,
+#   from_auto 退化成 @s ⇒ **击杀归属永久错**(by 变成受害者自己)。
+#   路径在记录**根**下(与 new 一致), 不是 stats 里; 宏参数 work.a 已带这四值(见 uuid/collect)。
+$execute unless data storage manacore:players "$(uuid)".u0 run data modify storage manacore:players "$(uuid)".u0 set value $(u0)
+$execute unless data storage manacore:players "$(uuid)".u1 run data modify storage manacore:players "$(uuid)".u1 set value $(u1)
+$execute unless data storage manacore:players "$(uuid)".u2 run data modify storage manacore:players "$(uuid)".u2 set value $(u2)
+$execute unless data storage manacore:players "$(uuid)".u3 run data modify storage manacore:players "$(uuid)".u3 set value $(u3)
+# 【★ 2026-10-10 F01 修】u0..u3 必须**带真值**传给 slot_check -> register:
+#   这一版新索引条目写了 u0..u3 供 tick_self 校验身份, 原来这里只塞默认 0
+#   ⇒ 索引里存的是 0,0,0,0 ⇒ 下一秒身份校验必然不匹配 ⇒ 又触发重注册(死循环)。
+#   宏参数 work.a 已带四个真值(见 uuid/collect)。
+$data modify storage manacore:macro a set value {uuid:"",u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3),cur:0,slot:0}
 $data modify storage manacore:macro a.uuid set value "$(uuid)"
 scoreboard players add @s manacore.slot 0
 execute store result storage manacore:macro a.cur int 1 run scoreboard players get @s manacore.slot

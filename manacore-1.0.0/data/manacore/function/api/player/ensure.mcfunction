@@ -6,5 +6,8 @@
 #   这样即使传入一个从没登录过的 UUID, 写入也不会因路径不存在而报错。
 # 【正常使用不需要手动调用】api/mana/*, api/stats/*, api/skill/cast
 #   内部都已经自动调用过它。
+# 【★ 空 uuid 守卫(2026-10-10, 修 F19)★】只对"存在且非空"的 uuid 建记录 ——
+#   空串会建出 players."" 垃圾记录(见 internal/player/ensure)。空串在默认值里
+#   本来就存在, 所以必须用复合匹配 {uuid:""} 取反, 不能用 `if data ... a.uuid`。
 # ============================================================
-execute if data storage manacore:work a.uuid run function manacore:internal/player/ensure with storage manacore:work a
+execute if data storage manacore:work a.uuid unless data storage manacore:work a{uuid:""} run function manacore:internal/player/ensure with storage manacore:work a
