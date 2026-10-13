@@ -36,25 +36,27 @@ execute store result score #fcv_need zx.meta run data get storage zx:work olv.ma
 execute if data storage manacore:out r{reason:"mana"} run tellraw @s [{"text":"魔力不足(需要 ","color":"red"},{"score":{"name":"#fcv_need","objective":"zx.meta"},"color":"red"},{"text":")","color":"red"}]
 execute unless data storage manacore:out r{success:1b} run return fail
 
-# ③ 算伤害: 当前魔力 ×0.03(超限的伤害乘区在 calc 前由 mod 乘进通道)
-#   ★ 2026-10-13 用户拍板: **先算伤害、后扣魔力** ⇒ 用的是**扣费前**的魔力。
-#     旧版先 consume 再 calc ⇒ 读到的是扣掉 100 之后的魔力: 满魔 1000 时文案给人的
-#     预期是 1000×0.03=30, 实际只有 900×0.03=27。文案写"自身**当前**魔力值 ×0.03",
-#     玩家按下右键那一刻面板上显示的就是扣费前的数 ⇒ 按扣前值算才对得上体感。
-#   ★ 顺序安全: 下面的 consume 只写 r.success / r.reason 两个键(不是整体替换
-#     manacore:out r), 不会把这里算好的 r.damage 冲掉 —— 可以放心把它排在扣费前。
-data modify storage manacore:in arg set value {uuid:"",other_mul:0.03,other_base:-1.0}
-data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function sweetdream:overlimit/api/mod
-function manacore:api/damage/calc
-
-# ④ 扣魔力 100(超限后的值)
+# ③ 扣魔力 100(超限后的值)
 data modify storage manacore:in arg set value {uuid:"",value:100.0}
 data modify storage manacore:in arg.value set from storage zx:work olv.mana
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/mana/consume
 execute if data storage manacore:out r{success:0b} run tellraw @s [{"text":"魔力不足(需要 ","color":"red"},{"score":{"name":"#fcv_need","objective":"zx.meta"},"color":"red"},{"text":")","color":"red"}]
 execute if data storage manacore:out r{success:0b} run return fail
+
+# ④ 算伤害: 当前魔力 ×0.03(超限的伤害乘区在 calc 前由 mod 乘进通道)
+#   ★ 2026-10-13 拍板: **跟随全仓惯例 = 先扣魔力、后算伤害**(读到的是扣费**后**的魔力)。
+#     同口径的先例全部是"先扣后算", 共 8 处 —— 本件不是孤例, 别再单独改它:
+#       海棠 begonia/attack(30) · 蛊毒 gu_poison/attack(80) ·
+#       风止之地 wind_ontheground/attack · 灰度 grayscale/cast ·
+#       万相 myriad/cast · 负离子斧 anion/cast · 解梦师 dream_reader/cast ·
+#       永霜 everfrost/cast(扣 200, 冰冻结束时才结算 —— 同样用的扣后魔力)。
+#     ⇒ 满魔 1000 时本件是 (1000-100)×0.03 = 27, 与海棠/蛊毒等完全一致。
+#   ⚠️ 想改成"先算后扣"会让它成为全仓唯一例外 —— 守门 `manafirst` 会拦下。
+data modify storage manacore:in arg set value {uuid:"",other_mul:0.03,other_base:-1.0}
+data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
+function sweetdream:overlimit/api/mod
+function manacore:api/damage/calc
 
 # ⑤ 装球出膛: 伤害交给法球, 命中回调只叠世咒
 data modify storage zx:work ball set value {dmg:0.0,hit:"sweetdream:equipment/staff/five_curses/ball_hit"}

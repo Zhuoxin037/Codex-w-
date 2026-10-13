@@ -235,7 +235,7 @@ R = {k: [] for k in ['fn', 'tag', 'macro', 'sel', 'adv', 'json', 'rp', 'sched', 
                      'datarm', 'datapath', 'mergelist', 'noexecute', 'intovf',
                      'norun', 'placeholder', 'selfield', 'airpred', 'itempath', 'criterion',
                      'resetset', 'tagmacro', 'dmgseg', 'creative', 'pldur', 'fdsnap', 'upfield',
-                     'crossshot', 'ddpair', 'embertop']}
+                     'crossshot', 'ddpair', 'embertop', 'manafirst']}
 
 # 技能倍率的三条通道(manacore/internal/damage/calc) —— 字段名 -> 口径表里的标记
 CH_FIELD = {'max_mana_mul': 'mm', 'attack_mul': 'atk', 'other_mul': 'oth',
@@ -4560,6 +4560,38 @@ for _fnk, _fp in functions.items():
                 'F21 音效 ID 拼写错(1.21.5 里应为 entity.allay.item_thrown / '
                 'entity.evoker.cast_spell), 这一声不会播 —— 且不报错'))
 
+# 坑 152(2026-10-13): 「当前魔力 ×N」的伤害 —— 扣魔力必须排在 damage/calc **之前**。
+#   全仓 8 处同口径技能一律"先扣后算"(读到的是扣费**后**的魔力): 海棠 begonia ·
+#   蛊毒 gu_poison · 风止之地 wind_ontheground · 灰度 grayscale · 万相 myriad ·
+#   负离子斧 anion · 解梦师 dream_reader · 永霜 everfrost(扣 200, 冰冻结束才结算)。
+#   若某件改成"先算后扣", 它就成为全仓唯一例外 ⇒ 与其余件数值对不上, 且零报错。
+#   ★ 只查 equipment/ 下的实现文件: 框架侧(manacore 的 calc)也读写 other_mul, 不算。
+#   ★ 只查"同一文件里既有扣费又有 calc"的情况; 延迟结算(扣费在别的文件)天然合规。
+_PAY152 = ('mana/consume', 'api/skill/cast')
+for _fnk, _fp in functions.items():
+    _s152 = str(_fp).replace('\\', '/')
+    if '/function/equipment/' not in _s152:
+        continue
+    try:
+        _t152 = _fp.read_text(encoding='utf-8', errors='ignore')
+    except Exception:
+        continue
+    _ls = [(i, l) for i, l in enumerate(_t152.split('\n'), 1)
+           if not l.strip().startswith('#')]
+    if not any('other_mul' in l or 'other_base' in l for _, l in _ls):
+        continue
+    _calc = next((i for i, l in _ls if 'damage/calc' in l), None)
+    if _calc is None:
+        continue
+    _pays = [i for i, l in _ls if any(k in l for k in _PAY152)]
+    if not _pays or min(_pays) <= _calc:
+        continue
+    R['manafirst'].append((_fp, _calc,
+        '★ 坑 152: 「当前魔力 ×N」却写成**先算伤害、后扣魔力**(扣费在第 %d 行, 晚于 '
+        '第 %d 行的 damage/calc)。全仓 8 处同口径技能(海棠/蛊毒/风止之地/灰度/万相/'
+        '负离子/解梦师/永霜)一律先扣后算 ⇒ 本件会成为唯一例外, 数值对不上其余件。'
+        '把扣费挪到 calc 之前。' % (min(_pays), _calc)))
+
 TITLE = {'fn': 'function 引用不存在的目标', 'tag': '#tag 引用无对应 json',
          'upfield': '升级数值字段缺"减旧/加回"一半, 或累加器没归零(静默算错)',
          'macro': '含 $(变量) 但行首不是 $', 'sel': 'data entity 选择器缺 limit=1',
@@ -4976,6 +5008,11 @@ TITLE = {'fn': 'function 引用不存在的目标', 'tag': '#tag 引用无对应
                      '(zx.em_gate 记"下次可补的 tick 时刻" + #now manacore.meta 比对) —— '
                      '双状态被吸收后只剩流火, 下次熄灭又升级成夜火, 反复回 100 魔力 = 刷魔力漏洞。'
                      '★ 通用: 能凭空重新产生某可消耗资源的被动, 先问"它能不能给自己续杯"。',
+         'manafirst': '坑 152: 「当前魔力 ×N」的伤害写成**先算伤害、后扣魔力** —— '
+                      '全仓 8 处同口径技能(海棠/蛊毒/风止之地/灰度/万相/负离子/解梦师/永霜)'
+                      '一律"先扣后算", 读到的是扣费**后**的魔力。写反的那一件会成为唯一例外, '
+                      '数值对不上其余件, 且不报错、不进日志。正解: 把 mana/consume 挪到 '
+                      'damage/calc 之前。',
          }
 print('=' * 72)
 print('数据包静态自检  函数 %d 个 / 命名空间 %s' % (len(functions), sorted({s.name for s in nsdirs})))
