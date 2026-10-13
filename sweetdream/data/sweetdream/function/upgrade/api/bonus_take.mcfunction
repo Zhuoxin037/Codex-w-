@@ -21,7 +21,7 @@
 # ============================================================
 
 # 桶不存在就先建一个"空桶", 不然下面第一次 data get 会读不到(分数留旧值)
-$execute unless data storage zx:work up_val."$(series)" run data modify storage zx:work up_val."$(series)" set value {tier:0,mm:0,mr:0,mh:0,mhp:0,ar:0,at:0,hp:0,cdex:0,tc:0,boil:0,nv:0,rg:0,ms:{pct:0,every:0}}
+$execute unless data storage zx:work up_val."$(series)" run data modify storage zx:work up_val."$(series)" set value {tier:0,mm:0,mr:0,mh:0,mhp:0,ar:0,at:0,hp:0,cdex:0,aspd:0.0,tc:0,boil:0,nv:0,rg:0,ms:{pct:0,every:0}}
 
 scoreboard players set #up_bt zx.meta 0
 $execute store result score #up_bt zx.meta run data get storage zx:work up_val."$(series)".tier
@@ -72,6 +72,10 @@ scoreboard players operation #up_msp zx.meta -= #up_o zx.meta
 scoreboard players set #up_o zx.meta 0
 $execute store result score #up_o zx.meta run data get storage zx:work up_val."$(series)".ms.every
 scoreboard players operation #up_mse zx.meta -= #up_o zx.meta
+# 神经衰弱: 攻击速度(aspd, 单位 0.01 —— 和乘区 dmg/mana/cd 同一套 ×100 定点)
+scoreboard players set #up_o zx.meta 0
+$execute store result score #up_o zx.meta run data get storage zx:work up_val."$(series)".aspd 100
+scoreboard players operation #up_aspd zx.meta -= #up_o zx.meta
 
 # ① 续: 最后一批四个"效果开关"(火炬 / 沸腾 / 夜视仪 / 再生), 同样减旧贡献
 #    —— 它们是 0/1 开关, 同系只有一条, 减完再加回来就等于"只留当前生效那条"。
@@ -133,6 +137,10 @@ scoreboard players operation #up_msp zx.meta += #up_o zx.meta
 scoreboard players set #up_o zx.meta 0
 $execute store result score #up_o zx.meta run data get storage zx:work up_val."$(series)".ms.every
 scoreboard players operation #up_mse zx.meta += #up_o zx.meta
+# 神经衰弱: 攻击速度加回新贡献(和上面减旧那段一一对应)
+scoreboard players set #up_o zx.meta 0
+$execute store result score #up_o zx.meta run data get storage zx:work up_val."$(series)".aspd 100
+scoreboard players operation #up_aspd zx.meta += #up_o zx.meta
 
 # ③ 续: 四个效果开关加回新贡献(和上面那四段一一对应)
 scoreboard players set #up_o zx.meta 0

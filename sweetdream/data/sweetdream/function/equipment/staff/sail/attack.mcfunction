@@ -40,7 +40,7 @@ execute if data storage manacore:out r{success:0b} run tellraw @s [{"text":"魔�
 execute if data storage manacore:out r{success:0b} run return fail
 
 # ④ 固定 1 点伤害装进法球射出去
-data modify storage zx:work ball set value {dmg:1.0,style:"plain"}
+data modify storage zx:work ball set value {dmg:1.0,style:"sail"}
 function sweetdream:equipment/staff/attack
 
 # ⑤ 记录"离自身最近的一个生物"身上的四种标记

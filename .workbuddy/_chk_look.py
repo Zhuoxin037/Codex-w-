@@ -114,10 +114,16 @@ for tag, rp in (('源', RP_SRC), ('版本隔离', RP_DST)):
         ok('%s贴图 %dx%d colortype=%d' % (tag, w, h, ct))
 
 # ---------------------------------------------------- 5) 源 / 目标 字节一致
+#   ★ 2026-10-12 补两行: O06 之后 items/look.json 指向的是 `sweetdream:item/vanilla/look`,
+#     真正渲染用的模型/贴图挪进了 `models|textures/item/vanilla/` —— 只守 items/look.json
+#     会漏掉"模型/贴图没同步过去"这一半(2026-10-11 实测: 版本隔离副本缺整个 vanilla/ 目录,
+#     items/look.json 也还指着旧的 item/look, 而这条规则当时只报了 items/look.json)。
 diff = 0
 for rel in ['assets/sweetdream/items/look.json',
             'assets/sweetdream/models/item/look.json',
+            'assets/sweetdream/models/item/vanilla/look.json',
             'assets/sweetdream/textures/item/look.png',
+            'assets/sweetdream/textures/item/vanilla/look.png',
             # 标签字体（2026-10-06 加：图标"剩余<=3秒变淡"要用新的淡色字形）
             'assets/sweetdream/font/icons.json',
             'assets/sweetdream/textures/font/icons.png',
@@ -131,7 +137,7 @@ for rel in ['assets/sweetdream/items/look.json',
         err('源与版本隔离目录内容不一致: %s' % rel)
         diff += 1
 if not diff:
-    ok('源 / 版本隔离目录 %d 个文件字节一致' % 7)
+    ok('源 / 版本隔离目录 %d 个文件字节一致' % 9)
 
 # ---------------------------------------------------- 6) 标签字体图集（普通 + 淡色）
 ORDER = ['yuanhai', 'liuhuo', 'yehuo', 'shixin', 'dream']

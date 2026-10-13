@@ -2,6 +2,7 @@
 # sweetdream:equipment/tool/look/cache —— 面板重数据的每秒缓存(以玩家身份执行)
 # ------------------------------------------------------------
 # 【谁调用它】lib/second: execute as @a[tag=test_look_on] run function ...(每秒)
+#           toggle: 开启面板的那一刻也立即调一次(见 N07 修)
 # 【O02 为什么要有它(2026-10-11, spark 剖析结论)】
 #   任何 `data ... entity` —— 读也好、if data 也好 —— 都会把整个玩家
 #   (54 格背包 + 全部物品组件 + lore)完整序列化成 NBT(NbtPredicate.entityToNbt)。
@@ -11,30 +12,22 @@
 # 【重新分工】装备在身名单(eq)和手持武器 skill 字段改成**每秒缓存**进
 #   zx:look cache; render_go(每刻)只读计分板/命令存储 —— 免序列化。
 #   面板的显示粒度本来就是秒(v_cd 后缀 s), 观感不变; 换装最多滞后 1 秒。
-# 【★ 头注释换行 —— 见下 ② 的判空说明 ★】
+# 【★★ N07 修(2026-10-11): 缓存按 UUID 分片 ★★】
+#   原来 cache.eq / cache.skill 是**全服共用一格**: 调用点是
+#   `execute as @a[tag=test_look_on]`(每人跑一遍), 每跑一遍都把同一格覆盖掉
+#   ⇒ 每个人 render_go 时读到的都是"**最后那个人**"的装备/手持技能:
+#     · 装备专属段(调色盘/炉心)会串到别人身上;
+#     · 冷却读的是"别人的技能 id + 自己的 uuid" ⇒ 显示无关技能或恒 0;
+#     · 最后那个人手里没武器时, 还会把别人要用的那格**删掉**。
+#   现在路径 = zx:look cache."<uuid>".eq / .skill: 各人只写自己那格、只读自己那格。
+# 【为什么要拆两层】uuid 只能靠宏变量拼进 storage 路径, 而宏变量必须 "with storage"
+#   传 —— 本文件只做"普通事"(取 uuid / 判空), 宏部分全在 cache_go。
 # ============================================================
 
-# ① 装备在身名单: 复用 equip_scan(它把 <id> 写进 zx:work eq.<id>), 完了整体搬进缓存
-data remove storage zx:work eq
-function sweetdream:debug/equip_scan {p:"SelectedItem"}
-function sweetdream:debug/equip_scan {p:"equipment.offhand"}
-function sweetdream:debug/equip_scan {p:"equipment.head"}
-function sweetdream:debug/equip_scan {p:"equipment.chest"}
-function sweetdream:debug/equip_scan {p:"equipment.legs"}
-function sweetdream:debug/equip_scan {p:"equipment.feet"}
-execute if data storage zx:work eq run data modify storage zx:look cache.eq set from storage zx:work eq
-execute unless data storage zx:work eq run data remove storage zx:look cache.eq
+# ① 取自己的 uuid(拿不到就收工, 免得按 cache."" 这种野键写)
+function sweetdream:lib/uuid
+execute unless data storage zx:data self{ok:1b} run return fail
 
-# ② 手持武器的 skill 字段(观测镜冷却显示的"哪把武器")
-#    ★ skill 是**字符串**(skill:"sweetdream:<id>", 见 _gen_batch5) —— 物品谓词
-#    `custom_data~{skill:{}}` 测不了字符串键, 所以这里保留原来的
-#    `if data entity` 判定(每秒一次, 只对面板玩家, 开销可忽略)。
-data remove storage zx:look cache.skill
-execute if data entity @s SelectedItem.components."minecraft:custom_data".skill run data modify storage zx:look cache.skill set from entity @s SelectedItem.components."minecraft:custom_data".skill
-
-# ③ 面板"当前生命"(原来 render_go 每刻 data get entity @s Health —— 又是一次全量
-#    序列化)。每秒读一次缓存进 zx.hp_show, render_go 每刻只读计分板。
-#    ★ zx.hp_c(criterion)只给"活着/死了"门用(账本自愈), 显示值不用它 ——
-#      criterion 的刻度(×2 与否)没有先例背书, 别拿来做显示。
-scoreboard players set @s zx.hp_show 0
-execute store result score @s zx.hp_show run data get entity @s Health
+# ② 转交宏叶子(执行者仍是玩家本人 —— equip_scan 要靠 @s 读身上的物品)
+data modify storage zx:work a.uuid set from storage zx:data self.uuid
+function sweetdream:equipment/tool/look/cache_go with storage zx:work a

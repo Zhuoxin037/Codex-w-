@@ -52,8 +52,9 @@ data modify storage zx:config wchan.everfrost set value {mm:0b,atk:0b,oth:1b}
 # 神裁(2026-10-07 批1): 被动 基础攻击力 ×2(atk) + 主动 最大魔力 ×0.1(mm) + 领域 基础攻击力 ×3(atk)
 #   -> 两段分属 mm / atk 两条通道, 所以标两条(和天使核心/天穹同款)。
 data modify storage zx:config wchan.verdict set value {mm:1b,atk:1b,oth:0b}
-# 火种(2026-10-07 批1): 燃烧态攻击 = **当前剩余魔力** ×0.1(other); 反噬是固定值(最大生命×0.3, 不走通道)
-data modify storage zx:config wchan.tinder set value {mm:0b,atk:0b,oth:1b}
+# 火种(2026-10-07 批1): 燃烧态攻击 = **当前剩余魔力** ×0.1(other);
+#   超限版改吃**最大魔力值** ×0.1(mm) -> 两条通道都标; 反噬是固定值(最大生命×0.3, 不走通道)
+data modify storage zx:config wchan.tinder set value {mm:1b,atk:0b,oth:1b}
 # 回锋(2026-10-07 批1): 前方 3×5 = 基础攻击力 ×2(atk)
 data modify storage zx:config wchan.rebound set value {mm:0b,atk:1b,oth:0b}
 
@@ -181,8 +182,9 @@ data modify storage zx:config wchan.red_lotus set value {mm:0b,atk:1b,oth:0b}
 data modify storage zx:config wchan.azure_star set value {mm:1b,atk:0b,oth:0b}
 
 # ---- 批3 · 法杖(2026-10-07) ----
-# 共鸣: 普攻是**固定 7 点**(不走通道); 水晶每 2 秒 ×0.03 / "法术穿过" ×0.05 都是 mm
-data modify storage zx:config wchan.chime set value {mm:1b,atk:0b,oth:0b}
+# 共鸣: 普攻是**固定 7 点**(不走通道); 水晶每 2 秒 ×0.03(超限 0.05) / "法术穿过"
+#   ×0.05(超限 0.1)都是 mm; 超限"自毁伤害" = **当前魔力** ×0.2 -> oth(两条通道都走)
+data modify storage zx:config wchan.chime set value {mm:1b,atk:0b,oth:1b}
 # 调色盘: 普攻固定 1 点(不走通道); “色彩”命中 = 最大魔力 ×0.1×(1+红数) -> mm
 data modify storage zx:config wchan.palette set value {mm:1b,atk:0b,oth:0b}
 # 海棠: 普攻 = 当前魔力 ×0.02 -> oth; 漩涡结束 = 最大魔力 ×0.15 -> mm
@@ -197,3 +199,38 @@ data modify storage zx:config wchan.sail set value {mm:0b,atk:0b,oth:0b}
 # ---- 批3 · 弩(2026-10-07) ----
 # 电弧: 配对放电 = 基础攻击力 ×2 + 当前魔力 ×0.03 -> atk + oth(两条通道都走)
 data modify storage zx:config wchan.arc set value {mm:0b,atk:1b,oth:1b}
+
+# ---- 批 11 · 剑(2026-10-12): 潮痕 / 灰度 / 缺月 ----
+# 潮痕: 前方 4×2 = 最大魔力 ×0.08 -> mm
+data modify storage zx:config wchan.tidemark set value {mm:1b,atk:0b,oth:0b}
+# 灰度: 自身 2 格 = 当前魔力 ×0.08 -> oth
+data modify storage zx:config wchan.grayscale set value {mm:0b,atk:0b,oth:1b}
+# 缺月: 被动 1/2 档 = 基础攻击力 ×2/×4(atk); 3 档 = 最大魔力 ×0.08(mm);
+#   主动结算 = 最大魔力 ×0.12 + 基础攻击力 ×4(mm + atk) => 两条都走
+data modify storage zx:config wchan.crescent set value {mm:1b,atk:1b,oth:0b}
+
+# ---- 批 11 · 斧(2026-10-12): 圣骸 / 沉锚 / 焦骨 ----
+# 圣骸: 「遗骸」每秒 = 释放者最大魔力 ×0.1 -> mm(遗骸标签的 +30%/+80% 走独立乘区;
+#   「噬心」那条是"死者最大生命 ×5%"的真实伤害 —— 生命口径, 不是三通道)
+data modify storage zx:config wchan.sacred_relic set value {mm:1b,atk:0b,oth:0b}
+# 沉锚: 被动 = 最大魔力 ×0.06(mm); 主动 = 基础攻击力 ×5(atk) => 两条都走
+data modify storage zx:config wchan.anchor set value {mm:1b,atk:1b,oth:0b}
+# 焦骨: 主目标 = 基础攻击力 ×5(atk); 范围 = 最大魔力 ×0.05(夜火档 ×0.1)(mm) => 两条都走
+data modify storage zx:config wchan.scorch_bone set value {mm:1b,atk:1b,oth:0b}
+
+# ---- 批 11 · 弩(2026-10-12): 龙舌 / 云迹 / 爆裂黎明 ----
+# 龙舌: 箭雨每根 = 当前魔力 ×X×0.01 -> oth(other 通道基数默认当前魔力, 正好对上)
+data modify storage zx:config wchan.dragon_tongue set value {mm:0b,atk:0b,oth:1b}
+# 云迹: 「领域」内同步伤害 = 基础攻击力 ×2 -> atk
+data modify storage zx:config wchan.cloudtrail set value {mm:0b,atk:1b,oth:0b}
+# 爆裂黎明: 主力 = 基础攻击力 ×8 + 最大魔力 ×0.15(atk + mm); 续轰 = 基础攻击力 ×4
+#   + 最大魔力 ×0.08(同两条) => 两条都走。★「魂灵之影」每 3 秒那一下 = 目标当前生命
+#   ×0.5, 是生命口径(calc 的 custom_damage), **不走**三通道。
+data modify storage zx:config wchan.burst_dawn set value {mm:1b,atk:1b,oth:0b}
+
+# ---- 批 12(2026-10-13): 法杖两件 ----
+# 五世恶咒: 普攻 = **当前**魔力 ×0.03 -> other 通道(基数默认就是当前魔力)
+data modify storage zx:config wchan.five_curses set value {mm:0b,atk:0b,oth:1b}
+# 很冰的斧: 三形态各走一条 —— 冰斧 = 最大魔力 ×0.02(mm) / 热刀 = 基础攻击力 ×3、
+#   重枪 = 基础攻击力 ×6(都是 atk)。形态随时可切 => 两条都标上, 由 calc 按用的那条算。
+data modify storage zx:config wchan.triad set value {mm:1b,atk:1b,oth:0b}

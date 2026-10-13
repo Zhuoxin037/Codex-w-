@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "dragon_tongue": {
+            "trigger": "shot_crossbow",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "dragon_tongue"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:equipment/bow/dragon_tongue/shot"
+    }
+}

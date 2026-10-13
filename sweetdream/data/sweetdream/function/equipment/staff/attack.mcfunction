@@ -8,7 +8,7 @@
 #
 # 【谁调用它】法杖的普攻(例如 wind_ontheground/attack)。
 #   调用之前先把数值放好:
-#     data modify storage zx:work ball set value {dmg:0.0,style:"wind"}
+#     data modify storage zx:work ball set value {dmg:0.0,style:"<本武器的 zx[0]>"}
 #     data modify storage zx:work ball.dmg set from storage manacore:out r.damage
 #     function sweetdream:equipment/staff/attack
 #   —— 形状 / 射程 / 碰撞 / 归属 / 命中表现全都不用管。

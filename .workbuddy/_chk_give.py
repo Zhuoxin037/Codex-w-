@@ -12,7 +12,12 @@ NEW = [('sword', 'myriad'), ('sword', 'qiansan'), ('axe', 'agony'),
        ('staff', 'apocalypse'), ('bow', 'sculk_echo'), ('bow', 'bone_erode'),
        ('bow', 'lucid_dream'), ('bow', 'rainbow'), ('armor', 'withered_garden'),
        ('armor', 'lightless_sea'), ('armor', 'furnace_core'), ('armor', 'resonance'),
-       ('axe', 'anion'), ('staff', 'final_revelation')]
+       ('axe', 'anion'), ('staff', 'final_revelation'),
+       # 新批次(2026-10-11《新的装备-超限等.md》, 只做 give)
+       ('axe', 'sacred_relic'), ('axe', 'anchor'), ('axe', 'scorch_bone'),
+       ('sword', 'tidemark'), ('sword', 'grayscale'), ('sword', 'crescent'),
+       ('bow', 'dragon_tongue'), ('bow', 'cloudtrail'), ('bow', 'burst_dawn'),
+       ('staff', 'triad'), ('staff', 'five_curses')]
 
 
 def scan(s):

@@ -8,7 +8,7 @@
 => api/torch 永远不执行, 敲了等于没敲。
 
 判据:
-  · 数值字段 dmg/mana/cd/mm/mr/mh/mhp/ar/at/hp 有非零 => 有效果
+  · 数值字段 dmg/mana/cd/mm/mr/mh/mhp/ar/at/hp/aspd 有非零 => 有效果
   · 开关字段 cdex/tc/boil/nv/rg 有非零 => 有效果
   · ms.pct / ms.every 有非零 => 有效果
   以上全为 0 => 报"空效果"
@@ -21,7 +21,7 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEF = os.path.join(ROOT, "sweetdream", "data", "sweetdream", "function", "upgrade", "def", "load.mcfunction")
 
-NUM = ("dmg", "mana", "cd", "mm", "mr", "mh", "mhp", "ar", "at", "hp")
+NUM = ("dmg", "mana", "cd", "mm", "mr", "mh", "mhp", "ar", "at", "hp", "aspd")
 FLAG = ("cdex", "tc", "boil", "nv", "rg")
 
 

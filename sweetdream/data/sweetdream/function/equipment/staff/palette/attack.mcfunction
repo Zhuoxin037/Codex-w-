@@ -41,5 +41,5 @@ execute if data storage manacore:out r{success:0b} run tellraw @s [{"text":"魔�
 execute if data storage manacore:out r{success:0b} run return fail
 
 # ④ 装球射出去: 固定 1 点伤害 + 命中回调(攒颜色)
-data modify storage zx:work ball set value {dmg:1.0,style:"plain",hit:"sweetdream:equipment/staff/palette/ball_hit"}
+data modify storage zx:work ball set value {dmg:1.0,style:"palette",hit:"sweetdream:equipment/staff/palette/ball_hit"}
 function sweetdream:equipment/staff/attack

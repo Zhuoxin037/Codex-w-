@@ -586,6 +586,55 @@
           "type": "minecraft:model",
           "model": "sweetdream:item/stone/ol_furnace_core"
         }
+      },
+      {
+        "threshold": 50.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "sweetdream:item/stone/neuro_a"
+        }
+      },
+      {
+        "threshold": 51.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "sweetdream:item/stone/neuro_b"
+        }
+      },
+      {
+        "threshold": 52.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "sweetdream:item/stone/neuro_o"
+        }
+      },
+      {
+        "threshold": 53.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "sweetdream:item/stone/ol_arc"
+        }
+      },
+      {
+        "threshold": 54.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "sweetdream:item/stone/ol_tinder"
+        }
+      },
+      {
+        "threshold": 55.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "sweetdream:item/stone/ol_fissure"
+        }
+      },
+      {
+        "threshold": 56.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "sweetdream:item/stone/ol_chime"
+        }
       }
     ]
   }

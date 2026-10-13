@@ -4,43 +4,30 @@
 # 【宏参数】无(读 zx:work put.pct, 和 lib/dmg_add_put 的出参口径一致)
 # 【和 lib/dmg_add_put 的区别】
 #   dmg_add_put  : 调用方**指定**写哪条通道("挑口径"用: 漫步只写 mm、炽天使只写 atk)
-#   dmg_add_put_any: 由本函数**自己挑**那条"本次技能真正用到的通道", 只写一条
-# 【★★ 为什么必须有它(修 F14)★★】
-#   文案写"技能伤害 +X%"的几件(愿景升级 / 共振 / 桂冠)口径是"不挑通道",
-#   旧写法是**三条通道各写一份 X**。单通道技能没问题(只有用到的那条会被
-#   lib/dmg_add_apply 计入); 但**多通道技能**(mm + atk 各出一部分伤害)会让
-#   同一份 X 被算两次: 总伤害 ×(1+2X) —— 一个 +30% 变成 +60%(报告 F14)。
-#   现在读 lib/dmg_ch 拍下的通道快照 zx:work ch, 只写**第一条非 0 的通道**:
-#     多通道技能下总伤害 ×(1+X) —— 与"逐通道同幅增伤再求和"数值完全一致
-#     (100×1.3 + 10×1.3 = 110×1.3 = 143, 正是报告给的期望值)。
-# 【为什么"只写一条"就够】同一份百分比在总伤害上多乘几次没有意义; 语义是
-#   "本次技能伤害 +X%", 不是"每条通道各 +X%"。
-# 【兜底】三条通道全 0(异常 / 直接调 internal 没走 calc) -> 写 mm,
-#   和旧行为一致(那时 dmg_add_apply 也一条都不累加)。
-# 【通道优先级】mm > atk > oth, 与 lib/dmg_add_apply 的读取顺序一致, 只是取首条。
+#   dmg_add_put_any: 文案不挑通道(愿景升级 / 共振 / 桂冠), 由本函数**写满三条通道**
+# 【★★ D01 口径 B(2026-10-11 用户定): 为什么改回"三条各写一份"★★】
+#   伤害侧已经是**分量级**(lib/dmg_add_apply): 伤害 = Σ seg_i×(1+add_i) + seg_x。
+#   文案是"本次技能伤害 +X%" —— 要让**整段** +X%, 就必须让每一条用到的段都 +X%:
+#       Σ_i seg_i×(1+X) = (Σ_i seg_i)×(1+X) = 整段 ×(1+X)      ✔ 正是文案语义
+#   所以这里对三条通道各写一份 X(不再读 zx:work ch 挑"第一条")。
+#   ★ 写"没被用到的通道"是**安全**的: 那段 seg_i = 0, 乘不乘都一样 ⇒ 直接写满三条最简。
+# 【★ 这不是把 F14 改回去 ★】
+#   F14 的毛病是"**汇总式**加算下三条相加 ⇒ 重复计入 ×(1+2X)"(旧 apply 把 Σadd 乘整段)。
+#   现在是**分段式**: 三条各乘各的段, 恰好正确 —— 同一个 X 不会落到同一段上两次。
+# 【★ 附带收益: 面板更准 ★】
+#   upgrade/api/dmg_held(愿景)也走本函数, 而**面板侧**没有"本次技能"、pop 出来若读
+#   ch 快照会读的是**残留值**; 现在不再依赖快照 ⇒ 面板三条通道都能如实反映这份加成。
+# 【量纲】调用方先写好 zx:work put.pct(整数百分点, 10 = +10%)。
 # ============================================================
 
-# --- ① 最大魔力值通道 ---
+# --- 最大魔力值通道 ---
 data modify storage zx:work put.ch set value "mm"
-scoreboard players set #u zx.meta 0
-execute store result score #u zx.meta run data get storage zx:work ch.max_mana_mul 100
-execute if score #u zx.meta matches 1.. run function sweetdream:lib/dmg_add_put with storage zx:work put
-execute if score #u zx.meta matches 1.. run return 0
+function sweetdream:lib/dmg_add_put with storage zx:work put
 
-# --- ② 基础攻击力通道 ---
+# --- 基础攻击力通道 ---
 data modify storage zx:work put.ch set value "atk"
-scoreboard players set #u zx.meta 0
-execute store result score #u zx.meta run data get storage zx:work ch.attack_mul 100
-execute if score #u zx.meta matches 1.. run function sweetdream:lib/dmg_add_put with storage zx:work put
-execute if score #u zx.meta matches 1.. run return 0
+function sweetdream:lib/dmg_add_put with storage zx:work put
 
-# --- ③ 其他通道(当前魔力结算那类) ---
+# --- 其他通道(当前魔力结算那类) ---
 data modify storage zx:work put.ch set value "oth"
-scoreboard players set #u zx.meta 0
-execute store result score #u zx.meta run data get storage zx:work ch.other_mul 100
-execute if score #u zx.meta matches 1.. run function sweetdream:lib/dmg_add_put with storage zx:work put
-execute if score #u zx.meta matches 1.. run return 0
-
-# --- ④ 兜底: 三条都没用到 -> 写 mm(与旧行为等价) ---
-data modify storage zx:work put.ch set value "mm"
 function sweetdream:lib/dmg_add_put with storage zx:work put

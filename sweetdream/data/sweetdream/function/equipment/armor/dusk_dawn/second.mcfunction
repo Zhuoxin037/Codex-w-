@@ -21,4 +21,10 @@ scoreboard players operation #m3 zx.meta = #sec manacore.meta
 scoreboard players operation #m3 zx.meta %= #3 zx.meta
 execute if score #m3 zx.meta matches 0 as @a[tag=zx.dd_set_on] at @s run function sweetdream:equipment/armor/dusk_dawn/set_regen
 
+# ⑤ 【2026-10-12 坑 138 起删除】这里原本给"穿着但没挂附魔的老靴子"补挂
+#   `sweetdream:dusk_dawn` 监听附魔。整套附魔机制已废弃 ——
+#   原版 post_attack **只读攻击者的主手物品**上的附魔, 挂在靴子(slots:feet)上
+#   永远不触发, 所以那套回调从来没跑过。计数改由 5 条标签进度完成, 见 kill_mark。
+#   老靴子上残留的那个附魔无害(不触发 / tooltip 已隐藏 / 无光效), 不必清理。
+
 function sweetdream:lib/in_restore

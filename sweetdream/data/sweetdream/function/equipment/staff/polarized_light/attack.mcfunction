@@ -34,5 +34,5 @@ execute if data storage manacore:out r{success:0b} run tellraw @s [{"text":"魔�
 execute if data storage manacore:out r{success:0b} run return fail
 
 # ④ 固定 6 点伤害装进法球, 交给法杖类默认普攻射出去
-data modify storage zx:work ball set value {dmg:6.0,style:"plain"}
+data modify storage zx:work ball set value {dmg:6.0,style:"polarized_light"}
 function sweetdream:equipment/staff/attack

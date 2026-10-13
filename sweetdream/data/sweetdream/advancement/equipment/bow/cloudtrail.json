@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "cloudtrail": {
+            "trigger": "shot_crossbow",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "cloudtrail"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:equipment/bow/cloudtrail/shot"
+    }
+}

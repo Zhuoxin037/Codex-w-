@@ -20,5 +20,9 @@ data modify storage zx:work chp.u1 set from entity @s data.zx.ch.u1
 data modify storage zx:work chp.u2 set from entity @s data.zx.ch.u2
 data modify storage zx:work chp.u3 set from entity @s data.zx.ch.u3
 
+# ①' 超限分档: 穿过段的倍率 0.05 -> 0.1(pass_go 读它)
+data modify storage zx:work chp.mm2 set value 0.05
+execute if data entity @s data.zx.ch{ol:1} run data modify storage zx:work chp.mm2 set value 0.1
+
 # ② 交给宏: 反查释放者 + 抓"还没触发过的自己人的法球"
 function sweetdream:equipment/staff/chime/pass_set with storage zx:work chp

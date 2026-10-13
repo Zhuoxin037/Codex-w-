@@ -10,7 +10,13 @@
 #   延迟结算的每秒伤害按描述字面算。
 # 【缓慢Ⅱ】给 2 秒、每秒续 —— 比描述的字面多给一点余量, 肉眼上是
 #   "被锁定就一直缓着", 光束结束 2 秒后自然消退。
-# 【倒计时】放在最后: 先干活再扣, zx.pl_t 减到 0 自然停驱动。
+# 【★ 倒计时不在这个函数里 ★】(坑 120)zx.pl_t 的单位恒为「秒」, 由**驱动方**
+#   按真实时间扣: 基础版 = second(每 20 刻 = 1 秒)扣 1; 超限版 = half(每 20 刻
+#   = 1 秒)扣 1, 同时每 10 刻(0.5 秒)多结算一次。
+#   ★ 为什么不能在这里扣: 超限版每 **10 刻**就调一次 tick(0.5 秒节奏)。在这里
+#     扣 1 等于把"秒"当成"半秒" —— pl_t=5 只撑 **2.5 秒**, 与 lore 写的
+#     "该效果持续 5 秒"差一半(用户 2026-10-11 实测反馈)。干活频率(0.5/1 秒)
+#     与持续时间(单位恒为秒)必须彻底解耦。
 # ============================================================
 
 # ① 锁目标(#sweetdream:no_damage 含玩家 → 不会锁到自己)
@@ -36,5 +42,4 @@ execute if score @s zx.pl_ol matches 1 run execute as @e[tag=zx.pl_lock] run eff
 execute as @e[tag=zx.pl_lock] at @s run particle minecraft:end_rod ~ ~1 ~ 0.3 0.4 0.3 0.01 8 normal
 execute as @e[tag=zx.pl_lock] at @s run particle minecraft:electric_spark ~ ~1 ~ 0.35 0.45 0.35 0.02 6 normal
 
-# ⑤ 倒计时
-scoreboard players remove @s zx.pl_t 1
+# ⑤ 【倒计时在驱动方, 不在这里 —— 见文件头坑 120】

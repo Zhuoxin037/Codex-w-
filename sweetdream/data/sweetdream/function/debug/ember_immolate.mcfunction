@@ -21,6 +21,7 @@ scoreboard players add @s zx.im_buff_mk 0
 scoreboard players add @s zx.im_ignite 0
 scoreboard players add @s zx.em_conv 0
 scoreboard players add @s zx.em_seen 0
+scoreboard players add @s zx.em_scan 0
 
 tellraw @s [{"text":"===== 余烬 / 焚舟 =====","color":"gold","bold":true}]
 execute if items entity @s armor.legs netherite_leggings[custom_data~{zx:["ember"]}] run tellraw @s [{"text":"余烬: ","color":"gray"},{"text":"已装备","color":"green"},{"text":"  上限账本 ","color":"gray"},{"score":{"name":"@s","objective":"zx.em_mana"},"color":"aqua"}]
@@ -34,7 +35,9 @@ tellraw @s [{"text":"烈空上限账本: ","color":"gray"},{"score":{"name":"@s"
 tellraw @s [{"text":"换算常量 #20/#30: ","color":"gray"},{"score":{"name":"#20","objective":"zx.meta"},"color":"white"},{"text":" / ","color":"gray"},{"score":{"name":"#30","objective":"zx.meta"},"color":"white"}]
 tellraw @s [{"text":"套装+20 触发次数: ","color":"gray"},{"score":{"name":"@s","objective":"zx.im_set20"},"color":"white"},{"text":"  (烈空已 200 时会被夹住, 但这里仍会 +1)","color":"dark_gray"}]
 tellraw @s [{"text":"焚舟点火次数: ","color":"gray"},{"score":{"name":"@s","objective":"zx.im_ignite"},"color":"yellow"},{"text":"   余烬燃烧结束转换次数: ","color":"gray"},{"score":{"name":"@s","objective":"zx.em_conv"},"color":"white"}]
-tellraw @s [{"text":"余烬看到燃烧生物的 tick 次数: ","color":"gray"},{"score":{"name":"@s","objective":"zx.em_seen"},"color":"white"}]
+tellraw @s [{"text":"余烬看到燃烧生物的次数: ","color":"gray"},{"score":{"name":"@s","objective":"zx.em_seen"},"color":"white"}]
+tellraw @s [{"text":"余烬扫描次数(每 5 刻 +1) —— 连看两次, 5 秒应涨约 100: ","color":"gray"},{"score":{"name":"@s","objective":"zx.em_scan"},"color":"aqua"}]
+tellraw @s [{"text":"↑ 这个数**不涨** = 高频扫描压根没跑(余烬没穿在腿上? zx.em_on 标签没打上?)","color":"dark_gray"}]
 tellraw @s [{"text":"↑ 点火次数应该 ≈ 转换次数。点火明显更多 = 有火被漏掉了","color":"dark_gray"}]
 
 # 12 格内生物快照: Fire 值 / 余烬边沿标记 / 流火 / 夜火

@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "neuro_b": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "up_neuro_b"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:upgrade/apply/neuro_b"
+    }
+}

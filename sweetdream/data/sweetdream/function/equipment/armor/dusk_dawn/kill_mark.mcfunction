@@ -1,25 +1,40 @@
 # ============================================================
-# sweetdream:equipment/armor/dusk_dawn/kill_mark —— 进度入口: 击杀带通用标签的怪
+# sweetdream:equipment/armor/dusk_dawn/kill_mark —— 击杀带通用标签的怪: 补 100×X
 # ------------------------------------------------------------
-# 【谁调用它】进度 sweetdream:equipment/armor/dusk_dawn_kill_mark(5 个标签各一条条件)
-# 【为什么真正的逻辑在 kill_mark_go】"技能击杀"那条路也要记这笔账(见
-#   internal/damage/one), 所以记账逻辑只留一份, 进度和伤害接口都调它。
-#   那边用的是差值账本(zx.dd_app), 因此重复调用、两个来源同时命中, 都只会加一次。
-# 【★ 超限版要先把"死者"找回来 ★】超限文案是"额外获得 100×X（X 为该生物所有的
-#   效果数量）", 而进度的奖励函数拿不到实体 —— 只能按 UUID + Health:0.0f 反查,
-#   见 find_dead 顶部的说明。原版是固定 100, 不需要这个。
-#   ★ 找不到就按 X=1 走(等于原版行为) —— 宁可少给, 不能给错。
+# 【谁调用它】5 个 wrapper(equipment/armor/dusk_dawn/kill_mark_<tag>), 它们各自由
+#   一条**同名进度**触发(advancement/equipment/armor/dusk_dawn_kill_mark_<tag>.json)。
+#   **死者的 Tags 里有几个通用标签, 就有几条进度同刻触发 ⇒ 本函数同刻被调用几次
+#   ⇒ 天然实现"100×X"(X = 死者身上的效果数量)。**
+# 【★★ 2026-10-12 重写(坑 138, 用户实测: 打一只「流火+夜火」的怪只加了 300)★★】
+#   旧版走的是一条**从根上就不工作**的路: 新增 `enchantment/dusk_dawn.json`
+#   (post_attack, affected:victim), 想让回调函数"就地数死者的标签"。
+#   但**原版 post_attack 只读「攻击者的主手物品」上的附魔** —— 附魔却挂在
+#   **靴子**(slots:feet)上 ⇒ 永不触发 ⇒ 回调零调用 ⇒ X 恒用兜底值 1
+#   ⇒ 超限版"额外 100×X"永远只给 100(本该 400)。见圣骸的同款注释
+#   (equipment/axe/sacred_relic/watch: "原版 post_attack 读取攻击者的主手物品")。
+#   正解 = **不用附魔**: "数死者标签"这件事交给**进度的条件** —— 进度的
+#   `conditions.entity`(角色 this = 被杀死的实体)本来就在**死者**上求值, 读 Tags
+#   不受 MC-108307 的 isAlive 限制(现行进度一直这么写、也一直能触发)。
+#   再用"一个标签一条进度"把"计数"变成"函数被调用几次" ⇒ 不需要任何附魔/回调。
+# 【★ revoke 在各自的 wrapper 里 ★】自撤销型奖励函数的"首行 revoke 自己那条"
+#   由 kill_mark_<tag> 负责(见 lib/rearm、check.py 的 selfrev 规则):
+#   共享函数不知道自己是被哪条进度调的, 所以 revoke 必须落在各自的入口上。
+# 【★ 与"基础 +200"那条进度顺序无关 ★】dusk_dawn_kill(→ kill) 与本函数同刻触发,
+#   谁先谁后都行: 同刻账本只清一次(kill_init 的 dd_know 去重), 本函数再按
+#   `@s zx.dd_n`(本刻进来的第几次)决定加多少。
 # ============================================================
 
-advancement revoke @s only sweetdream:equipment/armor/dusk_dawn_kill_mark
+execute unless items entity @s armor.feet netherite_boots[custom_data~{zx:["dusk_dawn"]}] run return fail
+function sweetdream:equipment/armor/dusk_dawn/is_ol
 
-scoreboard players set #dd_x zx.meta 1
-execute store result storage zx:work v.u0 int 1 run data get entity @s UUID[0]
-execute store result storage zx:work v.u1 int 1 run data get entity @s UUID[1]
-execute store result storage zx:work v.u2 int 1 run data get entity @s UUID[2]
-execute store result storage zx:work v.u3 int 1 run data get entity @s UUID[3]
-function sweetdream:equipment/armor/dusk_dawn/find_dead with storage zx:work v
-execute if entity @e[tag=zx.dd_d,limit=1] as @e[tag=zx.dd_d,limit=1] run function sweetdream:equipment/armor/dusk_dawn/kill_count
-tag @e[tag=zx.dd_d] remove zx.dd_d
+# 同一次击杀的账本(t1/t2/dd_n)只清一次 —— 第一次进来时清, 后面几次直接跳过
+function sweetdream:equipment/armor/dusk_dawn/kill_init
+# 本刻第几次进来 = 死者身上第几个通用标签
+scoreboard players add @s zx.dd_n 1
 
-function sweetdream:equipment/armor/dusk_dawn/kill_mark_go
+# 基础版: "额外 100"(不管死者有几个标签) -> 同一次击杀只加一次
+execute unless score #dd_ol zx.meta matches 1 if score @s zx.dd_n matches 1 run scoreboard players set @s zx.dd_t2 100
+# 超限版: 100×X -> 死者有几个标签本函数就被调几次, 每次 +100
+execute if score #dd_ol zx.meta matches 1 run scoreboard players add @s zx.dd_t2 100
+
+function sweetdream:equipment/armor/dusk_dawn/temp_apply

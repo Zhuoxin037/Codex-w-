@@ -24,6 +24,13 @@ execute if entity @s[tag=test_look_tmp] run tag @s remove test_look_on
 execute unless entity @s[tag=test_look_tmp] run tag @s add test_look_on
 tag @s remove test_look_tmp
 
+# ②.5 【N07 修】刚"开启"时立即刷一次缓存
+#   【为什么需要】缓存是每秒刷的, 而 panel 每刻就画 —— 开面板后的头一秒里
+#   render 读到的是**上一次留下的旧缓存**(以前是别人的, 现在是自己的上一轮):
+#   单人开启瞬间可能先闪一段别人的/旧的装备与冷却。这里当场采一次, 消除空窗。
+#   【为什么只判"开着"】关掉时不动缓存(留着无害: render 只对开着的人跑)。
+execute if entity @s[tag=test_look_on] run function sweetdream:equipment/tool/look/cache
+
 # ③ 关掉的时候顺手清空动作栏(不然最后那行会残留两秒)
 execute unless entity @s[tag=test_look_on] run title @s actionbar ""
 

@@ -360,8 +360,39 @@ def bubble(px, main, dark, lite):
                     rgba(px, x, y, lite)
 
 
+def bolt(px, main, dark, lite):
+    """形状⑩⚡闪电(神经衰弱系列): 右上斜楔 + 横向错位(折) + 左下尖尾。
+    ★ 为什么把"折"放在 v≈-3★ 中心 7x7 是白色字形(α/β/Ω)的位置, 折点是闪电最
+      标志性的一笔 —— 放在正中间会被字形整个盖住, 就只剩一条斜棍了(试过)。
+      抬到字形上方(v≈-3)才看得出来。
+    ★ 画法 = 一个斜四边形 + 一个三角形取并集(两个都是凸的, 内部判定用射线法)。
+    ★ 电火花只画在四角留白处(形状外的透明区)。"""
+    upper = [(-1.0, -7.6), (5.6, -7.6), (2.0, -2.6), (-3.8, -2.6)]
+    tail = [(6.4, -3.6), (0.2, -3.6), (-3.4, 7.6)]
+
+    def in_poly(P, u, v):
+        c = False
+        n = len(P)
+        for i in range(n):
+            x1, y1 = P[i]
+            x2, y2 = P[(i + 1) % n]
+            if (y1 > v) != (y2 > v):
+                if u < x1 + (v - y1) * (x2 - x1) / (y2 - y1):
+                    c = not c
+        return c
+
+    def inside(u, v):
+        return in_poly(upper, u, v) or in_poly(tail, u, v)
+
+    fill_shape(px, inside, (main, dark, lite))
+    pdot(px, 12.6, 2.6, 0.8, lite)                    # 右上电火花
+    pdot(px, 14.0, 5.6, 0.55, lite)
+    pdot(px, 3.4, 13.4, 0.7, lite)                    # 左下电火花
+    pdot(px, 1.6, 10.2, 0.5, lite)
+
+
 SHAPES = {"snowflake": snowflake, "shield": shield, "droplet": droplet, "eye": eye,
-          "hollow": hollow, "flame": flame, "bubble": bubble}
+          "hollow": hollow, "flame": flame, "bubble": bubble, "bolt": bolt}
 
 
 # ---------------------------------------------------------------- 定义
@@ -408,6 +439,10 @@ SPEC = [
     ("life_up_a",   "a", "disc",   (214,  84,  86), ( 92,  26,  28), (252, 186, 188), 0),
     ("life_up_b",   "b", "disc",   (196,  68,  70), ( 80,  20,  22), (246, 168, 170), 4),
     ("life_up_o",   "o", "disc",   (238, 108, 104), (110,  34,  34), (255, 208, 206), 8),
+    # ---- 批 9(2026-10-12): 神经衰弱(剑 / 斧, 攻击速度 +0.1/+0.2/+0.4) -> 荧光绿闪电 ----
+    ("neuro_a",     "a", "bolt",   (150, 228, 104), ( 48, 108,  26), (222, 255, 184), 0),
+    ("neuro_b",     "b", "bolt",   (128, 208,  88), ( 40,  92,  20), (206, 248, 166), 4),
+    ("neuro_o",     "o", "bolt",   (176, 244, 130), ( 64, 132,  38), (238, 255, 208), 8),
 ]
 
 # 超限石(八芒星, 与升级石区分): (id, 主色, 暗色, 亮色)
@@ -442,6 +477,11 @@ OL_SPEC = [
     ("polarized_light",   (226, 238, 255), ( 60,  80, 120), (255, 255, 255)),   # 偏振光(极化白)
     ("dionysus_helmet",   (212, 132, 232), ( 70,  26,  96), (250, 216, 255)),   # 狄俄尼索斯之桂冠(酒神葡萄紫)
     ("furnace_core",      (255, 118,  52), (120,  30,   8), (255, 214, 178)),   # 炉心(炉火橙)
+    # ---- 批 I1(2026-10-12): 超限·电弧 / 火种 / 崩裂 / 共鸣 ----
+    ("arc",               (110, 210, 245), ( 22,  78, 128), (214, 246, 255)),   # 电弧(电刺青)
+    ("tinder",            (239, 138,  82), (124,  46,  16), (255, 220, 190)),   # 火种(余烬橙)
+    ("fissure",           (172, 134,  84), ( 74,  48,  22), (242, 226, 194)),   # 崩裂(地裂岩棕)
+    ("chime",             (150, 124, 236), ( 52,  36, 116), (224, 214, 255)),   # 共鸣(共鸣紫)
 ]
 
 GLYPH_OF = {"mana_up_a": "a", "mana_up_b": "b", "mana_up_o": "o",
@@ -469,7 +509,11 @@ CMD = {"mana_up_a": 1, "mana_up_b": 2, "mana_up_o": 3,
        "ol_cold_crow": 42, "ol_bone_erode": 43, "ol_sculk_echo": 44, "ol_dream_reader": 45,
        # 批 G/H(2026-10-10): 超限·法杖/盔甲
        "ol_begonia": 46, "ol_polarized_light": 47,
-       "ol_dionysus_helmet": 48, "ol_furnace_core": 49}
+       "ol_dionysus_helmet": 48, "ol_furnace_core": 49,
+       # 批 9(2026-10-12): 3 升级石(神经衰弱 α/β/Ω)
+       "neuro_a": 50, "neuro_b": 51, "neuro_o": 52,
+       # 批 I1(2026-10-12): 4 超限石
+       "ol_arc": 53, "ol_tinder": 54, "ol_fissure": 55, "ol_chime": 56}
 
 
 def new_px():

@@ -73,6 +73,40 @@ execute in minecraft:overworld as @e[tag=zx.fi_field,distance=0..] at @s run fun
 execute in minecraft:the_nether as @e[tag=zx.fi_field,distance=0..] at @s run function sweetdream:equipment/axe/fissure/field_tick
 execute in minecraft:the_end as @e[tag=zx.fi_field,distance=0..] at @s run function sweetdream:equipment/axe/fissure/field_tick
 
+# 超限·电弧(2026-10-12 批 I1): 「放电锚」每秒一跳 —— 8 格内重判配对、3 格宽电线、
+#   沿途与两端 1 格内伤害 + 落雷(都在 ol_fire); 计时 zx.arc_wt 归零由 ol_tick_go 收尾。
+#   ★ 三维度各写一遍 + distance=0..(同神裁领域/崩裂裂缝)。
+execute in minecraft:overworld as @e[type=marker,tag=zx.arc_w,distance=0..] at @s run function sweetdream:equipment/bow/arc/ol_tick
+execute in minecraft:the_nether as @e[type=marker,tag=zx.arc_w,distance=0..] at @s run function sweetdream:equipment/bow/arc/ol_tick
+execute in minecraft:the_end as @e[type=marker,tag=zx.arc_w,distance=0..] at @s run function sweetdream:equipment/bow/arc/ol_tick
+
+# 超限·电弧: 配对两端的"放电窗口"计时(安全网) —— 锚先死时也保证窗口最多 3 秒。
+#   见 ol_sweep 头部(两端是非玩家生物, 所以按维度扫 @e 而不是 @a)。
+function sweetdream:equipment/bow/arc/ol_sweep
+
+# 云迹(2026-10-12 批 11): 「领域」每秒一跳 —— 画一圈云气 + 计时 ct_ft -1, 归零 kill 自己。
+#   ★ 三维度各写一遍 + distance=0..(同神裁领域 / 崩裂裂缝 / 电弧放电锚)。
+execute in minecraft:overworld as @e[type=marker,tag=zx.ct_field,distance=0..] at @s run function sweetdream:equipment/bow/cloudtrail/field_tick
+execute in minecraft:the_nether as @e[type=marker,tag=zx.ct_field,distance=0..] at @s run function sweetdream:equipment/bow/cloudtrail/field_tick
+execute in minecraft:the_end as @e[type=marker,tag=zx.ct_field,distance=0..] at @s run function sweetdream:equipment/bow/cloudtrail/field_tick
+
+# 爆裂黎明(2026-10-12 批 11): 「魂灵之影」每秒一跳 —— 魂火 + 3 秒攻击倒计时
+#   + 索敌转移 + 寿命 bd_ft -1(归零消失)。实体是**铁傀儡**(不是 marker:
+#   文案要"生命值 100"能被打掉, marker 没有生命值字段), 所以选择器按标签认人。
+#   ★ 三维度各写一遍 + distance=0..(同云迹领域 / 威霆术阵 / 电弧放电锚)。
+execute in minecraft:overworld as @e[tag=zx.bd_shade,distance=0..] at @s run function sweetdream:equipment/bow/burst_dawn/shade_tick
+execute in minecraft:the_nether as @e[tag=zx.bd_shade,distance=0..] at @s run function sweetdream:equipment/bow/burst_dawn/shade_tick
+execute in minecraft:the_end as @e[tag=zx.bd_shade,distance=0..] at @s run function sweetdream:equipment/bow/burst_dawn/shade_tick
+
+# 爆裂黎明: 每秒看一眼"我自己的魂灵之影还有没有" —— 没有就立刻收尾(撤术阵)。
+#   排在 shade_tick **之后**: 影先走完这一步的寿命 -1 与 kill, 再数才不会把
+#   刚在这一秒到期的影算成"还活着"(否则术阵会多留一秒)。
+#   【为什么只写一行】`as @a[...] at @s` 带位置基准, 后面的 @e 锁在玩家所在维度;
+#     写三遍(三维度)的话同一个玩家会被扫三次。
+execute as @a[scores={zx.bd_on=1..}] at @s run function sweetdream:equipment/bow/burst_dawn/check
+
+# 圣骸的脉冲与遗骸寿命由 core/tick 精确计时, 不再受全局秒心跳相位影响。
+
 # 天使核心(2026-10-08): 「圣光柱」每秒 -1 秒, 归零 kill —— 纯表现实体(在受伤生物处升起的光柱)。
 #   选择器同样不带 type(display); 三维度各一行 + distance=0..。
 execute in minecraft:overworld as @e[tag=zx.ac_beam,distance=0..] at @s run function sweetdream:equipment/axe/angel_core/beam_tick

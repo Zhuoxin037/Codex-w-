@@ -15,12 +15,12 @@
 #   而且一个字都不报(真实事故: 2026-10-04 04:08:55 一次命令爆量, 把
 #   upgrade/attack 卡住 → 魔力增殖 α/β/Ω 的攻击回魔从此全死, 玩家以为"升级失效了")。
 #
-# 【怎么做】每刻对所有玩家撤销一遍这 131 条。
+# 【怎么做】每刻对所有玩家撤销一遍这 159 条。
 #   · 正常情况: 进度早被奖励函数自己撤掉了, 这里全是**空操作**(撤销一条未授予的
 #     进度什么都不发生), 所以本文件在健康状态下不产生任何行为变化;
 #   · 只有"奖励函数被跳过"这个死角里, 它才是唯一的救兵 —— 下一 tick 事件
 #     就能重新授予, 效果恢复(最多晚 1 tick, 玩家察觉不到)。
-#   · 成本: 131 条 revoke / tick, 相对预算 65536 可忽略。
+#   · 成本: 159 条 revoke / tick, 相对预算 65536 可忽略。
 #
 # 【★ 新增自撤销型进度时, 必须同步加到这里 ★】
 #   判据 = "奖励函数的第一个非注释行是 advancement revoke @s only 自己"
@@ -29,7 +29,7 @@
 #
 # 【★ 审查报告 O01 的核对结论(2026-10-10): 一条都不能删 ★】
 #   报告说"很多奖励函数本身已经先撤销自己的进度, 这类每 tick 兜底冗余" ——
-#   但按本包契约, **全部 131 条**的奖励函数都自撤销(规则 5 强制), 所以"自撤销"
+#   但按本包契约, **全部 159 条**的奖励函数都自撤销(规则 5 强制), 所以"自撤销"
 #   不构成删减依据: 这个文件的职责恰恰是兜住"自撤销没跑成"的那次(预算爆量 /
 #   排序错), 删了 = 复现 2026-10-04 的事故类别。
 #   · 真能省的只有"频率/位置"(每 2 tick 交替两半 / 改每秒), 但那是在拿
@@ -42,7 +42,11 @@
 advancement revoke @a only sweetdream:equipment/armor/brain_leech_attack
 advancement revoke @a only sweetdream:equipment/armor/dionysus_helmet
 advancement revoke @a only sweetdream:equipment/armor/dusk_dawn_kill
-advancement revoke @a only sweetdream:equipment/armor/dusk_dawn_kill_mark
+advancement revoke @a only sweetdream:equipment/armor/dusk_dawn_kill_mark_dream
+advancement revoke @a only sweetdream:equipment/armor/dusk_dawn_kill_mark_liuhuo
+advancement revoke @a only sweetdream:equipment/armor/dusk_dawn_kill_mark_shixin
+advancement revoke @a only sweetdream:equipment/armor/dusk_dawn_kill_mark_yehuo
+advancement revoke @a only sweetdream:equipment/armor/dusk_dawn_kill_mark_yuanhai
 advancement revoke @a only sweetdream:equipment/armor/furnace_core_hit
 advancement revoke @a only sweetdream:equipment/armor/immolate_hurt
 advancement revoke @a only sweetdream:equipment/armor/iridescent_hurt
@@ -70,6 +74,14 @@ advancement revoke @a only sweetdream:equipment/bow/bone_erode
 advancement revoke @a only sweetdream:equipment/bow/sculk_echo
 advancement revoke @a only sweetdream:equipment/bow/lucid_dream
 advancement revoke @a only sweetdream:equipment/bow/rainbow
+#   (电弧 equipment/bow/arc 补于 2026-10-12: 原先只有附魔回调、没有射击进度,
+#    这次补上 shot 才成为"自撤销型", 按契约必须登记到这里。)
+advancement revoke @a only sweetdream:equipment/bow/arc
+#   (弩三件 2026-10-12: 龙舌/云迹/爆裂黎明 与其余 6 把弩同款 —— 射击进度 + shot
+#    扣蓝, shot 首行自撤销, 按契约必须登记到这里。)
+advancement revoke @a only sweetdream:equipment/bow/dragon_tongue
+advancement revoke @a only sweetdream:equipment/bow/cloudtrail
+advancement revoke @a only sweetdream:equipment/bow/burst_dawn
 advancement revoke @a only sweetdream:equipment/staff/apocalypse
 advancement revoke @a only sweetdream:equipment/staff/delusion
 advancement revoke @a only sweetdream:equipment/staff/fallen_dream
@@ -159,6 +171,10 @@ advancement revoke @a only sweetdream:upgrade/night_vision
 advancement revoke @a only sweetdream:upgrade/life_up_a
 advancement revoke @a only sweetdream:upgrade/life_up_b
 advancement revoke @a only sweetdream:upgrade/life_up_o
+# ---- 批 9 · 神经衰弱(2026-10-12) ----
+advancement revoke @a only sweetdream:upgrade/neuro_a
+advancement revoke @a only sweetdream:upgrade/neuro_b
+advancement revoke @a only sweetdream:upgrade/neuro_o
 advancement revoke @a only sweetdream:overlimit/stellar_elegy
 advancement revoke @a only sweetdream:overlimit/dusk_dawn
 advancement revoke @a only sweetdream:overlimit/myriad
@@ -183,4 +199,24 @@ advancement revoke @a only sweetdream:overlimit/begonia
 advancement revoke @a only sweetdream:overlimit/polarized_light
 advancement revoke @a only sweetdream:overlimit/dionysus_helmet
 advancement revoke @a only sweetdream:overlimit/furnace_core
+# ---- 批 I1 · 超限·电弧/火种/崩裂/共鸣(2026-10-12) ----
+advancement revoke @a only sweetdream:overlimit/arc
+advancement revoke @a only sweetdream:overlimit/tinder
+advancement revoke @a only sweetdream:overlimit/fissure
+advancement revoke @a only sweetdream:overlimit/chime
 advancement revoke @a only sweetdream:equipment/armor/dionysus_helmet_hit
+# ---- 批 11 · 剑(2026-10-12): 潮痕 / 灰度 / 缺月(主动 + 被动) ----
+advancement revoke @a only sweetdream:equipment/sword/tidemark
+advancement revoke @a only sweetdream:equipment/sword/grayscale
+advancement revoke @a only sweetdream:equipment/sword/crescent
+advancement revoke @a only sweetdream:equipment/sword/crescent_hit
+# ---- 批 11 · 斧(2026-10-12): 圣骸(主动 + 击杀/命中两条被动) / 沉锚(主动 + 命中被动) / 焦骨 ----
+advancement revoke @a only sweetdream:equipment/axe/sacred_relic
+advancement revoke @a only sweetdream:equipment/axe/sacred_relic_hit
+advancement revoke @a only sweetdream:equipment/axe/sacred_relic_kill
+advancement revoke @a only sweetdream:equipment/axe/anchor
+advancement revoke @a only sweetdream:equipment/axe/anchor_hit
+advancement revoke @a only sweetdream:equipment/axe/scorch_bone
+# ---- 批 12 · 法杖(2026-10-13): 五世恶咒 / 很冰的斧 ----
+advancement revoke @a only sweetdream:equipment/staff/five_curses
+advancement revoke @a only sweetdream:equipment/staff/triad

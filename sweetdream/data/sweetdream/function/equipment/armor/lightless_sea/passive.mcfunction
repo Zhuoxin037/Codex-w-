@@ -13,7 +13,7 @@
 #     n 归 0 后**不清**, 进入 3 秒宽限(zx.ls_t 从 3 每秒递减), 宽限内保持
 #     原值, 断供满 3 秒才清零; 期间再来目标立刻跟随新的 n。
 #   · 回魔是即时的(每秒 n×5), 不占账本。
-# 【"有缓慢效果"的判定】实体 NBT ActiveEffects 列表里出现 minecraft:slowness
+# 【"有缓慢效果"的判定】实体 NBT active_effects 列表里出现 minecraft:slowness(1.20.2+)
 #   (列表按子序列匹配, 任意等级/时长的缓慢都算)。
 # 【为什么对全部玩家跑】两本账都是差值账本, 脱下那一秒也要有人减回去。
 # ============================================================
@@ -36,7 +36,7 @@ execute unless score #diff zx.meta matches 0 run function sweetdream:equipment/a
 # ④ 圈"源生物": 8 格内带缓慢 或 渊海(两遍各打一次标签, 天然去重)
 tag @e[tag=zx.ls_src] remove zx.ls_src
 tag @e[tag=zx.ls_hit] remove zx.ls_hit
-execute at @s run tag @e[type=!#sweetdream:no_damage,distance=..8,nbt={ActiveEffects:[{id:"minecraft:slowness"}]}] add zx.ls_src
+execute at @s run tag @e[type=!#sweetdream:no_damage,distance=..8,nbt={active_effects:[{id:"minecraft:slowness"}]}] add zx.ls_src
 execute at @s run tag @e[type=!#sweetdream:no_damage,distance=..8,tag=zx.status.yuanhai] add zx.ls_src
 
 # ⑤ 圈"受影响": 每个源的 3 格内全部生物(标签幂等 = 去重)

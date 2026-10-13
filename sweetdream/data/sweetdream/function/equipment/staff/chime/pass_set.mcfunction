@@ -56,16 +56,20 @@ tag @s remove zx.ch_beam
 # ①' 本刻真的触发了 -> 压满节流: 接下来 10 tick(0.5 秒)内不再触发
 execute if entity @s[tag=zx.ch_act] run scoreboard players set @s zx.ch_cd 10
 
-# ② 本刻真有触发(球或光束) -> 重圈"水晶 3 格内全部生物"(★ 基准 = 水晶本身, 不抬 —— 人和怪都在地上)
+# ② 本刻真有触发(球或光束) -> 重圈"水晶 N 格内全部生物"(原版 3 / 超限 5; ★ 基准 = 水晶本身, 不抬 —— 人和怪都在地上)
 execute if entity @s[tag=zx.ch_act] run tag @e[tag=zx.ch_p] remove zx.ch_p
 execute if entity @s[tag=zx.ch_act] run tag @e[type=!#sweetdream:no_damage,distance=..3] add zx.ch_p
+execute if entity @s[tag=zx.ch_act] if data entity @s data.zx.ch{ol:1} run tag @e[type=!#sweetdream:no_damage,distance=..5] add zx.ch_p
+
+# ②' 超限另加"释放者 3 格内的全部生物" —— 先反查释放者, 再以他为圆心圈一次
+$execute if entity @s[tag=zx.ch_act] if data entity @s data.zx.ch{ol:1} as @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] at @s run tag @e[type=!#sweetdream:no_damage,distance=..3] add zx.ch_p
 
 # ③ 给那颗球打"已触发"戳(每颗球对每颗水晶只触发一次; 同样用抬高的基准找它)
 $execute positioned ~ ~1.6 ~ as @e[tag=zx.ball,distance=..1.5,nbt={data:{u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}},tag=!zx.ch_pass] run tag @s add zx.ch_pass
 
 # ④ 反查释放者, 交给他结算(执行者=玩家 -> 归属正确)
 #   ★ 门控 = "本刻戳" —— 只有"正好这一下"才结算, 不是"标签还挂着"就一直结算。
-$execute if entity @s[tag=zx.ch_act] as @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] if entity @e[tag=zx.ch_p,limit=1] run function sweetdream:equipment/staff/chime/pass_go
+$execute if entity @s[tag=zx.ch_act] as @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] if entity @e[tag=zx.ch_p,limit=1] run function sweetdream:equipment/staff/chime/pass_go with storage zx:work chp
 
 # ⑤ 表现(水晶被法术激发的环; 执行者/坐标仍是水晶; 同样只在"本刻触发"时播一次)
 execute if entity @s[tag=zx.ch_act] run particle minecraft:enchant ~ ~0.6 ~ 0.6 0.6 0.6 0.4 24 normal

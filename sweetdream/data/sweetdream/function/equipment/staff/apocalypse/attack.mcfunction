@@ -39,6 +39,6 @@ function sweetdream:overlimit/api/mod
 function manacore:api/damage/calc
 
 # ⑤ 装球
-data modify storage zx:work ball set value {dmg:0.0,style:"plain"}
+data modify storage zx:work ball set value {dmg:0.0,style:"apocalypse"}
 data modify storage zx:work ball.dmg set from storage manacore:out r.damage
 function sweetdream:equipment/staff/attack

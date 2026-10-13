@@ -32,12 +32,12 @@ BOX_CAP = 27
 # 盒子方块坐标(和强化台 0,-59,2 错开; 0,-60,2 留给暂存箱)
 #   ★ 每 27 件开一个盒子: 2026-10-07 晚 83 装备 + 31 石头 = 114 件 -> 5 盒。
 #     加装备/石头后如果这里不够, 脚本会 assert 报错(不会静默丢件), 照提示补坐标即可。
-BOX_POS = ["0 -60 1", "0 -60 3", "0 -60 5", "0 -60 7", "0 -60 9"]
+BOX_POS = ["0 -60 1", "0 -60 3", "0 -60 5", "0 -60 7", "0 -60 9", "0 -60 11"]
 # ★ 只能是**染料色**(白/橙/品红/淡蓝/黄/黄绿/粉/灰/淡灰/青/紫/蓝/棕/绿/红/黑)——
 #   潜影盒方块只有这 16 种染色版 + 1 个默认版。写 gold/light_purple/aqua 这种
 #   "只有文字组件才认的颜色", setblock 会失败 -> 中转站建不起来 -> 盒子全发不出去。
 #   (2026-10-04 踩过: 原来写的就是 gold/light_purple/aqua, 玩家拿到的是空的。)
-BOX_COLOR = ["yellow", "purple", "cyan", "red", "lime"]
+BOX_COLOR = ["yellow", "purple", "cyan", "red", "lime", "blue"]
 
 # ★ 名字用的**文字组件颜色**和方块色名不是一套! ★
 #   方块色名 purple / cyan / lime 在文字组件里**不合法**
@@ -45,7 +45,7 @@ BOX_COLOR = ["yellow", "purple", "cyan", "red", "lime"]
 #   (日志: "Failed to parse custom name, discarding: Invalid color name: purple"),
 #   盒子就没名字了。所以这里单独映射一套合法的文字色。
 NAME_COLOR = {"yellow": "yellow", "purple": "light_purple",
-              "cyan": "aqua", "red": "red", "lime": "green"}
+              "cyan": "aqua", "red": "red", "lime": "green", "blue": "blue"}
 
 # 盒 A: 装备(按 盔甲 -> 剑 -> 斧 -> 弓 -> 法杖 -> 工具 排)
 A = []

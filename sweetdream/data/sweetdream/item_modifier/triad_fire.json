@@ -1,0 +1,8 @@
+[
+  {
+    "function": "minecraft:set_components",
+    "components": {
+      "minecraft:item_name": {"text": "很热的刀", "bold": true, "color": "red"}
+    }
+  }
+]

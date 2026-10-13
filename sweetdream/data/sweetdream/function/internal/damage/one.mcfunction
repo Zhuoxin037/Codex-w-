@@ -3,26 +3,19 @@
 # ------------------------------------------------------------
 # 【执行者】被打的那一只(由 with_from 用 execute as 逐个送进来)
 # 【顺序很重要】
-#   ①   先看它身上有没有 5 个通用标签 —— 生物一死就查不到了, 所以必须打之前看
+#   ①   (2026-10-12 坑 138 已删) 原本在打之前数目标身上的通用标签(#dmk),
+#       服务于「黄昏黎明之交界」超限版的 100×X。那整套附魔回调方案已经废弃 ——
+#       原版 post_attack 只读攻击者的**主手物品**, 附魔挂在靴子上永远不触发。
+#       现在 X 由 5 条标签进度独立数出, 见 equipment/armor/dusk_dawn/kill_mark。
 #   ①.5 ★ 每只目标都从专用基准节点 zx:work ob 复原入参 ★
 #        + 目标带「升痕」且"居高临下"时, 把伤害乘区加上
 #   ②   打伤害(带 by <攻击者>, 击杀才算玩家头上) —— 走 internal/damage/deal
-#   ③   如果"带标签"且"这一下把它打死了"(Health 被夹到 0.0f), 就让攻击者补 +100
-#       —— 走的是和进度回调**同一条**逻辑(kill_mark_go), 那边是"差值记账",
-#          所以两条路都跑也不会加两遍。
+#   ③   (2026-10-12 坑 138 已删) 原本"这一下打死就调 kill_mark_from_skill 补 +100"。
 # 【★ 为什么每只都要"复原"★】见 with_from 的长注释: a 是全包共用的临时节点,
 #   伤害循环里任何嵌套调用都可能动它。所以每只目标开打前, 都把 deal 需要的入参
 #   从 ob(专用基准) 拉回来一次 —— 这样"每只都从同一份原始伤害起算", 加成绝不会
 #   串到下一条没有升痕的命上。
 # ============================================================
-
-# ① 打之前: 它身上有任意一个通用标签吗?
-scoreboard players set #dmk zx.meta 0
-execute if entity @s[tag=zx.status.yuanhai] run scoreboard players set #dmk zx.meta 1
-execute if entity @s[tag=zx.status.liuhuo] run scoreboard players set #dmk zx.meta 1
-execute if entity @s[tag=zx.status.yehuo] run scoreboard players set #dmk zx.meta 1
-execute if entity @s[tag=zx.status.shixin] run scoreboard players set #dmk zx.meta 1
-execute if entity @s[tag=zx.status.dream] run scoreboard players set #dmk zx.meta 1
 
 # ①.5a 读这只目标自己的「升痕」层数(0 = 没升痕)
 scoreboard players set #stg zx.meta 0
@@ -63,10 +56,28 @@ execute if entity @s[tag=zx.status.yehuo] if data storage zx:work a{type:"sweetd
 execute if entity @s[tag=zx.status.yehuo] if data storage zx:work a{src:"enemy"} run function sweetdream:internal/damage/vuln_tag
 execute if data storage zx:work a{type:"sweetdream:true_damage"} if entity @s[tag=zx.status.shixin] run function sweetdream:internal/damage/vuln_tag
 
+# ①.5e 五世恶咒·第三世: 带 zx.fcv_3 的目标, **技能伤害**额外 ×1.20(2026-10-13 批 12)
+#   【为什么单独一条、不并进 vuln_tag】vuln_tag 的 115 是夜火/噬心共用的固定值;
+#     世咒要的是 120, 另起 internal/damage/vuln_fcv3, 两边互不影响。
+#   【互斥口径与夜火一致】只认 sweetdream:skill 且非敌方来源, 免得与夜火那条
+#     对同一次伤害重复加乘(那会变成 ×1.15×1.20, 不是文案里的二选一)。
+#     ★ 若目标同时带夜火和世咒三世, 两条**各**跑一次(= ×1.38)—— 那是两个不同
+#       debuff 叠加, 属于预期(与"夜火 + 噬心"同族)。
+execute if entity @s[tag=zx.fcv_3] if data storage zx:work a{type:"sweetdream:skill"} unless data storage zx:work a{src:"enemy"} run function sweetdream:internal/damage/vuln_fcv3
+
+# ①.6 五世恶咒·第五世: 记录窗口开着时, 把这一下累计进 zx.fcv_rec(2026-10-13 批 12)
+#   【为什么放在 deal **之前**】此时 a.num 已是最终伤害(升痕/易伤都算完了),
+#     记到的是"实际要打出去多少"; 放到 deal 之后再读就已经被别的调用点改过了。
+execute if entity @s[tag=zx.fcv_5] run function sweetdream:equipment/staff/five_curses/record
+
 # ② 打伤害(有攻击者就带 by; 选不到人(离线)就退化成无归属, 照样打得出来)
 function sweetdream:internal/damage/deal with storage zx:work a
 
-# ③ 带标签 + 这一下打死了 -> 让攻击者补 +100
-#   【宏源用 ob 而不是 a】/damage 有可能同步触发进度回调(那边会动 a),
-#   而这里只要 u0..u3(攻击者 uuid)。ob 是不可变的快照, 用它万无一失。
-execute if score #dmk zx.meta matches 1 if data entity @s {Health:0.0f} run function sweetdream:equipment/armor/dusk_dawn/kill_mark_from_skill with storage zx:work ob
+# 圣骸: 保留准确受害者上下文, 已死后不要再用 @e 查找。归属读取不可变的 ob。
+function sweetdream:equipment/axe/sacred_relic/skill_kill with storage zx:work ob
+
+# ③ (2026-10-12 坑 138 已删) 这里原本是"带标签 + 这一下打死了 ⇒ 调
+#   dusk_dawn/kill_mark_from_skill 让攻击者补 +100×X"。随附魔回调方案一并废弃
+#   (原版 post_attack 只读攻击者主手物品, 附魔挂在靴子上不触发 ⇒ 这行从来没生效)。
+#   现在技能击杀也走原版 player_killed_entity 进度: 本包技能伤害都带 `by <玩家>`
+#   (见 internal/damage/deal), 击杀会正常归到玩家头上, 5 条标签进度照常触发。

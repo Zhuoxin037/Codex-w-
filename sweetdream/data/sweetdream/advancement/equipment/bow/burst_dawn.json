@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "burst_dawn": {
+            "trigger": "shot_crossbow",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "burst_dawn"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:equipment/bow/burst_dawn/shot"
+    }
+}

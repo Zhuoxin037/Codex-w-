@@ -50,6 +50,14 @@ execute in minecraft:overworld as @e[tag=zx.pal_col,distance=0..] at @s run func
 execute in minecraft:the_nether as @e[tag=zx.pal_col,distance=0..] at @s run function sweetdream:equipment/staff/palette/color_tick
 execute in minecraft:the_end as @e[tag=zx.pal_col,distance=0..] at @s run function sweetdream:equipment/staff/palette/color_tick
 
+# 超限·崩裂(2026-10-12 批 I1): 「裂缝锁」每刻一步 —— "在裂缝上的生物将无法离开裂缝"。
+#   ★ 必须每刻: 一秒 20 刻, 生物一步就能跨出伤害半径(3 格), 放成每秒等于没锁。
+#   ★ 选择器不带 type(裂缝是 item_display, 换型史见 fissure/field 头部)。
+#   ★ 三维度各写一遍 + distance=0..(同调色盘/神裁领域)。
+execute in minecraft:overworld as @e[tag=zx.fi_field,distance=0..] at @s run function sweetdream:equipment/axe/fissure/lock_tick
+execute in minecraft:the_nether as @e[tag=zx.fi_field,distance=0..] at @s run function sweetdream:equipment/axe/fissure/lock_tick
+execute in minecraft:the_end as @e[tag=zx.fi_field,distance=0..] at @s run function sweetdream:equipment/axe/fissure/lock_tick
+
 # 【备份公共输入口】下面三套每刻逻辑都会写 manacore:in arg(观测镜要查术阵数量),
 #   不还回去的话你在聊天栏手填的参数每刻都被冲掉 —— 见 lib/in_bak。
 function sweetdream:lib/in_bak
@@ -71,6 +79,40 @@ execute as @a[tag=zx.hs_back] at @s run function sweetdream:equipment/sword/hush
 #   ★ 筛 `zx.rb_t=1..` 是天然停摆: 打完最后一段就停在 0, 不再被选中, 不用额外清标签。
 #   必须在 lib/in_restore 之前 —— tick_step 里的 recalc 要用公共输入口 manacore:in arg。
 execute as @a[scores={zx.rb_t=1..}] at @s run function sweetdream:equipment/sword/rebound/tick_step
+
+# 缺月(2026-10-12 批11): 主动"冻结窗"的每刻驱动(zx.cr_t 120->0 = 6 秒)
+#   ★ 为什么必须**每刻**: 冻结 = 每刻把被冻结技能的剩余冷却顶回原值
+#     (api/cooldown/increase 1 tick)。每秒做一次会漏掉 19/20 的刻 —— 那就不是冻结,
+#     而是"冷却照常走"(与坑 120"干活频率 ≠ 持续时间"同源)。
+#   ★ 筛 `zx.cr_t=1..` 是天然停摆: 窗归零后 freeze_end 收尾, 玩家不再被选中。
+#   必须在 lib/in_restore 之前 —— freeze_tick/freeze_end 里的 calc 要用公共输入口。
+execute as @a[scores={zx.cr_t=1..}] at @s run function sweetdream:equipment/sword/crescent/freeze_drive
+
+# 沉锚(2026-10-12 批11): 主动"牵引"的每刻驱动(zx.an_pull 14->0 = 0.7 秒)
+#   ★ 为什么必须**每刻**: 用户拍板"拉近要有过程, 不要瞬移"= 位置得每刻变一小段;
+#     每秒跑一次就成了一秒一跳的"瞬移三连"。0.5 格/刻 = 10 格/秒。
+#   ★ 筛 `zx.an_pull=1..` 是天然停摆: 停下那刻 pull_end 把分数清零, 玩家不再被选中。
+#   必须在 lib/in_restore 之前 —— pull_end -> impact 里的 calc 要用公共输入口 manacore:in arg。
+execute as @a[scores={zx.an_pull=1..}] at @s run function sweetdream:equipment/axe/anchor/pull_tick
+
+# 圣骸: 主/副手回调维护, 不扫描/猜测附近尸体。
+execute as @a at @s run function sweetdream:equipment/axe/sacred_relic/watch
+# 每次施法独立计时, 每隔准确 20 刻结算; 12 跳后停。先结算最后一跳, 再清到期遗骸。
+execute as @a[scores={zx.sr_on=1..}] at @s if score @s zx.sr_next <= #now manacore.meta run function sweetdream:equipment/axe/sacred_relic/second
+execute in minecraft:overworld as @e[type=minecraft:marker,tag=zx.sr_w,distance=0..] at @s run function sweetdream:equipment/axe/sacred_relic/watch_dead with entity @s data
+execute in minecraft:the_nether as @e[type=minecraft:marker,tag=zx.sr_w,distance=0..] at @s run function sweetdream:equipment/axe/sacred_relic/watch_dead with entity @s data
+execute in minecraft:the_end as @e[type=minecraft:marker,tag=zx.sr_w,distance=0..] at @s run function sweetdream:equipment/axe/sacred_relic/watch_dead with entity @s data
+execute in minecraft:overworld as @e[tag=zx.sr_relic,distance=0..] at @s run function sweetdream:equipment/axe/sacred_relic/relic_tick
+execute in minecraft:the_nether as @e[tag=zx.sr_relic,distance=0..] at @s run function sweetdream:equipment/axe/sacred_relic/relic_tick
+execute in minecraft:the_end as @e[tag=zx.sr_relic,distance=0..] at @s run function sweetdream:equipment/axe/sacred_relic/relic_tick
+
+# 圣骸(2026-10-12 批11): 「遗骸」的常亮表现(每刻) —— marker 天生隐形, 不每刻铺粒子
+#   玩家根本看不见遗骸(粒子寿命 < 1 秒, 每秒一次 = 20 帧里只有 1 帧)。
+#   ★ 三维度各写一遍 + 每行 distance=0..: #minecraft:tick 只在主世界跑, 裸 @e 会跨维度重复处理。
+#   ★ 只管表现; 计时/寿命仍在 lib/second 的 relic_tick(每秒)。
+execute in minecraft:overworld as @e[tag=zx.sr_relic,distance=0..] at @s run function sweetdream:equipment/axe/sacred_relic/relic_glow
+execute in minecraft:the_nether as @e[tag=zx.sr_relic,distance=0..] at @s run function sweetdream:equipment/axe/sacred_relic/relic_glow
+execute in minecraft:the_end as @e[tag=zx.sr_relic,distance=0..] at @s run function sweetdream:equipment/axe/sacred_relic/relic_glow
 
 # 红莲(2026-10-07 批2): 主动"每 0.35 秒推一段"倒计时(zx.rl_t 7->0 = 7 刻)
 #   ★ 用户口径: 多段都依次隔 0.35 秒(同刻打完会被受伤无敌帧吃掉, 等于只有第一下掉血)。
@@ -228,6 +270,13 @@ execute in minecraft:overworld as @e[distance=0..,tag=zx.icon_fading_owner] at @
 execute in minecraft:the_nether as @e[distance=0..,tag=zx.icon_fading_owner] at @s run function sweetdream:tag/icon_fade
 execute in minecraft:the_end as @e[distance=0..,tag=zx.icon_fading_owner] at @s run function sweetdream:tag/icon_fade
 
+# ★ 云迹: 补认"上一刻射出、但 shot 那一瞬还没进世界"的箭(坑 141)。
+#   **必须排在下面打 zx.cc_seen 之前**: 箭一旦被补上 cc_seen 就再也认不出来了,
+#   而 shot 的触发时机可能早于箭进世界 —— 这是唯一能补救的窗口。
+#   【为什么只写一行 + 为什么不用三维度】`as @a[...] at @s` 给了位置基准, 后面的
+#     @e 会被锁进玩家所在维度; 写三遍的话同一个玩家会被跑三次, zx.ct_seek 会被多扣。
+execute as @a[scores={zx.ct_seek=1..}] at @s run function sweetdream:equipment/bow/cloudtrail/arrow_seek
+
 # 寒鸦逐箭快照: 给"这一刻之前就已经存在的箭"都打上 zx.cc_seen。
 #   【为什么要这么绕】想把"这一发的层数/伤害"绑到**具体某一支箭**上, 就必须在
 #     射击那一刻把它认出来。按"离玩家最近的一支"认会被地上插着的老箭骗
@@ -242,6 +291,16 @@ execute in minecraft:the_end as @e[distance=0..,tag=zx.icon_fading_owner] at @s 
 execute in minecraft:overworld run tag @e[distance=0..,type=#sweetdream:cc_arrow,tag=!zx.cc_seen] add zx.cc_seen
 execute in minecraft:the_nether run tag @e[distance=0..,type=#sweetdream:cc_arrow,tag=!zx.cc_seen] add zx.cc_seen
 execute in minecraft:the_end run tag @e[distance=0..,type=#sweetdream:cc_arrow,tag=!zx.cc_seen] add zx.cc_seen
+
+# 云迹: 「射击后若**未射中生物**, 则在箭停留位置生成一个持续 5 秒的半径 3 格的领域」。
+#   判据 = inGround:1b(1.21.5 原版字段: 箭插进方块后变 1b; 同幽匿残响 se_live 那条,
+#   见 RULES 第 32 条) —— 打中了生物的箭不会插地(而且 hook_arrow 会先摘掉 zx.ct_live),
+#   所以"带 zx.ct_live 且 inGround"就是"落空"。
+#   ★ field_spawn 建完领域会自己摘掉 zx.ct_live, 所以不会每刻重复建。
+#   ★ 三维度各一行 + distance=0..(裸 @e 会跨维度搜索, 同一支箭会被处理 3 次)。
+execute in minecraft:overworld as @e[distance=0..,tag=zx.ct_live,nbt={inGround:1b}] at @s run function sweetdream:equipment/bow/cloudtrail/field_spawn
+execute in minecraft:the_nether as @e[distance=0..,tag=zx.ct_live,nbt={inGround:1b}] at @s run function sweetdream:equipment/bow/cloudtrail/field_spawn
+execute in minecraft:the_end as @e[distance=0..,tag=zx.ct_live,nbt={inGround:1b}] at @s run function sweetdream:equipment/bow/cloudtrail/field_spawn
 
 #   【为什么写三行】tick 函数执行维度默认主世界, 所以要三个维度各来一遍。
 #   【★ 每行都要 distance=0.. ★】裸 @e 会跨维度搜索 —— 三行都写裸 @e 的话, 同一支箭每刻会被结算 3 次。
@@ -269,6 +328,24 @@ execute in minecraft:the_end as @e[distance=0..,tag=zx.ld_mark] at @s run functi
 #   攻击命中时 hurt 里的 buff_on 也会写 manacore:in arg, 所以放在
 #   in_restore 之前, 让这一整段都在公共输入口的备份保护里。
 execute as @a[tag=zx.im_on] at @s run function sweetdream:equipment/armor/immolate/tick
+
+# 余烬: 燃烧边沿检测 —— **每 5 刻一次**(不是每秒!)
+#   【为什么提速】原来挂在 #manacore:event/second(20 刻), 而它是**边沿检测**:
+#     火熄灭那一刻并不结算, 要等下一次心跳发现"上一轮有标记、这一轮 Fire=0"
+#     ⇒ 延迟 0~1 秒、平均 0.5 秒。用户 2026-10-12: "每次燃烧结束都不能及时
+#     上流火/夜火" ⇒ 拍板"更密集的周期" ⇒ 5 刻一次, 延迟 0~0.25 秒。
+#   【为什么不再更密】每次扫描要给 9 格内每个实体读两次 Fire NBT;
+#     5 刻 = 每秒 4 次已经是手感与开销的平衡点(再密收益递减、扫描开销线性涨)。
+#   【分频】#now manacore.meta 每刻 +1(持久化 tick 计数), 对 #5 取模 = 0 的刻跑。
+#     ★ 用取模而不是自己的倒数计数器: 不额外占一个需要初始化的常量,
+#       且 #now 跨 /reload 连续, 不会因为重载而"卡在某一次不跑"。
+#   【门控】zx.em_on 由 ember/second_one 每秒维护(穿上打、脱下摘);
+#     没人穿余烬时 @a[tag=zx.em_on] 是空集, 这一行零开销。
+#     ⚠️ 副作用: 刚穿上那一秒还没打上标签, 高频扫描要等下一次秒心跳才开始 ——
+#        与焚舟 zx.im_on 同款, 可接受。
+scoreboard players operation #em_t zx.meta = #now manacore.meta
+scoreboard players operation #em_t zx.meta %= #5 zx.meta
+execute if score #em_t zx.meta matches 0 as @a[tag=zx.em_on] at @s run function sweetdream:equipment/armor/ember/scan_one
 
 # 焱(2026-10-08): 「视为金甲」—— 每刻掐掉猪灵挑"不穿金甲的人"的那条通道
 #   【必须每刻】猪灵的 NEAREST_TARGETABLE_PLAYER_NOT_WEARING_GOLD 记忆由
@@ -314,7 +391,9 @@ execute as @a[scores={zx.fr_t=1..}] at @s run function sweetdream:equipment/staf
 execute as @a[scores={zx.pl_t=1..}] at @s run function sweetdream:equipment/staff/polarized_light/beam
 
 # 偏振光超限(批 G): 三道光线的伤害节奏是"每 0.5 秒", 每秒入口跟不上 ——
-#   由这里每刻推 10 刻闸(half), 到闸跑一次 tick(锁 3 目标/伤害/缓慢Ⅲ/倒计时)。
+#   由这里每刻推闸(half): 每 10 刻结算一次(锁 3 目标/伤害/缓慢Ⅲ), 每 20 刻再扣
+#   1 秒(★ 倒计时按真实时间扣, 不在 tick 里扣 —— 坑 120: 在 tick 里扣会把"秒"当
+#   "半秒", pl_t=5 只撑 2.5 秒, 与 lore 的"持续 5 秒"差一半)。
 #   基础版仍走 second(zx.pl_ol=0), 两边互不见面, 不会双倍伤害。
 execute as @a[scores={zx.pl_t=1..,zx.pl_ol=1}] at @s run function sweetdream:equipment/staff/polarized_light/half
 

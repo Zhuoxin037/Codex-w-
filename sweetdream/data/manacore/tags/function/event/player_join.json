@@ -1,5 +1,6 @@
 {
   "values": [
-    "sweetdream:equipment/axe/thunderclap/join_clear"
+    "sweetdream:equipment/axe/thunderclap/join_clear",
+    "sweetdream:event/player_join"
   ]
 }

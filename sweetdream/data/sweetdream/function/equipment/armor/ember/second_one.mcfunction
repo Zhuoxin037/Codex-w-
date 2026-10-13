@@ -2,11 +2,15 @@
 # sweetdream:equipment/armor/ember/second_one —— 单个玩家的余烬结算
 # ------------------------------------------------------------
 # 【执行者】玩家   【执行位置】玩家脚下
-# 【每秒做三件事】
+# 【每秒做两件事】(2026-10-12 起)
 #   ① 认装备: 穿余烬 -> zx.em_on
 #   ② 魔力上限 +240: 和 zx.em_mana 账本求差, 穿上加 240, 脱下减 240
 #      （这就是文案里的“自身魔力值上限+240”）
-#   ③ 燃烧边沿检测: 只有穿着余烬才做, 没穿就到此为止
+# 【★ 燃烧边沿检测已挪走 ★】它原来挂在每秒, 2026-10-12 用户反馈
+#   "每次燃烧结束都不能及时上流火/夜火" 并拍板"更密集的周期" ⇒ 现在由
+#   core/tick **每 5 刻**跑一次 scan_one(延迟 0~1 秒降到 0~0.25 秒)。
+#   ①② 是账本不是手感, 留在每秒(高频跑纯属浪费)。
+#   ⚠️ zx.em_on 现在是 scan_one 的门控, **不能删** —— 删了高频扫描对谁都不跑。
 # 【★ 必须 lib/uuid ★】写面板用的是 zx:data self.uuid, 而 zx:data self 是
 #   全局节点; 不重新取一次, 可能带着上一个人的 uuid 去写面板。
 # ============================================================
@@ -26,20 +30,6 @@ scoreboard players operation #em_diff zx.meta = #em_want zx.meta
 scoreboard players operation #em_diff zx.meta -= @s zx.em_mana
 execute unless score #em_diff zx.meta matches 0 run function sweetdream:equipment/armor/ember/apply_mana
 
-# ③ 没穿余烬 -> 不做燃烧边沿检测
-execute unless entity @s[tag=zx.em_on] run return 0
-
-# ④ 旧标记里, 已经不再燃烧的 -> 流火/夜火
-#    ⚠️ 检测扫描用 hit_scan_exclude, 不用 no_damage: no_damage 把盔甲架/
-#    训练人偶也排掉了, 结果就是“人偶明明在烧, 余烬看不到”。
-scoreboard players set #em_conv zx.meta 0
-execute as @e[type=!#sweetdream:hit_scan_exclude,tag=zx.em_burn,distance=..9] at @s run function sweetdream:equipment/armor/ember/burned_out
-scoreboard players operation @s zx.em_conv += #em_conv zx.meta
-
-# ⑤ 清掉本秒范围内的旧标记(远处不清, 见 second 顶部注释)
-tag @e[type=!#sweetdream:hit_scan_exclude,tag=zx.em_burn,distance=..9] remove zx.em_burn
-
-# ⑥ 当前还在燃烧的, 打上标记, 给下一秒做边沿检测
-scoreboard players set #em_seen zx.meta 0
-execute as @e[type=!#sweetdream:hit_scan_exclude,distance=..9] at @s run function sweetdream:equipment/armor/ember/watch
-scoreboard players operation @s zx.em_seen += #em_seen zx.meta
+# ③ 到这儿就结束了 —— 燃烧边沿检测不在本函数里, 由 core/tick 每 5 刻
+#    单独调 scan_one(见本文件顶部"燃烧边沿检测已挪走")。
+#    （zx.em_on 标签由上面的 ① 维护, 就是那条高频扫描的门控。）

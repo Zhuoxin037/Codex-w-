@@ -44,6 +44,6 @@ function sweetdream:overlimit/api/mod
 function manacore:api/damage/calc
 
 # ⑤ 装球: dmg = 0(ball/hit 不打伤害), 真正的伤害在 fdmg, 命中后回调结算
-data modify storage zx:work ball set value {dmg:0.0,style:"plain",hit:"sweetdream:equipment/staff/fallen_dream/ball_hit",fdmg:0.0}
+data modify storage zx:work ball set value {dmg:0.0,style:"fallen_dream",hit:"sweetdream:equipment/staff/fallen_dream/ball_hit",fdmg:0.0}
 data modify storage zx:work ball.fdmg set from storage manacore:out r.damage
 function sweetdream:equipment/staff/attack

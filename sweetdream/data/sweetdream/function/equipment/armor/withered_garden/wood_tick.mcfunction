@@ -6,7 +6,7 @@
 #   最大魔力值 ×0.08 的伤害, 若该目标同时附有「渊海」效果则额外造成一次伤害。
 # 【圈两批目标】hit = 5 格内带缓慢效果的; hit2 = hit ∩ 渊海。
 #   两个都是共享临时标签 —— second 逐只朽木原子执行, 不会串。
-# 【"有缓慢效果"的判定】实体 NBT ActiveEffects 列表里出现 minecraft:slowness
+# 【"有缓慢效果"的判定】实体 NBT active_effects 列表里出现 minecraft:slowness(1.20.2+)
 #   (列表按子序列匹配, 任意等级/时长的缓慢都算)。
 # 【到期先死】寿命到点先摘标签再 kill, 当拍不再打 —— 死亡优先, 保守取整。
 # ============================================================
@@ -28,7 +28,7 @@ execute if score @s zx.gw_end <= #now manacore.meta run return 0
 # ② 圈目标(先清上一轮残留)
 tag @e[tag=zx.gd_hit] remove zx.gd_hit
 tag @e[tag=zx.gd_hit2] remove zx.gd_hit2
-execute at @s run tag @e[type=!#sweetdream:no_damage,distance=..5,nbt={ActiveEffects:[{id:"minecraft:slowness"}]}] add zx.gd_hit
+execute at @s run tag @e[type=!#sweetdream:no_damage,distance=..5,nbt={active_effects:[{id:"minecraft:slowness"}]}] add zx.gd_hit
 execute as @e[tag=zx.gd_hit] if entity @s[tag=zx.status.yuanhai] run tag @s add zx.gd_hit2
 
 # ③ 表现(腐朽氛围: 灰烬贴着树身飘 + 孢子绕冠散; 每 2 秒一轮, 量给得省)

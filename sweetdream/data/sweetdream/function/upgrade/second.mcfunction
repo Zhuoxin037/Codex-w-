@@ -17,3 +17,7 @@ execute as @a run function sweetdream:upgrade/armor_apply
 execute as @a run function sweetdream:upgrade/api/cd_tick
 
 function sweetdream:lib/in_restore
+
+# 神经衰弱石(2026-10-12): 攻击速度是"持续型原版属性", 每秒按**主手**对一次账。
+# 放在 in_restore 之后 —— 它不碰 manacore:in arg(只挂属性), 不需要备份窗口。
+execute as @a run function sweetdream:upgrade/held_apply

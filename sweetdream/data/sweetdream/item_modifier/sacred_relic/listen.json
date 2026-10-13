@@ -1,0 +1,7 @@
+{
+  "function": "minecraft:set_enchantments",
+  "enchantments": {
+    "sweetdream:sacred_relic": 1
+  },
+  "add": false
+}

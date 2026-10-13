@@ -79,7 +79,7 @@ execute if items entity @s armor.head *[minecraft:custom_data~{zx:["styx_walk"]}
 
 # ②¾½ 炽天使之翼(副手): 有关**基础攻击力**的技能伤害 +50%。
 #    结算在 seraph_wing/hook_calc(挂 damage_calc, 往加算池的 atk 通道写 50;
-#    "本次技能走不走 atk 通道"由 lib/dmg_add_apply 判)。这里同样只往池子写 50。
+#    没用 atk 通道的技能 seg_atk = 0 ⇒ 自动吃不到)。这里同样只往池子写 50。
 #    判据(副手拿着)必须和 hook_calc 逐字一致, 否则面板的数字就是假的。
 #    ★ 全包第一条"按通道区分"的装备加成 —— 详见 seraph_wing/hook_calc 头注释。
 execute if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["seraph_wing"]}] run function sweetdream:equipment/tool/seraph_wing/scan_mul

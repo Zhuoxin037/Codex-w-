@@ -24,4 +24,8 @@ function sweetdream:lib/num/plain
 execute unless data storage zx:work a{target:""} run function sweetdream:internal/damage/with_from with storage zx:work a
 
 # ③ 表现
+#   ★ 暮光的命中音在**这里**, 不在 projectile/ball/fx_twilight_hit ——
+#     用户要求: 普攻命中本身保持静音, 只有 20% 触发「噬心」这一下才出声。
+#     (音量/音高与原先 fx_twilight_hit 里的一致; 想调改这一行)
 execute as @e[tag=zx.ball_hit,distance=0..] at @s run particle minecraft:witch ~ ~1 ~ 0.4 0.6 0.4 0.03 14 normal
+execute at @e[tag=zx.ball_hit,distance=0..] run playsound minecraft:entity.wither.shoot player @a ~ ~ ~ 0.55 1.2

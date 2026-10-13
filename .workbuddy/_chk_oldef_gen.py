@@ -47,9 +47,10 @@ def disk_lines():
 bad = []
 disk = disk_lines()
 
-# ---- 5 个批量生成器: DEFS = [(uid, label, note, items)] + line(uid,label,note,items) ----
+# ---- 6 个批量生成器: DEFS = [(uid, label, note, items)] + line(uid,label,note,items) ----
 for fn in ('_gen_oldef_e1.py', '_gen_oldef_e2.py',
-           '_gen_oldef_f1.py', '_gen_oldef_f2.py', '_gen_oldef_gh.py'):
+           '_gen_oldef_f1.py', '_gen_oldef_f2.py', '_gen_oldef_gh.py',
+           '_gen_oldef_i1.py'):
     mod = load_mod(fn)
     for (uid, label, note, items) in mod.DEFS:
         want = mod.line(uid, label, note, items).rstrip('\n')
@@ -88,7 +89,8 @@ for uid, want in mod.NEW.items():
 # ---- 未被任何生成器覆盖的条目: 只提示(手写的), 不算问题 ----
 covered = set()
 for fn in ('_gen_oldef_e1.py', '_gen_oldef_e2.py',
-           '_gen_oldef_f1.py', '_gen_oldef_f2.py', '_gen_oldef_gh.py'):
+           '_gen_oldef_f1.py', '_gen_oldef_f2.py', '_gen_oldef_gh.py',
+           '_gen_oldef_i1.py'):
     covered |= {d[0] for d in load_mod(fn).DEFS}
 covered |= set(load_mod('_fix_oldef.py').NEW)
 manual = sorted(set(disk) - covered)

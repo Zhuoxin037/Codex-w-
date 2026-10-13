@@ -40,7 +40,7 @@ def _body(p):
 
 
 # 所有"直接写 equipment/*/give.mcfunction"的生成器都要登记在这里。
-GENERATORS = ('_gen_batch5.py', '_gen_batch6.py')
+GENERATORS = ('_gen_batch5.py', '_gen_batch6.py', '_gen_batch7.py')
 
 
 def main():
@@ -55,15 +55,23 @@ def main():
             gen.BASE = base
             gen.main()
         # 规范化(与真实流程一致: 生成器 -> lore_fmt --write)
+        # ★ 必须**迭代到不动点**: lore_fmt 对个别文案一遍折不完(折行会改变后续行的
+        #   起点 -> 第二遍才稳定; 实例 2026-10-12 缺月 crescent 需要 2 遍), 而真实流程
+        #   是"跑到 0 变化为止"(project 约定: lore_fmt --write 连跑两遍)。
+        #   只跑一遍会把"还没收敛"误判成"生成器 ↔ 磁盘漂移"。
         for dirpath, _dirs, files in os.walk(base):
             for f in files:
                 if not f.endswith('.mcfunction'):
                     continue
                 p = os.path.join(dirpath, f)
-                src = io.open(p, encoding='utf-8').read()
-                new, _n = lf.patch_text(src, 37)
-                if new != src:
+                for _ in range(20):
+                    src = io.open(p, encoding='utf-8').read()
+                    new, _n = lf.patch_text(src, 37)
+                    if new == src:
+                        break
                     io.open(p, 'w', encoding='utf-8', newline='\n').write(new)
+                else:
+                    raise SystemExit('[错误] lore_fmt 20 遍仍未收敛: %s' % p)
 
         # 逐件对比
         n = 0
@@ -94,7 +102,7 @@ def main():
         for rel, why in problems:
             print('  [漂移] %-44s %s' % (rel, why))
         if problems:
-            print('\n★ 处理: 把改动补进对应生成器(.workbuddy/_gen_batch5.py 或 _gen_batch6.py),')
+            print('\n★ 处理: 把改动补进对应生成器(_gen_batch5.py / _gen_batch6.py / _gen_batch7.py),')
             print('  重跑生成器 + lore_fmt, 再跑本脚本确认为 0。否则下次重跑生成器会把磁盘上的改动**静默打掉**。')
         return 1 if problems else 0
     finally:

@@ -102,3 +102,21 @@ data modify storage zx:config updef."night_vision" set value {label:"夜视仪",
 data modify storage zx:config updef."life_up_a" set value {label:"生命提升·α",cat:"armor",cat2:"",cat3:"",cat4:"",dmg:0.0,mana:0.0,cd:0.0,mm:0,mr:0,mh:0,mhp:0.0,ar:0,at:0,hp:2,cdex:0,tc:0,boil:0,nv:0,rg:0,ms:{pct:0,every:0},tier:1,series:"life_up",req:"",note:"最大生命值 +2"}
 data modify storage zx:config updef."life_up_b" set value {label:"生命提升·β",cat:"armor",cat2:"",cat3:"",cat4:"",dmg:0.0,mana:0.0,cd:0.0,mm:0,mr:0,mh:0,mhp:0.0,ar:0,at:0,hp:6,cdex:0,tc:0,boil:0,nv:0,rg:0,ms:{pct:0,every:0},tier:2,series:"life_up",req:"life_up_a",note:"最大生命值 +6"}
 data modify storage zx:config updef."life_up_o" set value {label:"生命提升·Ω",cat:"armor",cat2:"",cat3:"",cat4:"",dmg:0.0,mana:0.0,cd:0.0,mm:0,mr:0,mh:0,mhp:0.0,ar:0,at:0,hp:10,cdex:0,tc:0,boil:0,nv:0,rg:1,ms:{pct:0,every:0},tier:3,series:"life_up",req:"life_up_b",note:"最大生命值 +10, 常态再生Ⅰ"}
+
+# ============================================================
+# ---- 神经衰弱(剑 / 斧) α -> β -> Ω: 攻击速度 +0.1 / +0.2 / +0.4 (2026-10-12) ----
+# ------------------------------------------------------------
+# 【新增字段】aspd —— 攻击速度的**固定值**加算(0.10 = +0.1), 和 dmg 一样是小数。
+#   ★ 为什么和已有的 ar/at/hp 不同"类": 那三个是**盔甲**向、穿在身上就一直有效;
+#     aspd 是**手持武器**向、且改的是原版**持续型**属性(mincraft:attack_speed),
+#     所以落地方式完全不同 —— 见 upgrade/held_apply(每秒按主手重挂)。
+#   ★ 单位: 存进计分板时 ×100(0.1 -> 10), 和 dmg/mana/cd 的定点化同一套。
+#   ★ 吃分级桶: series=neuro, 同系只认最高 tier(β 的 +0.2 是"这一级的完整效果",
+#     不是"在 α 的 0.1 上再加 0.2")。req 链 = α -> β -> Ω, 前置必须**同系且正好低一级**。
+# 【能装到哪】剑 / 斧(cat + cat2), 即 custom_data.zx 含 "sword" 或 "axe" 的武器。
+# ============================================================
+
+# ---- 神经衰弱(剑 / 斧) α -> β -> Ω: 攻击速度 ----
+data modify storage zx:config updef."neuro_a" set value {label:"神经衰弱·α",cat:"sword",cat2:"axe",cat3:"",cat4:"",dmg:0.0,mana:0.0,cd:0.0,mm:0,mr:0,mh:0,mhp:0.0,ar:0,at:0,hp:0,cdex:0,aspd:0.10,tc:0,boil:0,nv:0,rg:0,ms:{pct:0,every:0},tier:1,series:"neuro",req:"",note:"攻击速度 +0.1"}
+data modify storage zx:config updef."neuro_b" set value {label:"神经衰弱·β",cat:"sword",cat2:"axe",cat3:"",cat4:"",dmg:0.0,mana:0.0,cd:0.0,mm:0,mr:0,mh:0,mhp:0.0,ar:0,at:0,hp:0,cdex:0,aspd:0.20,tc:0,boil:0,nv:0,rg:0,ms:{pct:0,every:0},tier:2,series:"neuro",req:"neuro_a",note:"攻击速度 +0.2"}
+data modify storage zx:config updef."neuro_o" set value {label:"神经衰弱·Ω",cat:"sword",cat2:"axe",cat3:"",cat4:"",dmg:0.0,mana:0.0,cd:0.0,mm:0,mr:0,mh:0,mhp:0.0,ar:0,at:0,hp:0,cdex:0,aspd:0.40,tc:0,boil:0,nv:0,rg:0,ms:{pct:0,every:0},tier:3,series:"neuro",req:"neuro_b",note:"攻击速度 +0.4"}

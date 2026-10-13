@@ -39,10 +39,12 @@ execute if data storage zx:look saved_in run data modify storage manacore:in arg
 execute if data storage zx:look saved_in run data remove storage zx:look saved_in
 
 # ---- 冷却: 看"手上拿的那把武器"还剩多久 ----
-# 【O02】skill 字段由 cache 每秒缓存(zx:look cache.skill), 这里只读存储。
-#   空手 / 拿别的道具时 cache.skill 不存在 ⇒ 走下面的守卫, 显示 0(和原来一致)。
+# 【O02】skill 字段由 cache 每秒缓存(zx:look cache."<uuid>".skill), 这里只读存储。
+# 【★ N07 修】必须读**自己 uuid 那份** —— 原来读全局单格, 多人开面板时会读到
+#   别人手上的技能 id(拿它去查自己的冷却路径 ⇒ 显示无关技能/恒 0)。
+#   空手 / 拿别的道具时该键不存在 ⇒ 走下面的守卫, 显示 0(和原来一致)。
 data remove storage zx:work a.skill
-execute if data storage zx:look cache.skill run data modify storage zx:work a.skill set from storage zx:look cache.skill
+$execute if data storage zx:look cache."$(uuid)".skill run data modify storage zx:work a.skill set from storage zx:look cache."$(uuid)".skill
 
 scoreboard players set #v_cd zx.meta 0
 scoreboard players set #v_end zx.meta 0
@@ -69,8 +71,10 @@ data modify storage zx:look xline set value [{"text":""}]
 # 【O02】6 次 equip_scan 挪进 cache(每秒) —— 这里只把缓存的名单搬进 zx:work eq。
 #   ↓↓↓ 原实现(每刻 6×"if data entity + data modify from entity" = 最多 12 次全玩家
 #   NBT 序列化)整段保留在 cache.mcfunction 里, 这里只读缓存:
+#   【★ N07 修】读**自己 uuid 那份**(cache."<uuid>".eq) —— 原来读全局单格, 多人时
+#   会穿上别人身上的装备(装备专属段串人)。
 data remove storage zx:work eq
-execute if data storage zx:look cache.eq run data modify storage zx:work eq set from storage zx:look cache.eq
+$execute if data storage zx:look cache."$(uuid)".eq run data modify storage zx:work eq set from storage zx:look cache."$(uuid)".eq
 scoreboard players set #ly_first zx.meta 1
 # ---- 装备专属「段」: 值不是"常数上限"的机制, 走各自的段函数 ----
 # 【为什么要这个】layer 表只会画「标签 当前值/上限」, 而且上限 `max` 是**写死的常数**

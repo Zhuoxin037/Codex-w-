@@ -60,7 +60,10 @@ data modify storage manacore:in arg set value {uuid:"",id:"sweetdream:polarized_
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/formation/create
 
-# ⑥ 点火: 光束状态 5 秒(基础版每秒由 second 驱动 tick; 超限版每 0.5 秒由 core/tick 驱动)
+# ⑥ 点火: 光束状态 5 秒。★ zx.pl_t 的单位**恒为秒**(坑 120):
+#   基础版由 second 每 20 刻调 tick 一次 + 扣 1 秒(共 5 次结算);
+#   超限版由 core/tick 的 half 每 10 刻调 tick 一次(共 10 次结算)、每 20 刻扣 1 秒
+#   —— 两头都是真的 5 秒, 只有"结算节奏"不同(1 秒 / 0.5 秒)。
 scoreboard players set @s zx.pl_t 5
 scoreboard players set @s zx.pl_ct 0
 

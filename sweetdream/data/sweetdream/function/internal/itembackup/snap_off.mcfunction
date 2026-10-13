@@ -1,6 +1,7 @@
 # ============================================================
-# sweetdream:internal/itembackup/snap_off —— 玩家副手 -> zx:ret 快照(宏 {uuid})
+# sweetdream:internal/itembackup/snap_off —— 玩家副手 -> zx:ret **暂存区**(宏 {uuid})
 # ------------------------------------------------------------
+# 【★ A02(2026-10-11 三审): 快照落"暂存区" stage, 不落"待归还"】(同 snap_main)
 # 【为什么必须中转盔甲架】见 snap_main 头部(坑 95): 玩家的副手物品同样
 #   不在 equipment 复合(实测 playerdata: equipment 只存穿戴盔甲),
 #   `from entity @s equipment.offhand` = 路径不存在 ⇒ 静默失败。
@@ -17,8 +18,8 @@ execute at @s run summon minecraft:armor_stand ~ ~ ~ {Tags:["zx.snap_tmp"],Marke
 # ③ 玩家副手 -> 临时架主手
 item replace entity @e[tag=zx.snap_tmp,limit=1] weapon.mainhand from entity @s weapon.offhand
 
-# ④ 临时架(生物) -> 存储
-$data modify storage zx:ret p."$(uuid)".offhand set from entity @e[tag=zx.snap_tmp,limit=1] equipment.mainhand
+# ④ 临时架(生物) -> 存储暂存区
+$data modify storage zx:ret p."$(uuid)".stage.offhand set from entity @e[tag=zx.snap_tmp,limit=1] equipment.mainhand
 
 # ⑤ 收尾
 kill @e[tag=zx.snap_tmp]

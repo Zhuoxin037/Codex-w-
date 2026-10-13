@@ -14,3 +14,7 @@ execute if entity @s[tag=zx.em_burn] run tellraw @a[tag=zx.em_dbg] [{"text":"   
 execute unless entity @s[tag=zx.em_burn] run tellraw @a[tag=zx.em_dbg] [{"text":"      余烬边沿标记: ","color":"gray"},{"text":"无","color":"red"}]
 execute if entity @s[tag=zx.status.liuhuo] run tellraw @a[tag=zx.em_dbg] [{"text":"      流火","color":"gold"}]
 execute if entity @s[tag=zx.status.yehuo] run tellraw @a[tag=zx.em_dbg] [{"text":"      夜火","color":"dark_purple"}]
+# 双状态时"补流火"的节流闸: 这是该生物下次可补的 tick 时刻, 和 #now 比 ——
+#   gate <= #now 才会补(见 ember/top_up)。没打过闸的目标显示 0(可以补)。
+scoreboard players add @s zx.em_gate 0
+execute if entity @s[tag=zx.status.yehuo] run tellraw @a[tag=zx.em_dbg] [{"text":"      下次可补流火(gate/#now): ","color":"gray"},{"score":{"name":"@s","objective":"zx.em_gate"},"color":"yellow"},{"text":" / ","color":"dark_gray"},{"score":{"name":"#now","objective":"manacore.meta"},"color":"white"}]

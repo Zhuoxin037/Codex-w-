@@ -5,7 +5,10 @@
 # 【入参】zx:work ball {dmg, style}  —— 调用者只写这两个就够了
 #   dmg   命中时打出的伤害。**发射那一刻就定死**, 之后你换装/嗑药都不影响它,
 #         因为它是"跟着球飞的一个数字", 不是命中时再算一遍。
-#   style 外观代号(现在支持 "wind"; 不写或者不认识就走朴素白球)
+#   style 外观代号 = **法杖自己的 zx[0]**(apocalypse / begonia / chime …)。
+#     每把法杖都有两份: fx_<style>(飞行拖尾) 与 fx_<style>_hit(命中表现),
+#     由 .workbuddy/_gen_staff_particles.py 生成 —— 改外观改生成器, 别手改。
+#     不写 / 写了个不认识的 -> 走 fx_plain(朴素白球), 不会什么都不出。
 # 【执行者】必须是玩家(要取 @s 的 uuid、UUID 四个整数、视线朝向)
 #
 # 【载体为什么用 minecraft:marker】

@@ -30,6 +30,9 @@ scoreboard players set #up_tc zx.meta 0
 scoreboard players set #up_boil zx.meta 0
 scoreboard players set #up_nv zx.meta 0
 scoreboard players set #up_rg zx.meta 0
+# ★ 2026-10-12 扩: 神经衰弱(攻速 aspd) —— 武器向, 盔甲不输出, 但 bonus_take 会读/减/加它,
+#   不归零会让调试读数莫名其妙(和上面 dmg/mana/cd 同理)。
+scoreboard players set #up_aspd zx.meta 0
 data remove storage zx:work up_val
 
 data modify storage zx:work sl.slot set value "head"

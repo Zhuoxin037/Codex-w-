@@ -97,7 +97,17 @@ from pathlib import Path
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
 ROOT = Path(r'D:\数据包')
 PACKS = ['manacore-1.0.0', 'sweetdream']
-RP = ROOT / 'sweetdream_rp'
+# 【老包 sweetdream_rp/ 已经不在了】(2026-10-12 发现时只剩构建产物
+#   sweetdream_rp_完整版/) ⇒ 依次回退; 一个都找不到时 RP 为 None,
+#   下面所有跟资源包有关的检查会**跳过并明确报告**(绝不静默丢检查)。
+RP = None
+for _cand in ('sweetdream_rp', 'sweetdream_rp_完整版', 'sweetdream_rp_原版风'):
+    _p2 = ROOT / _cand
+    if (_p2 / 'assets').exists():
+        RP = _p2
+        break
+if RP is None:
+    print('[WARN] 找不到任何资源包目录(sweetdream_rp* —— 资源包相关检查被跳过)')
 
 functions, nsdirs = {}, []
 for pack in PACKS:
@@ -221,7 +231,9 @@ R = {k: [] for k in ['fn', 'tag', 'macro', 'sel', 'adv', 'json', 'rp', 'sched', 
                      'boltseen', 'selfclr', 'mqgate', 'modelrot', 'storpath', 'attrprefix', 'cdstop',
                      'freezegate', 'olfit', 'eyedist', 'tgvocab', 'regress',
                      'datarm', 'datapath', 'mergelist', 'noexecute', 'intovf',
-                     'norun', 'placeholder', 'selfield', 'airpred', 'itempath', 'criterion']}
+                     'norun', 'placeholder', 'selfield', 'airpred', 'itempath', 'criterion',
+                     'resetset', 'tagmacro', 'dmgseg', 'creative', 'pldur', 'fdsnap', 'upfield',
+                     'crossshot', 'ddpair', 'embertop']}
 
 # 技能倍率的三条通道(manacore/internal/damage/calc) —— 字段名 -> 口径表里的标记
 CH_FIELD = {'max_mana_mul': 'mm', 'attack_mul': 'atk', 'other_mul': 'oth',
@@ -858,6 +870,128 @@ for f in (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'enchantment').glob('*.j
                                '补一条 affected=damaging_entity 的 run_function(hook_arrow), '
                                'hook_victim 开头 "unless 有 _arr 标签 return 0" 拦掉近战'))
 
+# 42b) 弩的"射击扣蓝"契约 —— 有 post_attack 附魔的弩必须有配套射击进度 + shot, 且真扣蓝。
+#   真实事故 2026-10-12(用户实测): 「电弧」发射**不消耗魔力**。根因 = 它是唯一一把
+#   **只有附魔回调**、没有"射击进度 / shot"的弩 —— 其余 5 把都是
+#     advancement(shot_crossbow) -> rewards.function = equipment/bow/<id>/shot -> 扣蓝;
+#   电弧 lore 上写着「魔力 30」却从来没扣过, 属"整整漏掉一环"的实现遗漏, 加载期零日志。
+#   判据(以弩附魔 <id>.json 为锚, supported_items 含 crossbow):
+#     ① advancement/equipment/bow/<id>.json 存在, 且 trigger = shot_crossbow;
+#     ② 它的 rewards.function = sweetdream:equipment/bow/<id>/shot;
+#     ③ 那个 shot 里调了 manacore:api/mana/consume(真的扣蓝)。
+for f in (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'enchantment').glob('*.json'):
+    try:
+        j = json.loads(f.read_text(encoding='utf-8'))
+    except Exception:
+        continue
+    eff = (j.get('effects') or {}).get('minecraft:post_attack')
+    if not eff:
+        continue
+    sup = j.get('supported_items') or j.get('primary_items') or ''
+    if 'crossbow' not in str(sup):
+        continue
+    cid = f.stem
+    rel = f.relative_to(ROOT).as_posix()
+    advf = (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'advancement' / 'equipment' / 'bow'
+            / (cid + '.json'))
+    shotf = (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function' / 'equipment' / 'bow'
+             / cid / 'shot.mcfunction')
+    if not advf.exists():
+        R['crossshot'].append((rel,
+                               '弩附魔「%s」没有配套射击进度 equipment/bow/%s.json -> 没有 shot 就'
+                               '永远不扣魔力(lore 写着「魔力 N」却从不扣; 2026-10-12 电弧事故)' % (cid, cid)))
+        continue
+    try:
+        aj = json.loads(advf.read_text(encoding='utf-8'))
+    except Exception as e:
+        R['crossshot'].append((str(advf.relative_to(ROOT).as_posix()), '进度 JSON 解析失败: %s' % e))
+        continue
+    trig = {c.get('trigger') for c in (aj.get('criteria') or {}).values() if isinstance(c, dict)}
+    rw = (aj.get('rewards') or {}).get('function')
+    want_rw = 'sweetdream:equipment/bow/%s/shot' % cid
+    if 'shot_crossbow' not in trig:
+        R['crossshot'].append((str(advf.relative_to(ROOT).as_posix()),
+                               '射击进度的触发器必须是 shot_crossbow(现在: %s)' % (sorted(trig) or '无')))
+    if rw != want_rw:
+        R['crossshot'].append((str(advf.relative_to(ROOT).as_posix()),
+                               '射击进度的 rewards.function 应为 %s(现在: %s)' % (want_rw, rw)))
+    if not shotf.exists():
+        R['crossshot'].append((str(shotf.relative_to(ROOT).as_posix()),
+                               '弩的 shot 函数不存在 -> 射击不扣蓝'))
+    else:
+        # 只看**非注释行** —— 否则把 `function manacore:api/mana/consume` 注释掉
+        # (行首加 #)时, 子串仍在, 规则会被"假满足"放过去。
+        body = [l for l in shotf.read_text(encoding='utf-8').splitlines()
+                if l.strip() and not l.strip().startswith('#')]
+        if not any('manacore:api/mana/consume' in l for l in body):
+            R['crossshot'].append((str(shotf.relative_to(ROOT).as_posix()),
+                                   'shot 里没有调用 manacore:api/mana/consume -> 射击不消耗魔力'
+                                   '(2026-10-12 电弧事故)'))
+
+# 42c) 升级字段的"减旧/加回成对 + 累加器归零"契约 (2026-10-12 批 9 神经衰弱)
+#   背景: bonus_take 的"同系取最高 tier"靠三段 ①减旧贡献 ②整条换进桶 ③加回新贡献。
+#   给一个新数值字段(如 aspd)时, 必须同时做两件事:
+#     (a) 在 ①③ 两段**各恰好**出现一次 —— 少一遍就静默算错: 只加不减 -> 反复换高阶时
+#         旧值减不掉(越加越多); 只减不加 -> 敲上去反而变弱;
+#     (b) bonus_held / bonus_armor 里把它的累加器 `#up_<x>` 归零 —— 不归零则每调用
+#         一次就攒一次, 数值无限增长(武器向的 bonus_held 每秒跑一次, 秒秒变大)。
+#   这两类加载期都**零日志**。真源 = bonus_take 里 `data get storage zx:work
+#   up_val."$(series)".<field>` 这一句(字段是它说了算, 不是注释/文档), 累加器取紧随
+#   其后那行的 `scoreboard players operation #up_<acc> …`。
+_bt = functions.get('sweetdream:upgrade/api/bonus_take')
+if _bt is not None:
+    # 只看**非注释行** —— 否则把某段(比如 ① 的 -= )注释掉时子串仍在, 规则会被"假满足"。
+    _bt_lines = [l for l in _bt.read_text(encoding='utf-8').splitlines()
+                 if l.strip() and not l.lstrip().startswith('#')]
+    _re_get = re.compile(r'data\s+get\s+storage\s+zx:work\s+up_val\."\$\(series\)"\.([\w.]+)')
+    _re_op = re.compile(r'scoreboard\s+players\s+operation\s+#up_(\w+)\s+zx\.meta\s+(-=|\+=)\s+#up_o\s+zx\.meta')
+    _f_cnt = {}       # field -> {'-=': n, '+=': n}  (只收"配得上累加器"的字段)
+    _acc_of = {}      # 累加器名 -> 字段
+    for _i, _l in enumerate(_bt_lines):
+        _mg = _re_get.search(_l)
+        if not _mg:
+            continue
+        _fd = _mg.group(1)
+        # 紧跟其后那行必须是 `scoreboard players operation #up_<acc> … #up_o`;
+        # 没有(如 `tier` 这种只用来比较、不进账本的字段) => 不是"数值贡献字段", 跳过。
+        for _j in (_i + 1, _i + 2):
+            if _j >= len(_bt_lines):
+                break
+            _mo = _re_op.search(_bt_lines[_j])
+            if _mo:
+                _f_cnt.setdefault(_fd, {'-=': 0, '+=': 0})[_mo.group(2)] += 1
+                _acc_of[_mo.group(1)] = _fd
+                break
+    _rel_bt = _bt.relative_to(ROOT).as_posix()
+    for _fd in sorted(_f_cnt):
+        _c = _f_cnt[_fd]
+        if _c['-='] != 1 or _c['+='] != 1:
+            R['upfield'].append((_rel_bt,
+                                 '升级字段 "%s" 的"减旧/加回"不成对(现在 -=%d / +=%d, 各要 1) '
+                                 '-> 同系换高阶时账本算错(静默, 无日志)'
+                                 % (_fd, _c['-='], _c['+='])))
+    _bh = functions.get('sweetdream:upgrade/api/bonus_held')
+    if _bh is not None:
+        _t = '\n'.join(l for l in _bh.read_text(encoding='utf-8').splitlines()
+                       if l.strip() and not l.lstrip().startswith('#'))
+        for _acc in sorted(_acc_of):
+            if not re.search(r'scoreboard\s+players\s+set\s+#up_%s\s+zx\.meta\s+0'
+                             % re.escape(_acc), _t):
+                R['upfield'].append((_bh.relative_to(ROOT).as_posix(),
+                                     'bonus_take 会累加 #up_%s(字段 %s), 但 bonus_held 没把它归零 '
+                                     '-> 每调用一次攒一次, 数值无限增长(静默)'
+                                     % (_acc, _acc_of[_acc])))
+    _ba = functions.get('sweetdream:upgrade/api/bonus_armor')
+    if _ba is not None:
+        _t = '\n'.join(l for l in _ba.read_text(encoding='utf-8').splitlines()
+                       if l.strip() and not l.lstrip().startswith('#'))
+        _outs = set(re.findall(r'run\s+scoreboard\s+players\s+get\s+#up_(\w+)', _t))
+        _zero = set(re.findall(r'scoreboard\s+players\s+set\s+#up_(\w+)\s+zx\.meta\s+0', _t))
+        for _acc in sorted(_outs - _zero):
+            R['upfield'].append((_ba.relative_to(ROOT).as_posix(),
+                                 'bonus_armor 输出了 #up_%s 却没在开头归零 -> 残留上一件盔甲的值(静默)'
+                                 % _acc))
+
 # 进度 / JSON / 资源包
 self_rev = {}   # 自撤销型进度 -> 其奖励函数(判据同 5): 奖励函数首行 revoke 自己那条
 for pack in PACKS:
@@ -1165,7 +1299,7 @@ for f in (ROOT / 'sweetdream' / 'data').rglob('*.mcfunction'):
 #   连带看: ② from 必须严格小于 to(退化的元素会被静默丢弃)、③ 取值域 [-16,32]、
 #   ④ uv 必须是 4 个数。
 LEGAL_ROT = {-45.0, -22.5, 0.0, 22.5, 45.0}
-for ns in (RP / 'assets').iterdir():
+for ns in ((RP / 'assets').iterdir() if RP else []):
     if not ns.is_dir() or not (ns / 'models').exists():
         continue
     for f in (ns / 'models').rglob('*.json'):
@@ -2786,7 +2920,7 @@ for _urq_id, _urq_d in sorted(_urq_def.items()):
 #   —— 见 equipment/armor/immolate/check_burn 的成熟写法。
 #   真实事故 2026-10-07: equipment/sword/tinder/burn 写了
 #   `unless data entity @s {Fire:1..}` ⇒ 整个 burn 不加载(用户报"点火没反应")。
-_nbtrange = re.compile(r'[\{,\[]\s*[A-Za-z_][A-Za-z0-9_.]*\s*:\s*(?:-?\d+\s*\.\.|\.\.\s*-?\d+)')
+_nbtrange = re.compile(r'[\{,\[]\s*[A-Za-z_][A-Za-z0-9_.]*\s*:\s*(?:-?\d+[bBsSlLfFdD]?\s*\.\.|\.\.\s*-?\d+[bBsSlLfFdD]?)')
 for _fk in sorted(functions):
     for _ln, _ls in enumerate(ftext(_fk).split('\n'), 1):
         _s = _ls.strip()
@@ -3137,6 +3271,382 @@ if _tg_give_root.exists():
                         '词表见 .workbuddy/_tags_data.py; 私有资源名(熔浆/燃灰/酒浆…)不该进标签。: %s'
                         % (_t, _ls.strip()[:70])))
 
+# ---- 84) resetset: player_reset 的"逐项清账清单"必须 == 源码声明的 zx.* 集合(双向) ----
+#   审查 N06(2026-10-11): 旧写法 `scoreboard players reset @s`(**不带 objective**)
+#   = 清该玩家在**所有**计分项上的分 —— 连别的数据包的分一起清。本包目录里就住着
+#   第二个数据包 naturewind(nw.anim / nw.cast_t) ⇒ 现场可证被误清(不是假想)。
+#   现在清单由 .workbuddy/_gen_reset_scores.py 从**源码**生成(单一真源), 本条守门:
+#     · 源码声明了 zx.X 却不在清单 -> "漏清"(账本残留, 装备被动"应加的不加回", 静默)
+#     · 清单里有 zx.Y 但源码没声明 -> 拼错 / 已删(白清, 且掩盖真实问题)
+#     · 又写回"不带 objective"的全清 -> 直接报(跨包误伤回来)
+_reset_fp = (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function' / 'event'
+             / 'player_reset.mcfunction')
+if not _reset_fp.exists():
+    R['resetset'].append((str(_reset_fp), 0,
+                          'N06: 清账清单文件不见了(player_first_join 也依赖它)'))
+else:
+    _declared_zx = set()
+    for _pack in ('manacore-1.0.0', 'sweetdream'):
+        for _p in (ROOT / _pack / 'data').rglob('*.mcfunction'):
+            try:
+                _t = _p.read_text(encoding='utf-8', errors='ignore')
+            except Exception:
+                continue
+            for _m in obj_add_re.finditer(_t):
+                if _m.group(1).startswith('zx.'):
+                    _declared_zx.add(_m.group(1))
+    _rtxt = _reset_fp.read_text(encoding='utf-8', errors='ignore')
+    _listed_zx = set(m.group(1) for m in re.finditer(
+        r'scoreboard\s+players\s+reset\s+@s\s+(zx\.[A-Za-z0-9_.]+)', _rtxt))
+    for _n in sorted(_declared_zx - _listed_zx):
+        R['resetset'].append((str(_reset_fp), 0,
+            'N06 漏清: 源码里声明了 %s, 但本清单没有 reset 它 —— 重置后该账本残留, '
+            '装备被动"应加的不加回"(静默)。改法: 重跑 '
+            '.workbuddy/_gen_reset_scores.py --write' % _n))
+    for _n in sorted(_listed_zx - _declared_zx):
+        R['resetset'].append((str(_reset_fp), 0,
+            'N06 多清: 清单 reset 了 %s, 但全仓没有任何 `scoreboard objectives add` '
+            '声明它 —— 名字拼错 / 该计分项已被删, 白清且掩盖真实问题。' % _n))
+    if not _listed_zx:
+        R['resetset'].append((str(_reset_fp), 0,
+            'N06: 清单是空的 —— 命令段应由 _gen_reset_scores.py 生成, 别留下空文件'))
+    for _i, _l in enumerate(_rtxt.split('\n'), 1):
+        if _l.strip().startswith('#'):
+            continue
+        if re.fullmatch(r'scoreboard\s+players\s+reset\s+@s', _l.strip()):
+            R['resetset'].append((str(_reset_fp), _i,
+                'N06 回归: 又写回了"不带 objective"的全清 `scoreboard players reset @s` '
+                '—— 会连别的数据包(naturewind 的 nw.*)的分数一起清掉。'))
+
+# ---- 84b) Q02(2026-10-11 四审): player_reset 的尾标记必须存在 ----
+#   为什么单开一条: 上面的 _REGRESS 循环把**注释行整个滤掉**了
+#   (`if not l.strip().startswith('#')`) ⇒ 任何"锚点是注释"的 must 都永远匹配不到,
+#   看着像锁、其实是死锁。这里直接读原文。
+#   尾标记的作用: _gen_reset_scores.py 只托管「两个标记之间」的清单, 尾标记之下的
+#   手写区(Q02 的镜像重建调用)不会被覆盖。丢了尾标记 ⇒ 下次重跑生成器会把那段
+#   整段吃掉 ⇒ Q02 静默失效(而且**当场**看不出任何异常)。
+if _reset_fp.exists():
+    if '# @@GEN-SCORES-ABOVE@@' not in _reset_fp.read_text(encoding='utf-8', errors='ignore'):
+        R['resetset'].append((str(_reset_fp), 0,
+            'Q02(四审): 缺尾标记 `# @@GEN-SCORES-ABOVE@@` —— _gen_reset_scores.py 只托管'
+            '"两个标记之间"的清单; 尾标记之下是手写区(清账后的镜像重建 resync_go 就在那里)。'
+            '丢了尾标记, 下次重跑生成器会把那段整段吃掉 ⇒ Q02 静默失效。'))
+
+# ---- 85) dmgseg: D01 口径 B —— "分量级"伤害的三件套必须成对存在 ----
+#   加算池 zx:work add 有**两个消费者**, 走**两套算法**:
+#     · 面板侧 lib/skill_mul/padd_apply : smul_<c> ×(1+add.<c>)   ← 逐通道(本来就是 B)
+#     · 伤害侧 lib/dmg_add_apply       : (Σseg+x) ×(1+Σadd)      ← 汇总(= 旧口径 A)
+#   D01(2026-10-11 用户定 **口径 B**)把伤害侧也改成"逐通道各乘各的分量":
+#       dmg = Σ_i seg_i×(1+add_i) + seg_x      (再 × im)
+#   这要求**三处同时**成立, 缺一个就是"静默算错"(多通道技能数值偏差, 不报错):
+#     ① calc 必须把分量落进 out: r.seg_m/seg_a/seg_o/seg_x 与 r.im;
+#     ② dmg_add_apply 必须按分量级重算(调 mul_pct), 且**不得**再读 zx:work ch
+#        —— 读回 ch 判通道 = 退回旧口径 A(100mm+10atk+炽天使 = 165 而非 115);
+#     ③ dmg_add_put_any(不挑口径: 愿景/共振/桂冠)必须**三条通道各写一份**
+#        —— 分段式下 Σseg_i×(1+X)=整段×(1+X) 才是"技能伤害 +X%"的唯一正确写法
+#        (旧 F14 的"只写一条"只在**汇总式**下成立; 分段式下只写一条 = 其余段吃不到)。
+#   报告验收例: 100mm + 10atk + 炽天使(+50%→atk) = 100 + 15 = **115**。
+_segc_fn = functions.get('manacore:internal/damage/calc')
+_sega_fn = functions.get('sweetdream:lib/dmg_add_apply')
+_segp_fn = functions.get('sweetdream:lib/dmg_add_put_any')
+if _segc_fn is None:
+    R['dmgseg'].append((str(ROOT), 0, 'D01: 找不到 manacore:internal/damage/calc'))
+else:
+    _ct = _segc_fn.read_text(encoding='utf-8', errors='ignore')
+    for _k in ('r.seg_m', 'r.seg_a', 'r.seg_o', 'r.seg_x', 'r.im'):
+        if not re.search(r'storage\s+manacore:out\s+%s\b' % re.escape(_k), _ct):
+            R['dmgseg'].append((_segc_fn, 0,
+                'D01 口径 B: calc 没有把 %s 落进 manacore:out —— dmg_add_apply 读不到'
+                '分量就会按 0/旧值算(静默)。' % _k))
+if _sega_fn is None:
+    R['dmgseg'].append((str(ROOT), 0, 'D01: 找不到 sweetdream:lib/dmg_add_apply'))
+else:
+    _at_all = _sega_fn.read_text(encoding='utf-8', errors='ignore')
+    _at = '\n'.join(l for l in _at_all.split('\n') if not l.strip().startswith('#'))
+    if 'internal/damage/mul_pct' not in _at:
+        R['dmgseg'].append((_sega_fn, 0,
+            'D01 口径 B: dmg_add_apply 没走 mul_pct —— seg(可达 ~2e9)×(100+add) 会越过 '
+            'int32 回绕(同 N10)。'))
+    for _k in ('r.seg_m', 'r.seg_a', 'r.seg_o', 'r.seg_x'):
+        if not re.search(r'storage\s+manacore:out\s+%s\b' % re.escape(_k), _at):
+            R['dmgseg'].append((_sega_fn, 0,
+                'D01 口径 B: dmg_add_apply 没读 %s(分量级必须有四条分量)。' % _k))
+    if 'zx:work ch' in _at:
+        R['dmgseg'].append((_sega_fn, 0,
+            'D01 回归: dmg_add_apply 又读快照 zx:work ch 判通道 —— 口径 B 靠分量自动筛选'
+            '(seg=0), 读 ch 会把落点退回"整段"(旧口径 A: 100mm+10atk+炽天使 = 165 而非 115)。'))
+if _segp_fn is None:
+    R['dmgseg'].append((str(ROOT), 0, 'D01: 找不到 sweetdream:lib/dmg_add_put_any'))
+else:
+    _pt_all = _segp_fn.read_text(encoding='utf-8', errors='ignore')
+    _pt = '\n'.join(l for l in _pt_all.split('\n') if not l.strip().startswith('#'))
+    _chs = re.findall(r'storage\s+zx:work\s+put\.ch\s+set\s+value\s+"(mm|atk|oth)"', _pt)
+    if sorted(set(_chs)) != ['atk', 'mm', 'oth'] or len(_chs) < 3:
+        R['dmgseg'].append((_segp_fn, 0,
+            'D01 口径 B: dmg_add_put_any 必须给 mm/atk/oth 三条各写一份(分段式下 '
+            'Σseg_i×(1+X)=整段×(1+X)); 现在只写了 %s —— 其余通道吃不到这份"技能伤害 +X%%"'
+            '(静默)。' % (_chs or '无')))
+    if 'zx:work ch' in _pt:
+        R['dmgseg'].append((_segp_fn, 0,
+            'D01 回归: dmg_add_put_any 又读 zx:work ch 挑通路 —— 口径 B 下应固定写满三条。'))
+
+# ---- 86) creative: 创造模式下"使用武器会凭空多一把"(2026-10-11 用户实测) ----
+#   所有带 zx:["itemreplace"] 的武器(剑 20 + 斧 15 + 法杖 12)都靠 consumable 触发技能,
+#   同时也会触发 sweetdream:itembackup/consume —— 那是一套"消耗 → 备份 → 下一 tick 回手"。
+#   这套系统是为**生存/冒险**写的: 那里 consumable 走完后原版会把那一格设成消耗
+#   结果(空), 武器真的没了, 必须补回来。
+#   但**创造模式下原版根本不消耗物品**, 手上那把还在 —— 于是 effect_2 的回手
+#   (首选槽位 → 放不下就依次找任意空格: offhand/hotbar.N/hotbar.0..8/inventory.0..26
+#    共 39 个候选)会把它当成"原格放不下", 往背包某个空格再塞一把同样的武器。
+#   ⇒ 修法 = effect_1 里创造模式直接 return(物品没丢就不用还)。两条都要盯:
+#     ① 门禁本身还在吗?  ② revoke 必须排在门禁**之前** —— 否则进度停在"已完成",
+#        玩家切回生存模式后整个返还链就再也不触发了(静默: 武器用完直接消失)。
+_cr_fn = functions.get('sweetdream:internal/itembackup/effect_1')
+if _cr_fn is None:
+    R['creative'].append((str(ROOT), 0,
+        '创造模式幽灵物品: 找不到 sweetdream:internal/itembackup/effect_1 —— '
+        '返还链的入口没了(武器用完不回手)。'))
+else:
+    _cr = '\n'.join(l for l in _cr_fn.read_text(encoding='utf-8', errors='ignore').split('\n')
+                    if not l.strip().startswith('#'))
+    if 'gamemode=creative' not in _cr:
+        R['creative'].append((_cr_fn, 0,
+            '创造模式幽灵物品: effect_1 没有 gamemode=creative 门禁 —— 创造模式下原版'
+            '不消耗物品, 该格非空 ⇒ effect_2 的 39 个兜底候选会往背包空格再塞一把。'
+            '正解: `advancement revoke` 之后加 '
+            '`execute if entity @s[gamemode=creative] run return fail`。'))
+    else:
+        _i_rev = _cr.find('advancement revoke')
+        _i_gm = _cr.find('gamemode=creative')
+        if _i_rev < 0 or _i_gm < _i_rev:
+            R['creative'].append((_cr_fn, 0,
+                '创造模式幽灵物品: gamemode=creative 门禁排在了 `advancement revoke` '
+                '**之前** —— 创造模式下会直接 return 而**没有撤进度**, 进度永远停在'
+                '"已完成", 玩家切回生存模式后整条返还链静默失效(武器用完直接消失)。'))
+
+# ---- 87) pldur: 偏振光"持续 5 秒"的计时单位(2026-10-11 用户实测: 超限版只撑 2.5 秒) ----
+#   zx.pl_t 的单位恒为"秒", 但超限版的**结算节奏**是"每 0.5 秒"(half 每 10 刻调一次 tick)。
+#   倒计时写在 tick 里 ⇒ 一次 tick 扣 1 = 把"秒"当成"半秒" ⇒ pl_t=5 只撑 **2.5 秒**,
+#   与 lore 写的"该效果持续 5 秒"整整差一半。★ 静默: 不报错、不写日志, 只是光早灭一半。
+#   正解 = **干活频率与持续时间彻底解耦**: tick 只干活, 倒计时由驱动方按真实时间扣
+#   (基础版 second 每 20 刻扣 1; 超限版 half 每 20 刻扣 1, 每 10 刻多结算一次)。
+_pl_rm = re.compile(r'scoreboard\s+players\s+remove\s+@s\s+zx\.pl_t')
+
+
+def _pl_code(_fnk):
+    _f = functions.get(_fnk)
+    if _f is None:
+        return None
+    return '\n'.join(l for l in _f.read_text(encoding='utf-8', errors='ignore').split('\n')
+                     if not l.strip().startswith('#'))
+
+
+_pl_files = {'tick': 'sweetdream:equipment/staff/polarized_light/tick',
+             'second': 'sweetdream:equipment/staff/polarized_light/second',
+             'half': 'sweetdream:equipment/staff/polarized_light/half'}
+_pl = {k: _pl_code(v) for k, v in _pl_files.items()}
+for _k, _v in _pl.items():
+    if _v is None:
+        R['pldur'].append((str(ROOT), 0,
+            '偏振光持续时间: 找不到 %s —— 光束驱动链断了一环(技能放不出来 / 不结束)。' % _pl_files[_k]))
+if _pl.get('tick') and _pl_rm.search(_pl['tick']):
+    R['pldur'].append((str(_pl_files['tick'].split('/')[-1]), 0,
+        '偏振光持续时间(坑 120): tick 里又在扣 `zx.pl_t` —— tick 的调用节奏在超限版是 '
+        '**0.5 秒**一次, 在这里扣 1 等于把"秒"当"半秒", pl_t=5 只撑 2.5 秒(lore 写 5 秒)。'
+        '正解: tick 只干活, 倒计时交给驱动方按真实时间扣(second/half 各扣自己的)。'))
+for _k in ('second', 'half'):
+    _c = _pl.get(_k)
+    if _c is None:
+        continue
+    _m = _pl_rm.search(_c)
+    if not _m:
+        R['pldur'].append((str(_pl_files[_k]), 0,
+            '偏振光持续时间(坑 120): %s 没有扣 `zx.pl_t` —— 光束倒计时没人扣, '
+            'zx.pl_t 永远 >0 ⇒ 光线不灭(永久光束 + 每 0.5/1 秒一直结算)。' % _k))
+        continue
+    if _k == 'half' and not re.search(
+            r'if\s+score\s+@s\s+zx\.pl_ct\s+matches\s+20\s+run\s+scoreboard\s+players\s+remove\s+@s\s+zx\.pl_t',
+            _c):
+        R['pldur'].append((str(_pl_files['half']), 0,
+            '偏振光持续时间(坑 120): half 的 `remove zx.pl_t` 没有挂在 **20 刻(1 秒)**闸上 —— '
+            '超限版每 10 刻(0.5 秒)就调一次 tick, 必须每 20 刻才扣 1 秒; 挂在 10 刻闸上 '
+            '就又把"秒"当"半秒"(pl_t=5 只撑 2.5 秒)。'))
+
+# ---- 88) fdsnap: 堕梦"谁原本在时停里"必须先快照(2026-10-12 用户实测两条 bug) ----
+#   skill ⑦ 先给"未时停"的那批上时停(lib/timestop 立刻挂上 zx.stop), 于是:
+#     · 下一句再选 `tag=!zx.stop` ⇒ **空集** ⇒ 「白昼梦」一件都没附上;
+#     · ⑧ 再选 `tag=zx.stop` ⇒ 把刚被 ⑦ 时停的这批也算成"原本就在时停"
+#       ⇒ 3 秒 + 2 秒 = 5 秒(玩家: "说好的 3 秒变成 5 秒")。
+#   ★ 通用形态: **"按当前状态选人"的选择器, 不能在改了同一状态之后再求值**
+#     —— 必须先把分类抄成快照标签, 后面一律按快照取值(和 selfclr/cdstop 同族:
+#     "改"排在"判"前面 ⇒ 后面的判永远不成立)。
+_fd_fn = functions.get('sweetdream:equipment/staff/fallen_dream/skill')
+if _fd_fn is None:
+    R['fdsnap'].append((str(ROOT), 0,
+        '堕梦分流快照: 找不到 sweetdream:equipment/staff/fallen_dream/skill。'))
+else:
+    _fd = _fd_fn.read_text(encoding='utf-8', errors='ignore')
+    _fd_code = '\n'.join(l for l in _fd.split('\n') if not l.strip().startswith('#'))
+    if 'zx.fd_new' not in _fd_code or 'zx.fd_old' not in _fd_code:
+        R['fdsnap'].append((str(_fd_fn), 0,
+            '堕梦分流快照(坑 123): skill 里没有 zx.fd_new / zx.fd_old 两组快照标签 —— '
+            '时停一挂上 zx.stop 就变了, 后面按 zx.stop 现选 ⇒ 白昼梦落空、新时停的 '
+            '被重复 +2 秒(3 秒变 5 秒)。正解 = 改状态**之前**先打两个快照标签。'))
+    if re.search(r'target:"@e\[tag=zx\.fd_area,tag=', _fd):
+        R['fdsnap'].append((str(_fd_fn), 0,
+            '堕梦分流快照(坑 123): 还在用 `target:"@e[tag=zx.fd_area,tag=…]"` 现用现选 —— '
+            '⑦ 的时停已经把 zx.stop 改了, 这个选择器求值时要么空集(白昼梦落空)、'
+            '要么把新时停的也算进"原本就在时停"(3 秒变 5 秒)。改用 zx.fd_new / zx.fd_old。'))
+    if not re.search(r'as\s+@e\[tag=zx\.fd_old\]\s+run\s+scoreboard\s+players\s+add\s+@s\s+zx\.ts_end\s+40',
+                     _fd_code):
+        R['fdsnap'].append((str(_fd_fn), 0,
+            '堕梦分流快照(坑 123): ⑧ 的"+2 秒"没有认 zx.fd_old —— 认 zx.stop 会把 ⑦ '
+            '刚时停的这批一起加时(3 秒 -> 5 秒, 与文案不符)。'))
+    if not re.search(r'target:"@e\[tag=zx\.fd_area\]",mark:"dream"', _fd_code):
+        R['fdsnap'].append((str(_fd_fn), 0,
+            '堕梦「白昼梦」(坑 124): mark 没有施给**圈内全体** zx.fd_area —— 只给 '
+            'zx.fd_new(原本没时停的那批)的话, 已经在时停里的目标就吃不到白昼梦, '
+            '普攻打上去转不了真伤(用户 2026-10-12 拍板: 一律全体)。'))
+
+# ---- 89) ddpair: 黄昏黎明「100×X」必须由 5 条标签进度各自独立触发 ----
+#   ★ 2026-10-12 坑 138 重写。旧版这条路是"新增附魔 sweetdream:dusk_dawn
+#     (post_attack, affected:victim), 让回调函数就地数死者的标签数" ——
+#     但**原版 post_attack 只读攻击者的主手物品**上的附魔, 附在靴子(slots:feet)上
+#     永远不触发 ⇒ 回调零调用 ⇒ X 恒用兜底值 1 ⇒ 超限版"额外 100×X"永远只给 100
+#     (用户实测: 打一只「流火+夜火」的怪只加 300 = 基础 200 + 100, 本该 400)。
+#   新口径 = **不用附魔**: 一个标签一条进度(dusk_dawn_kill_mark_<tag>), 死者身上有几个
+#   通用标签就有几条同刻触发 ⇒ kill_mark 被调几次就是 X。五个必须同时成立的点:
+#     ① 5 个进度都在, rewards.function **各自**指向同名 wrapper kill_mark_<tag>;
+#     ② 每个 wrapper 首行 revoke **自己**那条进度(自撤销型契约, 与 lib/rearm 同源),
+#        并转发到共享的 kill_mark;
+#     ③ 旧的**合并版**进度 dusk_dawn_kill_mark.json 必须已删(留着会同刻触发两遍, X 虚高);
+#     ④ kill_mark 用 `@s zx.dd_n` 数次数, 自己**不得**再 revoke 进度(那是 wrapper 的活,
+#        重复一份会掩盖"某个 wrapper 漏 revoke"), 也不得再引用已废弃的 dd_xk / dd_px;
+#     ⑤ kill_init 必须把 dd_n 归零(不归零 ⇒ 第二次击杀接着上次涨 ⇒ 基础版少给)。
+#   ★ 通用: 依附魔回调的机制, **先确认那个附魔挂在会被遍历到的位置** ——
+#     post_attack 只遍历攻击者的主手物品, 挂到护甲/背包槽位是静默失效(不报错、零日志)。
+_DD_TAGS = ('yuanhai', 'liuhuo', 'yehuo', 'shixin', 'dream')
+_dd_root = ROOT / 'sweetdream' / 'data' / 'sweetdream'
+_dd_adv_dir = _dd_root / 'advancement' / 'equipment' / 'armor'
+_dd_fn_dir = _dd_root / 'function' / 'equipment' / 'armor' / 'dusk_dawn'
+_dd_km = functions.get('sweetdream:equipment/armor/dusk_dawn/kill_mark')
+_dd_ki = functions.get('sweetdream:equipment/armor/dusk_dawn/kill_init')
+
+
+def _dd_code(_f):
+    return '\n'.join(l for l in _f.read_text(encoding='utf-8', errors='ignore').split('\n')
+                     if not l.strip().startswith('#'))
+
+
+if _dd_km is None:
+    R['ddpair'].append((str(ROOT), 0,
+        '黄昏黎明 100×X(坑 138): 找不到 dusk_dawn/kill_mark —— 击杀计数链断了。'))
+else:
+    _ddc = _dd_code(_dd_km)
+    if not re.search(r'scoreboard players add @s zx\.dd_n 1', _ddc):
+        R['ddpair'].append((str(_dd_km), 0,
+            '黄昏黎明 100×X(坑 138): kill_mark 没有 `scoreboard players add @s zx.dd_n 1` —— '
+            'X 永远是 0, 超限版不会加任何"带标签"的额度。'))
+    elif not re.search(r'zx\.dd_n(?![\w])', _ddc):
+        R['ddpair'].append((str(_dd_km), 0,
+            '黄昏黎明 100×X(坑 138): kill_mark 没有用专用计数 `zx.dd_n` —— 5 条标签进度各自'
+            '独立触发, "本刻进来几次"就是 X, 必须由它来数。'))
+    if re.search(r'zx\.dd_(xk|px)(?![\w])', _ddc):
+        R['ddpair'].append((str(_dd_km), 0,
+            '黄昏黎明 100×X(坑 138): kill_mark 还在引用已废弃的 zx.dd_xk / zx.dd_px —— 那是'
+            '"附魔 post_attack 回调"时代的产物, 而原版 post_attack 只读攻击者主手物品, '
+            '附魔挂在靴子上永不触发, 整套已删。'))
+    if re.search(r'advancement revoke @s only sweetdream:equipment/armor/dusk_dawn_kill_mark', _ddc):
+        R['ddpair'].append((str(_dd_km), 0,
+            '黄昏黎明 100×X(坑 138): kill_mark 自己又 revoke 了进度 —— revoke 必须留在各自的 '
+            'wrapper 首行(自撤销型契约), 在共享函数里重复一份只会掩盖"某个 wrapper 漏 revoke"。'))
+
+for _t in _DD_TAGS:
+    _rev = 'advancement revoke @s only sweetdream:equipment/armor/dusk_dawn_kill_mark_%s' % _t
+    _w = _dd_fn_dir / ('kill_mark_%s.mcfunction' % _t)
+    if not _w.exists():
+        R['ddpair'].append((str(_w), 0,
+            '黄昏黎明 100×X(坑 138): 少了 wrapper kill_mark_%s.mcfunction —— 进度 '
+            'dusk_dawn_kill_mark_%s 的 rewards.function 就没有着落。' % (_t, _t)))
+    else:
+        _wc = [l.strip() for l in _dd_code(_w).split('\n') if l.strip()]
+        if not _wc or _wc[0] != _rev:
+            R['ddpair'].append((str(_w), 0,
+                '黄昏黎明 100×X(坑 138): wrapper kill_mark_%s 的首行必须是 `%s` —— '
+                '自撤销型进度不 revoke 自己, 第二次触发就永远不再发生(X 少算)。' % (_t, _rev)))
+        if 'function sweetdream:equipment/armor/dusk_dawn/kill_mark' not in _dd_code(_w):
+            R['ddpair'].append((str(_w), 0,
+                '黄昏黎明 100×X(坑 138): wrapper kill_mark_%s 没有转发到共享的 '
+                'dusk_dawn/kill_mark —— 这次击杀就白触发了。' % _t))
+    _p = _dd_adv_dir / ('dusk_dawn_kill_mark_%s.json' % _t)
+    if not _p.exists():
+        R['ddpair'].append((str(_p), 0,
+            '黄昏黎明 100×X(坑 138): 少了标签进度 dusk_dawn_kill_mark_%s.json —— 死者的 '
+            '`zx.status.%s` 就数不进 X。' % (_t, _t)))
+    elif ('"sweetdream:equipment/armor/dusk_dawn/kill_mark_%s"' % _t) not in _p.read_text(encoding='utf-8', errors='ignore'):
+        R['ddpair'].append((str(_p), 0,
+            '黄昏黎明 100×X(坑 138): 进度 %s 的 rewards.function 没指向它**自己**的 wrapper '
+            'kill_mark_%s —— 指向共享函数的话就没人 revoke 它了。' % (_p.name, _t)))
+
+if (_dd_adv_dir / 'dusk_dawn_kill_mark.json').exists():
+    R['ddpair'].append((str(_dd_adv_dir / 'dusk_dawn_kill_mark.json'), 0,
+        '黄昏黎明 100×X(坑 138): 旧的**合并版**进度 dusk_dawn_kill_mark.json 还在 —— '
+        '它和 5 条单标签进度会**双双触发**, 一次击杀被记两遍(X 虚高)。必须删掉。'))
+
+if _dd_ki is None:
+    R['ddpair'].append((str(ROOT), 0,
+        '黄昏黎明 100×X(坑 138): 找不到 dusk_dawn/kill_init —— 同刻账本去重链断了。'))
+elif not re.search(r'scoreboard players set @s zx\.dd_n 0', _dd_code(_dd_ki)):
+    R['ddpair'].append((str(_dd_ki), 0,
+        '黄昏黎明 100×X(坑 138): kill_init 没有把 `zx.dd_n` 归零 —— 第二次击杀会接着上次的'
+        '数往上加, 基础版"同一次击杀只加一次"(dd_n matches 1)的判据永远不成立, 静默少给。'))
+
+# ---- 90) embertop: 余烬"夜火怪也要补流火" + 它的 5 秒节流(坑 137, 2026-10-12 用户拍板) ----
+#   文案只说"使其附着流火", **没有**排除"已经有夜火"的情况。旧版 burned_out 在这一支
+#   `if entity @s[tag=zx.status.yehuo] run return 0`(保持最高阶) 把整支吞掉 ⇒
+#   穿余烬永远看不到"流火 + 夜火"(用户实测: "夜火怪再燃烧后没有附加流火")。
+#   拍板口径: 已是双状态 -> 不动; 只有夜火 -> 补流火。
+#   ★★ 但这条补流火**必须限速** ★★: 双状态被吸收(烈火残躯的 night / 红莲的 step_night
+#   把夜火摘走)之后只剩流火, 下次熄灭又会升级成夜火 -> 反复给余烬回 100 魔力; 而这条
+#   补流火正是该循环**唯一**能自我重新武装的来源, 不限速就是刷魔力漏洞。
+#   ★ 通用形态: 凡是"能凭空重新产生某个可被消耗资源"的被动, 都要先问一句
+#     "它能不能自己给自己续杯" —— 能, 就必须挂节流(时刻闸 / 次数闸)。
+_em_bo = functions.get('sweetdream:equipment/armor/ember/burned_out')
+_em_tu = functions.get('sweetdream:equipment/armor/ember/top_up')
+if _em_bo is None:
+    R['embertop'].append((str(ROOT), 0,
+        '余烬补流火(坑 137): 找不到 ember/burned_out。'))
+if _em_tu is None:
+    R['embertop'].append((str(ROOT), 0,
+        '余烬补流火(坑 137): 找不到 ember/top_up —— 夜火怪熄灭后不会补流火(功能缺失)。'))
+
+
+def _em_code(_f):
+    return '\n'.join(l for l in _f.read_text(encoding='utf-8', errors='ignore').split('\n')
+                     if not l.strip().startswith('#'))
+
+
+if _em_bo is not None:
+    _emb = _em_code(_em_bo)
+    _m_call = re.search(r'function\s+sweetdream:equipment/armor/ember/top_up', _emb)
+    if not _m_call:
+        R['embertop'].append((str(_em_bo), 0,
+            '余烬补流火(坑 137): burned_out 没有调用 ember/top_up —— 夜火怪熄灭又变成'
+            '"保持最高阶直接收工", 拿不到"流火+夜火"双状态(用户实测反馈的正是这条)。'))
+    else:
+        _m_back = re.search(r'tag=zx\.status\.yehuo\]\s+run\s+return\s+0', _emb)
+        if _m_back and _m_back.start() < _m_call.start():
+            R['embertop'].append((str(_em_bo), 0,
+                '余烬补流火(坑 137): burned_out 里"见夜火就 return 0"跑在 top_up **前面** —— '
+                '补流火那一支成了死代码。顺序必须"先补、再收工"。'))
+if _em_tu is not None:
+    _emt = _em_code(_em_tu)
+    if 'zx.em_gate' not in _emt or not re.search(r'#now\s+manacore\.meta', _emt):
+        R['embertop'].append((str(_em_tu), 0,
+            '余烬补流火(坑 137): top_up 没有 5 秒节流(zx.em_gate + #now manacore.meta) —— '
+            '双状态被吸走夜火后只剩流火, 下次熄灭又升级成夜火, 反复给余烬回 100 魔力 = '
+            '刷魔力漏洞。必须按"下次可补的 tick 时刻"限速。'))
+
 # ---- 83) regress: 已修缺陷的"形态锁定"(审查报告 2026-10-10 · O10) ----
 #   报告里 F06–F21 那批坑的共同点是**静默**: 不报错、不写日志, 游戏里只表现为
 #   "没效果 / 数值不对", 而且大多要"多人 / 多目标 / 跨 tick / 重连"才现形 ——
@@ -3192,7 +3702,87 @@ for _fnk, _fp in functions.items():
                      % (_acc, _li, _m.group(1), _m.group(1), _m.group(1), _acc, _m.group(1))))
             break
 
+# ---- 84) tagmacro: 被函数标签**直接引用**的函数里不能有宏行 ($(…)) ----
+#   函数标签是**无参调用**(`function #ns:tag` 后面接不了 with / 复合标签) ⇒ 被它
+#   直接引用的函数必须是**普通函数**。含 `$(变量)` 的行拿不到参数: 整条宏行
+#   (以及它之后的一切)在运行期被跳过, 严重时整个宏函数不实例化 —— **零日志**,
+#   游戏里只表现为"这个功能不存在"。
+#   真实事故 2026-10-11(N09): sweetdream:equipment/staff/begonia/hook_calc 里写着
+#   `$execute if entity @e[…u0:$(u0)…]`, 而它是 #manacore:event/damage_calc 的值之一
+#   ⇒ 海棠「漩涡增强 mm +20%」整段不执行(玩家只会觉得"这装备没增强")。
+#   正解: 标签指**普通 wrapper**, wrapper 再用 `with storage` 调**宏叶子**。
+#   ★ 只扫**非注释行** —— 头注释里讲"本文件不能写 $(变量)"不该被算进来。
+for _pk in ('manacore-1.0.0', 'sweetdream'):
+    _tbase = ROOT / _pk / 'data'
+    if not _tbase.exists():
+        continue
+    for _jp in sorted(_tbase.rglob('*.json')):
+        if '/tags/function/' not in str(_jp).replace('\\', '/'):
+            continue
+        try:
+            _jv = json.loads(_jp.read_text(encoding='utf-8')).get('values', [])
+        except Exception:
+            continue
+        for _v in _jv:
+            if isinstance(_v, dict):
+                _v = _v.get('id', '')
+            if not _v or _v.startswith('#'):
+                continue
+            _ns, _, _pth = _v.partition(':')
+            _tf = _tbase / _ns / 'function' / (_pth + '.mcfunction')
+            if not _tf.exists():
+                continue
+            try:
+                _tx = _tf.read_text(encoding='utf-8', errors='ignore')
+            except Exception:
+                continue
+            _body = '\n'.join(_l for _l in _tx.split('\n') if not _l.strip().startswith('#'))
+            if macro_var.search(_body):
+                R['tagmacro'].append((_tf, 0,
+                    '被函数标签直接引用(%s)却含宏行 $(…) —— `function #…` 是**无参**调用, '
+                    '宏行拿不到参数会整段跳过(零日志)。拆成"普通 wrapper + 宏叶子", '
+                    '由 wrapper 用 with storage 调叶子。' % _jp.name))
+
 _REGRESS = [
+    (_SD + '/equipment/armor/lightless_sea/passive.mcfunction',
+     'nbt={active_effects:[{id:"minecraft:slowness"}]}', r'nbt\s*=\s*\{ActiveEffects', None,
+     'S01: 无光之海缓慢源必须读 1.20.2+ 的 active_effects'),
+    (_SD + '/equipment/armor/withered_garden/wood_tick.mcfunction',
+     'nbt={active_effects:[{id:"minecraft:slowness"}]}', r'nbt\s*=\s*\{ActiveEffects', None,
+     'S01: 枯萎花园缓慢伤害圈必须读 1.20.2+ 的 active_effects'),
+    (_MC + '/internal/join/new.mcfunction',
+     'function #manacore:event/player_prepare_new', None,
+     ('record.stats.base_attack double 1 run attribute', 'function #manacore:event/player_prepare_new'),
+     'S02: 应用清旧属性必须早于建档读取实际攻击力'),
+    (_MC + '/internal/join/new.mcfunction', None, None,
+     ('function #manacore:event/player_prepare_new', '#slot_full manacore.meta matches 1 run return 0'),
+     'S02: 槽位耗尽时不得清属性, 必须先退出'),
+    ('manacore-1.0.0/data/manacore/tags/function/event/player_prepare_new.json',
+     'manacore:event/noop', None, None, 'S02: 前置包必须定义建档前事件标签'),
+    ('sweetdream/data/manacore/tags/function/event/player_prepare_new.json',
+     'sweetdream:event/player_prepare_new', None, None, 'S02: sweetdream 必须挂载建档前清理'),
+    (_SD + '/event/player_prepare_new.mcfunction',
+     'function sweetdream:internal/attr/cleanup',
+     r'function (?:sweetdream:lib/uuid|manacore:api/)|scoreboard players (?:reset|set) @s', None,
+     'S02: 未登记时只摘属性, 不调用登记 API/UUID 查找或提前清掉迁移判据'),
+    (_SD + '/lib/ledger_resync_go.mcfunction',
+     'function sweetdream:equipment/armor/lightless_sea/atk_add with storage zx:work x',
+     r'scoreboard players (?:set @s zx\.ls_buf 0|reset @s zx\.ls_buf)|#lr_sum zx\.meta \+= @s zx\.ls_buf',
+     ('function sweetdream:equipment/armor/lightless_sea/atk_add',
+      'attribute @s minecraft:attack_damage modifier remove sweetdream:eqp_ls_atk'),
+     'S03: 无光之海账本兼作三秒宽限缓存, 保留账本/面板且只重挂原版属性'),
+    (_SD + '/lib/ledger_resync_go.mcfunction',
+     'attribute @s minecraft:attack_damage modifier remove sweetdream:eqp_ls_atk', None, None,
+     'S03: 无光之海重挂必须先摘同 id, 兼容修饰符未丢的世界'),
+    (_SD + '/lib/ledger_resync_go.mcfunction',
+     'function sweetdream:equipment/armor/mirage/set_atk_add with storage zx:work x',
+     r'scoreboard players (?:set @s zx\.mr_atk 0|reset @s zx\.mr_atk)|#lr_sum zx\.meta \+= @s zx\.mr_atk',
+     ('function sweetdream:equipment/armor/mirage/set_atk_add',
+      'attribute @s minecraft:attack_damage modifier remove sweetdream:eqp_mr_set_atk'),
+     'S03: 蜃楼保留面板与旧账只重挂属性, 到期/卸装仍可按差值正常减回'),
+    (_SD + '/lib/ledger_resync_go.mcfunction',
+     'attribute @s minecraft:attack_damage modifier remove sweetdream:eqp_mr_set_atk', None, None,
+     'S03: 蜃楼重挂必须先摘同 id, 兼容修饰符未丢的世界'),
     (_MC + '/internal/skill/stage_mana.mcfunction',
      'manacore:work a.value set from storage manacore:work a.mana', None, None,
      'F06 扣费契约: 少了这行显式映射, internal/mana/consume 读的是 a.value(空/旧值), '
@@ -3248,6 +3838,172 @@ _REGRESS = [
      'F08 多目标隔离: 改成"挑字段恢复"会漏 a.num ⇒ 带易伤的多目标伤害按选择器遍历顺序'
      '累积放大(100 -> 115 -> 132.25, 静默)'),
 
+    # ---- 2026-10-11 三审 A03(uuid/migrate 双键漏登记 + 离线补登记口) ----
+    (_MC + '/internal/uuid/migrate.mcfunction',
+     'if data storage manacore:players "$(uuid)" unless data storage manacore:players "$(h0)" '
+     'unless data storage manacore:players "$(uuid)".reg run data modify storage '
+     'manacore:players_all list append value "$(uuid)"', None, None,
+     '★ A03: "完整 UUID 键已存在、旧键已不在、且未登记"的历史记录也要补登记(第③步)。'
+     '缺了它, 这一类记录永远进不了终身清单 ⇒ debug/reset_all 清不到(报告 A03 的现场形态)。'
+     '★ 与第①步互斥(① 看旧键存在、③ 看旧键不在)⇒ 不会重复 append。'),
+    (_MC + '/debug/registry_add.mcfunction',
+     'if data storage manacore:players "$(uuid)" run data modify storage '
+     'manacore:players_all list append value "$(uuid)"',
+     r'unless\s+data\s+storage\s+manacore:players\s+"\$\(uuid\)"\.reg\s+run\s+data\s+modify\s+'
+     r'storage\s+manacore:players_all',
+     None,
+     '★ A03(三审) + Q03(四审): 运维入口的登记行**必须无 `unless reg`**(强制补登记)。'
+     'A03 只修好了 migrate 的双键路径, 没能修**已经产生的坏状态**(更早的版本给一条记录'
+     '打过 reg=1b 而它从没进过清单); 旧版本入口也带 `unless reg` ⇒ 人工口同样救不回来。'
+     '★ 为什么敢不看 reg: 清单元素是**裸字符串**, 没有任何"列表里含不含某串"的语法,'
+     '查重做不到; 而重复项**无害** —— purge_registry 逐删时第二条会被 `if data` 挡掉。'
+     '★ 必须保留 `if data storage manacore:players "$(uuid)"`(否则会给不存在的记录建空条目)'
+     ' 与 `tellraw @s`(纯命令枚举不出未知存储键, 这条只能人工逐个调)。'),
+    (_MC + '/debug/registry_add.mcfunction',
+     'if data storage manacore:players "$(uuid)" run data modify storage '
+     'manacore:players "$(uuid)".reg set value 1b',
+     None, None,
+     '★ A03/Q03: 打 reg 标志的守卫与登记一致(记录存在)。自动路径(migrate/existing)仍带'
+     ' `unless reg` —— 那两条每次上线都跑, 无条件 append 会让清单无限增长; 本入口是人工的。'),
+    (_MC + '/debug/registry_add.mcfunction',
+     '必须是 32 位纯十六进制', None, None,
+     '★ Q03(四审): 用法必须写清"实际存储键 = 32 位纯十六进制"(见 internal/uuid/build)。'
+     '旧注释写 `<8-4-4-4-12 或 8 位短键>` 是错的 —— 带连字符的 UUID 与 8 位短键都匹配不到'
+     '任何记录(短键只是 migrate 的**输入**), 用户按说明敲会以为命令坏了。'),
+
+    # ---- 2026-10-11 四审 Q01(旧快照 -> 新队列的升级迁移) ----
+    (_SD + '/internal/itembackup/migrate_legacy.mcfunction',
+     'if score @s zx.ret_pend matches 1.. if score @s zx.ret_slot matches 0..8 unless data '
+     'storage zx:ret p."$(uuid)".q[0] if data storage zx:ret p."$(uuid)".mainhand.id run '
+     'scoreboard players set #lg_main zx.meta 1',
+     None, None,
+     '★ Q01(四审): 迁移的**判据**必须是"旧版 zx.ret_pend >= 1(真的欠一把)" + 队列为空 + 旧快照有货。'
+     '★ 为什么不能只看"旧快照在不在": 旧版 backup_go **每秒刷新** .mainhand/.offhand ⇒ '
+     '"有快照"完全不代表"欠一把", 拿它当判据会把玩家非待还状态下的普通备份当成欠款、'
+     '**凭空发一件武器**。'),
+    (_SD + '/internal/itembackup/migrate_legacy.mcfunction',
+     'run data modify storage zx:ret p."$(uuid)".q[0].item set from storage '
+     'zx:ret p."$(uuid)".mainhand',
+     None, None,
+     '★ Q01: 主手那笔必须把**旧快照内容**搬进队首条目(.item) —— 只 append 一个 {slot:...} '
+     '而忘了 set from ⇒ 建成"只有槽位、没有物品"的空条目 ⇒ 反而永久堵死队首。'),
+    (_SD + '/internal/itembackup/migrate_legacy.mcfunction',
+     'run data remove storage zx:ret p."$(uuid)".mainhand', None, None,
+     '★ Q01: 迁移 = **搬移** —— 成功搬进队列后删掉旧键(与 uuid/migrate 同款)。'
+     '留着旧键, 下次上线虽然因 `unless q[0]` 不会再迁, 但现场会一直混淆"哪份才是真待还"。'),
+    (_SD + '/internal/itembackup/migrate_legacy.mcfunction',
+     'run data modify storage zx:ret p."$(uuid)".q set value []',
+     None,
+     ('#lg_off zx.meta matches 1 run data modify storage zx:ret p."$(uuid)".q append value {slot:-1}',
+      'if data storage zx:ret p."$(uuid)".offhand.id run scoreboard players set #lg_off zx.meta 1'),
+     '★ Q01: **先算标志、再按标志建队列**, 顺序不能反(本锁 + 下面那条 `q set value []` 一起钉)。'
+     '边判边建的话: 建完 q[0] 之后, 后面几行的 `unless q[0]` 立刻变假 ⇒ 搬移那步被跳过 '
+     '⇒ 建出空条目。★ `_order` = (应更晚, 应更早)。'
+     '★ 另: `append` 要求目标是**已存在的 list** ⇒ 必须先 `q set value []` 建空壳。'),
+    (_SD + '/internal/itembackup/migrate_legacy.mcfunction',
+     'function sweetdream:internal/itembackup/resync_go', None, None,
+     '★ Q01: 迁移完**立刻重建镜像**(pend/slot/wait) —— 否则下一秒 recover 的选择器'
+     ' `@a[scores={zx.ret_pend=1..}]` 还是选不到人, 等于白迁。'),
+    (_SD + '/event/player_join.mcfunction',
+     'function sweetdream:internal/itembackup/migrate_legacy with storage zx:work a', None, None,
+     '★ Q01: 迁移挂在 **player_join**(register 末尾, 每次上线/重注册都抛; 且它排在 '
+     '`player_first_join` **之前** ⇒ 迁移早于清账, 那时 zx.ret_pend 还在 —— 它是迁移的唯一判据)。'),
+    ('sweetdream/data/manacore/tags/function/event/player_join.json',
+     'sweetdream:event/player_join', None, None,
+     '★ Q01: 新的上线收尾函数必须真的挂进跨包事件标签(少这一行 = 迁移永不执行, 且完全静默)。'),
+
+    # ---- 2026-10-11 四审 Q02(重置后按队列重建镜像) ----
+    (_SD + '/internal/itembackup/resync.mcfunction',
+     'if data storage zx:ret p."$(uuid)".q[0] store result score @s zx.ret_slot run data get '
+     'storage zx:ret p."$(uuid)".q[0].slot',
+     None, None,
+     '★ Q02(四审): 镜像必须**从队列重算**(q[0].slot), 而不是照抄旧分数 —— 队列是唯一真相。'),
+    (_SD + '/internal/itembackup/resync.mcfunction',
+     'unless data storage zx:ret p."$(uuid)".q[0] run scoreboard players set @s zx.ret_pend 0',
+     None, None,
+     '★ Q02: **双向**重建 —— q 空时要把镜像复位成干净态。只管"q 非空就置 1"的话, '
+     'q 已被还净而镜像还留着 1 的玩家会被永久挂上 ret_pend=1(每秒空转 + 20 秒后吃到'
+     '那句"背包已满"的误导提示)。'),
+    (_SD + '/internal/itembackup/resync_go.mcfunction',
+     'function sweetdream:internal/itembackup/resync with storage zx:work a', None, None,
+     '★ Q02: 普通包装(取 uuid) -> 宏叶子; 宏函数不能裸调(整函数作废、零日志)。'),
+    (_SD + '/event/player_reset.mcfunction',
+     'function sweetdream:internal/itembackup/resync_go', None,
+     ('function sweetdream:internal/itembackup/resync_go',
+      'scoreboard players reset @s zx.ret_pend'),
+     '★ Q02(四审): 镜像重建必须排在**清账清单之后** —— 放前面的话刚建的镜像会被清单'
+     '立刻 reset 掉, 等于没做。★ `_order` = (应更晚, 应更早)。'),
+    (_SD + '/event/player_reset.mcfunction',
+     'function sweetdream:internal/itembackup/resync_go', None, None,
+     '★ Q02(四审): 清账之后必须真的调用镜像重建(存在性)。'
+     '★ 该行位于尾标记 `@@GEN-SCORES-ABOVE@@` 之下的**手写区**; 尾标记本身是注释, '
+     '本锁看不到 —— 它的存在性由 resetset 规则单独守(见那里)。'),
+
+    # ---- 2026-10-11 四审 Q04(装备型修饰符一并摘净) ----
+    (_SD + '/internal/attr/cleanup.mcfunction',
+     'minecraft:max_health modifier remove sweetdream:eqp_power_hp', None, None,
+     '★ Q04(四审): 装备型修饰符也必须摘 —— 报告例。清账清单会把装备账本(zx.power_hp 等)'
+     '一起清零, 而"重置那一刻没穿这件"时 want=0/账本=0 ⇒ 差额 0 ⇒ 跳过 apply_hp '
+     '⇒ 这份 +8 永久留在身上, 而且 apply_hp 自己的"先按旧账摘"门(账本 matches 1..)也随'
+     '账本归零失效 ⇒ **以后再也摘不掉**。★ 别再写回"装备型不摘"。'),
+    (_SD + '/internal/attr/cleanup.mcfunction',
+     'minecraft:attack_damage modifier remove sweetdream:eqp_mr_set_atk', None, None,
+     '★ Q04: 装备型清单的**末位**一条(蜃楼套装攻击力) —— 钉住"这一批真的整段摘完了", '
+     '而不是只加了两条应付差事。'),
+    (_SD + '/internal/attr/cleanup.mcfunction',
+     'tag @s remove zx.status.liuhuo', None, None,
+     '★ Q04: 标签驱动型的修饰符**必须连标签一起清**(见下方 never 说明的配对清单)。'
+     'liuhuo 的撤销只在 tag/unmark_one, 而它的触发条件是 zx.tt.liuhuo matches ..0 —— '
+     '那个分数被清单清了 ⇒ 永不撤销 ⇒ 护甲 -20% 与标签双双残留。'),
+    (_SD + '/internal/attr/cleanup.mcfunction',
+     'tag @s remove zx.rm_melt', None, None,
+     '★ Q04: 同类配对还有 freeze / rm_melt / tw_tgt / status.dream / lethe; '
+     '这里钉住 rm_melt(remelt/second 每秒认这个标签)。'),
+
+    # ---- 2026-10-11 四审 Q05(增量入口也要保护 pack.description) ----
+    ('.workbuddy/build_full_pack.py',
+     "metadata.append('pack.mcmeta 的 pack.description')", None, None,
+     '★ Q05(四审): `--update-crossbows` 收尾会**无条件**把 pack.description 写成 DESC'
+     '(main 里的 `meta[\'pack\'][\'description\'] = DESC`) —— 而旧护栏只盯 65 个弩资源 '
+     '⇒ 用户手改过的包说明会被静默覆盖。必须把 pack.mcmeta 也纳入同一套"备份 + 中止"。'),
+
+    # ---- 2026-10-11 四审 Q06(③ 步对倍率二次分解) ----
+    (_MC + '/internal/damage/mul_pct.mcfunction',
+     '#lo $(obj) *= #q1 $(obj)', None, None,
+     '★ Q06(四审): ③ 步后半必须走"对倍率再分解一次"的新式 —— 旧式 `#lo *= $(mul)` 的中间量'
+     ' 99·|M| **与最终结果无关**, |M| > 约 2.17e7 就回绕(报告例 250000 实得 456800.327, '
+     '真值 499750; 而同组输入的前半 19×25,000,000 = 475,000,000 完全正常)。'),
+    (_MC + '/internal/damage/mul_pct.mcfunction',
+     '#t $(obj) *= #r2 $(obj)', None, None,
+     '★ Q06: 后半 r·r2 ≤ 99×99 = 9801 —— 恒安全。这三行(q1/t/r2)是二次分解的全部。'),
+    (_MC + '/internal/damage/mul_pct.mcfunction', None,
+     r'#lo\s+\$\(obj\)\s+\*=\s+\$\(mul\)\s+\$\(obj\)', None,
+     '★ Q06 回归锁: `#lo *= $(mul)` 一律不许写回 —— 那是"99·倍率与结果无关地溢出"的旧式。'),
+
+
+    # ---- 2026-10-11 三审 A04(重置时清理"状态型"原版属性修饰符) ----
+    (_SD + '/event/player_reset.mcfunction',
+     'function sweetdream:internal/attr/cleanup', None,
+     ('scoreboard players reset @s zx.', 'function sweetdream:internal/attr/cleanup'),
+     '★ A04: player_reset **必须先摘"状态型"修饰符, 再清分数**。'
+     '修饰符的到期回收全靠"计时分数驱动的每秒心跳"; 分数一清, 心跳选择器不再命中 ⇒ '
+     '收尾永不执行 ⇒ 修饰符永久残留(熔星攻速永久变大 / 残念速度永久翻倍 + 每秒白回 20 魔力)。'
+     '★ `_order` 约定 = (应更晚出现者, 应更早出现者): 本条断言**第一条 reset 排在 cleanup 之后**。'),
+    (_SD + '/internal/attr/cleanup.mcfunction',
+     'minecraft:attack_speed modifier remove sweetdream:meteor', None, None,
+     '★ A04: 熔星的攻速倍率必须显式摘(`modifier remove` 对不存在的 id 是空操作, 不必先判存在)。'),
+    (_SD + '/internal/attr/cleanup.mcfunction',
+     'minecraft:movement_speed modifier remove sweetdream:lethe_speed', None, None,
+     '★ A04: 残念的速度倍率必须显式摘。'),
+    (_SD + '/internal/attr/cleanup.mcfunction',
+     'tag @s remove zx.lethe', None, None,
+     '★ A04: 残念的**状态标签**必须一起摘 —— 留着它, "残念每秒 +20 魔力 + 速度翻倍"'
+     '会靠标签一直续下去(zx.lt_end 已被清, 到期判定永不成立)。'),
+    (_SD + '/internal/attr/cleanup.mcfunction', None,
+     r'modifier\s+(?:add|value\s+get)\b|\bset\s+base\b', None,
+     '★ A04: 清理函数**只许摘**(modifier remove / tag remove), 绝不许挂修饰符或改 base —— '
+     '它是在"重置"路径上跑的, 任何加法都会被随后的清账本吞掉或在下次上线时翻倍。'),
+
     (_SD + '/internal/itembackup/backup.mcfunction',
      'execute if items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["itemreplace"]}] '
      'run function sweetdream:internal/itembackup/snap_main with storage zx:work a',
@@ -3260,36 +4016,119 @@ _REGRESS = [
      '★ 与坑 93 同族: 生物 NBT 形态不能套玩家, 玩家 NBT 形态不能套生物。'
      '★ 另拦 `$execute`(空宏行, dollar 规则同源): 门控转发是静态行, 不带 $'),
     (_SD + '/internal/itembackup/restore.mcfunction', None, None,
-     ('if items entity @e[tag=zx.ret_tmp,limit=1] weapon.mainhand *',
-      'run item replace entity @s $(dst) from entity @e[tag=zx.ret_tmp,limit=1] weapon.mainhand'),
+     ('run item replace entity @s $(dst) from entity @e[tag=zx.ret_tmp,limit=1] weapon.mainhand',
+      'if items entity @e[tag=zx.ret_tmp,limit=1] weapon.mainhand *'),
      '★ O03 回手的安全闸顺序: 必须先 `if items`(临时架真的拿到了快照)再 item replace。'
      'item replace from 空槽 = 把玩家槽位**清成空气** —— 不设闸, 快照缺失/写架失败时'
      '就会把玩家手里的东西吃掉。临时架流程: kill 防串味 -> 就地召 -> 快照写进主手 -> '
-     '有货才还 -> 删快照(防 recover 重试"复活") -> kill'),
+     '有货才还 -> 删快照(防 recover 重试"复活") -> kill。'
+     '★ `_order` 约定 = (应更晚出现者, 应更早出现者): 本条断言 item replace 晚于 if items。'
+     '★ 注: 旧版把两个子串写在**同一行**(a==b)⇒ 本条其实从未触发过(死锁), N08 拆分后才生效'),
+    (_SD + '/internal/itembackup/restore.mcfunction',
+     'unless items entity @s $(dst) *', None, None,
+     '★ N08(2026-10-11): item replace 是**覆盖式**的 —— 不判"目标槽为空"就会把玩家'
+     '放在那一格的另一件物品**直接吃掉**(不落地、找不回)。判空门逐字为 '
+     '`unless items entity @s $(dst) *`(判空只能用 `unless … *`, 见 airpred)。'),
+    (_SD + '/internal/itembackup/restore.mcfunction', None,
+     r'data\s+remove\s+storage\s+zx:ret'
+     r'|scoreboard\s+players\s+set\s+@s\s+zx\.ret_pend\s+0', None,
+     '★ A02(2026-10-11 三审): restore **只负责"把队首 q[0].item 写进这一格 + 置 #ret_ok"**。'
+     '出队(删 q[0])与销账(zx.ret_pend=0)是 effect_2 的活 —— 它还要据"出没出队"重算'
+     '队首镜像 zx.ret_slot。在 restore 里删/销账会让 effect_2 读不到队首、或把镜像留在旧值上 '
+     '(下一件就写错槽位)。'
+     '★ 铁律②(落地才算数)仍在: #ret_ok 由"临时架有货 且 目标槽空"置位, 由 effect_2 消费。'),
     (_SD + '/internal/itembackup/effect_2.mcfunction',
-     '$execute if score @s zx.ret_slot matches 0..8 '
+     '$execute if score @s zx.ret_pend matches 1.. if score @s zx.ret_slot matches 0..8 '
+     'if score #ret_ok zx.meta matches 0 '
      'unless items entity @s hotbar.$(slot) * '
-     'if data storage zx:ret p."$(uuid)".mainhand.id '
+     'if data storage zx:ret p."$(uuid)".q[0].item.id '
      'run function sweetdream:internal/itembackup/restore '
-     '{uuid:"$(uuid)",src:"mainhand",dst:"hotbar.$(slot)"}',
+     '{uuid:"$(uuid)",dst:"hotbar.$(slot)"}',
      r'items\s+entity\s+@s\s+\S+\s+air', None,
-     '★ R01 的正写形态 ②-a(O03 后): 目标格**是空的** -> 还回 **hotbar.$(slot)**(消耗时'
+     '★ R01 的正写形态 ②-a(A02 后): 目标格**是空的** -> 还回 **hotbar.$(slot)**(消耗时'
      '那一格)而不是 weapon.mainhand(当前选中格)⇒ 切一下快捷栏就会顶掉那一格原有的物品; '
-     '判据必须读 zx.ret_slot 而不是 tag zx.ret_off(tag 随实体消失, 重连后 recover 会判错手); '
-     '快照存在性门 `if data storage zx:ret …mainhand.id` 必须在(没快照不还原)。'
-     '★ 判空只能用 `unless items … *` —— `items … air` **恒假**(2026-10-10 实测: '
-     '空手/持有都不触发), 见 airpred 规则'),
+     '判据必须读 zx.ret_slot(队首镜像)而不是 tag zx.ret_off(tag 随实体消失, 重连后 recover 会判错手); '
+     '物品存在性门 `if data storage zx:ret …q[0].item.id` 必须在(队首没东西不还原); '
+     '`#ret_ok matches 0` 是"本轮还没落地"的传球标志(第一名命中后整段跳过)。'
+     '★ 行首必须有"待归还门" `if score @s zx.ret_pend matches 1..`(队列非空)。'
+     '★ 判空只能用 `unless items … *` —— `items … air` **恒假**(2026-10-10 实测), 见 airpred'),
     (_SD + '/internal/itembackup/effect_2.mcfunction',
-     '$execute if score @s zx.ret_slot matches 0..8 '
-     'if items entity @s hotbar.$(slot) * '
-     'if data storage zx:ret p."$(uuid)".mainhand.id '
+     'unless items entity @s weapon.offhand *', None, None,
+     '★ N08(2026-10-11): ① 副手返还也必须先判"副手为空" —— 旧版直接把快照写进副手, 若'
+     '副手已被换入另一件物品就把它**吃掉**。没有空副手时保留待归还(不写不删), recover 重试。'),
+    (_SD + '/internal/itembackup/effect_2.mcfunction',
+     'if score @s zx.ret_pend matches 1.. if score @s zx.ret_slot matches -1', None, None,
+     '★ N08 续修(2026-10-11, 玩家实测"回手后还多给一把"): ① 副手分支同样必须带"待归还门" '
+     '`if score @s zx.ret_pend matches 1..`。没有它: 只要 zx:ret 里有副手快照'
+     '(每秒被 backup_go 刷新, 副手又常拿 itemreplace 武器), recover 每秒都会再还一次 '
+     '⇒ 重复发武器。'),
+    (_SD + '/internal/itembackup/effect_2.mcfunction',
+     '$execute if score @s zx.ret_pend matches 1.. if score #ret_ok zx.meta matches 0 '
+     'unless items entity @s hotbar.8 * '
+     'if data storage zx:ret p."$(uuid)".q[0].item.id '
      'run function sweetdream:internal/itembackup/restore '
-     '{uuid:"$(uuid)",src:"mainhand",dst:"weapon.mainhand"}',
+     '{uuid:"$(uuid)",dst:"hotbar.8"}',
      None, None,
-     '★ R01 的 ②-b(必须与 ②-a **成对**存在): 目标格**被占了** -> 退回 weapon.mainhand'
-     '(修 R01 前的老行为)。两条互为补集 ⇒ 无论 `*` 对空槽的语义怎样, 总有一条会跑 '
-     '⇒ 武器一定回得来; 失败方向被压成"退化到老行为", 不会出现"恒假 ⇒ 武器消失"。'
-     '★ 只留一条(尤其只留 ②-a)就有"目标格非空时这条恒不成立 ⇒ 武器永久消失"的风险'),
+     '★ A02(2026-10-11 三审) ④ 兜底扫描(快捷栏 0..8): 首选槽(原格/副手)被占或镜像非法时, '
+     '依次扫 hotbar.0..8 落进**第一个空格**(行 `…restore {…,dst:"hotbar.N"}`)。'
+     '★ 每行都必须带**三件套**: `if score @s zx.ret_pend matches 1..`(队列非空) + '
+     '`if score #ret_ok zx.meta matches 0`(本轮还没落地) + `unless items … N *`(那一格是空的)。'
+     '少了判空 => 覆盖玩家物品(N08); 少了 #ret_ok 门 => 未命中也会一路调 restore。'),
+    (_SD + '/internal/itembackup/effect_2.mcfunction',
+     '$execute if score @s zx.ret_pend matches 1.. if score #ret_ok zx.meta matches 0 '
+     'unless items entity @s inventory.26 * '
+     'if data storage zx:ret p."$(uuid)".q[0].item.id '
+     'run function sweetdream:internal/itembackup/restore '
+     '{uuid:"$(uuid)",dst:"inventory.26"}',
+     None, None,
+     '★ A02(2026-10-11 三审) ⑤ 兜底扫描(主背包 inventory.0..26 = 索引 9-35, 27 格): '
+     '旧版只找快捷栏 ⇒ 主背包有空格也不还(报告 A02 ①)。'
+     '`inventory.N` 是 1.21.5 `item` / `if items` 对**玩家**合法的槽位名(映射到索引 N+9)。'
+     '★ 同 ④ 的三件套门控; 27 行缺一不可(一行都不能"顺手删掉看着重复的")。'),
+    (_SD + '/internal/itembackup/effect_2.mcfunction',
+     '$execute if score @s zx.ret_pend matches 1.. if data storage zx:ret '
+     'p."$(uuid)".q[0] store result score @s zx.ret_slot run data get storage zx:ret '
+     'p."$(uuid)".q[0].slot', None, None,
+     '★ A02(2026-10-11 三审) ⑦ 出队后重算队首镜像(队列**非空**那一支): 出队后必须把 '
+     'zx.ret_slot 重算成**新队首**的首选槽; 缺了它, ret_slot 会停在"刚归还那件"的槽位 '
+     '⇒ 下一件还错格子(姊妹行 = "队列空 => 复位 -2", 见下一条)。'
+     '★ 2026-10-11 反向探针**抓出来的漏锁**: 本条原先没有锁 —— 探针把这一行删掉, '
+     'check 居然一条不报(「31 条探针 30 命中」里唯一未命中的那个)。'),
+    (_SD + '/internal/itembackup/effect_2.mcfunction',
+     '$execute if score @s zx.ret_pend matches 1.. unless data storage zx:ret '
+     'p."$(uuid)".q[0] run scoreboard players set @s zx.ret_slot -2',
+     r'p\."\$\(uuid\)"\.(?:mainhand|offhand)\.id'
+     r'|custom_data~\{zx:\["itemreplace"\]\}\].? run scoreboard players set @s zx\.ret_pend 0', None,
+     '★ A02(2026-10-11 三审) ⑦ 出队后重算队首镜像: 队列空了 => zx.ret_slot 复位成 -2 '
+     '(干净)。**永不放弃**: 队列非空而这一秒没还成 => 什么都不做, 留给 recover 每秒重试'
+     '(旧版的 20 秒"放弃"已删)。'
+     '★ 禁止回归: 把"目标格本来就有另一件 itemreplace 物品"误判成"已还成功" ⇒ 提前出队/'
+     '销账 ⇒ 武器丢在外面; 或改回去读固定快照键 p."<uuid>".mainhand/.offhand(A02 已改成队首 q[0])。'),
+    (_SD + '/internal/itembackup/effect_2.mcfunction',
+     '$execute if score @s zx.ret_pend matches 1.. if score #ret_ok zx.meta matches 1 '
+     'run data remove storage zx:ret p."$(uuid)".q[0]',
+     None, None,
+     '★ A02(2026-10-11 三审) ⑥ 出队: **落地成功(#ret_ok=1)才删队首**。'
+     '只删快照/不删队首 => 下一秒又还一遍(重复发武器); 没落地就删 => 武器永久丢失。'),
+    (_SD + '/internal/itembackup/effect_2.mcfunction',
+     '$execute if score @s zx.ret_pend matches 1.. unless data storage zx:ret '
+     'p."$(uuid)".q[0] run scoreboard players set @s zx.ret_pend 0',
+     None,
+     ('run scoreboard players set @s zx.ret_pend 0',
+      'run scoreboard players set @s zx.ret_slot -2'),
+     '★ A02(2026-10-11 三审) ⑦ 出队后销账: 队列空 => zx.ret_pend=0(不变式: ret_pend=1 ⟺ 队列非空)。'
+     '★ `_order` 约定 = (应更晚出现者, 应更早出现者): 本条断言 **ret_slot 复位排在 ret_pend 清零之前** '
+     '—— 反过来的话最后那行 `… run set ret_pend 0` 的门 `if score @s zx.ret_pend matches 1..` '
+     '会被自己刚清掉的 0 挡掉 ⇒ ret_slot 永远停在旧值 ⇒ 下一件写错槽位。'),
+    (_SD + '/internal/itembackup/backup_go.mcfunction', None,
+     r'unless\s+score\s+@s\s+zx\.ret_pend\s+matches\s+1\.\.\s+run\s+function\s+'
+     r'sweetdream:internal/itembackup/backup', None,
+     '★ A02(2026-10-11 三审): 暂存区(stage.*)不再需要"待归还期间冻结"。'
+     '待还武器已经搬进**队列** q, 与暂存区彻底解耦 —— 冻结逻辑(N08 续修那版)已删除。'
+     '写回来只会让暂存区发霉(消耗当刻 effect_1 还会再拍一次最新), 没有任何好处。'),
+    (_SD + '/internal/itembackup/backup_go.mcfunction',
+     'function sweetdream:internal/itembackup/backup with storage zx:work a', None, None,
+     '★ 每秒安全网仍要转调宏本体(宏函数不能裸调: 整函数作废、零日志)。'),
 
     (_SD + '/equipment/sword/rebound/cast.mcfunction', None, None,
      ('scoreboard players reset @s zx.rb_t', 'function manacore:api/cooldown/start'),
@@ -3319,8 +4158,8 @@ _REGRESS = [
      'F13 同上(海棠漩涡收尾)'),
 
     (_SD + '/upgrade/api/dmg_held.mcfunction', 'dmg_add_put_any', None, None,
-     'F14 加算只许写一条通道: 三条通道各写一份 ⇒ 多通道技能把同一份"技能伤害 +X%"'
-     '算两次(总伤害 x(1+2X))'),
+     'F14/D01: "不挑口径"的加成必须经 dmg_add_put_any 统一写(现在它写满三条 —— '
+     '分段式下三条各乘各的段 = 整段 +X%, 不会重复计入; 详见 dmgseg 桶)'),
 
     (_SD + '/lib/in_bak.mcfunction', 'prepend', None, None,
      'F15 参数备份必须是栈: 退回单层 ⇒ 内层覆盖外层、外层恢复不到 ⇒ 聊天栏手填的参数永久丢失'),
@@ -3349,11 +4188,17 @@ _REGRESS = [
 
     (_MC + '/internal/uuid/migrate.mcfunction',
      'if data storage manacore:players "$(h0)" unless data storage manacore:players '
-     '"$(uuid)" run data modify storage manacore:players_all list append value "$(uuid)"',
-     None, None,
+     '"$(uuid)".reg run data modify storage manacore:players_all list append value "$(uuid)"',
+     None,
+     ('run data modify storage manacore:players "$(uuid)".reg set value 1b',
+      'manacore:players_all list append value "$(uuid)"'),
      '终身清单登记必须**逐字照抄**迁移那句的 if/unless: 第一版漏抄 ⇒ 每次 join 无条件 '
      'append 一条(现场同一个 uuid 重复 92 次, 每秒长一条)。裸字符串列表判不了重, '
-     '只能靠调用点守卫'),
+     '只能靠调用点守卫。'
+     '★ A03(2026-10-11 三审): 登记条件补 `.reg` 未登记门 —— 否则"双键历史记录"(新键在、'
+     '旧键也在/不在)永远不登记, 且 existing 见 reg 又跳过补登记 ⇒ reset_all 清不到它。'
+     '★ 顺序锁 = (应更晚者, 应更早者): 打 reg 标记**必须排在登记之后** —— 反过来会'
+     '"标记已登记、实际不在清单", 就是报告 A03 那个场景。'),
     (_MC + '/internal/uuid/join.mcfunction',
      'if data storage manacore:players "$(h0)" unless data storage manacore:players '
      '"$(h0)-$(h1)-$(h2)-$(h3)-$(h4)" run data modify storage manacore:players_all list append',
@@ -3385,20 +4230,278 @@ _REGRESS = [
     (_SD + '/internal/itembackup/recover_go.mcfunction',
      'store result storage zx:work a.slot int 1', None, None,
      '★ 同上: recover 这条兜底路径也必须给 effect_2 传 $(slot)'),
+    (_SD + '/internal/itembackup/return_go.mcfunction', None,
+     r'zx:work\s+a\.src\b', None,
+     '★ A02(2026-10-11 三审): effect_2 已**不再有 $(src)**(物品改从队首 q[0].item 取), '
+     'return_go 别再写 a.src —— 多写一条不会报错, 但会让"宏参数面"白白多出作废风险'
+     '(旧 N08 那版就是靠 $(src) 撑着第三个参数); 现在只留 $(slot)。'),
+    (_SD + '/internal/itembackup/recover_go.mcfunction', None,
+     r'zx:work\s+a\.src\b', None,
+     '★ A02: 同上(recover 这条兜底路径也不再备 $(src))。'),
     (_SD + '/internal/itembackup/effect_1.mcfunction',
-     'store result score @s zx.ret_slot run data get entity @s SelectedItemSlot', None, None,
-     '★ R01 的记账端: 必须在"消耗还没走完"这一刻把 SelectedItemSlot 存进持久计分项; '
+     'store result storage zx:work a.slot int 1 run data get entity @s SelectedItemSlot',
+     None, None,
+     '★ R01 的记账端(A02 形态): 必须在"消耗还没走完"这一刻把 SelectedItemSlot 读进 '
+     'zx:work a.slot(副手给 -1), 交给 enqueue 入队 —— 入队后队首镜像 zx.ret_slot / '
+     '开关 zx.ret_pend 由 enqueue 统一写。'
      '★ 字段名是 Selected**Item**Slot(先例: sickle_dreams/sweep/start 第 14 行); '
-     '写成 SelectedSlot ⇒ data get 抛错 ⇒ 本函数从这一行起中断 ⇒ 备份没做、schedule 没排 '
-     '⇒ 武器消耗后再也没人还(2026-10-10 实测). zx.ret_pend 也要在这里 set —— '
-     '缺了它 recover 那条线永远不满足选择器'),
+     '写成 SelectedSlot ⇒ data get 抛错 ⇒ 本函数从这一行起中断 ⇒ 快照没做、入队没做、'
+     'schedule 没排 ⇒ 武器消耗后再也没人还(2026-10-10 实测)。'),
+    (_SD + '/internal/itembackup/effect_1.mcfunction',
+     'function sweetdream:internal/itembackup/enqueue with storage zx:work a', None, None,
+     '★ A02(2026-10-11 三审): 消耗当刻必须**入队** —— 少了它, 连消耗两件会互相顶掉、'
+     '且 20 秒后放弃(报告 A02 ①②)。zx.ret_slot / zx.ret_pend 的写入都随它一起走'
+     '(别在 effect_1 里另写一遍: 那会把"队首镜像"写成本次那一格, 队列非空时就写错了)。'),
+    (_SD + '/internal/itembackup/enqueue.mcfunction',
+     'store result score @s zx.ret_slot run data get storage zx:ret '
+     'p."$(uuid)".q[0].slot', None, None,
+     '★ A02: 入队后**按队首重算**镜像 zx.ret_slot(队列空时 = 本次这一格; 非空时队首没变, '
+     '重算结果与原来一致 ⇒ 天然幂等)。写成"直接写 $(slot)"会在队列非空时把队首镜像改错。'),
+    (_SD + '/internal/itembackup/enqueue.mcfunction',
+     'data modify storage zx:ret p."$(uuid)".q append value {slot:$(slot)}', None, None,
+     '★ A02: 队列条目 = {slot:<int>, item:<快照>}(item 由下一行从暂存区搬入)。'
+     '`append` 要求 q 已是 list ⇒ 必须保留"不存在就先 `set value []`"那一行。'),
     (_SD + '/core/load.mcfunction',
      'execute unless data storage zx:config obj_ret_slot run scoreboard objectives '
      'add zx.ret_slot dummy',
      r'^\s*scoreboard\s+objectives\s+add\s+zx\.ret_', None,
-     '★ zx.ret_slot / zx.ret_pend 必须在 load 里声明, 且**必须带 obj_ 创建标记守卫**: '
+     '★ zx.ret_slot / zx.ret_pend / zx.ret_wait 必须在 load 里声明, 且**必须带 obj_ 创建标记守卫**: '
      '1.21.5 的 objectives add 在目标已存在时会报错并中断整个函数 ⇒ 第二次 /reload 之后 '
      '后面的初始化全都不跑(见 load 头部注释)。裸 add 即报这一条'),
+    (_SD + '/core/load.mcfunction',
+     'execute unless data storage zx:config obj_ret_wait run scoreboard objectives '
+     'add zx.ret_wait dummy', None, None,
+     '★ A02(2026-10-11 三审): 新增 zx.ret_wait(待归还已等待秒数)必须在 load 里声明, '
+     '否则 recover 里那两条 `scoreboard players add/reset @s zx.ret_wait` 运行时直接失败'
+     '(objmiss 也会报), "首次超时提示"静默失效。'),
+
+    # ---- 2026-10-11 P1(槽位统一 N01/N02): #next_slot 语义 = "最高占用槽" ----
+    # bg: #next_slot 曾作"累计发号上限"用 ⇒ boot 满槽归零(N02 覆盖 slot 1)、回收池收进
+    #     从未发过的高位槽而 foreach 只遍历 1..#next_slot(N01 漏遍历)。统一为
+    #     "#next_slot = 当前最高已登记(占用)槽", 由 boot 的 rebuild→scan_go 重算。
+    (_MC + '/core/boot.mcfunction', None,
+     r'#next_slot\s+manacore\.meta\s+0', None,
+     '★ boot 禁止把 #next_slot 归零(`… set #next_slot manacore.meta 0`): 那是 N02 的根 '
+     '—— 满槽 reload 归零后, slot/new 不判 index 是否存在 ⇒ 第 65 人覆盖已占用的 slot 1 '
+     '的索引。正解 = 由 internal/slot/rebuild 里的 scan_go 按 index 重算"最高占用槽"'),
+    (_MC + '/internal/slot/rebuild.mcfunction',
+     'function manacore:internal/slot/scan_go', None, None,
+     '★ rebuild 必在"重建回收池之前"调用 scan_go 重算 #next_slot(= 最高占用槽)。缺它则 '
+     '#next_slot 用旧值 ⇒ 建池上限错 + 遍历上界错(N01/N02 回归)。'
+     '★ scan_go 是纯驱动器(不含宏行), 调用**不带** with; 带宏源的是叶子 scan_one。'),
+    (_MC + '/internal/slot/rebuild.mcfunction',
+     'storage manacore:work s.i', None,
+     ('function manacore:internal/slot/scan_go', 'storage manacore:work s.i'),
+     '★ 调 scan_go 前必须先把宏源 s.i 写成起始槽号 1(与 index/foreach 同构): '
+     '`execute store result storage manacore:work s.i ... run scoreboard players get #i`。'
+     '★ 不这么写则第一轮叶子渲染到的 $(i) 是 0 ⇒ off-by-one, 漏掉第 #max_slots 槽 '
+     '(2026-10-11 事故: #next_slot 恒 0, 见 scan_go 头部)'),
+    (_MC + '/internal/slot/rebuild_one.mcfunction',
+     '<= #next_slot', None, None,
+     '★ 回收池只许收 1..#next_slot 范围内的空槽, 守卫逐字为 `<= #next_slot`。少了它就会把 '
+     '"从未发过的高位空槽"也塞进池 ⇒ from_free 取到 > #next_slot 的槽, 而 foreach 只遍历 '
+     '1..#next_slot ⇒ 高位槽漏遍历(N01)'),
+    (_MC + '/internal/slot/scan_go.mcfunction',
+     'function manacore:internal/slot/scan_one with storage manacore:work s', None,
+     ('function manacore:internal/slot/scan_one', 'store result storage manacore:work s.i'),
+     '★ scan_go 是**驱动器**: 必须"先写宏源 s.i、再带 with 调用叶子 scan_one"。'
+     '★ 宏时序陷阱(2026-10-11 事故): 若在**同一层**里先写 s.i 再用 $(i), 本轮 $(i) 永远是'
+     '上一轮的值 ⇒ off-by-one, 只扫 0..#max_slots-1, 漏掉第 #max_slots 槽 ⇒ #next_slot 恒 0'),
+    (_MC + '/internal/slot/scan_one.mcfunction',
+     'operation #next_slot manacore.meta = #i manacore.meta', None, None,
+     '★ scan_one(叶子)的核心: index."$(i)" 存在就把 #next_slot 抬到 i。'
+     '★ 本文件只读 $(i)、**绝不写宏源**(写了就 off-by-one, 见 scan_go 头部)'),
+    (_MC + '/internal/debug/slot_recount_loop.mcfunction',
+     '> #max_slots', r'>=\s*#max_slots', None,
+     '★ 重算循环边界必须是 `> #max_slots`(扫到并含第 #max_slots 槽, 默认 64)。原 `>=` 会'
+     '漏掉第 64 槽 ⇒ 最高占槽 = 64 时报成 0/63(N01 同类遗漏)'),
+
+    # ---- 2026-10-11 复审 N03 / N04(清档链: 漏删最后一项 + 登记死代码) ----
+    (_MC + '/internal/debug/purge_registry_go.mcfunction',
+     'function manacore:internal/debug/purge_registry_del with storage manacore:work a',
+     r'run data remove storage manacore:players "\$\(uuid\)"',
+     ('function manacore:internal/debug/purge_registry_del with storage manacore:work a',
+      'a.uuid set from storage manacore:players_all list[$(i)]'),
+     '★ N03 修(2026-10-11): 带 `with` 的宏函数里 `$(var)` 在本函数入口就冻结 ⇒ '
+     '"同层写 a.uuid + 用 $(uuid)" 恒 off-by-one(删的是上一轮的 uuid: 清单 [A,B] 漏 B、'
+     '[A] 全留)。正解 = 本层只用 $(i) 读 uuid 进 a.uuid, 再用**另一层** '
+     'purge_registry_del(进入时读到新值)去删。_order 断言"读 uuid 行"早于"调 del 行"; '
+     '_never 封同层删除 `run data remove … "$(uuid)"`。同坑 96'),
+
+    (_MC + '/internal/debug/purge_registry_del.mcfunction',
+     'data remove storage manacore:players "$(uuid)"', None, None,
+     '★ N03 修(2026-10-11): 删除叶子 —— 它进入时 a.uuid 已被驱动器写好, 所以 $(uuid) 是'
+     '**本轮**的值。这一层是"跨调用才用宏变量"的正解形态, 别再并回 go(见其头部说明)'),
+
+    (_MC + '/internal/uuid/migrate.mcfunction',
+     'players_all list append value "$(uuid)"', None,
+     ('data modify storage manacore:players "$(uuid)" set from storage manacore:players "$(h0)"',
+      'players_all list append value "$(uuid)"'),
+     '★ N04 修(2026-10-11): 复制与登记用的是**同一个条件**(旧键存在 且 新键不存在)⇒ 只要'
+     '复制先跑, 新键就存在, 后面那句登记**恒假 = 死代码** ⇒ 迁移过的记录永不进终身清单。'
+     '_order 断言"登记"必须**早于**"复制": (应更晚者=复制, 应更早者=登记)'),
+
+    (_MC + '/internal/join/existing.mcfunction',
+     'unless data storage manacore:players "$(uuid)".reg run data modify '
+     'storage manacore:players_all list append value "$(uuid)"', None, None,
+     '★ N04 修(2026-10-11) 补登记: 补丁前就存在的记录(尤其已离线、无 index 的)不在 '
+     'players_all 里 ⇒ debug/reset_all 清不到。老玩家重上线走 existing ⇒ 这里按"幂等标志 '
+     'reg"补登记一次。少了它, 历史记录永远清不干净(报告 N04 的核心)'),
+
+    (_MC + '/internal/player/create.mcfunction',
+     'players "$(uuid)".reg set value 1b', None, None,
+     '★ N04 修(2026-10-11): 建记录口必须打"已登记"标志(供 existing 判补登记)。'
+     '5 个建记录口统一写 reg, 否则 existing 会把已登记的新记录再登记一遍'),
+    (_MC + '/internal/join/new.mcfunction',
+     'players "$(uuid)".reg set value 1b', None, None,
+     '★ N04 修: 同上(新玩家首次建记录)'),
+    (_MC + '/internal/debug/reset_one.mcfunction',
+     'players "$(uuid)".reg set value 1b', None, None,
+     '★ N04 修: 同上(管理员重置重建记录)'),
+    (_MC + '/internal/uuid/migrate.mcfunction',
+     'players "$(uuid)".reg set value 1b', None, None,
+     '★ N04 修: 同上(迁移新建键)'),
+    (_MC + '/internal/uuid/join.mcfunction',
+     'reg set value 1b', None, None,
+     '★ N04 修: 同上(该文件当前无调用方, 保持一致免得将来接回去时漏)'),
+
+    # ---- N05/N06(2026-10-11): 重置链(逐项清账清单 + 首次加入事件) ----
+    (_SD + '/event/player_reset.mcfunction',
+     'scoreboard players reset @s zx.', None, None,
+     '★ N06(2026-10-11): 清账清单必须**逐项** reset zx.*(由 _gen_reset_scores.py 生成), '
+     '不能再回到"不带 objective 的全清"(那会连 naturewind 的 nw.* 一起清)。'
+     '本锁只保证"清单非空且指向 zx.*"; 集合的完整对账由 resetset 规则负责。'),
+    (_SD + '/event/player_first_join.mcfunction',
+     'function sweetdream:event/player_reset', None, None,
+     '★ N05(2026-10-11): 首次加入事件必须复用同一份清账清单(player_reset)—— '
+     'reset_all 清不到的离线玩家靠它上线时补清; 少这行 = N05 没修。'),
+    (_MC + '/internal/join/new.mcfunction',
+     'function #manacore:event/player_first_join', None,
+     ('function #manacore:event/player_first_join',
+      'manacore:internal/join/register'),
+     '★ N05(2026-10-11): join/new(新玩家 / reset_all 后首次上线)必须在 register '
+     '**之后**抛 #manacore:event/player_first_join。抛早了(记录/索引还没落库)应用层'
+     '可能读到未就绪的上下文; 抛在 existing 里则会让老玩家每次重连都清账本。'),
+    ('manacore-1.0.0/data/manacore/tags/function/event/player_first_join.json',
+     'manacore:event/noop', None, None,
+     '★ N05(2026-10-11): 新事件标签的默认占位 —— 空标签不是合法目标, 会让 '
+     '`function #manacore:event/player_first_join` 在解析期报错(整个 join/new 加载失败)。'),
+    ('sweetdream/data/manacore/tags/function/event/player_first_join.json',
+     'sweetdream:event/player_first_join', None, None,
+     '★ N05(2026-10-11): sweetdream 侧必须往 #manacore:event/player_first_join 追加'
+     '自己的 handler(否则事件抛了没人听 = N05 没生效)。'),
+    (_MC + '/debug/reset_all.mcfunction',
+     'scoreboard players reset @a manacore.gen', None, None,
+     '★ N05(2026-10-11): reset_all 顺带清注册代/心跳(让在线玩家下一拍必然重走 join/new '
+     '-> 触发 player_first_join)。不清也不致命(索引已空, verify 会判需要重注册), '
+     '但显式清掉更"彻底重生"。'),
+    # ---- N07(2026-10-11): 观测镜缓存按 UUID 分片 ----
+    (_SD + '/equipment/tool/look/render_go.mcfunction',
+     'cache."$(uuid)".eq',
+     r'storage zx:look cache\.eq\b|storage zx:look cache\.skill\b', None,
+     '★ N07: render(每刻·每个开面板的人)必须读**自己那份**缓存 cache."<uuid>". '
+     '写回/读回全局单格 cache.eq / cache.skill 时, `execute as @a[tag=test_look_on]` '
+     '的每一次覆盖都会串人: 装备专属段穿上别人的装备、冷却拿别人的技能 id 去查。'),
+    (_SD + '/equipment/tool/look/render_go.mcfunction',
+     'cache."$(uuid)".skill',
+     r'storage zx:look cache\.eq\b|storage zx:look cache\.skill\b', None,
+     '★ N07: 冷却读的"手持技能"也必须是自己 uuid 那份。'),
+    (_SD + '/equipment/tool/look/cache.mcfunction',
+     'sweetdream:equipment/tool/look/cache_go',
+     r'storage zx:look cache\.', None,
+     '★ N07: cache 只做"取 uuid / 判空 / 转交"(普通命令), 宏落库全在 cache_go —— '
+     '它自己不许再写全局缓存格(否则 N07 原样回归)。'),
+    (_SD + '/equipment/tool/look/cache_go.mcfunction',
+     'cache."$(uuid)".eq',
+     r'storage zx:look cache\.[a-z]', None,
+     '★ N07: 缓存落库必须按 uuid 分片(见 cache 头注释); 写回全局单格 = 多人串人。'),
+    (_SD + '/equipment/tool/look/cache_go.mcfunction',
+     'cache."$(uuid)".skill',
+     r'storage zx:look cache\.[a-z]', None,
+     '★ N07: 手持技能的缓存同样按 uuid 分片。'),
+    (_SD + '/equipment/tool/look/toggle.mcfunction',
+     'execute if entity @s[tag=test_look_on] run function sweetdream:equipment/tool/look/cache',
+     None, None,
+     '★ N07: 开启面板那一刻必须**立即**刷一次缓存 —— 否则头一秒 render 读到的还是'
+     '上一次留下的旧缓存(旧版是别人的, 新版是自己上一轮的)。'),
+    # ---- N09(2026-10-11): 海棠 hook 必须"普通 wrapper + 宏叶子" ----
+    (_SD + '/equipment/staff/begonia/hook_calc.mcfunction',
+     'sweetdream:equipment/staff/begonia/emp_find',
+     r'\$\(u[0-3]\)', None,
+     '★ N09: 本文件被 #manacore:event/damage_calc **无参派发**, 绝不能含 $(u0..u3) '
+     '(宏行拿不到参数 ⇒ 整段不执行、零日志)。宏行必须住在 emp_find, 由本文件 with storage 调。'),
+    (_SD + '/equipment/staff/begonia/hook_calc.mcfunction',
+     'execute at @s run function sweetdream:equipment/staff/begonia/emp_find', None, None,
+     '★ N09: 查漩涡前必须先 `at @s` 把**位置**定到施法者本人 —— calc_as_owner 只换了'
+     '执行者、没换位置, 否则 `distance=..6` 会按召唤物残留坐标量, 判成"不在漩涡旁"。'),
+    (_SD + '/equipment/staff/begonia/emp_find.mcfunction',
+     '$(u0)', None, None,
+     '★ N09: 那条宏行必须住在 emp_find(只由 hook_calc `with storage zx:work bgc` 调)。'),
+    # ---- N10(2026-10-11): 核心伤害的定点乘法必须走 mul_pct 除余分解 ----
+    (_MC + '/internal/damage/calc.mcfunction',
+     'manacore:internal/damage/mul_pct',
+     r'operation\s+#\w+\s+\S+\s+\*=\s+#(?:mul_[mao]|im)\b', None,
+     '★ N10: 基数(x1000) × 倍率(x100) ÷ 100 的**裸乘**会在 基数×倍率 > 约 21,474 时把'
+     '中间值顶过 int32 ⇒ 回绕成负 ⇒ 末尾 `matches ..0` 夹成 0(报告例: max_mana 3 万、'
+     '期望 30000, 实打 0)。四处都必须走 mul_pct 的"除余分解"(既不溢出也不掉精度)。'),
+    (_MC + '/internal/damage/mul_pct.mcfunction',
+     'scoreboard players operation #lo $(obj) -= #r $(obj)', None, None,
+     '★ N10: 除余分解的关键一步 —— 余数用**减法**取(r = B − (B÷100)×100), **不用 %=**:'
+     '原版 %= 对负数的取余符号没有先例背书, 减法版对正负严格成立(20 万组离线比对通过)。'
+     '★ A01(2026-10-11 三审): 四个临时量(#q/#r/#lo/#mul_out)一律落在调用方传入的 $(obj), 不再硬编码。'),
+    (_MC + '/internal/damage/mul_pct.mcfunction',
+     'scoreboard players operation #mul_out $(obj) += #lo $(obj)', None, None,
+     '★ N10: 出参必须是"前半(q·M) + 后半(r·M÷100)"两项之和, 少一项 = 丢掉小数部分。'
+     '★ A01: 出参 objective = $(obj)(= 调用方的 objective)。'),
+    (_MC + '/internal/damage/mul_pct.mcfunction', None,
+     r'scoreboard\s+players\s+operation\s+#(?:q|r|lo|mul_out)\s+manacore\.math\b'
+     r'|store\s+result\s+score\s+#mul_out\s+manacore\.math\b', None,
+     '★ A01(2026-10-11 三审)禁止回归: mul_pct 里出现**硬编码** manacore.math 的输入/出参。'
+     '调用方 sweetdream:lib/dmg_add_apply 的分数写在 zx.meta —— "持有者名对、objective 错" '
+     '会让输入一律读不到(0) ⇒ 只要本轮有增伤, 重算结果就是 0(报告例: 该给 115 实得 0), '
+     '而且**零日志、仿真也看不见**(数值仿真按值建模, 没建 (持有者,objective) 键)。'
+     'objective 只能由 $(obj) 显式传入。'),
+    # ---- N11(2026-10-11): tick_self 一轮只 join 一次 ----
+    (_MC + '/internal/session/tick_self.mcfunction',
+     'execute if score #need manacore.meta matches 1 run function manacore:core/player/join',
+     r'unless data storage manacore:work id\{ok:1b\} run function manacore:core/player/join',
+     None,
+     '★ N11: 两个注册判据(代落后 OR 索引无效)必须在**任何 join 之前**合成单一 #need。'
+     '顺排两条时首次注册会双跑: 第一句 join 已把 @s gen 顶到 #gen, 而 ② 留下的 '
+     'id.ok=0b 还是旧值(join 之后没人回写) ⇒ 第二句又 join ⇒ 同一秒两次 player_join。'),
+
+    # ---- D01(2026-10-11): 口径 B —— 加算只作用于"本通道分量" ----
+    (_MC + '/internal/damage/calc.mcfunction',
+     'storage manacore:out r.seg_m', None, None,
+     'D01 口径 B: calc 必须把三通道分量落进 out(r.seg_m/a/o), 否则 dmg_add_apply 读不到'
+     '分量 ⇒ 只能按 0 算(静默)'),
+    (_MC + '/internal/damage/calc.mcfunction',
+     'storage manacore:out r.seg_x', None, None,
+     'D01 口径 B: calc 必须落 r.seg_x(custom_damage + 生命项 = 第四条分量, 不吃通道加算)'),
+    (_MC + '/internal/damage/calc.mcfunction',
+     'storage manacore:out r.im', None, None,
+     'D01 口径 B: calc 必须落 r.im(独立乘区) —— 事件里 work a 会被 hook 重置, '
+     'apply 只能从 out 读'),
+    (_MC + '/internal/damage/health_part.mcfunction',
+     '#seg_x manacore.math += #hp', None, None,
+     'D01 口径 B: 生命项必须**同时**累加进 #seg_x(第四条分量), 否则会漏进"不吃加算"的 0'),
+    (_SD + '/lib/dmg_add_apply.mcfunction',
+     'internal/damage/mul_pct', None, None,
+     'D01 口径 B: 分量级乘法必须走 mul_pct(seg 可达 ~2e9, 裸乘会越过 int32 回绕, 同 N10)'),
+    (_SD + '/lib/dmg_add_apply.mcfunction',
+     'storage manacore:out r.seg_m', None, None,
+     'D01 口径 B: dmg_add_apply 必须按分量级重算(读 r.seg_*), 而不是乘整段'),
+    (_SD + '/lib/dmg_add_apply.mcfunction',
+     None, r'zx:work ch', None,
+     'D01 回归: dmg_add_apply 又读快照 zx:work ch 判通道 —— 口径 B 靠分量自动筛选(seg=0), '
+     '读 ch 会把落点退回"整段"(旧口径 A: 100mm+10atk+炽天使 = 165 而非 115)'),
+    (_SD + '/lib/dmg_add_put_any.mcfunction',
+     'put.ch set value "oth"', None, None,
+     'D01 口径 B: 不挑口径的加成必须给 mm/atk/oth 三条各写一份(分段式下 '
+     'Σseg_i×(1+X)=整段×(1+X)); 只写一条 = 其余通道吃不到(静默)'),
+    (_SD + '/lib/dmg_add_put_any.mcfunction',
+     None, r'zx:work ch', None,
+     'D01 回归: dmg_add_put_any 又读 zx:work ch 挑通路 —— 口径 B 下应固定写满三条'),
 ]
 for _rel, _must, _never, _order, _why in _REGRESS:
     _p = ROOT / _rel
@@ -3456,6 +4559,7 @@ for _fnk, _fp in functions.items():
                 'entity.evoker.cast_spell), 这一声不会播 —— 且不报错'))
 
 TITLE = {'fn': 'function 引用不存在的目标', 'tag': '#tag 引用无对应 json',
+         'upfield': '升级数值字段缺"减旧/加回"一半, 或累加器没归零(静默算错)',
          'macro': '含 $(变量) 但行首不是 $', 'sel': 'data entity 选择器缺 limit=1',
          'adv': '进度奖励问题', 'json': 'JSON 解析失败', 'rp': '模型引用缺失',
          'sched': 'schedule 同名(默认 replace, 会互相顶掉)',
@@ -3550,6 +4654,8 @@ TITLE = {'fn': 'function 引用不存在的目标', 'tag': '#tag 引用无对应
                    '(静默; 真实事故: 悲鸣永远清不掉)',
          'crossgate': '弩的 post_attack 附魔缺 damaging_entity 门控 —— 拿弩近战敲人也会触发技能'
                       '(不耗魔力 + 用上一发快照的层数; 真实事故 2026-10-05: 寒鸦等 5 把弩)',
+         'crossshot': '弩没有配套的"射击进度 + shot 扣蓝" —— lore 写着「魔力 N」却从来不扣'
+                      '(真实事故 2026-10-12: 电弧发射不消耗魔力)',
          'hbslot': 'items 命令用了裸 hotbar 槽位(未知槽位, 整个函数加载失败; 要 hotbar.0..8)',
          'strent': 'execute store result/success entity 目标是多实体(只收单实体, 整个函数加载失败; 多目标要 as 循环)',
          'nbtempty': '{"nbt":...,"interpret":true} 引用的 storage 节点被初始化成空表 [] —— 空列表'
@@ -3812,6 +4918,62 @@ TITLE = {'fn': 'function 引用不存在的目标', 'tag': '#tag 引用无对应
                       '只有**裸名** health/food/air/armor/level/xp/deathCount(1.13 起从来没有命名空间); '
                       '点号/冒号只属于统计类准则(minecraft.custom:minecraft.deaths)。★ 与 itempath/'
                       'selfield 同族: 命令参数没有"编译期"检查, 靠本规则 + latest.log 兜底',
+         'resetset': '重置清账清单(N06): sweetdream:event/player_reset 的逐项 `reset @s zx.*` '
+                     '必须 == 全仓 `scoreboard objectives add zx.*` 的集合(双向)。清单由 '
+                     '.workbuddy/_gen_reset_scores.py 生成 —— 新增账本要重跑它。'
+                     '★ 少了 -> "漏清"(账本残留, 装备被动应加的不加回); 多了 -> 拼错/已删。'
+                     '★ 还禁"不带 objective 的全清": 会连别的数据包(naturewind 的 nw.*)一起清。',
+         'tagmacro': '被函数标签(tags/function/*.json)直接引用的函数里含宏行 $(…) —— '
+                     '`function #…` 是**无参**调用, 宏行拿不到参数会整段跳过(零日志)。'
+                     '真实事故 N09: begonia/hook_calc 里写着 $(u0)..$(u3) 而被 '
+                     '#manacore:event/damage_calc 无参派发 ⇒ 海棠漩涡增强整段不执行。'
+                     '正解 = 标签指普通 wrapper, wrapper 再用 with storage 调宏叶子。',
+         'dmgseg': 'D01 口径 B(2026-10-11) —— 加算只作用于"本通道分量"的三件套必须成对: '
+                   '① calc 出 r.seg_m/a/o/x + r.im; ② dmg_add_apply 按分量级重算(走 mul_pct, '
+                   '不读快照 zx:work ch); ③ dmg_add_put_any 给三条通道各写一份。'
+                   '缺一个 = 静默算错(多通道技能数值偏差, 不报错): 比如 apply 读回 ch ⇒ '
+                   '退回旧口径(100mm+10atk+炽天使 = 165 而非 115); put_any 只写一条 ⇒ '
+                   '其余通道吃不到"技能伤害 +X%"。',
+         'creative': '创造模式幽灵物品(2026-10-11 用户实测) —— itembackup 的"消耗→备份→回手"'
+                     '必须在创造模式下跳过: 生存/冒险下 consumable 走完, 原版把该格清空, '
+                     '所以要靠 effect_2 补回; 创造模式下原版**根本不消耗**, 该格非空 ⇒ '
+                     'effect_2 的 39 个兜底候选会把它当成"原格放不下", 往背包空格再塞一把。'
+                     '要求: ① effect_1 含 gamemode=creative 门禁; ② 门禁必须排在 '
+                     '`advancement revoke` **之后**(否则进度永远停在已完成, 切回生存也不触发)。',
+         'pldur': '偏振光"持续 5 秒"的计时单位(坑 120, 2026-10-11 用户实测: 超限版只撑 2.5 秒) '
+                  '—— zx.pl_t 单位恒为"秒", 但超限版结算节奏是"每 0.5 秒"(half 每 10 刻调 tick)。'
+                  '倒计时写在 tick 里 ⇒ 一次 tick 扣 1 = 把秒当半秒 ⇒ pl_t=5 只撑 2.5 秒。'
+                  '要求: ① tick 里**不得**扣 zx.pl_t; ② second 与 half 各自按真实时间扣; '
+                  '③ half 的扣减必须挂在 20 刻(1 秒)闸上, 不能在 10 刻闸上。',
+         'fdsnap': '堕梦"谁原本在时停里"必须先快照(坑 123, 2026-10-12 用户实测两条 bug) —— '
+                   '⑦ 的时停一挂上就把 zx.stop 改了, 之后按 zx.stop 现选 ⇒ ① 白昼梦的选择器'
+                   '变空集(一件都没附上); ② ⑧ 把刚时停的也算成"原本就在时停"(3+2=5 秒)。'
+                   '要求: ① 改状态前先打 zx.fd_new / zx.fd_old 两个快照标签; ② ⑦⑧ 一律按'
+                   '快照取值, 不许出现 `target:"@e[tag=zx.fd_area,tag=…]"`; ③ +2 秒只认 zx.fd_old; '
+                   '④ 「白昼梦」必须施给**圈内全体**(坑 124, 用户拍板: 已在时停里的也要有, '
+                   '否则普攻转不了真伤)。★ 通用: 按当前状态选人的选择器, 不能在改了同一状态之后再求值。',
+         'ddpair': '黄昏黎明「100×X」必须由 5 条标签进度各自独立触发(坑 138, 2026-10-12 用户实测'
+                   '"打一只带流火+夜火的怪只加 300") —— 旧方案用附魔 post_attack 的受害者回调去'
+                   '数死者的标签数, 但**原版 post_attack 只读攻击者的主手物品**上的附魔, 附在'
+                   '靴子(slots:feet)上永远不触发 ⇒ 回调零调用 ⇒ X 恒用兜底值 1 ⇒ 超限版'
+                   '"额外 100×X"永远只给 100。要求: ① 5 个进度 dusk_dawn_kill_mark_<tag>'
+                   '(yuanhai/liuhuo/yehuo/shixin/dream) 都要在、rewards.function 各自指向同名 '
+                   'wrapper kill_mark_<tag>; ② 每个 wrapper 首行 revoke 自己那条(自撤销型契约)'
+                   '并转发到共享的 kill_mark; ③ 旧的合并版 dusk_dawn_kill_mark.json 必须已删'
+                   '(留着会同刻触发两遍, X 虚高); ④ kill_mark 用 `@s zx.dd_n` 数"本刻进来几次"'
+                   '(= X)、自己不得再 revoke 进度, 也不得引用已废弃的 zx.dd_xk / zx.dd_px; '
+                   '⑤ kill_init 必须把 zx.dd_n 归零(否则第二次击杀接着上次涨, 基础版少给)。'
+                   '★ 通用: 依附魔回调的机制, 先确认附魔挂在**会被遍历到的位置**'
+                   '(post_attack ⇒ 攻击者主手物品) —— 挂错槽位是静默失效(不报错/零日志)。',
+         'embertop': '余烬"夜火怪也要补流火"及它的节流(坑 137, 2026-10-12 用户拍板) —— '
+                     '文案只说"使其附着流火", 没排除"已经有夜火"; 旧版 burned_out 用 '
+                     '`if entity @s[tag=zx.status.yehuo] run return 0` 把这一支吞掉 ⇒ 穿余烬'
+                     '永远看不到"流火+夜火"(用户实测"夜火怪再燃烧后没有附加流火")。'
+                     '要求: ① burned_out 必须调用 ember/top_up, 且该调用必须排在"见夜火即 '
+                     'return 0"**之前**(否则是死代码); ② top_up 必须带 5 秒节流'
+                     '(zx.em_gate 记"下次可补的 tick 时刻" + #now manacore.meta 比对) —— '
+                     '双状态被吸收后只剩流火, 下次熄灭又升级成夜火, 反复回 100 魔力 = 刷魔力漏洞。'
+                     '★ 通用: 能凭空重新产生某可消耗资源的被动, 先问"它能不能给自己续杯"。',
          }
 print('=' * 72)
 print('数据包静态自检  函数 %d 个 / 命名空间 %s' % (len(functions), sorted({s.name for s in nsdirs})))
@@ -3820,7 +4982,12 @@ total = 0
 for k in TITLE:
     print('\n[%s] %d 条' % (TITLE[k], len(R[k])))
     total += len(R[k])
+    # ★ regress 这一桶**不截断**: 它的消息天生就长 —— 形态是
+    #   `缺少"修复标志"(应含 `<整行>` ) —— <说明>`, 长 must(150~330 字) 会把 `—— 说明`
+    #   挤到 180 之外, 而"说明"才是人/探针真正要读的东西。其余桶维持 180。
+    _lim = None if k == 'regress' else 180
     for e in R[k][:40]:
-        print('   ', ' | '.join(str(x).replace(str(ROOT) + '\\', '') for x in e)[:180])
+        _ln = ' | '.join(str(x).replace(str(ROOT) + '\\', '') for x in e)
+        print('   ', _ln if _lim is None else _ln[:_lim])
 print('\n' + '=' * 72)
 print('合计问题: %d' % total)

@@ -7,16 +7,27 @@
 # 【★ 旧的 data.zx.status 判定已废弃 ★】
 #   现在通用标签统一是实体原生 Tags 里的 zx.status.*（由 tag/mark 维护）,
 #   读旧 NBT 会导致流火/夜火判定永远不成立。
-# 【★ “改为”是替换, 不是叠加 ★】
+# 【★ “改为”是替换, 不是叠加 ★】(只针对"还没有夜火"的那一支)
 #   有流火 -> 先摘流火, 再上夜火; 否则会出现“流火+夜火”双状态,
 #   烈火残躯吸掉夜火后流火还在, 下次熄灭又能再变一次, 变成刷魔力漏洞。
+# 【★ 已经有夜火的那一支 = **另补一个「流火」**(2026-10-12 用户拍板) ★】
+#   文案只说“使其附着流火”, 并没有排除“已经有夜火”的情况; 旧版在这里
+#   `if entity @s[tag=zx.status.yehuo] run return 0`(保持最高阶) 会把这一支吞掉,
+#   于是穿余烬永远看不到“流火 + 夜火”(用户实测: “夜火怪再燃烧后没有附加流火”)。
+#   现在改走 top_up: 已是双状态 -> 不动; 只有夜火 -> 补流火, **且带 5 秒节流**
+#   (节流理由写在 top_up 顶部 —— 这条补流火是“吸掉夜火 -> 流火残留 -> 再升级”
+#    那条刷魔力循环唯一能自我重新武装的来源)。
 # ============================================================
 
 # ① 当前还在燃烧 -> 不是“刚刚熄灭”, 什么都不做（标记留给下一秒）
 execute store result score #em_f zx.meta run data get entity @s Fire
 execute if score #em_f zx.meta matches 1.. run return 0
 
-# ② 已经有夜火 -> 保持最高阶, 不降级、不重复
+# ② 已经有「夜火」-> 保持最高阶; 并**按文案补一个「流火」**(2026-10-12 用户拍板)
+#   ★ 节流(同一只生物 5 秒一次)写在 top_up 里, 别把这两行拆开或调换顺序 ——
+#     先 top_up 再收工; 一旦写成"见夜火就 return", 补流火那一支立刻变死代码
+#     (check.py 的 embertop 桶盯着这个顺序)。
+execute if entity @s[tag=zx.status.yehuo] run function sweetdream:equipment/armor/ember/top_up
 execute if entity @s[tag=zx.status.yehuo] run return 0
 
 # ③ 判断这一只原本有没有流火

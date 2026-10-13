@@ -66,7 +66,7 @@ function manacore:api/damage/calc
 effect give @s minecraft:speed 1 2 true
 
 # ⑦ 把伤害装进法球, 交给"法杖类默认普攻"射出去
-data modify storage zx:work ball set value {dmg:0.0,style:"wind"}
+data modify storage zx:work ball set value {dmg:0.0,style:"wind_ontheground"}
 data modify storage zx:work ball.dmg set from storage manacore:out r.damage
 function sweetdream:equipment/staff/attack
 

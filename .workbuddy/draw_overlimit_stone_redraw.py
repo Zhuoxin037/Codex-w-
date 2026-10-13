@@ -94,6 +94,19 @@ DESIGNS = [
     ('furnace_core', 'armor', '炉心', '方炉与熔芯', 'c78146', [
         '..#####..', '..#...#..', '.#######.', '.#..#..#.', '.#.#+#.#.',
         '.#..#..#.', '.#######.', '..#...#..', '..#####..']),
+    # ---- 批 I1(2026-10-12): 超限·电弧 / 火种 / 崩裂 / 共鸣 ----
+    ('arc', 'bow', '电弧', '分叉电刺', '6ed2f5', [
+        '.....#...', '....##...', '...##....', '...##..#.', '....#.##.',
+        '...###...', '...##.#..', '..##..#..', '..#......']),
+    ('tinder', 'sword', '火种', '余烬火星', 'ef8a52', [
+        '.........', '....#....', '...#.#...', '..#...#..', '.##.#.##.',
+        '..#.#.#..', '..#####..', '...#.#...', '....#....']),
+    ('fissure', 'axe', '崩裂', '地裂折痕', 'ac8654', [
+        '..#......', '..##.....', '...#.##..', '..##..#..', '...#..#..',
+        '..##..##.', '.##....#.', '..#......', '...#.....']),
+    ('chime', 'staff', '共鸣', '同心声波', '967cec', [
+        '...###...', '..#...#..', '.#..#..#.', '#..#.#..#', '#.#...#.#',
+        '#..#.#..#', '.#..#..#.', '..#...#..', '...###...']),
 ]
 
 CATEGORY = {'sword': '剑', 'axe': '斧', 'bow': '弩', 'staff': '法杖', 'armor': '盔甲'}
@@ -174,7 +187,7 @@ def main():
     original_assets = files_hash(RP / 'assets/sweetdream/textures/item/stone')
     original_def = sha(RP / 'assets/minecraft/items/recovery_compass.json')
     expected = {row[0] for row in constants['OL_SPEC']}
-    assert len(expected) == 24 and expected == {row[0] for row in DESIGNS}
+    assert len(expected) == 28 and expected == {row[0] for row in DESIGNS}
     entries = json.loads((RP / 'assets/minecraft/items/recovery_compass.json').read_text(encoding='utf-8'))['model']['entries']
     routing = {e['threshold']: e['model']['model'] for e in entries}
     images, originals, report, masks = {}, {}, [], {}
@@ -195,12 +208,14 @@ def main():
         path.parent.mkdir(exist_ok=True)
         im.save(path)
         source = RP / 'assets/sweetdream/textures/item/stone' / path.name
-        images[cid], originals[cid] = im, Image.open(source).convert('RGBA')
+        # ★ 批 I1 新增的 4 颗还没进包 -> 没有"原图"; 用重绘本身兜底(对照图上表现为"未变更")
+        images[cid] = im
+        originals[cid] = Image.open(source).convert('RGBA') if source.exists() else im.copy()
         report.append({'id':cid,'name':name,'category':cat,'motif':motif,'theme_colour':'#'+colour,
                        'cmd':cmd,'file':str(path),'sha256':sha(path),'prior_sha256':sha(source),
                        'current_skill_lore':skill_text})
-    assert len({im.tobytes() for im in images.values()}) == 24
-    assert len(set(masks.values())) == 24
+    assert len({im.tobytes() for im in images.values()}) == 28
+    assert len(set(masks.values())) == 28
     distances = [(sum(x != y for x,y in zip(masks[a],masks[b])),a,b) for a,b in itertools.combinations(masks,2)]
     nearest = min(distances)
     assert nearest[0] >= 8, nearest
@@ -209,8 +224,8 @@ def main():
     title=ImageFont.truetype(font_path,30)
     name_font=ImageFont.truetype(font_path,20)
     small=ImageFont.truetype(font_path,16)
-    board=Image.new('RGB',(1260,1040),'#23262c');d=ImageDraw.Draw(board)
-    d.text((26,18),'超限石 · 24 颗手绘像素重绘',font=title,fill='#eee3ce')
+    board=Image.new('RGB',(1260,1250),'#23262c');d=ImageDraw.Draw(board)
+    d.text((26,18),'超限石 · 28 颗手绘像素重绘',font=title,fill='#eee3ce')
     d.text((26,66),'16×16 实际贴图 / 晶石切面 + 各自的主题刻纹 / 尚未替换游戏资源',font=small,fill='#acb4b9')
     for i,(cid,cat,name,motif,colour,rows) in enumerate(DESIGNS):
         x=20+(i%6)*206;y=110+(i//6)*220
@@ -222,8 +237,8 @@ def main():
         bbox=d.textbbox((0,0),label,font=f)
         d.text((x+(197-bbox[2])//2,y+137),label,font=f,fill='#dedbcf')
         d.text((x+15,y+169),motif,font=small,fill='#adbabc')
-    d.text((26,1010),'所有刻纹都不同；颜色相近时仍可以辨识。纹样为静态图标，不改变技能与超限编号。',font=small,fill='#acb4b9')
-    board.save(OUT/'超限石_24颗_重绘总览.png')
+    d.text((26,1215),'所有刻纹都不同；颜色相近时仍可以辨识。纹样为静态图标，不改变技能与超限编号。',font=small,fill='#acb4b9')
+    board.save(OUT/'超限石_28颗_重绘总览.png')
 
     # Compare the most easily confused orange and blue sets at both magnified
     # scale and real inventory-slot scale. All images are the actual PNGs.
@@ -245,23 +260,24 @@ def main():
             q=im.resize((32,32),Image.Resampling.NEAREST);pairs.paste(q,(sx+4,sy+4),q)
     pairs.save(OUT/'超限石_橙蓝组_前后对照.png')
 
-    manifest={'phase':'已完成24颗手绘重绘，待审阅','hand_authored':True,'image_generation_used':False,
-              'resolution':[16,16],'item_count':24,'distinct_engravings':24,
+    manifest={'phase':'已完成28颗手绘重绘，待审阅','hand_authored':True,'image_generation_used':False,
+              'resolution':[16,16],'item_count':28,'distinct_engravings':28,
               'minimum_symbol_pixel_difference':nearest[0],'closest_symbols':list(nearest[1:]),
               'game_bound':False,'number_mapping_unchanged':True,'items':report}
     (OUT/'贴图清单.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
-    (OUT/'说明.md').write_text('''# 超限石 · 24颗像素重绘
+    (OUT/'说明.md').write_text('''# 超限石 · 28颗像素重绘
 
-实际16×16透明PNG，以晶石切面、主题刻纹和配色区分24颗超限石。
-剑、斧、弩、法杖、盔甲使用五种切面轮廓；各石头中心刻纹逐颗手绘，24种均不同。
-例如深海的回响为卷浪水滴，永霜为霜晶，寒鸦为鸦羽，红莲为莲瓣，炉心为方炉熔芯。
+实际16×16透明PNG，以晶石切面、主题刻纹和配色区分28颗超限石。
+剑、斧、弩、法杖、盔甲使用五种切面轮廓；各石头中心刻纹逐颗手绘，28种均不同。
+例如深海的回响为卷浪水滴，永霜为霜晶，寒鸦为鸦羽，红莲为莲瓣，炉心为方炉熔芯；
+批 I1 新增的电弧为分叉电刺、火种为余烬火星、崩裂为地裂折痕、共鸣为同心声波。
 颜色相近时可以继续凭刻纹区分，不依赖汉字在16像素里挤占整个图标。
 
-贴图/ 是完整24张实际PNG，贴图清单.json记录原贴图/重绘的校验值、现有技能说明、原超限编号。
+贴图/ 是完整28张实际PNG，贴图清单.json记录原贴图/重绘的校验值、现有技能说明、原超限编号。
 总览与前后对照均直接放大真实PNG；物品栏示意以两倍游戏像素显示，没有另行美化概念图。
 本阶段供审阅，没有替换资源包或游戏中的贴图，不改超限编号和技能。
 ''',encoding='utf-8')
-    archive=OUT/'超限石_24颗_重绘贴图.zip'
+    archive=OUT/'超限石_28颗_重绘贴图.zip'
     with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED) as z:
         for item in report:
             p=Path(item['file']);z.write(p,p.relative_to(OUT).as_posix())
@@ -269,8 +285,8 @@ def main():
             z.write(OUT/name,name)
     assert original_assets == files_hash(RP / 'assets/sweetdream/textures/item/stone')
     assert original_def == sha(RP / 'assets/minecraft/items/recovery_compass.json')
-    print(json.dumps({'textures':24,'unique_symbols':24,'minimum_symbol_difference':nearest[0],
-                      'game_assets_unchanged':True,'preview':str(OUT/'超限石_24颗_重绘总览.png'),
+    print(json.dumps({'textures':28,'unique_symbols':28,'minimum_symbol_difference':nearest[0],
+                      'game_assets_unchanged':True,'preview':str(OUT/'超限石_28颗_重绘总览.png'),
                       'archive':str(archive)},ensure_ascii=False))
 
 

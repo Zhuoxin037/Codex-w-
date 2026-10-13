@@ -99,6 +99,10 @@ TAGS = {
     "sickle_dreams":     ["shixin", "max_mana", "apply", "timestop", "consume"],
     "tinder":            ["cur_mana", "max_hp", "debuff"],
     "verdict":           ["max_mana", "base_atk", "debuff", "field"],
+    # ---- 新批次(2026-10-11) ----
+    "tidemark":          ["yuanhai", "max_mana", "apply"],
+    "grayscale":         ["liuhuo", "cur_mana", "debuff", "apply"],
+    "crescent":          ["base_atk", "max_mana", "cd_down"],
 
     # ================= 斧 axe（15）=================
     "agony":             ["max_hp", "base_atk", "formation"],
@@ -116,6 +120,11 @@ TAGS = {
     "red_lotus":         ["liuhuo", "yehuo", "base_atk", "consume"],
     "skyvault":          ["max_mana", "base_atk", "dash", "cd_down", "debuff"],
     "thunderclap":       ["max_mana", "cur_mana", "max_hp", "formation", "field", "debuff"],
+    # ---- 新批次(2026-10-11《新的装备-超限等.md》) ----
+    "sacred_relic":      ["liuhuo", "yehuo", "shixin", "yuanhai", "dream", "max_mana", "max_hp",
+                          "true_dmg", "timestop", "formation", "summon"],
+    "anchor":            ["max_mana", "base_atk", "dash"],
+    "scorch_bone":       ["liuhuo", "yehuo", "base_atk", "max_mana", "apply", "consume"],
 
     # ================= 弩 bow（6）=================
     "arc":               ["cur_mana", "base_atk"],
@@ -124,6 +133,10 @@ TAGS = {
     "lucid_dream":       ["dream", "max_mana", "cur_mana", "true_dmg", "timestop", "consume", "formation"],
     "rainbow":           ["liuhuo", "yehuo", "yuanhai", "dream", "shixin", "max_hp", "consume"],
     "sculk_echo":        ["base_atk"],
+    # ---- 新批次(2026-10-11) ----
+    "dragon_tongue":     ["liuhuo", "yehuo", "cur_mana", "consume"],
+    "cloudtrail":        ["base_atk", "field"],
+    "burst_dawn":        ["max_mana", "base_atk", "formation", "summon", "slow", "debuff"],
 
     # ================= 法杖 staff（12）=================
     "apocalypse":        ["max_mana", "cur_mana", "formation", "debuff"],
@@ -138,6 +151,9 @@ TAGS = {
     "sail":              ["yuanhai", "liuhuo", "dream", "shixin", "attract", "apply", "summon"],
     "twilight":          ["shixin", "max_mana", "apply", "debuff"],
     "wind_ontheground":  ["max_mana", "cur_mana", "formation", "buff"],
+    # ---- 新批次(2026-10-11) ----
+    "triad":             ["max_mana", "base_atk", "formation", "freeze", "debuff"],
+    "five_curses":       ["cur_mana", "true_dmg", "slow", "debuff"],
 
     # ================= 盔甲 armor（25）=================
     "blaze_armor":       ["liuhuo", "max_mana", "buff", "debuff", "apply"],

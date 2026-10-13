@@ -9,3 +9,6 @@
 # ============================================================
 
 execute as @a[scores={zx.pl_t=1..,zx.pl_ol=0}] at @s run function sweetdream:equipment/staff/polarized_light/tick
+
+# ★ 倒计时由驱动方扣(坑 120): 这里每 20 刻 = 1 秒, 扣 1 秒 —— 与 lore 的"持续 5 秒"对齐。
+execute as @a[scores={zx.pl_t=1..,zx.pl_ol=0}] run scoreboard players remove @s zx.pl_t 1

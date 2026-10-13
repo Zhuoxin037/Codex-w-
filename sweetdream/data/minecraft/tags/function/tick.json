@@ -8,6 +8,7 @@
     "sweetdream:equipment/staff/sail/visual/tick",
     "sweetdream:equipment/staff/palette/visual/tick",
     "sweetdream:equipment/axe/angel_core/visual/tick",
-    "sweetdream:visual/tick"
+    "sweetdream:visual/tick",
+    "sweetdream:equipment/axe/sacred_relic/visual/tick"
   ]
 }

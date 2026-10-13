@@ -20,8 +20,8 @@
 # ============================================================
 
 # ① 自己已经在方块里(比如贴墙发射) / 下一步是方块 -> 消失, 不掉血
-execute unless block ~ ~ ~ #minecraft:replaceable run return run function sweetdream:projectile/ball/pop
-$execute rotated $(yaw) $(pitch) positioned ^ ^ ^0.75 unless block ~ ~ ~ #minecraft:replaceable run return run function sweetdream:projectile/ball/pop
+execute unless block ~ ~ ~ #minecraft:replaceable run return run function sweetdream:projectile/ball/pop with entity @s data
+$execute rotated $(yaw) $(pitch) positioned ^ ^ ^0.75 unless block ~ ~ ~ #minecraft:replaceable run return run function sweetdream:projectile/ball/pop with entity @s data
 
 # ② 撞到生物? -> 命中(打伤害 + 消失)
 # 【★ 这里必须用"判定箱相交"(dx/dy/dz), 不能用 distance ★】
@@ -44,9 +44,19 @@ execute if entity @e[distance=0..,tag=zx.ball_touch,limit=1] run return run func
 $execute if entity @e[nbt={UUID:[I;$(t0),$(t1),$(t2),$(t3)]},limit=1] facing entity @e[nbt={UUID:[I;$(t0),$(t1),$(t2),$(t3)]},limit=1] eyes run tp @s ^ ^ ^0.75
 $execute unless entity @e[nbt={UUID:[I;$(t0),$(t1),$(t2),$(t3)]},limit=1] rotated $(yaw) $(pitch) run tp @s ^ ^ ^0.75
 
-# ④ 拖尾外观(按 style 分工; 现在只有 wind 一种)
-execute if data entity @s data{style:"wind"} run function sweetdream:projectile/ball/fx_wind
-
+# ④ 拖尾外观(按 style 分工 —— 一把法杖一份, 由 _gen_staff_particles.py 维护)
+execute if data entity @s data{style:"apocalypse"} run function sweetdream:projectile/ball/fx_apocalypse
+execute if data entity @s data{style:"begonia"} run function sweetdream:projectile/ball/fx_begonia
+execute if data entity @s data{style:"chime"} run function sweetdream:projectile/ball/fx_chime
+execute if data entity @s data{style:"delusion"} run function sweetdream:projectile/ball/fx_delusion
+execute if data entity @s data{style:"fallen_dream"} run function sweetdream:projectile/ball/fx_fallen_dream
+execute if data entity @s data{style:"final_revelation"} run function sweetdream:projectile/ball/fx_final_revelation
+execute if data entity @s data{style:"gu_poison"} run function sweetdream:projectile/ball/fx_gu_poison
+execute if data entity @s data{style:"palette"} run function sweetdream:projectile/ball/fx_palette
+execute if data entity @s data{style:"polarized_light"} run function sweetdream:projectile/ball/fx_polarized_light
+execute if data entity @s data{style:"sail"} run function sweetdream:projectile/ball/fx_sail
+execute if data entity @s data{style:"twilight"} run function sweetdream:projectile/ball/fx_twilight
+execute if data entity @s data{style:"wind_ontheground"} run function sweetdream:projectile/ball/fx_wind_ontheground
 # ⑤ 射程耗尽 -> 自己消失
 scoreboard players remove @s zx.ball_dist 75
-execute if score @s zx.ball_dist matches ..0 run function sweetdream:projectile/ball/pop
+execute if score @s zx.ball_dist matches ..0 run function sweetdream:projectile/ball/pop with entity @s data

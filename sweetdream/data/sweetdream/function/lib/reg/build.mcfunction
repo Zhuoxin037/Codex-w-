@@ -369,6 +369,19 @@ data modify storage zx:reg names.flesh_mill set value "血肉磨坊"
 data modify storage zx:reg names.blaze_armor set value "焱"
 data modify storage zx:reg names.spirit_sight set value "灵视"
 data modify storage zx:reg names.fade set value "息影"
+# ---- 第八批(2026-10-11《新的装备-超限等.md》新武器 11 件, 只有 give; 效果/外观待做) ----
+#   ★ 键必须等于 give 里 custom_data 的 zx:[ "<id>" ] 那一段, 否则 debug/worn 显示英文 id。
+data modify storage zx:reg names.sacred_relic set value "圣骸"
+data modify storage zx:reg names.anchor set value "沉锚"
+data modify storage zx:reg names.scorch_bone set value "焦骨"
+data modify storage zx:reg names.tidemark set value "潮痕"
+data modify storage zx:reg names.grayscale set value "灰度"
+data modify storage zx:reg names.crescent set value "缺月"
+data modify storage zx:reg names.dragon_tongue set value "龙舌"
+data modify storage zx:reg names.cloudtrail set value "云迹"
+data modify storage zx:reg names.burst_dawn set value "爆裂黎明"
+data modify storage zx:reg names.triad set value "很冰的斧"
+data modify storage zx:reg names.five_curses set value "五世恶咒"
 
 # ============================================================
 # tg: 每个 /trigger 调试入口

@@ -1,6 +1,10 @@
 # ============================================================
-# sweetdream:internal/itembackup/snap_main —— 玩家主手 -> zx:ret 快照(宏 {uuid})
+# sweetdream:internal/itembackup/snap_main —— 玩家主手 -> zx:ret **暂存区**(宏 {uuid})
 # ------------------------------------------------------------
+# 【★ A02(2026-10-11 三审): 快照落"暂存区" stage, 不落"待归还" ★】
+#   本文件只负责"把玩家**当前**主手那把拍下来", 落点 = zx:ret p."<uuid>".stage.mainhand。
+#   真正的"欠玩家的那件"是消费当刻由 enqueue 从暂存区**搬进队列** q 的;
+#   所以暂存区随时可被覆盖(backup_go 每秒刷新), 与"欠不欠一把"无关。
 # 【★ 为什么必须中转盔甲架(坑 95, 2026-10-11)】
 #   玩家 NBT 实测(playerdata 解剖): **equipment 复合只存穿戴的盔甲**
 #   (equipment={feet,legs}), 玩家的主手/快捷栏物品全在 Inventory 列表
@@ -27,8 +31,8 @@ execute at @s run summon minecraft:armor_stand ~ ~ ~ {Tags:["zx.snap_tmp"],Marke
 # ③ 玩家主手 -> 临时架主手(item replace 的槽位 = 物品谓词语法, 对玩家合法)
 item replace entity @e[tag=zx.snap_tmp,limit=1] weapon.mainhand from entity @s weapon.mainhand
 
-# ④ 临时架(生物) -> 存储(equipment.mainhand 对非玩家实体有效)
-$data modify storage zx:ret p."$(uuid)".mainhand set from entity @e[tag=zx.snap_tmp,limit=1] equipment.mainhand
+# ④ 临时架(生物) -> 存储暂存区(equipment.mainhand 对非玩家实体有效)
+$data modify storage zx:ret p."$(uuid)".stage.mainhand set from entity @e[tag=zx.snap_tmp,limit=1] equipment.mainhand
 
 # ⑤ 收尾
 kill @e[tag=zx.snap_tmp]

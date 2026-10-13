@@ -44,6 +44,6 @@ function sweetdream:overlimit/api/mod
 function manacore:api/damage/calc
 
 # ⑤ 装球射出去 + 命中回调(20% 附噬心 + 补一发)
-data modify storage zx:work ball set value {dmg:0.0,style:"plain",hit:"sweetdream:equipment/staff/twilight/ball_hit"}
+data modify storage zx:work ball set value {dmg:0.0,style:"twilight",hit:"sweetdream:equipment/staff/twilight/ball_hit"}
 data modify storage zx:work ball.dmg set from storage manacore:out r.damage
 function sweetdream:equipment/staff/attack

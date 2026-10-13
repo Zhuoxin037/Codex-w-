@@ -1,8 +1,9 @@
 # ============================================================
 # sweetdream:upgrade/api/bonus_held —— 汇总**主手**这件装备上所有升级的加成
 # ------------------------------------------------------------
-# 【出参】zx:out r = {count:0~4, dmg, mana, cd, mm, mr, mh, mhp, ar, at, hp, cdex, ms_pct, ms_every}
+# 【出参】zx:out r = {count:0~4, dmg, mana, cd, mm, mr, mh, mhp, ar, at, hp, cdex, aspd, ms_pct, ms_every}
 #   dmg/mana/cd = 乘区加算后的小数(0.10 = +10%; cd 负数 = 减冷却)
+#   aspd = 攻击速度固定值加算(0.10 = +0.1; 神经衰弱石, 由 upgrade/held_apply 挂到玩家属性)
 #   mm=魔力上限 / mr=每秒回魔 / mh=每次攻击回魔 / mhp=每次攻击回魔百分比(1.5 = 1.5%)
 #   ★ 2026-10-07 扩: ar/at/hp=护甲值/护甲韧性/最大生命值(整数);
 #     cdex=1 表示"冷却 >30 秒的技能每秒额外 -1 秒"; ms_pct/ms_every=魔力沸涌阈值与间隔秒
@@ -14,7 +15,7 @@
 #   r.cd / r.cdex / r.ms_*; 攻击回魔读 r.mh / r.mhp(见 upgrade/api/on_hit)。
 # ============================================================
 
-data modify storage zx:out r set value {count:0,dmg:0.0,mana:0.0,cd:0.0,mm:0,mr:0,mh:0,mhp:0.0,ar:0,at:0,hp:0,cdex:0,ms_pct:0,ms_every:0}
+data modify storage zx:out r set value {count:0,dmg:0.0,mana:0.0,cd:0.0,mm:0,mr:0,mh:0,mhp:0.0,ar:0,at:0,hp:0,cdex:0,aspd:0.0,ms_pct:0,ms_every:0}
 scoreboard players set #up_dmg zx.meta 0
 scoreboard players set #up_mana zx.meta 0
 scoreboard players set #up_cd zx.meta 0
@@ -36,6 +37,8 @@ scoreboard players set #up_tc zx.meta 0
 scoreboard players set #up_boil zx.meta 0
 scoreboard players set #up_nv zx.meta 0
 scoreboard players set #up_rg zx.meta 0
+# ★ 2026-10-12 扩: 神经衰弱(攻速 aspd) —— bonus_take 会读/减/加它, 不归零会残留上一次的值。
+scoreboard players set #up_aspd zx.meta 0
 # 分级链条的桶每次重来(不然上一次的结果会残留)
 data remove storage zx:work up_val
 
@@ -69,3 +72,5 @@ execute store result storage zx:out r.ms_every int 1 run scoreboard players get 
 # ★ 效果开关(火炬 / 沸腾)
 execute store result storage zx:out r.tc int 1 run scoreboard players get #up_tc zx.meta
 execute store result storage zx:out r.boil int 1 run scoreboard players get #up_boil zx.meta
+# ★ 神经衰弱(攻速): 与 dmg 同一套 ×0.01 换回小数(0.1 -> 10 -> 0.1)
+execute store result storage zx:out r.aspd double 0.01 run scoreboard players get #up_aspd zx.meta

@@ -1,0 +1,8 @@
+[
+  {
+    "function": "minecraft:set_components",
+    "components": {
+      "minecraft:item_name": {"text": "很重的枪", "bold": true, "color": "gray"}
+    }
+  }
+]

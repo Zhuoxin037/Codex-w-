@@ -16,6 +16,14 @@
     python build_full_pack.py            # 只生成到 OUT
     python build_full_pack.py --deploy   # 生成后再同步到游戏实例 resourcepacks/
     python build_full_pack.py --zip      # 生成后再打一个可分发 zip
+    python build_full_pack.py --diff     # 【只读】对照完整版与构建来源, 看有没有"直接改动"
+    （护栏: 重建会先对照; 若完整版里有构建来源之外的改动, 会自动备份并中止,
+      需 --force 才覆盖; --no-backup 可关闭自动备份）
+    ★ A06(2026-10-11 三审): 对照**覆盖生成资源(89 个)与 pack.mcmeta** ——
+      以前 diff 跳过它们, 直接改完整版里的法杖/弩模型或贴图不会报警, 重建时被静默覆盖。
+      --update-crossbows 增量入口同样走护栏。
+★ 完整版是**构建产物**: 资源改动请改来源(sweetdream_rp / sweetdream_rp_原版风 / 对应生成器),
+  不要直接改 sweetdream_rp_完整版/ —— 否则下次重建会被覆盖(护栏会先备份, 但仍会丢)。
 不变量（verify 里逐条断言，失败即 sys.exit）：
   1. OUT 文件集 = 基底 + 覆盖层 + 8 件法杖各3文件 + 5把弩各13文件
   2. OVERLAY_ITEMS 里每条 items 定义 == 覆盖层版本（字节一致）
@@ -107,18 +115,20 @@ def crossbow_definition(cid):
     return data
 
 
-def build_crossbow_icons():
+def build_crossbow_icons(out_root=OUT, quiet=False):
+    root = Path(out_root)
     for cid, name in CROSSBOW_ICONS.items():
-        write_json(Path(OUT) / crossbow_paths(cid)[0], crossbow_definition(cid))
+        write_json(root / crossbow_paths(cid)[0], crossbow_definition(cid))
         for state in CROSSBOW_STATES:
             model = 'sweetdream:item/vanilla/crossbow_' + cid + '_' + state
-            write_json(Path(OUT) / ('assets/sweetdream/models/item/vanilla/crossbow_' + cid + '_' + state + '.json'),
+            write_json(root / ('assets/sweetdream/models/item/vanilla/crossbow_' + cid + '_' + state + '.json'),
                        {'parent': 'minecraft:item/crossbow', 'textures': {'layer0': model}})
             source = CROSSBOW_ART / '贴图' / name / (state + '.png')
-            target = Path(OUT) / ('assets/sweetdream/textures/item/vanilla/crossbow_' + cid + '_' + state + '.png')
+            target = root / ('assets/sweetdream/textures/item/vanilla/crossbow_' + cid + '_' + state + '.png')
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(source, target)
-    print('5 把像素弩 / 30 张六状态贴图；寒鸦保留现有模型')
+    if not quiet:
+        print('5 把像素弩 / 30 张六状态贴图；寒鸦保留现有模型')
 
 
 def verify_crossbows():
@@ -156,21 +166,23 @@ def require_target(path, expected):
         sys.exit('✗ 构建/部署路径不符合预期: ' + str(path))
 
 
-def build_staff_icons():
+def build_staff_icons(out_root=OUT, quiet=False):
+    root = Path(out_root)
     for cid, name in STAFF_ICONS.items():
         mid, ip, mp, tp = staff_paths(cid)
         source = STAFF_ART / (name + '_16x16.png')
         if not source.is_file():
             sys.exit('✗ 缺少已批准的贴图: ' + str(source))
         model = 'sweetdream:item/vanilla/staff_' + cid
-        write_json(Path(OUT) / ip, {'hand_animation_on_swap': False,
+        write_json(root / ip, {'hand_animation_on_swap': False,
                    'model': {'type': 'minecraft:model', 'model': model}})
-        write_json(Path(OUT) / mp, {'parent': 'minecraft:item/handheld',
+        write_json(root / mp, {'parent': 'minecraft:item/handheld',
                    'textures': {'layer0': model}})
-        target = Path(OUT) / tp
+        target = root / tp
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(source, target)
-    print('用户批准的法杖贴图: 8 张；风行/启示录/调色盘/风帆保留')
+    if not quiet:
+        print('用户批准的法杖贴图: 8 张；风行/启示录/调色盘/风帆保留')
 
 
 _SKIP_DIR = {'tools'}
@@ -206,6 +218,241 @@ def sha(p):
         return hashlib.sha256(f.read()).hexdigest()
 
 
+# ============================================================
+# D02(2026-10-11) 护栏: 完整版是**构建产物**, 默认"整目录删了重建"。
+#   若有人直接在 sweetdream_rp_完整版/ 里改/加文件而没同步回来源,
+#   下次重建会静默丢。这里加三道保护(都在 build() 删目录**之前**):
+#     ① --diff  : 只读对照, 随时可查"完整版有没有直接改动"
+#     ② 重建前 : 有直接改动 -> 自动打包备份 + 打印清单 + **中止**(加 --force 才继续)
+#     ③ --no-backup / --force : 逃生口
+#   对照来源 = BASE(老包) ∪ OVERLAY(覆盖层) ∪ 生成器(staff/crossbow 产出)
+# ============================================================
+def _src_sets():
+    """构建来源文件集: (base, over_src, gen)。over_src 去掉 README/pack.mcmeta。"""
+    base = set(rel_files(BASE))
+    over_src = set(rel_files(OVERLAY)) - {'pack.mcmeta', 'README.md'}
+    gen = {p for cid in STAFF_ICONS for p in staff_paths(cid)[1:]}
+    gen |= {p for cid in CROSSBOW_ICONS for p in crossbow_paths(cid)}
+    return base, over_src, gen
+
+
+def expected_mcmeta():
+    """完整版 pack.mcmeta 的**预期内容**(唯一真源; build() 与对照都用它)。"""
+    return {
+        "pack": {
+            "pack_format": 55,
+            "supported_formats": {"min_inclusive": 55, "max_inclusive": 55},
+            "description": DESC,
+        }
+    }
+
+
+def expected_gen_hashes():
+    """把 staff / crossbow 生成物先产到**临时目录**, 返回 {rel: sha256}。
+    —— A06(2026-10-11 三审): 生成集合也要参与"完整版有没有被直接改"的对照。
+       以前 diff 对 gen 集合直接 `continue` 跳过 ⇒ 直接改完整版里的生成模型/贴图
+       时 diff 报 0, 重建时被静默覆盖。现在改成"与**预期重新生成的内容**逐字节比"。
+    ★ 只读来源 + 生成器, 不碰 OUT, 无副作用。"""
+    import tempfile
+    tmp = tempfile.mkdtemp(prefix='sf_full_gen_expected_')
+    try:
+        build_staff_icons(tmp, quiet=True)
+        build_crossbow_icons(tmp, quiet=True)
+        return {rel: sha(p) for rel, p in rel_files(tmp).items()}
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def diff_against_sources():
+    """只读对照「当前 OUT」 vs 「构建来源」。返回 (extra, changed, missing):
+        extra   - OUT 独有(来源没有)      => 重建**会被删**
+        changed - 同名但 OUT 版本≠来源    => 重建**会被覆盖**
+                  (覆盖层接管/生成集合/pack.mcmeta 都按各自口径比, 见下)
+        missing - 来源有但 OUT 没有的      => 多为 O04 裁剪(正常)
+    OUT 不存在时返回三个空集。"""
+    if not os.path.isdir(OUT):
+        return set(), set(), set()
+    base, over_src, gen = _src_sets()
+    src_all = base | over_src | gen
+    out = set(rel_files(OUT))
+
+    extra = {r for r in out if r not in src_all and r != 'pack.mcmeta'}
+
+    changed = set()
+    for r in out:
+        if r == 'pack.mcmeta' or r in gen:
+            continue           # 生成集合单独比(见下); pack.mcmeta 单独比
+        exp = None
+        if r in over_src:      # 覆盖层优先(它接管了 OUT 里的版本)
+            exp = os.path.join(OVERLAY, r.replace('/', os.sep))
+        elif r in base:
+            exp = os.path.join(BASE, r.replace('/', os.sep))
+        if exp and os.path.isfile(exp):
+            if sha(exp) != sha(os.path.join(OUT, r.replace('/', os.sep))):
+                changed.add(r)
+
+    # ★ A06: 生成集合(8 法杖×3 + 5 弩×13 = 89 个)与「预期重新生成的内容」逐字节比。
+    gen_out = sorted(r for r in out if r in gen)
+    if gen_out:
+        try:
+            exp_h = expected_gen_hashes()
+        except SystemExit as e:            # 来源缺失时不让 --diff 崩
+            exp_h = None
+            print('  (生成集合预期内容不可算, 未比对: %s)' % e)
+        if exp_h is not None:
+            for r in gen_out:
+                h = exp_h.get(r)
+                if h is None or h != sha(os.path.join(OUT, r.replace('/', os.sep))):
+                    changed.add(r)
+
+    # ★ A06: pack.mcmeta 也纳入对照(可编辑字段 = pack.description)。语义比对:
+    #   用户若改过它, 重建会被覆盖成预期内容 —— 报出来让他自己决定。
+    mp = os.path.join(OUT, 'pack.mcmeta')
+    if os.path.isfile(mp):
+        try:
+            if json.load(open(mp, encoding='utf-8')) != expected_mcmeta():
+                changed.add('pack.mcmeta')
+        except Exception:
+            changed.add('pack.mcmeta')
+
+    missing = {r for r in src_all if r not in out}
+    return extra, changed, missing
+
+
+def backup_out():
+    """把当前完整版整体打包备份, 返回 zip 路径。"""
+    import zipfile, time
+    ts = time.strftime('%Y%m%d-%H%M%S')
+    z = os.path.join(ROOT, 'sweetdream_rp_完整版.改动备份-%s.zip' % ts)
+    n = 0
+    with zipfile.ZipFile(z, 'w', zipfile.ZIP_DEFLATED) as zf:
+        for dp, _, fns in os.walk(OUT):
+            for fn in sorted(fns):
+                p = os.path.join(dp, fn)
+                zf.write(p, os.path.relpath(p, OUT).replace('\\', '/'))
+                n += 1
+    print('  ✔ 已自动备份 %d 个文件 -> %s' % (n, z))
+    return z
+
+
+def guard_before_rebuild():
+    """重建前护栏: 完整版里有"来源之外"的内容就备份 + 中止(除非 --force)。"""
+    if '--force' in sys.argv:
+        print('⚠ --force: 跳过高危重建前的差异对照')
+        return
+    extra, changed, _ = diff_against_sources()
+    if not extra and not changed:
+        return
+    print()
+    print('⚠ 完整版里存在「构建来源之外」的内容 —— 直接重建会丢:')
+    if extra:
+        print('  · 会被删除(完整版独有): %d 个' % len(extra))
+        for r in sorted(extra)[:20]:
+            print('      ' + r)
+        if len(extra) > 20:
+            print('      ... 还有 %d 个' % (len(extra) - 20))
+    if changed:
+        print('  · 会被覆盖(内容被直接改过): %d 个' % len(changed))
+        for r in sorted(changed)[:20]:
+            print('      ' + r)
+        if len(changed) > 20:
+            print('      ... 还有 %d 个' % (len(changed) - 20))
+    if '--no-backup' not in sys.argv:
+        backup_out()
+    else:
+        print('  (--no-backup: 未自动备份)')
+    print()
+    sys.exit('✗ 已中止重建。确认覆盖请加 --force; 只看清单可跑 --diff。')
+
+
+def guard_before_update_crossbows():
+    """--update-crossbows 会**就地重写** 65 个弩资源, 收尾还会**无条件**把
+    pack.description 写成构建默认值(DESC) —— 先把这两样都跟「现状」比一遍,
+    有改动就自动备份 + 中止。
+    ★ A06(2026-10-11 三审): 增量入口以前**完全没有护栏** —— 直接改过的弩资源会被静默覆盖。
+    ★ Q05(2026-10-11 四审): 那道护栏只盯弩资源, pack.description 仍被无条件覆盖。"""
+    if '--force' in sys.argv:
+        print('⚠ --force: 跳过增量更新前的差异对照')
+        return
+    exp = expected_gen_hashes()
+    targets = [p for cid in CROSSBOW_ICONS for p in crossbow_paths(cid)]
+    changed = []
+    for r in targets:
+        fp = os.path.join(OUT, r.replace('/', os.sep))
+        if not os.path.isfile(fp):
+            continue                       # 缺失的会被本次更新补齐, 不算"丢东西"
+        h = exp.get(r)
+        if h is None or h != sha(fp):
+            changed.append(r)
+    # ★ Q05: 收尾那句 `meta['pack']['description'] = DESC`(main) 不在上面的 targets 里
+    #   ⇒ 用户手改过的包说明会被静默覆盖。把 pack.mcmeta 一并纳入保护集合。
+    metadata = []
+    meta_fp = os.path.join(OUT, 'pack.mcmeta')
+    if os.path.isfile(meta_fp):
+        try:
+            with open(meta_fp, encoding='utf-8') as f:
+                cur_desc = json.load(f).get('pack', {}).get('description')
+        except Exception as e:             # 读不出/不合法 -> 保守地当成"会被覆盖"
+            cur_desc = None
+            print('  (pack.mcmeta 读不出或不合法, 按「会被覆盖」处理: %s)' % e)
+        if cur_desc != DESC:
+            metadata.append('pack.mcmeta 的 pack.description')
+    if not changed and not metadata:
+        return
+    print()
+    if changed:
+        print('⚠ --update-crossbows 将要覆盖的弩资源里, 有「被直接改过」的文件:')
+        for r in changed[:20]:
+            print('      ' + r)
+        if len(changed) > 20:
+            print('      ... 还有 %d 个' % (len(changed) - 20))
+    if metadata:
+        print('⚠ --update-crossbows 收尾还会把下面这些写成构建默认值(会覆盖你的改动):')
+        for r in metadata:
+            print('      ' + r)
+    if '--no-backup' not in sys.argv:
+        backup_out()
+    else:
+        print('  (--no-backup: 未自动备份)')
+    print()
+    sys.exit('✗ 已中止增量更新。确认覆盖请加 --force; 只对照可跑 --diff。')
+
+
+def do_diff():
+    """--diff: 只读对照, 不改任何文件。"""
+    extra, changed, missing = diff_against_sources()
+    base, over_src, gen = _src_sets()
+    print('== 完整版重建前对照 (只读) ==')
+    if not os.path.isdir(OUT):
+        print('  完整版不存在: %s' % OUT)
+        print('  首次重建, 无来源之外内容。')
+        return
+    print('  BASE=%d  OVERLAY=%d  staff=%d  crossbow=%d  OUT=%d'
+          % (len(base), len(over_src), len({p for cid in STAFF_ICONS for p in staff_paths(cid)[1:]}),
+             len({p for cid in CROSSBOW_ICONS for p in crossbow_paths(cid)}), len(rel_files(OUT))))
+    print()
+    print('A. 完整版独有（重建会被删）: %d' % len(extra))
+    for r in sorted(extra)[:40]:
+        print('      ' + r)
+    if len(extra) > 40:
+        print('      ... 还有 %d 个' % (len(extra) - 40))
+    print()
+    print('B. 内容被直接改过（重建会被覆盖）: %d' % len(changed))
+    for r in sorted(changed)[:40]:
+        print('      ' + r)
+    if len(changed) > 40:
+        print('      ... 还有 %d 个' % (len(changed) - 40))
+    print()
+    print('C. 来源有但完整版无（多为 O04 裁剪, 正常）: %d' % len(missing))
+    print()
+    if not extra and not changed:
+        print('结论: 完整版与构建来源一致(含 89 个生成资源与 pack.mcmeta)'
+              ' —— 重建安全, 不会丢任何东西。')
+    else:
+        print('结论: ★ 存在 %d 个独有 + %d 个被改 —— 直接重建会丢; '
+              '重建时会被自动备份并中止(需 --force 才覆盖)。' % (len(extra), len(changed)))
+
+
 def build():
     if not os.path.isdir(BASE):
         sys.exit('✗ 找不到老包: ' + BASE)
@@ -216,6 +463,7 @@ def build():
             sys.exit('✗ 缺少已批准的法杖贴图: ' + name)
     if os.path.isdir(OUT):
         require_target(OUT, Path(ROOT) / 'sweetdream_rp_完整版')
+        guard_before_rebuild()          # D02: 有"来源之外"的改动就备份+中止
         shutil.rmtree(OUT)
 
     # 1) 基底全量复制 —— 走 rel_files 过滤(跳过 .bak/.broken 备份与 tools/ 脚本, 见 O07)。
@@ -247,13 +495,7 @@ def build():
     build_crossbow_icons()
 
     # 3) pack.mcmeta（沿用老包的 format 55 结构，换描述）
-    mcmeta = {
-        "pack": {
-            "pack_format": 55,
-            "supported_formats": {"min_inclusive": 55, "max_inclusive": 55},
-            "description": DESC,
-        }
-    }
+    mcmeta = expected_mcmeta()
     with open(os.path.join(OUT, 'pack.mcmeta'), 'w', encoding='utf-8') as f:
         json.dump(mcmeta, f, ensure_ascii=False, indent=2)
         f.write('\n')
@@ -489,11 +731,16 @@ def dir_size(p):
 
 
 def main():
+    if '--diff' in sys.argv:
+        # D02: 只读自查「完整版有没有构建来源之外的内容」, 不改任何文件。
+        do_diff()
+        return
     if '--update-crossbows' in sys.argv:
         # Add just this approved set; keep existing user edits and other assets in place.
         require_target(OUT, Path(ROOT) / 'sweetdream_rp_完整版')
         if not Path(OUT).is_dir():
             sys.exit('✗ 增量接入需要已有完整版')
+        guard_before_update_crossbows()      # ★ A06: 增量入口也要护栏
         build_crossbow_icons()
         meta_path = Path(OUT) / 'pack.mcmeta'
         meta = json.loads(meta_path.read_text(encoding='utf-8'))
