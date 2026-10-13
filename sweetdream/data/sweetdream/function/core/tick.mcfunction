@@ -247,6 +247,17 @@ execute in minecraft:overworld as @e[distance=0..,tag=zx.ball] at @s run functio
 execute in minecraft:the_nether as @e[distance=0..,tag=zx.ball] at @s run function sweetdream:projectile/ball/tick with entity @s data
 execute in minecraft:the_end as @e[distance=0..,tag=zx.ball] at @s run function sweetdream:projectile/ball/tick with entity @s data
 
+# 三形态法杖 · 强化重枪「抗性提升失效 2 秒」(2026-10-13 用户拍板按文案做成真·2 秒):
+#   每刻替带 zx.tri_nores 的目标清一次抗性提升, 并扣 1 刻倒计时, 到点摘标签。
+#   【为什么每刻】原版没有"禁止获得效果"的设施, "失效 2 秒"只能靠反复清除实现;
+#     若每秒清一次, 中间最多 1 秒的空档里抗性是**真的生效**的 ⇒ 与文案不符。
+#   【开销】选择器带标签门控, 没人被重枪打中时完全为空 —— 不会每刻扫全部实体。
+#   【★ 三维度各写一遍 + 每行 distance=0.. ★】#minecraft:tick 只在主世界跑;
+#     裸 @e 会跨维度搜索 —— 不锁维度的话同一只目标会被三行各推一次(倒计时 3 倍速)。
+execute in minecraft:overworld as @e[distance=0..,tag=zx.tri_nores] at @s run function sweetdream:equipment/staff/triad/nores_tick
+execute in minecraft:the_nether as @e[distance=0..,tag=zx.tri_nores] at @s run function sweetdream:equipment/staff/triad/nores_tick
+execute in minecraft:the_end as @e[distance=0..,tag=zx.tri_nores] at @s run function sweetdream:equipment/staff/triad/nores_tick
+
 # 标签位置每 2 tick 更新；完整状态校验固定每 20 tick，跨原版三维度。
 scoreboard players add #icon_t zx.meta 1
 execute if score #icon_t zx.meta matches 2.. run function sweetdream:tag/follow_all

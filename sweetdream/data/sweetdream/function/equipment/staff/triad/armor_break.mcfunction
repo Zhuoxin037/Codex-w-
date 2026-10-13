@@ -11,6 +11,15 @@
 
 scoreboard players add @s zx.tri_hit 1
 
+# ---- 记住"这份破甲是谁削的"(zx.tri_u0..u3) ----
+#   恢复时(strong_end)要按 owner 比对, 否则多人同用会互相把对方的破甲恢复掉。
+#   ★ 全程 `store result score @s` 直落目标 —— 不能经假玩家中转: 假玩家是全局的,
+#     一刀命中多只目标时"先存假玩家再赋给 @s"会把同一个值灌给所有目标(串号)。
+execute if data storage zx:work tri.u0 run execute store result score @s zx.tri_u0 run data get storage zx:work tri.u0
+execute if data storage zx:work tri.u1 run execute store result score @s zx.tri_u1 run data get storage zx:work tri.u1
+execute if data storage zx:work tri.u2 run execute store result score @s zx.tri_u2 run data get storage zx:work tri.u2
+execute if data storage zx:work tri.u3 run execute store result score @s zx.tri_u3 run data get storage zx:work tri.u3
+
 # ---- 护甲: -N ----
 attribute @s minecraft:armor modifier remove sweetdream:tri_fire_arm
 scoreboard players set #tri_na zx.meta 0

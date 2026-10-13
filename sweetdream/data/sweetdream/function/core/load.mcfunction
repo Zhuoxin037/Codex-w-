@@ -1415,6 +1415,11 @@ execute unless data storage zx:config obj_fcv_u2 run scoreboard objectives add z
 execute unless data storage zx:config obj_fcv_u2 run data modify storage zx:config obj_fcv_u2 set value 1b
 execute unless data storage zx:config obj_fcv_u3 run scoreboard objectives add zx.fcv_u3 dummy
 execute unless data storage zx:config obj_fcv_u3 run data modify storage zx:config obj_fcv_u3 set value 1b
+#   zx.fcv_t4  = 第四世「护甲/韧性 -50%」**自己的**剩余秒数(2026-10-13 加)。
+#     各层共用的 zx.fcv_t 会被"每次命中"刷回 5 ⇒ 玩家在第四世续攻时破甲会跟着
+#     续命, 远超文案的"持续 5 秒"。⇒ 破甲挂独立倒计时, 归零由 armor_uncut 摘掉。
+execute unless data storage zx:config obj_fcv_t4 run scoreboard objectives add zx.fcv_t4 dummy
+execute unless data storage zx:config obj_fcv_t4 run data modify storage zx:config obj_fcv_t4 set value 1b
 
 #   zx.tri_form   = 「很冰的斧」当前形态(0 = 冰斧 / 1 = 热刀 / 2 = 重枪), 记在**玩家**身上。
 #   zx.tri_strong = 主动技能的"强化"还剩几秒(术阵期间 15 → 0), 归零切回冰斧。
@@ -1432,3 +1437,25 @@ execute unless data storage zx:config obj_tri_next run data modify storage zx:co
 #     ⇒ 所以要数次数, 强化结束时由 second 统一摘掉 modifier 并清零(见 triad/second)。
 execute unless data storage zx:config obj_tri_hit run scoreboard objectives add zx.tri_hit dummy
 execute unless data storage zx:config obj_tri_hit run data modify storage zx:config obj_tri_hit set value 1b
+#   zx.tri_u0..u3 = **削这份护甲的是谁**(施法者 UUID 四段, 2026-10-13 加)。
+#     "技能结束后恢复"原来只认 zx.tri_hit 标记、不认人 ⇒ 多人各拿一把三形态法杖时,
+#     A 的技能结束会把 B 刚削掉的护甲/韧性一起恢复掉 ⇒ 恢复时按 owner 逐个比对。
+execute unless data storage zx:config obj_tri_u0 run scoreboard objectives add zx.tri_u0 dummy
+execute unless data storage zx:config obj_tri_u0 run data modify storage zx:config obj_tri_u0 set value 1b
+execute unless data storage zx:config obj_tri_u1 run scoreboard objectives add zx.tri_u1 dummy
+execute unless data storage zx:config obj_tri_u1 run data modify storage zx:config obj_tri_u1 set value 1b
+execute unless data storage zx:config obj_tri_u2 run scoreboard objectives add zx.tri_u2 dummy
+execute unless data storage zx:config obj_tri_u2 run data modify storage zx:config obj_tri_u2 set value 1b
+execute unless data storage zx:config obj_tri_u3 run scoreboard objectives add zx.tri_u3 dummy
+execute unless data storage zx:config obj_tri_u3 run data modify storage zx:config obj_tri_u3 set value 1b
+#   zx.tri_nores = 强化「很重的枪」打出的"抗性提升失效"还剩几**刻**(2026-10-13 加)。
+#     文案是"失效 **2 秒**"; 原版没有"禁止获得效果", 只能靠每刻反复清除来逼近
+#     ⇒ 由 core/tick 每刻跑 triad/nores_tick: 清一次效果 + 扣 1 刻, 到点摘标签。
+#     ★ 单位是**刻**(40 = 2 秒), 与驱动方 core/tick 的周期一致(坑 120: 别把秒当刻)。
+execute unless data storage zx:config obj_tri_nores run scoreboard objectives add zx.tri_nores dummy
+execute unless data storage zx:config obj_tri_nores run data modify storage zx:config obj_tri_nores set value 1b
+#   zx.staff_gcd = 法杖普攻的"下一次允许出手的时刻"(2026-10-13 加, 记在玩家身上)。
+#     存的是**到期刻**(现在 + 10 刻 = 0.5 秒), 不是倒数 —— #now 是持久化 tick 计数,
+#     跨 /reload 连续, 也不需要每刻有人去扣它。见 equipment/staff/gate。
+execute unless data storage zx:config obj_staff_gcd run scoreboard objectives add zx.staff_gcd dummy
+execute unless data storage zx:config obj_staff_gcd run data modify storage zx:config obj_staff_gcd set value 1b

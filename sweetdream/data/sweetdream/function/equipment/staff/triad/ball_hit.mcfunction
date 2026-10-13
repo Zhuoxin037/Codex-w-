@@ -22,6 +22,16 @@ data modify storage zx:work tri.strong set from entity @s data.tri_strong
 data modify storage zx:work tri.extra set from entity @s data.tri_extra
 data modify storage zx:work tri.blank set from entity @s data.tri_blank
 
+# ⓪.5 把**施法者**的 uuid 也搬下来(u0..u3 由 projectile/ball/fire 第 ① 步写进球上)
+#   【为什么需要】强化热刀削的护甲要在"技能结束时恢复"(armor_restore), 而恢复是
+#     遍历 `scores={zx.tri_hit=1..}` 找目标 —— 只认标记不认人。多人各拿一把时,
+#     A 的技能结束会把 B 刚削掉的甲一起恢复掉(2026-10-13 用户拍板改按施法者区分)。
+#   ⇒ 削甲的当下把 owner 记到目标身上(zx.tri_u0..u3), 恢复时逐个比对。
+data modify storage zx:work tri.u0 set from entity @s data.u0
+data modify storage zx:work tri.u1 set from entity @s data.u1
+data modify storage zx:work tri.u2 set from entity @s data.u2
+data modify storage zx:work tri.u3 set from entity @s data.u3
+
 # ========== 形态 0 · 冰斧: 冰冻 ==========
 execute if data storage zx:work tri{form:0} run function sweetdream:equipment/staff/triad/passive_ice
 

@@ -6,8 +6,10 @@
 # 【★ "为空" = 0 伤害 ★】2026-10-13 用户拍板: "很重的枪下次攻击为空的意思是 0 伤害"。
 #   实现上不是"这一刀不发射", 而是照常出球、把伤害算成 0(见 attack 第 ⑤ 步) ——
 #   这样命中的表现/音效都还在, 玩家看得懂"打出去了但没伤害"。
-# 【抗性失效】这里的实现是**清掉目标身上的抗性提升效果**; 严格意义上"2 秒内无法再获得"
-#   需要额外的禁止逻辑, 本包暂无该设施 —— 退而求其次清一次, 并在注释里写明差异。
+# 【抗性失效 2 秒】2026-10-13 起按文案做**真·2 秒**(旧版只清一次, 见下):
+#   命中后给目标挂 zx.tri_nores 标签 + 40 刻倒计时, 由 core/tick 每刻跑 nores_tick
+#   反复清除抗性提升 ⇒ 这 2 秒内即使有持续来源也补不上。旧实现只 `effect clear`
+#   一次, 来源下一刻就补回来, 等于没有"2 秒" —— 差异已在 2026-10-13 记录并由用户拍板改掉。
 # ============================================================
 
 # ---- 非强化: 埋"下次为空" ----
@@ -17,8 +19,15 @@
 #     文案"每次攻击后下一次攻击为空"= 隔一刀空一刀, 不是无限空。
 execute if data storage zx:work tri{strong:0b,blank:0b} run function sweetdream:equipment/staff/triad/set_next_two with entity @s data
 
-# ---- 强化: 不再为空, 改为使目标抗性提升失效 ----
-execute if data storage zx:work tri{strong:1b} as @e[tag=zx.ball_hit] run effect clear @s minecraft:resistance
+# ---- 强化: 不再为空, 改为使目标抗性提升失效 2 秒 ----
+#   ★ 2026-10-13 用户拍板按文案做**真·2 秒**: 不是"清一次就完", 而是这 2 秒内
+#     反复清 ⇒ 目标即使有持续来源(光环/信标/其它装备)也一直补不上抗性。
+#   【怎么做】打标签 zx.tri_nores + 倒计时 zx.tri_nores(**单位 = 刻**, 40 刻 = 2 秒),
+#     由 `core/tick` 每刻扫一次 `nores_tick` 负责"清效果 + 扣时 + 到点摘标签"。
+#     ★ 倒计时写在**驱动方**(tick)里, 单位与驱动周期一致 —— 坑 120 的教训:
+#       把"秒"的计数放进每刻跑的函数里, 会把 2 秒跑成 0.1 秒。
+#   【为什么不能只在命中时清一次】清完的下一刻来源就会重新给上 ⇒ 玩家看不到任何效果。
+execute if data storage zx:work tri{strong:1b} as @e[tag=zx.ball_hit] run function sweetdream:equipment/staff/triad/nores_start
 
 # 命中表现: 沉重的顿挫
 execute as @e[tag=zx.ball_hit] at @s run particle minecraft:crit ~ ~1 ~ 0.4 0.6 0.4 0.02 10 normal

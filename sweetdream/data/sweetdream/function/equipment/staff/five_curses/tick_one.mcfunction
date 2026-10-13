@@ -6,6 +6,13 @@
 #   function 本文件` 比把四行逻辑抄三遍干净, 也避免以后改一处漏两处。
 # ============================================================
 
+# ⓪ 第四世破甲的**独立**倒计时(文案: 降低 50%, **持续 5 秒**)
+#   ★ 必须排在下面的 `return 0` **之前** —— 早退会把这一段整段跳过(世咒还没到期时
+#     正是最常见的情况, 那样破甲就永远不会自己摘)。
+#   ★ 门控用标签 zx.fcv_4(="当前正挂着破甲"), 没挂的目标不参与, 开销为零。
+execute if entity @s[tag=zx.fcv_4] run scoreboard players remove @s zx.fcv_t4 1
+execute if entity @s[tag=zx.fcv_4] if score @s zx.fcv_t4 matches ..0 run function sweetdream:equipment/staff/five_curses/armor_uncut
+
 scoreboard players remove @s zx.fcv_t 1
 
 # 还没到点 → 收工

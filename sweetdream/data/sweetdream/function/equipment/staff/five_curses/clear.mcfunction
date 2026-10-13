@@ -14,5 +14,8 @@ scoreboard players set @s zx.fcv_rec 0
 scoreboard players set @s zx.fcv_t 0
 tag @s remove zx.fcv_3
 tag @s remove zx.fcv_5
+# 第四世破甲: 一并摘标签 + 归零它自己的倒计时(与 armor_uncut 保持一致)
+tag @s remove zx.fcv_4
+scoreboard players set @s zx.fcv_t4 0
 attribute @s minecraft:armor modifier remove sweetdream:fcv4_arm
 attribute @s minecraft:armor_toughness modifier remove sweetdream:fcv4_tou

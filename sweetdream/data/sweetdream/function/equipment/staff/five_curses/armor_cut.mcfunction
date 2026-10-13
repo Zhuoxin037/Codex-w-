@@ -31,3 +31,11 @@ execute store result storage zx:work fcv.tou double 0.01 run scoreboard players 
 
 # ---- 真正下 modifier(宏展开) ----
 function sweetdream:equipment/staff/five_curses/armor_apply with storage zx:work fcv
+
+# ---- 起"第四世自己的" 5 秒倒计时 ----
+#   ★ 2026-10-13 用户拍板: 文案写"护甲及护甲韧性降低 50%, **持续 5 秒**",
+#     而各层共用的 zx.fcv_t 会被"每次命中"刷回 5 ⇒ 玩家续攻时破甲会一直挂着。
+#     ⇒ 破甲挂独立的 zx.fcv_t4(单位秒), tick_one 每秒 -1, 归零由 armor_uncut 摘掉。
+#   ★ zx.fcv_4 这个标签同时是"当前正挂着破甲"的门控 —— 没挂的目标不进倒计时。
+tag @s add zx.fcv_4
+scoreboard players set @s zx.fcv_t4 5

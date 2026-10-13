@@ -36,6 +36,10 @@ execute if data storage zx:work fcv.u2 run execute store result score @s zx.fcv_
 execute if data storage zx:work fcv.u3 run execute store result score @s zx.fcv_u3 run data get storage zx:work fcv.u3
 
 # ① 层数 +1, 上限 5(第五世之后再命中 = 刷新第五世的记录窗口, 不再往前推)
+#   ★ 加层**前**先打快照标签 zx.fcv_new5 = "这一刀是从第四世跨进第五世"(⑤ 用它判断
+#     记录要不要从头开始)。★ 标签挂在**目标自己**身上、不用假玩家 ——
+#     一刀命中多只目标时不会串号(坑 123 同款: 别用全局假玩家中转)。
+execute if score @s zx.fcv_st matches 4 run tag @s add zx.fcv_new5
 scoreboard players add @s zx.fcv_st 1
 execute if score @s zx.fcv_st matches 6.. run scoreboard players set @s zx.fcv_st 5
 
@@ -56,9 +60,15 @@ execute if score @s zx.fcv_st matches 4 run function sweetdream:equipment/staff/
 execute if score @s zx.fcv_st matches 4 run scoreboard players set @s zx.fcv_t 5
 
 # ---- 第五世: 开记录窗口 5 秒(累计伤害的钩子在 internal/damage/one) ----
-execute if score @s zx.fcv_st matches 5 run scoreboard players set @s zx.fcv_rec 0
+#   ★ 2026-10-13 用户拍板: 第五世期间的伤害**累计**, 不许清零 ⇒
+#     只有"这一刀才刚跨进第五世"才把 zx.fcv_rec 归零(那一刻它本来就是 0);
+#     已经在第五世再被命中 = 只把窗口刷回 5 秒, 记录**接着累加**。
+#     (旧版无条件 set 0 ⇒ 玩家在第五世持续普攻, 终世只能结算"最后一刀之后"的
+#      那一丁点伤害, 越打越接近 0 —— 与文案"记录…全部伤害"相反。)
+execute if score @s zx.fcv_st matches 5 if entity @s[tag=zx.fcv_new5] run scoreboard players set @s zx.fcv_rec 0
 execute if score @s zx.fcv_st matches 5 run tag @s add zx.fcv_5
 execute if score @s zx.fcv_st matches 5 run scoreboard players set @s zx.fcv_t 5
+tag @s remove zx.fcv_new5
 
 # ② 表现: 世咒加深(层数越高越红)
 execute at @s run particle minecraft:witch ~ ~1 ~ 0.3 0.5 0.3 0.02 8 normal

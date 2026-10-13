@@ -165,6 +165,7 @@ scoreboard players reset @s zx.fc_t
 scoreboard players reset @s zx.fcv_rec
 scoreboard players reset @s zx.fcv_st
 scoreboard players reset @s zx.fcv_t
+scoreboard players reset @s zx.fcv_t4
 scoreboard players reset @s zx.fcv_u0
 scoreboard players reset @s zx.fcv_u1
 scoreboard players reset @s zx.fcv_u2
@@ -359,6 +360,7 @@ scoreboard players reset @s zx.ss_hp
 scoreboard players reset @s zx.ss_mana
 scoreboard players reset @s zx.ss_ta
 scoreboard players reset @s zx.ss_te
+scoreboard players reset @s zx.staff_gcd
 scoreboard players reset @s zx.stg
 scoreboard players reset @s zx.stg_t
 scoreboard players reset @s zx.sv_launch
@@ -382,7 +384,12 @@ scoreboard players reset @s zx.th_due
 scoreboard players reset @s zx.tri_form
 scoreboard players reset @s zx.tri_hit
 scoreboard players reset @s zx.tri_next
+scoreboard players reset @s zx.tri_nores
 scoreboard players reset @s zx.tri_strong
+scoreboard players reset @s zx.tri_u0
+scoreboard players reset @s zx.tri_u1
+scoreboard players reset @s zx.tri_u2
+scoreboard players reset @s zx.tri_u3
 scoreboard players reset @s zx.ts_end
 scoreboard players reset @s zx.tt.dream
 scoreboard players reset @s zx.tt.liuhuo

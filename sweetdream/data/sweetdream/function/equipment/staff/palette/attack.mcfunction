@@ -15,6 +15,10 @@
 # ============================================================
 
 # ① 拿 uuid
+# ★ 法杖普攻间隔: 0.5 秒(10 刻) —— 连点会被这里拦下(不扣魔力、不出球)。
+#   ★ 必须排在**扣魔力之前**: 拦晚了就成了"扣了蓝但没出手"。
+function sweetdream:equipment/staff/gate
+execute if score #st_gate zx.meta matches 0 run return fail
 function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return fail
 
