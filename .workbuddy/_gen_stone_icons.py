@@ -23,7 +23,7 @@
 import io, os, json, math, struct, zlib
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-RP = "D:/数据包/sweetdream_rp/assets"
+RP = "D:/数据包/sweetdream_rp_完整版/assets"
 # 原版定义已固化进项目(.workbuddy/vanilla/), 免得每次重跑都要去翻 jar。
 # 来源: 1.21.5 jar 的 assets/minecraft/items/recovery_compass.json
 ORIG = HERE + "/vanilla/recovery_compass.json"

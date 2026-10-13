@@ -36,7 +36,7 @@ for old_display in baseline['parts'].values():
         count += 1
 
 for name, elements in [('angel_beam', 9), ('fr_beam', 12)]:
-    model = B.read(ROOT / f'sweetdream_rp/assets/sweetdream/models/item/{name}.json')
+    model = B.read(ROOT / f'sweetdream_rp_完整版/assets/sweetdream/models/item/{name}.json')
     assert len(model['elements']) == elements
     for e in model['elements']:
         assert e['light_emission'] == 15
@@ -45,7 +45,7 @@ for name, elements in [('angel_beam', 9), ('fr_beam', 12)]:
         for f in e['faces'].values():
             tex = model['textures'][f['texture'][1:]]
             ns, p = tex.split(':')
-            assert (ROOT / f'sweetdream_rp/assets/{ns}/textures/{p}.png').exists()
+            assert (ROOT / f'sweetdream_rp_完整版/assets/{ns}/textures/{p}.png').exists()
 
 # 起柱与收束都必须贴地；施法的长度和视线偏移不能随外观优化改变。
 for scale, shift in [(.8, -2.6), (6, 0)]:

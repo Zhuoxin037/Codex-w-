@@ -95,7 +95,7 @@ for j in range(12):
         wc=w*.48;cube(pommel,'尾端蓝晶嵌面'+str(j),[-wc,yy-.19,-dep-.055],[wc,yy,-dep-.031],'ice1' if j<7 else 'ice4')
 check(elements,groups,root,textures)
 now={e['uuid']:e for e in elements};assert all(now[e['uuid']]==e for e in original['elements'])
-display=json.loads((ROOT/'sweetdream_rp/assets/deepseaecho/models/item/sword.json').read_text(encoding='utf-8'))['display']
+display=json.loads((ROOT/'sweetdream_rp_完整版/assets/deepseaecho/models/item/sword.json').read_text(encoding='utf-8'))['display']
 native=save_native(O,'深海回响_旧稿整剑_分组',elements,groups,root,textures,display)
 master,count=export_static(O,'sword','deepseaecho',elements,groups,root,textures,display,offset=(7.775,2,7.895))
 (O/'贴图').mkdir(exist_ok=True)

@@ -63,7 +63,7 @@
      ★ 判据(2026-10-10 加宽): 不只是"定义里写了 custom_model_data"这一种形态 ——
         **任何覆盖层资源包**整份替换 `items/<id>.json` 时, 只要那个 id 被数据包的
         `item_modifier/*.json`(`set_components` 写 `item_model`)驱动, 就必须照带这个字段。
-        覆盖层内部通常是纯 `minecraft:model`、且不在 `sweetdream_rp` 目录下 ⇒ 旧判据漏检。
+        覆盖层内部通常是纯 `minecraft:model`、且不在 `sweetdream_rp_完整版` 目录下 ⇒ 旧判据漏检。
         真实案例: `sweetdream_rp_原版风` 的 4 件(天使核心 / 风帆 / 极光与幻梦 / 观测镜)
         第一次生成时只写了 `model`, 表现为"换上去之后在手上一直抽搐"; 用户连报两次
         (先极光与幻梦、后天使核心), 因为改好的版本一直没被游戏重载 ⇒ 看的一直是旧表现。
@@ -97,17 +97,19 @@ from pathlib import Path
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
 ROOT = Path(r'D:\数据包')
 PACKS = ['manacore-1.0.0', 'sweetdream']
-# 【老包 sweetdream_rp/ 已经不在了】(2026-10-12 发现时只剩构建产物
-#   sweetdream_rp_完整版/) ⇒ 依次回退; 一个都找不到时 RP 为 None,
-#   下面所有跟资源包有关的检查会**跳过并明确报告**(绝不静默丢检查)。
+# ★ 2026-10-13 起: 资源包**只留一份** = sweetdream_rp_完整版/(老包 sweetdream_rp/
+#   与覆盖层 sweetdream_rp_原版风/ 已按用户要求删除, 见当日记录)。
+#   它既是构建产物也是唯一真源 —— 改贴图/模型只改这一处。
+#   一个都找不到时 RP 为 None, 下面所有跟资源包有关的检查会**跳过并明确报告**
+#   (绝不静默丢检查)。
 RP = None
-for _cand in ('sweetdream_rp', 'sweetdream_rp_完整版', 'sweetdream_rp_原版风'):
+for _cand in ('sweetdream_rp_完整版',):
     _p2 = ROOT / _cand
     if (_p2 / 'assets').exists():
         RP = _p2
         break
 if RP is None:
-    print('[WARN] 找不到任何资源包目录(sweetdream_rp* —— 资源包相关检查被跳过)')
+    print('[WARN] 找不到资源包目录 sweetdream_rp_完整版 —— 资源包相关检查被跳过')
 
 functions, nsdirs = {}, []
 for pack in PACKS:
@@ -1246,7 +1248,7 @@ for fnk, fp in functions.items():
                                % (i, first_ret)))
 
 # 完整版可独立增加物品；覆盖层可以引用基底，索引应涵盖所有本项目资源包。
-RP_DIRS = sorted(p for p in ROOT.glob('sweetdream_rp*') if (p / 'assets').is_dir())
+RP_DIRS = sorted(p for p in ROOT.glob('sweetdream_rp_完整版*') if (p / 'assets').is_dir())
 for base in [ROOT / p for p in PACKS] + RP_DIRS:
     if not base.exists():
         continue
@@ -1347,9 +1349,9 @@ for ns in ((RP / 'assets').iterdir() if RP else []):
 #   它内部是纯 minecraft:model、又不在 RP 目录下 ⇒ 旧版规则两条都沾不上, 连漏两次
 #   (极光与幻梦、天使核心 都是"覆盖定义漏了字段 -> 在手上一直抽搐", 用户报了两回)。
 #   改法: 先由数据包 item_modifier 反推出"被驱动的模型 id"集合, 再扫**每个**
-#   sweetdream_rp* 资源包 —— 命中(id 被驱动, 或自己写了 custom_model_data)就必须带
+#   sweetdream_rp_完整版* 资源包 —— 命中(id 被驱动, 或自己写了 custom_model_data)就必须带
 #   "hand_animation_on_swap": false。且必须是 false, 只写字段名(或写 true)不算数。
-RP_DIRS = sorted(p for p in ROOT.glob('sweetdream_rp*') if (p / 'assets').is_dir())
+RP_DIRS = sorted(p for p in ROOT.glob('sweetdream_rp_完整版*') if (p / 'assets').is_dir())
 DRIVEN_MODELS = set()
 _IM_MODEL = re.compile(r'"minecraft:item_model"\s*:\s*"([^"]+)"')
 for _pk in PACKS:
@@ -4570,7 +4572,7 @@ TITLE = {'fn': 'function 引用不存在的目标', 'tag': '#tag 引用无对应
          'ply2': '被 as 非玩家调用却用 tellraw @s (运行时静默失效, 需人工确认)',
          'mcomma': 'matches 用了逗号列表(会让整个函数加载失败)',
          'swap': '逐帧切换 / 被数据包驱动的物品模型没关 hand_animation_on_swap'
-                 '(第一人称手上一直抽搐; 含覆盖层资源包, 不限于 sweetdream_rp)',
+                 '(第一人称手上一直抽搐; 含覆盖层资源包, 不限于 sweetdream_rp_完整版)',
          'dollar': '行首有 $ 但不含 $(变量)(会让整个函数作废)',
          'regcap': '通用数值注册表: 表行数超 cap / cap 与生成器不一致',
          'regobj': '通用数值注册表: 引用了没建过的计分项(静默显示不出来)',

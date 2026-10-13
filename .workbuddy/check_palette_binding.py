@@ -1,6 +1,6 @@
 from pathlib import Path
 import json,copy,hashlib
-B=Path('D:/数据包');RP=B/'sweetdream_rp';M=RP/'assets/palette/models/item';O=B/'模型设计/调色盘_阶段三';BACK=B/'.workbuddy/backup/palette-binding-2026-10-09'
+B=Path('D:/数据包');RP=B/'sweetdream_rp_完整版';M=RP/'assets/palette/models/item';O=B/'模型设计/调色盘_阶段三';BACK=B/'.workbuddy/backup/palette-binding-2026-10-09'
 load=lambda p:json.loads(p.read_text(encoding='utf-8-sig'))
 manifest=load(B/'.workbuddy/palette_deploy_manifest.json');whole=load(M/'palette.json');edited=load(O/'显示调整示例/assets/palette/models/item/palette.json')
 assert whole['display']==edited['display'],'Do not replace the user pose with the concept pose'

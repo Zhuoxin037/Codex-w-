@@ -11,7 +11,7 @@
 import os, sys, zlib, struct
 
 ROOT = r'D:\数据包'
-STONE = os.path.join(ROOT, 'sweetdream_rp', 'assets', 'sweetdream', 'textures', 'item', 'stone')
+STONE = os.path.join(ROOT, 'sweetdream_rp_完整版', 'assets', 'sweetdream', 'textures', 'item', 'stone')
 OUT = os.path.join(ROOT, 'logs', 'stone_icons.png')
 
 ORDER = [

@@ -24,7 +24,7 @@
   铁斧/钻石斧/下界合金斧是全包几十把武器共用的底物，拿底物当身份必然误伤。
 
 【★★ 崩裂的模型键是 fissure_axe, 不是 fissure】
-  老包 sweetdream_rp 里 `sweetdream:fissure` **已经被占用** —— 那是崩裂技能的
+  老包 sweetdream_rp_完整版 里 `sweetdream:fissure` **已经被占用** —— 那是崩裂技能的
   「地面裂缝」平面模型（equipment/axe/fissure/field.mcfunction 用 item_display +
   item_model="sweetdream:fissure" 召唤，横平面贴地、scale 6）。
   斧要是也叫 fissure，物品就会显示成一块贴地的裂缝。所以这里 item_id 仍是

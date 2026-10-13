@@ -15,7 +15,7 @@
   ① 每个暗海**最多存在 10 秒** -> 数据包侧(sea_cap), 与本脚本无关
   ② 暗海有**三个形态**, 每次生成随机取一个
 
-产出（都在 sweetdream_rp/assets/sweetdream/ 下）:
+产出（都在 sweetdream_rp_完整版/assets/sweetdream/ 下）:
   textures/item/sea_{a,b,c}_deep.png      64x64    海底色(不规则 alpha 裁边, 静态)
   textures/item/sea_{a,b,c}_ripple.png    64x1024 波纹层(16 帧动画, 透明底)
   textures/item/sea_{a,b,c}_ripple.png.mcmeta
@@ -37,7 +37,7 @@
 import json, math, random, struct, zlib
 from pathlib import Path
 
-ROOT = Path(r'D:/数据包/sweetdream_rp')
+ROOT = Path(r'D:/数据包/sweetdream_rp_完整版')
 NS = ROOT / 'assets' / 'sweetdream'
 TEX = NS / 'textures' / 'item'
 MDL = NS / 'models' / 'item'

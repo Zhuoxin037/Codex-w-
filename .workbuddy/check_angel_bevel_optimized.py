@@ -5,12 +5,12 @@ import numpy as np
 from PIL import Image,ImageDraw
 from model_review_io import renderer
 B=Path(__file__).resolve().parents[1];load=lambda p:json.loads(p.read_text(encoding='utf-8-sig'))
-M=load(B/'.workbuddy/angel_bevel_optimized_binding.json');O=Path(M['review']);RP=B/'sweetdream_rp';A=RP/'assets/angelcore'
+M=load(B/'.workbuddy/angel_bevel_optimized_binding.json');O=Path(M['review']);RP=B/'sweetdream_rp_完整版';A=RP/'assets/angelcore'
 bb=load(O/M['native_name']);approved=load(O.parent/'阶段二_斜面与金边贴合/天使核心_斜面贴合金边_分组动画.bbmodel')
 assert len(bb['elements'])==990 and len(bb['groups'])==26
 assert bb['animations']==approved['animations']
 master=load(A/'models/item/axe.json');body=load(A/'models/item/parts/body.json')
-assert master['display']==load(B/'.workbuddy/backup/angel-bevel-optimized-source-20261009/sweetdream_rp/assets/angelcore/models/item/axe.json')['display']
+assert master['display']==load(B/'.workbuddy/backup/angel-bevel-optimized-source-20261009/sweetdream_rp_完整版/assets/angelcore/models/item/axe.json')['display']
 assert all(hashlib.sha256((B/p).read_bytes()).hexdigest()==sha for p,sha in M['immutable_datapack'].items())
 def resolve(ref,kind,suffix):
     ns,name=ref.split(':',1);return RP/'assets'/ns/kind/(name+suffix)

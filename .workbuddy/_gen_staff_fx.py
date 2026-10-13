@@ -32,7 +32,7 @@
 import json, math, struct, sys, zlib
 from pathlib import Path
 
-ROOT = Path(r'D:/数据包/sweetdream_rp')
+ROOT = Path(r'D:/数据包/sweetdream_rp_完整版')
 NS = ROOT / 'assets' / 'sweetdream'
 TEX = NS / 'textures' / 'item'
 MDL = NS / 'models' / 'item'

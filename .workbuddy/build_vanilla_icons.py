@@ -8,7 +8,7 @@ build_vanilla_icons.py —— 「原版风」16x16 物品图标生成器（10 �
      => 原版的描边、受光面、暗面结构原样保留，只换色相/材质。
 
 模板 = 本机 1.21.5 客户端 jar 官方贴图（.workbuddy/_vanilla_ref/）
-色阶 = 从 sweetdream_rp 该武器自己的 3D 贴图里采的（见各 RAMP_* 注释）
+色阶 = 从 sweetdream_rp_完整版 该武器自己的 3D 贴图里采的（见各 RAMP_* 注释）
 
 输出：模型设计/原版风_资源包_20261010/icons/<ns>_<name>.png  (16x16)
 """

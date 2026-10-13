@@ -2,7 +2,7 @@
 """
 生成「陨星·陨石」的资源包素材(幂等, 改数字重跑即可)。
 
-产出(都在 sweetdream_rp/assets/sweetdream/ 下):
+产出(都在 sweetdream_rp_完整版/assets/sweetdream/ 下):
   textures/item/meteor_rock.png  16x16  燃烧的岩石(深褐底 + 橙红裂纹)
   models/item/meteor_rock.json   9 块不规则碎石拼成的陨石
   items/meteor_rock.json         item_model 分发
@@ -29,7 +29,7 @@ import struct
 import zlib
 from pathlib import Path
 
-ROOT = Path(r'D:/数据包/sweetdream_rp')
+ROOT = Path(r'D:/数据包/sweetdream_rp_完整版')
 NS = ROOT / 'assets' / 'sweetdream'
 TEX = NS / 'textures' / 'item'
 MDL = NS / 'models' / 'item'

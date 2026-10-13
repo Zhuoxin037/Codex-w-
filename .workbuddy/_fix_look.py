@@ -5,13 +5,13 @@
 ② 模型的 element 里多了个 "name" 字段(包里既有模型都没有, 我生成时加的)
    -> 有触发模型加载失败显示紫黑方块的风险, 去掉。
 
-改完会把 sweetdream_rp 同步到版本隔离的 resourcepacks 目录。
+改完会把 sweetdream_rp_完整版 同步到版本隔离的 resourcepacks 目录。
 """
 import io, os, json
 
 DATA = r'D:\数据包\sweetdream\data\sweetdream\function\equipment\tool\look'
-RP_SRC = r'D:\数据包\sweetdream_rp'
-RP_DST = r'D:\PCL 正式版 2.10.0\.minecraft\versions\1.21.5-Fabric 0.16.10\resourcepacks\sweetdream_rp'
+RP_SRC = r'D:\数据包\sweetdream_rp_完整版'
+RP_DST = r'D:\PCL 正式版 2.10.0\.minecraft\versions\1.21.5-Fabric 0.16.10\resourcepacks\sweetdream_rp_完整版'
 
 # ---------------------------------------------------------- ① return_item
 p = os.path.join(DATA, 'return_item.mcfunction')

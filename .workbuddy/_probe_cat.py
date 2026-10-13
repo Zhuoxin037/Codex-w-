@@ -9,7 +9,7 @@ import re
 import sys
 
 ROOT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-# 已有独立建模（老包 sweetdream_rp 里 items 定义齐全）的名单
+# 已有独立建模（老包 sweetdream_rp_完整版 里 items 定义齐全）的名单
 MODELED = {
     'axe': ['angelcore'],
     'sword': ['deepseaecho', 'flameremnant', 'aurora_dream'],

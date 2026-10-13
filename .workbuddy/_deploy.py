@@ -11,9 +11,8 @@ _deploy.py —— 把 manacore-1.0.0 / sweetdream / sweetdream_rp_完整版 镜�
 ★ 2026-10-10(F20 修): 资源包改镜像"游戏实际加载的那一份" = `sweetdream_rp_完整版`
   (options.txt 里 resourcePacks 一直是它)。原来这里镜像的是老包 `sweetdream_rp`
   —— 那份根本没被加载 ⇒ 改老包再一键部署, 游戏外观毫无变化。
-  ⚠️ `sweetdream_rp_完整版` 是**合并产物**: 改完老包/覆盖层后要先
-     `python build_full_pack.py`(不带 --deploy)重建它, 再跑本脚本; 或直接用
-     `python build_full_pack.py --deploy`(重建 + 部署一步到位)。
+★ 2026-10-13: 老包 / 覆盖层已删除, `sweetdream_rp_完整版` 升为**唯一真源**
+  (不再有"合并产物"和 build 这一步)。改模型/贴图直接改它, 再一键部署 + F3+T。
 
 用法:
   python .workbuddy/_deploy.py            # 试运行(只报告要做什么)

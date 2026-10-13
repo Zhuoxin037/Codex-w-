@@ -185,7 +185,7 @@ def fixed_geometry(els):
     def fixed(e):return not e['name'].startswith(('剑根','柄座','握柄'))
     return sorted(json.dumps({k:v for k,v in e.items() if k!='uuid'},ensure_ascii=False,sort_keys=True) for e in els if fixed(e))
 assert fixed_geometry(before['elements'])==fixed_geometry(elements)
-display=json.loads((ROOT/'sweetdream_rp/assets/deepseaecho/models/item/sword.json').read_text(encoding='utf-8'))['display']
+display=json.loads((ROOT/'sweetdream_rp_完整版/assets/deepseaecho/models/item/sword.json').read_text(encoding='utf-8'))['display']
 native=save_native(O,'深海回响_宽剑根连接_分组',elements,groups,root,textures,display)
 master,count=export_static(O,'sword','deepseaecho',elements,groups,root,textures,display,offset=(7.775,2,7.895))
 (O/'贴图').mkdir(exist_ok=True);atlas.save(O/'贴图'/textures[0]['name'])

@@ -15,7 +15,7 @@ def walk(n):
         if isinstance(c,dict):walk(c)
         else:owners[c]=groups[n['uuid']]['name']
 walk(bb['outliner'][0])
-offset=np.array([7.775,2,7.895]);A=B/'sweetdream_rp/assets/deepseaecho/models/item';base=load(A/'liquid/base.json')
+offset=np.array([7.775,2,7.895]);A=B/'sweetdream_rp_完整版/assets/deepseaecho/models/item';base=load(A/'liquid/base.json')
 maxerr=0;count=0
 for ai,(sub,n) in enumerate([('idle',96),('cast',48)]):
     for i in range(n):

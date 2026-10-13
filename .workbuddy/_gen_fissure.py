@@ -2,7 +2,7 @@
 """
 生成「崩裂·裂缝」的资源包素材(幂等, 改数字重跑即可)。
 
-产出(都在 sweetdream_rp/assets/sweetdream/ 下):
+产出(都在 sweetdream_rp_完整版/assets/sweetdream/ 下):
   textures/item/fissure.png   16x16  俯视裂缝: 透明底 + 6 条放射状裂纹(中心暖橙红 -> 末端暗红)
   models/item/fissure.json    横平面贴地(元素 y 8..9, 照 vortex/sea/tide), 只给 up/down 面
   items/fissure.json          item_model 分发(让 item_display 认得出 sweetdream:fissure)
@@ -17,7 +17,7 @@ import struct
 import zlib
 from pathlib import Path
 
-ROOT = Path(r'D:/数据包/sweetdream_rp')
+ROOT = Path(r'D:/数据包/sweetdream_rp_完整版')
 NS = ROOT / 'assets' / 'sweetdream'
 TEX = NS / 'textures' / 'item'
 MDL = NS / 'models' / 'item'

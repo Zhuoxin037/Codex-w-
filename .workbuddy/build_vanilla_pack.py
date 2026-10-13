@@ -6,7 +6,7 @@ build_vanilla_pack.py —— 组装「原版风」覆盖资源包
 部署：versions/1.21.5-Fabric 0.16.10/resourcepacks/sweetdream_rp_原版风\\  （--deploy）
 
 本包含**五组**内容：
-  ① 覆盖组 `ITEMS` —— 替换 sweetdream_rp 里**已有的独立 3D 模型**（4 件）。
+  ① 覆盖组 `ITEMS` —— 替换 sweetdream_rp_完整版 里**已有的独立 3D 模型**（4 件）。
   ② 新增组 `ADD`   —— 底物是原版剑、老包里**没有**独立定义的武器
      （13 件剑 = 12 件平面图标 + 火种两态）。
   ③ 新增组 `AXES`  —— 同上，但是斧（14 件）。
@@ -24,13 +24,13 @@ build_vanilla_pack.py —— 组装「原版风」覆盖资源包
       `equipment/sword/tinder/visual/sync` 按 zx.td_on 在两态之间切。
    改完记得 `_deploy.py --apply` 把数据包推过去。
 
-设计：**覆盖层**。老包 `sweetdream_rp` 一个字节都不改；把它排在老包**之上**即可切换。
+设计：**覆盖层**。老包 `sweetdream_rp_完整版` 一个字节都不改；把它排在老包**之上**即可切换。
 合并版 `sweetdream_rp_完整版` 由 `build_full_pack.py` 从本目录整份取（见该脚本）。
 
 ★★ 每条 items 定义必须带 "hand_animation_on_swap": false
     数据包每刻/每秒用 `item modify`（item_modifier/*.json）改写物品的 item_model 组件。
     若关掉「换手动画」的开关缺失，客户端会把组件刷新当成「换了一件物品」
-    → 每刻播一次举手动画 → 手上一直抽搐。（sweetdream_rp 里 11 件的定义本来就都写着它。）
+    → 每刻播一次举手动画 → 手上一直抽搐。（sweetdream_rp_完整版 里 11 件的定义本来就都写着它。）
 """
 import os, json, shutil, sys
 from PIL import Image, ImageDraw, ImageFont
@@ -45,7 +45,7 @@ DEPLOY    = r'D:\PCL 正式版 2.10.0\.minecraft\versions\1.21.5-Fabric 0.16.10\
 FONT      = r'C:\Windows\Fonts\msyh.ttc'
 
 # ---------------------------------------------------------------- ① 覆盖组
-# 老包里本来就有独立 3D 模型，这里整份换掉 —— 必须排在 sweetdream_rp 之上。
+# 老包里本来就有独立 3D 模型，这里整份换掉 —— 必须排在 sweetdream_rp_完整版 之上。
 # (命名空间, items 定义名, 模型键, 父模型, 图标源文件, 中文名, 原版对照模板)
 ITEMS = [
     ('angelcore',  'axe',          'axe',          'minecraft:item/handheld',  'angelcore_axe',     '天使核心',   'netherite_axe'),
@@ -86,7 +86,7 @@ ADD = [
 # 图标源 = 模型设计\原版风_资源包_20261010\斧_预览\。
 #
 # ★★ 一件例外：`fissure`（崩裂）的模型键写成 **fissure_axe** —— 不能用 fissure。
-#    老包 sweetdream_rp 里 `sweetdream:fissure` **已经被占用**了：那是崩裂技能的
+#    老包 sweetdream_rp_完整版 里 `sweetdream:fissure` **已经被占用**了：那是崩裂技能的
 #    「地面裂缝」平面模型（equipment/axe/fissure/field.mcfunction 用 item_display +
 #    item_model="sweetdream:fissure" 召唤，横平面贴地、scale 6）。
 #    斧要是也叫 fissure，物品就会显示成一块贴地的裂缝 —— 必须换名。
@@ -173,7 +173,7 @@ TOOLS = [('sweetdream', tool_key(pid), tool_key(pid), 'minecraft:item/generated'
 
 
 # ---------------------------------------------------------------- ⑥ 保留
-# 继续用 sweetdream_rp 里的独立 3D 模型，本包**不覆盖**
+# 继续用 sweetdream_rp_完整版 里的独立 3D 模型，本包**不覆盖**
 KEEP = [
     ('引梦镰',        'dreamscythe:sickle'),
     ('风行于大地之上', 'naturewind:staff'),
@@ -186,7 +186,7 @@ KEEP = [
 
 # (名字, 表, 图标源目录, 语义)
 GROUPS = [
-    ('覆盖',   ITEMS, SRC_ICONS, '替换 sweetdream_rp 里已有的独立 3D 模型'),
+    ('覆盖',   ITEMS, SRC_ICONS, '替换 sweetdream_rp_完整版 里已有的独立 3D 模型'),
     ('新增·剑', ADD,  SRC_SWORD, '老包里没有独立定义的剑（底物 = 原版铁/钻石/下界合金剑）'),
     ('新增·斧', AXES, SRC_AXE,   '老包里没有独立定义的斧（底物 = 原版铁/钻石/下界合金斧）'),
     ('新增·副手', TOOLS, SRC_TOOL, '副手 · 被动道具（底物 = 原版回响罗盘）'),
@@ -196,7 +196,7 @@ MCMETA = {
     "pack": {
         "pack_format": 55,
         "supported_formats": {"min_inclusive": 55, "max_inclusive": 55},
-        "description": "sweetdream 原版风平面图标（覆盖 4 件 + 剑 13 件／含火种两态 + 斧 14 件 + 盔甲 25 件 + 副手 7 件 · 请置于 sweetdream_rp 之上）",
+        "description": "sweetdream 原版风平面图标（覆盖 4 件 + 剑 13 件／含火种两态 + 斧 14 件 + 盔甲 25 件 + 副手 7 件 · 请置于 sweetdream_rp_完整版 之上）",
     }
 }
 
@@ -204,7 +204,7 @@ README = """# sweetdream_rp_原版风
 
 把 sweetdream 的武器、盔甲与副手道具换成"原版风"的像素图标（武器/副手 16×16 平面；盔甲 = 16×16 图标 + 64×32 穿戴层）。**五层内容**：
 
-## ① 覆盖（替换 sweetdream_rp 里已有的独立 3D 模型）—— 4 件
+## ① 覆盖（替换 sweetdream_rp_完整版 里已有的独立 3D 模型）—— 4 件
 
 | 武器 | 原版轮廓 | 模型/贴图键 |
 |---|---|---|
@@ -304,7 +304,7 @@ README = """# sweetdream_rp_原版风
   `build_offhand_icons.py` 生成，逐件配色见 `模型设计/原版风_副手物品_20261010/配色对照表.md`。
 - ★ **观测镜（`look`）不在这一组** —— 它 2026-10-05 就有独立平面图标了（见 ① 覆盖组）。
 
-## 本次**保留**（继续用 sweetdream_rp 里的独立 3D 模型，本包不覆盖）
+## 本次**保留**（继续用 sweetdream_rp_完整版 里的独立 3D 模型，本包不覆盖）
 
 引梦镰 · 风行于大地之上 · 烈火，残躯 · 深海的回响 · 寒鸦 · 启示录 · 调色盘
 
@@ -313,12 +313,12 @@ README = """# sweetdream_rp_原版风
 这是一个**覆盖层**，本身只有上面这些图标，不含其它资源。
 
 1. 把本文件夹（或压缩包）放进资源包目录。
-2. 在资源包列表中把它排到 **`sweetdream_rp` 之上**。
+2. 在资源包列表中把它排到 **`sweetdream_rp_完整版` 之上**。
 3. 应用资源包（或 `F3+T` 重载）。
 
 > ⚠ **新增的 59 件（剑 13 + 斧 14 + 盔甲 25 + 副手 7）必须搭配本包**：数据包会把它们的
 > `item_model`（盔甲还有 `equippable.asset_id`）改成 `sweetdream:armor_<id>` / `tool_<id>` 这类，
-> 这些定义在本包里 —— 只开老包 `sweetdream_rp` 会显示成缺模型 / 穿成原版外观。
+> 这些定义在本包里 —— 只开老包 `sweetdream_rp_完整版` 会显示成缺模型 / 穿成原版外观。
 > 日常直接用合并版 `sweetdream_rp_完整版` 最省心（已内含本包）。
 >
 > 关掉/移到下面：立刻回到原来的样子，老包一个字节都没改。
@@ -334,7 +334,7 @@ README = """# sweetdream_rp_原版风
 
 `item_model` 组件是数据包在运行时**改写**的（`item_modifier/*.json`）。物品组件变化 ⇒
 客户端会把它当成"换了一件物品" ⇒ 播一次举手动画 ⇒ **在手上一直抽搐**。
-`sweetdream_rp` 里 11 件的定义本来就都写着它；本包是整份替换 `items/<id>.json`，
+`sweetdream_rp_完整版` 里 11 件的定义本来就都写着它；本包是整份替换 `items/<id>.json`，
 所以必须照带，否则就会抽搐。
 
 ## 已知取舍

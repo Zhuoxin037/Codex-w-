@@ -14,7 +14,7 @@ ROOT = Path(r'D:\数据包')
 PY = r'C:\Users\qq303\.workbuddy\binaries\python\envs\default\Scripts\python.exe'
 CHK = ROOT / '.workbuddy' / 'check.py'
 FN = ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function'
-RP = ROOT / 'sweetdream_rp'
+RP = ROOT / 'sweetdream_rp_完整版'
 
 # (名字, 规则标题关键字, 文件, 原文, 改成)
 PROBES = [

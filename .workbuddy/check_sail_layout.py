@@ -1,6 +1,6 @@
 from pathlib import Path
 import json,math,copy
-B=Path('D:/数据包');RP=B/'sweetdream_rp';A=RP/'assets/sail';M=A/'models/item'
+B=Path('D:/数据包');RP=B/'sweetdream_rp_完整版';A=RP/'assets/sail';M=A/'models/item'
 load=lambda p:json.loads(p.read_text(encoding='utf-8-sig'))
 whole=load(M/'staff.json');report=load(B/'.workbuddy/sail_layout_report.json')
 assert len(whole['elements'])==632 and whole['display']==report['display']
@@ -17,10 +17,10 @@ for p in M.rglob('*.json'):
  for texture in j['textures'].values():
   ns,tex=texture.split(':');assert (RP/'assets'/ns/'textures'/(tex+'.png')).is_file(),texture
 
-old=load(B/'.workbuddy/backup/sail-layout-2026-10-09/sweetdream_rp/assets/sweetdream/models/item/sail/body.json')
+old=load(B/'.workbuddy/backup/sail-layout-2026-10-09/sweetdream_rp_完整版/assets/sweetdream/models/item/sail/body.json')
 assert load(M/'parts/body.json')['elements']==old['elements'],'Preserve edited body geometry exactly'
 for p in (M/'frames').glob('*.json'):
- oldframe=load(B/'.workbuddy/backup/sail-layout-2026-10-09/sweetdream_rp/assets/sweetdream/models/item/sail/frames'/p.name)
+ oldframe=load(B/'.workbuddy/backup/sail-layout-2026-10-09/sweetdream_rp_完整版/assets/sweetdream/models/item/sail/frames'/p.name)
  assert load(p)['elements']==oldframe['elements'],'Animation geometry changed'
 for context,previous in old['display'].items():
  expected={'rotation':previous.get('rotation',[0,0,0]),'translation':previous.get('translation',[0,0,0]),'scale':previous.get('scale',[1,1,1])}

@@ -150,7 +150,7 @@ for j in range(12):
 
 display={'gui':{'rotation':[0,180,0],'translation':[0,0,0],'scale':[1]*3},'firstperson_righthand':{'rotation':[0,180,0],'translation':[0,0,0],'scale':[.7]*3},'thirdperson_righthand':{'rotation':[0,180,0],'translation':[0,0,0],'scale':[.6]*3}}
 # If the original whole display exists, use its current pose even for the review JSON.
-masters=list((ROOT/'sweetdream_rp/assets/deepseaecho/models/item').glob('*.json'))
+masters=list((ROOT/'sweetdream_rp_完整版/assets/deepseaecho/models/item').glob('*.json'))
 for p in masters:
     if p.stem in ['deepseaecho','deepsea','sword']:
         q=json.loads(p.read_text(encoding='utf-8'));display=q.get('display',display);break

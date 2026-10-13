@@ -4,7 +4,7 @@ import os
 import sys
 
 ROOT = r'D:\数据包'
-BASE = os.path.join(ROOT, 'sweetdream_rp')
+BASE = os.path.join(ROOT, 'sweetdream_rp_完整版')
 OUT = os.path.join(ROOT, 'sweetdream_rp_完整版')
 DEP = r'D:\PCL 正式版 2.10.0\.minecraft\versions\1.21.5-Fabric 0.16.10\resourcepacks\sweetdream_rp_完整版'
 OVL = os.path.join(ROOT, 'sweetdream_rp_原版风')

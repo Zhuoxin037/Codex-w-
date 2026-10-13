@@ -2,7 +2,7 @@
 """
 生成「枯枝园·朽木」与「无光海·暗潮」的资源包素材。
 
-产出（都在 sweetdream_rp/assets/sweetdream/ 下）:
+产出（都在 sweetdream_rp_完整版/assets/sweetdream/ 下）:
   textures/item/withered_wood.png   64x64   枯木树皮 + 菌菇/苔藓/焦黑色块
   textures/item/tide_deep.png       64x64   暗潮底层: 深暗海水(圆形 alpha 裁边)
   textures/item/tide_ripple.png     64x1024 暗潮波纹层: 16 帧动画(透明底 + 亮波纹)
@@ -22,7 +22,7 @@
 import json, math, random, struct, zlib
 from pathlib import Path
 
-ROOT = Path(r'D:/数据包/sweetdream_rp')
+ROOT = Path(r'D:/数据包/sweetdream_rp_完整版')
 NS = ROOT / 'assets' / 'sweetdream'
 TEX = NS / 'textures' / 'item'
 MDL = NS / 'models' / 'item'

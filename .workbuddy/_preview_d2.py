@@ -5,7 +5,7 @@ from pathlib import Path
 sys.path.insert(0, r'C:/Users/qq303/.workbuddy/skills/mc-model-preview/scripts')
 import render3d as R
 
-RP = Path(r'D:/数据包/sweetdream_rp'); OUT = Path(r'D:/数据包/logs')
+RP = Path(r'D:/数据包/sweetdream_rp_完整版'); OUT = Path(r'D:/数据包/logs')
 repo = R.Repo(str(RP))
 dom = R.load_model(str(RP / 'assets/sweetdream/models/item/domain.json'))
 

@@ -4,7 +4,7 @@
 from PIL import Image, ImageDraw
 import pathlib
 
-RP = pathlib.Path(__file__).resolve().parent.parent / 'sweetdream_rp/assets/sweetdream/textures/item'
+RP = pathlib.Path(__file__).resolve().parent.parent / 'sweetdream_rp_完整版/assets/sweetdream/textures/item'
 OUT = pathlib.Path(__file__).resolve().parent.parent / 'logs' / 'tide_ripple_16frames.png'
 
 deep = Image.open(RP / 'tide_deep.png').convert('RGBA')

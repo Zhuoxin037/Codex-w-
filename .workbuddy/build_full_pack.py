@@ -30,6 +30,24 @@
   3. OUT 里除这些定义 + pack.mcmeta 外，每个文件都与老包字节一致
   4. 每条定义都带 hand_animation_on_swap: false，且 model→模型→贴图 可达（贴图 16x16）
 """
+# ============================================================================
+# ★ 2026-10-13 起本脚本**暂停使用**（不是坏了，是工作流变了）:
+#     用户拍板"资源包只留一份" ⇒ 老包 sweetdream_rp/ 与覆盖层
+#     sweetdream_rp_原版风/ 已删除，完整版 sweetdream_rp_完整版/ 升为唯一真源。
+#     ⇒ 没有构建源了，也就不需要"合并构建"这一步: 改模型/贴图直接改完整版。
+#   ★ 附带修掉一个老毛病: 以前三个 sync_*_display 同步的是**老包**, 而游戏
+#     加载的是完整版 ⇒ "改了外观没效果"(F20 同款)。现在两边是同一份, 不会再犯。
+#   ★ 想恢复"源 + 产物"双份工作流: git 里有完整历史, 把两个目录 checkout 回来即可。
+# ============================================================================
+import os as _os
+if not _os.path.isdir(r'D:\数据包\sweetdream_rp') \
+        or not _os.path.isdir(r'D:\数据包\sweetdream_rp_原版风'):
+    raise SystemExit(
+        '[build_full_pack] 构建源 sweetdream_rp/ 与 sweetdream_rp_原版风/ 已删除 '
+        '(2026-10-13 起资源包只留 sweetdream_rp_完整版/ 这一份)。\n'
+        '  现在请直接改 sweetdream_rp_完整版/，不再需要合并构建。\n'
+        '  确需重建旧工作流: git checkout <本次之前的提交> -- sweetdream_rp sweetdream_rp_原版风')
+
 import os, sys, json, shutil, hashlib
 from pathlib import Path
 

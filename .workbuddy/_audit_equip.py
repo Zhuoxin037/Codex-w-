@@ -184,7 +184,7 @@ def main():
 
     # 全仓文本(含 json / mcmeta)出现过的 ns:path 字符串 -> 软可达
     mention = collections.defaultdict(list)
-    for base in (os.path.join(DATA), os.path.join(ROOT, "sweetdream_rp")):
+    for base in (os.path.join(DATA), os.path.join(ROOT, "sweetdream_rp_完整版")):
         for r, _d, fs in os.walk(base):
             for f in fs:
                 if not f.endswith((".mcfunction", ".json", ".mcmeta", ".txt", ".md")):

@@ -6,7 +6,7 @@ import math
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-ASSETS = ROOT / 'sweetdream_rp/assets'
+ASSETS = ROOT / 'sweetdream_rp_完整版/assets'
 bb = json.loads((ROOT / '模型设计/天使核心_阶段二/天使核心_分组模型.bbmodel').read_text(encoding='utf-8'))
 root_path = ASSETS / 'angelcore/models/item/axe.json'
 root = json.loads(root_path.read_text(encoding='utf-8'))
@@ -106,7 +106,7 @@ for name in ('stigma_flow', 'stigma_core'):
     assert a['frametime']*len(a['frames'])/20 == 3.2
 
 # 寒鸦显示合并不得修改任何原有部件的坐标、UV、拉弦帧或装填附件。
-backup = ROOT / '.workbuddy/backup/angel-binding-2026-10-09/sweetdream_rp/assets/coldcrow/models/item'
+backup = ROOT / '.workbuddy/backup/angel-binding-2026-10-09/sweetdream_rp_完整版/assets/coldcrow/models/item'
 for p in backup.glob('*.json'):
     if p.name == 'crossbow.json':
         continue

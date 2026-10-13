@@ -162,7 +162,7 @@ def render_hanzi_stone(main, ch, box=11, ink_target=44):
 # 原超限石贴图的真实 alpha 掩码（十字花：四条粗臂 + 中心芯）
 from PIL import Image as _Img
 _src = _Img.open(os.path.join(
-    ROOT, 'sweetdream_rp', 'assets', 'sweetdream', 'textures', 'item',
+    ROOT, 'sweetdream_rp_完整版', 'assets', 'sweetdream', 'textures', 'item',
     'stone', 'ol_liuguang.png')).convert('RGBA')
 _a = _src.split()[3].load()
 STAR_M = [[_a[x, y] > 60 for x in range(W)] for y in range(H)]

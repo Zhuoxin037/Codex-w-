@@ -16,7 +16,7 @@ import math
 from PIL import Image, ImageDraw, ImageFont
 
 ROOT = r'D:\数据包'
-STONE = os.path.join(ROOT, 'sweetdream_rp', 'assets', 'sweetdream',
+STONE = os.path.join(ROOT, 'sweetdream_rp_完整版', 'assets', 'sweetdream',
                      'textures', 'item', 'stone')
 OUT = os.path.join(ROOT, '模型设计', '超限石_重设计_20261010')
 os.makedirs(OUT, exist_ok=True)

@@ -55,7 +55,7 @@ ell=((X-ns['HOLE_X'])/2.10)**2+((Y-ns['HOLE_Y'])/1.92)**2
 patches(ns['shape']&(ell<1.18),ns['thumb'],'薄黄铜孔内沿',-.80,-.59,'bronze')
 # Default is RGB; each well also has independent hidden color alternatives.
 for (i,c),n in pigments.items():groups[n]['visibility']=c==['red','yellow','blue'][i]
-display=json.loads((ROOT/'sweetdream_rp/assets/palette/models/item/palette.json').read_text(encoding='utf-8'))['display']
+display=json.loads((ROOT/'sweetdream_rp_完整版/assets/palette/models/item/palette.json').read_text(encoding='utf-8'))['display']
 key_number=0
 def key(channel,t,v):
     global key_number

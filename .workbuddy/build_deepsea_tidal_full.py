@@ -114,7 +114,7 @@ check(elements,groups,root,textures)
 # No edits to the approved guard/core elements; animation is on their groups only.
 now={e['uuid']:e for e in elements};assert all(now[e['uuid']]==e for e in original['elements'])
 keys=[k['uuid'] for a in [idle,cast] for g in a['animators'].values() for k in g['keyframes']];assert len(keys)==len(set(keys))
-display=json.loads((ROOT/'sweetdream_rp/assets/deepseaecho/models/item/sword.json').read_text(encoding='utf-8'))['display']
+display=json.loads((ROOT/'sweetdream_rp_完整版/assets/deepseaecho/models/item/sword.json').read_text(encoding='utf-8'))['display']
 native=save_native(O,'深海回响_潮汐整剑_分组动画',elements,groups,root,textures,display,[idle,cast])
 master,count=export_static(O,'sword','deepseaecho',elements,groups,root,textures,display,offset=(7.775,2,7.895))
 T=O/'贴图';T.mkdir(exist_ok=True)

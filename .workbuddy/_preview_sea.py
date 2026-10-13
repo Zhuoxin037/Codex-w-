@@ -10,7 +10,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from texlab import decode
 
 ROOT = Path(r'D:/数据包')
-TEX = ROOT / 'sweetdream_rp/assets/sweetdream/textures/item'
+TEX = ROOT / 'sweetdream_rp_完整版/assets/sweetdream/textures/item'
 OUT = ROOT / 'logs' / 'sea_vs_tide.png'
 
 ROWS = [

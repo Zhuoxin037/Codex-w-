@@ -6,7 +6,7 @@ from pathlib import Path
 sys.path.insert(0, r'C:/Users/qq303/.workbuddy/skills/mc-model-preview/scripts')
 import render3d as R  # noqa: E402
 
-RP = Path(r'D:/数据包/sweetdream_rp')
+RP = Path(r'D:/数据包/sweetdream_rp_完整版')
 OUT = Path(r'D:/数据包/logs')
 OUT.mkdir(parents=True, exist_ok=True)
 repo = R.Repo(str(RP))

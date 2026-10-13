@@ -9,7 +9,7 @@ sys.path.insert(0, r'C:/Users/qq303/.workbuddy/skills/mc-model-preview/scripts')
 import render3d as R  # noqa: E402
 import texlab  # noqa: E402
 
-RP = Path(r'D:/数据包/sweetdream_rp')
+RP = Path(r'D:/数据包/sweetdream_rp_完整版')
 A = RP / 'assets/sweetdream/textures/item/angel_glow.png'
 
 w, h, px = texlab.decode(str(A))

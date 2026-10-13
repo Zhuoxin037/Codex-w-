@@ -8,7 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, 'C:/Users/qq303/.workbuddy/skills/mc-model-preview/scripts')
 import render3d as R
 
-RP = ROOT / 'sweetdream_rp'
+RP = ROOT / 'sweetdream_rp_完整版'
 new = json.loads((RP/'assets/sweetdream/models/item/domain.json').read_text(encoding='utf-8'))
 old = json.loads((ROOT/'.workbuddy/backup/thunder-domain-2026-10-09/domain.json').read_text(encoding='utf-8'))
 assert len(new['elements']) == 1, '精简版只保留水平法阵，不应恢复外围竖立符文'

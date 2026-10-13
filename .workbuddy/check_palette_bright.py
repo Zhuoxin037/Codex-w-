@@ -7,7 +7,7 @@ from PIL import Image,ImageDraw
 from model_review_io import renderer
 from sync_palette_bright_display import rotation
 
-B=Path(__file__).resolve().parents[1];RP=B/'sweetdream_rp';DP=B/'sweetdream/data/sweetdream'
+B=Path(__file__).resolve().parents[1];RP=B/'sweetdream_rp_完整版';DP=B/'sweetdream/data/sweetdream'
 F=DP/'function/equipment/staff/palette';A=RP/'assets/palette';M=A/'models/item'
 O=B/'模型设计/调色盘_明亮木盘_20261009/阶段二_提色施法'
 BACK=B/'.workbuddy/backup/palette-bright-source-20261009'
@@ -36,7 +36,7 @@ def choose(d,v,context):
         if value>=e['threshold']:selected=e['model']
     return choose(selected,v,context)
 item=read(A/'items/palette.json');assert item['hand_animation_on_swap'] is False
-whole=read(M/'palette.json');assert whole['display']==read(BACK/'sweetdream_rp/assets/palette/models/item/palette.json')['display']
+whole=read(M/'palette.json');assert whole['display']==read(BACK/'sweetdream_rp_完整版/assets/palette/models/item/palette.json')['display']
 for rel in plan['source_rp_files']:
     p=RP/rel
     if p.suffix!='.json':continue

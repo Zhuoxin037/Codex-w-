@@ -3,8 +3,8 @@
 
 为什么需要: 2026-10-05 实测两个 bug 都是"改了一处、漏了另一处":
   ① give 加了 item_model, 但右键消耗后还回来的那个(return_item)没加 -> 用一次就没模型
-  ② 资源包改了源(D:/数据包/sweetdream_rp), 版本隔离目录(.minecraft/versions/*/
-     resourcepacks/sweetdream_rp)是**另一份拷贝**, 不同步 -> 游戏里紫黑方块
+  ② 资源包改了源(D:/数据包/sweetdream_rp_完整版), 版本隔离目录(.minecraft/versions/*/
+     resourcepacks/sweetdream_rp_完整版)是**另一份拷贝**, 不同步 -> 游戏里紫黑方块
 
 本脚本离线抓这六类:
   1. give / return_item 三处 recovery_compass[...] 的组件列表必须逐字一致
@@ -17,9 +17,9 @@
 import io, os, re, sys, json, struct
 
 ROOT = r'D:\数据包'
-RP_SRC = os.path.join(ROOT, 'sweetdream_rp')
+RP_SRC = os.path.join(ROOT, 'sweetdream_rp_完整版')
 RP_DST = (r'D:\PCL 正式版 2.10.0\.minecraft\versions\1.21.5-Fabric 0.16.10'
-          r'\resourcepacks\sweetdream_rp')
+          r'\resourcepacks\sweetdream_rp_完整版')
 LOOK = os.path.join(ROOT, 'sweetdream', 'data', 'sweetdream', 'function',
                     'equipment', 'tool', 'look')
 

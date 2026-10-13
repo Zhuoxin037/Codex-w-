@@ -21,9 +21,9 @@ import io, os, re, sys, json
 
 ROOT = r'D:\数据包'
 DP = os.path.join(ROOT, 'sweetdream', 'data', 'sweetdream', 'function')
-RP_SRC = os.path.join(ROOT, 'sweetdream_rp')
+RP_SRC = os.path.join(ROOT, 'sweetdream_rp_完整版')
 RP_DST = (r'D:\PCL 正式版 2.10.0\.minecraft\versions\1.21.5-Fabric 0.16.10'
-          r'\resourcepacks\sweetdream_rp')
+          r'\resourcepacks\sweetdream_rp_完整版')
 RC = 'assets/minecraft/items/recovery_compass.json'
 
 bad = []

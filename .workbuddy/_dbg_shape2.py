@@ -3,7 +3,7 @@ import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from texlab import decode
-TEX = Path(r'D:/数据包/sweetdream_rp/assets/sweetdream/textures/item')
+TEX = Path(r'D:/数据包/sweetdream_rp_完整版/assets/sweetdream/textures/item')
 for name in ['tide_ripple.png', 'sea_ripple.png']:
     w, h, px = decode(TEX / name)
     print('=== %s (%dx%d, 第0帧) ===' % (name, w, h))

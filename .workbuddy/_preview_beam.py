@@ -12,7 +12,7 @@ sys.path.insert(0, str(SKILL))
 import render3d as R  # noqa: E402
 
 ROOT = Path(r'D:/数据包')
-RP = ROOT / 'sweetdream_rp'
+RP = ROOT / 'sweetdream_rp_完整版'
 OUT = ROOT / 'logs' / 'beam_preview.png'
 
 repo = R.Repo(str(RP))
