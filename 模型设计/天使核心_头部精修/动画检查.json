@@ -1,8 +1,0 @@
-{
-  "content": [
-    {
-      "type": "text",
-      "text": "{\n  \"animation\": \"idle_圣痕循环\",\n  \"length\": 3.2,\n  \"loop\": \"loop\",\n  \"orientation\": \"The model FACES -z. Its own RIGHT is +x, its own LEFT is -x.\",\n  \"samples\": 13,\n  \"bones_with_keyframes\": 4,\n  \"total_keyframes\": 75,\n  \"per_bone\": [\n    {\n      \"bone\": \"核心_暖白晶体\",\n      \"keyframes\": 18,\n      \"channels\": [\n        \"rotation\",\n        \"position\"\n      ]\n    },\n    {\n      \"bone\": \"游光_背面\",\n      \"keyframes\": 24,\n      \"channels\": [\n        \"position\",\n        \"scale\"\n      ]\n    },\n    {\n      \"bone\": \"游光_正面\",\n      \"keyframes\": 24,\n      \"channels\": [\n        \"position\",\n        \"scale\"\n      ]\n    },\n    {\n      \"bone\": \"晶体_内核光辉\",\n      \"keyframes\": 9,\n      \"channels\": [\n        \"scale\"\n      ]\n    }\n  ],\n  \"motion\": {},\n  \"motion_legend\": \"Distances are in model units along the model's own axes. \\\"forward\\\" = -z (the way it faces).\",\n  \"direction_check\": null,\n  \"issue_count\": 1,\n  \"by_type\": {\n    \"no_visible_motion\": 1\n  },\n  \"issues\": [\n    {\n      \"issue\": \"no_visible_motion\",\n      \"hint\": \"Nothing moves more than half a unit — the amplitudes are far too small to read in game.\"\n    }\n  ],\n  \"verdict\": \"Fix the issues above, then re-run analyze_animation — do not show this to the user yet.\"\n}"
-    }
-  ]
-}

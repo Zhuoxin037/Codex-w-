@@ -1,8 +1,0 @@
-{
-  "content": [
-    {
-      "type": "text",
-      "text": "{\n  \"cubes\": 1089,\n  \"groups\": 19,\n  \"textures\": 4,\n  \"texture_size\": [\n    64,\n    64\n  ],\n  \"animation_format\": true,\n  \"orientation\": \"The model FACES -z. Its own RIGHT is +x, its own LEFT is -x.\",\n  \"issue_count\": 0,\n  \"by_type\": {},\n  \"issues\": []\n}"
-    }
-  ]
-}
