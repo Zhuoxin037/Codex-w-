@@ -1,0 +1,35 @@
+{
+  "source": "live MCP saved bbmodel",
+  "cubes": 901,
+  "groups": 28,
+  "textures": 3,
+  "animations": 0,
+  "fluke_count": 4,
+  "radial_angles": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "fluke_cube_counts": {
+    "01_左月刃锚爪": 131,
+    "02_右月刃锚爪": 140,
+    "12_前向月刃锚爪": 131,
+    "13_后向月刃锚爪": 140
+  },
+  "fluke_root_contact_with_coupling": true,
+  "java_elements": 901,
+  "faces": 5406,
+  "source_sha256": "ff99c9e9fdc3e1469c7885b62936bd2a5d2ee334e190a0e1741e50046fd07e57",
+  "checks": {
+    "hierarchy": true,
+    "positive_volume": true,
+    "uv": true,
+    "game_coordinates": true,
+    "discrete_single_axis_rotation": true,
+    "resource_references": true,
+    "item_atlas_paths": true
+  },
+  "state": "static shape review; not animated or deployed",
+  "game_visual_or_fps_test": false
+}

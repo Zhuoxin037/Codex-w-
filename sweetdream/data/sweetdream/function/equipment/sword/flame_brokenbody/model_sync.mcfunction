@@ -2,3 +2,6 @@
 # 正在消耗回手时跳过，避免写入尚未返还的物品。
 execute as @a[tag=!test_pending_return] if items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["flame_brokenbody"]}] unless items entity @s weapon.mainhand *[minecraft:item_model="flameremnant:sword"] run item modify entity @s weapon.mainhand sweetdream:flame_model
 execute as @a[tag=!test_pending_return] if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["flame_brokenbody"]}] unless items entity @s weapon.offhand *[minecraft:item_model="flameremnant:sword"] run item modify entity @s weapon.offhand sweetdream:flame_model
+
+# 非施法武器在重新持有时恢复当前握姿。
+execute as @a[tag=!test_pending_return,tag=!zx.fb_cast] at @s run function sweetdream:equipment/sword/flame_brokenbody/visual/idle

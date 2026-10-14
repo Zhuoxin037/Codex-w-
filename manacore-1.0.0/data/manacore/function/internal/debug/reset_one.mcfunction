@@ -12,3 +12,5 @@ $data modify storage manacore:players "$(uuid)" set from storage manacore:work r
 #   这里会把已经不存在的记录**重建**出来, 所以也要登记(重复一条无害:
 #   清档时第二次 `data remove` 会因为路径不存在被 `execute if data` 挡掉)。
 $data modify storage manacore:players_all list append value "$(uuid)"
+# 【★ N04 修(2026-10-11)★】打"已登记终身清单"标志(见 internal/player/create 的说明)。
+$data modify storage manacore:players "$(uuid)".reg set value 1b

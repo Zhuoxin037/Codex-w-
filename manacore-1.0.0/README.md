@@ -596,7 +596,9 @@ function manacore:api/formation/limit/set
 | --- | --- | --- |
 | `#manacore:event/load` | 数据包加载/重载后 | — |
 | `#manacore:event/second` | 每秒（所有玩家逻辑之后） | — |
+| `#manacore:event/player_prepare_new` | 新建玩家记录前，槽位分配成功后、读取实际攻击力前 | 无；执行者 `@s` 为玩家，尚未登记 |
 | `#manacore:event/player_join` | 玩家完成注册 | `uuid` `slot` `reason="join"` |
+| `#manacore:event/player_first_join` | 新记录登记及 `player_join` 回调之后 | 同 `player_join` |
 | `#manacore:event/player_leave` | 检测到玩家离线并完成清理 | `uuid` `reason="leave"` |
 | `#manacore:event/mana_regen` | 每次自动恢复结算前 | `uuid`，可读写计分板 `#regen` |
 | `#manacore:event/cooldown_start` | 技能进入冷却 | `uuid` `skill` |
@@ -607,6 +609,12 @@ function manacore:api/formation/limit/set
 
 `formation_remove` 的 `reason` 取值：`expire`(自然到期) / `remove`(主动删除) /
 `clear`(清空) / `leave`(玩家离线)。
+
+新建记录（首次加入或记录被清除后的重新建档）的顺序为：
+`player_prepare_new → 读取实际攻击力并建档 → register / player_join → player_first_join`。
+`player_prepare_new` 可用来摘掉应用包残留的属性修饰符，避免将旧加成读成基础攻击力；
+此时不可使用 `manacore:ctx` 或依赖登记完成的 UUID 查找/API，也不应提前清掉迁移所需的分数。
+普通重连走 `join/existing`，只触发 `player_join`，不触发这两个新建事件。
 
 ### 接入方式（推荐）
 

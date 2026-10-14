@@ -110,9 +110,6 @@ execute in minecraft:the_end as @e[tag=zx.sr_relic,distance=0..] at @s run funct
 #   玩家根本看不见遗骸(粒子寿命 < 1 秒, 每秒一次 = 20 帧里只有 1 帧)。
 #   ★ 三维度各写一遍 + 每行 distance=0..: #minecraft:tick 只在主世界跑, 裸 @e 会跨维度重复处理。
 #   ★ 只管表现; 计时/寿命仍在 lib/second 的 relic_tick(每秒)。
-execute in minecraft:overworld as @e[tag=zx.sr_relic,distance=0..] at @s run function sweetdream:equipment/axe/sacred_relic/relic_glow
-execute in minecraft:the_nether as @e[tag=zx.sr_relic,distance=0..] at @s run function sweetdream:equipment/axe/sacred_relic/relic_glow
-execute in minecraft:the_end as @e[tag=zx.sr_relic,distance=0..] at @s run function sweetdream:equipment/axe/sacred_relic/relic_glow
 
 # 红莲(2026-10-07 批2): 主动"每 0.35 秒推一段"倒计时(zx.rl_t 7->0 = 7 刻)
 #   ★ 用户口径: 多段都依次隔 0.35 秒(同刻打完会被受伤无敌帧吃掉, 等于只有第一下掉血)。
@@ -486,9 +483,35 @@ execute in minecraft:overworld as @e[distance=0..,type=minecraft:lightning_bolt,
 execute in minecraft:the_nether as @e[distance=0..,type=minecraft:lightning_bolt,tag=!zx.th_seen] at @s run function sweetdream:equipment/tool/thunder/strike
 execute in minecraft:the_end as @e[distance=0..,type=minecraft:lightning_bolt,tag=!zx.th_seen] at @s run function sweetdream:equipment/tool/thunder/strike
 
+# 引雷针(thunderrod, 2026-10-13 批 13): 普攻预约的那一道雷到期 —— 与雷鸣同形态,
+#   只是到期后**不再新劈一道真闪电的连锁**(雷要劈在命中点, 由 pend_go 自己 summon)。
+#   ★ pend_go 是宏函数(要拿 marker 里的主人 UUID 四个整数), 所以这里带
+#     `with entity @s data.zx.tr` 把参数喂进去(宏源只能是调用时 with 的那一份)。
+execute in minecraft:overworld as @e[distance=0..,tag=zx.tr_pend] at @s if score @s zx.tr_due <= #now manacore.meta run function sweetdream:equipment/staff/thunderrod/pend_go with entity @s data.zx.tr
+execute in minecraft:the_nether as @e[distance=0..,tag=zx.tr_pend] at @s if score @s zx.tr_due <= #now manacore.meta run function sweetdream:equipment/staff/thunderrod/pend_go with entity @s data.zx.tr
+execute in minecraft:the_end as @e[distance=0..,tag=zx.tr_pend] at @s if score @s zx.tr_due <= #now manacore.meta run function sweetdream:equipment/staff/thunderrod/pend_go with entity @s data.zx.tr
+
+# 长明(everlit, 2026-10-13 批 13): 「灯灵」的**每刻表现**
+#   ★ 表现必须每刻画(坑 147): 挂每秒 = 20 帧里只有 1 帧有粒子 => 肉眼看不见。
+#     计时与结算在 lib/second(每秒), 这里只画粒子。
+execute in minecraft:overworld as @e[distance=0..,tag=zx.el_wisp] at @s run function sweetdream:equipment/tool/everlit/wisp_fx
+execute in minecraft:the_nether as @e[distance=0..,tag=zx.el_wisp] at @s run function sweetdream:equipment/tool/everlit/wisp_fx
+execute in minecraft:the_end as @e[distance=0..,tag=zx.el_wisp] at @s run function sweetdream:equipment/tool/everlit/wisp_fx
+
 # 调试用的 /trigger: 只有刚按过的人分数 >= 1, 平时三个选择器全空。
 #   它也写 manacore:in arg(查数值/清冷却都要走前置包接口), 所以放在
 #   in_restore 之前, 让这一整段都在公共输入口的备份保护里。
 function sweetdream:debug/tg_router
 
+# 烈火残躯：独立玩家姿态与短时回旋焰刃，三维度各推进一次。
+execute as @a[tag=zx.fb_cast] at @s run function sweetdream:equipment/sword/flame_brokenbody/visual/tick
+execute in minecraft:overworld as @e[type=minecraft:item_display,tag=zx.fb_fx,distance=0..] at @s run function sweetdream:equipment/sword/flame_brokenbody/visual/fx_tick
+execute in minecraft:the_nether as @e[type=minecraft:item_display,tag=zx.fb_fx,distance=0..] at @s run function sweetdream:equipment/sword/flame_brokenbody/visual/fx_tick
+execute in minecraft:the_end as @e[type=minecraft:item_display,tag=zx.fb_fx,distance=0..] at @s run function sweetdream:equipment/sword/flame_brokenbody/visual/fx_tick
+
+execute as @a[tag=zx.av_cast] at @s run function sweetdream:equipment/axe/anchor/visual/tick
+execute in minecraft:overworld as @e[type=minecraft:item_display,tag=zx.av_anchor,distance=0..] at @s run function sweetdream:equipment/axe/anchor/visual/world_tick
+execute in minecraft:the_nether as @e[type=minecraft:item_display,tag=zx.av_anchor,distance=0..] at @s run function sweetdream:equipment/axe/anchor/visual/world_tick
+execute in minecraft:the_end as @e[type=minecraft:item_display,tag=zx.av_anchor,distance=0..] at @s run function sweetdream:equipment/axe/anchor/visual/world_tick
+execute as @a at @s run function sweetdream:equipment/axe/anchor/visual/idle
 function sweetdream:lib/in_restore

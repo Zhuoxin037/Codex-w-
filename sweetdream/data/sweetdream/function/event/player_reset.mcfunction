@@ -34,7 +34,9 @@
 #     装备账本(zx.power_hp / zx.set_hp / …)一起清零, 而"重置那一刻没穿装备"时
 #     want=0 / 账本=0 ⇒ 差额 0 ⇒ 跳过 apply_* ⇒ 那份修饰符再也摘不掉。
 #     详见 internal/attr/cleanup 头部(含"重置 = 恢复成新玩家"的语义论证)。
+execute if entity @s[tag=zx.fb_cast] at @s run function sweetdream:equipment/sword/flame_brokenbody/visual/end
 function sweetdream:internal/attr/cleanup
+function sweetdream:equipment/axe/anchor/cancel
 # @@GEN-SCORES-BELOW@@
 scoreboard players reset @s zx.ab_age
 scoreboard players reset @s zx.ab_t
@@ -76,6 +78,12 @@ scoreboard players reset @s zx.as_x2
 scoreboard players reset @s zx.atk_gt
 scoreboard players reset @s zx.atk_lt
 scoreboard players reset @s zx.atk_ok
+scoreboard players reset @s zx.av_dim
+scoreboard players reset @s zx.av_hand
+scoreboard players reset @s zx.av_life
+scoreboard players reset @s zx.av_phase
+scoreboard players reset @s zx.av_slot
+scoreboard players reset @s zx.av_t
 scoreboard players reset @s zx.ball_dist
 scoreboard players reset @s zx.bd_cd
 scoreboard players reset @s zx.bd_ft
@@ -97,6 +105,9 @@ scoreboard players reset @s zx.bl_regen
 scoreboard players reset @s zx.bl_rv
 scoreboard players reset @s zx.bl_ta
 scoreboard players reset @s zx.bl_te
+scoreboard players reset @s zx.bs_n
+scoreboard players reset @s zx.bs_paid
+scoreboard players reset @s zx.bs_ready
 scoreboard players reset @s zx.cc_fx
 scoreboard players reset @s zx.cc_ice
 scoreboard players reset @s zx.cc_vis
@@ -148,6 +159,14 @@ scoreboard players reset @s zx.dio_regen
 scoreboard players reset @s zx.dio_wine
 scoreboard players reset @s zx.dr_life
 scoreboard players reset @s zx.dt_paid
+scoreboard players reset @s zx.el_attack
+scoreboard players reset @s zx.el_cd
+scoreboard players reset @s zx.el_clock
+scoreboard players reset @s zx.el_dim
+scoreboard players reset @s zx.el_last
+scoreboard players reset @s zx.el_mana
+scoreboard players reset @s zx.el_state
+scoreboard players reset @s zx.el_time
 scoreboard players reset @s zx.em_conv
 scoreboard players reset @s zx.em_gate
 scoreboard players reset @s zx.em_mana
@@ -155,7 +174,16 @@ scoreboard players reset @s zx.em_mana50
 scoreboard players reset @s zx.em_scan
 scoreboard players reset @s zx.em_seen
 scoreboard players reset @s zx.et_mana
+scoreboard players reset @s zx.fb_dim
+scoreboard players reset @s zx.fb_frame
+scoreboard players reset @s zx.fb_fx_t
+scoreboard players reset @s zx.fb_hand
 scoreboard players reset @s zx.fb_lava
+scoreboard players reset @s zx.fb_mode
+scoreboard players reset @s zx.fb_ol
+scoreboard players reset @s zx.fb_refresh
+scoreboard players reset @s zx.fb_slot
+scoreboard players reset @s zx.fb_until
 scoreboard players reset @s zx.fc_ash
 scoreboard players reset @s zx.fc_atk
 scoreboard players reset @s zx.fc_hold
@@ -173,6 +201,7 @@ scoreboard players reset @s zx.fcv_u3
 scoreboard players reset @s zx.fd_t
 scoreboard players reset @s zx.fi_ft
 scoreboard players reset @s zx.floor_mana
+scoreboard players reset @s zx.fm_cd
 scoreboard players reset @s zx.fm_t
 scoreboard players reset @s zx.fr_auto
 scoreboard players reset @s zx.fr_light
@@ -351,6 +380,12 @@ scoreboard players reset @s zx.sr_lt
 scoreboard players reset @s zx.sr_next
 scoreboard players reset @s zx.sr_on
 scoreboard players reset @s zx.sr_wt
+scoreboard players reset @s zx.srm_b
+scoreboard players reset @s zx.srm_d
+scoreboard players reset @s zx.srm_end
+scoreboard players reset @s zx.srm_f
+scoreboard players reset @s zx.srm_last
+scoreboard players reset @s zx.srm_p
 scoreboard players reset @s zx.srv_frame
 scoreboard players reset @s zx.srv_i
 scoreboard players reset @s zx.srv_pulse
@@ -381,6 +416,7 @@ scoreboard players reset @s zx.tc_on
 scoreboard players reset @s zx.td_lt
 scoreboard players reset @s zx.td_on
 scoreboard players reset @s zx.th_due
+scoreboard players reset @s zx.tr_due
 scoreboard players reset @s zx.tri_form
 scoreboard players reset @s zx.tri_hit
 scoreboard players reset @s zx.tri_next

@@ -2,7 +2,7 @@
   {
     "function": "minecraft:set_components",
     "components": {
-      "minecraft:item_name": {"text": "很冰的斧", "bold": true, "color": "gold"}
+      "minecraft:item_name": {"text": "很冰的斧", "bold": true, "color": "aqua"}
     }
   }
 ]

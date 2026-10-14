@@ -1,0 +1,34 @@
+{
+  "revision": "保留加大的动作，熄灭后主体与铜饰随灯火逐渐收暗",
+  "cubes": 399,
+  "groups": 52,
+  "textures": 3,
+  "material_state_frames": 9,
+  "animations": 5,
+  "keyframes": 609,
+  "original_385_cubes_unchanged": true,
+  "original_texture_normal_frame_unchanged": true,
+  "all_cubes_grouped": true,
+  "whole_scale_fixed": true,
+  "lamp_follows_left_hand_error": 2.220446049250313e-16,
+  "right_hand_forward_reach": 2.1054128188107546,
+  "loop_errors": {
+    "01_待机_托灯轻浮": 0,
+    "05_熄灭_安静轻浮": 0
+  },
+  "state_join_errors": {
+    "attack_to_idle": 0,
+    "extinguish_to_dormant": 0,
+    "dormant_to_rekindle": 0,
+    "rekindle_to_idle": 0
+  },
+  "geometry_issues": 0,
+  "rig_sides_valid_about_model_center_x": 8,
+  "generic_rig_warning_note": "MCP侧别检查以x=0为中线，因此误判x=8中线的模型；已按模型中线核实。灯灵有意没有腿。静止隐藏特效轨道的两帧和熄灭时身体不移动均为状态设计。",
+  "sampling": "actual live Blockbench MCP affine matrices, 20 fps; no motion reimplementation",
+  "approval": "approved_in_chat",
+  "deployed": false,
+  "native": "D:\\数据包\\模型设计\\长明_灯灵_建模_20261013\\阶段三_灯灵动效\\灯灵_分组可编辑动画.bbmodel",
+  "whole_json": "D:\\数据包\\模型设计\\长明_灯灵_建模_20261013\\阶段三_灯灵动效\\灯灵_整体显示调整.json",
+  "game_integration_manifest": "D:/数据包/.workbuddy/everlit_wisp_binding.json"
+}

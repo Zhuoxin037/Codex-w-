@@ -1,0 +1,106 @@
+{
+  "cubes": 399,
+  "groups": 52,
+  "textures": 3,
+  "texture_size": [
+    256,
+    256
+  ],
+  "animation_format": true,
+  "orientation": "The model FACES -z. Its own RIGHT is +x, its own LEFT is -x.",
+  "issue_count": 12,
+  "by_type": {
+    "wrong_side": 4,
+    "unpaired_side": 8
+  },
+  "issues": [
+    {
+      "issue": "wrong_side",
+      "element": "左臂_肩根_shoulder_left",
+      "claimed_side": "left",
+      "actual_side": "right",
+      "side_coord": 7.09,
+      "hint": "\"左臂_肩根_shoulder_left\" is named left but its geometry is on the model's right (+x). Either rename it \"左臂_肩根_shoulder_right\" or mirror it to the other side. The model's RIGHT is +x."
+    },
+    {
+      "issue": "wrong_side",
+      "element": "左臂_上臂_arm_upper_left",
+      "claimed_side": "left",
+      "actual_side": "right",
+      "side_coord": 7.21,
+      "hint": "\"左臂_上臂_arm_upper_left\" is named left but its geometry is on the model's right (+x). Either rename it \"左臂_上臂_arm_upper_right\" or mirror it to the other side. The model's RIGHT is +x."
+    },
+    {
+      "issue": "wrong_side",
+      "element": "左臂_前臂_arm_lower_left",
+      "claimed_side": "left",
+      "actual_side": "right",
+      "side_coord": 7.47,
+      "hint": "\"左臂_前臂_arm_lower_left\" is named left but its geometry is on the model's right (+x). Either rename it \"左臂_前臂_arm_lower_right\" or mirror it to the other side. The model's RIGHT is +x."
+    },
+    {
+      "issue": "wrong_side",
+      "element": "左手_hand_left",
+      "claimed_side": "left",
+      "actual_side": "right",
+      "side_coord": 7.84,
+      "hint": "\"左手_hand_left\" is named left but its geometry is on the model's right (+x). Either rename it \"左手_hand_right\" or mirror it to the other side. The model's RIGHT is +x."
+    },
+    {
+      "issue": "unpaired_side",
+      "elements": [
+        "左臂_肩根_shoulder_left"
+      ],
+      "hint": "A left/right body part exists without its counterpart. Mirror it (mirror_element {axis:\"x\"}) unless the asymmetry is intentional."
+    },
+    {
+      "issue": "unpaired_side",
+      "elements": [
+        "左臂_上臂_arm_upper_left"
+      ],
+      "hint": "A left/right body part exists without its counterpart. Mirror it (mirror_element {axis:\"x\"}) unless the asymmetry is intentional."
+    },
+    {
+      "issue": "unpaired_side",
+      "elements": [
+        "左臂_前臂_arm_lower_left"
+      ],
+      "hint": "A left/right body part exists without its counterpart. Mirror it (mirror_element {axis:\"x\"}) unless the asymmetry is intentional."
+    },
+    {
+      "issue": "unpaired_side",
+      "elements": [
+        "左手_hand_left"
+      ],
+      "hint": "A left/right body part exists without its counterpart. Mirror it (mirror_element {axis:\"x\"}) unless the asymmetry is intentional."
+    },
+    {
+      "issue": "unpaired_side",
+      "elements": [
+        "右臂_肩根_shoulder_right"
+      ],
+      "hint": "A left/right body part exists without its counterpart. Mirror it (mirror_element {axis:\"x\"}) unless the asymmetry is intentional."
+    },
+    {
+      "issue": "unpaired_side",
+      "elements": [
+        "右臂_上臂_arm_upper_right"
+      ],
+      "hint": "A left/right body part exists without its counterpart. Mirror it (mirror_element {axis:\"x\"}) unless the asymmetry is intentional."
+    },
+    {
+      "issue": "unpaired_side",
+      "elements": [
+        "右臂_前臂_arm_lower_right"
+      ],
+      "hint": "A left/right body part exists without its counterpart. Mirror it (mirror_element {axis:\"x\"}) unless the asymmetry is intentional."
+    },
+    {
+      "issue": "unpaired_side",
+      "elements": [
+        "右手_hand_right"
+      ],
+      "hint": "A left/right body part exists without its counterpart. Mirror it (mirror_element {axis:\"x\"}) unless the asymmetry is intentional."
+    }
+  ]
+}

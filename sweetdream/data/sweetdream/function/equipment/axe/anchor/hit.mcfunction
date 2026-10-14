@@ -60,3 +60,4 @@ execute as @e[tag=zx.an_t,distance=0..] run data modify entity @s Motion set val
 execute at @e[tag=zx.an_t,distance=..16,limit=1,sort=nearest] run particle minecraft:cloud ~ ~0.3 ~ 0.3 0.2 0.3 0.02 8 normal
 execute at @s run playsound minecraft:entity.player.attack.strong player @a ~ ~ ~ 0.5 1.4
 tag @e[tag=zx.an_t,distance=0..] remove zx.an_t
+function sweetdream:equipment/axe/anchor/visual/passive

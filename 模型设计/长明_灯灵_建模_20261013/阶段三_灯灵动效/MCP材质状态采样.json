@@ -1,0 +1,422 @@
+{
+  "clips": [
+    {
+      "name": "01_待机_托灯轻浮",
+      "frames": [
+        {
+          "time": 0,
+          "material_frame": 0,
+          "all_frames": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "time": 0.4,
+          "material_frame": 0,
+          "all_frames": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "time": 4,
+          "material_frame": 0,
+          "all_frames": [
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "name": "02_攻击_抬手引焰",
+      "frames": [
+        {
+          "time": 0,
+          "material_frame": 0,
+          "all_frames": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "time": 0.4,
+          "material_frame": 0,
+          "all_frames": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "time": 1.1,
+          "material_frame": 0,
+          "all_frames": [
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "name": "03_熄灭_灯火渐息",
+      "frames": [
+        {
+          "time": 0,
+          "material_frame": 0,
+          "all_frames": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "time": 0.05,
+          "material_frame": 0,
+          "all_frames": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "time": 0.1,
+          "material_frame": 1,
+          "all_frames": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "time": 0.15,
+          "material_frame": 1,
+          "all_frames": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "time": 0.2,
+          "material_frame": 2,
+          "all_frames": [
+            2,
+            2,
+            2
+          ]
+        },
+        {
+          "time": 0.25,
+          "material_frame": 2,
+          "all_frames": [
+            2,
+            2,
+            2
+          ]
+        },
+        {
+          "time": 0.3,
+          "material_frame": 3,
+          "all_frames": [
+            3,
+            3,
+            3
+          ]
+        },
+        {
+          "time": 0.35,
+          "material_frame": 3,
+          "all_frames": [
+            3,
+            3,
+            3
+          ]
+        },
+        {
+          "time": 0.4,
+          "material_frame": 4,
+          "all_frames": [
+            4,
+            4,
+            4
+          ]
+        },
+        {
+          "time": 0.45,
+          "material_frame": 4,
+          "all_frames": [
+            4,
+            4,
+            4
+          ]
+        },
+        {
+          "time": 0.5,
+          "material_frame": 5,
+          "all_frames": [
+            5,
+            5,
+            5
+          ]
+        },
+        {
+          "time": 0.55,
+          "material_frame": 5,
+          "all_frames": [
+            5,
+            5,
+            5
+          ]
+        },
+        {
+          "time": 0.6,
+          "material_frame": 6,
+          "all_frames": [
+            6,
+            6,
+            6
+          ]
+        },
+        {
+          "time": 0.65,
+          "material_frame": 6,
+          "all_frames": [
+            6,
+            6,
+            6
+          ]
+        },
+        {
+          "time": 0.7,
+          "material_frame": 7,
+          "all_frames": [
+            7,
+            7,
+            7
+          ]
+        },
+        {
+          "time": 0.75,
+          "material_frame": 7,
+          "all_frames": [
+            7,
+            7,
+            7
+          ]
+        },
+        {
+          "time": 0.8,
+          "material_frame": 8,
+          "all_frames": [
+            8,
+            8,
+            8
+          ]
+        }
+      ]
+    },
+    {
+      "name": "04_复燃_重新点亮",
+      "frames": [
+        {
+          "time": 0,
+          "material_frame": 8,
+          "all_frames": [
+            8,
+            8,
+            8
+          ]
+        },
+        {
+          "time": 0.05,
+          "material_frame": 8,
+          "all_frames": [
+            8,
+            8,
+            8
+          ]
+        },
+        {
+          "time": 0.1,
+          "material_frame": 7,
+          "all_frames": [
+            7,
+            7,
+            7
+          ]
+        },
+        {
+          "time": 0.15,
+          "material_frame": 7,
+          "all_frames": [
+            7,
+            7,
+            7
+          ]
+        },
+        {
+          "time": 0.2,
+          "material_frame": 6,
+          "all_frames": [
+            6,
+            6,
+            6
+          ]
+        },
+        {
+          "time": 0.25,
+          "material_frame": 6,
+          "all_frames": [
+            6,
+            6,
+            6
+          ]
+        },
+        {
+          "time": 0.3,
+          "material_frame": 5,
+          "all_frames": [
+            5,
+            5,
+            5
+          ]
+        },
+        {
+          "time": 0.35,
+          "material_frame": 5,
+          "all_frames": [
+            5,
+            5,
+            5
+          ]
+        },
+        {
+          "time": 0.4,
+          "material_frame": 4,
+          "all_frames": [
+            4,
+            4,
+            4
+          ]
+        },
+        {
+          "time": 0.45,
+          "material_frame": 4,
+          "all_frames": [
+            4,
+            4,
+            4
+          ]
+        },
+        {
+          "time": 0.5,
+          "material_frame": 3,
+          "all_frames": [
+            3,
+            3,
+            3
+          ]
+        },
+        {
+          "time": 0.55,
+          "material_frame": 3,
+          "all_frames": [
+            3,
+            3,
+            3
+          ]
+        },
+        {
+          "time": 0.6,
+          "material_frame": 2,
+          "all_frames": [
+            2,
+            2,
+            2
+          ]
+        },
+        {
+          "time": 0.65,
+          "material_frame": 2,
+          "all_frames": [
+            2,
+            2,
+            2
+          ]
+        },
+        {
+          "time": 0.7,
+          "material_frame": 1,
+          "all_frames": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "time": 0.75,
+          "material_frame": 1,
+          "all_frames": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "time": 0.8,
+          "material_frame": 0,
+          "all_frames": [
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "name": "05_熄灭_安静轻浮",
+      "frames": [
+        {
+          "time": 0,
+          "material_frame": 8,
+          "all_frames": [
+            8,
+            8,
+            8
+          ]
+        },
+        {
+          "time": 0.4,
+          "material_frame": 8,
+          "all_frames": [
+            8,
+            8,
+            8
+          ]
+        },
+        {
+          "time": 4,
+          "material_frame": 8,
+          "all_frames": [
+            8,
+            8,
+            8
+          ]
+        }
+      ]
+    }
+  ],
+  "root_scale": [
+    1,
+    1,
+    1
+  ],
+  "variables": "preview.texture_frame = variable.lamp_dim_frame;"
+}

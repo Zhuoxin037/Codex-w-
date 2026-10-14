@@ -1,0 +1,486 @@
+[
+  {
+    "animation": "01_待机_双端固定链条轻摆",
+    "result": {
+      "animation": "01_待机_双端固定链条轻摆",
+      "length": 4,
+      "loop": "loop",
+      "orientation": "The model FACES -z. Its own RIGHT is +x, its own LEFT is -x.",
+      "samples": 18,
+      "bones_with_keyframes": 13,
+      "total_keyframes": 114,
+      "per_bone": [
+        {
+          "bone": "沉锚_整体",
+          "keyframes": 6,
+          "channels": [
+            "rotation",
+            "position",
+            "scale"
+          ]
+        },
+        {
+          "bone": "链节_01",
+          "keyframes": 9,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_02",
+          "keyframes": 9,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_03",
+          "keyframes": 9,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_04",
+          "keyframes": 9,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_05",
+          "keyframes": 9,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_06",
+          "keyframes": 9,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_07",
+          "keyframes": 9,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_08",
+          "keyframes": 9,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_09",
+          "keyframes": 9,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_10",
+          "keyframes": 9,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_11",
+          "keyframes": 9,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_12",
+          "keyframes": 9,
+          "channels": [
+            "position"
+          ]
+        }
+      ],
+      "motion": {},
+      "motion_legend": "Distances are in model units along the model's own axes. \"forward\" = -z (the way it faces).",
+      "direction_check": null,
+      "issue_count": 1,
+      "by_type": {
+        "no_visible_motion": 1
+      },
+      "issues": [
+        {
+          "issue": "no_visible_motion",
+          "hint": "Nothing moves more than half a unit — the amplitudes are far too small to read in game."
+        }
+      ],
+      "verdict": "Fix the issues above, then re-run analyze_animation — do not show this to the user yet."
+    }
+  },
+  {
+    "animation": "02_掷锚_起势出手",
+    "result": {
+      "animation": "02_掷锚_起势出手",
+      "length": 0.55,
+      "loop": "hold",
+      "orientation": "The model FACES -z. Its own RIGHT is +x, its own LEFT is -x.",
+      "samples": 18,
+      "bones_with_keyframes": 13,
+      "total_keyframes": 86,
+      "per_bone": [
+        {
+          "bone": "沉锚_整体",
+          "keyframes": 14,
+          "channels": [
+            "rotation",
+            "position",
+            "scale"
+          ]
+        },
+        {
+          "bone": "链节_01",
+          "keyframes": 6,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_02",
+          "keyframes": 6,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_03",
+          "keyframes": 6,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_04",
+          "keyframes": 6,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_05",
+          "keyframes": 6,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_06",
+          "keyframes": 6,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_07",
+          "keyframes": 6,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_08",
+          "keyframes": 6,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_09",
+          "keyframes": 6,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_10",
+          "keyframes": 6,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_11",
+          "keyframes": 6,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_12",
+          "keyframes": 6,
+          "channels": [
+            "position"
+          ]
+        }
+      ],
+      "motion": {},
+      "motion_legend": "Distances are in model units along the model's own axes. \"forward\" = -z (the way it faces).",
+      "direction_check": null,
+      "issue_count": 1,
+      "by_type": {
+        "no_visible_motion": 1
+      },
+      "issues": [
+        {
+          "issue": "no_visible_motion",
+          "hint": "Nothing moves more than half a unit — the amplitudes are far too small to read in game."
+        }
+      ],
+      "verdict": "Fix the issues above, then re-run analyze_animation — do not show this to the user yet."
+    }
+  },
+  {
+    "animation": "03_落击_震颤与回收",
+    "result": {
+      "animation": "03_落击_震颤与回收",
+      "length": 1.05,
+      "loop": "once",
+      "orientation": "The model FACES -z. Its own RIGHT is +x, its own LEFT is -x.",
+      "samples": 18,
+      "bones_with_keyframes": 13,
+      "total_keyframes": 114,
+      "per_bone": [
+        {
+          "bone": "沉锚_整体",
+          "keyframes": 18,
+          "channels": [
+            "rotation",
+            "position",
+            "scale"
+          ]
+        },
+        {
+          "bone": "链节_01",
+          "keyframes": 8,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_02",
+          "keyframes": 8,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_03",
+          "keyframes": 8,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_04",
+          "keyframes": 8,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_05",
+          "keyframes": 8,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_06",
+          "keyframes": 8,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_07",
+          "keyframes": 8,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_08",
+          "keyframes": 8,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_09",
+          "keyframes": 8,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_10",
+          "keyframes": 8,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_11",
+          "keyframes": 8,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_12",
+          "keyframes": 8,
+          "channels": [
+            "position"
+          ]
+        }
+      ],
+      "motion": {},
+      "motion_legend": "Distances are in model units along the model's own axes. \"forward\" = -z (the way it faces).",
+      "direction_check": null,
+      "issue_count": 1,
+      "by_type": {
+        "no_visible_motion": 1
+      },
+      "issues": [
+        {
+          "issue": "no_visible_motion",
+          "hint": "Nothing moves more than half a unit — the amplitudes are far too small to read in game."
+        }
+      ],
+      "verdict": "Fix the issues above, then re-run analyze_animation — do not show this to the user yet."
+    }
+  },
+  {
+    "animation": "04_被动_重锚短击",
+    "result": {
+      "animation": "04_被动_重锚短击",
+      "length": 0.8,
+      "loop": "once",
+      "orientation": "The model FACES -z. Its own RIGHT is +x, its own LEFT is -x.",
+      "samples": 18,
+      "bones_with_keyframes": 13,
+      "total_keyframes": 114,
+      "per_bone": [
+        {
+          "bone": "沉锚_整体",
+          "keyframes": 18,
+          "channels": [
+            "rotation",
+            "position",
+            "scale"
+          ]
+        },
+        {
+          "bone": "链节_01",
+          "keyframes": 8,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_02",
+          "keyframes": 8,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_03",
+          "keyframes": 8,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_04",
+          "keyframes": 8,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_05",
+          "keyframes": 8,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_06",
+          "keyframes": 8,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_07",
+          "keyframes": 8,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_08",
+          "keyframes": 8,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_09",
+          "keyframes": 8,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_10",
+          "keyframes": 8,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_11",
+          "keyframes": 8,
+          "channels": [
+            "position"
+          ]
+        },
+        {
+          "bone": "链节_12",
+          "keyframes": 8,
+          "channels": [
+            "position"
+          ]
+        }
+      ],
+      "motion": {},
+      "motion_legend": "Distances are in model units along the model's own axes. \"forward\" = -z (the way it faces).",
+      "direction_check": null,
+      "issue_count": 1,
+      "by_type": {
+        "no_visible_motion": 1
+      },
+      "issues": [
+        {
+          "issue": "no_visible_motion",
+          "hint": "Nothing moves more than half a unit — the amplitudes are far too small to read in game."
+        }
+      ],
+      "verdict": "Fix the issues above, then re-run analyze_animation — do not show this to the user yet."
+    }
+  }
+]

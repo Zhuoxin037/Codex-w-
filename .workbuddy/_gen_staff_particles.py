@@ -19,6 +19,9 @@ sweetdream 法杖法球粒子 —— 生成器（2026-10-11）
       · ball/hit   第 ⑤ 步 —— 同上(原来只有 wind / 其余兜底 plain)
       · ball/pop   撞墙也按各自的风格散掉(改成宏函数, 复用拖尾)
       · equipment/staff/<id>/attack.mcfunction —— style 改成各自的 id
+        (★ 支持"一把法杖多套 style": SPEC 里加 dir='<法杖目录>' 让附加 style 指回同一
+         法杖; 加 no_attack=True 表示该 style 由 attack 运行时按形态改、生成器别去动它。
+         先例: triad(很冰的斧) 三形态 = triad / triad_fire / triad_gun)
 
 【安全网(每次都跑)】
     1. 粒子名必须在**客户端 jar 的 assets/minecraft/particles/*.json** 里
@@ -202,6 +205,58 @@ SPECS = [
               P('small_gust', 0.9, 0.4, 0.9, 0.08, 22),
               P('crit', 0.4, 0.4, 0.4, 0.05, 8),
               SND('entity.wind_charge.wind_burst', 0.85, 1.15)]),
+
+    # ── 引雷针(2026-10-13 批 13): 定点落雷 —— 黄白电光 + 一线引下的电火花
+    dict(style='thunderrod', cn='引雷针', theme='闪电 · 引下的电光',
+         trail=[P(dust(1.0, 0.95, 0.55, 1.1), 0.12, 0.12, 0.12, 0, 6),
+                P('electric_spark', 0.2, 0.2, 0.2, 0.02, 4)],
+         hit=[P('electric_spark', 0.5, 0.5, 0.5, 0.06, 22),
+              P(dust(1.0, 0.95, 0.55, 1.4), 0.45, 0.45, 0.45, 0.04, 14),
+              SND('item.trident.thunder', 0.6, 1.4)]),
+
+    # ── 很冰的斧(2026-10-13 批 11-D): ★ 三形态各一套外观(2026-10-13 追加)
+    #   形态记在球的 data.tri_form 上(0 冰斧 / 1 热刀 / 2 重枪), attack 按形态改写球的
+    #   style —— 所以这里一个法杖占 **三个 style**:
+    #       style 'triad'      = 冰斧(基础, = 法杖 id, 守卫按它认这把武器)
+    #       style 'triad_fire' = 热刀 / 'triad_gun' = 重枪 (dir 都指回 equipment/staff/triad)
+    #   ★ dir  : 三份同属一个法杖目录, patch_attacks 靠它找 attack(默认 = style)。
+    #   ★ no_attack: 热刀/重枪 的 style 是 attack **运行时**按形态改的, 生成器不许去改它
+    #     (否则三次改写互相覆盖, 最后只剩重枪)。基础那份 style 已 = id, 无需改。
+    dict(style='triad', cn='很冰的斧', dir='triad', theme='三形态·冰斧 · 冷蓝霜晶',
+         trail=[P(dust(0.55, 0.85, 1.0, 1.3), 0.12, 0.12, 0.12, 0, 8),
+                P('snowflake', 0.18, 0.18, 0.18, 0.01, 5)],
+         hit=[P('snowflake', 0.55, 0.5, 0.55, 0.05, 26),
+              P(dust(0.55, 0.85, 1.0, 1.6), 0.5, 0.5, 0.5, 0.04, 18),
+              SND('block.glass.break', 0.7, 1.5)]),
+
+    dict(style='triad_fire', cn='很热的刀', dir='triad', no_attack=True,
+         theme='三形态·热刀 · 橙红炽焰',
+         trail=[P(dust(1.0, 0.45, 0.12, 1.2), 0.12, 0.12, 0.12, 0, 8),
+                P('small_flame', 0.16, 0.16, 0.16, 0.01, 4)],
+         hit=[P('flame', 0.5, 0.45, 0.5, 0.05, 20),
+              P('small_flame', 0.5, 0.45, 0.5, 0.04, 14),
+              P(dust(1.0, 0.5, 0.15, 1.6), 0.5, 0.5, 0.5, 0.04, 16),
+              SND('entity.blaze.shoot', 0.7, 1.3)]),
+
+    dict(style='triad_gun', cn='很重的枪', dir='triad', no_attack=True,
+         theme='三形态·重枪 · 灰铁重压',
+         trail=[P(dust(0.55, 0.58, 0.62, 1.4), 0.12, 0.12, 0.12, 0, 8),
+                P('crit', 0.14, 0.14, 0.14, 0.02, 2)],
+         hit=[P('poof', 0.55, 0.5, 0.55, 0.05, 22),
+              P(dust(0.5, 0.53, 0.58, 1.7), 0.5, 0.5, 0.5, 0.05, 16),
+              P('crit', 0.45, 0.45, 0.45, 0.06, 10),
+              SND('block.anvil.land', 0.7, 0.85)]),
+
+    # ── 五世恶咒(2026-10-13 批 11-D): 世咒 —— 暗紫 + 魂火(sculk_soul 是它的身份)
+    dict(style='five_curses', cn='五世恶咒', theme='世咒 · 暗紫与魂火',
+         trail=[P(dust(0.45, 0.18, 0.62, 1.2), 0.12, 0.12, 0.12, 0, 7),
+                P('soul_fire_flame', 0.16, 0.16, 0.16, 0.01, 3),
+                P('sculk_soul', 0.18, 0.18, 0.18, 0.01, 2)],
+         hit=[P('soul_fire_flame', 0.55, 0.5, 0.55, 0.04, 22),
+              P('sculk_soul', 0.5, 0.45, 0.5, 0.03, 12),
+              P(dust(0.45, 0.18, 0.62, 1.5), 0.5, 0.5, 0.5, 0.04, 16),
+              P('witch', 0.45, 0.45, 0.45, 0.06, 10),
+              SND('entity.witch.throw', 0.6, 0.9)]),
 ]
 
 # 兜底: 没写 style(或写了个不认识的)的新法杖, 至少别是"完全隐形"
@@ -255,7 +310,7 @@ def emit():
 
 # ------------------------------------------------------------------ 派发块
 def dispatch_trail():
-    out = ['# ④ 拖尾外观(按 style 分工 —— 一把法杖一份, 由 _gen_staff_particles.py 维护)']
+    out = ['# ④ 拖尾外观(按 style 分工 —— 一套 style 一份, 由 _gen_staff_particles.py 维护)']
     for sp in SPECS:
         out.append('execute if data entity @s data{style:"%s"} '
                    'run function sweetdream:projectile/ball/fx_%s'
@@ -263,7 +318,7 @@ def dispatch_trail():
     return out
 
 def dispatch_hit():
-    out = ['# ⑤ 命中表现(按 style 分工 —— 一把法杖一份)']
+    out = ['# ⑤ 命中表现(按 style 分工 —— 一套 style 一份)']
     for sp in SPECS:
         out.append('execute if data entity @s data{style:"%s"} '
                    'run function sweetdream:projectile/ball/fx_%s_hit'
@@ -271,7 +326,8 @@ def dispatch_hit():
     # ★ 兜底行必须带 `execute` 前缀: 一串 unless 后面直接跟 run 不是合法命令
     guard = ' '.join('unless data entity @s data{style:"%s"}' % sp['style'] for sp in SPECS)
     out.append('# 兜底: 没写 style / 写了个不认识的 —— 至少别什么都不出')
-    out.append('#   (一行排掉全部 12 个已知 style; 以后加新法杖记得在这里补一条 unless)')
+    out.append('#   (一行排掉全部已知 style; 以后加新法杖记得在这里补一条 unless —— '
+               '本块由 _gen_staff_particles.py 自动维护, 别手改)')
     out.append('execute ' + guard + ' run function sweetdream:projectile/ball/fx_plain_hit')
     return out
 
@@ -336,7 +392,12 @@ def patch_tick_pop_calls():
 def patch_attacks():
     changed = []
     for sp in SPECS:
-        p = os.path.join(STAFF, sp['style'], 'attack.mcfunction')
+        # no_attack: 这条 style 是 attack 运行时按形态改的(如 triad 的热刀/重枪),
+        # 生成器不许去动 attack —— 否则同一份 attack 被三条 style 轮流改写, 只剩最后一条。
+        if sp.get('no_attack'):
+            continue
+        # dir: 找 attack 用的法杖目录(默认 = style)。多形态法杖的附加 style 都指回基础目录。
+        p = os.path.join(STAFF, sp.get('dir', sp['style']), 'attack.mcfunction')
         if not os.path.isfile(p):
             err('法杖 %s 没有 attack.mcfunction' % sp['style'])
             continue

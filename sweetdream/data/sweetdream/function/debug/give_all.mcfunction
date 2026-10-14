@@ -5,8 +5,8 @@
 #     python .workbuddy/_gen_give_all.py
 # 【用法】/function sweetdream:debug/give_all   或   /trigger zx.dbg_give
 #
-# 【为什么是 6 个盒子】潜影盒只有 27 格, 而东西一共 150 件
-#   (94 件装备 + 56 块强化石) —— 按每盒 27 件自动分包。
+# 【为什么是 6 个盒子】潜影盒只有 27 格, 而东西一共 154 件
+#   (98 件装备 + 56 块强化石) —— 按每盒 27 件自动分包。
 #
 # 【怎么做到的】走一个方块当中转站:
 #   ① 在下面这些坐标放空潜影盒方块(和强化台 0,-59,2 错开、同一个区块)
@@ -42,7 +42,7 @@ data modify block 0 -60 3 CustomName set value {"text":"sweetdream · 盒2 (27 �
 data modify block 0 -60 5 CustomName set value {"text":"sweetdream · 盒3 (27 件)","color":"aqua","italic":false}
 data modify block 0 -60 7 CustomName set value {"text":"sweetdream · 盒4 (27 件)","color":"red","italic":false}
 data modify block 0 -60 9 CustomName set value {"text":"sweetdream · 盒5 (27 件)","color":"green","italic":false}
-data modify block 0 -60 11 CustomName set value {"text":"sweetdream · 盒6 (15 件)","color":"blue","italic":false}
+data modify block 0 -60 11 CustomName set value {"text":"sweetdream · 盒6 (19 件)","color":"blue","italic":false}
 #   【兜底提示】要是中转站没建成(区块没加载 / 你不在主世界), 后面全都会
 #   静默失败 —— 与其让你以为发了但没给, 不如直接说出来。
 execute unless block 0 -60 1 #minecraft:shulker_boxes run tellraw @s [{"text":"[调试] 中转站没建成: 盒子都没发出去。这条只支持主世界, 且那个坐标的区块得是加载的。","color":"red"}]
@@ -248,269 +248,281 @@ item replace entity @s hotbar.0 with minecraft:air
 function sweetdream:equipment/bow/arc/give
 item replace block 0 -60 5 container.9 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:equipment/bow/bone_erode/give
+function sweetdream:equipment/bow/backstring/give
 item replace block 0 -60 5 container.10 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:equipment/bow/burst_dawn/give
+function sweetdream:equipment/bow/bone_erode/give
 item replace block 0 -60 5 container.11 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:equipment/bow/cloudtrail/give
+function sweetdream:equipment/bow/burst_dawn/give
 item replace block 0 -60 5 container.12 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:equipment/bow/cold_crow/give
+function sweetdream:equipment/bow/cloudtrail/give
 item replace block 0 -60 5 container.13 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:equipment/bow/dragon_tongue/give
+function sweetdream:equipment/bow/cold_crow/give
 item replace block 0 -60 5 container.14 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:equipment/bow/lucid_dream/give
+function sweetdream:equipment/bow/dragon_tongue/give
 item replace block 0 -60 5 container.15 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:equipment/bow/rainbow/give
+function sweetdream:equipment/bow/lucid_dream/give
 item replace block 0 -60 5 container.16 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:equipment/bow/sculk_echo/give
+function sweetdream:equipment/bow/rainbow/give
 item replace block 0 -60 5 container.17 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:equipment/staff/apocalypse/give
+function sweetdream:equipment/bow/sculk_echo/give
 item replace block 0 -60 5 container.18 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:equipment/staff/begonia/give
+function sweetdream:equipment/staff/apocalypse/give
 item replace block 0 -60 5 container.19 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:equipment/staff/chime/give
+function sweetdream:equipment/staff/begonia/give
 item replace block 0 -60 5 container.20 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:equipment/staff/delusion/give
+function sweetdream:equipment/staff/chime/give
 item replace block 0 -60 5 container.21 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:equipment/staff/fallen_dream/give
+function sweetdream:equipment/staff/delusion/give
 item replace block 0 -60 5 container.22 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:equipment/staff/final_revelation/give
+function sweetdream:equipment/staff/fallen_dream/give
 item replace block 0 -60 5 container.23 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:equipment/staff/five_curses/give
+function sweetdream:equipment/staff/final_revelation/give
 item replace block 0 -60 5 container.24 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:equipment/staff/gu_poison/give
+function sweetdream:equipment/staff/five_curses/give
 item replace block 0 -60 5 container.25 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:equipment/staff/palette/give
+function sweetdream:equipment/staff/gu_poison/give
 item replace block 0 -60 5 container.26 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
 
 # ---- ③ 盒 4: 27 件 ----
-function sweetdream:equipment/staff/polarized_light/give
+function sweetdream:equipment/staff/palette/give
 item replace block 0 -60 7 container.0 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:equipment/staff/sail/give
+function sweetdream:equipment/staff/polarized_light/give
 item replace block 0 -60 7 container.1 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:equipment/staff/triad/give
+function sweetdream:equipment/staff/sail/give
 item replace block 0 -60 7 container.2 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:equipment/staff/twilight/give
+function sweetdream:equipment/staff/thunderrod/give
 item replace block 0 -60 7 container.3 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:equipment/staff/wind_ontheground/give
+function sweetdream:equipment/staff/triad/give
 item replace block 0 -60 7 container.4 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:equipment/tool/bitter_cold/give
+function sweetdream:equipment/staff/twilight/give
 item replace block 0 -60 7 container.5 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:equipment/tool/blaze_plume/give
+function sweetdream:equipment/staff/wind_ontheground/give
 item replace block 0 -60 7 container.6 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:equipment/tool/look/give
+function sweetdream:equipment/tool/bitter_cold/give
 item replace block 0 -60 7 container.7 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:equipment/tool/mana_pump/give
+function sweetdream:equipment/tool/blaze_plume/give
 item replace block 0 -60 7 container.8 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:equipment/tool/nullify/give
+function sweetdream:equipment/tool/everlit/give
 item replace block 0 -60 7 container.9 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:equipment/tool/seraph_wing/give
+function sweetdream:equipment/tool/frostmirror/give
 item replace block 0 -60 7 container.10 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:equipment/tool/thunder/give
+function sweetdream:equipment/tool/look/give
 item replace block 0 -60 7 container.11 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:equipment/tool/wrath/give
+function sweetdream:equipment/tool/mana_pump/give
 item replace block 0 -60 7 container.12 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:upgrade/item/boil
+function sweetdream:equipment/tool/nullify/give
 item replace block 0 -60 7 container.13 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:upgrade/item/coolant_a
+function sweetdream:equipment/tool/seraph_wing/give
 item replace block 0 -60 7 container.14 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:upgrade/item/coolant_b
+function sweetdream:equipment/tool/thunder/give
 item replace block 0 -60 7 container.15 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:upgrade/item/coolant_o
+function sweetdream:equipment/tool/wrath/give
 item replace block 0 -60 7 container.16 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:upgrade/item/harden_a
+function sweetdream:upgrade/item/boil
 item replace block 0 -60 7 container.17 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:upgrade/item/harden_b
+function sweetdream:upgrade/item/coolant_a
 item replace block 0 -60 7 container.18 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:upgrade/item/harden_o
+function sweetdream:upgrade/item/coolant_b
 item replace block 0 -60 7 container.19 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:upgrade/item/life_up_a
+function sweetdream:upgrade/item/coolant_o
 item replace block 0 -60 7 container.20 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:upgrade/item/life_up_b
+function sweetdream:upgrade/item/harden_a
 item replace block 0 -60 7 container.21 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:upgrade/item/life_up_o
+function sweetdream:upgrade/item/harden_b
 item replace block 0 -60 7 container.22 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:upgrade/item/mana_gain_a
+function sweetdream:upgrade/item/harden_o
 item replace block 0 -60 7 container.23 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:upgrade/item/mana_gain_b
+function sweetdream:upgrade/item/life_up_a
 item replace block 0 -60 7 container.24 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:upgrade/item/mana_gain_o
+function sweetdream:upgrade/item/life_up_b
 item replace block 0 -60 7 container.25 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:upgrade/item/mana_surge_a
+function sweetdream:upgrade/item/life_up_o
 item replace block 0 -60 7 container.26 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
 
 # ---- ③ 盒 5: 27 件 ----
-function sweetdream:upgrade/item/mana_surge_b
+function sweetdream:upgrade/item/mana_gain_a
 item replace block 0 -60 9 container.0 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:upgrade/item/mana_surge_o
+function sweetdream:upgrade/item/mana_gain_b
 item replace block 0 -60 9 container.1 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:upgrade/item/mana_up_a
+function sweetdream:upgrade/item/mana_gain_o
 item replace block 0 -60 9 container.2 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:upgrade/item/mana_up_b
+function sweetdream:upgrade/item/mana_surge_a
 item replace block 0 -60 9 container.3 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:upgrade/item/mana_up_o
+function sweetdream:upgrade/item/mana_surge_b
 item replace block 0 -60 9 container.4 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:upgrade/item/neuro_a
+function sweetdream:upgrade/item/mana_surge_o
 item replace block 0 -60 9 container.5 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:upgrade/item/neuro_b
+function sweetdream:upgrade/item/mana_up_a
 item replace block 0 -60 9 container.6 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:upgrade/item/neuro_o
+function sweetdream:upgrade/item/mana_up_b
 item replace block 0 -60 9 container.7 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:upgrade/item/night_vision
+function sweetdream:upgrade/item/mana_up_o
 item replace block 0 -60 9 container.8 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:upgrade/item/torch
+function sweetdream:upgrade/item/neuro_a
 item replace block 0 -60 9 container.9 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:upgrade/item/uncolor
+function sweetdream:upgrade/item/neuro_b
 item replace block 0 -60 9 container.10 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:upgrade/item/vision_a
+function sweetdream:upgrade/item/neuro_o
 item replace block 0 -60 9 container.11 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:upgrade/item/vision_b
+function sweetdream:upgrade/item/night_vision
 item replace block 0 -60 9 container.12 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:upgrade/item/vision_o
+function sweetdream:upgrade/item/torch
 item replace block 0 -60 9 container.13 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:overlimit/item/anion
+function sweetdream:upgrade/item/uncolor
 item replace block 0 -60 9 container.14 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:overlimit/item/arc
+function sweetdream:upgrade/item/vision_a
 item replace block 0 -60 9 container.15 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:overlimit/item/begonia
+function sweetdream:upgrade/item/vision_b
 item replace block 0 -60 9 container.16 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:overlimit/item/bone_erode
+function sweetdream:upgrade/item/vision_o
 item replace block 0 -60 9 container.17 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:overlimit/item/brain_leech
+function sweetdream:overlimit/item/anion
 item replace block 0 -60 9 container.18 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:overlimit/item/charge
+function sweetdream:overlimit/item/arc
 item replace block 0 -60 9 container.19 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:overlimit/item/chime
+function sweetdream:overlimit/item/begonia
 item replace block 0 -60 9 container.20 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:overlimit/item/cold_crow
+function sweetdream:overlimit/item/bone_erode
 item replace block 0 -60 9 container.21 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:overlimit/item/deepsea_echo
+function sweetdream:overlimit/item/brain_leech
 item replace block 0 -60 9 container.22 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:overlimit/item/dionysus_helmet
+function sweetdream:overlimit/item/charge
 item replace block 0 -60 9 container.23 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:overlimit/item/dream_reader
+function sweetdream:overlimit/item/chime
 item replace block 0 -60 9 container.24 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:overlimit/item/dusk_dawn
+function sweetdream:overlimit/item/cold_crow
 item replace block 0 -60 9 container.25 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:overlimit/item/everfrost
+function sweetdream:overlimit/item/deepsea_echo
 item replace block 0 -60 9 container.26 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
 
-# ---- ③ 盒 6: 15 件 ----
-function sweetdream:overlimit/item/fissure
+# ---- ③ 盒 6: 19 件 ----
+function sweetdream:overlimit/item/dionysus_helmet
 item replace block 0 -60 11 container.0 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:overlimit/item/flame_brokenbody
+function sweetdream:overlimit/item/dream_reader
 item replace block 0 -60 11 container.1 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:overlimit/item/furnace_core
+function sweetdream:overlimit/item/dusk_dawn
 item replace block 0 -60 11 container.2 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:overlimit/item/hengdao
+function sweetdream:overlimit/item/everfrost
 item replace block 0 -60 11 container.3 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:overlimit/item/liuguang
+function sweetdream:overlimit/item/fissure
 item replace block 0 -60 11 container.4 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:overlimit/item/myriad
+function sweetdream:overlimit/item/flame_brokenbody
 item replace block 0 -60 11 container.5 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:overlimit/item/polarized_light
+function sweetdream:overlimit/item/furnace_core
 item replace block 0 -60 11 container.6 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:overlimit/item/red_lotus
+function sweetdream:overlimit/item/hengdao
 item replace block 0 -60 11 container.7 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:overlimit/item/rogue_star
+function sweetdream:overlimit/item/liuguang
 item replace block 0 -60 11 container.8 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:overlimit/item/sculk_echo
+function sweetdream:overlimit/item/myriad
 item replace block 0 -60 11 container.9 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:overlimit/item/shadow_blade
+function sweetdream:overlimit/item/polarized_light
 item replace block 0 -60 11 container.10 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:overlimit/item/sickle_dreams
+function sweetdream:overlimit/item/red_lotus
 item replace block 0 -60 11 container.11 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:overlimit/item/spine_symbiote
+function sweetdream:overlimit/item/rogue_star
 item replace block 0 -60 11 container.12 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:overlimit/item/stellar_elegy
+function sweetdream:overlimit/item/sculk_echo
 item replace block 0 -60 11 container.13 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
-function sweetdream:overlimit/item/tinder
+function sweetdream:overlimit/item/shadow_blade
 item replace block 0 -60 11 container.14 from entity @s hotbar.0
+item replace entity @s hotbar.0 with minecraft:air
+function sweetdream:overlimit/item/sickle_dreams
+item replace block 0 -60 11 container.15 from entity @s hotbar.0
+item replace entity @s hotbar.0 with minecraft:air
+function sweetdream:overlimit/item/spine_symbiote
+item replace block 0 -60 11 container.16 from entity @s hotbar.0
+item replace entity @s hotbar.0 with minecraft:air
+function sweetdream:overlimit/item/stellar_elegy
+item replace block 0 -60 11 container.17 from entity @s hotbar.0
+item replace entity @s hotbar.0 with minecraft:air
+function sweetdream:overlimit/item/tinder
+item replace block 0 -60 11 container.18 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
 
 # ---- ④ 先把玩家原本的 hotbar.0 还回去(再发盒子, 免得被顶掉) ----
@@ -532,4 +544,4 @@ setblock 0 -60 7 minecraft:air replace
 setblock 0 -60 9 minecraft:air replace
 setblock 0 -60 11 minecraft:air replace
 setblock 0 -60 2 minecraft:air replace
-tellraw @s [{"text":"[调试] 已发: 150 件东西, 共 6 个盒子。","color":"dark_gray"}]
+tellraw @s [{"text":"[调试] 已发: 154 件东西, 共 6 个盒子。","color":"dark_gray"}]

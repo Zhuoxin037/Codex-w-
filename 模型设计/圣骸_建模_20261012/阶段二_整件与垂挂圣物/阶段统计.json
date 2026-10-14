@@ -1,0 +1,39 @@
+{
+  "cubes": 841,
+  "faces": 5046,
+  "groups": 42,
+  "textures": 5,
+  "rotated_cubes": 0,
+  "rotated_groups": 0,
+  "bbox_native": {
+    "from": [
+      -2.2144,
+      -15.555,
+      4.62
+    ],
+    "to": [
+      13.712,
+      29.375,
+      10.465
+    ]
+  },
+  "approved_head_geometry_unchanged": true,
+  "approved_head_textures_unchanged": true,
+  "head_cubes": 541,
+  "new_cubes": 300,
+  "mcp_authored": true,
+  "mcp_model_issues": 0,
+  "deployed": false,
+  "approval": "approved_in_chat",
+  "native": "D:\\数据包\\模型设计\\圣骸_建模_20261012\\阶段二_整件与垂挂圣物\\圣骸_阶段二_整件分组模型.bbmodel",
+  "display_json": "D:\\数据包\\模型设计\\圣骸_建模_20261012\\阶段二_整件与垂挂圣物\\审阅资源\\assets\\sacredrelic\\models\\item\\sacred_relic_stage2.json",
+  "cloth_revision": "长绸加宽至1.08，短绸0.73；长绸加长，补充立体折痕与布尾",
+  "next_stage": [
+    "材质收尾与残魂动效",
+    "握持确认",
+    "接入资源包与对应武器"
+  ],
+  "mcp_review_id": "ask-1",
+  "mcp_review_status": "pending",
+  "approval_note": "用户：可以的，做动效吧"
+}

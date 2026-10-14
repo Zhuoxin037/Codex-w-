@@ -383,6 +383,12 @@ data modify storage zx:reg names.burst_dawn set value "爆裂黎明"
 data modify storage zx:reg names.triad set value "很冰的斧"
 data modify storage zx:reg names.five_curses set value "五世恶咒"
 
+# ---- 批 13 · 过渡/终端补缺(2026-10-13)----
+data modify storage zx:reg names.backstring set value "退弦"
+data modify storage zx:reg names.frostmirror set value "冰鉴"
+data modify storage zx:reg names.everlit set value "长明"
+data modify storage zx:reg names.thunderrod set value "引雷针"
+
 # ============================================================
 # tg: 每个 /trigger 调试入口
 #   obj  = 计分项(core/load 里建的 trigger 型)

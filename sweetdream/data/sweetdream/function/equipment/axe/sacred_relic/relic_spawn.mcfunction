@@ -17,5 +17,6 @@ execute if entity @s[tag=zx.status.yuanhai] run data modify entity @e[type=minec
 scoreboard players operation @e[type=minecraft:marker,tag=zx.sr_new,distance=0..,limit=1] zx.sr_ft = #now manacore.meta
 scoreboard players add @e[type=minecraft:marker,tag=zx.sr_new,distance=0..,limit=1] zx.sr_ft 240
 execute at @e[type=minecraft:marker,tag=zx.sr_new,distance=0..,limit=1] run particle minecraft:dust{color:[0.86,0.86,0.78],scale:1.2} ~ ~0.4 ~ 0.5 0.5 0.5 0 18 normal
+execute as @e[type=minecraft:marker,tag=zx.sr_new,distance=0..,limit=1] at @s run function sweetdream:equipment/axe/sacred_relic/visual/remnant/ensure
 tag @e[type=minecraft:marker,tag=zx.sr_new,distance=0..] remove zx.sr_new
 scoreboard players add #sr_ok zx.meta 1

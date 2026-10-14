@@ -20,7 +20,9 @@
 #   ② 应用层(sweetdream)那些"已加成账本"(zx.am_mana / zx.chg_atk …)挂在玩家身上,
 #      manacore 清不到 ⇒ 底层属性被重置后装备**不会把加成加回来**。现在逐个在线
 #      玩家抛 #manacore:event/player_reset, 由应用层收尾(见 internal/debug/reset_notify)。
-#   ③ 离线玩家的应用层账本这一次清不到(见 event/player_reset 的注释)。
+#   ③ 离线玩家的应用层账本这一次清不到(@a 选不到); 但他们下次上线必然走
+#      internal/join/new(记录已被本条删掉) ⇒ 由那里的 #manacore:event/player_first_join
+#      补清(见 sweetdream:event/player_first_join)。★ N05 修(2026-10-11)。
 # ============================================================
 scoreboard players set #mode manacore.meta 7
 function manacore:internal/index/foreach
@@ -29,6 +31,12 @@ function manacore:internal/debug/purge_registry
 data modify storage manacore:free_slots list set value []
 scoreboard players set #next_slot manacore.meta 0
 scoreboard players reset @a manacore.slot
+# 【N05 补(2026-10-11)】注册代 / 心跳也清掉, 让"重生"更彻底: 清完代与心跳, 在线玩家
+#   下一拍必然被判"未注册" -> 走 core/player/join -> join/new(记录已删) -> 抛
+#   player_first_join。★ 不清 manacore.u0..u3(UUID 缓存): tick_self 会自愈重读,
+#   清了也无害, 但没必要。
+scoreboard players reset @a manacore.gen
+scoreboard players reset @a manacore.beat
 # 逐个在线玩家 -> 应用层收尾事件(清 zx.* 账本, 见 event/player_reset)
 execute as @a run function manacore:internal/debug/reset_notify
 tellraw @s [{"text":"[ManaCore] 已清空全部玩家数据(含离线残留记录; 在线玩家的应用层账本已同步重置)","color":"red"}]

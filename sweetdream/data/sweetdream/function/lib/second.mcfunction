@@ -135,6 +135,11 @@ function sweetdream:lib/unfreeze_sweep
 # 虹彩: 漫彩每秒推进(吞噬效果 / 到点结束触发范围伤) —— 只对带 zx.rb_rainbow 的生物跑
 execute as @e[tag=zx.rb_rainbow] run function sweetdream:equipment/bow/rainbow/second
 
+# 长明(2026-10-13 批 13): 「灯灵」每秒管理 —— 持有时补召唤 / 不持有时**主动撤**
+#   (坑 142)。撤场判据写在灯灵那一侧(它自己反查主人), 所以两个玩家站在一起
+#   不会互相杀掉对方的灯灵。详见 equipment/tool/everlit/second。
+function sweetdream:equipment/tool/everlit/second
+
 # 常驻状态特效(圣痕=金 / 升痕=天蓝, 按层数分档) —— 见 status/aura
 function sweetdream:status/aura
 

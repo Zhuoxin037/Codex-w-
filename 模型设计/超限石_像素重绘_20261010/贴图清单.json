@@ -1,17 +1,17 @@
 {
-  "phase": "已完成24颗手绘重绘，待审阅",
+  "phase": "已完成28颗手绘重绘，待审阅",
   "hand_authored": true,
   "image_generation_used": false,
   "resolution": [
     16,
     16
   ],
-  "item_count": 24,
-  "distinct_engravings": 24,
-  "minimum_symbol_pixel_difference": 17,
+  "item_count": 28,
+  "distinct_engravings": 28,
+  "minimum_symbol_pixel_difference": 13,
   "closest_symbols": [
-    "liuguang",
-    "charge"
+    "charge",
+    "arc"
   ],
   "game_bound": false,
   "number_mapping_unchanged": true,
@@ -25,7 +25,7 @@
       "cmd": 7,
       "file": "D:\\数据包\\模型设计\\超限石_像素重绘_20261010\\贴图\\ol_liuguang.png",
       "sha256": "1e0e52b54cbd3d090fb202ec5f8c40b0fb14eec09f5763a906b306ebd041b560",
-      "prior_sha256": "0aa110b34f7ea5b493d434c7170ebfda7fbd759b80bc883e572f0df503e66e51",
+      "prior_sha256": "1e0e52b54cbd3d090fb202ec5f8c40b0fb14eec09f5763a906b306ebd041b560",
       "current_skill_lore": [
         "✦ 超限石",
         "魔力 120   ·   冷却 8 秒",
@@ -50,7 +50,7 @@
       "cmd": 29,
       "file": "D:\\数据包\\模型设计\\超限石_像素重绘_20261010\\贴图\\ol_myriad.png",
       "sha256": "9d845d4e5a6ddccaf5c5c409e0de36f1c9c1e4001a583c519174f263e6dad810",
-      "prior_sha256": "f398dccacebb97aefc1a18f4ffcab2e0f81f7816dc18459e02df221da994184d",
+      "prior_sha256": "9d845d4e5a6ddccaf5c5c409e0de36f1c9c1e4001a583c519174f263e6dad810",
       "current_skill_lore": [
         "✦ 超限石",
         "适用于 万念   ·   前置 尚未超限",
@@ -81,7 +81,7 @@
       "cmd": 32,
       "file": "D:\\数据包\\模型设计\\超限石_像素重绘_20261010\\贴图\\ol_rogue_star.png",
       "sha256": "7c097dea283a9819b5e67f7f9e961ce4feefbc9920d0a6f108f7c3d5f6c67dc6",
-      "prior_sha256": "4ebd14849d7e1032909d0834f4b880403b3731c9fd2dbdb398b0bb12b3cb749f",
+      "prior_sha256": "7c097dea283a9819b5e67f7f9e961ce4feefbc9920d0a6f108f7c3d5f6c67dc6",
       "current_skill_lore": [
         "✦ 超限石",
         "适用于 游星   ·   前置 尚未超限",
@@ -102,7 +102,7 @@
       "cmd": 33,
       "file": "D:\\数据包\\模型设计\\超限石_像素重绘_20261010\\贴图\\ol_shadow_blade.png",
       "sha256": "b116dedbf9860bb59c78bc1b92828da06dfc288ad8afd6c112dab986371f8804",
-      "prior_sha256": "170dbbbee17184404646af6cee4b448444f14f5f4d3375497abda6694c40f235",
+      "prior_sha256": "b116dedbf9860bb59c78bc1b92828da06dfc288ad8afd6c112dab986371f8804",
       "current_skill_lore": [
         "✦ 超限石",
         "适用于 影刃   ·   前置 尚未超限",
@@ -126,7 +126,7 @@
       "cmd": 34,
       "file": "D:\\数据包\\模型设计\\超限石_像素重绘_20261010\\贴图\\ol_deepsea_echo.png",
       "sha256": "5eb7cfc0375b86e37378a40bf3b0e8e79437b105bb243bc3ff29ef3d26c83e2a",
-      "prior_sha256": "7b7003dadba760c6b9ff07207128de41d725085b5229b392eeaa37b19a9cf477",
+      "prior_sha256": "5eb7cfc0375b86e37378a40bf3b0e8e79437b105bb243bc3ff29ef3d26c83e2a",
       "current_skill_lore": [
         "✦ 超限石",
         "适用于 深海的回响   ·   前置 尚未超限",
@@ -155,7 +155,7 @@
       "cmd": 35,
       "file": "D:\\数据包\\模型设计\\超限石_像素重绘_20261010\\贴图\\ol_everfrost.png",
       "sha256": "6b1e713408e467a5630ba085e61980360d8db03eb03c287c1d3b24d8b04fb2c6",
-      "prior_sha256": "49ef427df213ce99c59d2076d57ca505b9f1dc1b51fbfb9421fc99f457e08aea",
+      "prior_sha256": "6b1e713408e467a5630ba085e61980360d8db03eb03c287c1d3b24d8b04fb2c6",
       "current_skill_lore": [
         "✦ 超限石",
         "适用于 永霜   ·   前置 尚未超限",
@@ -178,7 +178,7 @@
       "cmd": 36,
       "file": "D:\\数据包\\模型设计\\超限石_像素重绘_20261010\\贴图\\ol_flame_brokenbody.png",
       "sha256": "a7030816b7bffbe5d5298553e532562d8e20f744f509f1052630327b187b42de",
-      "prior_sha256": "a2215a8417f716754c21d1e8c5178fbd555bc9b440c27a04c43ea7e8b2ae805f",
+      "prior_sha256": "a7030816b7bffbe5d5298553e532562d8e20f744f509f1052630327b187b42de",
       "current_skill_lore": [
         "✦ 超限石",
         "适用于 “烈火，残躯”",
@@ -208,7 +208,7 @@
       "cmd": 37,
       "file": "D:\\数据包\\模型设计\\超限石_像素重绘_20261010\\贴图\\ol_sickle_dreams.png",
       "sha256": "9aefd291827356a86dc540a26bf6fc50750e60a23d81eb397753bdcec460802b",
-      "prior_sha256": "6d3807cf1924d18ba57c36df4789ebe4550fcf45eab588b6e79b13c6a5699d98",
+      "prior_sha256": "9aefd291827356a86dc540a26bf6fc50750e60a23d81eb397753bdcec460802b",
       "current_skill_lore": [
         "✦ 超限石",
         "适用于 引梦镰   ·   前置 尚未超限",
@@ -232,7 +232,7 @@
       "cmd": 38,
       "file": "D:\\数据包\\模型设计\\超限石_像素重绘_20261010\\贴图\\ol_hengdao.png",
       "sha256": "72da8f5d8d98f2a1f6bbf6b44c30b466c73428dc9030e382e41ebad6a2bc25fc",
-      "prior_sha256": "eee9975bffa1326fc8caf40b0ec31409fa4f5c18691db40b28a31f11dd247354",
+      "prior_sha256": "72da8f5d8d98f2a1f6bbf6b44c30b466c73428dc9030e382e41ebad6a2bc25fc",
       "current_skill_lore": [
         "✦ 超限石",
         "适用于 横刀   ·   前置 尚未超限",
@@ -254,7 +254,7 @@
       "cmd": 39,
       "file": "D:\\数据包\\模型设计\\超限石_像素重绘_20261010\\贴图\\ol_red_lotus.png",
       "sha256": "21db4962cce4e100e09c4b570bbb9c3441160a60c801affa5a784edebc5cf503",
-      "prior_sha256": "1a87b1e87a5497d2f956ea7dc531fd241d175ae7ea3b138e47d2fbf8d015599c",
+      "prior_sha256": "21db4962cce4e100e09c4b570bbb9c3441160a60c801affa5a784edebc5cf503",
       "current_skill_lore": [
         "✦ 超限石",
         "适用于 红莲   ·   前置 尚未超限",
@@ -281,7 +281,7 @@
       "cmd": 40,
       "file": "D:\\数据包\\模型设计\\超限石_像素重绘_20261010\\贴图\\ol_charge.png",
       "sha256": "b8b378c1a1bc1147c938297671863b3476cb768a4bf00e1924da8cce78bbe6d5",
-      "prior_sha256": "b520e98ee56113af5e5189c56485e14812ac0b4d274509bb357c916dae9e0941",
+      "prior_sha256": "b8b378c1a1bc1147c938297671863b3476cb768a4bf00e1924da8cce78bbe6d5",
       "current_skill_lore": [
         "✦ 超限石",
         "适用于 超•负•荷   ·   前置 尚未超限",
@@ -315,7 +315,7 @@
       "cmd": 41,
       "file": "D:\\数据包\\模型设计\\超限石_像素重绘_20261010\\贴图\\ol_anion.png",
       "sha256": "12a4958ab13257d2007caa8fb5c99b0fa43fba146450914757ca6ff24357a053",
-      "prior_sha256": "3b78b5fdad8c3868f17ce1e53eb6cc943bd1ed51ff02c7df39a11b2e07eaa632",
+      "prior_sha256": "12a4958ab13257d2007caa8fb5c99b0fa43fba146450914757ca6ff24357a053",
       "current_skill_lore": [
         "✦ 超限石",
         "适用于 负离子   ·   前置 尚未超限",
@@ -339,7 +339,7 @@
       "cmd": 45,
       "file": "D:\\数据包\\模型设计\\超限石_像素重绘_20261010\\贴图\\ol_dream_reader.png",
       "sha256": "9f46839b28d64fb0de837b795255f4fc03b31344bf88bdd03802993bc7dbd29e",
-      "prior_sha256": "06ec97dc8a1ee6eff37253c57687ea49de9a6ffd0a2fb7a098fced7086cbd7ba",
+      "prior_sha256": "9f46839b28d64fb0de837b795255f4fc03b31344bf88bdd03802993bc7dbd29e",
       "current_skill_lore": [
         "✦ 超限石",
         "适用于 释梦   ·   前置 尚未超限",
@@ -366,7 +366,7 @@
       "cmd": 42,
       "file": "D:\\数据包\\模型设计\\超限石_像素重绘_20261010\\贴图\\ol_cold_crow.png",
       "sha256": "70ce73f3fb0829b8eec50ae12c96d3b8bc87f14e3201fd263b5c42e5266a285d",
-      "prior_sha256": "4c5dd40eb5e7c6db2fe45e901a60d7f3314ff26a2a63c2ceadb279ebc0a396c5",
+      "prior_sha256": "70ce73f3fb0829b8eec50ae12c96d3b8bc87f14e3201fd263b5c42e5266a285d",
       "current_skill_lore": [
         "✦ 超限石",
         "适用于 寒鸦   ·   前置 尚未超限",
@@ -386,7 +386,7 @@
       "cmd": 43,
       "file": "D:\\数据包\\模型设计\\超限石_像素重绘_20261010\\贴图\\ol_bone_erode.png",
       "sha256": "553fa0d51c51b2162f958bbc745c08eb49a3828489cc923533660774ad41224a",
-      "prior_sha256": "2a106c0a87d99c3fc6f05676ffd75ae1ab4b6fe582bb8f090ad3f29780262423",
+      "prior_sha256": "553fa0d51c51b2162f958bbc745c08eb49a3828489cc923533660774ad41224a",
       "current_skill_lore": [
         "✦ 超限石",
         "适用于 蚀骨   ·   前置 尚未超限",
@@ -409,7 +409,7 @@
       "cmd": 44,
       "file": "D:\\数据包\\模型设计\\超限石_像素重绘_20261010\\贴图\\ol_sculk_echo.png",
       "sha256": "dbc11af9214710d7f205762ada15e9ef1ccfb8233b3ce36d8afb3c6030c96620",
-      "prior_sha256": "2306c0dc206ff67ebe3bc9cdcc3a5406716be8f8624a9d71c626ad95a6565952",
+      "prior_sha256": "dbc11af9214710d7f205762ada15e9ef1ccfb8233b3ce36d8afb3c6030c96620",
       "current_skill_lore": [
         "✦ 超限石",
         "适用于 幽匿残响   ·   前置 尚未超限",
@@ -434,7 +434,7 @@
       "cmd": 46,
       "file": "D:\\数据包\\模型设计\\超限石_像素重绘_20261010\\贴图\\ol_begonia.png",
       "sha256": "8346c24ac0def891373773900d49dffea640ec671c7f932595d5a23585b55096",
-      "prior_sha256": "49ee8ead3a89b8f760025a1abb8890eabf94e1ea7c408565bbd077e636cd3ecb",
+      "prior_sha256": "8346c24ac0def891373773900d49dffea640ec671c7f932595d5a23585b55096",
       "current_skill_lore": [
         "✦ 超限石",
         "适用于 海棠   ·   前置 尚未超限",
@@ -458,7 +458,7 @@
       "cmd": 47,
       "file": "D:\\数据包\\模型设计\\超限石_像素重绘_20261010\\贴图\\ol_polarized_light.png",
       "sha256": "2063e48435a8d097262145774e70e8f625360b36f9c5cbfb1c57fd195ad68100",
-      "prior_sha256": "97afa5a9a00c4561d70bfbaa6549a0e7aad708280ba5247816044e63d3c0f88e",
+      "prior_sha256": "2063e48435a8d097262145774e70e8f625360b36f9c5cbfb1c57fd195ad68100",
       "current_skill_lore": [
         "✦ 超限石",
         "适用于 偏振光   ·   前置 尚未超限",
@@ -481,7 +481,7 @@
       "cmd": 20,
       "file": "D:\\数据包\\模型设计\\超限石_像素重绘_20261010\\贴图\\ol_brain_leech.png",
       "sha256": "f8d794c23cc41e8a0c0c65db0ef22c8104f96f5428c224fc2ad364fa4e70e355",
-      "prior_sha256": "661c00879fed8a4d019cd4f1a8a986a9f0f844a53cc93f4f78dbdb4a400db339",
+      "prior_sha256": "f8d794c23cc41e8a0c0c65db0ef22c8104f96f5428c224fc2ad364fa4e70e355",
       "current_skill_lore": [
         "✦ 超限石",
         "适用于 脑髓蛭   ·   前置 尚未超限",
@@ -509,7 +509,7 @@
       "cmd": 21,
       "file": "D:\\数据包\\模型设计\\超限石_像素重绘_20261010\\贴图\\ol_spine_symbiote.png",
       "sha256": "ed41f47f43ed53ff1f35d8dbdfde268898a343146f56fed46fdc17730be4cee6",
-      "prior_sha256": "7a076d729833e25e80fb70addb871cab7b9f070fbc14bead222d74470cc8a0bc",
+      "prior_sha256": "ed41f47f43ed53ff1f35d8dbdfde268898a343146f56fed46fdc17730be4cee6",
       "current_skill_lore": [
         "✦ 超限石",
         "适用于 脊骨共生   ·   前置 尚未超限",
@@ -536,7 +536,7 @@
       "cmd": 30,
       "file": "D:\\数据包\\模型设计\\超限石_像素重绘_20261010\\贴图\\ol_stellar_elegy.png",
       "sha256": "585de48953698dd5e6f446c8b65fd132baa332b99711c2f9661ed92a17313e3c",
-      "prior_sha256": "2419bc1608971e36701192b89987df7104d650edb534a2d11bf44b240390c948",
+      "prior_sha256": "585de48953698dd5e6f446c8b65fd132baa332b99711c2f9661ed92a17313e3c",
       "current_skill_lore": [
         "✦ 超限石",
         "适用于 群星坠落之挽歌",
@@ -560,7 +560,7 @@
       "cmd": 31,
       "file": "D:\\数据包\\模型设计\\超限石_像素重绘_20261010\\贴图\\ol_dusk_dawn.png",
       "sha256": "c90bd3ba470f6086b5af391326b1f44d3333c93ddc522c18e30547b2005c74b3",
-      "prior_sha256": "cc2fba474b0335c1e0275f104159efb97ebfa2bdb369de888c8b9906d9af56ad",
+      "prior_sha256": "c90bd3ba470f6086b5af391326b1f44d3333c93ddc522c18e30547b2005c74b3",
       "current_skill_lore": [
         "✦ 超限石",
         "适用于 黄昏黎明之交界",
@@ -584,7 +584,7 @@
       "cmd": 48,
       "file": "D:\\数据包\\模型设计\\超限石_像素重绘_20261010\\贴图\\ol_dionysus_helmet.png",
       "sha256": "e314ad5f883df40a32c174af67ec369c3c5293cefb861fa029337b2d5d4df286",
-      "prior_sha256": "9b06cc98d4f28d8af3f02c330b61a7db20d0eaf081e91b0d201820038b47893d",
+      "prior_sha256": "e314ad5f883df40a32c174af67ec369c3c5293cefb861fa029337b2d5d4df286",
       "current_skill_lore": [
         "✦ 超限石",
         "适用于 狄俄尼索斯之桂冠",
@@ -614,7 +614,7 @@
       "cmd": 49,
       "file": "D:\\数据包\\模型设计\\超限石_像素重绘_20261010\\贴图\\ol_furnace_core.png",
       "sha256": "247335704a931cfa5b15d9bf1a1964888870ef64571b8aaa56f30d499ec60d0f",
-      "prior_sha256": "aca7c4e71531484fcc4cf01406c54987858d6977c4eaea0cbe7f4fd252890cfe",
+      "prior_sha256": "247335704a931cfa5b15d9bf1a1964888870ef64571b8aaa56f30d499ec60d0f",
       "current_skill_lore": [
         "✦ 超限石",
         "适用于 炉心   ·   前置 尚未超限",
@@ -632,6 +632,111 @@
         "达到 12 层则「燃灰」在 12 秒内将不再",
         "减少层数。之后自身「燃灰」层数降至 8",
         "层。"
+      ]
+    },
+    {
+      "id": "arc",
+      "name": "电弧",
+      "category": "bow",
+      "motif": "分叉电刺",
+      "theme_colour": "#6ed2f5",
+      "cmd": 53,
+      "file": "D:\\数据包\\模型设计\\超限石_像素重绘_20261010\\贴图\\ol_arc.png",
+      "sha256": "c6bf7a6682473be2ae2630f1bba33e2d56320aaaf0419e089df125ebb98b92a2",
+      "prior_sha256": "c6bf7a6682473be2ae2630f1bba33e2d56320aaaf0419e089df125ebb98b92a2",
+      "current_skill_lore": [
+        "✦ 超限石",
+        "适用于 电弧   ·   前置 尚未超限",
+        " ",
+        "敲入后电弧更名为「超限·电弧」，基础属",
+        "性变为：每次射击都会对被攻击的生物附",
+        "加「电刺」效果。若附有「电刺」的生物",
+        "8 格内有另一个附有「电刺」的生物，则",
+        "每秒都会在他们之间产生一道 3 格宽的电",
+        "线并对沿途的生物及他们自身 1 格内的全",
+        "部生物造成一次相当于自身基础攻击力",
+        "×2+ 当前魔力值 ×0.03 的伤害并召唤闪电，",
+        "持续 3 秒。之后移除「电刺」。"
+      ]
+    },
+    {
+      "id": "tinder",
+      "name": "火种",
+      "category": "sword",
+      "motif": "余烬火星",
+      "theme_colour": "#ef8a52",
+      "cmd": 54,
+      "file": "D:\\数据包\\模型设计\\超限石_像素重绘_20261010\\贴图\\ol_tinder.png",
+      "sha256": "3a23602dab2f681898717528223995ffd7931c5a8deed0cadae4547dfd151fca",
+      "prior_sha256": "3a23602dab2f681898717528223995ffd7931c5a8deed0cadae4547dfd151fca",
+      "current_skill_lore": [
+        "✦ 超限石",
+        "适用于 火种   ·   前置 尚未超限",
+        " ",
+        "敲入后火种更名为「超限·火种」，基础属",
+        "性变为：「火种」为燃烧状态时，攻击生",
+        "物时将会对其 3 格内的全部生物造成相当",
+        "于自身最大魔力值 ×0.1 的伤害，之后使",
+        "未处于燃烧状态的生物燃烧 5 秒，且使附",
+        "有「夜火」的生物额外受到一次伤害。为",
+        "熄灭状态时，攻击生物后会对自身造成相",
+        "当于自身最大生命值 ×0.3 的伤害并使",
+        "「火种」变为燃烧状态。手持时，若自身",
+        "魔力值大于 400 且「火种」为熄灭状态则",
+        "消耗 350 点魔力值并使「火种」变为燃烧",
+        "状态。"
+      ]
+    },
+    {
+      "id": "fissure",
+      "name": "崩裂",
+      "category": "axe",
+      "motif": "地裂折痕",
+      "theme_colour": "#ac8654",
+      "cmd": 55,
+      "file": "D:\\数据包\\模型设计\\超限石_像素重绘_20261010\\贴图\\ol_fissure.png",
+      "sha256": "c6db59609dbe7bc83166eeb509e62f67c7d09e183ca945f01de5a0b26a9cc9a6",
+      "prior_sha256": "c6db59609dbe7bc83166eeb509e62f67c7d09e183ca945f01de5a0b26a9cc9a6",
+      "current_skill_lore": [
+        "✦ 超限石",
+        "适用于 崩裂   ·   前置 尚未超限",
+        " ",
+        "敲入后崩裂更名为「超限·崩裂」，基础属",
+        "性变为：立即对自身前方 8 格的生物造成",
+        "一次相当于自身基础攻击力 ×6 的伤害并",
+        "形成一个持续 8 秒的裂缝。之后在裂缝处",
+        "的生物将每秒受到一次相当于释放者基础",
+        "攻击力的伤害。在裂缝上的生物将无法离",
+        "开裂缝。"
+      ]
+    },
+    {
+      "id": "chime",
+      "name": "共鸣",
+      "category": "staff",
+      "motif": "同心声波",
+      "theme_colour": "#967cec",
+      "cmd": 56,
+      "file": "D:\\数据包\\模型设计\\超限石_像素重绘_20261010\\贴图\\ol_chime.png",
+      "sha256": "57d1c042362cefbbb99d5f1089fe423b511e68ced80a3b6d78438dfb0633096a",
+      "prior_sha256": "57d1c042362cefbbb99d5f1089fe423b511e68ced80a3b6d78438dfb0633096a",
+      "current_skill_lore": [
+        "✦ 超限石",
+        "适用于 共鸣   ·   前置 尚未超限",
+        " ",
+        "敲入后共鸣更名为「超限·共鸣」，基础属",
+        "性变为：使用后召唤一个术阵。之后在原",
+        "地生成一个“共鸣水晶”。其每 2 秒都会",
+        "对其 6 格内的一个生物造成一次相当于自",
+        "身最大魔力值 ×0.05 的伤害。自身释放的",
+        "法术穿过“共鸣水晶”时会立即对其 5 格",
+        "内的全部生物及释放者 3 格内的全部生物",
+        "造成一次相当于自身最大魔力值 ×0.1 的",
+        "伤害。“共鸣水晶”在另一个",
+        "“共鸣水晶”被召唤出来后或 18 秒后自",
+        "毁。自毁时会吸引一次其 5 格内的全部生",
+        "物并造成相当于自身当前魔力值 ×0.2 的",
+        "伤害。"
       ]
     }
   ]

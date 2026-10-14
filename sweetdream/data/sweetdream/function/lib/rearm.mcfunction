@@ -82,6 +82,11 @@ advancement revoke @a only sweetdream:equipment/bow/arc
 advancement revoke @a only sweetdream:equipment/bow/dragon_tongue
 advancement revoke @a only sweetdream:equipment/bow/cloudtrail
 advancement revoke @a only sweetdream:equipment/bow/burst_dawn
+#   (批 13 2026-10-13: 退弦(弩·射击) / 引雷针(法杖·右键) / 冰鉴(副手·受击)
+#    三条进度同样是"自撤销型", 按契约登记到这里。)
+advancement revoke @a only sweetdream:equipment/bow/backstring
+advancement revoke @a only sweetdream:equipment/staff/thunderrod
+advancement revoke @a only sweetdream:equipment/tool/frostmirror_hurt
 advancement revoke @a only sweetdream:equipment/staff/apocalypse
 advancement revoke @a only sweetdream:equipment/staff/delusion
 advancement revoke @a only sweetdream:equipment/staff/fallen_dream

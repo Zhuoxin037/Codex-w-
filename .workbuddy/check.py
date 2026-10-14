@@ -230,12 +230,13 @@ R = {k: [] for k in ['fn', 'tag', 'macro', 'sel', 'adv', 'json', 'rp', 'sched', 
                      'ctrlmul', 'dimflag', 'enemysrc', 'reloadttl', 'dimsel',
                      'equipgate', 'storid', 'braceval', 'dmgch', 'dmgord', 'panelrow',
                      'beamoff', 'scoreeq', 'scorelit', 'guardclob', 'retabort', 'atkonce', 'upreq', 'nbtrange',
-                     'boltseen', 'selfclr', 'mqgate', 'modelrot', 'storpath', 'attrprefix', 'cdstop',
+                     'enchref',
+                     'boltseen', 'onlight', 'selfclr', 'mqgate', 'modelrot', 'storpath', 'attrprefix', 'cdstop',
                      'freezegate', 'olfit', 'eyedist', 'tgvocab', 'regress',
                      'datarm', 'datapath', 'mergelist', 'noexecute', 'intovf',
                      'norun', 'placeholder', 'selfield', 'airpred', 'itempath', 'criterion',
                      'resetset', 'tagmacro', 'dmgseg', 'creative', 'pldur', 'fdsnap', 'upfield',
-                     'crossshot', 'ddpair', 'embertop', 'manafirst']}
+                     'crossshot', 'ddpair', 'embertop', 'manafirst', 'trailcmt']}
 
 # 技能倍率的三条通道(manacore/internal/damage/calc) —— 字段名 -> 口径表里的标记
 CH_FIELD = {'max_mana_mul': 'mm', 'attack_mul': 'atk', 'other_mul': 'oth',
@@ -929,6 +930,36 @@ for f in (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'enchantment').glob('*.j
             R['crossshot'].append((str(shotf.relative_to(ROOT).as_posix()),
                                    'shot 里没有调用 manacore:api/mana/consume -> 射击不消耗魔力'
                                    '(2026-10-12 电弧事故)'))
+
+# 42bb) give 里引用的本包附魔 id 必须在 enchantment/ 目录下有定义 ——
+#   背景(2026-10-13 退弦事故): 新弩「退弦」的 give 写了
+#   enchantments={"sweetdream:backstring":1}, 玩家直接(没退世界重进)拿装备时,
+#   注册表里还没有这个附魔 ⇒ **整条 give 命令在解析阶段就挂掉**:
+#     [Server thread/ERROR] Failed to load function …/backstring/give
+#     … 错误的"minecraft:enchantments"组件: "Failed to get element
+#        sweetdream:backstring missed input …"
+#   现象 = 「别的装备都拿到了, 就这一件凭空消失」(日志只有一行 ERROR, 物品栏无痕)。
+#   守门能拦的是**拼写/漏建定义**这一半(那种是 100% 必挂); 另一半"定义存在、
+#   但当前世界没重进所以注册表里没有"守门拦不了 —— 只能靠交付时明说
+#   (附魔/伤害类型/进度都是注册表, 新增后必须**退出世界重进**, /reload 不补)。
+#   判据: 所有 give.mcfunction 的非注释行里 `"sweetdream:<id>"` 出现在
+#   enchantments={…} 内 ⇒ 必须有 enchantment/<id>.json。
+_ENCH_DIR = ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'enchantment'
+for _gf in (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function' / 'equipment').rglob(
+        'give.mcfunction'):
+    _grel = _gf.relative_to(ROOT).as_posix()
+    for _i, _l in enumerate(_gf.read_text(encoding='utf-8').splitlines(), 1):
+        _s = _l.strip()
+        if not _s or _s.startswith('#'):
+            continue
+        if 'enchantments=' not in _s:
+            continue
+        for _id in re.findall(r'"(?:sweetdream|minecraft):([a-z0-9_]+)"\s*:', _s):
+            if not (_ENCH_DIR / (_id + '.json')).exists():
+                R['enchref'].append((_grel, _i,
+                                     'give 里挂了附魔 sweetdream:%s, 但 enchantment/%s.json '
+                                     '不存在 ⇒ **整条 give 命令解析失败**(物品凭空消失, 日志只有一行 '
+                                     '"Failed to load function"): %s' % (_id, _id, _s[:80])))
 
 # 42c) 升级字段的"减旧/加回成对 + 累加器归零"契约 (2026-10-12 批 9 神经衰弱)
 #   背景: bonus_take 的"同系取最高 tier"靠三段 ①减旧贡献 ②整条换进桶 ③加回新贡献。
@@ -1811,24 +1842,18 @@ if _CORELOAD.exists():
                                                 '加成整段静默不触发' % _obj))
 
 
-# ---- boltseen) 真召唤的闪电必须带 zx.th_seen(除非明确豁免) ----
+# ---- boltseen) 真召唤的闪电必须带 zx.th_own 或 zx.th_seen ----
 #   core/tick 每刻扫 `type=minecraft:lightning_bolt,tag=!zx.th_seen]` 并跑
 #   tool/thunder/strike —— 该函数会**先给这道雷打上 zx.th_seen**(去重), 再检查
-#   6 格内有没有持「雷鸣」的玩家。所以"不带 seen 的闪电" = 会被雷鸣机制当成
-#   "刚出现的新一道雷"接管。后果分两种:
-#     · 鸣雷反应链里劈出的雷(见 tool/thunder/pend_go / axe/thunderclap/bolt_one)
-#       若忘了 seen -> 那道雷自己被 strike 命中 -> 1 秒后再劈 -> **无限连锁**
-#       (每刻都在劈, 直到有人把雷鸣摘了)。这是最危险的一种。
-#     · 其它来源(如 anion/charge)落在持雷鸣的玩家旁 -> 会被额外接管一次。
-#   现行**故意**不带 seen 的两处(看了头注释确认是有意的, 加进白名单):
-#     · axe/anion/cast   —— 原版真闪电, 就是要让雷鸣接管
-#     · axe/charge/bolt  —— 同上
+#   6 格内有没有持「雷鸣」的玩家。所以标签语义(2026-10-13 重构后):
+#     · zx.th_own  = 玩家用武器劈出来的雷 ⇒ **会**被雷鸣接管(要的效果)。
+#     · zx.th_seen = 已经扫过了 / 雷鸣自己连锁劈的那道 ⇒ 直接跳过, 不再触发。
+#   ★ 为什么武器雷一律用 own(不再预带 seen): 预带 seen 会被 core/tick 直接跳过
+#     ⇒ 雷鸣**永远看不见**这道雷。2026-10-13 用户实测"引雷针无法触发雷鸣"即此。
+#   ★ 不会无限连锁: 雷鸣 pend_go 劈出的那道保留 seen ⇒ 被跳过, **一层就停**。
 #   另外盯: 威霆"每刻劈一道"的驱动 bolt_fx 必须挂在 core/tick、且三维度各一行
 #   (core/tick 只在主世界每刻跑 -> 少了维度, 在别的维度打威霆就永远不落雷)。
-_BOLT_EXEMPT = {
-    'equipment/axe/anion/cast.mcfunction',
-    'equipment/axe/charge/bolt.mcfunction',
-}
+_BOLT_EXEMPT = set()
 _DPFUN = ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function'
 if _DPFUN.exists():
     for _fp in sorted(_DPFUN.rglob('*.mcfunction')):
@@ -1839,12 +1864,81 @@ if _DPFUN.exists():
             _s = _l.strip()
             if _s.startswith('#') or 'summon minecraft:lightning_bolt' not in _s:
                 continue
-            if 'zx.th_seen' in _s:
+            if 'zx.th_seen' in _s or 'zx.th_own' in _s:
                 continue
             R['boltseen'].append((str(_fp), _n, _s[:100] +
-                                  '  <- 召唤真闪电必须带 {Tags:["zx.th_seen"]}'
-                                  '(漏了会被雷鸣的每刻扫描当成新雷接管; 反应链里劈出的雷会无限连锁)'
-                                  '。若这道雷**故意**要让雷鸣接管, 把文件路径加进 check.py 的 _BOLT_EXEMPT'))
+                                  '  <- 召唤真闪电必须带 {Tags:["zx.th_own"]}(武器雷, 会被雷鸣接管) '
+                                  '或 {Tags:["zx.th_seen"]}(已处理过/雷鸣连锁雷, 不再触发)。'
+                                  '两个都不带 ⇒ 每刻都被 scan 当成新雷、反复触发; 该带 seen 却带了 '
+                                  'own ⇒ 无限连锁(雷鸣劈的雷必须带 seen)'))
+# 42e) ★ 新增落雷点必须接"自身召唤闪电"的公共钩子 lib/on_lightning ★
+#   真实事故 2026-10-13(用户实测): 「超限·负离子」写着"之后 8 秒内自身召唤闪电时
+#   闪电额外对落地处造成…", 用户开了超限负离子、再拿新做的引雷针普攻落雷 ——
+#   **落点伤害完全不触发**, 零日志。根因: 引雷针是新写的落雷点, `summon
+#   minecraft:lightning_bolt` 之后**没有**调 lib/on_lightning(那两层效果全挂在
+#   这个钩子上) ⇒ 跨武器效果对新建武器天然不生效。
+#   ★ 通用教训: 钩子型效果(跨武器/跨系统)在**每新增一个触发点**时都要补接,
+#     而"新写的那件"自己测试时是看不出来的 —— 必须靠守门把触发点列全。
+#   ★ 顺序契约: 钩子必须排在本件自己的 `read:"manacore"` 伤害**之后** —— 下游
+#     ol_bonus 会重新 damage/calc 覆盖 manacore:out(守门拦不住顺序, 见文件头注)。
+# (2026-10-13 全部补接完毕, 现在**没有豁免**了: 接口层一律接, 数值层另外调。
+#  ★ 教训: 别拿"实战打不上"当理由砍接口 —— 那是两件事(用户原话)。雷鸣当初按
+#    "8 秒内切不过去"判成不接, 但它根本是**副手常驻**、不用切武器, 判据本身就错了。)
+_ONL_EXEMPT = set()
+# ★ 闪电标签契约: zx.th_own = "武器劈的雷"(会被雷鸣接管) / zx.th_seen = "扫过了"(不再触发)
+#   雷鸣自己连锁劈的那道必须带 seen, 否则无限连锁; 其余武器雷必须带 own, 否则
+#   **永远触发不了雷鸣**(2026-10-13 "引雷针无法触发雷鸣" 事故)。
+_ONL_SEEN_OWNER = 'equipment/tool/thunder/pend_go.mcfunction'
+if _DPFUN.exists():
+    for _fp in sorted(_DPFUN.rglob('*.mcfunction')):
+        _rel = _fp.relative_to(_DPFUN).as_posix()
+        _live = [l for l in _fp.read_text(encoding='utf-8', errors='ignore').splitlines()
+                 if l.strip() and not l.strip().startswith('#')]
+        if not any('summon minecraft:lightning_bolt' in l for l in _live):
+            continue
+        if _rel in _ONL_EXEMPT:
+            continue
+        if not any('lib/on_lightning' in l for l in _live):
+            R['onlight'].append((str(_fp), 0,
+                                 '这里 `summon minecraft:lightning_bolt` 之后没有调 '
+                                 'sweetdream:lib/on_lightning ⇒ 跨武器的"自身召唤闪电时…"效果'
+                                 '(超限·负离子 8 秒落点伤害 / 超限·超•负•荷 第二形态落点追加)'
+                                 '在这道雷上**永远不触发**(静默、零日志; 2026-10-13 引雷针事故)。'
+                                 '补一行即可(位置 = 落点、@s = 召唤者); 若**有意**不接, 把路径加进 '
+                                 'check.py 的 _ONL_EXEMPT 并写明理由。'))
+        # 闪电标签契约(own vs seen): 见 _ONL_SEEN_OWNER 的说明
+        _has_own = any('zx.th_own' in l for l in _live)
+        _has_seen = any('zx.th_seen' in l for l in _live)
+        if _rel == _ONL_SEEN_OWNER:
+            if not _has_seen:
+                R['onlight'].append((str(_fp), 0,
+                                     '雷鸣**连锁劈出的那道**闪电必须带 zx.th_seen —— 否则它会被 '
+                                     'core/tick 当成"新雷"再走一遍连锁 ⇒ 无限劈下去。'))
+        else:
+            if not _has_own:
+                R['onlight'].append((str(_fp), 0,
+                                     '武器自己劈的闪电必须带 zx.th_own(不能预带 zx.th_seen) —— '
+                                     '带 seen 的话 core/tick 的 `tag=!zx.th_seen` 会直接跳过它 ⇒ '
+                                     '**这道雷永远触发不了雷鸣**(静默; 2026-10-13 引雷针事故)。'
+                                     'seen 只表示"已经扫过了", 由 strike 自己打, 别在 summon 时预置。'))
+    # 位置契约(本文件与两个落点结算函数): 都不许出现 `at @s`
+    #   ★ 这条必须放在**循环外**: lib/on_lightning 自己没有 summon 行, 放在循环里
+    #     会被上面的 `continue` 直接跳过(2026-10-13 反向验证时发现的假阴性)。
+    for _rel2 in ('lib/on_lightning.mcfunction',
+                  'equipment/axe/anion/ol_bonus.mcfunction',
+                  'equipment/axe/charge/ol_bolt_bonus.mcfunction'):
+        _p2 = _DPFUN / _rel2
+        if not _p2.exists():
+            continue
+        _l2 = [l for l in _p2.read_text(encoding='utf-8', errors='ignore').splitlines()
+               if l.strip() and not l.strip().startswith('#')]
+        if any('at @s' in l for l in _l2):
+            R['onlight'].append((str(_p2), 0,
+                                 '这个文件里出现 `at @s` ⇒ 位置被从**落点**挪到**玩家脚下**, '
+                                 '"落点 2 格"变成"玩家 2 格"(文案是"对落地处造成…"; '
+                                 '2026-10-13 修)。圈人与放粒子都直接用当前位置'
+                                 '(调用方已 at 到落点)。'))
+
 _TCTICK = (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function'
            / 'core' / 'tick.mcfunction')
 if _TCTICK.exists():
@@ -1858,6 +1952,39 @@ if _TCTICK.exists():
                                   'core/tick 缺 "execute in %s ... run function '
                                   'sweetdream:equipment/axe/thunderclap/bolt_fx" —— '
                                   '少了这个维度, 在该维度打威霆就永远不落雷' % _d))
+
+
+# ---- trailcmt) mcfunction 行尾注释 —— '#' 只能独占一行 ----
+#   1.21.5 的命令解析器**不把行尾的 `#` 当注释**, 而是当成"多出来的一个参数"⇒
+#   整份函数**加载失败**(静默: 只在 latest.log 里留一行 `Failed to load function …`,
+#   游戏里表现为"这个功能整个没反应/没雷了")。2026-10-13 我手写诊断锚时给 4 个函数
+#   (anion/ol_bonus、thunderrod/bolt_atk、thunder/on_strike、thunder/strike) 在命令行尾
+#   加了 ` # 锚…` ⇒ 全部整份作废, 用户报"引雷针普攻都没用雷了"。⇒ 注释一律提到上一行。
+#   判据: 非行首注释行里出现"前面是空白、后面是空白/行尾/非 ASCII 字符"的 `#`。
+#   ★ 真·假玩家名形如 `#an_dbg0`(`#` 后紧跟 ASCII 词字符)⇒ 不会误报。
+_CMT_TAIL = re.compile(r'(?<=\s)#(?=\s|$|[^\x00-\x7f])')
+if _DPFUN.exists():
+    for _fp in sorted(_DPFUN.rglob('*.mcfunction')):
+        for _n, _l in enumerate(_fp.read_text(encoding='utf-8', errors='ignore').splitlines(), 1):
+            _s = _l.lstrip()
+            if not _s or _s.startswith('#'):
+                continue
+            # 去掉双引号内的内容(里面的 # 是文本, 不算注释)
+            _q = []
+            _inq = False
+            for _c in _l:
+                if _c == '"':
+                    _inq = not _inq
+                    _q.append('.')
+                elif _inq:
+                    _q.append('.')
+                else:
+                    _q.append(_c)
+            if _CMT_TAIL.search(''.join(_q)):
+                R['trailcmt'].append((str(_fp), _n,
+                                      '行尾出现 `#` 注释 —— 命令解析器会把它当成多出来的一个'
+                                      '参数, **整份函数加载失败**(静默, 只在 latest.log 留一行)。'
+                                      '把注释提到上一行、`#` 独占一行。原文: %s' % _l.strip()[:90]))
 
 
 # ---- 33) 面板数字不许被截成整数 ----
@@ -4635,6 +4762,12 @@ TITLE = {'fn': 'function 引用不存在的目标', 'tag': '#tag 引用无对应
                   '(技能伤害也会算进去, 静默)',
          'glint': '弩的 give 带了附魔却没写 enchantment_glint_override=false'
                   '(物品会一直闪紫色附魔光效, 静默)',
+         'onlight': '落雷点漏接"自身召唤闪电"的公共钩子 lib/on_lightning(跨武器效果'
+                    '在这道雷上永远不触发, 静默零日志); 或落点结算里写了 `at @s` '
+                    '(范围从"落地处"变成"玩家身边")',
+         'enchref': 'give 里挂了 enchantment/ 下没有定义的附魔 id ⇒ 整条 give 命令'
+                    '**解析失败、物品凭空消失**(日志只有一行 "Failed to load function"。'
+                    '注意另一半: 定义存在但没退出世界重进时同样会挂 —— 附魔是注册表, /reload 不补)',
          'lorestyle': '物品描述的版式不是 lore_fmt 的输出(数字没留白 / 用了 * 当乘号…)',
          'chanhack': '技能倍率: 又把面板读数塞进 base_attack(旧口径 hack, 面板没法归类)',
          'chandef': '技能倍率三通道: 口径表(lib/skill_mul/def)和技能文件对不上'
@@ -4796,12 +4929,18 @@ TITLE = {'fn': 'function 引用不存在的目标', 'tag': '#tag 引用无对应
                      '`data get entity @s <字段>` 存分数再判(见 immolate/check_burn)。'
                      '真实事故 2026-10-07: tinder/burn 的 `unless data entity @s {Fire:1..}` '
                      '⇒ 点火整段失效。★ 同类: 计分板 `matches` 用逗号列表、`if score` 写 `==`',
-         'boltseen': '手工召唤的真闪电忘了带 zx.th_seen —— 会被雷鸣的每刻扫描(见 '
-                     'core/tick 的 `tag=!zx.th_seen` 那三行)当成"刚出现的雷"接管; 若这道雷'
-                     '是从雷鸣反应链里劈出的(如 thunder/pend_go、thunderclap/bolt_one), '
-                     '它会自己再触发一次 strike -> 1 秒后再劈 -> 无限连锁。故意要让雷鸣'
-                     '接管的雷请把文件加进 check.py 的 _BOLT_EXEMPT。另外盯威霆"每刻劈一道"的'
-                     'bolt_fx 有没有三维度都挂在 core/tick 上(少一个维度 = 该维度永不落雷)。',
+         'boltseen': '手工召唤的真闪电必须带 zx.th_own(玩家用武器劈的雷, **会**被雷鸣接管)'
+                     '或 zx.th_seen(已处理过/雷鸣连锁雷, core/tick 的 tag=!zx.th_seen 直接跳过)。'
+                     '漏了标签 ⇒ 被雷鸣的每刻扫描当成"刚出现的雷"反复接管。2026-10-13 语义重构:'
+                     '武器雷一律 own(否则雷鸣永远看不见 —— 引雷针当初就是这么哑的), '
+                     '只有雷鸣 pend_go 自己连锁劈的那道保留 seen(不会无限连锁: own→扫描→登记→'
+                     '劈一道(seen)→跳过, 一层就停)。另外盯威霆"每刻劈一道"的 bolt_fx 有没有'
+                     '三维度都挂在 core/tick 上(少一个维度 = 该维度永不落雷)。',
+         'trailcmt': 'mcfunction 命令行尾写了 `#` 注释 —— 1.21.5 解析器不认行尾注释, 会把它'
+                     '当成"多出来的一个参数"⇒ **整份函数加载失败**(静默, 只在 latest.log 里留'
+                     '一行 `Failed to load function …`, 游戏里表现为"这个功能整个没反应")。'
+                     '2026-10-13 四个函数(含引雷针 bolt_atk)就这么整份作废。注释一律提到上一行、'
+                     '`#` 独占一行。',
          'selfclr': '同一条计分项上"改"排在了"判"前面, 而且是**自己把自己清零** —— '
                     '`if score @s zx.X matches 5.. run set @s zx.X 0` 之后又出现 '
                     '`if score @s zx.X matches 5..` ⇒ 后面那些命令**永远不执行**, '

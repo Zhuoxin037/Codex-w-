@@ -34,7 +34,7 @@ function sweetdream:lib/num/plain
 # ④ 打出去
 function sweetdream:internal/damage/with_from with storage zx:work a
 
-# ⑤ 命中表现(按 style 分工 —— 一把法杖一份)
+# ⑤ 命中表现(按 style 分工 —— 一套 style 一份)
 execute if data entity @s data{style:"apocalypse"} run function sweetdream:projectile/ball/fx_apocalypse_hit
 execute if data entity @s data{style:"begonia"} run function sweetdream:projectile/ball/fx_begonia_hit
 execute if data entity @s data{style:"chime"} run function sweetdream:projectile/ball/fx_chime_hit
@@ -47,9 +47,14 @@ execute if data entity @s data{style:"polarized_light"} run function sweetdream:
 execute if data entity @s data{style:"sail"} run function sweetdream:projectile/ball/fx_sail_hit
 execute if data entity @s data{style:"twilight"} run function sweetdream:projectile/ball/fx_twilight_hit
 execute if data entity @s data{style:"wind_ontheground"} run function sweetdream:projectile/ball/fx_wind_ontheground_hit
+execute if data entity @s data{style:"thunderrod"} run function sweetdream:projectile/ball/fx_thunderrod_hit
+execute if data entity @s data{style:"triad"} run function sweetdream:projectile/ball/fx_triad_hit
+execute if data entity @s data{style:"triad_fire"} run function sweetdream:projectile/ball/fx_triad_fire_hit
+execute if data entity @s data{style:"triad_gun"} run function sweetdream:projectile/ball/fx_triad_gun_hit
+execute if data entity @s data{style:"five_curses"} run function sweetdream:projectile/ball/fx_five_curses_hit
 # 兜底: 没写 style / 写了个不认识的 —— 至少别什么都不出
-#   (一行排掉全部 12 个已知 style; 以后加新法杖记得在这里补一条 unless)
-execute unless data entity @s data{style:"apocalypse"} unless data entity @s data{style:"begonia"} unless data entity @s data{style:"chime"} unless data entity @s data{style:"delusion"} unless data entity @s data{style:"fallen_dream"} unless data entity @s data{style:"final_revelation"} unless data entity @s data{style:"gu_poison"} unless data entity @s data{style:"palette"} unless data entity @s data{style:"polarized_light"} unless data entity @s data{style:"sail"} unless data entity @s data{style:"twilight"} unless data entity @s data{style:"wind_ontheground"} run function sweetdream:projectile/ball/fx_plain_hit
+#   (一行排掉全部已知 style; 以后加新法杖记得在这里补一条 unless —— 本块由 _gen_staff_particles.py 自动维护, 别手改)
+execute unless data entity @s data{style:"apocalypse"} unless data entity @s data{style:"begonia"} unless data entity @s data{style:"chime"} unless data entity @s data{style:"delusion"} unless data entity @s data{style:"fallen_dream"} unless data entity @s data{style:"final_revelation"} unless data entity @s data{style:"gu_poison"} unless data entity @s data{style:"palette"} unless data entity @s data{style:"polarized_light"} unless data entity @s data{style:"sail"} unless data entity @s data{style:"twilight"} unless data entity @s data{style:"wind_ontheground"} unless data entity @s data{style:"thunderrod"} unless data entity @s data{style:"triad"} unless data entity @s data{style:"triad_fire"} unless data entity @s data{style:"triad_gun"} unless data entity @s data{style:"five_curses"} run function sweetdream:projectile/ball/fx_plain_hit
 # ⑥ 可选: 武器自己的"命中之后"回调
 #   在 data.hit 里写一个函数 id, 就会在这次命中后被调用(宏参数就是球的数据,
 #   @s 是球本身、位置就是命中点)。不写(空串)就跳过 —— 默认是不调用的。

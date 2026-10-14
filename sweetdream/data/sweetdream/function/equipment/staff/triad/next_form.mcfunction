@@ -17,7 +17,7 @@ execute if score @s zx.tri_form matches 3.. run scoreboard players set @s zx.tri
 function sweetdream:equipment/staff/triad/rename
 
 # ② 提示 + 表现
-execute if score @s zx.tri_form matches 0 run tellraw @s [{"text":"切换至「很冰的斧」","color":"gold"}]
+execute if score @s zx.tri_form matches 0 run tellraw @s [{"text":"切换至「很冰的斧」","color":"aqua"}]
 execute if score @s zx.tri_form matches 1 run tellraw @s [{"text":"切换至「很热的刀」","color":"red"}]
 execute if score @s zx.tri_form matches 2 run tellraw @s [{"text":"切换至「很重的枪」","color":"gray"}]
 execute at @s run particle minecraft:enchant ~ ~1 ~ 0.6 0.6 0.6 0.05 20 normal

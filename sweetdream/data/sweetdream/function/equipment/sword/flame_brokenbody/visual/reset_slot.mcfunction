@@ -1,0 +1,1 @@
+$execute if items entity @s hotbar.$(slot) *[minecraft:custom_data~{zx:["flame_brokenbody"]}] if data entity @s Inventory[{Slot:$(slot)b}].components."minecraft:custom_model_data".floats[1] run item modify entity @s hotbar.$(slot) sweetdream:flame_cast/idle

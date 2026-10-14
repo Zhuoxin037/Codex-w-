@@ -41,4 +41,14 @@ $data modify storage manacore:macro a.uuid set value "$(uuid)"
 scoreboard players add @s manacore.slot 0
 execute store result storage manacore:macro a.cur int 1 run scoreboard players get @s manacore.slot
 execute store result storage manacore:macro a.slot int 1 run scoreboard players get @s manacore.slot
+# 【★ N04 修(2026-10-11): 补登记终身清单(幂等) ★】见 internal/player/create 的说明。
+#   补丁**之前**就已存在的记录不在 players_all 清单里 —— 若玩家离线, reset_all 按
+#   "索引 + 清单"都遍历不到他 ⇒ 清不干净。这里按"幂等标志 reg"补一次:
+#   没有 reg 字段(补丁前老记录) ⇒ 登记 + 打标; 有 reg ⇒ 跳过(绝不重复)。
+#   ★ 为什么不用"清单里有没有我"判重: 清单元素是**裸字符串**, 没法用列表过滤谓词
+#     判重(本包无先例、无法离线验证)。用一个随记录同生共死的字段当标志最稳。
+#   ★ 边界: 补丁前的老记录会在**这次上线**多登记一条(裸串判不了重的代价, 有界:
+#     写完 reg 就不再) —— 无害, purge 第二次 data remove 会被 if data 挡掉。
+$execute unless data storage manacore:players "$(uuid)".reg run data modify storage manacore:players_all list append value "$(uuid)"
+$execute unless data storage manacore:players "$(uuid)".reg run data modify storage manacore:players "$(uuid)".reg set value 1b
 function manacore:internal/join/slot_check with storage manacore:macro a

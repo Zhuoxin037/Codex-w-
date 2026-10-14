@@ -73,12 +73,21 @@ function sweetdream:overlimit/api/mod
 function manacore:api/damage/calc
 execute if data storage zx:work tri{zero:1b} run data modify storage manacore:out r.damage set value 0.0
 
-# ⑦ 装球出膛; 把命中回调要用的信息一并带上(形态 / 是否强化 / 要不要额外 2 次)
+# ⑦ 装球出膛; 把命中回调要用的信息一并带上(外观 / 形态 / 是否强化 / 要不要额外 2 次)
+#   【★ style ★】= 本武器的 zx[0](基础 "triad" = 冰斧), 再按形态覆盖成 triad_fire /
+#     triad_gun(见下方那两行) —— 决定拖尾与命中表现(六份 fx 由
+#     .workbuddy/_gen_staff_particles.py 生成, 派发在 ball/tick ④ 与 ball/hit ⑤)。
+#     漏了它会兜底成 fx_plain(白球), 和别的法杖长得一样。
 #   【★ 为什么把形态写进球上 ★】命中那一刻执行者是**法球**, 而形态记在玩家身上 ——
 #     靠 uuid 反查玩家要过一次宏选择器, 且在玩家下线/切维度时会查不到。
 #     形态在出膛这一刻就定了, 直接随球带走最简单也最稳(与五世恶咒搬 u0..u3 同理)。
 #     ★ tri_form 默认 0 = 冰斧: "未赋值"与"冰斧"同义, 所以只在 1/2 时覆盖(坑 1)。
-data modify storage zx:work ball set value {dmg:0.0,hit:"sweetdream:equipment/staff/triad/ball_hit",tri_extra:0,tri_form:0,tri_strong:0b,tri_blank:0b}
+data modify storage zx:work ball set value {dmg:0.0,style:"triad",hit:"sweetdream:equipment/staff/triad/ball_hit",tri_extra:0,tri_form:0,tri_strong:0b,tri_blank:0b}
+#   ★ 形态 → 外观(2026-10-13): 基础 style "triad" = 冰斧; 热刀 / 重枪换各自的外观。
+#     ★ 只在形态 1/2 时覆盖 —— 形态 0(或 zx.tri_form 从未赋值)保持 "triad"(坑 1:
+#       别写成 `matches 0`, 那时它是**假**的)。三份 fx 由 _gen_staff_particles.py 生成。
+execute if score @s zx.tri_form matches 1 run data modify storage zx:work ball.style set value "triad_fire"
+execute if score @s zx.tri_form matches 2 run data modify storage zx:work ball.style set value "triad_gun"
 data modify storage zx:work ball.dmg set from storage manacore:out r.damage
 execute if score @s zx.tri_form matches 1 run data modify storage zx:work ball.tri_form set value 1
 execute if score @s zx.tri_form matches 2 run data modify storage zx:work ball.tri_form set value 2

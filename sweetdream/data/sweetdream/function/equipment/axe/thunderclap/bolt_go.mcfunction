@@ -62,4 +62,18 @@ execute at @e[tag=zx.victim,distance=0..,limit=1] run playsound minecraft:entity
 execute at @e[tag=zx.victim,distance=0..,limit=1] run summon minecraft:marker ~ ~ ~ {Tags:["zx.tc_strike","zx.tc_new"]}
 execute as @e[tag=zx.tc_new,distance=0..,limit=1] run scoreboard players set @s zx.tc_ang 0
 execute as @e[tag=zx.tc_new,distance=0..,limit=1] run scoreboard players operation @s zx.tc_bs = #tc_x zx.meta
+
+# ★ 把施法者 UUID 抄到排期 marker 上(bolt_one 要用它把"召唤这道雷的人"找回来,
+#   好接 lib/on_lightning —— 钩子契约是 @s = 召唤雷的玩家, 而劈雷时 @s 是 marker)。
+#   ★ 坑 129: 宏参数**只能取键、不能取列表下标** ⇒ 术阵 marker 的 data.zx.u[0..3]
+#     必须逐个摊成顶层键 u0..u3, 不能在宏里写 $(u[0])。
+data modify storage zx:work tcu set value {u0:0,u1:0,u2:0,u3:0}
+data modify storage zx:work tcu.u0 set from entity @s data.zx.u[0]
+data modify storage zx:work tcu.u1 set from entity @s data.zx.u[1]
+data modify storage zx:work tcu.u2 set from entity @s data.zx.u[2]
+data modify storage zx:work tcu.u3 set from entity @s data.zx.u[3]
+execute as @e[tag=zx.tc_new,distance=0..,limit=1] run data modify entity @s data.zx.u0 set from storage zx:work tcu.u0
+execute as @e[tag=zx.tc_new,distance=0..,limit=1] run data modify entity @s data.zx.u1 set from storage zx:work tcu.u1
+execute as @e[tag=zx.tc_new,distance=0..,limit=1] run data modify entity @s data.zx.u2 set from storage zx:work tcu.u2
+execute as @e[tag=zx.tc_new,distance=0..,limit=1] run data modify entity @s data.zx.u3 set from storage zx:work tcu.u3
 tag @e[tag=zx.tc_new,distance=0..] remove zx.tc_new

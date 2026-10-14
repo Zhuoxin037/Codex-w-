@@ -10,8 +10,9 @@
 #   伤害直接塞进 ball.dmg; 命中回调 ball_hit 只负责**叠世咒**, 不再重复打伤害。
 #   (堕梦要把普通伤害改成真伤, 才不得不把 dmg 设 0、另存 fdmg 在回调里分流。
 #    本件没有"改伤害类型"的需求, 走最普通的那条路。)
-# 【外观】style 留空 => 发射器会补成 "plain"(fx_plain / fx_plain_hit 已存在)。
-#   专属外观(批 12 外观批次)再补 fx_five_curses + 在 ball/tick、ball/hit 各加一行分支。
+# 【外观】style:"five_curses" —— 专属拖尾/命中已补(2026-10-13): fx_five_curses /
+#   fx_five_curses_hit, 由 .workbuddy/_gen_staff_particles.py 生成, 派发在 ball/tick ④
+#   与 ball/hit ⑤。漏了 style 会兜底成 fx_plain(白球), 与别的法杖长得一样。
 # ============================================================
 
 # ① 拿 uuid
@@ -59,6 +60,6 @@ function sweetdream:overlimit/api/mod
 function manacore:api/damage/calc
 
 # ⑤ 装球出膛: 伤害交给法球, 命中回调只叠世咒
-data modify storage zx:work ball set value {dmg:0.0,hit:"sweetdream:equipment/staff/five_curses/ball_hit"}
+data modify storage zx:work ball set value {dmg:0.0,style:"five_curses",hit:"sweetdream:equipment/staff/five_curses/ball_hit"}
 data modify storage zx:work ball.dmg set from storage manacore:out r.damage
 function sweetdream:equipment/staff/attack

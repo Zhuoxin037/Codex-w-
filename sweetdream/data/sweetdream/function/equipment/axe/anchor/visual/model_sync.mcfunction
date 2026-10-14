@@ -1,0 +1,2 @@
+execute if items entity @s weapon.mainhand diamond_axe[custom_data~{zx:["anchor"]}] unless items entity @s weapon.mainhand *[minecraft:item_model="sweetdream:anchor"] run item modify entity @s weapon.mainhand sweetdream:anchor_visual/model
+execute if items entity @s weapon.offhand diamond_axe[custom_data~{zx:["anchor"]}] unless items entity @s weapon.offhand *[minecraft:item_model="sweetdream:anchor"] run item modify entity @s weapon.offhand sweetdream:anchor_visual/model

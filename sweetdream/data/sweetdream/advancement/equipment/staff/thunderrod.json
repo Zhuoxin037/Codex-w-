@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "cast": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "thunderrod"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:equipment/staff/thunderrod/cast"
+    }
+}

@@ -1,0 +1,11 @@
+{
+  "sampled_component_transforms": 3832,
+  "max_shear_error": 1.4769595268498639e-08,
+  "all_can_be_encoded_as_display_rotation_scale_translation": true,
+  "rebuild_full_geometry_per_frame": false,
+  "game_deployed": true,
+  "game_tested": false,
+  "fps_tested": false,
+  "approval": "用户已确认动效并要求导入游戏",
+  "deployment_receipt": "D:\\数据包\\.workbuddy\\sacred_relic_deployment_receipt.json"
+}

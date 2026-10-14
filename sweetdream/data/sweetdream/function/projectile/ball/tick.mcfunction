@@ -44,7 +44,7 @@ execute if entity @e[distance=0..,tag=zx.ball_touch,limit=1] run return run func
 $execute if entity @e[nbt={UUID:[I;$(t0),$(t1),$(t2),$(t3)]},limit=1] facing entity @e[nbt={UUID:[I;$(t0),$(t1),$(t2),$(t3)]},limit=1] eyes run tp @s ^ ^ ^0.75
 $execute unless entity @e[nbt={UUID:[I;$(t0),$(t1),$(t2),$(t3)]},limit=1] rotated $(yaw) $(pitch) run tp @s ^ ^ ^0.75
 
-# ④ 拖尾外观(按 style 分工 —— 一把法杖一份, 由 _gen_staff_particles.py 维护)
+# ④ 拖尾外观(按 style 分工 —— 一套 style 一份, 由 _gen_staff_particles.py 维护)
 execute if data entity @s data{style:"apocalypse"} run function sweetdream:projectile/ball/fx_apocalypse
 execute if data entity @s data{style:"begonia"} run function sweetdream:projectile/ball/fx_begonia
 execute if data entity @s data{style:"chime"} run function sweetdream:projectile/ball/fx_chime
@@ -57,6 +57,11 @@ execute if data entity @s data{style:"polarized_light"} run function sweetdream:
 execute if data entity @s data{style:"sail"} run function sweetdream:projectile/ball/fx_sail
 execute if data entity @s data{style:"twilight"} run function sweetdream:projectile/ball/fx_twilight
 execute if data entity @s data{style:"wind_ontheground"} run function sweetdream:projectile/ball/fx_wind_ontheground
+execute if data entity @s data{style:"thunderrod"} run function sweetdream:projectile/ball/fx_thunderrod
+execute if data entity @s data{style:"triad"} run function sweetdream:projectile/ball/fx_triad
+execute if data entity @s data{style:"triad_fire"} run function sweetdream:projectile/ball/fx_triad_fire
+execute if data entity @s data{style:"triad_gun"} run function sweetdream:projectile/ball/fx_triad_gun
+execute if data entity @s data{style:"five_curses"} run function sweetdream:projectile/ball/fx_five_curses
 # ⑤ 射程耗尽 -> 自己消失
 scoreboard players remove @s zx.ball_dist 75
 execute if score @s zx.ball_dist matches ..0 run function sweetdream:projectile/ball/pop with entity @s data

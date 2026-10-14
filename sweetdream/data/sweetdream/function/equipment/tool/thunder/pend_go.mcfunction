@@ -24,6 +24,13 @@ summon minecraft:lightning_bolt ~ ~ ~ {Tags:["zx.th_seen"]}
 # ③ 额外伤害: 执行位置仍是 marker 处, as 只换身份不换位置
 execute at @s as @a[tag=zx.mc_by] run function sweetdream:equipment/tool/thunder/bolt_dmg
 
+# ③.5 ★ "自身召唤闪电"的公共收尾钩子 ★(接口层: 只要是"自己召唤的雷"就走这里)
+#   ★ 雷鸣是**副手常驻**, 不用切武器: 它被动抓场上不带 zx.th_seen 的新闪电
+#     (自然雷/别人的雷都行), 1 秒后自动连锁劈这一道 —— 所以只要负离子的 8 秒
+#     雷劲开着、场上有雷, 这一道就会落在窗口里(2026-10-13 用户指正后补接)。
+#   @s = 持雷鸣的玩家(zx.mc_by 是 find_by 反查出来的释放者), 位置 = marker(=落点)。
+execute at @s as @a[tag=zx.mc_by] run function sweetdream:lib/on_lightning
+
 # ④ 收尾
 tag @a remove zx.mc_by
 kill @s

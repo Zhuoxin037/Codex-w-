@@ -30,3 +30,7 @@ data modify storage zx:work a.slot set value 0
 execute if score @s zx.ret_slot matches 0..8 store result storage zx:work a.slot int 1 run scoreboard players get @s zx.ret_slot
 
 function sweetdream:internal/itembackup/migrate_legacy with storage zx:work a
+
+# 取消上一会话的短时武器动作。
+execute if entity @s[tag=zx.fb_cast] at @s run function sweetdream:equipment/sword/flame_brokenbody/visual/end
+function sweetdream:equipment/axe/anchor/cancel

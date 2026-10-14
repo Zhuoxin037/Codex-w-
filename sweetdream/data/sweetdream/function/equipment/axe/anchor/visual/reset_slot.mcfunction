@@ -1,0 +1,1 @@
+$execute if items entity @s hotbar.$(slot) diamond_axe[custom_data~{zx:["anchor"]}] if data entity @s Inventory[{Slot:$(slot)b}].components."minecraft:custom_model_data".floats[1] run item modify entity @s hotbar.$(slot) sweetdream:anchor_visual/idle

@@ -26,9 +26,25 @@
 #   ★ 不要写成"先 `set value []` 再 append": 空列表没有元素类型, append 的结果
 #     无法离线验证; 有 [0] 占位则类型确定, 行为确定。
 # ============================================================
-data modify storage manacore:free_slots list set value [0]
-data modify storage manacore:work s set value {i:0,n:0}
+# 【★ 2026-10-11 P1 修(N01/N02)★ #next_slot 语义已收紧为"最高占用槽"】
+#   本文件现在按**固定顺序**做两件事:
+#     ① 【先】重算 #next_slot = "当前最高已登记(占用)槽" —— 由 scan_go 扫 index 得出。
+#        它取代了 core/boot 原来的"满槽归零"hack(归零会让第 65 人覆盖 slot 1, 见 N02)。
+#     ② 【后】按 index 反推重建回收池, 且 rebuild_one 只收 1..#next_slot 里的空槽
+#        ⇒ 池内元素恒 ≤ #next_slot ⇒ from_free 不会发出超界槽。
+#   ⇒ 遍历上界 1..#next_slot 恒覆盖所有占用槽(N01 的"高位槽漏遍历"消除)。
+#   ★ 顺序不能颠倒: 必须先有 #next_slot, 建池才知道该收到几号。
+#   ★ scan_go 是**纯驱动器**(本身不含宏行) ⇒ 调用**不带** with; 带宏源的是叶子 scan_one。
+#     ★ 调用前必须把宏源 s.i 写成起始槽号 1(与 index/foreach 同构) —— 否则第一轮叶子渲染到的
+#       $(i) 是 0 ⇒ off-by-one, 漏掉第 #max_slots 槽(2026-10-11 事故, 见 scan_go 头部)。
+# ============================================================
+scoreboard players set #next_slot manacore.meta 0
 scoreboard players set #i manacore.meta 1
+data modify storage manacore:work s set value {i:0,n:0}
+execute store result storage manacore:work s.i int 1 run scoreboard players get #i manacore.meta
+function manacore:internal/slot/scan_go
+scoreboard players set #i manacore.meta 1
+data modify storage manacore:free_slots list set value [0]
 function manacore:internal/slot/rebuild_go
 data remove storage manacore:free_slots list[0]
 scoreboard players set #i manacore.meta 1

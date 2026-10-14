@@ -67,15 +67,18 @@ execute unless data storage manacore:free_slots list run data modify storage man
 #   一次性找回来(哪怕 #slot_full 已经卡在 1, reload 一次就恢复, 不用手改计分板)。
 #   详见 internal/slot/rebuild 的说明。
 function manacore:internal/slot/rebuild
-# 【★ 槽位耗尽的一键自愈(2026-10-10)★】
-#   #next_slot 只增不减, 一旦顶到 #max_slots(实测 64/64)就**永远拒分配** ⇒ 死锁:
-#   slot/new 拒分配 → reissue 跳过 register → index 恒空 → 每秒重走 join → 整包静默失效。
-#   这里在 boot 时把它归零, 下一秒 slot/new 就能从 1 重新发号。
-#   ★ 安全性: **占用与否只由 index 说了算**, 不是由 #next_slot 说了算 ——
-#     已登记的人走 slot_check 的"按 uuid 扫 index"复用原槽(根本不会走到 slot/new);
-#     只有 index 里查不到的人才去 slot/new 拿新号。所以归零不会抢别人的槽。
-#   ★ 为什么不直接每 reload 都归零: 正常运行时没必要动它, 只在"已经顶到上限"时才救。
-execute if score #next_slot manacore.meta >= #max_slots manacore.meta run scoreboard players set #next_slot manacore.meta 0
+# 【★ 2026-10-11 P1 修(N01/N02)★ 这里的"满槽归零"hack 已删除】
+#   原写法: `execute if score #next_slot >= #max_slots run set #next_slot 0`。它有两个
+#   致命问题 ——
+#     N02: 归零后 slot/new 只是 `+1`, 而它**不判 index."<槽>" 是否已存在** ⇒ 满槽
+#          reload 后第 65 人写到**已占用的 slot 1** 上, 两人索引归属冲突。
+#     N01: 与之配套的"回收池只增"还会把"从未发过的高位槽"也塞进池, 而 foreach 只
+#          遍历 1..#next_slot ⇒ 高位槽漏遍历。
+#   正解: #next_slot 的语义改为「**当前最高已登记(占用)槽**」, 由 internal/slot/rebuild
+#   在 boot 时按 index 重算(重算逻辑在那个文件的 scan_go 递归体里)。
+#   ★ 不要再写回 `set #next_slot 0` —— 守门拦这一条(check.py 的 regress 槽位锁)。
+#   ★ 这里**不**重算: 重算已收进上一行的 internal/slot/rebuild 内部, 顺序是"先重算上限、
+#     再按 index 重建回收池"。
 scoreboard players set #slot_full manacore.meta 0
 
 # --- 让所有在线玩家在下一秒自动重新注册 ---

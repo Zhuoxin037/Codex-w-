@@ -27,8 +27,13 @@
   2. **数值 = "lore 涉及该数值就打"**（含属性加成，"魔力值上限 +100" → `max_mana`）。
   3. `debuff`（削弱）= **凡给敌方挂负面状态就算**（缓慢/虚弱/发光/反胃/燃烧/冰冻/时停/护甲减半/击退…）；
      原先与它重合的 `weaken`（减益）**已删**，统一用 `debuff`。
-  4. `field`（领域）**只认 lore 明写"领域"的**（威霆 / 神裁 2 件）。
+  4. `field`（领域）**只认 lore 明写"领域"的**（凡出现就照打；先例 威霆 / 神裁 / 云迹）。
+     ★ 领域 = **范围增益 / 减益**，这是包内**固定叫法**，实现上**要占 1 个术阵位**。
   5. `formation`（术阵）**凡 lore 出现"术阵"就照打**（用户的设计意图：限流高强度持续技）。
+     ★★ **术阵 = 纯数据占位符：无实体、不划范围、不打人**（2026-10-07 用户口径，10-14 重申）。
+        底层 = 玩家名下登记条目（`manacore:players.<uuid>.formations`，8 槽 / 默认上限 3）+ marker 站位。
+        ⇒ 写机制时 **"生成一个术阵，里面的生物每秒…"这种写法是错的**：范围效果一律写「领域」，
+          划范围靠技能自己挂标签扫周围（先例 `wind_ontheground` 的 `zx.wg_cN` + `hit_pass`）。
   6. `summon`（召唤物）**只算独立实体**，lore 里用弯引号 `“”` 标出（入梦体/共鸣水晶/色彩/朽木/暗潮/暗海/旋风…）。
   7. `heal`（治疗）**暂空**——本包目前没有治疗类装备（回魔不算），词表保留备用。
   8. 装备**私有资源**（熔浆/燃灰/酒浆/冰凌/风声…）**不进标签**（它们是"资源"不是"分类"）。
@@ -37,15 +42,18 @@
  11. **套装效果两件都打**（lore 写在每件上就都打）。
 """
 
-# ---------------------------------------------------------------- 词汇表（27 词）
+# ---------------------------------------------------------------- 词汇表（28 词）
 #   cat: 分组（词表用） · label: 中文名 · desc: 语义说明
 VOCAB = [
-    # ---- 状态（5）「涉及就打」----
+    # ---- 状态（6）「涉及就打」----
     ("liuhuo", "状态", "流火", "lore 涉及「流火」状态"),
     ("yehuo", "状态", "夜火", "lore 涉及「夜火」状态"),
     ("shixin", "状态", "噬心", "lore 涉及「噬心」状态"),
     ("yuanhai", "状态", "渊海", "lore 涉及「渊海」状态"),
     ("dream", "状态", "白昼梦", "lore 涉及「白昼梦」状态"),
+    # ★ 2026-10-13 用户加: 闪电不是五大状态之一, 但同为"涉及就打"的效果词, 归状态组。
+    #   口径照第 1 条: lore 出现「闪电 / 落雷 / 雷击 / 电」就打(电弧的「电刺 / 电线」同族)。
+    ("lightning", "状态", "闪电", "lore 涉及「闪电 / 落雷 / 雷击 / 电」（负离子 / 超•负•荷 / 威霆 / 电弧 / 雷鸣）"),
 
     # ---- 数值口径（6）「lore 提到该数值就打」----
     ("max_hp", "数值", "最大生命值", "涉及「最大生命值 / 生命值上限」（含属性加成）"),
@@ -66,8 +74,8 @@ VOCAB = [
     ("summon", "机制", "召唤物", "召唤独立实体（lore 用“”标出）"),
     ("dash", "机制", "位移", "突进 / 瞬移 / 闪回 / 跃升 / 俯冲 / 击退"),
     ("attract", "机制", "吸引", "把生物拉向中心"),
-    ("field", "机制", "领域", "★ 仅 lore 明确写「领域」（威霆 / 神裁）"),
-    ("formation", "机制", "术阵", "★ 凡 lore 出现「术阵」"),
+    ("field", "机制", "领域", "★ 凡 lore 明写「领域」（= 范围增益/减益，包内固定叫法；占 1 个术阵位）"),
+    ("formation", "机制", "术阵", "★ 凡 lore 出现「术阵」（纯数据占位符：无实体、不划范围）"),
     ("timestop", "机制", "时停", "时停 / 定身"),
     ("freeze", "机制", "冰冻", "冰冻"),
     ("slow", "机制", "减速", "lore 里的「缓慢」"),
@@ -98,7 +106,7 @@ TAGS = {
     "shadow_blade":      ["base_atk", "dash", "cd_down"],
     "sickle_dreams":     ["shixin", "max_mana", "apply", "timestop", "consume"],
     "tinder":            ["cur_mana", "max_hp", "debuff"],
-    "verdict":           ["max_mana", "base_atk", "debuff", "field"],
+    "verdict":           ["max_mana", "base_atk", "debuff", "field", "slow"],
     # ---- 新批次(2026-10-11) ----
     "tidemark":          ["yuanhai", "max_mana", "apply"],
     "grayscale":         ["liuhuo", "cur_mana", "debuff", "apply"],
@@ -107,10 +115,10 @@ TAGS = {
     # ================= 斧 axe（15）=================
     "agony":             ["max_hp", "base_atk", "formation"],
     "angel_core":        ["max_mana", "base_atk", "apply", "consume"],
-    "anion":             ["cur_mana"],
+    "anion":             ["lightning", "cur_mana"],
     "azure_star":        ["max_mana", "cur_mana", "indep_mul"],
     "ballad":            ["base_atk", "true_dmg", "timestop"],
-    "charge":            ["cur_mana", "formation", "buff", "cd_down"],
+    "charge":            ["lightning", "cur_mana", "formation", "buff", "cd_down"],
     "chenyuan":          ["yuanhai", "max_mana", "cur_mana", "cd_down", "slow", "debuff", "apply"],
     "draught":           ["max_hp", "base_atk", "buff"],
     "dream_reader":      ["dream", "cur_mana", "true_dmg", "summon", "timestop", "apply"],
@@ -119,7 +127,7 @@ TAGS = {
     "pyre":              ["cur_mana", "debuff"],
     "red_lotus":         ["liuhuo", "yehuo", "base_atk", "consume"],
     "skyvault":          ["max_mana", "base_atk", "dash", "cd_down", "debuff"],
-    "thunderclap":       ["max_mana", "cur_mana", "max_hp", "formation", "field", "debuff"],
+    "thunderclap":       ["lightning", "max_mana", "cur_mana", "max_hp", "formation", "field", "debuff"],
     # ---- 新批次(2026-10-11《新的装备-超限等.md》) ----
     "sacred_relic":      ["liuhuo", "yehuo", "shixin", "yuanhai", "dream", "max_mana", "max_hp",
                           "true_dmg", "timestop", "formation", "summon"],
@@ -127,7 +135,7 @@ TAGS = {
     "scorch_bone":       ["liuhuo", "yehuo", "base_atk", "max_mana", "apply", "consume"],
 
     # ================= 弩 bow（6）=================
-    "arc":               ["cur_mana", "base_atk"],
+    "arc":               ["lightning", "cur_mana", "base_atk"],
     "bone_erode":        ["cur_mana"],
     "cold_crow":         ["max_mana", "freeze", "debuff"],
     "lucid_dream":       ["dream", "max_mana", "cur_mana", "true_dmg", "timestop", "consume", "formation"],
@@ -137,6 +145,8 @@ TAGS = {
     "dragon_tongue":     ["liuhuo", "yehuo", "cur_mana", "consume"],
     "cloudtrail":        ["base_atk", "field"],
     "burst_dawn":        ["max_mana", "base_atk", "formation", "summon", "slow", "debuff"],
+    # ---- 批 13 · 过渡/终端补缺(2026-10-13) ----
+    "backstring":        ["dash", "buff", "flat"],
 
     # ================= 法杖 staff（12）=================
     "apocalypse":        ["max_mana", "cur_mana", "formation", "debuff"],
@@ -149,11 +159,13 @@ TAGS = {
     "palette":           ["max_mana", "summon", "cd_down"],
     "polarized_light":   ["cur_mana", "formation", "slow", "debuff"],
     "sail":              ["yuanhai", "liuhuo", "dream", "shixin", "attract", "apply", "summon"],
-    "twilight":          ["shixin", "max_mana", "apply", "debuff"],
+    "twilight":          ["shixin", "max_mana", "apply", "debuff", "formation"],
     "wind_ontheground":  ["max_mana", "cur_mana", "formation", "buff"],
     # ---- 新批次(2026-10-11) ----
     "triad":             ["max_mana", "base_atk", "formation", "freeze", "debuff"],
     "five_curses":       ["cur_mana", "true_dmg", "slow", "debuff"],
+    # ---- 批 13 · 过渡/终端补缺(2026-10-13) ----
+    "thunderrod":        ["lightning", "debuff"],
 
     # ================= 盔甲 armor（25）=================
     "blaze_armor":       ["liuhuo", "max_mana", "buff", "debuff", "apply"],
@@ -170,12 +182,12 @@ TAGS = {
     "immolate":          ["liuhuo", "yehuo", "max_mana", "debuff"],
     "intravenous_pump":  ["max_mana", "max_hp", "buff"],
     "iridescent":        ["dream", "max_mana", "base_atk", "true_dmg", "slow", "debuff", "dash", "timestop", "apply"],
-    "lethe_shore":       ["shixin", "max_mana", "buff", "apply", "indep_mul"],
+    "lethe_shore":       ["shixin", "max_mana", "buff", "apply", "indep_mul", "summon"],
     "lightless_sea":     ["yuanhai", "max_mana", "base_atk", "summon", "slow", "debuff", "apply"],
     "mana_helm":         ["max_mana"],
     "mana_plate":        ["max_mana"],
     "mirage":            ["dream", "max_mana", "base_atk", "true_dmg", "apply", "timestop"],
-    "resonance":         ["max_mana", "indep_mul"],
+    "resonance":         ["max_mana", "indep_mul", "formation"],
     "spine_symbiote":    ["max_mana", "max_hp", "buff"],
     "spirit_sight":      ["liuhuo", "yehuo", "yuanhai", "dream", "shixin", "max_mana", "debuff"],
     "stellar_elegy":     ["liuhuo", "yehuo", "yuanhai", "dream", "shixin", "max_mana", "cur_mana", "buff"],
@@ -189,8 +201,11 @@ TAGS = {
     "mana_pump":         ["max_mana"],
     "nullify":           ["max_mana", "formation", "indep_mul"],
     "seraph_wing":       ["base_atk", "indep_mul"],
-    "thunder":           ["max_mana"],
+    "thunder":           ["lightning", "max_mana"],
     "wrath":             ["max_mana", "buff", "indep_mul"],
+    # ---- 批 13 · 过渡/终端补缺(2026-10-13) ----
+    "frostmirror":       ["freeze", "cd_down", "debuff"],
+    "everlit":           ["summon", "true_dmg", "cur_mana"],
 }
 
 

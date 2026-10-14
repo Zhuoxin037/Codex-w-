@@ -1,0 +1,47 @@
+{
+  "cubes": 254,
+  "groups": 37,
+  "textures": 6,
+  "animations": 4,
+  "keyframes": 270,
+  "source": "actual live MCP matrices and shader-frame indices at 20 fps",
+  "whole_scale_fixed": true,
+  "root_scale": [
+    1,
+    1,
+    1
+  ],
+  "idle_loop_matrix_error": 0.0,
+  "idle_texture_loop_closed": true,
+  "spawn_material_frames": [
+    8,
+    24
+  ],
+  "vanish_material_frames": [
+    25,
+    41
+  ],
+  "spawn_alpha_monotone": true,
+  "vanish_alpha_monotone": true,
+  "tag_combinations_verified": 32,
+  "independent_tag_layers": 5,
+  "mcp_model_issues": 0,
+  "tag_pulse_geometry_fixed": true,
+  "tag_pulse_alpha_shape_fixed": true,
+  "deployed": true,
+  "approval": "approved_in_chat",
+  "native": "D:\\数据包\\模型设计\\圣骸_遗骸个体_建模_20261013\\阶段二_魂火与共鸣\\圣骸遗骸_分组可编辑动画.bbmodel",
+  "complete_json": "D:\\数据包\\模型设计\\圣骸_遗骸个体_建模_20261013\\阶段二_魂火与共鸣\\审阅资源\\assets\\sacredrelic\\models\\entity\\remnant.json",
+  "editor_texture_sync": "关闭设置中的动画中播放翻页纹理，让工程的 preview.texture_frame 控制精确材质帧；当前MCP会话已设置，切到其他工程恢复。",
+  "game_render_tested": false,
+  "fps_tested": false,
+  "game_same_frame_max_cubes": 252,
+  "game_same_frame_max_parts": 7,
+  "deployment_files_verified": 545,
+  "game_display_master": "D:\\数据包\\sweetdream_rp_完整版\\assets\\sacredrelic\\models\\entity\\remnant.json",
+  "game_item_model": "sweetdream:sacred_remnant",
+  "logical_lifetime_ticks": 240,
+  "visual_tail_ticks": 17,
+  "atlas_registered": true,
+  "atlas_materials_verified": 88
+}

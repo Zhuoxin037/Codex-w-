@@ -13,3 +13,6 @@ data modify storage manacore:work record set from storage manacore:config defaul
 $data modify storage manacore:work record.uuid set value "$(uuid)"
 $data modify storage manacore:players "$(uuid)" set from storage manacore:work record
 $data modify storage manacore:players_all list append value "$(uuid)"
+# 【★ N04 修(2026-10-11)★】打"已登记终身清单"标志, 供 existing 判"这条记录登记过没"
+#   (老记录没这字段 ⇒ 上线时补登记一次; 见 internal/join/existing)。
+$data modify storage manacore:players "$(uuid)".reg set value 1b

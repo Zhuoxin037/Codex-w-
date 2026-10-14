@@ -1,0 +1,51 @@
+{
+  "cubes": 994,
+  "groups": 15,
+  "animations": 2,
+  "native_keyframes": 174,
+  "geometry_and_uv_preserved": true,
+  "source_and_game_assets_untouched": true,
+  "clips": [
+    {
+      "name": "01_普通_带焰横斩",
+      "sampled_frames": 19,
+      "tip_min": [
+        -15.268436911175598,
+        12.62278050630224,
+        -26.791647132051356
+      ],
+      "tip_max": [
+        30.101226045804317,
+        29.1082540953204,
+        7.026096684937359
+      ],
+      "restore_error": 0.0,
+      "rigid_error": 1.161908791402766e-09,
+      "grip_max_shift": 1.45307074188837
+    },
+    {
+      "name": "02_强化_双斩与回旋焰刃",
+      "sampled_frames": 32,
+      "tip_min": [
+        -19.614446231526074,
+        11.410945146677198,
+        -29.65190156650816
+      ],
+      "tip_max": [
+        31.74574897607399,
+        28.836471633141198,
+        7.179244905928641
+      ],
+      "restore_error": 0.0,
+      "rigid_error": 1.4499885736540818e-09,
+      "grip_max_shift": 1.7870226630936998
+    }
+  ],
+  "particle_plan_only": true,
+  "vfx_cubes": 174,
+  "weapon_full_spin": false,
+  "vfx_is_independent": true,
+  "vfx_rotation_degrees": -360.0,
+  "vfx_burned_out_transparent": true,
+  "mcp_analyzer_note": "人体分析器没有识别武器骨骼的手脚端点，返回空motion；已用实际剑尖与握点矩阵独立验收。"
+}

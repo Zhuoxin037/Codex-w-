@@ -4,6 +4,9 @@
 
 盯四条漂移:
   1. 每把法杖的 attack 里 style 必须 = 它自己的 zx[0]
+     (★ 多形态法杖另有"附加 style", 由 attack 运行时改写球的 style 选形态 ——
+       它们必须写成 `<id>_<后缀>`(先例 triad_fire / triad_gun), 见 attack 里的
+       `ball.style set value "..."` 行)
   2. fx_<style> 与 fx_<style>_hit 两份文件必须都在
   3. ball/tick ④ 与 ball/hit ⑤ 的派发块必须覆盖全部 style(漏一把 = 那把没拖尾)
   4. ball 目录下不能有"没人派的"孤儿 fx 文件(改名/删法杖时容易落下)
@@ -55,6 +58,14 @@ for s in staffs:
     if ms.group(1) != s:
         err('[%s] style 写成 "%s" —— 必须是自己的 id' % (s, ms.group(1)))
     used.add(ms.group(1))
+    # ★ 多形态法杖: attack 会按形态**运行时**改写球的 style(先例 triad 的 triad_fire /
+    #   triad_gun)。这些附加 style 必须**以本把法杖的 id 开头**, 否则就是归属写错了。
+    for me in re.finditer(r'ball\.style set value "([a-z_0-9]*)"', txt):
+        extra = me.group(1)
+        if not extra.startswith(s + '_'):
+            err('[%s] ball.style set value "%s" —— 附加 style 必须以 "%s_" 开头'
+                % (s, extra, s))
+        used.add(extra)
 
 # ---- ③ fx 文件成对
 for s in used:

@@ -86,7 +86,7 @@ execute if score @s zx.an_ol matches 1 at @s run tag @e[type=!#sweetdream:no_dam
 #   ★ 必须带 zx.th_seen ★ 否则会被 tool/thunder/strike 的每刻扫描当"新雷"接管,
 #     给 6 格内每个持雷鸣的玩家追加一道连锁雷(2026-10-08 修)。
 #   ★ 紧接着那一行 = "自身召唤闪电"的公共收尾钩子(超限 8 秒雷劲挂在这儿)。
-execute at @e[tag=zx.an_hit,distance=0..] run summon minecraft:lightning_bolt ~ ~ ~ {Tags:["zx.th_seen"]}
+execute at @e[tag=zx.an_hit,distance=0..] run summon minecraft:lightning_bolt ~ ~ ~ {Tags:["zx.th_own"]}
 execute at @e[tag=zx.an_hit,distance=0..] run function sweetdream:lib/on_lightning
 
 # ⑧ 伤害: 基础版 当前魔力 ×0.1; 超限版 当前魔力 ×0.12(执行者仍是玩家 -> 归属正确)

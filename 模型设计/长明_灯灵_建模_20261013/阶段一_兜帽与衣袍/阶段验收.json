@@ -1,0 +1,48 @@
+{
+  "cubes": 248,
+  "groups": 24,
+  "textures": 2,
+  "native_format": "free",
+  "source": "actual MCP-saved geometry, groups and UVs",
+  "element_rotations_all_zero": true,
+  "grouped_elements": 248,
+  "all_faces_textured": true,
+  "deployed": false,
+  "approval": "approved_in_chat",
+  "completed": [
+    "兜帽空壳与包边",
+    "面部光眼",
+    "领口和短袍",
+    "前后侧独立下摆"
+  ],
+  "remaining": [
+    "双臂和手",
+    "灯盏与灵火",
+    "待机/攻击/熄灭动画",
+    "游戏接入"
+  ],
+  "counts_by_region": {
+    "兜帽空壳": 60,
+    "帽檐旧金包边": 36,
+    "兜帽褶层": 41,
+    "面部深腔": 3,
+    "光眼": 6,
+    "帽顶古铜结": 6,
+    "短袍主身": 12,
+    "领口与胸扣": 14,
+    "肩部承托": 6,
+    "腰部铜束": 5,
+    "前下摆": 16,
+    "左下摆": 10,
+    "右下摆": 10,
+    "后下摆": 16,
+    "背部灯纹": 7
+  },
+  "native": "D:\\数据包\\模型设计\\长明_灯灵_建模_20261013\\阶段一_兜帽与衣袍\\灯灵_阶段一_主体分组模型.bbmodel",
+  "display_master": "D:\\数据包\\模型设计\\长明_灯灵_建模_20261013\\阶段一_兜帽与衣袍\\灯灵_整体显示调整.json",
+  "mcp_model_issues": 0,
+  "hood_silhouette_iou": 0.844,
+  "reference_scope": "front hood only, black opaque face included, body excluded",
+  "review_id": "ask-3",
+  "review_status": "approved_in_chat"
+}

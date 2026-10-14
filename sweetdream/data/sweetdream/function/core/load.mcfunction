@@ -591,6 +591,27 @@ execute unless data storage zx:config obj_ct_seek run scoreboard objectives add 
 execute unless data storage zx:config obj_ct_seek run data modify storage zx:config obj_ct_seek set value 1b
 execute unless data storage zx:config obj_bd_paid run scoreboard objectives add zx.bd_paid dummy
 execute unless data storage zx:config obj_bd_paid run data modify storage zx:config obj_bd_paid set value 1b
+
+# ---- 批 13(2026-10-13)· 过渡/终端补缺四件 ----
+#   退弦(弩): bs_paid = "这一发付过账"(写在射手身上, 坑 141)
+#             bs_n    = 已射击次数(0..2, 满 3 归零)
+#             bs_ready= "下一次命中要打 12 点保底"(命中结算读完即清)
+execute unless data storage zx:config obj_bs_paid run scoreboard objectives add zx.bs_paid dummy
+execute unless data storage zx:config obj_bs_paid run data modify storage zx:config obj_bs_paid set value 1b
+execute unless data storage zx:config obj_bs_n run scoreboard objectives add zx.bs_n dummy
+execute unless data storage zx:config obj_bs_n run data modify storage zx:config obj_bs_n set value 1b
+execute unless data storage zx:config obj_bs_ready run scoreboard objectives add zx.bs_ready dummy
+execute unless data storage zx:config obj_bs_ready run data modify storage zx:config obj_bs_ready set value 1b
+#   冰鉴(副手): fm_cd = 内置冷却的**到期时刻**(now + 80; 存到期刻而不是倒计时,
+#     与法杖普攻门控同招 —— 不需要每刻有人去扣它)
+execute unless data storage zx:config obj_fm_cd run scoreboard objectives add zx.fm_cd dummy
+execute unless data storage zx:config obj_fm_cd run data modify storage zx:config obj_fm_cd set value 1b
+#   长明(副手): el_cd = 灯灵的攻击倒计时(2 秒; 由**驱动方**每秒 -1, 坑 120)
+execute unless data storage zx:config obj_el_cd run scoreboard objectives add zx.el_cd dummy
+execute unless data storage zx:config obj_el_cd run data modify storage zx:config obj_el_cd set value 1b
+#   引雷针(法杖): tr_due = 预约落雷的**到期刻**(now + 20; 由 core/tick 每刻判)
+execute unless data storage zx:config obj_tr_due run scoreboard objectives add zx.tr_due dummy
+execute unless data storage zx:config obj_tr_due run data modify storage zx:config obj_tr_due set value 1b
 execute unless data storage zx:config obj_bd_mode run scoreboard objectives add zx.bd_mode dummy
 execute unless data storage zx:config obj_bd_mode run data modify storage zx:config obj_bd_mode set value 1b
 
@@ -1459,3 +1480,9 @@ execute unless data storage zx:config obj_tri_nores run data modify storage zx:c
 #     跨 /reload 连续, 也不需要每刻有人去扣它。见 equipment/staff/gate。
 execute unless data storage zx:config obj_staff_gcd run scoreboard objectives add zx.staff_gcd dummy
 execute unless data storage zx:config obj_staff_gcd run data modify storage zx:config obj_staff_gcd set value 1b
+
+# 长明灯灵：显示与状态计分项（2026-10-14）
+function sweetdream:equipment/tool/everlit/visual/load
+
+function sweetdream:equipment/sword/flame_brokenbody/visual/load
+function sweetdream:equipment/axe/anchor/visual/load

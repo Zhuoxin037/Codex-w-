@@ -81,6 +81,8 @@ ITEMS = [
     # ============================================================ 斧 ============
     dict(cat='axe', id='sacred_relic', item_model='sweetdream:sacred_relic', name='圣骸',
          base='netherite_axe', color='white',
+         headnote=['# ★ 圣骸外观已接入 sweetdream:sacred_relic；旧物品持有时自动补绑。',
+                   '#   实际模型及统一 display 在 assets/sacredrelic/models/item/axe.json。'],
          note='【被动 + 主动】被动: 玩家击杀的生物在死亡位置留 12 秒“遗骸”, 记住死者的最大生命与身上的标签。\n'
               '#   主动: 400 / 40 秒 -> 术阵; 每秒让 12 格内全部“遗骸”打它 3 格内随机一只 最大魔力 ×0.1;\n'
               '#   “遗骸”带「流火」伤害 +30% 且锁定范围 +1 格 / 「夜火」+80% / 「噬心」追加死者最大生命 5% 真伤 /\n'
@@ -204,7 +206,7 @@ ITEMS = [
 
     # ============================================================ 法杖 ==========
     dict(cat='staff', id='triad', item_model='sweetdream:triad', name='很冰的斧',
-         base='recovery_compass', color='gold',
+         base='recovery_compass', color='aqua',
          note='【法杖三形态】★ 名字先按初始形态「很冰的斧」；切形态改名属"效果", 本批不做。\n'
               '#   普攻 50: 冰斧 = 最大魔力 ×0.02 / 热刀 = 基础攻击力 ×3 / 重枪 = 基础攻击力 ×6。\n'
               '#   形态被动: 冰斧 20% 冰冻 1 秒 / 热刀 40% 下次攻击额外 2 次 / 重枪 下次攻击为空。\n'
@@ -333,8 +335,13 @@ def header(it):
         A('#   全靠附魔的 post_attack 回调(没有右键/消耗), 所以这行不能删。外观仍待做。')
     else:
         A('# ★ 本批只做 give（2026-10-11 用户定）: 技能 / 进度 / 外观 等后续批次再接。')
-    A('# ★ 本批**不挂 item_model**（外观未做; 挂了会引用不存在的模型 -> 游戏里显示紫黑方块）。')
-    A('#   外观批次再补 item_model="%s" + items/*.json + models/ + 贴图。' % it['item_model'])
+    if it.get('headnote'):
+        # 本件外观已接入 / 有额外说明 -> 用它替掉默认那两句(2026-10-13: 由磁盘回收进生成器)
+        for ln in it['headnote']:
+            A(ln)
+    else:
+        A('# ★ 本批**不挂 item_model**（外观未做; 挂了会引用不存在的模型 -> 游戏里显示紫黑方块）。')
+        A('#   外观批次再补 item_model="%s" + items/*.json + models/ + 贴图。' % it['item_model'])
     A('# ============================================================')
     A('')
     return '\n'.join(L)

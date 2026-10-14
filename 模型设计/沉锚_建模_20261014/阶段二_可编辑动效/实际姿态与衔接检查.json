@@ -1,0 +1,46 @@
+{
+  "source": "real live MCP Animator.preview matrices at 20FPS",
+  "geometry_unchanged": true,
+  "textures_unchanged": true,
+  "cubes": 901,
+  "groups": 28,
+  "textures": 3,
+  "animations": 4,
+  "keyframes": 428,
+  "clips": [
+    {
+      "name": "01_待机_双端固定链条轻摆",
+      "length": 4,
+      "samples": 81
+    },
+    {
+      "name": "02_掷锚_起势出手",
+      "length": 0.55,
+      "samples": 12
+    },
+    {
+      "name": "03_落击_震颤与回收",
+      "length": 1.05,
+      "samples": 22
+    },
+    {
+      "name": "04_被动_重锚短击",
+      "length": 0.8,
+      "samples": 17
+    }
+  ],
+  "sampled_frames": 132,
+  "root_scale_and_rigidity_error": 2.220446049250313e-16,
+  "chain_end_attachment_matrix_error": 7.105427357601002e-15,
+  "idle_loop_error": 0.0,
+  "throw_to_impact_error": 0.0,
+  "impact_return_error": 0.0,
+  "passive_return_error": 0.0,
+  "forward_tip_motion_units": 32.41802742624503,
+  "windup_backward_tip_motion_units": 11.824895149097369,
+  "impact_tip_downward_units": 7.4785715730773905,
+  "idle_chain6_motion_units": 0.2670574750547472,
+  "game_deployed": false,
+  "game_visual_or_fps_test": false,
+  "native_sha256": "4f7950acda89460c3b852b5a185e2116fe3b4784dec730f8946ad1f942f1374d"
+}

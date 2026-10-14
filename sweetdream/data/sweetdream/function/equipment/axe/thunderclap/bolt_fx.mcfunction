@@ -17,7 +17,15 @@ execute if score @s zx.tc_bs matches ..0 run kill @s
 execute if score @s zx.tc_bs matches ..0 run return 0
 
 # ① 下一道的角度 -> 宏参数
+#   ★ 为什么要 set value 整份重来 ★ work 节点是复用的, 只写 ang 会把上一道雷的
+#     u0..u3 留下来 ⇒ 换了个施法者却按上一个人的 UUID 反查(共享节点串味,
+#     RULES 坑 36)。所以先整体复位再逐个填; 缺键的 marker 就留 0(选不到人, 安全)。
+data modify storage zx:work bs set value {ang:0,u0:0,u1:0,u2:0,u3:0}
 execute store result storage zx:work bs.ang int 1 run scoreboard players get @s zx.tc_ang
+execute if data entity @s data.zx.u0 run data modify storage zx:work bs.u0 set from entity @s data.zx.u0
+execute if data entity @s data.zx.u1 run data modify storage zx:work bs.u1 set from entity @s data.zx.u1
+execute if data entity @s data.zx.u2 run data modify storage zx:work bs.u2 set from entity @s data.zx.u2
+execute if data entity @s data.zx.u3 run data modify storage zx:work bs.u3 set from entity @s data.zx.u3
 
 # ② 劈一道(位置 = 本 marker, 角度按宏参数转 -> 半径 1 格处)
 function sweetdream:equipment/axe/thunderclap/bolt_one with storage zx:work bs

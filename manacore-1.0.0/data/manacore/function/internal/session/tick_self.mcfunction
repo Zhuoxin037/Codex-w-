@@ -38,8 +38,18 @@ execute store result storage manacore:work id.i int 1 run scoreboard players get
 function manacore:internal/session/verify with storage manacore:work id
 
 # ③ 需要注册(首次上线 / 加载代际变化 / 槽位已被回收或占用) -> 走完整注册
-execute unless score @s manacore.gen >= #gen manacore.meta run function manacore:core/player/join
-execute unless data storage manacore:work id{ok:1b} run function manacore:core/player/join
+# 【★★ N11 修(2026-10-11): 两个判据必须在**任何 join 之前**合成一个 ★★】
+#   原写法是两条 `unless … run function core/player/join` **顺排**。首次注册时
+#   两条同时成立 —— 第一条 join 跑完会把 `@s manacore.gen` 顶到 `#gen`
+#   (见 join/register 末尾), 可上面 ② 留下的 `manacore:work id.ok=0b` 还是**旧值**
+#   (join 之后没人回写它) ⇒ 第二条紧接着**又 join 一次**
+#   ⇒ 同一秒发**两次** `#manacore:event/player_join`。
+#   自身加入清理 hook 可能幂等, 但框架接入领取奖励 / 任务初始化 / 外部加入回调时
+#   就是**双倍效果**。⇒ 先算一个 #need, 一轮最多 join 一次。
+scoreboard players set #need manacore.meta 0
+execute unless score @s manacore.gen >= #gen manacore.meta run scoreboard players set #need manacore.meta 1
+execute if score #need manacore.meta matches 0 unless data storage manacore:work id{ok:1b} run scoreboard players set #need manacore.meta 1
+execute if score #need manacore.meta matches 1 run function manacore:core/player/join
 
 # ④ 已有效注册 -> 只把心跳写进索引(离线检测靠它; 槽位不是自己时不写, 免得篡改别人的记录)
 execute if data storage manacore:work id{ok:1b} run function manacore:internal/session/beat with storage manacore:work id

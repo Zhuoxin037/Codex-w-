@@ -20,7 +20,7 @@ tag @e[tag=zx.an_hit2] remove zx.an_hit2
 execute at @s run tag @e[type=!#sweetdream:no_damage,distance=0.1..6] add zx.an_hit2
 
 # ③ 逐个放闪电(位置 = 目标身上, @s 仍是玩家 -> 归属与雷劲钩子都对)
-execute at @e[tag=zx.an_hit2] run summon minecraft:lightning_bolt ~ ~ ~ {Tags:["zx.th_seen"]}
+execute at @e[tag=zx.an_hit2] run summon minecraft:lightning_bolt ~ ~ ~ {Tags:["zx.th_own"]}
 execute at @e[tag=zx.an_hit2] run function sweetdream:lib/on_lightning
 
 # ④ 伤害 = 自身最大魔力值 ×0.08

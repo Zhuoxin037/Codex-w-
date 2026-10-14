@@ -19,6 +19,7 @@
 
 # ⓪ 撤销自己的进度
 advancement revoke @s only sweetdream:equipment/axe/anchor
+execute if score @s zx.an_pull matches 1.. run return 0
 
 # ① 拿 uuid
 function sweetdream:lib/uuid
@@ -64,3 +65,6 @@ scoreboard players set @s zx.an_pull 22
 execute at @s run playsound minecraft:block.beacon.activate player @a ~ ~ ~ 0.6 1.4
 
 # ⑧ 结算 + ⑨ 收尾: 都挪到"牵引停下那一刻"(anchor/pull_end) —— 停下才炸, 时序才对着。
+
+# 成功施法后记录本人目标并生成真正离手飞锚。
+function sweetdream:equipment/axe/anchor/visual/start

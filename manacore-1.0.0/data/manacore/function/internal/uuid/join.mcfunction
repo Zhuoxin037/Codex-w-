@@ -21,3 +21,5 @@ $execute if data storage manacore:players "$(h0)" unless data storage manacore:p
 #   ★ 条件必须逐字照抄上面那句的 if/unless(同 migrate 的 92 条重复事故),
 #   否则每次调用都会无条件长一条。
 $execute if data storage manacore:players "$(h0)" unless data storage manacore:players "$(h0)-$(h1)-$(h2)-$(h3)-$(h4)" run data modify storage manacore:players_all list append value "$(h0)-$(h1)-$(h2)-$(h3)-$(h4)"
+# 【★ N04 修(2026-10-11)★】同 migrate: 新建了键就补打"已登记"标志(见 existing 的说明)。
+$execute if data storage manacore:players "$(h0)" unless data storage manacore:players "$(h0)-$(h1)-$(h2)-$(h3)-$(h4)" run data modify storage manacore:players "$(h0)-$(h1)-$(h2)-$(h3)-$(h4)".reg set value 1b

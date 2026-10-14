@@ -223,6 +223,14 @@ data modify storage zx:config wchan.scorch_bone set value {mm:1b,atk:1b,oth:0b}
 data modify storage zx:config wchan.dragon_tongue set value {mm:0b,atk:0b,oth:1b}
 # 云迹: 「领域」内同步伤害 = 基础攻击力 ×2 -> atk
 data modify storage zx:config wchan.cloudtrail set value {mm:0b,atk:1b,oth:0b}
+# ---- 批 13 · 过渡/终端补缺(2026-10-13) ----
+# 退弦(弩): 保底 12 点是**固定值**, 不走 calc 的三通道 => 表里不需要它。
+# 引雷针(法杖): 2026-10-13 起**只降雷、无自身伤害**(原"当前魔力 ×0.03 / ×0.05"
+#   砍掉: 落点 2 格选不到人 + 普攻 0.5 秒一发会超模, 用户拍板)
+#   => 不走 calc 的三通道, 同退弦, **表里不需要它**(apply 里 unless data 直接返回 0)。
+# 长明(副手): 灯灵每 2 秒那一下 = 当前魔力 ×0.02 -> oth
+data modify storage zx:config wchan.everlit set value {mm:0b,atk:0b,oth:1b}
+
 # 爆裂黎明: 主力 = 基础攻击力 ×8 + 最大魔力 ×0.15(atk + mm); 续轰 = 基础攻击力 ×4
 #   + 最大魔力 ×0.08(同两条) => 两条都走。★「魂灵之影」每 3 秒那一下 = 目标当前生命
 #   ×0.5, 是生命口径(calc 的 custom_damage), **不走**三通道。

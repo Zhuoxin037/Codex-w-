@@ -12,6 +12,8 @@
 #   先写成"新"标签、写完立刻摘 —— 同刻最多一个 zx.th_new, 不会认错。
 # ============================================================
 
+# 锚注释: 锚: 真的登记了连锁(6 格内有持雷鸣的玩家)
+scoreboard players add #th_dbg1 zx.meta 1
 summon minecraft:marker ~ ~ ~ {Tags:["zx.th_pend","zx.th_new"]}
 scoreboard players operation @n[limit=1,tag=zx.th_new] zx.th_due = #now manacore.meta
 scoreboard players add @n[limit=1,tag=zx.th_new] zx.th_due 20

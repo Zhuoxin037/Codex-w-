@@ -60,7 +60,18 @@ playsound minecraft:entity.lightning_bolt.impact player @a ~ ~ ~ 0.8 1.4
 particle minecraft:electric_spark ~ ~1.0 ~ 0.6 0.8 0.6 0.06 12 normal
 
 # ---- ⑥ 召唤闪电(带 zx.th_seen: 免被 tool/thunder/strike 当"新雷"接管连锁) ----
-summon minecraft:lightning_bolt ~ ~ ~ {Tags:["zx.th_seen"]}
+summon minecraft:lightning_bolt ~ ~ ~ {Tags:["zx.th_own"]}
+
+# ---- ⑥.5 ★ "自身召唤闪电"的公共收尾钩子 ★(超限·负离子 8 秒落点 / 超限·超•负•荷
+#      第二形态落点追加都挂在上面; 2026-10-13 补接 —— 见 RULES 坑 154)
+#   ★★ 本文件的 @s 是**放电的那一端生物**, 不是玩家 ★★ 而 lib/on_lightning 的契约是
+#      "@s = 召唤这道雷的玩家"(它要按 @s 读 zx.an_boost / zx.chg_mode) ⇒ 直接调会读到
+#      怪物身上的分数(恒 0, 静默不触发)。必须**先切回射手身份**:
+#        `at @s`  先把位置钉在落点(A 端), `as 射手` 只换执行者 —— 顺序反了位置会跑偏。
+#      射手身份靠 aw.u0..u3(起放电那刻以射手身份存进锚的归属 UUID, 见 ④)。
+#      射手若已死亡/不在, 这条自然不执行(无副作用)。
+#   ★ 排在 ④ 之后: 本件的伤害走 zx:work a + with_from(不读 manacore:out), 不会被覆盖。
+$execute at @s as @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run function sweetdream:lib/on_lightning
 
 # ---- ⑦ 清场(走廊标签; 下一跳开头还会再清一次, 这里只是不留脏) ----
 tag @e[tag=zx.arc_on,distance=0..] remove zx.arc_on

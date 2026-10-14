@@ -13,9 +13,11 @@
 #   (1.21.5 的真闪电没有"只出特效"的开关 —— visual_only 这个字段我在 jar 里查过, 不存在。)
 # ============================================================
 
-#   ★ 必须带 zx.th_seen ★ 否则会被 tool/thunder/strike 的每刻扫描当成"新出现的雷"接管,
-#     给 6 格内每个持雷鸣的玩家追加一道 1 秒后的连锁雷(2026-10-08 修, 与 thunderclap/bolt_one 一致)。
-summon minecraft:lightning_bolt ~ ~ ~ {Tags:["zx.th_seen"]}
+#   ★ 带 zx.th_own(= 玩家用武器劈出来的雷) ★ ⇒ **会**被 tool/thunder(雷鸣)的每刻
+#     扫描接管, 给 6 格内持雷鸣的玩家追加一道 1 秒后的连锁雷(2026-10-13 由 seen 改 own)。
+#   ★ 别写成 zx.th_seen ★ seen = "已经扫过了", core/tick 只扫 tag=!zx.th_seen,
+#     预带 seen 会让雷鸣**永远看不见**这道雷(引雷针当初就是这么哑掉的)。
+summon minecraft:lightning_bolt ~ ~ ~ {Tags:["zx.th_own"]}
 particle minecraft:electric_spark ~ ~1 ~ 0.5 0.7 0.5 0.05 16 normal
 
 # ★ "自身召唤闪电"的公共收尾钩子 ★

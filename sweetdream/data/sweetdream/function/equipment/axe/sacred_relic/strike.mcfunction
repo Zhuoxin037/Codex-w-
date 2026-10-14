@@ -70,3 +70,5 @@ execute if data entity @s data.zx.dm run function sweetdream:equipment/axe/sacre
 
 # 收尾: 清本轮随机目标标记
 tag @e[tag=zx.sr_t] remove zx.sr_t
+# 遗骸模型共鸣，只作用于本 marker 的显示载体。
+function sweetdream:equipment/axe/sacred_relic/visual/remnant/pulse
