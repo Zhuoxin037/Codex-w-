@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "death_bell": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "death_bell"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:equipment/axe/death_bell/cast"
+    }
+}

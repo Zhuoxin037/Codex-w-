@@ -8,5 +8,14 @@
 # 【有攻击者就带 by; 选不到人(离线)就退化成无归属, 照样打得出来】
 # ============================================================
 
+# ①.5 空枕(头盔, 2026-10-17 批 14 补技能): 「造成伤害的时刻」与「静息兑现」都挂这里
+#     ★ 为什么不等进度: 「造成伤害」要覆盖近战/弩/法球/技能真伤**全部来源**,
+#       而进度只覆盖原版事件那几种。deal 是所有本包伤害的必经之路, 一处全覆盖。
+#     ★ 受害者标签 zx.ep_vic 用完即摘(下一行), 不会留到下一次伤害。
+#     ★ 选不到攻击者(@a 里没有这个 UUID) = 无归属伤害, 三行都不成立, 自然跳过。
+$execute if entity @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run tag @s add zx.ep_vic
+$execute if entity @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] as @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run function sweetdream:equipment/armor/empty_pillow/on_deal
+$execute if entity @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run tag @s remove zx.ep_vic
+
 $execute if entity @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run damage @s $(num_str) $(type) by @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1]
 $execute unless entity @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run damage @s $(num_str) $(type)

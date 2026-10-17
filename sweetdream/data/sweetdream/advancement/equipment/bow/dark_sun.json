@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "dark_sun": {
+            "trigger": "shot_crossbow",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "dark_sun"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:equipment/bow/dark_sun/shot"
+    }
+}

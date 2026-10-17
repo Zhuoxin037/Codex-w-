@@ -222,7 +222,7 @@ R = {k: [] for k in ['fn', 'tag', 'macro', 'sel', 'adv', 'json', 'rp', 'sched', 
                      'selfmacro', 'dspace', 'storescale', 'opnum',
                      'floatz', 'base', 'oldname', 'rearm', 'const',
                      'equip', 'melee', 'lorestyle', 'glint',
-                     'chanhack', 'chandef', 'olchan', 'olvcache',
+                     'chanhack', 'chandef', 'chref', 'olchan', 'olvcache',
                      'smwind', 'regsent', 'numloss', 'shulker', 'posnbt', 'obnode',
                      'dstore', 'pname', 'nbtint', 'scorelive', 'nowith', 'crossgate',
                      'hbslot', 'strent', 'nbtempty', 'objmiss', 'asnoat',
@@ -236,7 +236,8 @@ R = {k: [] for k in ['fn', 'tag', 'macro', 'sel', 'adv', 'json', 'rp', 'sched', 
                      'datarm', 'datapath', 'mergelist', 'noexecute', 'intovf',
                      'norun', 'placeholder', 'selfield', 'airpred', 'itempath', 'criterion',
                      'resetset', 'tagmacro', 'dmgseg', 'creative', 'pldur', 'fdsnap', 'upfield',
-                     'crossshot', 'ddpair', 'embertop', 'manafirst', 'trailcmt']}
+                     'crossshot', 'ddpair', 'embertop', 'manafirst', 'trailcmt', 'consrc',
+                     'nbttype', 'layreg', 'datamatch', 'tickstate0', 'flatmodel']}
 
 # 技能倍率的三条通道(manacore/internal/damage/calc) —— 字段名 -> 口径表里的标记
 CH_FIELD = {'max_mana_mul': 'mm', 'attack_mul': 'atk', 'other_mul': 'oth',
@@ -1182,6 +1183,74 @@ if _MT in functions:
                     % (_i, _t, _s[:70])))
         _mtpend = False
 
+# ---- 32) consrc: armor/tool 目录下的"消耗标签"必须自报 src:"equip" ----
+#   2026-10-15 批 15-2 新增。lib/mark_consume 的 src **默认是 "skill"**(既有 11 个
+#   调用点全是技能发起的, 所以默认取它最省事); 而**装备被动**顺手消耗那一次如果漏标
+#   src, 就会被回潮扣/烛跬 当成"技能消耗" —— 现象是"穿这两件 + 一件被动消耗的装备,
+#   一次平A白蹭两份收益", 不报错、零日志。
+#   判据: 路径含 /equipment/armor/ 或 /equipment/tool/ 的文件里, 每个 mark_consume
+#   调用点**正上方最近的一条** `data modify storage zx:work a set value {…}` 必须含 src:。
+#   (技能在 bow/sword/axe/staff 下, 不受本规则约束 —— 它们本来就该按默认 skill 算。)
+_consrc = re.compile(r'function\s+sweetdream:lib/mark_consume')
+_aset = re.compile(r'data\s+modify\s+storage\s+zx:work\s+a\s+set\s+value\s*\{(.*)\}\s*$')
+for _ck, _cp in functions.items():
+    _crp = _cp.as_posix()
+    if '/equipment/armor/' not in _crp and '/equipment/tool/' not in _crp:
+        continue
+    try:
+        _cls = _cp.read_text(encoding='utf-8').split('\n')
+    except Exception:
+        continue
+    for _ci, _cl in enumerate(_cls, 1):
+        if _cl.strip().startswith('#') or not _consrc.search(_cl):
+            continue
+        _cval = None
+        for _cj in range(_ci - 2, max(-1, _ci - 9), -1):
+            _cm = _aset.search(_cls[_cj].strip())
+            if _cm:
+                _cval = _cm.group(1)
+                break
+        if _cval is None or 'src:' not in _cval:
+            R['consrc'].append((_crp, _ci,
+                'armor/tool 目录下的"消耗标签"没写 src:"equip" —— lib/mark_consume 默认按 '
+                '"skill" 记, 于是这一次**装备被动**消耗会被回潮扣/烛跬 当成"技能消耗"'
+                '(穿它们时一次平A白蹭两份收益, 静默)。在调用点前面的 '
+                '`data modify storage zx:work a set value {…}` 里补 src:"equip"。'))
+
+# ---- 33) nbttype: 写实体 NBT 时字段类型必须匹配 ----
+#   ★ 2026-10-16 更正前提 ★ 2026-10-15 那次"归息失效 / 涉及生命恢复的都没恢复"的
+#   **真因不是类型**, 而是"**原版禁止用命令写玩家 NBT**"(见下面 nbtplayer 段与
+#   lib/heal 文件头)。当时把 double 改成 float 只是"猜对了一个和结果无关的细节"。
+#   本规则本身仍然成立且有用 —— 它管的是**生物**的 NBT 写入(生物可写):
+#   写不匹配的类型会**静默存不进去**: 不报错、latest.log 一个字都没有、函数照常加载,
+#   现象就是"这个效果永远不生效"。铁证 = 同包 tool/blaze_plume/hit 第 16 行的老注释:
+#   "Fire 是 short, store result entity … Fire short 1(写 int/double 存不进去)"。
+#   判据: 只查**已知的实体字段**; `data.zx.*` / `item.components.*` 这类自定义路径
+#   (类型由写的人自己定)一律放行。Health 仍留在表里(值本身没错), 但**写 Health 这个
+#   行为**已经被下面的 nbtplayer 直接禁掉 —— 玩家写不进去, 生物又用不着。
+_NBT_TYPE = {
+    'Health': 'float', 'AbsorptionAmount': 'float', 'FallDistance': 'float',
+    'Fire': 'short', 'Air': 'short', 'HurtTime': 'short', 'DeathTime': 'short',
+    'PortalCooldown': 'int', 'Pos': 'double', 'Motion': 'double',
+}
+_sre = re.compile(r'\bstore\s+result\s+entity\s+\S+\s+(\S+?)(?:\[\d+\])?\s+(\w+)\s+\S+\s+run\b')
+for _nk, _np in functions.items():
+    try:
+        _nls = _np.read_text(encoding='utf-8').split('\n')
+    except Exception:
+        continue
+    for _ni, _nl in enumerate(_nls, 1):
+        if _nl.strip().startswith('#'):
+            continue
+        for _nm in _sre.finditer(_nl):
+            _fld, _ty = _nm.group(1), _nm.group(2)
+            _want = _NBT_TYPE.get(_fld)
+            if _want and _ty != _want:
+                R['nbttype'].append((_np.as_posix(), _ni,
+                    'store result entity 往 %s 写了 %s —— 该实体字段的 NBT 类型是 %s, 类型'
+                    '不符会**静默存不进去**(不报错、日志无痕迹)。改成 `%s`。'
+                    % (_fld, _ty, _want, _want)))
+
 # ---- 30) "只平A"契约 ----
 #   攻击回魔的进度 upgrade/attack 必须把伤害类型限定成玩家近战
 #   (原版标签 minecraft:is_player_attack = [player_attack, mace_smash])。
@@ -1340,7 +1409,20 @@ for ns in ((RP / 'assets').iterdir() if RP else []):
             _j = json.loads(f.read_text(encoding='utf-8'))
         except Exception:
             continue                      # JSON 坏了由 R['json'] 报
-        for _i, _el in enumerate((_j or {}).get('elements') or []):
+        _els = (_j or {}).get('elements') or []
+        # ★ "纯贴花模型"判定：整模型竖直高度 ≤2 单位。只有这种模型"贴地 = y 写 8"。
+        #   像 angel_beam 那样同时有竖立光柱(元素 y 0..16) 的模型，底部水平光环
+        #   坐在 y≈0 是刻意的（召唤时用 transformation.translation 把整柱压到地面），
+        #   按贴花去要求 y≈8 会误报。
+        _ymin = _ymax = None
+        for _e0 in _els:
+            _f0, _t0 = _e0.get('from'), _e0.get('to')
+            if (isinstance(_f0, list) and isinstance(_t0, list)
+                    and len(_f0) == 3 and len(_t0) == 3):
+                _ymin = _f0[1] if _ymin is None else min(_ymin, _f0[1])
+                _ymax = _t0[1] if _ymax is None else max(_ymax, _t0[1])
+        _FLAT_ONLY = _ymin is not None and (_ymax - _ymin) <= 2.0
+        for _i, _el in enumerate(_els):
             # MC 1.21.5 gsu$a rejects {} with
             # "Expected between 1 and 6 unique faces, got 0".
             # Removing hidden faces must remove the whole empty element.
@@ -1373,6 +1455,26 @@ for ns in ((RP / 'assets').iterdir() if RP else []):
                                         or any(v < 0 or v > 16 for v in _uv)):
                     R['modelrot'].append(('%s' % f, '第 %d 个元素 %s 面的 uv=%s 非法'
                                           '(须 4 个数、都在 0..16)' % (_i, _fn, _uv)))
+            # ---- 76b) flatmodel: "水平大薄板"的 y 基准必须是 8(渲染原点) ----
+            #   ★ 2026-10-17 用户实测(雨迹): "完全看不见。但是有实体, 因为我没重载
+            #     试了一遍有紫黑方块"。真相不是"模型没加载", 而是**模型合法却埋在地下**:
+            #     item model 的渲染原点**恒在 (8,8,8)**, 元素 y 写 0 等于把板沉到实体
+            #     下方半格; 而 display 实体是召唤在玩家脚部(= 方块顶面) ⇒ 整块板压在
+            #     方块内部, 客户端一个像素都不画。没装资源包时看到紫黑方块反而说明
+            #     实体在、位置也在 —— 这类"合法但不可见"只能靠规则抓。
+            #   判据: y 方向厚度 ≤1.5 单位、X 与 Z 都 ≥8 单位(>0.5 格) ⇒ 不可能是
+            #     竖着的物品图标/武器模型, 只可能是贴地面/贴天花板的 display 贴花。
+            #     这时 y 中心必须在 4..12(= 8 上下半格), 否则报警。
+            _dx, _dy, _dz = (_to[0] - _frm[0], _to[1] - _frm[1], _to[2] - _frm[2])
+            if _FLAT_ONLY and 0 < _dy <= 1.5 and _dx >= 8 and _dz >= 8:
+                _cy = (_frm[1] + _to[1]) / 2.0
+                if not (4.0 <= _cy <= 12.0):
+                    R['flatmodel'].append(('%s' % f, '第 %d 个元素是水平大薄板(y 厚 %.2f、'
+                                          '%.1f×%.1f 单位宽), 但 y 中心 = %.2f, 不在 4..12 —— '
+                                          'item model 的渲染原点恒在 (8,8,8): 贴地要写 y≈8, '
+                                          '写 0 会让板沉到实体下方半格, 召唤在玩家脚下时整块'
+                                          '埋进方块 ⇒ 模型合法但**完全看不见**(2026-10-17 雨迹)'
+                                          % (_i, _dy, _dx, _dz, _cy)))
 
 # 15) 物品定义按 custom_model_data 逐帧切换 / 被数据包 item_modify 驱动,
 #     却没关 hand_animation_on_swap (见文件头)
@@ -1516,6 +1618,66 @@ if regbuild.exists():
             elif me.group(1) != 'all' and me.group(1) not in names:
                 R['rege'].append((str(regbuild), 'layer「%s」的 e:"%s" 不是已登记的装备 id -> 这行永远不显示'
                                   % (lab, me.group(1))))
+
+    # 33) layer 漏登记(layreg): "玩家自己攒的层数" 必须出现在观测镜 layer 表里
+    #   ★ 真实事故 2026-10-17, 玩家原话: "给自己附加的层数观测镜没显示啊"
+    #     15-7 的「失血 · 心血」(zx.bld_n, 0..3 层) 与 15-4 的「缝心 · 绯结」
+    #     (zx.cr_knit, 0..3 层) 都把层数攒在**玩家自己**身上, 却没人去 layer 表登记一行 ——
+    #     观测镜第二行就永远不出现这两段。**不报错、不刷日志**, 只能等玩家自己发现。
+    #   判据: 扫 core/load 的注释行, 同一行同时出现「层数」与计分项名 ⇒ 视为玩家层数机制。
+    #     ① 形如 `#   zx.bld_n = 当前层数(...)`      -> 取 zx.bld_n
+    #     ② 形如 `#      cr_knit    绯结层数(0..3)`  -> 取 cr_knit 并补 zx. 前缀
+    #   豁免(必须写明, 别默默放过):
+    #     ① 该行含 生物 / marker / 目标 / 敌人 —— 层数记在别人身上, 观测镜本就不显示别人;
+    #     ② 该行写 `# layer-skip: 理由` —— 确实是环境计数或不值得占行, 由人工解释。
+    layobjs = set(re.findall(r'storage zx:reg layer append value \{o:"([^"]*)"', rtxt))
+    loadp = (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function'
+             / 'core' / 'load.mcfunction')
+    if loadp.exists():
+        for i, line in enumerate(loadp.read_text(encoding='utf-8', errors='ignore').split('\n'), 1):
+            s = line.strip()
+            if not s.startswith('#') or '层数' not in s:
+                continue
+            if 'layer-skip' in s:
+                continue
+            if any(k in s for k in ('生物', 'marker', '目标', '敌人')):
+                continue
+            cands = re.findall(r'zx\.[a-z0-9_]+', s)
+            if not cands:
+                m2 = re.match(r'#\s+([a-z][a-z0-9_]{2,})\s{2,}\S*层数', s)
+                if m2:
+                    cands = ['zx.' + m2.group(1)]
+            for o in cands[:1]:
+                if o not in layobjs:
+                    R['layreg'].append((
+                        str(loadp),
+                        '第 %d 行: %s 是玩家自己攒的层数, 但 lib/reg/build 的 layer 表没有它 '
+                        '-> 观测镜上看不见(静默): %s' % (i, o, s[:70])))
+
+    # 34) if data ... matches (datamatch): `if data` 后面不能接 matches
+    #   ★ 真实事故 2026-10-17: lore/base_dispatch 里 392 行全写成
+    #     `execute if data storage zx:work src.id matches "xxx" run ...`
+    #     —— `if data` 只接受"存储路径 + 可选 NBT 复合过滤器", 后面接 matches 是**非法语法**
+    #     ⇒ **整个函数加载失败**(日志里只有一行 Whilst parsing, 连行号都没有)
+    #     ⇒ 所有装备的"描述刷新"全部失效, 不报错、不刷屏, 只能等玩家发现。
+    #   正确写法: `execute if data storage zx:work src{id:"xxx"} run ...`
+    #            (或 `if data storage zx:work {src:{id:"xxx"}}`)
+    #   判据: 命令里出现 `if data <storage> <path> matches`。
+    for fnk, fp in functions.items():
+        for i, line in enumerate(ftext(fnk).split('\n'), 1):
+            s = line.strip()
+            if not s or s.startswith('#'):
+                continue
+            # ★ 只看"if data"与 matches 之间**没有** unless/run/if 的那种 ——
+            #   否则 `if data storage zx:work eq.$(e) unless score @s <obj> matches ..0`
+            #   这类合法写法会被误判(2026-10-17 反向探针实测 13 条误报)。
+            seg = re.sub(r'"[^"]*"', '""', s)
+            mm = re.search(r'\bif data\b([^\n]*?)\smatches\b', seg)
+            if mm and not re.search(r'\b(unless|run|if)\b', mm.group(1)):
+                R['datamatch'].append((
+                    str(fp),
+                    '第 %d 行: `if data` 后面接了 matches(非法语法) -> 整个函数加载失败, '
+                    '里面每条命令都不跑: %s' % (i, s[:90])))
 
     # 32) "全局行"哨兵表(gsent)必须齐, 且渲染器必须认它
     #   e:"all" 的行(套装合计 / 回魔账本 / 升级合计)不属于单件装备, 不该显示装备名。
@@ -1727,11 +1889,59 @@ for f in eqdir.rglob('*.mcfunction'):
     for i, l in enumerate(f.read_text(encoding='utf-8', errors='ignore').splitlines(), 1):
         if l.lstrip().startswith('#'):
             continue
+        # ★ 2026-10-16 批 15-4: "读快照"不算"声明通道", 别误报。
+        #   通道字段在全包有两种身份:
+        #     ① 技能**声明**自己走哪条通道 —— 写进 manacore:in arg(如
+        #        `data modify storage manacore:in arg set value {uuid:"",attack_mul:5.0}`);
+        #        这一种必须口径表登记, 否则面板漏显示/归错列。
+        #     ② 装备**读回**本次伤害的通道快照来判断"这一下算不算某类技能" ——
+        #        `data get storage zx:work ch/a.<字段>`。先例 = tool/wrath/hook_calc(判 mm)、
+        #        staff/begonia/hook_calc(判 mm)。这一种不是声明, 不该要求登记。
+        #   不豁免的后果: 一件**盔甲**读通道(armor/smoke_step/set_burn 判"基础攻击力类
+        #   技能伤害")会被当成"这个技能没登记" ⇒ check 从此永远报一条 ⇒ 真的错反而被淹。
+        if re.search(r'\bdata\s+get\b', l):
+            continue
         for fld, tag in CH_FIELD.items():
             if fld in l and tag not in wchan.get(eid, set()):
                 R['chandef'].append((f, '第 %d 行 "%s" 的技能用了 %s(%s), 但 lib/skill_mul/def '
                                         '没给它标 %s:1b —— 面板会漏显示/归错列'
                                      % (i, eid, fld, CH_LABEL[tag], tag)))
+
+# ---- 28b) 读"通道字段"必须与 with_from 的冻结配套 ----
+#   背景(2026-10-16 批 15-4, 真踩): 三条通道字段(attack_mul / max_mana_mul /
+#   other_mul)**不在** zx:work a 上 —— 它们只存在于 manacore:work a, 由 lib/dmg_ch
+#   在 #manacore:event/damage_calc 里拍成快照 zx:work ch。
+#   internal/damage/one 里那个 zx:work a 是从 ob 复原出来的**投递入参**, 字段只有
+#   num / damage / num_str / type / u0..u3 / src / target 这些。
+#   ⇒ 在 one 的调用树里写 `data get storage zx:work a.attack_mul`: data get 取不到值,
+#     `execute store result` **不写入** ⇒ 那个计分项保持旧值(通常 0) ⇒ "判据恒 0 ⇒
+#     整段功能一次都不触发", 零日志、零报错。2026-10-16 真这么写了一次
+#     (燧行套装的 smoke_step/set_burn): 套装效果永远不会生效。
+#   ⇒ 规矩: 要用通道, 先由 with_from 把 ch 冻进 ob
+#     (`data modify storage zx:work ob.<fld> set from storage zx:work ch.<fld>`),
+#     下游读 zx:work a.<fld>(one 复原后就在 a 上)。本规则盯"冻"与"读"成对 ——
+#     哪天有人把 with_from 那行删了, 这里立刻报警, 而不是让效果悄悄归零。
+_CHF = ('attack_mul', 'max_mana_mul', 'other_mul')
+_wf = functions.get('sweetdream:internal/damage/with_from')
+_wf_text = _wf.read_text(encoding='utf-8', errors='ignore') if _wf else ''
+_chf_frozen = set()
+for _f in _CHF:
+    if re.search(r'ob\.%s\s+set\s+from\s+storage\s+zx:work\s+ch\.%s\b' % (_f, _f), _wf_text):
+        _chf_frozen.add(_f)
+_chf_read = re.compile(r'\b(?:data\s+get\s+storage|if\s+data\s+storage|unless\s+data\s+storage)'
+                       r'\s+zx:work\s+(?:a|ob)\.(%s)\b' % '|'.join(_CHF))
+for fnk, fp in functions.items():
+    for i, l in enumerate(ftext(fnk).split('\n'), 1):
+        s = l.strip()
+        if s.startswith('#'):
+            continue
+        m = _chf_read.search(s)
+        if m and m.group(1) not in _chf_frozen:
+            R['chref'].append((str(fp),
+                '第 %d 行从 zx:work a/ob 读通道字段 %s, 但 internal/damage/with_from 里没有'
+                '配套的冻结行(ob.%s ← ch.%s) ⇒ data get 取不到值、store result 不写入, '
+                '判据静默恒 0(整段功能一次都不触发)'
+                % (i, m.group(1), m.group(1), m.group(1))))
 
 # ---- 29) 超限伤害必须三条通道都派发 ----
 #   overlimit/api/mod 是"哪个通道字段存在就乘哪个"。漏一条 -> 走那条通道的技能
@@ -2449,6 +2659,30 @@ for _fk in sorted(_dim_seen):
                 '%s 在"每维度各跑一次"的调用链上(沿 execute in <维度> 可达), 体内这行的 '
                 '@e[%s] 没带位置参数 —— 裸 @e 会跨维度重复处理(3 倍); 加 distance=0..'
                 % (_fk, _a[:40])))
+
+# ---- 64b) core/tick 里"每刻状态机"的筛选不许从 0 起(0 = 未激活) ----
+#   2026-10-17 用户实测(回旋): "一 reload 就有疯狂的挥剑声音, 身边也一直有蓝色粒子"。
+#   原因 = 自激死循环, 三个条件凑齐就发生:
+#     ① core/tick 用 `scores={zx.x=0..}` 选"状态机在跑";
+#     ② 状态机收尾时 `set @s zx.x 0`(把 0 当"未激活");
+#     ③ 收尾函数里带音效/粒子/伤害。
+#   ⇒ 收尾 → 0 → 下一刻又被选中 → 收尾的兜底分支又跑一遍 → 又置 0 …… 每刻重放,
+#   只要分数停在 0 就停不下来, reload 重开 tick 立刻复现, 且与穿什么装备无关。
+#   正解: 0 专用于"未激活", 过程状态从 1 起编号, tick 写 `1..`。存档里的历史脏值
+#   由状态机函数首行"非 1..7/99 一律静默归零"兜掉。
+_TS0 = re.compile(r'scores=\{[^{}]*\bzx\.([A-Za-z0-9_]+)=0(?:\.\.\d*)?\s*[,\}]')
+_TICKFK = 'sweetdream:core/tick'
+if _TICKFK in functions:
+    for _ln, _ls in enumerate(ftext(_TICKFK).split('\n'), 1):
+        _s = _ls.strip()
+        if not _s or _s.startswith('#'):
+            continue
+        for _m in _TS0.finditer(_s):
+            R['tickstate0'].append((functions[_TICKFK], _ln,
+                'core/tick 按 `zx.%s=0..` 每刻筛"状态机在跑" —— 但状态机惯例用 0 表示'
+                '"未激活/收尾已清", 收尾一置 0 就又被选中 ⇒ 收尾函数(音效/粒子/伤害)'
+                '每刻重放, 成自激死循环, /reload 后立刻复现且停不下来(2026-10-17 回旋: '
+                '疯狂挥剑声 + 蓝色粒子)。改成 `1..` 并把 0 定为"未激活"' % _m.group(1)))
 
 # ---- 60) `data storage <ns:path>.<键>` —— 存储名与路径之间少了空格 ----
 #   存储名是资源位置, **允许 `.`** —— 所以 `storage manacore:ctx.uuid` 会被解析成
@@ -4631,6 +4865,77 @@ _REGRESS = [
     (_SD + '/lib/dmg_add_put_any.mcfunction',
      None, r'zx:work ch', None,
      'D01 回归: dmg_add_put_any 又读 zx:work ch 挑通路 —— 口径 B 下应固定写满三条'),
+    # ---- 2026-10-15 五世恶咒: 第五世之后再命中必须走终世结算 ----
+    #   用户实测: 世咒推到第五世后再被命中, 旧写法把 zx.fcv_t 反复刷回 5
+    #   ⇒ "第五世的存在时间"被一直往后刷, **永远走不到终世**。
+    #   正解 = 加层**前**先快照"这一刀落下时是否已在第五世"(tag @s add zx.fcv_final),
+    #   是则调 five_curses/final 结算终世(30%)并清干净; 下面 1..5 世的 if 因 fcv_st 已归 0
+    #   而自然不成立 ⇒ 不需要额外 return。
+    (_SD + '/equipment/staff/five_curses/curse_step.mcfunction',
+     'five_curses/final', None,
+     ('scoreboard players add @s zx.fcv_st 1', 'tag @s add zx.fcv_final'),
+     '2026-10-15 用户报 bug: 世咒到第五世后再被命中, 旧写法把 zx.fcv_t 反复刷回 5 ⇒'
+     ' 第五世的存在时间被一直往后刷, **永远走不到终世**。正解 = 加层**前**先快照'
+     '"这一刀落下时是否已在第五世"(tag @s add zx.fcv_final), 是则调 five_curses/final'
+     ' 结算终世(30%)并清干净。⇒ 本件必须 (1) 含对 five_curses/final 的调用;'
+     ' (2) 该快照落在"加层"(scoreboard players add @s zx.fcv_st 1) **之前**。'),
+    # ---- 2026-10-16 ★玩家 NBT 不可写★: 回血/灭火两条链的正确落地 ----
+    #   两次排查(先把 `Health double` 改 float、再把 `Fire:-1s` 改 -20s + 每刻重写)
+    #   **都建立在错误前提上**。真因: 原版禁止用命令写**玩家** NBT —— `/data` 与
+    #   `/execute store` 对玩家实体一律抛 `commands.data.entity.invalid` =
+    #   "Unable to modify player data"(已在 1.21.5 客户端 jar 的 en_us.json 里核到,
+    #   并确认引用它的正是 data 命令那个类)。
+    #   ⇒ 玩家身上的 Health / Fire 都写不进去, **与类型、与负值大小全都无关**;
+    #     而生物 NBT 可写, 所以给生物点火的 immolate/ignite 一直是好的。
+    (_SD + '/lib/heal.mcfunction',
+     'lib/heal_up', r'(?:store\s+(?:result|success)|data\s+(?:merge|modify))\s+entity\s+@s[^\n]*\bHealth\b',
+     None,
+     '2026-10-16: 原版禁止写玩家 NBT, 所以"写 Health 回血"永远无效 —— lib/heal 必须走'
+     '"临时压低 max_health → 超大 instant_health 顶满 → 撤修饰符"(实体在 lib/heal_up)。'
+     '再出现对 @s 的 Health **写入**就是又退回了那条死路(读是合法的: data get entity @s Health)。'),
+    (_SD + '/lib/heal.mcfunction',
+     'lib/heal_up', None, None,
+     'lib/heal 必须把挂/摘修饰符交给宏件 lib/heal_up(modifier 的 add_value 只能是字面量)。'),
+    # ---- 回血原语: 压上限 → 发药水 → **跨一拍**撤上限(2026-10-16 二次返工) ----
+    #   返工原因: `instant_health` 是**延迟**效果(要到**实体的 tickEffects()** 才治疗),
+    #   而本链由**进度**触发(那一刻早于 tickEffects) ⇒ 旧写法"发药水当场撤天花板"
+    #   = 药水生效时已无天花板 ⇒ 4·2^20 顶到真实上限 = **一键满血**
+    #   (用户报"归息直接回了 19 血")。撤上限现在由 lib/heal_off + core/tick 跨拍执行。
+    (_SD + '/lib/heal_up.mcfunction',
+     'modifier add sweetdream:heal_cap', None,
+     ('instant_health', 'modifier add sweetdream:heal_cap'),
+     'heal_up 顺序: 先挂修饰符压上限, 再发 instant_health 顶满(否则没有天花板 ⇒ 一口气满血)。'),
+    (_SD + '/lib/heal_up.mcfunction',
+     None, r'^(?!\s*execute\b)[^\n]*\battribute\b[^\n]*modifier\s+remove\b',
+     None,
+     'heal_up 里凡是摘修饰符都**必须带 `execute if` 门控**(只用来清理上一轮的残留)。'
+     '没有门控的裸 remove = 想"发完药水顺手把天花板撤了" —— 那正是"一键满血"的老路'
+     '(药水要到 tickEffects 才生效)。收尾必须跨一拍: lib/heal_off + core/tick。'),
+    (_SD + '/lib/heal_up.mcfunction',
+     'tag @s add zx.heal_p', None, None,
+     'heal_up 结尾必须挂 zx.heal_p(待撤标签) —— core/tick 靠它把任务升格给 lib/heal_off。'),
+    (_SD + '/lib/heal_off.mcfunction',
+     'modifier remove sweetdream:heal_cap', None,
+     ('modifier remove sweetdream:heal_cap', 'tag @s remove zx.heal_on'),
+     'heal_off 必须**先摘标签、再摘修饰符**: 万一摘修饰符失败, 标签已清 ⇒ 不会每刻重复失败(死循环)。'),
+    (_SD + '/core/tick.mcfunction',
+     'sweetdream:lib/heal_off', None,
+     ('tag @s add zx.heal_on', 'sweetdream:lib/heal_off'),
+     'core/tick 的两行回血收尾不能反: 必须"先撤(判 heal_on)、再把 heal_p 升格成 heal_on";'
+     '反过来会在**同一刻**完成"设置→撤", 等于没延迟(又回到一键满血)。'),
+    # ---- 沸痕: "熄灭自身身上的火焰"落地成**临时细雪**(2026-10-16 三次收敛) ----
+    #   玩家 NBT 写不了(写 Fire 永远无效), 抗火也不灭火(wiki: JE 抗火只挡伤害、不消火) ——
+    #   真正能灭火的只有"接触水/细雪"; 细雪还会被**燃烧的玩家自己撞毁**, 所以不留残留。
+    (_SD + '/equipment/armor/boil_trace/on_hurt.mcfunction',
+     'minecraft:powder_snow', r'data\s+merge\s+entity\s+@s\s*\{Fire',
+     None,
+     '沸痕的"熄火"= 临时放一块细雪(Java 版真能灭火的手段, 见 wiki 细雪页)。'
+     '再出现 `data merge entity @s {Fire` 就是又写回了永远无效的死代码。'),
+    (_SD + '/equipment/armor/boil_trace/pw_off.mcfunction',
+     'if block ~ ~ ~ minecraft:powder_snow', r'setblock\s+~\s+~\s+~\s+minecraft:air\s+replace\s+minecraft:powder_snow',
+     None,
+     'pw_off 必须"先 if block 门控细雪、再 replace" —— setblock 第三个参数只认 destroy/keep/replace, '
+     '写成 `replace minecraft:powder_snow` 是**非法语法**, 整个函数加载失败(2026-10-17 实际事故)。'),
 ]
 for _rel, _must, _never, _order, _why in _REGRESS:
     _p = ROOT / _rel
@@ -4656,6 +4961,27 @@ for _rel, _must, _never, _order, _why in _REGRESS:
             R['regress'].append((_rel, _a,
                 '「%s」(第 %d 行) 排在「%s」(第 %d 行) 之前 —— %s'
                 % (_order[0], _a, _order[1], _b, _why)))
+
+# ★ nbtplayer(2026-10-16): 任何"写实体 NBT"的命令都不许碰 Health。
+#   原版对**玩家**实体拒绝一切 NBT 修改: `/data` 与 `/execute store` 会抛
+#   `commands.data.entity.invalid` = "Unable to modify player data"(1.21.5 jar 内核实)。
+#   而 Health 只有玩家需要被写(生物可写但不需要 —— 生物回血该走自己的口径)。
+#   ⇒ 全包不该出现 `… entity … Health` 的写法: 写了就是"永远不生效 + 零日志"。
+_HEALTH_W = re.compile(
+    r'\b(?:store\s+(?:result|success)|data\s+(?:merge|modify))\s+entity\b[^\n]*\bHealth\b')
+for _hk, _hp in functions.items():
+    try:
+        _hls = _hp.read_text(encoding='utf-8', errors='ignore').split('\n')
+    except Exception:
+        continue
+    for _hi, _hl in enumerate(_hls, 1):
+        if _hl.strip().startswith('#'):
+            continue
+        if _HEALTH_W.search(_hl):
+            R['regress'].append((_hp, _hi,
+                '★写实体 Health★ —— 原版禁止用命令改**玩家** NBT(`/data` / `/execute store` 抛 '
+                '"Unable to modify player data"), 对玩家永远不生效且零日志; 生物又不需要。'
+                '要回血请走 lib/heal(临时压低 max_health → 超大 instant_health 顶满 → 撤修饰符)。'))
 
 # F10 无息的跨 tick 标记: 必须带施法者 uuid 后缀(全局同名会让"多人同时施放"互相清标记 /
 #     漏命中), 且清理只能按自己的 uuid(见 hush/tag_clear)。
@@ -4737,6 +5063,12 @@ TITLE = {'fn': 'function 引用不存在的目标', 'tag': '#tag 引用无对应
          'regobj': '通用数值注册表: 引用了没建过的计分项(静默显示不出来)',
          'regname': '装备 id 没登记中文名(debug/worn 只会显示英文 id)',
          'rege': '注册表行缺 e 字段 / e 不是已登记装备(那行在 stats 里永远不显示, 静默)',
+         'layreg': '玩家身上的「层数」机制没登记观测镜 layer 表(玩家自攒的层数看不见, 静默)',
+         'datamatch': '`if data ... matches` 是非法语法(整个函数加载失败, 里面每条命令都不跑)',
+         'tickstate0': 'core/tick 用 `scores={zx.x=0..}` 每刻筛状态机, 而状态机用 0 表示'
+                       '"未激活" ⇒ 收尾置 0 后下一刻又被选中, 收尾的音效/粒子/伤害每刻重放, '
+                       '成自激死循环(/reload 后立刻复现且停不下来; 2026-10-17 回旋: 疯狂'
+                       '挥剑声 + 蓝色粒子)。状态编号从 1 起, tick 写 `1..`',
          'selfmacro': '宏参数直接传 zx:data self(会让宏函数一条命令都不跑, 静默)',
          'dspace': '参数间出现连续两个空格(会让整个函数加载失败)',
          'nbtsp': 'data 的路径与 NBT 过滤器之间多了空格(过滤器必须紧贴路径, 如 Items[{Slot:0b}] / updef."x"{req:""}; 带空格 = 整条命令解析失败, 整个函数加载失败且不报行号)',
@@ -4772,6 +5104,10 @@ TITLE = {'fn': 'function 引用不存在的目标', 'tag': '#tag 引用无对应
          'chanhack': '技能倍率: 又把面板读数塞进 base_attack(旧口径 hack, 面板没法归类)',
          'chandef': '技能倍率三通道: 口径表(lib/skill_mul/def)和技能文件对不上'
                     '(面板会漏显示或归错列, 静默)',
+         'chref': '从 zx:work a/ob 读"通道字段"(attack_mul/max_mana_mul/other_mul)，'
+                  '但 internal/damage/with_from 没有配套的冻结行 ⇒ data get 取不到值、'
+                  'store result 不写入 ⇒ 判据静默恒 0(整段功能一次都不触发)。'
+                  '要注意: one 里的 zx:work a 是"投递入参"，它身上本来就没有通道字段',
          'olchan': '超限伤害没按三条通道派发(漏掉的那条通道会静默少吃超限)',
          'olvcache': '读了 zx:work olv.mana 却没自己先写基准值(没超限时 mod 会提前 return, '
                      '读到 0 / 陈旧值: 提示显示「需要 0」或扣错蓝, 都不报错)',
@@ -4941,6 +5277,14 @@ TITLE = {'fn': 'function 引用不存在的目标', 'tag': '#tag 引用无对应
                      '一行 `Failed to load function …`, 游戏里表现为"这个功能整个没反应")。'
                      '2026-10-13 四个函数(含引雷针 bolt_atk)就这么整份作废。注释一律提到上一行、'
                      '`#` 独占一行。',
+         'consrc': '装备被动"消耗标签"没自报 src:"equip" —— lib/mark_consume 默认按 "skill" '
+                   '记, 于是这一次**装备被动**消耗会被回潮扣 / 烛跬 当成"技能消耗"'
+                   '(穿它们时一次平A白蹭两份收益, 静默; 2026-10-15 批 15-2)。',
+         'nbttype': '写实体 NBT 的类型不匹配 —— 实体字段有固定类型(Health=float / Fire=short / '
+                    'Pos,Motion=double / Air,HurtTime=short …), 写了别的类型**静默存不进去**'
+                    '(不报错、latest.log 里一个字都没有, 现象是"这个效果永远不生效")。'
+                    '2026-10-15 实测: lib/heal 写 `Health double` ⇒ 全包十件"恢复生命值"全哑; '
+                    'furnace_core/apply_hp 与 upgrade/api/hp_add 的"夹当前生命"同为哑弹。',
          'selfclr': '同一条计分项上"改"排在了"判"前面, 而且是**自己把自己清零** —— '
                     '`if score @s zx.X matches 5.. run set @s zx.X 0` 之后又出现 '
                     '`if score @s zx.X matches 5..` ⇒ 后面那些命令**永远不执行**, '
@@ -4969,6 +5313,18 @@ TITLE = {'fn': 'function 引用不存在的目标', 'tag': '#tag 引用无对应
                      '只有 latest.log 里那句 `Invalid rotation X found` 能作证)。'
                      '★ 想摆"任意角度"只能绕开 rotation: 改成对 90° 旋转不变的形状(如正交薄片)'
                      '自己用 from/to 摆位, 或换成 ±45/±22.5 的近似角。',
+         'flatmodel': '资源包模型里的"水平大薄板"y 基准不对 —— 模型合法、贴图也在, '
+                      '但客户端**一个像素都不画**。★ item model 的渲染原点恒在 (8,8,8): '
+                      '地面贴花的 y 必须写在 8 附近, 写 0 等于把板沉到实体下方半格。'
+                      'display 实体召唤在玩家脚部(=方块顶面)时, 板整个埋在方块内部。'
+                      '★ 症状极易误判: 没装资源包时反而能看到"紫黑方块"(那说明实体与位置都'
+                      '正常, 只是模型没加载), 装了资源包就"什么都看不见"。'
+                      '真实事故 2026-10-17 雨迹: 水迹模型 from y=0.1 ⇒ 用户"完全看不见"。'
+                      '连带: display 的剔除距离 ≈ bbox × view_range, 薄板必须显式拉大 '
+                      'view_range, 否则走远了整条水带就"没连到终点"。'
+                      '★ 只对"整模型都是薄片"的贴花判 —— angel_beam 这类模型里同时有竖立'
+                      '光柱和底部光环, 光环刻意坐在 y≈0 配合 transformation.translation 落地, '
+                      '不算错(判据要求整模型竖直高度 ≤2 单位)。',
          'storpath': '`execute if/unless data storage <存储名> <SNBT键值对>` —— 条件式的'
                      '存储名后面要写 **NBT 路径**(`r.ready` / `r{ready:1b}`), 不是复合。'
                      '直接写 `... manacore:out ready:1b` 时 `ready:1b` 不是合法路径(`:` 未加'

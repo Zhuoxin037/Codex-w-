@@ -65,6 +65,24 @@ execute if data storage zx:work a{type:"sweetdream:true_damage"} if entity @s[ta
 #       debuff 叠加, 属于预期(与"夜火 + 噬心"同族)。
 execute if entity @s[tag=zx.fcv_3] if data storage zx:work a{type:"sweetdream:skill"} unless data storage zx:work a{src:"enemy"} run function sweetdream:internal/damage/vuln_fcv3
 
+# ①.5f 燧行套装(批次 15-4): 目标带「流火」时, 施法者的"基础攻击力类"技能伤害 ×1.12
+#   【为什么排在 vuln_tag / 世咒之后】它们都是"乘在 a.num 上"的乘区, 先乘谁结果一样;
+#     排在一起读起来是一条线:"受击侧乘区依次乘上去"。
+#   【为什么必须在 deal **之前**】它改的是"这一下要打出去多少"(a.num), deal 之后
+#     再改就没有消费者了。所以本段与 ①.6 的世咒记录都落在 deal 前。
+#   【判据分工】"目标带流火"在本地判(entity @s); "施法者穿齐两件 + 本次走 atk 通道"
+#     由被调函数判 —— 它需要 ob 里的施法者 UUID, 只能用宏展开。
+execute if data storage zx:work ob{type:"sweetdream:skill"} unless data storage zx:work ob{src:"enemy"} if entity @s[tag=zx.status.liuhuo] run function sweetdream:equipment/armor/smoke_step/set_burn with storage zx:work ob
+
+# ①.5g 缝心套装(批次 15-4): 对带「噬心」的目标造成**真实伤害**时, 有「绯结」就消耗 1 层,
+#   这一段真伤 ×1.15(独立乘区) + 施法者 2 秒抗性提升Ⅰ(该强化 5 秒节流)
+#   【为什么排在 deal **之前**】"这一段真实伤害提高 15%"改的是 a.num。
+#   【判据】本地判"目标带噬心"(与 ①.8 殓丝同条件); 施法者侧的"穿齐两件 / 有绯结 /
+#     节流 / 消耗"全在被调函数里(它需要 ob 的 UUID 才能反查到人)。
+#   ★ 与 ①.8 是**两件事**: 殓丝(副手)换「殓结」, 缝心(胸甲)吃「绯结」的现成增益 ——
+#     同条件不同装备, 各跑各的, 互不影响(两件可以同时带)。
+execute if data storage zx:work ob{type:"sweetdream:true_damage"} unless data storage zx:work ob{src:"enemy"} if entity @s[tag=zx.status.shixin] run function sweetdream:equipment/armor/crimson_seam/set_true_hit with storage zx:work ob
+
 # ①.6 五世恶咒·第五世: 记录窗口开着时, 把这一下累计进 zx.fcv_rec(2026-10-13 批 12)
 #   【为什么放在 deal **之前**】此时 a.num 已是最终伤害(升痕/易伤都算完了),
 #     记到的是"实际要打出去多少"; 放到 deal 之后再读就已经被别的调用点改过了。
@@ -72,6 +90,41 @@ execute if entity @s[tag=zx.fcv_5] run function sweetdream:equipment/staff/five_
 
 # ② 打伤害(有攻击者就带 by; 选不到人(离线)就退化成无归属, 照样打得出来)
 function sweetdream:internal/damage/deal with storage zx:work a
+
+# ①.9 批 15-4 · 潮线的两段(顺序不可反, 见下)
+#   ① 潮线**套装**: 技能伤害命中**已带「渊海」**的生物 -> 主手主动技能冷却 -2 秒(6 秒节流)
+#   ② 候潮(单件):  主动技能命中生物 -> 耗 30 魔力给它挂「渊海」(10 秒节流)
+#   ★ 顺序必须是"先判套装、再挂渊海" ★
+#     套装文案是"命中了**附有**渊海的生物" —— 指命中那一刻它已经带着;
+#     若先跑候潮把渊海挂上去, 本次刚挂上的渊海会让套装**也**跟着触发 =
+#     "打谁都减冷却"。这是那种不报错、只是悄悄变强的错。
+#   ★ 都排在 deal **之后** ★
+#     (a) 两段文案都写"命中了…后";
+#     (b) 挂上去的渊海不该回头影响这一击的受击侧乘区。
+#   ★ 都只在"本包技能伤害、非敌方来源"时进 ★(敌方技能走 src:"enemy", 不是玩家主动技能)
+execute if data storage zx:work ob{type:"sweetdream:skill"} unless data storage zx:work ob{src:"enemy"} if entity @s[tag=zx.status.yuanhai] run function sweetdream:equipment/armor/beach_vein/set_cd with storage zx:work ob
+execute if data storage zx:work ob{type:"sweetdream:skill"} unless data storage zx:work ob{src:"enemy"} run function sweetdream:equipment/armor/tide_watch/on_skill_hit with storage zx:work ob
+
+# ①.9b 焦衣(批 15-4): 主动技能命中"带流火、未带夜火"的生物 -> 耗 80 魔力把流火升级成夜火
+#   【必须在 deal **之后**】夜火的受击侧效果是"受到技能伤害 +15%"(vuln_tag)。
+#     若在 deal 之前升级, 这一击会当场多吃 15% —— 而文案写的是"命中了…**后**转化"。
+#   【"转化"走 tag/unmark + tag/mark】不是 mark_consume: 流火是"变成"夜火, 不是被消耗,
+#     走消耗入口会白触发余烬/回潮扣/烛跬那些"消耗"被动。
+execute if data storage zx:work ob{type:"sweetdream:skill"} unless data storage zx:work ob{src:"enemy"} if entity @s[tag=zx.status.liuhuo,tag=!zx.status.yehuo] run function sweetdream:equipment/armor/char_coat/on_skill_hit with storage zx:work ob
+
+# ①.8 殓丝: 这一下是**真实伤害**且目标还带着「噬心」-> 交给持殓丝的玩家去换「殓结」
+#   【为什么排在 deal **之后**】文案写"且仍存活" —— 被打死的那一只已经从世界移除、
+#     身上的「噬心」也没了, 所以放在 deal 后面才判得出"仍存活"。
+#   【为什么读 ob 而不是 a】deal 里可能有嵌套调用改过 zx:work a; ob 是本批不可变快照。
+#   【为什么不用 a.type 而用 ob.type】同理 —— a 在 deal 之后已经不可信。
+#   【只认"自身造成"】src:"enemy" 的敌方真伤不算(它不是玩家打出来的)。
+execute if data storage zx:work ob{type:"sweetdream:true_damage"} unless data storage zx:work ob{src:"enemy"} if entity @s[tag=zx.status.shixin] run function sweetdream:equipment/tool/coffin_silk/on_true_hit with storage zx:work ob
+
+# ①.8b 绯缝(批 15-4): 同条件下**直接回血**(最大生命值 5%, 6 秒节流)
+#   【与 ①.8 是两件不同装备】殓丝是副手(换「殓结」)、绯缝是胸甲(直接回血);
+#     两件可以同时带 ⇒ 两个钩子各跑各的。
+#   【排在 deal 之后】文案是"命中了…后"; 且回血不该回头影响这一击。
+execute if data storage zx:work ob{type:"sweetdream:true_damage"} unless data storage zx:work ob{src:"enemy"} if entity @s[tag=zx.status.shixin] run function sweetdream:equipment/armor/crimson_seam/on_true_hit with storage zx:work ob
 
 # 圣骸: 保留准确受害者上下文, 已死后不要再用 @e 查找。归属读取不可变的 ob。
 function sweetdream:equipment/axe/sacred_relic/skill_kill with storage zx:work ob

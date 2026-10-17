@@ -29,6 +29,7 @@ $summon minecraft:iron_golem ~ ~ ~ {Tags:["zx.bd_shade","zx.bd_new"],NoAI:1b,Sil
 # 寿命 20 秒 / 攻击倒计时 3 秒(都由 lib/second 每秒推一次, 见 shade_tick)
 execute as @e[tag=zx.bd_new,distance=..3,limit=1] run scoreboard players set @s zx.bd_ft 20
 execute as @e[tag=zx.bd_new,distance=..3,limit=1] run scoreboard players set @s zx.bd_cd 3
+$execute as @e[tag=zx.bd_new,distance=..3,limit=1] run function sweetdream:boss/fireaxe/taunt/register_shade {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
 tag @e[tag=zx.bd_new,distance=..3] remove zx.bd_new
 
 particle minecraft:soul ~ ~1 ~ 0.3 0.5 0.3 0.03 18 normal

@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "reverse_string": {
+            "trigger": "shot_crossbow",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "reverse_string"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:equipment/bow/reverse_string/shot"
+    }
+}

@@ -10,6 +10,10 @@
     "sweetdream:equipment/axe/angel_core/visual/tick",
     "sweetdream:visual/tick",
     "sweetdream:equipment/axe/sacred_relic/visual/tick",
-    "sweetdream:equipment/axe/sacred_relic/visual/remnant/tick"
+    "sweetdream:equipment/axe/sacred_relic/visual/remnant/tick",
+    "sweetdream:equipment/staff/five_curses/visual/tick",
+    "animated_java:global/data_manager/on_tick",
+    "animated_java:global/on_tick",
+    "sweetdream:boss/fireaxe/tick"
   ]
 }

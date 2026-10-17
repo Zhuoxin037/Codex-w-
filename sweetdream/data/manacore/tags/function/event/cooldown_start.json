@@ -2,6 +2,8 @@
   "values": [
     "sweetdream:equipment/staff/apocalypse/observe",
     "sweetdream:equipment/armor/garden_sea/observe",
-    "sweetdream:equipment/armor/fade/on_cast"
+    "sweetdream:equipment/armor/fade/on_cast",
+    "sweetdream:equipment/armor/step_observe",
+    "sweetdream:equipment/armor/backlight/on_cast"
   ]
 }

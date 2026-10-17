@@ -1,0 +1,7 @@
+{
+  "parent": "sweetdream_boss:blueprint/reconstruction/weapon_fireaxe",
+  "textures": {
+    "1": "sweetdream_boss:blueprint/reconstruction/ash/fireaxe_512_2",
+    "particle": "minecraft:item/pufferfish"
+  }
+}

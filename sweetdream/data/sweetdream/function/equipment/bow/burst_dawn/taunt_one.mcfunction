@@ -19,4 +19,5 @@
 
 scoreboard players set #bd_tt zx.meta 0
 execute on target if entity @s[tag=zx.bd_owner] run scoreboard players set #bd_tt zx.meta 1
+execute if entity @s[tag=sd.fb.body] run function sweetdream:boss/fireaxe/taunt/check
 execute if score #bd_tt zx.meta matches 1 run tag @s add zx.bd_t

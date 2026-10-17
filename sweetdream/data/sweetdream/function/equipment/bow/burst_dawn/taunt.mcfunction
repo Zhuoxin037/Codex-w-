@@ -29,4 +29,8 @@ tag @e[tag=zx.bd_t,distance=0..] remove zx.bd_t
 execute as @e[type=!#sweetdream:no_damage,tag=!zx.bd_shade,distance=..12] run function sweetdream:equipment/bow/burst_dawn/taunt_one
 
 execute as @e[tag=zx.bd_t,distance=0..] at @s run damage @s 0.01 minecraft:generic by @e[tag=zx.bd_shade,distance=..12,limit=1,sort=nearest]
+tag @e[tag=sd.fb.taunt_source,distance=0..] remove sd.fb.taunt_source
+tag @s add sd.fb.taunt_source
+execute as @e[tag=zx.bd_t,tag=sd.fb.body,distance=0..] at @s run function sweetdream:boss/fireaxe/taunt/apply
+tag @s remove sd.fb.taunt_source
 tag @e[tag=zx.bd_t,distance=0..] remove zx.bd_t

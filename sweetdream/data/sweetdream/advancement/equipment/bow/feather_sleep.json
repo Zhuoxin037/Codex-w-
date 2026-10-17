@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "feather_sleep": {
+            "trigger": "shot_crossbow",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "feather_sleep"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:equipment/bow/feather_sleep/shot"
+    }
+}

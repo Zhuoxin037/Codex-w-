@@ -11,4 +11,5 @@
 
 $execute unless entity @e[type=minecraft:text_display,tag=zx.icon_fading,tag=zx.owner_$(u0)_$(u1)_$(u2)_$(u3)] run tag @s remove zx.icon_fading_owner
 $execute unless entity @e[type=minecraft:text_display,tag=zx.icon_fading,tag=zx.owner_$(u0)_$(u1)_$(u2)_$(u3)] run return 0
-$execute at @s anchored eyes positioned ^ ^ ^ anchored feet run tp @e[type=minecraft:text_display,tag=zx.icon_fading,tag=zx.owner_$(u0)_$(u1)_$(u2)_$(u3)] ~ ~0.45 ~
+$execute unless entity @s[tag=sd.fb.body] at @s anchored eyes positioned ^ ^ ^ anchored feet run tp @e[type=minecraft:text_display,tag=zx.icon_fading,tag=zx.owner_$(u0)_$(u1)_$(u2)_$(u3)] ~ ~0.45 ~
+$execute if entity @s[tag=sd.fb.body] at @s anchored eyes positioned ^ ^ ^ anchored feet run tp @e[type=minecraft:text_display,tag=zx.icon_fading,tag=zx.owner_$(u0)_$(u1)_$(u2)_$(u3)] ~ ~1.45 ~

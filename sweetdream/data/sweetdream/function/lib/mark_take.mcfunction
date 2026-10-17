@@ -20,5 +20,8 @@ $execute as $(by) run function sweetdream:equipment/armor/eternity/reclaim {targ
 # no-equip-check-ok: tag/unmark 是公共件, 本来就不该判装备(check 规则 equipgate)
 $execute unless data storage zx:work mc{done:1b} run function sweetdream:tag/unmark {target:"$(target)",mark:"$(mark)"}
 
-# ④ 没补回 -> 「余烬」被动(@s = 调用点的原执行者; 非玩家 / 没穿余烬会自动跳过)
-execute unless data storage zx:work mc{done:1b} run function sweetdream:lib/mark_ember
+# ④ 没补回 -> 消耗后的装备被动派发(@s = 调用点的原执行者; 非玩家 / 没穿对应装备会自动跳过)
+#   ★ 2026-10-15 批 15-2: 原来是直接调 lib/mark_ember(只服务余烬), 现在收进
+#     lib/on_consume —— 里面先跑余烬(契约不变: 只认 @s、不认 by), 再按 mc.by
+#     派发给"消耗状态后触发"的装备被动(回潮扣 / 烛跬 …), 那些认的是**消耗者**。
+execute unless data storage zx:work mc{done:1b} run function sweetdream:lib/on_consume with storage zx:work mc

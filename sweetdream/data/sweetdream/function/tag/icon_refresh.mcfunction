@@ -24,6 +24,9 @@ execute if entity @s[tag=zx.status.liuhuo] if score @s zx.tt.liuhuo matches ..3 
 execute if entity @s[tag=zx.status.yehuo] if score @s zx.tt.yehuo matches ..3 run scoreboard players add #tag_mask zx.meta 128
 execute if entity @s[tag=zx.status.shixin] if score @s zx.tt.shixin matches ..3 run scoreboard players add #tag_mask zx.meta 256
 execute if entity @s[tag=zx.status.dream] if score @s zx.tt.dream matches ..3 run scoreboard players add #tag_mask zx.meta 512
+# 并入专属状态位，公共标签消失时仍保留其他有效状态。
+function sweetdream:tag/custom_mask
+scoreboard players operation #tag_mask zx.meta += #tag_extra zx.meta
 # 正在死亡的生物不继续显示；不能以仍存在实体就认定它还活着。
 execute if data entity @s {Health:0.0f} run scoreboard players set #tag_mask zx.meta 0
 execute store result storage zx:tag owner.mask int 1 run scoreboard players get #tag_mask zx.meta

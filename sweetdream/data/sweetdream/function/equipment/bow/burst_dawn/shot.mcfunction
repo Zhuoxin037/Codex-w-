@@ -27,6 +27,7 @@ advancement revoke @s only sweetdream:equipment/bow/burst_dawn
 function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return fail
 
+function sweetdream:equipment/bow/burst_dawn/visual/shot
 # ⓪ 旧弩自检(坑 144)
 #   弩**没有** consumable / 右键, 命中结算全靠 enchantment 的 post_attack 回调
 #   (坑 138: 回调只读攻击者**主手物品**上的附魔)。手上的弩若是"加附魔之前"give

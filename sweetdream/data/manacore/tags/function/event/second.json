@@ -39,6 +39,11 @@
     "sweetdream:equipment/armor/lethe_shore/second",
     "sweetdream:equipment/armor/eternity/second",
     "sweetdream:equipment/armor/armor_mana/second",
+    "sweetdream:equipment/armor/armor_hp/second",
+    "sweetdream:equipment/armor/beach_vein/second",
+    "sweetdream:equipment/armor/light_pillow/second",
+    "sweetdream:equipment/armor/candle_step/second",
+    "sweetdream:equipment/armor/crimson_seam/second",
     "sweetdream:equipment/armor/flesh_mill/second",
     "sweetdream:equipment/armor/blaze_armor/second",
     "sweetdream:equipment/armor/spirit_sight/second",
@@ -55,6 +60,7 @@
     "sweetdream:visual/sword_icon_sync",
     "sweetdream:visual/axe_icon_sync",
     "sweetdream:visual/armor_icon_sync",
-    "sweetdream:visual/tool_icon_sync"
+    "sweetdream:visual/tool_icon_sync",
+    "sweetdream:equipment/staff/five_curses/visual/inventory_sync"
   ]
 }

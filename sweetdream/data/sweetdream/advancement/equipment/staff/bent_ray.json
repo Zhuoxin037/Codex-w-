@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "bent_ray": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "bent_ray"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:equipment/staff/bent_ray/cast"
+    }
+}

@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "wake_bell": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "wake_bell"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:equipment/staff/wake_bell/cast"
+    }
+}

@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "ember_string": {
+            "trigger": "shot_crossbow",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "ember_string"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:equipment/bow/ember_string/shot"
+    }
+}

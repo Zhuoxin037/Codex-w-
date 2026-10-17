@@ -309,7 +309,11 @@ def build():
 def render(chosen):
     lines = [HEAD.rstrip('\n')]
     for _id, e in sorted(chosen.items()):
-        sel = ('execute if data storage zx:work src.id matches "%s"' % _id)
+        # ★ `if data <storage> <路径>` 后面**只能**跟 NBT 复合过滤器, 不能接 `matches`
+        #   (matches 只属于 if score / if entity)。写成 `src.id matches "x"` 是**加载期**
+        #   语法错误 ⇒ 整个 base_dispatch 作废(392 行全不跑, 而且日志只有一行没行号)。
+        #   见 RULES 坑 170 / check.py 的 datamatch 桶。
+        sel = ('execute if data storage zx:work src{id:"%s"}' % _id)
         lines.append('')
         lines.append('# %s  (%s)' % (_id, e['rel']))
         lines.append('%s run data modify storage zx:work namesrc set value %s'

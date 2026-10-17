@@ -15,7 +15,7 @@ FN = os.path.join(ROOT, 'sweetdream', 'data', 'sweetdream', 'function')
 CAP_B = 56
 CAP_A = 8
 CAP_MENU = 12
-CAP_LAYER = 20
+CAP_LAYER = 23
 
 
 def read(p):

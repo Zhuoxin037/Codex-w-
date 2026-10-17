@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "blind_candle": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "blind_candle"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:equipment/sword/blind_candle/cast"
+    }
+}

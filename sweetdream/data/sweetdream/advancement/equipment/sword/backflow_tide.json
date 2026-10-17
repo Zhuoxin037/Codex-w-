@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "backflow_tide": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "backflow_tide"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:equipment/sword/backflow_tide/cast"
+    }
+}

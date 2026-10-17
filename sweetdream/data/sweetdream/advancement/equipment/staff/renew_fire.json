@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "renew_fire": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "renew_fire"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:equipment/staff/renew_fire/cast"
+    }
+}

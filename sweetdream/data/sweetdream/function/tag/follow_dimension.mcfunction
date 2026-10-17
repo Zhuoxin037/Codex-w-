@@ -1,5 +1,13 @@
 # distance=0.. 将选择器限定到当前执行维度，避免三维度循环重复处理同一实体。
 # 只遍历自己的图标和被标记的生物。租约负责死亡、卸载边界与跨维度残留。
+# 专属状态按原有两刻显示节奏发现；不触碰状态寿命。
+tag @e[distance=0..,tag=zx.status.shenghen,tag=!zx.icon_custom] add zx.icon_custom
+tag @e[distance=0..,scores={zx.stg=1..},tag=!zx.icon_custom] add zx.icon_custom
+tag @e[distance=0..,tag=zx.status.dianci,tag=!zx.icon_custom] add zx.icon_custom
+tag @e[distance=0..,tag=zx.rb_rainbow,tag=!zx.icon_custom] add zx.icon_custom
+tag @e[distance=0..,scores={zx.fcv_st=1..},tag=!zx.icon_custom] add zx.icon_custom
+execute as @e[distance=0..,tag=zx.icon_custom] at @s run function sweetdream:tag/custom_watch
+
 scoreboard players remove @e[distance=0..,type=minecraft:text_display,tag=zx.icon_v2] zx.icon_ttl 2
 execute as @e[distance=0..,tag=zx.tagged] at @s unless data entity @s {Health:0.0f} run function sweetdream:tag/follow_one
 kill @e[distance=0..,type=minecraft:text_display,tag=zx.icon_v2,scores={zx.icon_ttl=..0}]

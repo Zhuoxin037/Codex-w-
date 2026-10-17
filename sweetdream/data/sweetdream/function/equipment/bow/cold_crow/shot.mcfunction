@@ -126,7 +126,7 @@ execute unless score #tier zx.meta matches 4 run scoreboard players add @s zx.cc
 
 # ⑥ 表现: 层数越高, 冰屑越多、音调越高
 execute at @s run particle minecraft:snowflake ~ ~1.3 ~ 0.5 0.4 0.5 0.02 12 normal
-execute at @s run particle minecraft:item_snowball ~ ~1.3 ~ 0.3 0.3 0.3 0.02 8 normal
+execute at @s run particle minecraft:snowflake ~ ~1.3 ~ 0.3 0.3 0.3 0.02 8 normal
 execute at @s run playsound minecraft:item.crossbow.shoot player @a ~ ~ ~ 0.7 1.2
 execute if score #tier zx.meta matches 4 run playsound minecraft:block.glass.break player @a ~ ~ ~ 0.8 1.5
 

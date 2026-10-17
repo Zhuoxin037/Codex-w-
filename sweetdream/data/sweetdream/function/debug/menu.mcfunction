@@ -33,6 +33,6 @@ tellraw @s [{"text":"  用 /function 前缀 + sweetdream:debug/<名字>, 名字�
 tellraw @s [{"text":"    freeze / fix_noai / deepsea / deepsea_go / damage / true_damage / iframe","color":"gray"}]
 tellraw @s [{"text":"    offhand / offhand_go / cold_crow / ember_immolate / leech_spine","color":"gray"}]
 tellraw @s [{"text":"    iridescent_mirage / sickle / wind / num_probe","color":"gray"}]
-tellraw @s [{"text":"    sr_probe (圣骸\"杀了没遗骸\"时: 杀完立刻跑, 打印断在哪一步)","color":"gray"}]
-tellraw @s [{"text":"    dd_probe (黄昏黎明\"击杀没多给上限\"时: 跑一条打印断点计数)","color":"gray"}]
+# 命缕的四个调试入口(fate_thread_probe / fate_thread_reset / ft_hit / ft_diag)
+# 已于 2026-10-17 删除 —— 排查结论是「训练人偶不吃 /damage」, 代码侧无误。
 tellraw @s [{"text":"    lore (重刷副手物品的描述, 老装备改规则后用)","color":"gray"}]

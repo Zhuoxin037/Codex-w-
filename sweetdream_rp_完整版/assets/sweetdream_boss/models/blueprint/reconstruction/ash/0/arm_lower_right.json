@@ -1,0 +1,7 @@
+{
+  "parent": "sweetdream_boss:blueprint/reconstruction/arm_lower_right",
+  "textures": {
+    "0": "sweetdream_boss:blueprint/reconstruction/ash/boss_basecolor_1024_0",
+    "particle": "minecraft:item/pufferfish"
+  }
+}

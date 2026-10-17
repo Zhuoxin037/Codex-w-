@@ -62,6 +62,13 @@ execute if data entity @s data{style:"triad"} run function sweetdream:projectile
 execute if data entity @s data{style:"triad_fire"} run function sweetdream:projectile/ball/fx_triad_fire
 execute if data entity @s data{style:"triad_gun"} run function sweetdream:projectile/ball/fx_triad_gun
 execute if data entity @s data{style:"five_curses"} run function sweetdream:projectile/ball/fx_five_curses
+execute if data entity @s data{style:"long_night"} run function sweetdream:projectile/ball/fx_long_night
+execute if data entity @s data{style:"late_court"} run function sweetdream:projectile/ball/fx_late_court
+execute if data entity @s data{style:"wake_bell"} run function sweetdream:projectile/ball/fx_wake_bell
+execute if data entity @s data{style:"bent_ray"} run function sweetdream:projectile/ball/fx_bent_ray
+execute if data entity @s data{style:"fate_thread"} run function sweetdream:projectile/ball/fx_fate_thread
+execute if data entity @s data{style:"other_shore"} run function sweetdream:projectile/ball/fx_other_shore
+execute if data entity @s data{style:"renew_fire"} run function sweetdream:projectile/ball/fx_renew_fire
 # ⑤ 射程耗尽 -> 自己消失
 scoreboard players remove @s zx.ball_dist 75
 execute if score @s zx.ball_dist matches ..0 run function sweetdream:projectile/ball/pop with entity @s data

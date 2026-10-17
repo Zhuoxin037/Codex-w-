@@ -24,6 +24,8 @@ scoreboard players set #bd_p zx.meta 0
 execute on attacker store result score #bd_p zx.meta run scoreboard players get @s zx.bd_paid
 execute unless score #bd_p zx.meta matches 1 run return 0
 
+execute at @s positioned ~ ~0.85 ~ run function sweetdream:equipment/bow/burst_dawn/visual/impact
+tag @e[tag=zx.bd_arr,distance=0..] add zx.bv_impacted
 # ① 受害者必须是**生物**(排除玩家)
 scoreboard players add #bd_dbg3 zx.meta 1
 tag @e[tag=zx.bd_v,distance=0..] remove zx.bd_v

@@ -15,12 +15,12 @@
 #   而且一个字都不报(真实事故: 2026-10-04 04:08:55 一次命令爆量, 把
 #   upgrade/attack 卡住 → 魔力增殖 α/β/Ω 的攻击回魔从此全死, 玩家以为"升级失效了")。
 #
-# 【怎么做】每刻对所有玩家撤销一遍这 159 条。
+# 【怎么做】每刻对所有玩家撤销一遍这 178 条。
 #   · 正常情况: 进度早被奖励函数自己撤掉了, 这里全是**空操作**(撤销一条未授予的
 #     进度什么都不发生), 所以本文件在健康状态下不产生任何行为变化;
 #   · 只有"奖励函数被跳过"这个死角里, 它才是唯一的救兵 —— 下一 tick 事件
 #     就能重新授予, 效果恢复(最多晚 1 tick, 玩家察觉不到)。
-#   · 成本: 159 条 revoke / tick, 相对预算 65536 可忽略。
+#   · 成本: 178 条 revoke / tick, 相对预算 65536 可忽略。
 #
 # 【★ 新增自撤销型进度时, 必须同步加到这里 ★】
 #   判据 = "奖励函数的第一个非注释行是 advancement revoke @s only 自己"
@@ -29,7 +29,7 @@
 #
 # 【★ 审查报告 O01 的核对结论(2026-10-10): 一条都不能删 ★】
 #   报告说"很多奖励函数本身已经先撤销自己的进度, 这类每 tick 兜底冗余" ——
-#   但按本包契约, **全部 159 条**的奖励函数都自撤销(规则 5 强制), 所以"自撤销"
+#   但按本包契约, **全部 178 条**的奖励函数都自撤销(规则 5 强制), 所以"自撤销"
 #   不构成删减依据: 这个文件的职责恰恰是兜住"自撤销没跑成"的那次(预算爆量 /
 #   排序错), 删了 = 复现 2026-10-04 的事故类别。
 #   · 真能省的只有"频率/位置"(每 2 tick 交替两半 / 改每秒), 但那是在拿
@@ -85,6 +85,23 @@ advancement revoke @a only sweetdream:equipment/bow/burst_dawn
 #   (批 13 2026-10-13: 退弦(弩·射击) / 引雷针(法杖·右键) / 冰鉴(副手·受击)
 #    三条进度同样是"自撤销型", 按契约登记到这里。)
 advancement revoke @a only sweetdream:equipment/bow/backstring
+#   (批 15-1 2026-10-15: 眠羽/烬弦/逆弦/黯日 四把弩接上命中结算 —— 各自新增
+#    "射击进度 + shot 扣蓝", shot 首行 `advancement revoke @s only <自己>`,
+#    属自撤销型, 按契约登记到这里。)
+advancement revoke @a only sweetdream:equipment/bow/feather_sleep
+advancement revoke @a only sweetdream:equipment/bow/ember_string
+advancement revoke @a only sweetdream:equipment/bow/reverse_string
+advancement revoke @a only sweetdream:equipment/bow/dark_sun
+#   (批 15-2 2026-10-15: 归息(胸甲·近战命中) / 殓丝(副手·受击) 两条新进度同样是
+#    "自撤销型", 按契约登记到这里。)
+advancement revoke @a only sweetdream:equipment/armor/last_breath_hit
+advancement revoke @a only sweetdream:equipment/tool/coffin_silk_hurt
+#   (批 15-3 2026-10-15: 刺纹(近战命中) / 沸痕(受火伤) / 轻枕·渡梦(受近战) 四条新进度
+#    同样是"自撤销型", 按契约登记到这里。)
+advancement revoke @a only sweetdream:equipment/armor/thorn_vein_hit
+advancement revoke @a only sweetdream:equipment/armor/boil_trace_hurt
+advancement revoke @a only sweetdream:equipment/armor/light_pillow_hurt
+advancement revoke @a only sweetdream:equipment/armor/cross_dream_hurt
 advancement revoke @a only sweetdream:equipment/staff/thunderrod
 advancement revoke @a only sweetdream:equipment/tool/frostmirror_hurt
 advancement revoke @a only sweetdream:equipment/staff/apocalypse
@@ -225,3 +242,65 @@ advancement revoke @a only sweetdream:equipment/axe/scorch_bone
 # ---- 批 12 · 法杖(2026-10-13): 五世恶咒 / 很冰的斧 ----
 advancement revoke @a only sweetdream:equipment/staff/five_curses
 advancement revoke @a only sweetdream:equipment/staff/triad
+#   (批 15-4 2026-10-16: 燧行/缝心/浅梦 三套里的四条"近战命中"进度同样是自撤销型 ——
+#    燧帽 点火 / 烟履 收割 / 针眠 点噬心 / 镜寐 每 3 次计数, 均按契约登记到这里。
+#    ★ 本批其余六件(候潮/焦衣/绯缝 的单件与三套的套装段)走的是 **damage 钩子**
+#      (internal/damage/one), 不是进度, 因此**不进**这个清单。)
+advancement revoke @a only sweetdream:equipment/armor/flint_hat_hit
+advancement revoke @a only sweetdream:equipment/armor/smoke_step_hit
+advancement revoke @a only sweetdream:equipment/armor/needle_sleep_hit
+advancement revoke @a only sweetdream:equipment/armor/mirror_sleep_hit
+# ---- 批 15-5 · 术阵/领域/召唤物(2026-10-16): 重溟(主动 + 平A命中被动) / 长夜(右键分派) ----
+advancement revoke @a only sweetdream:equipment/axe/deep_brine
+advancement revoke @a only sweetdream:equipment/axe/deep_brine_hit
+advancement revoke @a only sweetdream:equipment/staff/long_night
+#   凝壳(胸甲)的"受伤"进度同样是自撤销型(entity_hurt_player -> on_hurt 首行 revoke),
+#   按契约登记到这里, 否则 /reload 后玩家的受伤进度会卡在已完成状态、再也不触发。
+advancement revoke @a only sweetdream:equipment/armor/condensed_shell_hurt
+#   迟庭(法杖)走的是右键分派(consume_item -> cast 首行 revoke), 同契约登记。
+advancement revoke @a only sweetdream:equipment/staff/late_court
+#   雷楔(剑)两条都登记: 右键主动(consume_item) + 平A命中被动(player_hurt_entity)。
+advancement revoke @a only sweetdream:equipment/sword/thunder_wedge
+advancement revoke @a only sweetdream:equipment/sword/thunder_wedge_hit
+# ---- 批 15-6 · 范围主动 + 连锁(2026-10-17) ----
+#   退汐(剑)右键主动(consume_item -> cast 首行 revoke), 同契约登记。
+advancement revoke @a only sweetdream:equipment/sword/backflow_tide
+#   盲烛(剑)两条都登记: 右键主动(consume_item) + 平A命中(player_hurt_entity)。
+advancement revoke @a only sweetdream:equipment/sword/blind_candle
+advancement revoke @a only sweetdream:equipment/sword/blind_candle_hit
+#   丧铃(斧)右键主动(consume_item -> cast 首行 revoke), 同契约登记。
+advancement revoke @a only sweetdream:equipment/axe/death_bell
+#   剜霜(斧)右键主动(consume_item -> cast 首行 revoke), 同契约登记。
+advancement revoke @a only sweetdream:equipment/axe/frost_carve
+#   醒梦钟(法杖)右键分派(consume_item -> cast 首行 revoke)。
+advancement revoke @a only sweetdream:equipment/staff/wake_bell
+#   折径(法杖)右键分派(consume_item -> cast 首行 revoke)。
+advancement revoke @a only sweetdream:equipment/staff/bent_ray
+#   命缕(法杖)右键分派(consume_item -> cast 首行 revoke)。
+#   ★ 原来的 fate_thread_hit(player_hurt_entity) 已删(2026-10-17): 连丝反伤改走
+#     core/tick 每刻血量轮询, 覆盖"全部伤害来源", 不再需要事件进度。
+advancement revoke @a only sweetdream:equipment/staff/fate_thread
+# ---- 批 15-7 · 连接/转化/资源(2026-10-17) ----
+#   彼岸(法杖)右键分派(consume_item -> cast 首行 revoke)。
+advancement revoke @a only sweetdream:equipment/staff/other_shore
+#   失血(剑)两条都登记: 右键主动(consume_item) + 平A命中(player_hurt_entity)。
+advancement revoke @a only sweetdream:equipment/sword/blood_loss
+advancement revoke @a only sweetdream:equipment/sword/blood_loss_hit
+#   杂纹(护腿)的"下一次攻击时停"靠一个全包共用的 player_hurt_entity 进度
+#   (不认武器), 同样是自撤销型 -> 必须登记, 否则 /reload 后永远不触发。
+advancement revoke @a only sweetdream:equipment/armor/mottle_vein_hit
+# ---- 批 14 补技能(2026-10-17): 断页 / 续火 ----
+#   两件都是自撤销型进度(consume_item -> cast 首行 revoke) => 必须登记,
+#   否则 /reload 之后永远不再触发。
+advancement revoke @a only sweetdream:equipment/axe/broken_page
+advancement revoke @a only sweetdream:equipment/staff/renew_fire
+# ---- 批 14 补技能(2026-10-17): 返照 / 回旋 ----
+#   两件都是**全包共用**的 player_hurt_entity 进度(不认武器) => 自撤销型, 必须登记,
+#   否则 /reload 之后"近战命中"永远不再触发它们。
+advancement revoke @a only sweetdream:equipment/armor/backlight_hit
+advancement revoke @a only sweetdream:equipment/armor/gyre_hit
+# ---- 批 14 补技能(2026-10-17): 空枕的近战命中 ----
+#   空枕的「造成伤害」原本只挂 internal/damage/deal（技能/法球/弩），
+#   原版近战普攻不走 deal ⇒ 平A 永远不附「白昼梦」。补这条 player_hurt_entity。
+#   自撤销型进度(首行 revoke) => 必须登记，否则 /reload 后平A 不再触发。
+advancement revoke @a only sweetdream:equipment/armor/empty_pillow_hit

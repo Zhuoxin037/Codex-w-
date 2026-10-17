@@ -220,8 +220,9 @@ data modify storage zx:reg a append value {l:"风声",o:"zx.wg_sound",c:"light_p
 #   ⚠️ l / n 会被塞进 tellraw 的 JSON 字符串: 不要写英文双引号和反斜杠。
 #   ⚠️ 一行的字段(o/l/c/e)必须写全; 宏参数少一个那条命令直接不跑(不报错, 难查)。
 #
-# 【表位上限】layer 最多 16 行; 加超了改 .workbuddy/gen_reg_unroll.py 顶上的
-#   LAYER_CAP 常量再跑一次那个脚本, check.py 会帮你数。
+# 【表位上限】layer 最多 23 行(2026-10-17 由 20 提到 23); 加超了先把下面的 cap 行改掉,
+#   再改 .workbuddy/gen_reg_unroll.py 顶上的 CAP_LAYER 常量(两边必须一致), 然后跑一次
+#   那个脚本重生成 lib/look/layer_unroll —— check.py 的 regcap 会帮你数。
 # ============================================================
 data modify storage zx:reg layer set value []
 
@@ -274,6 +275,17 @@ data modify storage zx:reg layer append value {o:"zx.dio_wine",l:"酒浆",c:"lig
 # ---- 风行于大地之上「风声」(点数, 无硬上限; 召唤术阵后每命中一个生物 +1, >60 触发加成) ----
 #   上限是动态阈值(60)而非硬顶, 且点数会冲到很大 -> max:0 只显示当前点数, 不摆 "x/N"。
 data modify storage zx:reg layer append value {o:"zx.wg_sound",l:"风声",c:"white",e:"wind_ontheground",n:"点",max:0}
+# ---- 缝心「绯结」(最多 3 层; 为原本未附「噬心」者附加噬心后积攒 1 层, 真伤命中时消耗 1 层换 +15%) ----
+#   ★ 与「剑魂」「居合」同款: 这是**双件套**(●针眠 头盔 + ●绯缝 胸甲)的私有积攒,
+#     而 layer 的 e 只能填一个 id("只在那件在身时显示") ⇒ 两件各登记一条。
+#     少登记一条 = 只戴其中一件时层数凭空消失(玩家只会说"有时候显示有时候不显示")。
+#   ★ 2026-10-17 补: 15-4 实装时漏登记, 玩家自攒了 3 层却看不见。
+data modify storage zx:reg layer append value {o:"zx.cr_knit",l:"绯结",c:"red",e:"needle_sleep",n:"层",max:3}
+data modify storage zx:reg layer append value {o:"zx.cr_knit",l:"绯结",c:"red",e:"crimson_seam",n:"层",max:3}
+# ---- 失血「心血」(最多 3 层; 平A 命中带「噬心」者消耗之 +1, 主动一次清零) ----
+#   ★ 2026-10-17 补(玩家原话: "给自己附加的层数观测镜没显示"): 15-7 实装时漏登记。
+#   ★ 凡是"给自己攒层"的机制, 加完代码必须回来登记这张表 —— 守门规则 layreg 会抓。
+data modify storage zx:reg layer append value {o:"zx.bld_n",l:"心血",c:"dark_red",e:"blood_loss",n:"层",max:3}
 
 
 # ============================================================
@@ -389,6 +401,50 @@ data modify storage zx:reg names.frostmirror set value "冰鉴"
 data modify storage zx:reg names.everlit set value "长明"
 data modify storage zx:reg names.thunderrod set value "引雷针"
 
+# ---- 批 14 · NEW.md 42 件(2026-10-15)----
+data modify storage zx:reg names.backflow_tide set value "退汐"
+data modify storage zx:reg names.fate_thread set value "命缕"
+data modify storage zx:reg names.other_shore set value "彼岸"
+data modify storage zx:reg names.feather_sleep set value "眠羽"
+data modify storage zx:reg names.blind_candle set value "盲烛"
+data modify storage zx:reg names.death_bell set value "丧铃"
+data modify storage zx:reg names.deep_brine set value "重溟"
+data modify storage zx:reg names.broken_page set value "断页"
+data modify storage zx:reg names.last_breath set value "归息"
+data modify storage zx:reg names.renew_fire set value "续火"
+data modify storage zx:reg names.wake_bell set value "醒梦钟"
+data modify storage zx:reg names.long_night set value "长夜"
+data modify storage zx:reg names.cross_dream set value "渡梦"
+data modify storage zx:reg names.tide_buckle set value "回潮扣"
+data modify storage zx:reg names.ember_string set value "烬弦"
+data modify storage zx:reg names.blood_loss set value "失血"
+data modify storage zx:reg names.bent_ray set value "折径"
+data modify storage zx:reg names.condensed_shell set value "凝壳"
+data modify storage zx:reg names.coffin_silk set value "殓丝"
+data modify storage zx:reg names.tread_ash set value "踏灰"
+data modify storage zx:reg names.backlight set value "返照"
+data modify storage zx:reg names.gyre set value "回旋"
+data modify storage zx:reg names.reverse_string set value "逆弦"
+data modify storage zx:reg names.late_court set value "迟庭"
+data modify storage zx:reg names.thunder_wedge set value "雷楔"
+data modify storage zx:reg names.frost_carve set value "剜霜"
+data modify storage zx:reg names.dark_sun set value "黯日"
+data modify storage zx:reg names.flint_hat set value "燧帽"
+data modify storage zx:reg names.smoke_step set value "烟履"
+data modify storage zx:reg names.tide_watch set value "候潮"
+data modify storage zx:reg names.beach_vein set value "滩纹"
+data modify storage zx:reg names.needle_sleep set value "针眠"
+data modify storage zx:reg names.crimson_seam set value "绯缝"
+data modify storage zx:reg names.mirror_sleep set value "镜寐"
+data modify storage zx:reg names.light_pillow set value "轻枕"
+data modify storage zx:reg names.char_coat set value "焦衣"
+data modify storage zx:reg names.candle_step set value "烛跬"
+data modify storage zx:reg names.boil_trace set value "沸痕"
+data modify storage zx:reg names.thorn_vein set value "刺纹"
+data modify storage zx:reg names.rain_trace set value "雨迹"
+data modify storage zx:reg names.empty_pillow set value "空枕"
+data modify storage zx:reg names.mottle_vein set value "杂纹"
+
 # ============================================================
 # tg: 每个 /trigger 调试入口
 #   obj  = 计分项(core/load 里建的 trigger 型)
@@ -425,4 +481,4 @@ data modify storage zx:reg menu append value {k:"menu",n:"重新打印这个菜�
 data modify storage zx:reg menu append value {k:"give",n:"发潜影盒: 装备 28 件 + 强化材料 7 块(分两盒)"}
 
 # ---------- 记录本版本的表位上限(给 gen_reg_unroll.py / check.py 数用) ----------
-data modify storage zx:reg cap set value {b:56,a:8,menu:12,layer:20}
+data modify storage zx:reg cap set value {b:56,a:8,menu:12,layer:23}

@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "frost_carve": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "frost_carve"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:equipment/axe/frost_carve/cast"
+    }
+}

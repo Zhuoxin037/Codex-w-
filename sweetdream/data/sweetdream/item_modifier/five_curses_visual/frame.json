@@ -1,0 +1,26 @@
+[
+  {
+    "function": "minecraft:set_components",
+    "components": {
+      "minecraft:item_model": "sweetdream:five_curses"
+    }
+  },
+  {
+    "function": "minecraft:set_custom_model_data",
+    "floats": {
+      "values": [
+        {
+          "type": "minecraft:score",
+          "target": {
+            "type": "minecraft:fixed",
+            "name": "#fcvv_frame"
+          },
+          "score": "zx.fcvv_f"
+        }
+      ],
+      "mode": "replace_section",
+      "offset": 0,
+      "size": 1
+    }
+  }
+]

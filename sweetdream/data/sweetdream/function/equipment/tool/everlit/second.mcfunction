@@ -1,3 +1,5 @@
+# 长明的GUI绑定与灯灵生命周期分别管理。
+execute as @a[tag=!test_pending_return] run function sweetdream:equipment/tool/everlit/model_sync
 # 持有者集合与“已被一只灯认领”的集合分离。scratch el_own 不会清掉别人的认领。
 tag @a[tag=zx.el_host] remove zx.el_host
 tag @a[tag=zx.el_seen] remove zx.el_seen

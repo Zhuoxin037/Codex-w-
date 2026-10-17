@@ -3,7 +3,7 @@
 # ============================================================
 # 【剩余 <= 3 秒 -> 换"淡色字形"】(2026-10-06 加)
 #   每个标签在自己的 zx.tt.<mark> 上剩余秒数 <= 3 时用淡色字形(U+E005..E009)，
-#   否则用普通字形(U+E000..U+E004)。淡色副本由 sweetdream_rp/tools/make_icons.py
+#   否则用普通字形(U+E000..U+E004)。淡色副本由 sweetdream_rp_完整版/tools/make_icons.py
 #   与图集一起生成(降不透明度 + 轻微去饱和；形状与字宽完全不变，所以整排不跳动)。
 # 【★ 为什么不能用 text_opacity ★】
 #   它作用在整个 text_display 上 —— 一行最多 5 个图标，弄淡"刚到 3 秒的那个"
@@ -29,5 +29,6 @@ execute if entity @s[tag=zx.status.shixin] if score @s zx.tt.shixin matches ..3 
 execute if entity @s[tag=zx.status.shixin] unless score @s zx.tt.shixin matches ..3 run data modify storage zx:tag row.extra append value {"translate":"sweetdream.icon.shixin","fallback":""}
 execute if entity @s[tag=zx.status.dream] if score @s zx.tt.dream matches ..3 run data modify storage zx:tag row.extra append value {"translate":"sweetdream.icon.dim.dream","fallback":""}
 execute if entity @s[tag=zx.status.dream] unless score @s zx.tt.dream matches ..3 run data modify storage zx:tag row.extra append value {"translate":"sweetdream.icon.dream","fallback":""}
+function sweetdream:tag/icon_render_custom
 $data modify entity @e[type=minecraft:text_display,tag=zx.icon_v2,tag=zx.owner_$(u0)_$(u1)_$(u2)_$(u3),limit=1] text set from storage zx:tag row
 $scoreboard players set @e[type=minecraft:text_display,tag=zx.icon_v2,tag=zx.owner_$(u0)_$(u1)_$(u2)_$(u3),limit=1] zx.icon_mask $(mask)

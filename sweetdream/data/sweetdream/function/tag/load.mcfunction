@@ -2,6 +2,9 @@
 execute unless data storage zx:config tag_v2_initialized run scoreboard objectives add zx.icon_mask dummy
 execute unless data storage zx:config tag_v2_initialized run scoreboard objectives add zx.icon_ttl dummy
 data modify storage zx:config tag_v2_initialized set value 1b
+# 新缓存仅保存图标指纹；reload不推进任何状态。
+execute unless data storage zx:config obj_zx_icon_ext run scoreboard objectives add zx.icon_ext dummy
+data modify storage zx:config obj_zx_icon_ext set value 1b
 scoreboard players set #tag_clock zx.meta 0
 scoreboard players set #icon_t zx.meta 0
 

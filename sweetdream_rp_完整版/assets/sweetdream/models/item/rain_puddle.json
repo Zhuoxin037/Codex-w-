@@ -1,0 +1,24 @@
+{
+  "credit": "雨迹：一摊平铺在地面的水迹（item_display 专用）。★ 元素坐标 = item model 空间，1 单位 = 1/16 格，渲染原点恒在 (8,8,8) ★ —— 所以「贴地」= y 写在 8 附近（8 = 实体所在高度），不是 0；写 0 会让整块板沉到实体下方半格、埋在方块里完全看不见。尺寸：x/z -16..32 = 48/16 = 3.0 格宽（贴图 48×48，水洼本体约占 77% ≈ 2.3 格，无息回程每刻跳 2 格也能拼上不留缝），厚度 0.2 单位 = 0.0125 格。只画 up 面：item_display 的模型空间里 Y 就是世界 Y，水平薄板天然躺平，不需要 transformation 旋转。",
+  "ambientocclusion": false,
+  "gui_light": "front",
+  "textures": {
+    "puddle": "sweetdream:item/rain_puddle",
+    "particle": "sweetdream:item/rain_puddle"
+  },
+  "elements": [
+    {
+      "name": "水面",
+      "from": [-16, 8.0, -16],
+      "to": [32, 8.2, 32],
+      "shade": false,
+      "light_emission": 4,
+      "faces": {
+        "up": {
+          "texture": "#puddle",
+          "uv": [0, 0, 16, 16]
+        }
+      }
+    }
+  ]
+}

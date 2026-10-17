@@ -64,6 +64,8 @@ def main():
     for m in ORDER:
         out.append(line(m, True) + '\n')
         out.append(line(m, False) + '\n')
+    if (OUT.parent / 'icon_render_custom.mcfunction').exists():
+        out.append('function sweetdream:tag/icon_render_custom\n')
     out.append(TAIL)
     OUT.write_text(''.join(out), encoding='utf-8', newline='\n')
     # 自检: 字形顺序必须与掩码位一一对应

@@ -49,4 +49,24 @@ execute unless data storage zx:work a.u3 run data modify storage zx:work a.u3 se
 
 data modify storage zx:work ob set from storage zx:work a
 
+# ============================================================
+# 【★★★ 把"本次技能走的是哪条倍率通道"一并冻进 ob ★★★】(2026-10-16 批 15-4)
+# ------------------------------------------------------------
+# 【为什么要】燧行套装(烟履+燧帽)的加成条件是"基础攻击力类技能伤害", 判据就是
+#   三条通道里的 attack_mul > 0。而通道字段**不在 zx:work a 里** —— 它在
+#   manacore:work a(算伤害用的入参), 由 lib/dmg_ch 在 #manacore:event/damage_calc
+#   **最前面**拍成快照 zx:work ch 保存下来(那是"这一次走了哪条通道"的唯一凭据)。
+# 【为什么在这里冻、不在 one 里直接读 ch】
+#   · ch 是**全局临时节点**(所有伤害共用一份)。范围伤害会 `execute as` 逐个目标打,
+#     前一只的收尾钩子(圣骸 skill_kill / 殓丝 / 焦衣…)可能触发**新的 calc**,
+#     把 ch 换成别人的通道 —— 那样同一发技能的第 2 只目标就会读到错的通道(随机、难复现)。
+#   · 冻进 ob 之后, 同一次投递的每只目标读到的是**同一个值**; 而 ob 每次都在
+#     上一行被整份覆盖, 所以也绝不会把上一发的通道带过来。
+# 【为什么只抄 attack_mul】目前只有燧行要判通道; 以后要判 mm / oth, 照抄一行即可。
+# 【静默不生效 = 安全的一边】用**存好的数字**直接投递的伤害(如裂缝 field_tick 每秒一跳)
+#   前面没有 calc, 这一行取不到值就不写 ⇒ 下游 data get 读到 0 ⇒ 判成"不算基础攻击力类"。
+#   宁可少给, 不可能多给。
+# ============================================================
+data modify storage zx:work ob.attack_mul set from storage zx:work ch.attack_mul
+
 $execute as $(target) run function sweetdream:internal/damage/one

@@ -113,6 +113,49 @@ execute in minecraft:overworld as @e[tag=zx.ac_beam,distance=0..] at @s run func
 execute in minecraft:the_nether as @e[tag=zx.ac_beam,distance=0..] at @s run function sweetdream:equipment/axe/angel_core/beam_tick
 execute in minecraft:the_end as @e[tag=zx.ac_beam,distance=0..] at @s run function sweetdream:equipment/axe/angel_core/beam_tick
 
+# 重溟(2026-10-16 批 15-5): 「领域」每秒一跳 —— 领域内(半径 3)全部生物吃
+#   施法者最大魔力值×0.03, 并被朝中心拉 0.5 格; 计时 zx.db_ft 归零就 kill 自己。
+#   领域是**纯 marker**(文案只说"领域"= 范围效果, 没要外观)。
+#   ★ 三维度各写一遍 + distance=0..(同神裁领域 / 崩裂裂缝 / 云迹领域 / 威霆术阵)。
+execute in minecraft:overworld as @e[type=marker,tag=zx.db_field,distance=0..] at @s run function sweetdream:equipment/axe/deep_brine/field_tick
+execute in minecraft:the_nether as @e[type=marker,tag=zx.db_field,distance=0..] at @s run function sweetdream:equipment/axe/deep_brine/field_tick
+execute in minecraft:the_end as @e[type=marker,tag=zx.db_field,distance=0..] at @s run function sweetdream:equipment/axe/deep_brine/field_tick
+
+# 长夜(2026-10-16 批 15-5): 「夜原」每秒一跳 —— 随机消耗圈内 1 个带「夜火」的生物
+#   (附「流火」+ 护甲/韧性 -60% + 打 最大魔力×0.12, 每消耗一次后续 ×1.08 独立乘区);
+#   计时 zx.ln_ft 归零就 field_end(先撤减甲、再删框架术阵、最后 kill)。
+#   夜原是**纯 marker**(文案只说"领域/夜原"= 范围效果, 没要外观)。
+#   ★ 三维度各写一遍 + distance=0..(同神裁领域 / 崩裂裂缝 / 威霆术阵)。
+execute in minecraft:overworld as @e[type=marker,tag=zx.ln_field,distance=0..] at @s run function sweetdream:equipment/staff/long_night/field_tick
+execute in minecraft:the_nether as @e[type=marker,tag=zx.ln_field,distance=0..] at @s run function sweetdream:equipment/staff/long_night/field_tick
+execute in minecraft:the_end as @e[type=marker,tag=zx.ln_field,distance=0..] at @s run function sweetdream:equipment/staff/long_night/field_tick
+
+# 凝壳（盔甲, 2026-10-16 批 15-5): 「霜壳」每秒推进 —— 每秒对领域内生物打一次
+#   基础攻击力 ×4, 并冻住"首次进入"的那一只; 计时 zx.cs_ft 归零就 field_end
+#   （删框架术阵 + kill 自己）。
+execute in minecraft:overworld as @e[type=marker,tag=zx.cs_field,distance=0..] at @s run function sweetdream:equipment/armor/condensed_shell/field_tick
+execute in minecraft:the_nether as @e[type=marker,tag=zx.cs_field,distance=0..] at @s run function sweetdream:equipment/armor/condensed_shell/field_tick
+execute in minecraft:the_end as @e[type=marker,tag=zx.cs_field,distance=0..] at @s run function sweetdream:equipment/armor/condensed_shell/field_tick
+
+# 迟庭(法杖, 2026-10-16 批 15-5): 「领域」每秒推进 —— 每秒对圈内**处于缓慢**的生物
+#   打一次 最大魔力值 ×0.04, 并处理"缓慢在领域内结束"那一段(基础攻击力 ×4 + 向领域外
+#   击退 1 格); 计时 zx.ltc_ft 归零就 field_end(删框架术阵 + kill 自己)。
+#   领域是**纯 marker**(文案只说"领域"= 范围效果, 没要外观)。
+#   ★ 前缀用 ltc_ 而不是 lt_: zx.lt_* 已经被「沉溺忘川彼岸」(lethe_shore) 占用
+#     (zx.lt_end = 残念到期刻), 复用会撞成"一个计分项两件事"(坑 136/143)。
+#   ★ 三维度各写一遍 + distance=0..(同神裁领域 / 崩裂裂缝 / 威霆术阵)。
+execute in minecraft:overworld as @e[type=marker,tag=zx.ltc_field,distance=0..] at @s run function sweetdream:equipment/staff/late_court/field_tick
+execute in minecraft:the_nether as @e[type=marker,tag=zx.ltc_field,distance=0..] at @s run function sweetdream:equipment/staff/late_court/field_tick
+execute in minecraft:the_end as @e[type=marker,tag=zx.ltc_field,distance=0..] at @s run function sweetdream:equipment/staff/late_court/field_tick
+
+# 雷楔(剑, 2026-10-16 批 15-5): 「雷楔」召唤物每秒推进 —— 只有倒计时与"还立着"的电花;
+#   计时 zx.twg_ft 归零就 wedge_end(删框架术阵 + kill 自己)。
+#   落雷不走这里(那是平A命中即触发, 见 thunder_wedge/hit), 这里只管活多久。
+#   ★ 三维度各写一遍 + distance=0..(同神裁领域 / 崩裂裂缝 / 威霆术阵)。
+execute in minecraft:overworld as @e[type=marker,tag=zx.twg_wedge,distance=0..] at @s run function sweetdream:equipment/sword/thunder_wedge/wedge_tick
+execute in minecraft:the_nether as @e[type=marker,tag=zx.twg_wedge,distance=0..] at @s run function sweetdream:equipment/sword/thunder_wedge/wedge_tick
+execute in minecraft:the_end as @e[type=marker,tag=zx.twg_wedge,distance=0..] at @s run function sweetdream:equipment/sword/thunder_wedge/wedge_tick
+
 # 威霆(2026-10-07 批2): 「术阵」每秒推进 —— 计时 zx.tc_ft 归零就收阵(field_end 反查施法者清 zx.tc_on)。
 execute in minecraft:overworld as @e[type=marker,tag=zx.tc_field,distance=0..] at @s run function sweetdream:equipment/axe/thunderclap/field_tick
 execute in minecraft:the_nether as @e[type=marker,tag=zx.tc_field,distance=0..] at @s run function sweetdream:equipment/axe/thunderclap/field_tick
@@ -146,8 +189,27 @@ function sweetdream:status/aura
 # 生物身上「武器专属标签」的到期衰减(圣痕 15 秒消失 / 升痕 每 15 秒 −1 层) —— 见 status/decay
 function sweetdream:status/decay
 
+# 命缕(法杖, 2026-10-17 批 15-6): 连丝的每秒推进 **已移到 core/tick 的每刻轮询**
+#   —— 玩家报"全部失效"后查明: marker 一直没生成成功(zx.ft_own/ft_ft 无任何记录),
+#   于是"7 秒收场 / 失去噬心断开 / 距离 >12 断开"全都不会发生。
+#   现在这三件事全部由 equipment/staff/fate_thread/watch 在玩家侧每刻判, 不再需要每秒驱动。
+
 # 极光与幻梦: 时停期间每隔 4 秒的飘渺钟声 + 持续极光粒子
 execute as @a[scores={zx.ad_bell=1..}] run function sweetdream:equipment/sword/aurora_dream/bell
+
+# 续火(法杖, 批 14 补技能): 切换武器后清空"普攻累计次数"
+#   文案"切换武器后清空次数" ⇒ 只要主手不再是续火就归零(切走立刻生效, 切回来是 0)。
+#   只对**有计数**的玩家跑这一条(`scores={zx.rf_n=1..}`), 平时选择器为空、零开销。
+execute as @a[scores={zx.rf_n=1..}] unless items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["renew_fire"]}] run scoreboard players set @s zx.rf_n 0
+
+# 空枕(头盔, 批 14 补技能): 连续 4 秒没造成伤害 -> 「静息」
+#   时刻由 internal/damage/deal 的钩子(on_deal)刷新, 这里只做"够 4 秒就发标签"。
+execute as @a run function sweetdream:equipment/armor/empty_pillow/passive
+
+# 返照(头盔, 批 14 补技能): 「回照」5 秒到期后把残留值清 0
+#   ★ 判定本身在 backlight/on_cast 里(`zx.bk_wd >= #now` 才算生效), 这里只是清理,
+#     让观测镜/调试看到的"回照剩余"不会一直停在过期的旧值上。
+function sweetdream:equipment/armor/backlight/second
 
 # 魔力上限下限保护 —— 必须放在所有装备结算之后(脑髓蛭/脊骨共生会把上限算成负数)
 execute as @a run function sweetdream:lib/mana_floor

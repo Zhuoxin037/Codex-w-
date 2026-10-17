@@ -38,7 +38,14 @@
 #   每 tick 的还会把状态续上。所以**成对清**: 每个被摘的"标签驱动型"修饰符,
 #   它的标签也一并去掉。范围就是下表这 6 对, 不做"海量 tag 全清"(那是另一件事)。
 # 【★ 升级属性 ★】`upg_*`(升级/超限给的)也算装备型 —— 一并摘掉后按穿戴重算, 见第二段。
-# 【★ `modifier remove` 对不存在的 id 是空操作 ★】无需先判存在(与 lib/freeze 同款)。
+# 【★ `modifier remove` 撞空会不会出事（2026-10-16 更正）★】
+#   ★ 旧注释写的是"对不存在的 id 是空操作" —— **不准**。wiki `/attribute` 的 Result 表
+#     把"不存在具有指定命名空间ID的修饰符"明确列为**执行失败**。
+#   ★ 但**失败不会中断函数**: 本包 lib/unfreeze_one 就是"无条件 remove 后面还接着
+#     4 条命令"(含摘 zx.freeze 标签), 而那条 remove 常常撞空 —— 功能一直正常, 说明
+#     后面的命令照跑。所以这里可以不判存在, 一路 remove 下去。
+#   ★ 另一种风格是加门控(armor_hp/passive: `execute if score … matches 1.. run …remove`),
+#     两者都对; 差别只是"撞空时要不要白报一次失败"。
 # ============================================================
 
 # ---- 一) 状态型修饰符(施法/命中时挂, 靠分数或标签到点摘) ----
@@ -69,6 +76,16 @@ attribute @s minecraft:armor modifier remove sweetdream:tag_liuhuo
 attribute @s minecraft:attack_damage modifier remove sweetdream:tag_dream_atk
 tag @s remove zx.status.liuhuo
 tag @s remove zx.status.dream
+
+# ---- 一·五) 回血原语的**临时**上限(2026-10-16 加) ----
+#   lib/heal_up 会把 max_health 临时压低(修饰符 `sweetdream:heal_cap`), 正常由 core/tick
+#   在两拍后摘掉。这里兜底那个窗口: 重置/建档**恰好卡在"压低之后、摘掉之前"**时,
+#   计时标签会被清、修饰符就永远留着(血条变短, 且再也摘不掉)。
+#   ★ 两个标签(heal_p / heal_on)必须一起摘: 它们是 lib/heal_up ① 的门控,
+#     留着会让"下一轮"误以为"已经挂着", 从而去摘一个不存在的修饰符。
+attribute @s minecraft:max_health modifier remove sweetdream:heal_cap
+tag @s remove zx.heal_p
+tag @s remove zx.heal_on
 
 # ---- 二) 装备型修饰符(常驻; 按穿戴 / 升级等级持续存在) ----
 #   摘掉之后由各装备的每秒被动按"已清零的账本"重算: 穿着 ⇒ 重新挂上(值正确),

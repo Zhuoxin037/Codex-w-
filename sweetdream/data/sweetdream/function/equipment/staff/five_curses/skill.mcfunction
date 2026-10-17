@@ -79,3 +79,6 @@ execute if score #fcv_kill zx.meta matches 1.. run function sweetdream:equipment
 
 # ⑩ 收尾
 tag @e[tag=zx.fcv_tar] remove zx.fcv_tar
+
+# 用户授权的猴头模型动效；不改变上述原技能的数值与执行顺序。
+function sweetdream:equipment/staff/five_curses/visual/begin_skill

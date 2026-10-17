@@ -62,6 +62,79 @@ execute in minecraft:the_end as @e[tag=zx.fi_field,distance=0..] at @s run funct
 #   不还回去的话你在聊天栏手填的参数每刻都被冲掉 —— 见 lib/in_bak。
 function sweetdream:lib/in_bak
 
+# ★ 位移检测（批 14 补技能：踏灰 / 雨迹）★
+#   只有"刚放过技能、脚穿这两件之一"的玩家带 zx.sm_chk（窗口 8 刻）⇒ 平时零开销。
+#   lib/step 里会比"施法刻坐标"与"当前坐标"，任一轴超阈值就兑现。
+#   ★ 必须每刻：位移技能的落点在 1~3 刻内就到位，每秒判会直接错过。
+#   ★ 三维度各写一遍：`@a` 只搜执行维度，只写一行的话在下界/末地放技能永远检测不到。
+execute in minecraft:overworld as @a[tag=zx.sm_chk] at @s run function sweetdream:lib/step
+execute in minecraft:the_nether as @a[tag=zx.sm_chk] at @s run function sweetdream:lib/step
+execute in minecraft:the_end as @a[tag=zx.sm_chk] at @s run function sweetdream:lib/step
+
+# ★ 回旋的绕后过程（批 14 补技能，2026-10-17 改"有过程"）★
+#   近战命中兑现「旋步」后设 zx.gyr_st = 1，之后**每刻推一步**：
+#   1/3/5 刻各走一段弧（tp 到预先生成的落点 marker），7 刻走完 → arc_done 打 24 点。
+#   ★ 必须每刻：整段只有 7 刻，放成每秒会一步跳完，等于又变回瞬移。
+#   ★ 三维度各一遍（同位移检测）。
+#   ★★ 筛选必须从 1 起（不能写 0..99）★★ 2026-10-17 用户报"一 reload 就有疯狂挥剑声
+#     + 身边一直冒蓝色粒子"，根因就是这里写了 0..99：arc_done 收尾把 st 置 0，而 0 仍
+#     被选中 → 下一刻又进 arc → marker 已被清 → 兜底 arc_done → 又置 0 …… 每刻死循环，
+#     音效粒子每刻各放一遍。现在 0 = 未激活、不匹配，1.. 才是"过程中"。改这里时务必同步
+#     arc 里的状态编号（1..6 过程 / 7 收尾 / 99 撞墙）。
+execute in minecraft:overworld as @a[distance=0..,scores={zx.gyr_st=1..}] at @s run function sweetdream:equipment/armor/gyre/arc
+execute in minecraft:the_nether as @a[distance=0..,scores={zx.gyr_st=1..}] at @s run function sweetdream:equipment/armor/gyre/arc
+execute in minecraft:the_end as @a[distance=0..,scores={zx.gyr_st=1..}] at @s run function sweetdream:equipment/armor/gyre/arc
+
+# ★ 雨迹的水迹点（批 14 补技能）★ 三维度各一遍（选择器只在执行维度里搜索）。
+#   每刻推：寿命 -1 / 附近生物登记停留 / 停满 2 秒的兑现 / 水气粒子。
+execute in minecraft:overworld as @e[tag=zx.rt_dot,distance=0..] at @s run function sweetdream:equipment/armor/rain_trace/dot_tick
+execute in minecraft:the_nether as @e[tag=zx.rt_dot,distance=0..] at @s run function sweetdream:equipment/armor/rain_trace/dot_tick
+execute in minecraft:the_end as @e[tag=zx.rt_dot,distance=0..] at @s run function sweetdream:equipment/armor/rain_trace/dot_tick
+
+# ★ 雨迹：离开水迹超过 0.4 秒的生物要退出"停留中"（否则 rt_on 会一直卡在 1）★
+function sweetdream:equipment/armor/rain_trace/stay
+
+# ★ 命缕(15-7, 2026-10-17 改口径): 连丝真伤 —— 主目标受到**任何来源**的伤害都要结算 ★
+#   原文"其每次受到自身造成的伤害后, 相连的其他生物分别受到本次伤害 ×0.3 真伤(最多 6 次)"。
+#   玩家复测指出: 不是只有命缕法球打的才算 —— 别的武器、别的玩家、环境/持续伤害全都算。
+#   ★ 只能每刻轮询: MC 没有"任意生物受伤"事件(只有 player_hurt_entity / entity_hurt_player),
+#     放成每秒会漏(一秒内多段伤害只算一次净差, 而且会被自然再生抵掉)。
+#   ★ 入口用**标签**(zx.ft_link, 只在丝存续的 7 秒里挂在施法者身上):
+#     平时选择器直接筛成空, 函数一次都不进, 对别的装备零影响。
+#     (不要写成 `@a unless score @s x matches 0`: 那会让每个玩家每刻都进函数。)
+#   ★ 判据写 `matches 0` 放行负数实例号 —— 实例号是 marker 的 UUID[0], 一半概率为负,
+#     写 `1..` 会让那一半的丝"连上了但永远没伤害"(零日志)。
+execute as @a[tag=zx.ft_link] at @s run function sweetdream:equipment/staff/fate_thread/watch
+
+# ★★ 回血收尾(2026-10-16): lib/heal_up 压低上限后必须**跨一拍**才能撤 ★★
+#   为什么: instant_health 是在实体 tick 的 tickEffects() 里才真正治疗的, 而那发生在
+#   触发它的进度之后 —— 同刻就撤修饰符 = 没有天花板 = 4·2^20 一口气顶到真实上限,
+#   就是用户报的"归息直接回了 19 血(满血)"。
+#   三行 = 两拍: 本拍把**上一拍**的 heal_p 升格成 heal_on, 再下一拍才由 lib/heal_off 摘。
+#   ★ 顺序不能改: 先撤(判 heal_on) 再升格(heal_p→heal_on); 反过来会在同一刻完成
+#     "设置→撤", 等于没延迟。★ 升格后必须摘掉 heal_p, 否则每拍都会被再升格一次。
+#   ★ 选择器只筛带标签的人 ⇒ 平时(没人回血)开销为零。
+execute as @a[tag=zx.heal_on] run function sweetdream:lib/heal_off
+execute as @a[tag=zx.heal_p] run tag @s add zx.heal_on
+execute as @a[tag=zx.heal_p] run tag @s remove zx.heal_p
+
+# ★★ 沸痕"细雪灭点"回收(2026-10-16) ★★
+#   boil_trace/on_hurt 会在玩家身上临时放一块细雪(powder_snow)来真正灭火 ——
+#   Java 版抗火**不灭火**(wiki), 能灭火的只有"接触水/细雪"; 而细雪会被**燃烧的玩家**
+#   自己撞毁(方块直接消失), 所以正常情况不留残留。这几行只兜底"放完就走"的那一块。
+#   锚点用 marker(带着那块细雪的精确坐标), 玩家跑多远都能清准。
+#   ★ 两拍: 与回血同款两阶段标签 —— 本拍升格、下拍清除, 保证玩家至少 tick 过一次
+#     (细雪得在玩家 tick 时还在场上, 才谈得上灭火)。
+#   ★ 三维度各写一遍: #minecraft:tick 只在主世界跑, 裸 @e 搜不到别的维度的 marker。
+#   ★ `at @s` 不能省: `as` 只换执行者、不换位置 —— 少了它, pw_off 里的 `~ ~ ~`
+#     会指到 core/tick 的执行位置(世界原点), 清错地方还清不掉。
+execute in minecraft:overworld as @e[type=minecraft:marker,tag=zx.bt_pw2,distance=0..] at @s run function sweetdream:equipment/armor/boil_trace/pw_off
+execute in minecraft:the_nether as @e[type=minecraft:marker,tag=zx.bt_pw2,distance=0..] at @s run function sweetdream:equipment/armor/boil_trace/pw_off
+execute in minecraft:the_end as @e[type=minecraft:marker,tag=zx.bt_pw2,distance=0..] at @s run function sweetdream:equipment/armor/boil_trace/pw_off
+execute in minecraft:overworld as @e[type=minecraft:marker,tag=zx.bt_pw1,distance=0..] run tag @s add zx.bt_pw2
+execute in minecraft:the_nether as @e[type=minecraft:marker,tag=zx.bt_pw1,distance=0..] run tag @s add zx.bt_pw2
+execute in minecraft:the_end as @e[type=minecraft:marker,tag=zx.bt_pw1,distance=0..] run tag @s add zx.bt_pw2
+
 execute as @a[tag=test_look_on] run function sweetdream:equipment/tool/look/render
 
 # 横刀突进: 只有分数 >= 1 的玩家参与, 平时完全不参与(开销为零)
@@ -296,6 +369,11 @@ execute as @a[scores={zx.ct_seek=1..}] at @s run function sweetdream:equipment/b
 #   【为什么写三行 + 为什么每行都要 distance=0..】tick 函数的执行维度默认是主世界, 所以要三个维度各来一遍;
 #     但**裸 @e 会跨维度搜索**(没有位置参数就搜全部维度) —— 三行都写裸 @e 的话, 同一支箭会被标记 3 次。
 #     `distance=0..` 本身不过滤任何东西, 它的作用只是给选择器一个位置基准, 从而把搜索锁进当前维度。
+# 爆裂黎明：真实新箭必须在 cc_seen 之前登记，精确 origin 归属。
+execute in minecraft:overworld as @e[type=#sweetdream:cc_arrow,tag=!zx.cc_seen,tag=!zx.bv_arrow,distance=0..] at @s run function sweetdream:equipment/bow/burst_dawn/visual/arrow_try
+execute in minecraft:the_nether as @e[type=#sweetdream:cc_arrow,tag=!zx.cc_seen,tag=!zx.bv_arrow,distance=0..] at @s run function sweetdream:equipment/bow/burst_dawn/visual/arrow_try
+execute in minecraft:the_end as @e[type=#sweetdream:cc_arrow,tag=!zx.cc_seen,tag=!zx.bv_arrow,distance=0..] at @s run function sweetdream:equipment/bow/burst_dawn/visual/arrow_try
+execute as @a[scores={zx.bv_seek=1..}] run scoreboard players remove @s zx.bv_seek 1
 execute in minecraft:overworld run tag @e[distance=0..,type=#sweetdream:cc_arrow,tag=!zx.cc_seen] add zx.cc_seen
 execute in minecraft:the_nether run tag @e[distance=0..,type=#sweetdream:cc_arrow,tag=!zx.cc_seen] add zx.cc_seen
 execute in minecraft:the_end run tag @e[distance=0..,type=#sweetdream:cc_arrow,tag=!zx.cc_seen] add zx.cc_seen
@@ -514,4 +592,20 @@ execute in minecraft:overworld as @e[type=minecraft:item_display,tag=zx.av_ancho
 execute in minecraft:the_nether as @e[type=minecraft:item_display,tag=zx.av_anchor,distance=0..] at @s run function sweetdream:equipment/axe/anchor/visual/world_tick
 execute in minecraft:the_end as @e[type=minecraft:item_display,tag=zx.av_anchor,distance=0..] at @s run function sweetdream:equipment/axe/anchor/visual/world_tick
 execute as @a at @s run function sweetdream:equipment/axe/anchor/visual/idle
+execute as @a at @s run function sweetdream:equipment/bow/burst_dawn/visual/watch
+execute in minecraft:overworld as @e[tag=zx.bv_sh,distance=0..] at @s run function sweetdream:equipment/bow/burst_dawn/visual/owner_tick
+execute in minecraft:overworld as @e[tag=zx.bv_backfx,distance=0..] at @s run function sweetdream:equipment/bow/burst_dawn/visual/owner_tick
+execute in minecraft:overworld as @e[tag=zx.bv_flight,distance=0..] at @s run function sweetdream:equipment/bow/burst_dawn/visual/flight_tick
+execute in minecraft:overworld as @e[tag=zx.bv_muzzle,distance=0..] at @s run function sweetdream:equipment/bow/burst_dawn/visual/fx_tick
+execute in minecraft:overworld as @e[tag=zx.bv_impact,distance=0..] at @s run function sweetdream:equipment/bow/burst_dawn/visual/fx_tick
+execute in minecraft:the_nether as @e[tag=zx.bv_sh,distance=0..] at @s run function sweetdream:equipment/bow/burst_dawn/visual/owner_tick
+execute in minecraft:the_nether as @e[tag=zx.bv_backfx,distance=0..] at @s run function sweetdream:equipment/bow/burst_dawn/visual/owner_tick
+execute in minecraft:the_nether as @e[tag=zx.bv_flight,distance=0..] at @s run function sweetdream:equipment/bow/burst_dawn/visual/flight_tick
+execute in minecraft:the_nether as @e[tag=zx.bv_muzzle,distance=0..] at @s run function sweetdream:equipment/bow/burst_dawn/visual/fx_tick
+execute in minecraft:the_nether as @e[tag=zx.bv_impact,distance=0..] at @s run function sweetdream:equipment/bow/burst_dawn/visual/fx_tick
+execute in minecraft:the_end as @e[tag=zx.bv_sh,distance=0..] at @s run function sweetdream:equipment/bow/burst_dawn/visual/owner_tick
+execute in minecraft:the_end as @e[tag=zx.bv_backfx,distance=0..] at @s run function sweetdream:equipment/bow/burst_dawn/visual/owner_tick
+execute in minecraft:the_end as @e[tag=zx.bv_flight,distance=0..] at @s run function sweetdream:equipment/bow/burst_dawn/visual/flight_tick
+execute in minecraft:the_end as @e[tag=zx.bv_muzzle,distance=0..] at @s run function sweetdream:equipment/bow/burst_dawn/visual/fx_tick
+execute in minecraft:the_end as @e[tag=zx.bv_impact,distance=0..] at @s run function sweetdream:equipment/bow/burst_dawn/visual/fx_tick
 function sweetdream:lib/in_restore

@@ -14,3 +14,6 @@ data modify storage zx:config obj_srm_last set value 1b
 scoreboard players set #srm_4 zx.srm_f 4
 scoreboard players set #srm_80 zx.srm_f 80
 execute as @e[type=minecraft:marker,tag=zx.sr_relic] at @s run function sweetdream:equipment/axe/sacred_relic/visual/remnant/ensure
+
+# 兼容已在场上的遗骸，重载不重置其寿命或动画相位。
+execute as @e[type=minecraft:item_display,tag=zx.sr_model] run function sweetdream:equipment/axe/sacred_relic/visual/remnant/size

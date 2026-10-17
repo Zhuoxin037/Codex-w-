@@ -26,6 +26,10 @@ data modify storage zx:work bdt.u0 set from entity @s data.zx.bd.u0
 data modify storage zx:work bdt.u1 set from entity @s data.zx.bd.u1
 data modify storage zx:work bdt.u2 set from entity @s data.zx.bd.u2
 data modify storage zx:work bdt.u3 set from entity @s data.zx.bd.u3
+execute if score @s sdbf.so0 = @s sdbf.so0 store result storage zx:work bdt.u0 int 1 run scoreboard players get @s sdbf.so0
+execute if score @s sdbf.so1 = @s sdbf.so1 store result storage zx:work bdt.u1 int 1 run scoreboard players get @s sdbf.so1
+execute if score @s sdbf.so2 = @s sdbf.so2 store result storage zx:work bdt.u2 int 1 run scoreboard players get @s sdbf.so2
+execute if score @s sdbf.so3 = @s sdbf.so3 store result storage zx:work bdt.u3 int 1 run scoreboard players get @s sdbf.so3
 function sweetdream:equipment/bow/burst_dawn/taunt with storage zx:work bdt
 
 # ④ 寿命: 20 秒 -> 0

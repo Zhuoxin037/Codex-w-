@@ -56,7 +56,7 @@ execute if score #tier zx.meta matches 3.. run function sweetdream:internal/dama
 
 # ⑤ 表现(画在被打中的那只身上) + 收尾清理
 $execute at $(target) run particle minecraft:snowflake ~ ~1 ~ 1.4 0.8 1.4 0.05 40 normal
-$execute at $(target) run particle minecraft:item_snowball ~ ~1 ~ 0.8 0.5 0.8 0.05 20 normal
+$execute at $(target) run particle minecraft:snowflake ~ ~1 ~ 0.8 0.5 0.8 0.05 20 normal
 $execute at $(target) run playsound minecraft:entity.player.hurt_freeze player @a ~ ~ ~ 0.9 1.0
 execute if score #tier zx.meta matches 4 run playsound minecraft:block.glass.break player @a ~ ~ ~ 1.0 0.8
 

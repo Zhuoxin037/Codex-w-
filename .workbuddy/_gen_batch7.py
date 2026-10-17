@@ -231,19 +231,20 @@ ITEMS = [
 
     dict(cat='staff', id='five_curses', item_model='sweetdream:five_curses', name='五世恶咒',
          base='recovery_compass', color='dark_purple',
-         note='【法杖: 普攻 + 主动】普攻 100, 伤害 自身当前魔力值 ×0.03; 每次命中叠一层「世咒」(第一~五世)。\n'
+         note='【法杖: 普攻 + 主动】普攻 100, 伤害 自身当前魔力值 ×0.03; 每次命中推进一世「世咒」(第一~五世);\n'
+              '#   已在第五世再被命中 -> 立即结算终世(30%)并清除(2026-10-15 用户拍板);\n'
               '#   主动 600 / 120 秒 -> 12 格内所有带「世咒」者推进一世; 已在第五世 -> 立即结算终世(比例 30%->80%);\n'
               '#   因此击杀一个生物返 50 魔力, 每次技能最多返 300。',
          lore=[H('✦ 普攻'),
                I(('魔力 ', '100', 'aqua'), ('伤害 ', '自身当前魔力值 ×0.03', 'yellow')),
                S(),
                H('✦ 世咒'),
-               P('每次普攻命中后都会向目标施加一层「世咒」。'),
+               P('每次普攻命中都会推进一世「世咒」；在第五世再命中即结算终世。'),
                B('第一世：虚弱3，持续 3 秒。'),
                B('第二世：缓慢4，持续 3 秒。'),
                B('第三世：受到的技能伤害提高 20%，持续 5 秒。'),
                B('第四世：护甲及护甲韧性降低 50%，持续 5 秒。'),
-               B('第五世：记录目标在接下来最多 5 秒内受到的全部伤害。'),
+               B('第五世：记录目标在接下来最多 10 秒内受到的全部伤害。'),
                B('终世：对其造成记录伤害的 30% 真实伤害，之后清除「世咒」。'),
                S(),
                H('✦ 主动技能'),
@@ -280,6 +281,14 @@ def build(it):
         # 已批准并接入的圣骸3D外观，其他本批装备仍保留原版。
         parts.append('item_model="sweetdream:sacred_relic"')
         parts.append('custom_model_data={floats:[0.0f]}')
+    if cid == 'five_curses':
+        # 2026-10-16 用户授权猴头模型、待机、拍颅普攻和重施法接入。
+        parts.append('item_model="sweetdream:five_curses"')
+        parts.append('custom_model_data={floats:[0.0f]}')
+    if cid == 'burst_dawn':
+        # 2026-10-16 用户授权维什戴尔炮身、肩饰及真实弹道/背效接入。
+        parts.append('item_model="sweetdream:crossbow_burst_dawn"')
+        parts.append('custom_model_data={floats:[0.0f,0.0f]}')
     parts.append('item_name={text:"%s",bold:true,color:%s}' % (it['name'], it['color']))
     parts.append('lore=' + json.dumps(it['lore'], ensure_ascii=False, separators=(',', ':')))
     parts.append('unbreakable={}')
@@ -332,10 +341,17 @@ def header(it):
     A('#   然后跑 `python .workbuddy/lore_fmt.py --write` 让规范器重新折行。')
     if it['cat'] == 'bow':
         A('# ★ 批 11(2026-10-12)已接上技能: 本件带附魔 sweetdream:%s —— 弩的命中结算' % it['id'])
-        A('#   全靠附魔的 post_attack 回调(没有右键/消耗), 所以这行不能删。外观仍待做。')
+        if it['id'] == 'burst_dawn':
+            # 爆裂黎明 2026-10-16 已接外观 → 不再是"外观仍待做"; 与下一行的 2026-10-16 说明保持一致。
+            A('#   全靠附魔的 post_attack 回调(没有右键/消耗)，保留现有机制附魔。')
+        else:
+            A('#   全靠附魔的 post_attack 回调(没有右键/消耗), 所以这行不能删。外观仍待做。')
     else:
         A('# ★ 本批只做 give（2026-10-11 用户定）: 技能 / 进度 / 外观 等后续批次再接。')
-    if it.get('headnote'):
+    if it['id'] == 'burst_dawn':
+        A('# ★ 2026-10-16 已接入炮身、肩部装置、重后坐与独立真实事件特效。')
+        A('#   旧件手持时只补外观组件，保留升级、附魔和技能数值。')
+    elif it.get('headnote'):
         # 本件外观已接入 / 有额外说明 -> 用它替掉默认那两句(2026-10-13: 由磁盘回收进生成器)
         for ln in it['headnote']:
             A(ln)

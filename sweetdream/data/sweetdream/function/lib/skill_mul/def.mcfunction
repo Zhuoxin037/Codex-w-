@@ -65,6 +65,46 @@ data modify storage zx:config wchan.rebound set value {mm:0b,atk:1b,oth:0b}
 data modify storage zx:config wchan.charge set value {mm:0b,atk:1b,oth:1b}
 # 沉渊: 无增益 = 当前魔力 ×0.08(other), 有增益 = 最大魔力 ×0.08(mm) -> 两条都走
 data modify storage zx:config wchan.chenyuan set value {mm:1b,atk:0b,oth:1b}
+# 退汐(2026-10-17 批 15-6): 水刃基础段 最大魔力 ×0.08 / 清渊海后额外段 最大魔力 ×0.07
+#   —— 两段都是 mm, 没有基础攻击力/当前魔力成分。
+data modify storage zx:config wchan.backflow_tide set value {mm:1b,atk:0b,oth:0b}
+# 盲烛(2026-10-17 批 15-6): 主动范围 ×0.14 / 被动 ×0.06 或 ×0.1 / 烛火 ×0.08 或 ×0.04
+#   —— 全部是最大魔力值(mm)。
+data modify storage zx:config wchan.blind_candle set value {mm:1b,atk:0b,oth:0b}
+# 丧铃(2026-10-17 批 15-6): 重击 ×0.1 / 钟声(两次) ×0.08 —— 全是 mm。
+data modify storage zx:config wchan.death_bell set value {mm:1b,atk:0b,oth:0b}
+# 剜霜(2026-10-17 批 15-6): 重击 基础攻击力 ×5 / 解冻额外 基础攻击力 ×2 —— 全是 atk。
+data modify storage zx:config wchan.frost_carve set value {mm:0b,atk:1b,oth:0b}
+# 醒梦钟(2026-10-17 批 15-6): 普攻 ×0.02 / 命中白昼梦追加 ×0.02 / 主动真实伤害 ×0.1
+#   —— 全是最大魔力值(mm)。
+data modify storage zx:config wchan.wake_bell set value {mm:1b,atk:0b,oth:0b}
+# 折径(2026-10-17 批 15-6): 普攻固定 8(custom_damage) / 主动 最大魔力 ×0.04(mm) + 固定 8。
+#   ★ oth 标 1 是因为"固定 8 不进乘区"必须分两段算: 第二次把上一段结果当 other_base
+#     传回去再加 custom_damage —— other_mul 在这里是**求和**用的 1.0, 不是"当前魔力"。
+data modify storage zx:config wchan.bent_ray set value {mm:1b,atk:0b,oth:1b}
+# 命缕(2026-10-17 批 15-6): 血丝结算 最大魔力 ×0.05(mm) / 连丝真伤 = 本次伤害 ×0.3
+#   ★ 后者把"本次伤害"当 other_base 传进 calc、other_mul 给 0.3 —— 所以 oth 也要标。
+data modify storage zx:config wchan.fate_thread set value {mm:1b,atk:0b,oth:1b}
+# 重溟(2026-10-16 批 15-5): 主动立即段 最大魔力 ×0.1 / 领域每秒 最大魔力 ×0.03
+#   / 被动 最大魔力 ×0.05 —— 三段全是 mm。
+data modify storage zx:config wchan.deep_brine set value {mm:1b,atk:0b,oth:0b}
+# 长夜(2026-10-16 批 15-5): 普攻 最大魔力 ×0.025 / 夜原每秒 最大魔力 ×0.12
+#   (再乘 1.08^n 的独立乘区) —— 全是 mm。
+data modify storage zx:config wchan.long_night set value {mm:1b,atk:0b,oth:0b}
+# 迟庭(2026-10-16 批 15-5): 普攻 最大魔力 ×0.025 / 领域每秒 最大魔力 ×0.04(mm)
+#   / "缓慢在领域内结束"那一段 基础攻击力 ×4(atk) => 两条通道都走。
+data modify storage zx:config wchan.late_court set value {mm:1b,atk:1b,oth:0b}
+# 雷楔(2026-10-16 批 15-5): 「雷楔」落雷时那一段 = 基础攻击力 ×2 -> atk。
+#   主动本身不打伤害(它只召唤术阵 + 雷楔), 所以没有 mm/oth 段。
+data modify storage zx:config wchan.thunder_wedge set value {mm:0b,atk:1b,oth:0b}
+# ---- 批 15-7 · 连接/转化/资源(2026-10-17) ----
+# 彼岸(法杖): 普攻 = **当前**魔力 ×0.02(other 通道, 基数默认就是当前魔力)
+#   / 真伤与转化各段 = 最大魔力 ×0.03 / 0.1 / 0.08 / 0.2 / 0.12(mm) => 两条都走。
+data modify storage zx:config wchan.other_shore set value {mm:1b,atk:0b,oth:1b}
+# 失血(剑): 主动 = 最大生命值 ×0.35×X —— 走 calc 的 health_ratio(生命项),
+#   它**不进** mm/atk/oth 任何一条通道(见 dmg_add_apply 头部: seg_x 不吃通道加算)。
+#   登记全 0 只为让 check 覆盖到 + 面板能把这件归类(同蚀骨 bone_erode 的写法)。
+data modify storage zx:config wchan.blood_loss set value {mm:0b,atk:0b,oth:0b}
 # 天使核心: 第一段 基础攻击力 ×8(atk), 第二段 最大魔力 ×0.08(mm)
 data modify storage zx:config wchan.angel_core set value {mm:1b,atk:1b,oth:0b}
 # 陨星: 陨石伤害 = 基础攻击力 ×4
@@ -129,6 +169,10 @@ data modify storage zx:config wchan.resonance set value {mm:1b,atk:1b,oth:1b}
 data modify storage zx:config wchan.styx_walk set value {mm:1b,atk:0b,oth:0b}
 # 沉溺忘川彼岸: 解除「残念」的爆发 = 自身最大魔力 ×0.06(mm)
 data modify storage zx:config wchan.lethe_shore set value {mm:1b,atk:0b,oth:0b}
+# 凝壳(胸甲 2026-10-16 批 15-5): 领域每秒 = 自身基础攻击力 ×4(atk)。
+#   盔甲被动, 面板扫不到; 登记只为让 check 的"口径表 vs 技能文件"反向校验覆盖到
+#   —— 与上面 withered_garden / lightless_sea / styx_walk / lethe_shore 完全同款。
+data modify storage zx:config wchan.condensed_shell set value {mm:0b,atk:1b,oth:0b}
 
 # ---- 第二批效果(2026-10-06 晚): 副手道具的伤害 ----
 #   同样是"装备被动", 面板扫不到, 登记只为让 check 的"口径表 vs 技能文件"反向校验覆盖到。
@@ -223,6 +267,16 @@ data modify storage zx:config wchan.scorch_bone set value {mm:1b,atk:1b,oth:0b}
 data modify storage zx:config wchan.dragon_tongue set value {mm:0b,atk:0b,oth:1b}
 # 云迹: 「领域」内同步伤害 = 基础攻击力 ×2 -> atk
 data modify storage zx:config wchan.cloudtrail set value {mm:0b,atk:1b,oth:0b}
+
+# ---- 批 15-1 · 弩四件(2026-10-15): 眠羽 / 烬弦 / 逆弦 / 黯日 ----
+# 眠羽: 羽箭 = 最大魔力 ×0.08 (合一 ×0.18) -> mm
+data modify storage zx:config wchan.feather_sleep set value {mm:1b,atk:0b,oth:0b}
+# 烬弦: 已带夜火时补的一段 = 最大魔力 ×0.04 -> mm
+data modify storage zx:config wchan.ember_string set value {mm:1b,atk:0b,oth:0b}
+# 逆弦: 命中后额外一段 = 基础攻击力 ×2(强化时整段 ×1.5 独立乘区) -> atk
+data modify storage zx:config wchan.reverse_string set value {mm:0b,atk:1b,oth:0b}
+# 黯日: 主目标 = 当前魔力 ×0.12、影矢 = 当前魔力 ×0.08 -> oth(基数默认当前魔力)
+data modify storage zx:config wchan.dark_sun set value {mm:0b,atk:0b,oth:1b}
 # ---- 批 13 · 过渡/终端补缺(2026-10-13) ----
 # 退弦(弩): 保底 12 点是**固定值**, 不走 calc 的三通道 => 表里不需要它。
 # 引雷针(法杖): 2026-10-13 起**只降雷、无自身伤害**(原"当前魔力 ×0.03 / ×0.05"
@@ -242,3 +296,10 @@ data modify storage zx:config wchan.five_curses set value {mm:0b,atk:0b,oth:1b}
 # 很冰的斧: 三形态各走一条 —— 冰斧 = 最大魔力 ×0.02(mm) / 热刀 = 基础攻击力 ×3、
 #   重枪 = 基础攻击力 ×6(都是 atk)。形态随时可切 => 两条都标上, 由 calc 按用的那条算。
 data modify storage zx:config wchan.triad set value {mm:1b,atk:1b,oth:0b}
+
+# ---- 批 14 补技能(2026-10-17): 两件都是**固定值**, 不过任何乘区 ----
+#   断页: 12 点(普通) / 30 点(真伤) —— 直接 custom_damage。
+#   续火: 普攻 5 点固定; 主动只回血, 不造成伤害。
+#   登记全 0 是为了让 check 的"每件走 calc 的装备都要有通道声明"覆盖到(同失血)。
+data modify storage zx:config wchan.broken_page set value {mm:0b,atk:0b,oth:0b}
+data modify storage zx:config wchan.renew_fire set value {mm:0b,atk:0b,oth:0b}

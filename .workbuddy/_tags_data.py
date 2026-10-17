@@ -35,11 +35,18 @@
         ⇒ 写机制时 **"生成一个术阵，里面的生物每秒…"这种写法是错的**：范围效果一律写「领域」，
           划范围靠技能自己挂标签扫周围（先例 `wind_ontheground` 的 `zx.wg_cN` + `hit_pass`）。
   6. `summon`（召唤物）**只算独立实体**，lore 里用弯引号 `“”` 标出（入梦体/共鸣水晶/色彩/朽木/暗潮/暗海/旋风…）。
-  7. `heal`（治疗）**暂空**——本包目前没有治疗类装备（回魔不算），词表保留备用。
+  7. `heal`（治疗）**只算"恢复/回复生命"**（回魔不算）——2026-10-15 批 14 起启用（续火等 10 件）。
   8. 装备**私有资源**（熔浆/燃灰/酒浆/冰凌/风声…）**不进标签**（它们是"资源"不是"分类"）。
   9. **类别词不进 `tags`**（走 `zx[1]`：`sword/axe/bow/staff/helmet/chestplate/leggings/boots/armor/tool`）。
  10. **超限形态 = 基础标签 + `overlimit`**（敲超限时由 `station/api/apply_go` 追加）。
  11. **套装效果两件都打**（lore 写在每件上就都打）。
+ 12. ★ `consume`（消耗）**只认消耗/清除/解除"某个状态或私有资源"**（消耗流火 / 清除渊海 / 消耗圣痕 / 解除冰冻 / 清除静息）。
+     **"消耗 N 魔力(值)" 这类固定费用不算** `consume`（费用另有 `cur_mana` 口径，见 13）。先例：神裁/脑髓蛭的"消耗 50 魔力"都没 `consume`；天使核心的 `consume` 来自"消耗圣痕"。
+ 13. ★ `cur_mana`（当前魔力）**只认"魔力作为口径/资源"**：伤害按当前魔力算、条件判"当前魔力值 ≤ N%"、按"本次消耗的魔力"回算。
+     **被动触发的固定费用（"消耗 30 魔力并附加…"）不算**（先例：天使核心/神裁/反弹 都无 `cur_mana`）。
+ 14. ★ `flat`（固定值）**只认正文里的"固定伤害/保底"**（如"12 点固定伤害"）。
+     **普攻/技能的拼色行「伤害 N」不算**（先例：共鸣水晶/终末启示 的"伤害 7 / 伤害 20" 都无 `flat`）。
+ 15. ★ "范围留痕"类（如雨迹的"水迹"、"重溟/凝壳/迟庭"的领域除外）**不打标签**——只有 lore 明写"领域"才 `field`（口径 4）。
 """
 
 # ---------------------------------------------------------------- 词汇表（28 词）
@@ -65,7 +72,7 @@ VOCAB = [
 
     # ---- 作用 / 机制（15）----
     ("debuff", "机制", "削弱", "给敌方挂负面状态（缓慢/虚弱/发光/反胃/燃烧/冰冻/时停/护甲减半/击退…）"),
-    ("heal", "机制", "治疗", "治疗 / 回血（★ 目前无装备使用，保留备用）"),
+    ("heal", "机制", "治疗", "治疗 / 回血（★ 2026-10-15 批 14 起有装备使用：续火/归息/失血/彼岸/绯缝/剜霜/踏灰/沸痕/殓丝/杂纹）"),
     ("consume", "机制", "消耗", "消耗 / 清除某个状态（消耗流火 / 清除渊海 / 移除噬心…）"),
     ("apply", "机制", "附加", "给目标施加某个状态（附加流火 / 附加圣痕 / 附加电刺…）"),
     ("buff", "机制", "增益", "给自身挂正向状态效果（力量/迅捷/再生/抗性/抗火/水下呼吸…）"),
@@ -206,6 +213,63 @@ TAGS = {
     # ---- 批 13 · 过渡/终端补缺(2026-10-13) ----
     "frostmirror":       ["freeze", "cd_down", "debuff"],
     "everlit":           ["summon", "true_dmg", "cur_mana"],
+
+    # ================= 批 14 · NEW.md 42 件（2026-10-15）=================
+    # ★ 五套双件套(燧行/潮线/缝心/浅梦/残烛)的 10 件：套装段写在两件上 ⇒ 口径 11
+    #   "套装效果两件都打"，所以两件的标签都含套装段的词。
+    # ---- 剑 sword（4）----
+    "backflow_tide":     ["yuanhai", "max_mana", "debuff", "consume", "dash"],
+    "blind_candle":      ["yehuo", "max_mana", "consume"],
+    "blood_loss":        ["shixin", "max_hp", "true_dmg", "heal", "consume"],
+    "thunder_wedge":     ["lightning", "base_atk", "summon", "formation"],
+    # ---- 斧 axe（4）----
+    "death_bell":        ["dream", "max_mana", "debuff", "consume", "cd_down"],
+    "deep_brine":        ["yuanhai", "max_mana", "debuff", "slow", "consume", "attract", "field"],
+    "broken_page":       ["dream", "flat", "true_dmg", "consume"],
+    "frost_carve":       ["max_hp", "base_atk", "freeze", "debuff", "heal", "consume"],
+    # ---- 弩 bow（4）----
+    "feather_sleep":     ["dream", "max_mana", "debuff", "slow", "consume"],
+    "ember_string":      ["liuhuo", "yehuo", "max_mana", "apply", "consume"],
+    "reverse_string":    ["base_atk", "max_mana", "cur_mana", "indep_mul"],
+    "dark_sun":          ["liuhuo", "yehuo", "cur_mana", "indep_mul", "apply"],
+    # ---- 法杖 staff（7）----
+    "fate_thread":       ["shixin", "max_mana", "true_dmg", "apply"],
+    "other_shore":       ["shixin", "yuanhai", "max_hp", "max_mana", "cur_mana", "true_dmg",
+                          "heal", "consume", "apply"],
+    "renew_fire":        ["heal"],
+    "wake_bell":         ["dream", "max_mana", "true_dmg", "consume"],
+    "long_night":        ["liuhuo", "yehuo", "max_mana", "debuff", "consume", "apply",
+                          "indep_mul", "summon", "formation"],
+    "bent_ray":          ["max_mana", "flat", "indep_mul", "apply", "consume"],
+    "late_court":        ["max_mana", "base_atk", "debuff", "slow", "dash", "field", "formation"],
+    # ---- 副手 tool（2）----
+    "tide_buckle":       ["yuanhai", "consume", "attract"],
+    "coffin_silk":       ["shixin", "max_hp", "max_mana", "true_dmg", "heal", "buff", "consume"],
+    # ---- 盔甲 armor（21）----
+    "last_breath":       ["shixin", "yuanhai", "max_mana", "heal", "consume"],
+    "cross_dream":       ["dream", "max_mana", "dash", "buff", "consume"],
+    "tread_ash":         ["max_hp", "max_mana", "heal", "cd_down", "dash"],
+    "backlight":         ["yehuo", "max_mana", "cur_mana", "cd_down", "consume"],
+    "gyre":              ["yuanhai", "max_mana", "flat", "dash", "consume"],
+    "condensed_shell":   ["max_mana", "base_atk", "debuff", "freeze", "field", "formation"],
+    "flint_hat":         ["liuhuo", "max_mana", "base_atk", "apply", "indep_mul"],
+    "smoke_step":        ["liuhuo", "max_mana", "base_atk", "buff", "indep_mul"],
+    "tide_watch":        ["yuanhai", "max_mana", "apply", "cd_down"],
+    "beach_vein":        ["yuanhai", "max_mana", "cur_mana", "buff", "cd_down"],
+    "needle_sleep":      ["shixin", "max_mana", "true_dmg", "buff", "apply", "consume", "indep_mul"],
+    "crimson_seam":      ["shixin", "max_hp", "max_mana", "true_dmg", "heal", "buff",
+                          "apply", "consume", "indep_mul"],
+    "mirror_sleep":      ["dream", "max_mana", "buff", "apply"],
+    "light_pillow":      ["dream", "max_mana", "buff", "apply"],
+    "char_coat":         ["liuhuo", "yehuo", "max_mana", "base_atk", "buff", "consume"],
+    "candle_step":       ["liuhuo", "yehuo", "max_mana", "base_atk", "buff", "consume"],
+    "boil_trace":        ["liuhuo", "max_hp", "max_mana", "heal", "apply"],
+    "thorn_vein":        ["shixin", "max_mana", "buff", "apply"],
+    "rain_trace":        ["yuanhai", "max_mana", "base_atk", "dash", "apply"],
+    "empty_pillow":      ["dream", "max_mana", "consume", "apply"],
+    "mottle_vein":       ["liuhuo", "yehuo", "shixin", "yuanhai", "dream", "max_hp",
+                          "max_mana", "debuff", "heal", "buff", "consume", "indep_mul",
+                          "timestop", "dash"],
 }
 
 

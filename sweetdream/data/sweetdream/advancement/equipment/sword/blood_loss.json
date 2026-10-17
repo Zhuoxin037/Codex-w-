@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "blood_loss": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "blood_loss"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:equipment/sword/blood_loss/cast"
+    }
+}

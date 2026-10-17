@@ -227,6 +227,71 @@ function sweetdream:debug/num_row with storage zx:work nr
 tellraw @s [{"text":"  术阵      ","color":"gray"},{"score":{"name":"#g_fcnt","objective":"zx.meta"},"color":"light_purple"},{"text":" / ","color":"dark_gray"},{"score":{"name":"#g_flim","objective":"zx.meta"},"color":"dark_purple"}]
 
 # ============================================================
+# ⑨.5 在身效果(状态计时) —— 批 14 那批"给自己上的状态"在这里看得见
+# ------------------------------------------------------------
+# 【为什么要单独一节】用户反馈："那些给自己的效果没给到观测镜"。
+#   注册表(lib/reg/build)只能显示"某个计分项的原值", 而这几件的状态存的是
+#   **到期绝对刻**(zx.bk_wd / zx.gy_wd / zx.ta_cd …), 直接显示会是一串天文数字。
+#   这里统一换算成"剩余秒", 并且只对**穿着的**装备显示(和注册表一个规矩)。
+# 【口径】
+#   剩余秒 = max(0, 到期刻 - #now) / #20   —— 整数秒, 面板不需要 0.1 秒精度
+#   ★ 先夹到 0 再除: 不夹的话过期状态会显示成负秒, 玩家会以为坏了 ★
+# 【为什么不进注册表 a 表】a 表的 o 字段只能写"计分项原名", 而这里全是派生值
+#   (要做减法除法), 塞不进表 —— 所以走 tellraw 直出。字段名用 #g_* 假名,
+#   本函数仍然只读玩家数据(与全文件"只读"的约定一致)。
+# ============================================================
+tellraw @s [{"text":"── 在身效果 ──","color":"dark_gray"}]
+
+# ---- 空枕「静息」：距上次造成伤害还差几秒 / 已就绪(下次攻击附「白昼梦」) ----
+scoreboard players operation #g_s zx.meta = #now manacore.meta
+scoreboard players operation #g_s zx.meta -= @s zx.ep_hit
+scoreboard players set #g_t zx.meta 80
+scoreboard players operation #g_t zx.meta -= #g_s zx.meta
+execute if score #g_t zx.meta matches ..0 run scoreboard players set #g_t zx.meta 0
+scoreboard players operation #g_t zx.meta /= #20 zx.meta
+execute if data storage zx:work eq.empty_pillow if entity @s[tag=zx.ep_rest] run tellraw @s [{"text":"  「静息」  ","color":"gray"},{"text":"已就绪 —— 下次攻击附「白昼梦」","color":"light_purple"}]
+execute if data storage zx:work eq.empty_pillow unless entity @s[tag=zx.ep_rest] run tellraw @s [{"text":"  「静息」还差  ","color":"gray"},{"score":{"name":"#g_t","objective":"zx.meta"},"color":"light_purple"},{"text":" 秒","color":"dark_gray"}]
+
+# ---- 返照「回照」剩余 + 20 秒节流 ----
+scoreboard players operation #g_a zx.meta = @s zx.bk_wd
+scoreboard players operation #g_a zx.meta -= #now manacore.meta
+execute if score #g_a zx.meta matches ..0 run scoreboard players set #g_a zx.meta 0
+scoreboard players operation #g_a zx.meta /= #20 zx.meta
+scoreboard players operation #g_b zx.meta = @s zx.bk_cd
+scoreboard players operation #g_b zx.meta -= #now manacore.meta
+execute if score #g_b zx.meta matches ..0 run scoreboard players set #g_b zx.meta 0
+scoreboard players operation #g_b zx.meta /= #20 zx.meta
+execute if data storage zx:work eq.backlight run tellraw @s [{"text":"  「回照」剩余  ","color":"gray"},{"score":{"name":"#g_a","objective":"zx.meta"},"color":"aqua"},{"text":" 秒   (下次可触发 ","color":"gray"},{"score":{"name":"#g_b","objective":"zx.meta"},"color":"dark_aqua"},{"text":" 秒)","color":"gray"}]
+
+# ---- 回旋「旋步」剩余 + 12 秒节流 ----
+scoreboard players operation #g_a zx.meta = @s zx.gy_wd
+scoreboard players operation #g_a zx.meta -= #now manacore.meta
+execute if score #g_a zx.meta matches ..0 run scoreboard players set #g_a zx.meta 0
+scoreboard players operation #g_a zx.meta /= #20 zx.meta
+scoreboard players operation #g_b zx.meta = @s zx.gy_cd
+scoreboard players operation #g_b zx.meta -= #now manacore.meta
+execute if score #g_b zx.meta matches ..0 run scoreboard players set #g_b zx.meta 0
+scoreboard players operation #g_b zx.meta /= #20 zx.meta
+execute if data storage zx:work eq.gyre run tellraw @s [{"text":"  「旋步」剩余  ","color":"gray"},{"score":{"name":"#g_a","objective":"zx.meta"},"color":"aqua"},{"text":" 秒   (下次可触发 ","color":"gray"},{"score":{"name":"#g_b","objective":"zx.meta"},"color":"dark_aqua"},{"text":" 秒)","color":"gray"}]
+
+# ---- 踏灰 12 秒节流（回血 + 减 CD 共用这一个闸）----
+scoreboard players operation #g_a zx.meta = @s zx.ta_cd
+scoreboard players operation #g_a zx.meta -= #now manacore.meta
+execute if score #g_a zx.meta matches ..0 run scoreboard players set #g_a zx.meta 0
+scoreboard players operation #g_a zx.meta /= #20 zx.meta
+execute if data storage zx:work eq.tread_ash run tellraw @s [{"text":"  踏灰下次可触发  ","color":"gray"},{"score":{"name":"#g_a","objective":"zx.meta"},"color":"aqua"},{"text":" 秒","color":"dark_gray"}]
+
+# ---- 雨迹：场上还留着几个水迹点（30 格内）----
+scoreboard players set #g_rtn zx.meta 0
+execute as @e[tag=zx.rt_dot,distance=..30] run scoreboard players add #g_rtn zx.meta 1
+execute if data storage zx:work eq.rain_trace run tellraw @s [{"text":"  场上水迹  ","color":"gray"},{"score":{"name":"#g_rtn","objective":"zx.meta"},"color":"aqua"},{"text":" 处（每处持续 5 秒）","color":"dark_gray"}]
+
+# ---- 位移检测窗口（踏灰/雨迹共用）：放完技能后的 1 秒内才亮 ----
+#   ★ 这是排查"为什么没触发"的关键：窗口内一直没确认位移 ⇒ 说明这次技能根本没挪窝。
+execute if entity @s[tag=zx.sm_chk] run tellraw @s [{"text":"  位移检测  ","color":"gray"},{"text":"进行中，还剩 ","color":"yellow"},{"score":{"name":"@s","objective":"zx.sm_t"},"color":"yellow"},{"text":" 刻","color":"dark_gray"}]
+execute if entity @s[tag=zx.sm_chk] if score @s zx.sm_done matches 1 run tellraw @s [{"text":"  位移检测  ","color":"gray"},{"text":"已确认位移","color":"green"}]
+
+# ============================================================
 # ⑩ 在身装备的加成 —— 由注册表驱动(lib/reg/build), 穿着什么报什么
 # ============================================================
 tellraw @s [{"text":"── 在身装备的加成 ──","color":"dark_gray"}]

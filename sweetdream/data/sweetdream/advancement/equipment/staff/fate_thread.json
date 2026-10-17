@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "fate_thread": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "fate_thread"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:equipment/staff/fate_thread/cast"
+    }
+}

@@ -34,12 +34,23 @@
 execute unless data storage zx:work a.by run data modify storage zx:work a.by set value "@s"
 execute if data storage zx:work a{by:""} run data modify storage zx:work a.by set value "@s"
 
+# ①.5 ★ 归一化 src（"这次消耗是谁发起的"）—— 2026-10-15 批 15-2 新增 ★
+#   · "skill"（**默认**）= 技能消耗。既有 11 个调用点（红莲/蚀骨/龙舌/眠羽/清醒梦/
+#     虹彩/海棠/蛊毒/烈火残躯/引梦镰…）**全部**是技能发起的，所以默认值取它最省事。
+#   · "equip"          = 装备被动自己顺手消耗的（归息「近战命中后消耗渊海/噬心」这类）。
+#   【为什么要分】回潮扣 / 烛跬 的文案都写"自身**技能**消耗…" —— 装备被动消耗的那一次
+#     不该算进去（否则穿归息 + 回潮扣，一次平A就能白拿一次拉近）。
+#   取用方：lib/on_consume_go 按 mc.src 分流。
+execute unless data storage zx:work a.src run data modify storage zx:work a.src set value "skill"
+execute if data storage zx:work a{src:""} run data modify storage zx:work a.src set value "skill"
+
 # ② 冻结到本轮专用节点 zx:work mc
 #    （zx:work a 是全包共用的，下面还要调别的函数，别让它们把参数冲掉）
-data modify storage zx:work mc set value {target:"",mark:"",by:"",ok:0b,done:0b}
+data modify storage zx:work mc set value {target:"",mark:"",by:"",src:"",ok:0b,done:0b}
 data modify storage zx:work mc.target set from storage zx:work a.target
 data modify storage zx:work mc.mark set from storage zx:work a.mark
 data modify storage zx:work mc.by set from storage zx:work a.by
+data modify storage zx:work mc.src set from storage zx:work a.src
 
 # ③ 判目标带没带标签 -> lib/mark_check（宏: 要拼 zx.status.$(mark)）
 function sweetdream:lib/mark_check with storage zx:work mc

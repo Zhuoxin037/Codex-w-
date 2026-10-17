@@ -39,10 +39,11 @@ execute unless score @s zx.fc_hp matches 0 run data modify storage zx:work x set
 execute unless score @s zx.fc_hp matches 0 store result storage zx:work x.v int 1 run scoreboard players get @s zx.fc_hp
 execute unless score @s zx.fc_hp matches 0 run function sweetdream:equipment/armor/furnace_core/hp_add with storage zx:work x
 
-# ⑥ 夹当前生命: 上限变低(脱下装备 / 燃灰掉层)后, 当前生命可能还停在新上限之上,
-#    原版**不会**自动把血扣下来 -> 显示成 30/20 这种脏值。只在当前 > 上限时才动手,
-#    不会误回血(上限变大时当前血一定 < 上限, 条件不成立, 安全)。
-#    ⚠️ 必须在 ④ 摘完、⑤ 加完之后读, 才能拿到"真正的最终上限"。
-execute store result score #maxhp zx.meta run attribute @s minecraft:max_health get
-execute store result score #curhp zx.meta run data get entity @s Health
-execute if score #curhp zx.meta > #maxhp zx.meta run execute store result entity @s Health double 1 run scoreboard players get #maxhp zx.meta
+# ⑥ 【2026-10-16 删除】这里原有"上限变低后把当前生命夹回来"的一段:
+#       execute if score #curhp > #maxhp run execute store result entity @s Health float 1 …
+#    —— **整段作废, 已删**。原版禁止用命令写玩家 NBT: `/data` 与 `/execute store` 对玩家
+#    实体一律抛 `commands.data.entity.invalid` = "Unable to modify player data"
+#    (1.21.5 客户端 jar 内核实)。所以这句(以及它更早的 double 版本)从来没有生效过,
+#    "30/20 脏值"也不是它修的 —— 那次真因是 ④ 里"按旧账摘 modifier"的顺序修正。
+#    ⇒ 命令层面**无法**把玩家当前生命夹下来。若以后真出现"当前 > 上限"的脏值,
+#      只能靠 /effect 路径或原版自身的钳制, 别再往这里加 NBT 写入。
