@@ -1,3 +1,26 @@
+scoreboard objectives add sdbf.num dummy
+scoreboard objectives add sdbf.dtime dummy
+scoreboard objectives add sdbf.dspeed dummy
+scoreboard objectives add sdbf.sprint dummy
+scoreboard objectives add sdbf.ltotal dummy
+scoreboard objectives add sdbf.lbudget dummy
+scoreboard objectives add sdbf.lticks dummy
+scoreboard objectives add sdbf.lmove dummy
+scoreboard objectives add sdbf.oldhp dummy
+scoreboard objectives add sdbf.pendhp dummy
+scoreboard objectives add sdbf.nexthp dummy
+scoreboard objectives add sdbf.dmg dummy
+scoreboard objectives add sdbf.extra dummy
+scoreboard objectives add sdbf.dmgok dummy
+scoreboard objectives add sdbf.maxhp dummy
+scoreboard objectives add sdbf.armorphase dummy
+scoreboard objectives add sdbf.fxland dummy
+scoreboard objectives add sdbf.fxsteps dummy
+scoreboard players set #5 sdbf.num 5
+scoreboard players set #10 sdbf.num 10
+scoreboard players set #300 sdbf.num 300
+scoreboard players set #1000 sdbf.num 1000
+scoreboard players set #250000 sdbf.num 250000
 scoreboard objectives add sdbf.id dummy
 scoreboard objectives add sdbf.state dummy
 scoreboard objectives add sdbf.rest dummy
@@ -37,3 +60,12 @@ scoreboard objectives add sdbf.fallsteps dummy
 scoreboard objectives add sdbf.phase dummy
 scoreboard objectives add sdbf.jstep dummy
 scoreboard objectives add sdbf.cmask dummy
+scoreboard objectives add sdbf.last_combo dummy
+scoreboard objectives add sdbf.jclear dummy
+scoreboard objectives add sdbf.fxage dummy
+execute in minecraft:overworld run kill @e[tag=sd.fb.fx,distance=0..]
+execute in minecraft:the_nether run kill @e[tag=sd.fb.fx,distance=0..]
+execute in minecraft:the_end run kill @e[tag=sd.fb.fx,distance=0..]
+execute in minecraft:overworld as @e[tag=sd.fb.body,distance=0..] run function sweetdream:boss/fireaxe/mechanics/init
+execute in minecraft:the_nether as @e[tag=sd.fb.body,distance=0..] run function sweetdream:boss/fireaxe/mechanics/init
+execute in minecraft:the_end as @e[tag=sd.fb.body,distance=0..] run function sweetdream:boss/fireaxe/mechanics/init

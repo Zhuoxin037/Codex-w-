@@ -1,0 +1,11 @@
+{
+  "function": "minecraft:set_components",
+  "components": {
+    "minecraft:item_model": "sweetdream:armor_empty_pillow",
+    "minecraft:equippable": {
+      "slot": "head",
+      "asset_id": "sweetdream:armor_empty_pillow",
+      "equip_sound": "minecraft:item.armor.equip_iron"
+    }
+  }
+}

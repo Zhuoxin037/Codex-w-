@@ -12,7 +12,7 @@ function animated_java:global/data_manager/read with storage animated_java:temp 
 data modify storage animated_java:temp entry.data.uuids append from storage animated_java:gu out
 data modify storage animated_java:temp entry.data.root_uuid set from storage animated_java:gu out
 data modify storage animated_java:temp entry.data.blueprint_id set value "sweetdream_boss:reconstruction"
-data modify storage animated_java:temp entry.data.rig_hash set value "0dcdc95b246544f3d0a567d4e7a1e91c90130a528a824017f032b79b8ec1efea"
+data modify storage animated_java:temp entry.data.rig_hash set value "1830e73b519c8822211fe4c7d5cad3dba3421b523b0ef6060152e0063b4653c7"
 tp @s ~ ~ ~ ~ ~
 execute on passengers if entity @s[tag=sweetdream_boss.reconstruction.node.pelvis] run function sweetdream_boss:reconstruction/zzz/summon/as_node/pelvis
 data modify storage animated_java:temp entry.data.uuids append from storage animated_java:gu out

@@ -9,9 +9,13 @@
 #   老面板每刻做: 1×Health + 1×SelectedItem.skill + 6×equip_scan(每条都是
 #   if data entity / data modify from entity) ⇒ 开着面板 = **每刻最多 14 次全量
 #   序列化**。spark 里那条 8~10 秒/分钟的热点主要就是它。
-# 【重新分工】装备在身名单(eq)和手持武器 skill 字段改成**每秒缓存**进
-#   zx:look cache; render_go(每刻)只读计分板/命令存储 —— 免序列化。
-#   面板的显示粒度本来就是秒(v_cd 后缀 s), 观感不变; 换装最多滞后 1 秒。
+# 【重新分工】装备在身名单(eq)、面板生命值改成**每秒缓存**进
+#   zx:look cache / zx.hp_show; render_go(每刻)只读计分板/命令存储 —— 免序列化。
+#   ★ 2026-10-18: 手持武器的 skill 字段**不在此列** —— 它一旦每秒采样,
+#     "换武器后冷却显示跟着换"就会滞后 0~1 秒(用户实测约 0.5 秒)。现在由
+#     render_go 每刻直读 SelectedItem, 只付 1 次序列化, 换武器即刻同步。
+#     这里仍然按秒刷的是: 装备在身名单(eq, 换装/层数段最多滞后 1 秒)、
+#     面板生命(zx.hp_show)。
 # 【★★ N07 修(2026-10-11): 缓存按 UUID 分片 ★★】
 #   原来 cache.eq / cache.skill 是**全服共用一格**: 调用点是
 #   `execute as @a[tag=test_look_on]`(每人跑一遍), 每跑一遍都把同一格覆盖掉

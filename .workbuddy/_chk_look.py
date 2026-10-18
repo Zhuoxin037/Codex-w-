@@ -79,27 +79,44 @@ else:
             ok('%s items/%s.json 存在且 JSON 合法' % (tag, path))
 
 # ---------------------------------------------------- 3) 模型文件
+#   ★ 2026-10-18 重写：观测镜早先是一份自带 elements/display 的 3D 望远镜模型，
+#     后来统一成**平面图标**（`parent: item/generated` + `layer0`），
+#     旧判据（要求 elements 非空、要求自带 display、禁止数字贴图键）已经全部不适用，
+#     只会天天报假警报。现在守的是真正会坏的三件事：
+#       ① 模型文件在 `models/item/vanilla/` 下（不是旧的 `models/item/`）
+#       ② 有 layer0，且它指向的贴图真的存在（断链 = 紫黑块）
+#       ③ items/look.json 的 model 指向**就是**这个模型（三层连通，最容易错位的地方）
+MODEL_REL = 'assets/sweetdream/models/item/vanilla/look.json'
 for tag, rp in (('源', RP_SRC), ('版本隔离', RP_DST)):
-    f = os.path.join(rp, 'assets', 'sweetdream', 'models', 'item', 'look.json')
+    f = os.path.join(rp, *MODEL_REL.split('/'))
     if not os.path.exists(f):
         err('%s资源包缺模型: %s' % (tag, f))
         continue
     d = json.load(io.open(f, encoding='utf-8'))
-    if not d.get('elements'):
-        err('%s模型 elements 为空: %s' % (tag, f))
+    ok('%s模型存在且 JSON 合法' % tag)
+    l0 = (d.get('textures') or {}).get('layer0')
+    if not l0:
+        err('%s模型缺 layer0（平面图标必须是 parent item/generated + layer0）' % tag)
     else:
-        ok('%s模型 %d elements' % (tag, len(d['elements'])))
-    # 包里可用模型的共同特征: 自带 display(不依赖 parent)
-    if not d.get('display'):
-        err('%s模型没有 display(包里可用模型都是自带 display, 不靠 parent)' % tag)
-    # 贴图键必须是具名的(数字键 "0" 在包里没有先例)
-    for k in (d.get('textures') or {}):
-        if k.isdigit():
-            err('%s模型用了数字贴图键 "%s"(包里全用具名键)' % (tag, k))
+        ns, path = l0.split(':', 1) if ':' in l0 else ('minecraft', l0)
+        tf = os.path.join(rp, 'assets', ns, 'textures', path + '.png')
+        if not os.path.exists(tf):
+            err('%s模型的 layer0 指向不存在的贴图: %s' % (tag, tf))
+        else:
+            ok('%s模型 layer0 -> %s' % (tag, l0))
+    # items/look.json 必须指向这个模型
+    ij = os.path.join(rp, 'assets', 'sweetdream', 'items', 'look.json')
+    if os.path.exists(ij):
+        ref = ((json.load(io.open(ij, encoding='utf-8')).get('model') or {})
+               .get('model') or '')
+        want = 'sweetdream:item/vanilla/look'
+        if ref != want:
+            err('%s items/look.json 指向 %r，应为 %r（模型/定义错位 = 紫黑块）'
+                % (tag, ref, want))
 
 # ---------------------------------------------------- 4) 贴图
 for tag, rp in (('源', RP_SRC), ('版本隔离', RP_DST)):
-    f = os.path.join(rp, 'assets', 'sweetdream', 'textures', 'item', 'look.png')
+    f = os.path.join(rp, 'assets', 'sweetdream', 'textures', 'item', 'vanilla', 'look.png')
     if not os.path.exists(f):
         err('%s资源包缺贴图: %s' % (tag, f))
         continue
@@ -118,17 +135,19 @@ for tag, rp in (('源', RP_SRC), ('版本隔离', RP_DST)):
 #     真正渲染用的模型/贴图挪进了 `models|textures/item/vanilla/` —— 只守 items/look.json
 #     会漏掉"模型/贴图没同步过去"这一半(2026-10-11 实测: 版本隔离副本缺整个 vanilla/ 目录,
 #     items/look.json 也还指着旧的 item/look, 而这条规则当时只报了 items/look.json)。
+#   ★ 2026-10-18: 旧路径 `models/item/look.json` / `textures/item/look.png` **已经不存在**
+#     (全包平面图标统一到 `item/vanilla/`, 只剩这两条旧路径还挂着) ⇒ 它们报的是
+#     "源资源包缺模型/贴图", 是**假警报**, 会掩盖真问题。删掉旧路径, 只守真正在用的两处。
+LOOK_FILES = ['assets/sweetdream/items/look.json',
+              'assets/sweetdream/models/item/vanilla/look.json',
+              'assets/sweetdream/textures/item/vanilla/look.png',
+              # 标签字体（2026-10-06 加：图标"剩余<=3秒变淡"要用新的淡色字形）
+              'assets/sweetdream/font/icons.json',
+              'assets/sweetdream/textures/font/icons.png',
+              'assets/sweetdream/lang/zh_cn.json',
+              'assets/sweetdream/lang/en_us.json']
 diff = 0
-for rel in ['assets/sweetdream/items/look.json',
-            'assets/sweetdream/models/item/look.json',
-            'assets/sweetdream/models/item/vanilla/look.json',
-            'assets/sweetdream/textures/item/look.png',
-            'assets/sweetdream/textures/item/vanilla/look.png',
-            # 标签字体（2026-10-06 加：图标"剩余<=3秒变淡"要用新的淡色字形）
-            'assets/sweetdream/font/icons.json',
-            'assets/sweetdream/textures/font/icons.png',
-            'assets/sweetdream/lang/zh_cn.json',
-            'assets/sweetdream/lang/en_us.json']:
+for rel in LOOK_FILES:
     a = os.path.join(RP_SRC, *rel.split('/'))
     b = os.path.join(RP_DST, *rel.split('/'))
     if not os.path.exists(b):
@@ -137,7 +156,7 @@ for rel in ['assets/sweetdream/items/look.json',
         err('源与版本隔离目录内容不一致: %s' % rel)
         diff += 1
 if not diff:
-    ok('源 / 版本隔离目录 %d 个文件字节一致' % 9)
+    ok('源 / 版本隔离目录 %d 个文件字节一致' % len(LOOK_FILES))
 
 # ---------------------------------------------------- 6) 标签字体图集（普通 + 淡色）
 ORDER = ['yuanhai', 'liuhuo', 'yehuo', 'shixin', 'dream']

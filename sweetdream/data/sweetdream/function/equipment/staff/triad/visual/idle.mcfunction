@@ -1,0 +1,2 @@
+execute if items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["triad"]}] if data entity @s SelectedItem.components."minecraft:custom_model_data".floats[1] run function sweetdream:equipment/staff/triad/visual/idle_main
+execute if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["triad"]}] if data entity @s equipment.offhand.components."minecraft:custom_model_data".floats[1] run function sweetdream:equipment/staff/triad/visual/idle_off

@@ -2,7 +2,12 @@
   {
     "function": "minecraft:set_components",
     "components": {
-      "minecraft:item_name": {"text": "很冰的斧", "bold": true, "color": "aqua"}
+      "minecraft:item_name": {
+        "text": "很冰的斧",
+        "bold": true,
+        "color": "aqua"
+      },
+      "minecraft:item_model": "sweetdream:triad"
     }
   }
 ]

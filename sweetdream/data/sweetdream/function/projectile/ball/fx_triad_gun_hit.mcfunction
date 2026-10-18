@@ -14,3 +14,6 @@ particle minecraft:poof ~ ~ ~ 0.55 0.5 0.55 0.05 22 normal
 particle minecraft:dust{color:[0.5,0.53,0.58],scale:1.7} ~ ~ ~ 0.5 0.5 0.5 0.05 16 normal
 particle minecraft:crit ~ ~ ~ 0.45 0.45 0.45 0.06 10 normal
 playsound minecraft:block.anvil.land player @a ~ ~ ~ 0.7 0.85
+
+# 三形态实际三维弹体；保留原有粒子和命中表现。
+function sweetdream:equipment/staff/triad/visual/ball_end

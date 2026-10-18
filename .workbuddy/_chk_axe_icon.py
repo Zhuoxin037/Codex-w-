@@ -54,6 +54,13 @@ AXES = {
     'red_lotus':    ('red_lotus',    'red_lotus'),
     'skyvault':     ('skyvault',     'skyvault'),
     'thunderclap':  ('thunderclap',  'thunderclap'),
+    # 批 12 外观（2026-10-18）：焦骨
+    'scorch_bone':  ('scorch_bone',  'scorch_bone'),
+    # 批 16 外观（2026-10-18）：批 14 那批只做 give 的斧（anchor 仍不挂，见 _chk_item_visual）
+    'broken_page':  ('broken_page',  'broken_page'),
+    'death_bell':   ('death_bell',   'death_bell'),
+    'deep_brine':   ('deep_brine',   'deep_brine'),
+    'frost_carve':  ('frost_carve',  'frost_carve'),
 }
 REG_ENTRY = 'sweetdream:visual/axe_icon_sync'
 
@@ -102,22 +109,12 @@ def check_pack(root, tag):
 
 
 def main():
-    # ---- 1) 覆盖层 + 2) 完整版 ----
-    for root, tag in ((OVERLAY, '覆盖层'), (FULL, '完整版')):
-        if not os.path.isdir(root):
-            E('找不到资源包 %s' % root)
-            continue
-        check_pack(root, tag)
-    # 2b) 完整版 == 覆盖层（逐字节）
-    if os.path.isdir(FULL) and os.path.isdir(OVERLAY):
-        for sub in ('items', 'models/item/vanilla', 'textures/item/vanilla'):
-            for sid, (stem, key) in AXES.items():
-                ext = '.png' if sub.startswith('textures') else '.json'
-                a = os.path.join(FULL, 'assets/sweetdream', sub, key + ext)
-                b = os.path.join(OVERLAY, 'assets/sweetdream', sub, key + ext)
-                if os.path.isfile(a) and os.path.isfile(b) and \
-                        open(a, 'rb').read() != open(b, 'rb').read():
-                    E('完整版 vs 覆盖层 不一致: %s/%s' % (sub, key))
+    # ---- 1) 完整版（覆盖层 `sweetdream_rp_原版风` 已合并进完整版并删除,
+    #      按旧路径遍历只会报"找不到资源包"的假警报 —— 只守真源）----
+    if not os.path.isdir(FULL):
+        E('找不到资源包 %s' % FULL)
+    else:
+        check_pack(FULL, '完整版')
 
     # ---- 3) item_modifier ----
     for sid, (stem, key) in AXES.items():
@@ -173,7 +170,8 @@ def main():
         E('缺 function/visual/axe_icon_sync.mcfunction')
 
     # ---- 7) ★ sweetdream:fissure 必须仍然属于地面裂缝, 不能被斧抢走 ----
-    for root, tag in ((OVERLAY, '覆盖层'), (FULL, '完整版')):
+    #   （覆盖层 `sweetdream_rp_原版风` 已合并进完整版并删除，只剩真源要守）
+    for root, tag in ((FULL, '完整版'),):
         p = os.path.join(root, 'assets', 'sweetdream', 'items', 'fissure.json')
         if os.path.isfile(p):
             d = json.load(io.open(p, encoding='utf-8'))
@@ -187,7 +185,7 @@ def main():
     if errs:
         print('\n'.join('  ✗ ' + e for e in errs))
         raise SystemExit('\n合计问题: %d' % len(errs))
-    print('斧图标绑定 ✓  资源包 2 份 × %d 件 · item_modifier %d 份 · '
+    print('斧图标绑定 ✓  资源包 1 份 × %d 件 · item_modifier %d 份 · '
           '物品串 %d 处带 item_model · 已登记 event/second · held 守卫齐全 · '
           '崩裂走 fissure_axe（fissure 仍属地面裂缝）'
           % (len(AXES), len(AXES), n_str))

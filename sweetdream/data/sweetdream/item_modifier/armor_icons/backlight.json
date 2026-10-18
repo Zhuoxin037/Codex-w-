@@ -1,0 +1,11 @@
+{
+  "function": "minecraft:set_components",
+  "components": {
+    "minecraft:item_model": "sweetdream:armor_backlight",
+    "minecraft:equippable": {
+      "slot": "head",
+      "asset_id": "sweetdream:armor_backlight",
+      "equip_sound": "minecraft:item.armor.equip_diamond"
+    }
+  }
+}

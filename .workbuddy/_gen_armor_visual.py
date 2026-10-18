@@ -23,6 +23,37 @@ import sys
 sys.path.insert(0, r'D:\数据包\.workbuddy')
 from build_vanilla_armor import P                                # noqa: E402
 
+# 批 16 外观（2026-10-18）：批 14 那批"只做了 give"的 21 件盔甲。
+#   ★ 不塞进 build_vanilla_armor.P —— 那份是"从像素画布重画整套盔甲"的真源，
+#     每件还带 motif 画法 / ramp / tint 回调；这 21 件的贴图走的是
+#     `_gen_late_icons.py`（借用同部位现成贴图换色 + 一处 motif），参数不同源。
+#     这里只补"数据包侧接入"需要的四个字段：id / 中文 / 槽位 / 底材档。
+#     以后真要重画它们，把它们并进 P 并把本列表删掉即可（两边字段是超集关系）。
+NEW = [
+    dict(id='backlight', cn='返照', slot='helmet', mat='diamond'),
+    dict(id='empty_pillow', cn='空枕', slot='helmet', mat='iron'),
+    dict(id='flint_hat', cn='燧帽', slot='helmet', mat='iron'),
+    dict(id='needle_sleep', cn='针眠', slot='helmet', mat='diamond'),
+    dict(id='boil_trace', cn='沸痕', slot='chestplate', mat='iron'),
+    dict(id='char_coat', cn='焦衣', slot='chestplate', mat='diamond'),
+    dict(id='condensed_shell', cn='凝壳', slot='chestplate', mat='diamond'),
+    dict(id='crimson_seam', cn='绯缝', slot='chestplate', mat='diamond'),
+    dict(id='last_breath', cn='归息', slot='chestplate', mat='iron'),
+    dict(id='tide_watch', cn='候潮', slot='chestplate', mat='iron'),
+    dict(id='beach_vein', cn='滩纹', slot='leggings', mat='iron'),
+    dict(id='gyre', cn='回旋', slot='leggings', mat='diamond'),
+    dict(id='mirror_sleep', cn='镜寐', slot='leggings', mat='iron'),
+    dict(id='mottle_vein', cn='杂纹', slot='leggings', mat='diamond'),
+    dict(id='thorn_vein', cn='刺纹', slot='leggings', mat='iron'),
+    dict(id='candle_step', cn='烛跬', slot='boots', mat='diamond'),
+    dict(id='cross_dream', cn='渡梦', slot='boots', mat='iron'),
+    dict(id='light_pillow', cn='轻枕', slot='boots', mat='iron'),
+    dict(id='rain_trace', cn='雨迹', slot='boots', mat='iron'),
+    dict(id='smoke_step', cn='烟履', slot='boots', mat='iron'),
+    dict(id='tread_ash', cn='踏灰', slot='boots', mat='iron'),
+]
+ALL = P + NEW
+
 DATA = r'D:\数据包\sweetdream\data\sweetdream'
 MOD_DIR = os.path.join(DATA, 'item_modifier', 'armor_icons')
 FUNC_DIR = os.path.join(DATA, 'function', 'visual')
@@ -53,7 +84,7 @@ def comps(p):
 # ---------------------------------------------------------------- ① item_modifier
 def gen_modifiers():
     n = 0
-    for p in P:
+    for p in ALL:
         im, eq = comps(p)
         data = {
             "function": "minecraft:set_components",
@@ -107,7 +138,7 @@ def gen_held():
     A('#   ⇒ 总行数 = 25, 不是 25×4。**背包/箱子里的存量盔甲这里看不到** ——')
     A('#   那些请重新 give(give 里已直接写了这两个组件)。')
     A('# ============================================================')
-    for p in P:
+    for p in ALL:
         im, eq = comps(p)
         cid = p['id']
         slot = SLOT_ARMOR[p['slot']]
@@ -122,7 +153,7 @@ def gen_held():
 # ---------------------------------------------------------------- ④ give 插入
 def patch_give():
     changed, skipped = 0, 0
-    for p in P:
+    for p in ALL:
         cid = p['id']
         path = os.path.join(GIVE_ROOT, cid, 'give.mcfunction')
         if not os.path.isfile(path):
@@ -176,7 +207,7 @@ def main():
     gen_modifiers()
     write(os.path.join(FUNC_DIR, 'armor_icon_sync.mcfunction'), SYNC)
     write(os.path.join(FUNC_DIR, 'armor_icon_held.mcfunction'), gen_held())
-    print('visual/armor_icon_sync + armor_icon_held 已写 (%d 件)' % len(P))
+    print('visual/armor_icon_sync + armor_icon_held 已写 (%d 件)' % len(ALL))
     register_second()
     patch_give()
 

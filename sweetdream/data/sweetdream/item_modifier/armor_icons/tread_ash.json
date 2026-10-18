@@ -1,0 +1,11 @@
+{
+  "function": "minecraft:set_components",
+  "components": {
+    "minecraft:item_model": "sweetdream:armor_tread_ash",
+    "minecraft:equippable": {
+      "slot": "feet",
+      "asset_id": "sweetdream:armor_tread_ash",
+      "equip_sound": "minecraft:item.armor.equip_iron"
+    }
+  }
+}

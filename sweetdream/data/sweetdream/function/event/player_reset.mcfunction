@@ -36,6 +36,7 @@
 #     详见 internal/attr/cleanup 头部(含"重置 = 恢复成新玩家"的语义论证)。
 execute if entity @s[tag=zx.fb_cast] at @s run function sweetdream:equipment/sword/flame_brokenbody/visual/end
 execute if entity @s[tag=zx.fcvv_on] at @s run function sweetdream:equipment/staff/five_curses/visual/end
+execute if entity @s[tag=zx.tv_cast] run function sweetdream:equipment/staff/triad/visual/end
 function sweetdream:internal/attr/cleanup
 function sweetdream:equipment/axe/anchor/cancel
 # @@GEN-SCORES-BELOW@@
@@ -462,6 +463,10 @@ scoreboard players reset @s zx.slvf
 scoreboard players reset @s zx.slvi
 scoreboard players reset @s zx.slvm
 scoreboard players reset @s zx.sm_done
+scoreboard players reset @s zx.sm_n
+scoreboard players reset @s zx.sm_px
+scoreboard players reset @s zx.sm_py
+scoreboard players reset @s zx.sm_pz
 scoreboard players reset @s zx.sm_t
 scoreboard players reset @s zx.sm_x
 scoreboard players reset @s zx.sm_y
@@ -526,6 +531,12 @@ scoreboard players reset @s zx.tt.liuhuo
 scoreboard players reset @s zx.tt.shixin
 scoreboard players reset @s zx.tt.yehuo
 scoreboard players reset @s zx.tt.yuanhai
+scoreboard players reset @s zx.tv_age
+scoreboard players reset @s zx.tv_form
+scoreboard players reset @s zx.tv_hand
+scoreboard players reset @s zx.tv_life
+scoreboard players reset @s zx.tv_slot
+scoreboard players reset @s zx.tv_t
 scoreboard players reset @s zx.tw_cd
 scoreboard players reset @s zx.tw_set_cd
 scoreboard players reset @s zx.tw_t

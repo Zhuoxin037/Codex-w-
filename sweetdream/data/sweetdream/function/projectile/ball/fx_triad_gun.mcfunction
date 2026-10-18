@@ -12,3 +12,6 @@
 
 particle minecraft:dust{color:[0.55,0.58,0.62],scale:1.4} ~ ~ ~ 0.12 0.12 0.12 0 8 normal
 particle minecraft:crit ~ ~ ~ 0.14 0.14 0.14 0.02 2 normal
+
+# 三形态实际三维弹体；保留原有粒子和命中表现。
+execute at @s run function sweetdream:equipment/staff/triad/visual/ball_tick

@@ -10,3 +10,12 @@ execute in minecraft:the_nether as @e[tag=sd.fb.ash,distance=0..] at @s run func
 execute in minecraft:the_nether as @e[tag=sd.fb.ash_cloud,distance=0..] at @s run function sweetdream:boss/fireaxe/ash/cloud
 execute in minecraft:the_end as @e[tag=sd.fb.ash,distance=0..] at @s run function sweetdream:boss/fireaxe/ash/tick
 execute in minecraft:the_end as @e[tag=sd.fb.ash_cloud,distance=0..] at @s run function sweetdream:boss/fireaxe/ash/cloud
+execute in minecraft:overworld as @e[tag=sd.fb.fx.sweep,distance=0..] at @s run function sweetdream:boss/fireaxe/fx/sweep_tick
+execute in minecraft:overworld as @e[tag=sd.fb.fx.crack,distance=0..] at @s run function sweetdream:boss/fireaxe/fx/crack_tick
+execute in minecraft:overworld as @e[tag=sd.fb.fx.chunk,distance=0..] at @s run function sweetdream:boss/fireaxe/fx/chunk_tick
+execute in minecraft:the_nether as @e[tag=sd.fb.fx.sweep,distance=0..] at @s run function sweetdream:boss/fireaxe/fx/sweep_tick
+execute in minecraft:the_nether as @e[tag=sd.fb.fx.crack,distance=0..] at @s run function sweetdream:boss/fireaxe/fx/crack_tick
+execute in minecraft:the_nether as @e[tag=sd.fb.fx.chunk,distance=0..] at @s run function sweetdream:boss/fireaxe/fx/chunk_tick
+execute in minecraft:the_end as @e[tag=sd.fb.fx.sweep,distance=0..] at @s run function sweetdream:boss/fireaxe/fx/sweep_tick
+execute in minecraft:the_end as @e[tag=sd.fb.fx.crack,distance=0..] at @s run function sweetdream:boss/fireaxe/fx/crack_tick
+execute in minecraft:the_end as @e[tag=sd.fb.fx.chunk,distance=0..] at @s run function sweetdream:boss/fireaxe/fx/chunk_tick

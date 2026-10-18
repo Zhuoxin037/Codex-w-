@@ -68,3 +68,21 @@ execute if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["skyvault
 # 威霆
 execute if items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["thunderclap"]}] unless items entity @s weapon.mainhand *[minecraft:item_model="sweetdream:thunderclap"] run item modify entity @s weapon.mainhand sweetdream:axe_icons/thunderclap
 execute if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["thunderclap"]}] unless items entity @s weapon.offhand *[minecraft:item_model="sweetdream:thunderclap"] run item modify entity @s weapon.offhand sweetdream:axe_icons/thunderclap
+# 焦骨
+execute if items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["scorch_bone"]}] unless items entity @s weapon.mainhand *[minecraft:item_model="sweetdream:scorch_bone"] run item modify entity @s weapon.mainhand sweetdream:axe_icons/scorch_bone
+execute if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["scorch_bone"]}] unless items entity @s weapon.offhand *[minecraft:item_model="sweetdream:scorch_bone"] run item modify entity @s weapon.offhand sweetdream:axe_icons/scorch_bone
+# 沉锚
+execute if items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["anchor"]}] unless items entity @s weapon.mainhand *[minecraft:item_model="sweetdream:anchor"] run item modify entity @s weapon.mainhand sweetdream:axe_icons/anchor
+execute if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["anchor"]}] unless items entity @s weapon.offhand *[minecraft:item_model="sweetdream:anchor"] run item modify entity @s weapon.offhand sweetdream:axe_icons/anchor
+# 断页
+execute if items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["broken_page"]}] unless items entity @s weapon.mainhand *[minecraft:item_model="sweetdream:broken_page"] run item modify entity @s weapon.mainhand sweetdream:axe_icons/broken_page
+execute if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["broken_page"]}] unless items entity @s weapon.offhand *[minecraft:item_model="sweetdream:broken_page"] run item modify entity @s weapon.offhand sweetdream:axe_icons/broken_page
+# 丧铃
+execute if items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["death_bell"]}] unless items entity @s weapon.mainhand *[minecraft:item_model="sweetdream:death_bell"] run item modify entity @s weapon.mainhand sweetdream:axe_icons/death_bell
+execute if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["death_bell"]}] unless items entity @s weapon.offhand *[minecraft:item_model="sweetdream:death_bell"] run item modify entity @s weapon.offhand sweetdream:axe_icons/death_bell
+# 重溟
+execute if items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["deep_brine"]}] unless items entity @s weapon.mainhand *[minecraft:item_model="sweetdream:deep_brine"] run item modify entity @s weapon.mainhand sweetdream:axe_icons/deep_brine
+execute if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["deep_brine"]}] unless items entity @s weapon.offhand *[minecraft:item_model="sweetdream:deep_brine"] run item modify entity @s weapon.offhand sweetdream:axe_icons/deep_brine
+# 剜霜
+execute if items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["frost_carve"]}] unless items entity @s weapon.mainhand *[minecraft:item_model="sweetdream:frost_carve"] run item modify entity @s weapon.mainhand sweetdream:axe_icons/frost_carve
+execute if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["frost_carve"]}] unless items entity @s weapon.offhand *[minecraft:item_model="sweetdream:frost_carve"] run item modify entity @s weapon.offhand sweetdream:axe_icons/frost_carve

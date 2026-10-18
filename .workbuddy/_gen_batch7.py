@@ -8,10 +8,13 @@
   法杖 2（很冰的斧… triad / 五世恶咒 five_curses）
   ★ 本批**只做 give**（用户 2026-10-11 定："先做好give，效果等一会再做"）——
     技能机制 / 进度 / updef / 超限石 / 资源包外观全部留到后续批次。
-  ★ 因此本批**不挂 item_model**（外观没做, 挂了 = 引用不存在的 items/<id>.json ⇒
-    游戏里显示**缺失模型紫黑方块**, 是真缺陷不是检查噪音）。物品先显示为其底材的原版外观;
-    外观批次再把 item_model + items/*.json + models/ + 贴图 一起补上（ITEMS 里的 item_model
-    字段已经预留好了, 到时把 build() 里那两行注释打开即可）。
+  ★ 外观（批 12，2026-10-18）：**7 件平面图标已接上**（潮痕/灰度/缺月/焦骨/龙舌/云迹/三形态），
+    见 build() 的 FLAT_ICON；圣骸/沉锚/五世恶咒/爆裂黎明 走的是 3D 手持模型，另有分支。
+    另 **anchor（沉锚）仍不挂** —— 资源包里那份 `items/anchor.json` 的 credit 明写
+    "四向静态审阅模型；尚未部署，握姿为初始候选"，是没验收的候选件，不能拿去给玩家。
+  ★ 挂 item_model 的前提永远是"资源包里那份 items/<id>.json 已经存在" ——
+    否则游戏里显示**缺失模型紫黑方块**，是真缺陷不是检查噪音。
+    以后新增外观必须先补 items/*.json + models/ + 贴图，再来这里放行。
 
 【稀有度 -> 底材】(用户 2026-10-07 定; 2026-10-11 用户补: "稀有 = 铁")
   罕见 = 铁 / 稀有 = 铁 / 史诗 = 钻石 / 传说 = 下界合金 / 禁忌 = 下界合金
@@ -275,8 +278,19 @@ def build(it):
         zx_txt = zx_txt + ',skill:"sweetdream:%s"' % cid
 
     parts = []
-    # ★ 外观批次再开: 本批不挂 item_model（引用不存在的 items/<id>.json ⇒ 游戏里紫黑方块）。
-    # parts.append('item_model="%s"' % it['item_model'])
+    # ★ 批 12（2026-10-18）：这 7 件的 16×16 平面图标已就位
+    #   （贴图 `textures/item/vanilla/<x>.png` + models + items 三层齐全，
+    #    由 `.workbuddy/_gen_batch12_icons.py` / `_gen_batch12_rp.py` 生成）。
+    #   ★ 不追加 custom_model_data：它们用的是纯 `minecraft:model`，
+    #     不像圣骸/五世恶咒/爆裂黎明那样按 custom_model_data 做 range_dispatch 分支。
+    FLAT_ICON = {
+        'tidemark', 'grayscale', 'crescent',      # 剑
+        'scorch_bone',                            # 斧
+        'dragon_tongue', 'cloudtrail',            # 弩（6 态一整套）
+        'triad',                                  # 法杖
+    }
+    if cid in FLAT_ICON:
+        parts.append('item_model="%s"' % it['item_model'])
     if cid == 'sacred_relic':
         # 已批准并接入的圣骸3D外观，其他本批装备仍保留原版。
         parts.append('item_model="sweetdream:sacred_relic"')
@@ -355,9 +369,13 @@ def header(it):
         # 本件外观已接入 / 有额外说明 -> 用它替掉默认那两句(2026-10-13: 由磁盘回收进生成器)
         for ln in it['headnote']:
             A(ln)
+    elif it['id'] in ('tidemark', 'grayscale', 'crescent', 'scorch_bone',
+                      'dragon_tongue', 'cloudtrail', 'triad'):
+        A('# ★ 2026-10-18（批 12）已接 16×16 平面图标 item_model="%s"' % it['item_model'])
+        A('#   （贴图 textures/item/vanilla + models/item/vanilla + items 三层齐全）。')
     else:
-        A('# ★ 本批**不挂 item_model**（外观未做; 挂了会引用不存在的模型 -> 游戏里显示紫黑方块）。')
-        A('#   外观批次再补 item_model="%s" + items/*.json + models/ + 贴图。' % it['item_model'])
+        A('# ★ 本件**不挂 item_model**（外观未做或只是未验收的候选模型）。')
+        A('#   要接的话先补 items/%s.json + models/ + 贴图，再来这里放行。' % it['item_model'])
     A('# ============================================================')
     A('')
     return '\n'.join(L)

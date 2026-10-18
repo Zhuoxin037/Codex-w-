@@ -1,2 +1,19 @@
-# Native pose is unchanged; hold the preceding transformations.
-return 0
+# Evaluated from the unchanged saved Blockbench native animation; complete hold frames too.
+$data merge entity $(pelvis) {transformation: [-1.5f,0f,0f,0f,0f,1.5f,0f,2.184375f,0f,0f,-1.5f,0.0328125f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}
+$data merge entity $(waist) {transformation: [-1.5f,0f,0f,0f,0f,1.4938266f,-0.1359489f,2.371875f,0f,-0.1359489f,-1.4938266f,0.0328125f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}
+$data merge entity $(chest) {transformation: [-1.5f,0f,0f,0f,0f,1.4938266f,-0.1359489f,2.8386958f,0f,-0.1359489f,-1.4938266f,-0.0096715f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}
+$data merge entity $(neck) {transformation: [-1.5f,0f,0f,0f,0f,1.4839085f,-0.2191245f,3.5669363f,0f,-0.2191245f,-1.4839085f,-0.0759466f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}
+$data merge entity $(head) {transformation: [-1.4963461f,-0.1007802f,0.0281383f,0f,-0.1035122f,1.3668366f,-0.6091329f,3.6782294f,0.0152854f,-0.6095909f,-1.3704617f,-0.0923809f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}
+$data merge entity $(arm_upper_right) {transformation: [-1.48063f,0.218774f,0.0993617f,-0.69375f,0.2287991f,1.4731371f,0.1658858f,3.4123244f,-0.0733879f,0.1788996f,-1.4874842f,-0.2232509f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}
+$data merge entity $(arm_lower_right) {transformation: [-1.48063f,0.2402686f,-0.0024056f,-0.8387012f,0.2287991f,1.405222f,-0.472231f,2.8254785f,-0.0733879f,-0.4664999f,-1.4237247f,-0.2781242f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}
+$data merge entity $(hand_right) {transformation: [-1.48063f,0.1856746f,0.1525114f,-1.0623698f,0.2287991f,1.3802618f,0.540859f,2.2741463f,-0.0733879f,0.5571377f,-1.3907594f,0.0129693f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}
+$data merge entity $(leg_upper_right) {transformation: [-1.5f,0f,0f,-0.2565281f,0f,1.4849247f,-0.2121291f,2.184375f,0f,-0.2121291f,-1.4849247f,0.0838125f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}
+$data merge entity $(leg_lower_right) {transformation: [-1.5f,0f,0f,-0.4673906f,0f,1.4368605f,0.430618f,1.0588314f,0f,0.430618f,-1.4368605f,0.1599577f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}
+$data merge entity $(foot_right) {transformation: [-1.5f,0f,0f,-0.5357156f,0f,1.5f,0f,0.5625f,0f,0f,-1.5f,-0.1433062f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}
+$data merge entity $(arm_upper_left) {transformation: [-1.3297542f,-0.6923682f,0.0487863f,0.69375f,-0.6457879f,1.2728067f,0.4614338f,3.4123244f,-0.2543851f,0.3880586f,-1.4264287f,-0.2232509f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}
+$data merge entity $(arm_lower_left) {transformation: [-1.3297542f,-0.4270295f,0.5471742f,1.0035219f,-0.6457879f,1.194586f,-0.6371202f,2.9050584f,-0.2543851f,-0.8003812f,-1.2428508f,-0.3415452f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}
+$data merge entity $(hand_left) {transformation: [-1.3297542f,-0.5155577f,0.4647085f,1.295232f,-0.6457879f,1.2870723f,-0.4200032f,2.4771221f,-0.2543851f,-0.5724028f,-1.3629539f,0.0688893f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}
+$data merge entity $(leg_upper_left) {transformation: [-1.5f,0f,0f,0.2611594f,0f,1.4961811f,-0.1069675f,2.184375f,0f,-0.1069675f,-1.4961811f,0.0590813f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}
+$data merge entity $(leg_lower_left) {transformation: [-1.5f,0f,0f,0.5009531f,0f,1.4248018f,0.4689774f,1.0569523f,0f,0.4689774f,-1.4248018f,0.0653582f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}
+$data merge entity $(foot_left) {transformation: [-1.5f,0f,0f,0.5478844f,0f,1.5f,0.0000003f,0.5625f,0f,0.0000003f,-1.5f,-0.231572f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}
+$data merge entity $(weapon_fireaxe) {transformation: [0.0992246f,-0.5925297f,1.9214806f,-1.3848134f,1.6181606f,-1.1184792f,-0.4284683f,1.3558813f,1.1936228f,1.565547f,0.4211317f,0.5792274f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}

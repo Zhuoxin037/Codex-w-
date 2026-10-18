@@ -10,9 +10,8 @@
 #
 # 【这个文件是生成的】改描述请改 .workbuddy/_new42_lore.py、改标签请改
 #   .workbuddy/_tags_data.py，然后重跑本生成器 + `python .workbuddy/lore_fmt.py --write`。
-# ★ 批 14（2026-10-15 用户定）**只做 give**：技能 / 进度 / updef / 超限石 /
-#   外观 等留后续批次；因此**不挂 item_model**（外观未做，挂了会引用不存在的
-#   模型 -> 游戏里显示紫黑方块）。物品先显示为底材的原版外观。
+# 【外观】批 16（2026-10-18）补齐：item_model 指向 sweetdream:crossbow_reverse_string
+#   （贴图源 _gen_late_icons.py，接线 _gen_late_rp.py）。
 # ★ 弩的命中结算要靠 sweetdream:reverse_string 附魔的 post_attack 回调（坑 138：回调
 #   只读**攻击者主手物品**上的附魔）=> **必须挂 enchantments**；漏了它整把弩
 #   会"射得出去、什么都不发生"且零日志。
@@ -21,4 +20,4 @@
 #   ★ enchantment_glint_override=false + tooltip 里藏掉 enchantments：
 #     让附魔生效但不显示附魔名与紫色光效（与既有 10 把弩同一套写法）。
 # ============================================================
-give @s crossbow[item_name={text:"逆弦",bold:true,color:aqua},lore=[{"text":"✦ 主动技能","color":"gold","bold":true,"italic":false},{"text":"","italic":false,"extra":[{"text":"魔力 ","color":"gray"},{"text":"100","color":"aqua"}]},{"text":" ","italic":false},{"text":"每次射击命中生物后，额外造成一次相当","color":"gray","italic":false},{"text":"于自身基础攻击力 ×2 的伤害。若自身当","color":"gray","italic":false},{"text":"前魔力值不高于最大魔力值的 25%，则该","color":"gray","italic":false},{"text":"段技能伤害提高 50%（独立乘区）；若强","color":"gray","italic":false},{"text":"化段击杀了生物，则返还 40 魔力。","color":"gray","italic":false}],unbreakable={},enchantments={"sweetdream:reverse_string":1},enchantment_glint_override=false,custom_data={zx:["reverse_string","bow"],tags:["base_atk","max_mana","cur_mana","indep_mul"]},tooltip_display={hidden_components:["unbreakable","enchantments"]}]
+give @s crossbow[item_name={text:"逆弦",bold:true,color:aqua},lore=[{"text":"✦ 主动技能","color":"gold","bold":true,"italic":false},{"text":"","italic":false,"extra":[{"text":"魔力 ","color":"gray"},{"text":"100","color":"aqua"}]},{"text":" ","italic":false},{"text":"每次射击命中生物后，额外造成一次相当","color":"gray","italic":false},{"text":"于自身基础攻击力 ×2 的伤害。若自身当","color":"gray","italic":false},{"text":"前魔力值不高于最大魔力值的 25%，则该","color":"gray","italic":false},{"text":"段技能伤害提高 50%（独立乘区）；若强","color":"gray","italic":false},{"text":"化段击杀了生物，则返还 40 魔力。","color":"gray","italic":false}],unbreakable={},enchantments={"sweetdream:reverse_string":1},enchantment_glint_override=false,custom_data={zx:["reverse_string","bow"],tags:["base_atk","max_mana","cur_mana","indep_mul"]},tooltip_display={hidden_components:["unbreakable","enchantments"]},item_model="sweetdream:crossbow_reverse_string"]

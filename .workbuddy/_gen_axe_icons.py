@@ -41,7 +41,7 @@ DP = os.path.join(ROOT, 'sweetdream', 'data')
 MOD_DIR = os.path.join(DP, 'sweetdream', 'item_modifier', 'axe_icons')
 FN_DIR = os.path.join(DP, 'sweetdream', 'function', 'visual')
 TAG = os.path.join(DP, 'manacore', 'tags', 'function', 'event', 'second.json')
-RP = os.path.join(ROOT, 'sweetdream_rp_原版风', 'assets', 'sweetdream', 'items')
+RP = os.path.join(ROOT, 'sweetdream_rp_完整版', 'assets', 'sweetdream', 'items')
 
 # ---------------------------------------------------------------- 名单（唯一真相来源）
 # (武器 id = zx[0], 中文名, 底物, 模型键)
@@ -62,6 +62,14 @@ AXES = [
     ('red_lotus',    '红莲',     'iron_axe',      'red_lotus'),
     ('skyvault',     '天穹',     'netherite_axe', 'skyvault'),
     ('thunderclap',  '威霆',     'netherite_axe', 'thunderclap'),
+    # 批 12 外观（2026-10-18）：焦骨的 16×16 平面图标（骨白刃 + 焦黑柄）
+    ('scorch_bone',  '焦骨',     'diamond_axe',   'scorch_bone'),
+    # 批 16 外观（2026-10-18）：批 14 那批"只做了 give"的斧，补齐平面图标
+    ('anchor',       '沉锚',     'diamond_axe',   'anchor'),
+    ('broken_page',  '断页',     'iron_axe',      'broken_page'),
+    ('death_bell',   '丧铃',     'iron_axe',      'death_bell'),
+    ('deep_brine',   '重溟',     'diamond_axe',   'deep_brine'),
+    ('frost_carve',  '剜霜',     'diamond_axe',   'frost_carve'),
 ]
 REG_ENTRY = 'sweetdream:visual/axe_icon_sync'
 

@@ -19,7 +19,13 @@ execute if score @s zx.sm_done matches 1 run function sweetdream:equipment/armor
 # ② 清状态
 scoreboard players set @s zx.sm_done 0
 scoreboard players set @s zx.sm_t 0
+scoreboard players set @s zx.sm_n 0
 tag @s remove zx.sm_chk
+#   ★ 兜底清雨迹的起点锚点 marker：正常在 step_moved 就 kill 掉了（那边用 ..32，
+#     因为影刃/沉锚确认位移时玩家已经跳出老远）；"原地放技能"（没确认位移）
+#     根本走不到那一步，marker 会一直留在脚下 ⇒ 每次原地施法攒一个，
+#     久了满地是 marker。这里玩家没动过，..3 够。
+kill @e[tag=zx.rt_anchor,distance=..3]
 
 # ③ 删掉这次施放的记录（必须在兑现之后：踏灰要读 skill id）
 data modify storage zx:step ctx set value {}

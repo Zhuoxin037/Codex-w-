@@ -13,4 +13,11 @@ tag @s remove sweetdream_boss.reconstruction.animation.death.playing
 tag @s remove sweetdream_boss.reconstruction.animation.phase_roar.playing
 tag @s remove sweetdream_boss.reconstruction.animation.combo_sweep_jump.playing
 tag @s remove sweetdream_boss.reconstruction.animation.combo_dash_chop.playing
+tag @s remove sweetdream_boss.reconstruction.animation.p2_attack.playing
+tag @s remove sweetdream_boss.reconstruction.animation.p2_attack_sweep.playing
+tag @s remove sweetdream_boss.reconstruction.animation.p2_attack_jump.playing
+tag @s remove sweetdream_boss.reconstruction.animation.p2_attack_dash.playing
+tag @s remove sweetdream_boss.reconstruction.animation.p2_combo_sweep_jump.playing
+tag @s remove sweetdream_boss.reconstruction.animation.p2_combo_dash_chop.playing
+tag @s remove sweetdream_boss.reconstruction.animation.sprint_loop.playing
 tag @s remove aj.pause_after_tween

@@ -13,4 +13,11 @@ scoreboard objectives remove sweetdream_boss.reconstruction.death.frame
 scoreboard objectives remove sweetdream_boss.reconstruction.phase_roar.frame
 scoreboard objectives remove sweetdream_boss.reconstruction.combo_sweep_jump.frame
 scoreboard objectives remove sweetdream_boss.reconstruction.combo_dash_chop.frame
+scoreboard objectives remove sweetdream_boss.reconstruction.p2_attack.frame
+scoreboard objectives remove sweetdream_boss.reconstruction.p2_attack_sweep.frame
+scoreboard objectives remove sweetdream_boss.reconstruction.p2_attack_jump.frame
+scoreboard objectives remove sweetdream_boss.reconstruction.p2_attack_dash.frame
+scoreboard objectives remove sweetdream_boss.reconstruction.p2_combo_sweep_jump.frame
+scoreboard objectives remove sweetdream_boss.reconstruction.p2_combo_dash_chop.frame
+scoreboard objectives remove sweetdream_boss.reconstruction.sprint_loop.frame
 tellraw @a [[{"color":"gray","text":"\n "},{"color":"#00aced","text":"ᴀɴɪᴍᴀᴛᴇᴅ ᴊᴀᴠᴀ"},{"color":"dark_gray","italic":true,"text":"\n (sweetdream_boss:reconstruction)"},"\n → "],[{"text":"Successfully uninstalled ","color":"green"},{"text":"sweetdream_boss:reconstruction","color":"yellow"},{"text":"!"},{"text":"\n If you have exported multiple times, you may have to remove objectives from previous exports manually, as Animated Java only knows about the objectives from the most recent export.","color":"gray","italic":true}],"\n"]

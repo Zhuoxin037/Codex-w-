@@ -1,0 +1,11 @@
+{
+  "function": "minecraft:set_components",
+  "components": {
+    "minecraft:item_model": "sweetdream:armor_thorn_vein",
+    "minecraft:equippable": {
+      "slot": "legs",
+      "asset_id": "sweetdream:armor_thorn_vein",
+      "equip_sound": "minecraft:item.armor.equip_iron"
+    }
+  }
+}

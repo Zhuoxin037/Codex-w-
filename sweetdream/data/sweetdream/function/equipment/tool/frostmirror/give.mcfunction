@@ -15,4 +15,4 @@
 # 【手写文件】不是 _gen_batch*.py 的产物, 别被生成器覆盖。
 # ============================================================
 
-give @s recovery_compass[max_stack_size=1,item_name={text:"冰鉴",bold:true,color:aqua},lore=[{"text":"✦ 被动技能","color":"gold","bold":true,"italic":false},{"text":"持于副手时，自身受到伤害后使自身 3 格","color":"gray","italic":false},{"text":"内最近的一个生物冰冻 1 秒，并使当前主","color":"gray","italic":false},{"text":"手装备的主动技能冷却时间 -1 秒。该效","color":"gray","italic":false},{"text":"果每 4 秒至多触发一次。","color":"gray","italic":false}],custom_data={zx:["frostmirror","tool"],tags:["freeze","cd_down","debuff"]}]
+give @s recovery_compass[max_stack_size=1,item_name={text:"冰鉴",bold:true,color:aqua},lore=[{"text":"✦ 被动技能","color":"gold","bold":true,"italic":false},{"text":"持于副手时，自身受到伤害后使自身 3 格","color":"gray","italic":false},{"text":"内最近的一个生物冰冻 1 秒，并使当前主","color":"gray","italic":false},{"text":"手装备的主动技能冷却时间 -1 秒。该效","color":"gray","italic":false},{"text":"果每 4 秒至多触发一次。","color":"gray","italic":false}],custom_data={zx:["frostmirror","tool"],tags:["freeze","cd_down","debuff"]},minecraft:item_model="sweetdream:tool_frostmirror"]

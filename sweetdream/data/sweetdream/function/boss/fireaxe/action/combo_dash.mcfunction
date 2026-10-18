@@ -1,3 +1,4 @@
+execute if score @s sdbf.phase matches 3 run return run function sweetdream:boss/fireaxe/action/p2_combo_dash
 execute store result score @s sdbf.frame run scoreboard players get @e[tag=sd.fb.current_rig,limit=1,distance=0..] sweetdream_boss.reconstruction.combo_dash_chop.frame
 execute if score @s sdbf.frame matches ..3 if entity @e[tag=sd.fb.target,distance=0..] run function sweetdream:boss/fireaxe/face
 execute if score @s sdbf.frame matches 9 at @s run function sweetdream:boss/fireaxe/phase/hit_dash

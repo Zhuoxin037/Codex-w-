@@ -34,7 +34,12 @@ GIVE_ROOT = os.path.join(DATA, 'function', 'equipment', 'tool')
 SECOND = r'D:\数据包\sweetdream\data\manacore\tags\function\event\second.json'
 
 SLOT = 'weapon.offhand'          # 副手槽（items 判定 / item modify 都用这个名）
-TOOLS = [(pid, cn) for pid, cn, _motif, _fn in TOOL_ICONS]
+# 批 16 外观（2026-10-18）：批 14 那批"只做了 give"的副手，补齐平面图标。
+#   ★ 这三件不在 build_offhand_icons.ICONS 里（那份画的是原版风矢量的 7 件），
+#     贴图由 _gen_late_icons.py 生成（骨架换色，key 同样是 tool_<id>），
+#     所以只在这里补名字：modifier / held / give 三处的写法与那 7 件逐字同构。
+NEW_TOOLS = [('coffin_silk', '殓丝'), ('frostmirror', '冰鉴'), ('tide_buckle', '回潮扣')]
+TOOLS = [(pid, cn) for pid, cn, _motif, _fn in TOOL_ICONS] + NEW_TOOLS
 
 
 def key(pid):

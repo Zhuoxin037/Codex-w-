@@ -6,4 +6,4 @@ execute if score @s sdbf.hp1000 < @s sdbf.last_hp on attacker at @s run function
 scoreboard players operation @s sdbf.last_hp = @s sdbf.hp1000
 tag @e[tag=sd.fb.target,distance=0..] remove sd.fb.target
 function sweetdream:boss/fireaxe/target/load with storage sweetdream:fireaxe aggro
-execute unless entity @e[tag=sd.fb.target,distance=0..] as @a[gamemode=!creative,gamemode=!spectator,distance=..24,sort=nearest,limit=1,nbt=!{Health:0.0f}] at @s run function sweetdream:boss/fireaxe/target/accept
+execute unless entity @e[tag=sd.fb.target,distance=0..] as @a[gamemode=!creative,gamemode=!spectator,distance=..30,sort=nearest,limit=1,nbt=!{Health:0.0f}] at @s run function sweetdream:boss/fireaxe/target/accept

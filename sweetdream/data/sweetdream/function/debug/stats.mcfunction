@@ -317,17 +317,20 @@ tellraw @s [{"text":"── 主手武器 ──","color":"dark_gray"}]
 data remove storage zx:work a.skill
 execute if data entity @s SelectedItem.components."minecraft:custom_data".skill run data modify storage zx:work a.skill set from entity @s SelectedItem.components."minecraft:custom_data".skill
 
-#   【★ 出参是 #v_cd ★】look/cooldown_get 把结果写在 #v_cd zx.meta 上
-#     (和观测镜面板同一个变量, 因为用的就是同一段逻辑)。
+#   【★ 出参是 #v_cdi / #v_cdd ★】look/cooldown_get 把结果拆成"整数位 + 十分位"
+#     写在 zx.meta 上(和观测镜面板同一份逻辑, 不会两处算出不同的数)。
+#     2026-10-18: 原来只有整数秒, 现在统一给一位小数。
 #     不需要先归零: 它内部每次都完整重算(#v_end - #now)。
 scoreboard players set #g_cd zx.meta 0
+scoreboard players set #g_cd_d zx.meta 0
 execute if data storage zx:work a.skill run function sweetdream:equipment/tool/look/cooldown_get with storage zx:work a
-scoreboard players operation #g_cd zx.meta = #v_cd zx.meta
+scoreboard players operation #g_cd zx.meta = #v_cdi zx.meta
+scoreboard players operation #g_cd_d zx.meta = #v_cdd zx.meta
 
 # 把 "sweetdream:sickle_dreams" 砍掉命名空间, 只留 sickle_dreams 去查中文名
 execute if data storage zx:work a.skill run data modify storage zx:work a.id set string storage zx:work a.skill 11
 data modify storage zx:work a.l set value "  "
 data modify storage zx:work a.tail set value ""
 execute if data storage zx:work a.id run function sweetdream:debug/name_row with storage zx:work a
-execute if data storage zx:work a.id run tellraw @s [{"text":"   剩余冷却 ","color":"gray"},{"score":{"name":"#g_cd","objective":"zx.meta"},"color":"yellow"},{"text":" 秒","color":"yellow"}]
+execute if data storage zx:work a.id run tellraw @s [{"text":"   剩余冷却 ","color":"gray"},{"score":{"name":"#g_cd","objective":"zx.meta"},"color":"yellow"},{"text":".","color":"yellow"},{"score":{"name":"#g_cd_d","objective":"zx.meta"},"color":"yellow"},{"text":" 秒","color":"yellow"}]
 execute unless data storage zx:work a.skill run tellraw @s [{"text":"  主手不是本包武器(物品上没有 skill 字段)","color":"dark_gray"}]

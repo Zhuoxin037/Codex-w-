@@ -20,6 +20,12 @@ execute unless data storage zx:config obj_meta run data modify storage zx:config
 #  借它算冷却就会把秒数显示成 2 倍。)
 scoreboard players set #tps zx.meta 20
 
+# 观测镜冷却显示的一位小数(2026-10-18): 要显示 "3.4s" 就得把 tick 先折成
+# "0.1 秒"单位 —— 1 tick = 0.05 秒 ⇒ ceil(tick/2) 就是 0.1 秒数, 再拆成
+# 整数位(cdi)与十分位(cdd)。除 2 与拆位各需要一个常量。
+scoreboard players set #two zx.meta 2
+scoreboard players set #ten zx.meta 10
+
 # 横刀突进用的计分项: 每个玩家自己的"还剩几步"
 #   用计分项而不是 storage —— 它天然"每人一份", 不用按 UUID 拼路径,
 #   于是突进那一整套完全不需要宏函数, 少一层就少一类坑。
@@ -1788,7 +1794,13 @@ execute unless data storage zx:config obj_ep_hit run scoreboard objectives add z
 execute unless data storage zx:config obj_ep_hit run data modify storage zx:config obj_ep_hit set value 1b
 
 #   位移检测（2026-10-17 批 14 补技能）: 踏灰 / 雨迹共用的"技能施放后有没有真位移"
-#     zx.sm_t     = 检测窗口剩余刻(8 → 0; 只有刚放过技能且脚穿这两件之一的玩家有)
+#     zx.sm_t     = 检测窗口剩余刻(24 → 0; 只有刚放过技能且脚穿这两件之一的玩家有)
+#                   ★ 2026-10-18：**位移还在继续就不倒数**（每刻续回 16），否则长位移
+#                     技能（无息 20 刻 / 沉锚 / 影刃）会在中途窗口到期、标签被摘，
+#                     后半段再也不撒水迹 —— 用户报的"中间断""后面一段没了"就是这个。
+#     zx.sm_px/py/pz = **上一刻**的坐标 ×100（判断"这一课还在不在动"，续期用）
+#     zx.sm_n     = 确认位移之后"还在动"的累计刻数（续期上限 56 刻 ≈ 2.8 秒，
+#                   防止玩家一路狂奔导致窗口永不结束）
 #     zx.sm_x/y/z = 施法刻的坐标 ×100(0.01 精度) —— lib/step 每刻拿它比当前 Pos
 #     zx.sm_done  = 0/1, "这次窗口里已经确认过位移" —— 确认后终点每刻跟着玩家走,
 #                   窗口到期由 step_finish 一次性兑现(这样持续位移也能被完整覆盖)
@@ -1804,6 +1816,14 @@ execute unless data storage zx:config obj_sm_y run scoreboard objectives add zx.
 execute unless data storage zx:config obj_sm_y run data modify storage zx:config obj_sm_y set value 1b
 execute unless data storage zx:config obj_sm_z run scoreboard objectives add zx.sm_z dummy
 execute unless data storage zx:config obj_sm_z run data modify storage zx:config obj_sm_z set value 1b
+execute unless data storage zx:config obj_sm_px run scoreboard objectives add zx.sm_px dummy
+execute unless data storage zx:config obj_sm_px run data modify storage zx:config obj_sm_px set value 1b
+execute unless data storage zx:config obj_sm_py run scoreboard objectives add zx.sm_py dummy
+execute unless data storage zx:config obj_sm_py run data modify storage zx:config obj_sm_py set value 1b
+execute unless data storage zx:config obj_sm_pz run scoreboard objectives add zx.sm_pz dummy
+execute unless data storage zx:config obj_sm_pz run data modify storage zx:config obj_sm_pz set value 1b
+execute unless data storage zx:config obj_sm_n run scoreboard objectives add zx.sm_n dummy
+execute unless data storage zx:config obj_sm_n run data modify storage zx:config obj_sm_n set value 1b
 
 #   踏灰（靴子 · 稀有，2026-10-17 批 14 补技能）
 #     zx.ta_cd = 12 秒节流的"下次可触发刻"
@@ -1815,10 +1835,18 @@ execute unless data storage zx:config obj_ta_cd run data modify storage zx:confi
 #     zx.rt_on       = 生物停留状态: 0 离开 / 1 停留中 / 2 本段已兑现
 #     zx.rt_first    = 首次进入这段水迹的绝对刻
 #     zx.rt_end      = 最后一次被覆盖的刻 + 8(容忍 0.4 秒走位抖动)
-#     zx.rt_lx/ly/lz = **上一个水迹点**的坐标 ×100(逐刻撒点的距离判据基准)
+#     zx.rt_lx/ly/lz = **上一滴**的坐标 ×100(撒点的间距判据基准)
+#                      ★ 2026-10-18 起由 dot_spawn 每生成一滴就同步成"那一滴的
+#                        真实坐标", 间距固定 1.4 格(见 rain_trace/fill 的注释)。
+#                        这样补点时"执行位置在连线中间"也能正确记账 ——
+#                        用玩家 Pos 记账会把整条链往回拽(上一版的"补点全堆一处")。
 #     zx.rt_ex/ey/ez = 旧版"位移终点"坐标 —— 2026-10-17 改成逐刻就地撒点后**不再写入**,
 #                      只为兼容存档与 player_reset 清单而保留注册。
 #     zx.rt_sn       = 旧版"上次撒点的绝对刻"(5 刻节流) —— 同上, 已不再写入。
+#     ★ "最新水迹点"的锚点不用计分项, 用实体标签 **zx.rt_last**(全维度一个,
+#       补点要靠它当 positioned 的参照物, 见 rain_trace/dot_spawn)。
+#     ★ 起点锚点同理用 marker + 标签 **zx.rt_anchor**: step_observe 在施法刻留、
+#       step_moved 撒完"起点那一摊"就 kill。
 #     ★ 停留判定用"首次刻 vs 当前刻"的差, 不用每刻 +1 —— 相邻水迹点会同时覆盖
 #       同一只生物, 每刻 +1 的写法会把计数叠成两倍速(2 秒变 1 秒)。
 execute unless data storage zx:config obj_rt_ex run scoreboard objectives add zx.rt_ex dummy

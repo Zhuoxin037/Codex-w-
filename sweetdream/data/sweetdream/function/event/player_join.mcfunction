@@ -37,3 +37,4 @@ function sweetdream:equipment/axe/anchor/cancel
 
 # 清理上一会话的五世恶咒视觉，原技能状态不变。
 execute if entity @s[tag=zx.fcvv_on] at @s run function sweetdream:equipment/staff/five_curses/visual/end
+execute if entity @s[tag=zx.tv_cast] run function sweetdream:equipment/staff/triad/visual/end

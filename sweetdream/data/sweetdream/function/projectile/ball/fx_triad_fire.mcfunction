@@ -12,3 +12,6 @@
 
 particle minecraft:dust{color:[1.0,0.45,0.12],scale:1.2} ~ ~ ~ 0.12 0.12 0.12 0 8 normal
 particle minecraft:small_flame ~ ~ ~ 0.16 0.16 0.16 0.01 4 normal
+
+# 三形态实际三维弹体；保留原有粒子和命中表现。
+execute at @s run function sweetdream:equipment/staff/triad/visual/ball_tick

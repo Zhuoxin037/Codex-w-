@@ -34,3 +34,9 @@ execute if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["seraph_w
 execute if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["thunder"]}] unless items entity @s weapon.offhand *[minecraft:item_model="sweetdream:tool_thunder"] run item modify entity @s weapon.offhand sweetdream:offhand_icons/thunder
 # 愠怒
 execute if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["wrath"]}] unless items entity @s weapon.offhand *[minecraft:item_model="sweetdream:tool_wrath"] run item modify entity @s weapon.offhand sweetdream:offhand_icons/wrath
+# 殓丝
+execute if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["coffin_silk"]}] unless items entity @s weapon.offhand *[minecraft:item_model="sweetdream:tool_coffin_silk"] run item modify entity @s weapon.offhand sweetdream:offhand_icons/coffin_silk
+# 冰鉴
+execute if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["frostmirror"]}] unless items entity @s weapon.offhand *[minecraft:item_model="sweetdream:tool_frostmirror"] run item modify entity @s weapon.offhand sweetdream:offhand_icons/frostmirror
+# 回潮扣
+execute if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["tide_buckle"]}] unless items entity @s weapon.offhand *[minecraft:item_model="sweetdream:tool_tide_buckle"] run item modify entity @s weapon.offhand sweetdream:offhand_icons/tide_buckle

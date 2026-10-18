@@ -48,6 +48,15 @@ SWORDS = {
     'rogue_star':   ('rogue_star',   'diamond_sword'),
     'shadow_blade': ('shadow_blade', 'diamond_sword'),
     'verdict':      ('verdict',      'netherite_sword'),
+    # 批 12 外观（2026-10-18）：三件新剑
+    'tidemark':     ('tidemark',     'iron_sword'),
+    'grayscale':    ('grayscale',    'iron_sword'),
+    'crescent':     ('crescent',     'netherite_sword'),
+    # 批 16 外观（2026-10-18）：批 14 那批只做 give 的剑
+    'backflow_tide': ('backflow_tide', 'iron_sword'),
+    'blind_candle': ('blind_candle', 'diamond_sword'),
+    'blood_loss':   ('blood_loss',   'diamond_sword'),
+    'thunder_wedge': ('thunder_wedge', 'diamond_sword'),
 }
 # 火种两态：资源包里要有定义，但**不写进 give**（由 tinder/visual/sync 按状态切）
 TINDER = {'tinder_off': 'tinder_off', 'tinder_on': 'tinder_on'}
@@ -104,22 +113,12 @@ def check_pack(root, tag, want_src_bytes=True):
 
 
 def main():
-    # ---- 1) 覆盖层 + 2) 完整版 ----
-    for root, tag in ((OVERLAY, '覆盖层'), (FULL, '完整版')):
-        if not os.path.isdir(root):
-            E('找不到资源包 %s' % root)
-            continue
-        check_pack(root, tag)
-    # 2b) 完整版 == 覆盖层（逐字节）
-    if os.path.isdir(FULL) and os.path.isdir(OVERLAY):
-        for sub in ('items', 'models/item/vanilla', 'textures/item/vanilla'):
-            for key in list(SWORDS) + list(TINDER):
-                ext = '.png' if sub.startswith('textures') else '.json'
-                a = os.path.join(FULL, 'assets/sweetdream', sub, key + ext)
-                b = os.path.join(OVERLAY, 'assets/sweetdream', sub, key + ext)
-                if os.path.isfile(a) and os.path.isfile(b) and \
-                        open(a, 'rb').read() != open(b, 'rb').read():
-                    E('完整版 vs 覆盖层 不一致: %s/%s' % (sub, key))
+    # ---- 1) 完整版（覆盖层 `sweetdream_rp_原版风` 已于 2026-10 合并进完整版并删除,
+    #      再按旧路径遍历只会报"找不到资源包"这条假警报 —— 只守真源）----
+    if not os.path.isdir(FULL):
+        E('找不到资源包 %s' % FULL)
+    else:
+        check_pack(FULL, '完整版')
 
     # ---- 3) item_modifier ----
     for key in SWORDS:
@@ -173,7 +172,7 @@ def main():
     if errs:
         print('\n'.join('  ✗ ' + e for e in errs))
         raise SystemExit('\n合计问题: %d' % len(errs))
-    print('剑图标绑定 ✓  资源包 2 份 × %d 件（含火种两态）· item_modifier %d 份 · '
+    print('剑图标绑定 ✓  资源包 1 份 × %d 件（含火种两态）· item_modifier %d 份 · '
           '物品串 %d 处带 item_model · 已登记 event/second · held 守卫齐全'
           % (len(SWORDS) + len(TINDER), len(SWORDS), n_str))
 

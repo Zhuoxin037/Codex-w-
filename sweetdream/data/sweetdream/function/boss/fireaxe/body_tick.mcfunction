@@ -14,6 +14,7 @@ execute if score @s sdbf.shortcd matches 1.. run scoreboard players remove @s sd
 execute at @s run function sweetdream:boss/fireaxe/ground/tick
 execute at @s run function sweetdream:boss/fireaxe/target/tick
 execute at @s run function sweetdream:boss/fireaxe/phase/check
+execute unless score @s sdbf.armorphase = @s sdbf.phase run function sweetdream:boss/fireaxe/mechanics/armor
 execute if score @s sdbf.state matches 2.. at @s run function sweetdream:boss/fireaxe/action_tick
 execute if score @s sdbf.state matches ..1 unless score @s sdbf.fall matches 1.. at @s run function sweetdream:boss/fireaxe/decide
 execute at @s rotated ~ 0 run tp @e[tag=sd.fb.current_rig,limit=1,distance=0..] ~ ~ ~ ~ 0

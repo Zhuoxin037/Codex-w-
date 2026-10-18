@@ -58,11 +58,30 @@ data modify storage zx:step ctx.u3 set from entity @s UUID[3]
 function sweetdream:equipment/armor/step_save with storage zx:step ctx
 
 scoreboard players set @s zx.sm_t 24
-#   ★ 24 刻（1.2 秒）而不是 20 ★ 2026-10-17 用户实测"无息只有前 3 格有水迹"后重算
-#     过时间轴：无息 = 去程 16 刻 + 归位 4 刻 = 20 刻，再算上 cast→dash 的 1 刻衔接，
-#     刚好压线甚至超线 ⇒ 归位那一段会掉在窗口外面。多给 4 刻余量，代价只是
-#     "施法后 1.2 秒内走出 1.5 格也算位移"，这个误判本来就是可接受的（见 lib/step）。
+#   ★ 24 刻（1.2 秒）只是**基础窗口** —— 2026-10-18 起 lib/step 会"还在动就续期"：
+#     每检测到位置变化就把 sm_t 顶回 12，最长续到 56 刻（约 2.8 秒）。这样无息
+#     （去程 16 刻 + 归位 4 刻）、沉锚、影刃这类长位移不会在中途窗口到期、标签被摘
+#     （用户报的"无息大约到中间就断了""沉锚也是后面一段没了"就是窗口先关门了）。
 #   ★ 顺手把"已确认位移"归零：上一次窗口若因退出游戏没走完 step_finish，
 #     done 会残留 1，下一次施法就会直接当成"已经位移过"（误给水迹/回血）。
 scoreboard players set @s zx.sm_done 0
+
+#   ★ 续期用的两个量（2026-10-18 新增）：
+#     zx.sm_px/py/pz = **上一刻**的坐标（初始 = 施法刻起点），lib/step 每刻拿它比
+#     zx.sm_n        = 确认位移之后"还在动"的累计刻数（续期上限 56）
+scoreboard players operation @s zx.sm_px = @s zx.sm_x
+scoreboard players operation @s zx.sm_py = @s zx.sm_y
+scoreboard players operation @s zx.sm_pz = @s zx.sm_z
+scoreboard players set @s zx.sm_n 0
+
 tag @s add zx.sm_chk
+
+# ⑤ 雨迹：在**施法刻的位置**留一个锚点 marker
+#   为什么非要它：step_moved 发现"真的位移了"的时候，玩家已经挪出 1.5 格了。
+#   第一个水迹点如果按"玩家当前位置"撒，起手那 1.5 格永远是空的 —— 用户报的
+#   "没铺满"有一部分就是这个。marker 记下的是施法那一刻的脚部坐标（= 起点）。
+#   ★ 只给穿雨迹的玩家造（踏灰不撒水迹，白造实体没意义）。
+#   ★ kill 用 `distance=..3`：只收自己脚边 3 格内的残留（窗口中途退出游戏会
+#     留下一个），不碰别人正在用的锚点、也不会跨维度误删。
+execute if items entity @s armor.feet *[minecraft:custom_data~{zx:["rain_trace"]}] run kill @e[tag=zx.rt_anchor,distance=..3]
+execute if items entity @s armor.feet *[minecraft:custom_data~{zx:["rain_trace"]}] at @s run summon minecraft:marker ~ ~ ~ {Tags:["zx.rt_anchor"]}

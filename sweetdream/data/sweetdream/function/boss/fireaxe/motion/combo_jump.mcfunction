@@ -27,40 +27,40 @@ execute if score @s sdbf.frame matches 27 positioned ~ ~-0.0073584 ~ run tp @s ~
 execute if score @s sdbf.frame matches 28 positioned ~ ~-0.0020016 ~ run tp @s ~ ~ ~
 execute if score @s sdbf.frame matches 29 positioned ~ ~-0.0013031 ~ run tp @s ~ ~ ~
 execute if score @s sdbf.frame matches 30 positioned ~ ~-0.0037781 ~ run tp @s ~ ~ ~
-execute if score @s sdbf.frame matches 30 run function sweetdream:boss/fireaxe/phase/jump_step
+execute if score @s sdbf.frame matches 30 at @s run function sweetdream:boss/fireaxe/leap/prepare {ticks:16}
 execute if score @s sdbf.frame matches 33 positioned ~ ~0.2817188 ~ run tp @s ~ ~ ~
 execute if score @s sdbf.frame matches 34 positioned ~ ~0.2058844 ~ run tp @s ~ ~ ~
-execute if score @s sdbf.frame matches 34 if score @s sdbf.blocked matches 0 at @s run function sweetdream:boss/fireaxe/phase/jump_move
+execute if score @s sdbf.frame matches 34 if score @s sdbf.blocked matches 0 at @s run function sweetdream:boss/fireaxe/leap/tick
 execute if score @s sdbf.frame matches 35 positioned ~ ~0.1698937 ~ run tp @s ~ ~ ~
-execute if score @s sdbf.frame matches 35 if score @s sdbf.blocked matches 0 at @s run function sweetdream:boss/fireaxe/phase/jump_move
+execute if score @s sdbf.frame matches 35 if score @s sdbf.blocked matches 0 at @s run function sweetdream:boss/fireaxe/leap/tick
 execute if score @s sdbf.frame matches 36 positioned ~ ~0.1420500 ~ run tp @s ~ ~ ~
-execute if score @s sdbf.frame matches 36 if score @s sdbf.blocked matches 0 at @s run function sweetdream:boss/fireaxe/phase/jump_move
+execute if score @s sdbf.frame matches 36 if score @s sdbf.blocked matches 0 at @s run function sweetdream:boss/fireaxe/leap/tick
 execute if score @s sdbf.frame matches 37 positioned ~ ~0.1282969 ~ run tp @s ~ ~ ~
-execute if score @s sdbf.frame matches 37 if score @s sdbf.blocked matches 0 at @s run function sweetdream:boss/fireaxe/phase/jump_move
+execute if score @s sdbf.frame matches 37 if score @s sdbf.blocked matches 0 at @s run function sweetdream:boss/fireaxe/leap/tick
 execute if score @s sdbf.frame matches 38 positioned ~ ~0.1437656 ~ run tp @s ~ ~ ~
-execute if score @s sdbf.frame matches 38 if score @s sdbf.blocked matches 0 at @s run function sweetdream:boss/fireaxe/phase/jump_move
+execute if score @s sdbf.frame matches 38 if score @s sdbf.blocked matches 0 at @s run function sweetdream:boss/fireaxe/leap/tick
 execute if score @s sdbf.frame matches 39 positioned ~ ~0.0063750 ~ run tp @s ~ ~ ~
-execute if score @s sdbf.frame matches 39 if score @s sdbf.blocked matches 0 at @s run function sweetdream:boss/fireaxe/phase/jump_move
+execute if score @s sdbf.frame matches 39 if score @s sdbf.blocked matches 0 at @s run function sweetdream:boss/fireaxe/leap/tick
 execute if score @s sdbf.frame matches 40 positioned ~ ~0.0195750 ~ run tp @s ~ ~ ~
-execute if score @s sdbf.frame matches 40 if score @s sdbf.blocked matches 0 at @s run function sweetdream:boss/fireaxe/phase/jump_move
+execute if score @s sdbf.frame matches 40 if score @s sdbf.blocked matches 0 at @s run function sweetdream:boss/fireaxe/leap/tick
 execute if score @s sdbf.frame matches 41 positioned ~ ~0.0356906 ~ run tp @s ~ ~ ~
-execute if score @s sdbf.frame matches 41 if score @s sdbf.blocked matches 0 at @s run function sweetdream:boss/fireaxe/phase/jump_move
+execute if score @s sdbf.frame matches 41 if score @s sdbf.blocked matches 0 at @s run function sweetdream:boss/fireaxe/leap/tick
 execute if score @s sdbf.frame matches 42 positioned ~ ~0.0552844 ~ run tp @s ~ ~ ~
-execute if score @s sdbf.frame matches 42 if score @s sdbf.blocked matches 0 at @s run function sweetdream:boss/fireaxe/phase/jump_move
+execute if score @s sdbf.frame matches 42 if score @s sdbf.blocked matches 0 at @s run function sweetdream:boss/fireaxe/leap/tick
 execute if score @s sdbf.frame matches 43 positioned ~ ~-0.0438656 ~ run tp @s ~ ~ ~
-execute if score @s sdbf.frame matches 43 if score @s sdbf.blocked matches 0 at @s run function sweetdream:boss/fireaxe/phase/jump_move
+execute if score @s sdbf.frame matches 43 if score @s sdbf.blocked matches 0 at @s run function sweetdream:boss/fireaxe/leap/tick
 execute if score @s sdbf.frame matches 44 positioned ~ ~-0.0463500 ~ run tp @s ~ ~ ~
-execute if score @s sdbf.frame matches 44 if score @s sdbf.blocked matches 0 at @s run function sweetdream:boss/fireaxe/phase/jump_move
+execute if score @s sdbf.frame matches 44 if score @s sdbf.blocked matches 0 at @s run function sweetdream:boss/fireaxe/leap/tick
 execute if score @s sdbf.frame matches 45 positioned ~ ~-0.2595750 ~ run tp @s ~ ~ ~
-execute if score @s sdbf.frame matches 45 if score @s sdbf.blocked matches 0 at @s run function sweetdream:boss/fireaxe/phase/jump_move
+execute if score @s sdbf.frame matches 45 if score @s sdbf.blocked matches 0 at @s run function sweetdream:boss/fireaxe/leap/tick
 execute if score @s sdbf.frame matches 46 positioned ~ ~-0.2762438 ~ run tp @s ~ ~ ~
-execute if score @s sdbf.frame matches 46 if score @s sdbf.blocked matches 0 at @s run function sweetdream:boss/fireaxe/phase/jump_move
+execute if score @s sdbf.frame matches 46 if score @s sdbf.blocked matches 0 at @s run function sweetdream:boss/fireaxe/leap/tick
 execute if score @s sdbf.frame matches 47 positioned ~ ~-0.1693969 ~ run tp @s ~ ~ ~
-execute if score @s sdbf.frame matches 47 if score @s sdbf.blocked matches 0 at @s run function sweetdream:boss/fireaxe/phase/jump_move
+execute if score @s sdbf.frame matches 47 if score @s sdbf.blocked matches 0 at @s run function sweetdream:boss/fireaxe/leap/tick
 execute if score @s sdbf.frame matches 48 positioned ~ ~-0.1891500 ~ run tp @s ~ ~ ~
-execute if score @s sdbf.frame matches 48 if score @s sdbf.blocked matches 0 at @s run function sweetdream:boss/fireaxe/phase/jump_move
+execute if score @s sdbf.frame matches 48 if score @s sdbf.blocked matches 0 at @s run function sweetdream:boss/fireaxe/leap/tick
 execute if score @s sdbf.frame matches 49 positioned ~ ~-0.2039531 ~ run tp @s ~ ~ ~
-execute if score @s sdbf.frame matches 49 if score @s sdbf.blocked matches 0 at @s run function sweetdream:boss/fireaxe/phase/jump_move
+execute if score @s sdbf.frame matches 49 if score @s sdbf.blocked matches 0 at @s run function sweetdream:boss/fireaxe/leap/tick
 execute if score @s sdbf.frame matches 50 positioned ~ ~0.0000469 ~ run tp @s ~ ~ ~
 execute if score @s sdbf.frame matches 51 positioned ~ ~-0.0000469 ~ run tp @s ~ ~ ~
 execute if score @s sdbf.frame matches 52 positioned ~ ~0.0001594 ~ run tp @s ~ ~ ~
@@ -82,3 +82,4 @@ execute if score @s sdbf.frame matches 72 positioned ~ ~-0.0012094 ~ run tp @s ~
 execute if score @s sdbf.frame matches 73 positioned ~ ~-0.0021000 ~ run tp @s ~ ~ ~
 execute if score @s sdbf.frame matches 76 positioned ~ ~0.0004969 ~ run tp @s ~ ~ ~
 execute if score @s sdbf.frame matches 77 positioned ~ ~-0.0004969 ~ run tp @s ~ ~ ~
+execute if score @s sdbf.frame matches 50.. run data modify entity @s NoGravity set value 0b

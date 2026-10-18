@@ -8,7 +8,9 @@
 #   魔力  players."<uuid>".stats.current_mana / max_mana
 #   术阵  manacore:api/formation/count 的 out r.count / r.limit
 #   冷却  主手物品自带的 custom_data.skill -> players."<uuid>".cooldowns."<该技能>".end
-#          减当前刻 #now。手里不是"带 skill 字段的武器"时显示 0。
+#          减当前刻 #now, 再折成"0.1 秒"精度(#v_cdi 整数位 / #v_cdd 十分位)。
+#          2026-10-18: 原来只显示整数秒, 20 刻才跳一次, 用户反馈"看着像卡住"。
+#          手里不是"带 skill 字段的武器"时显示 0.0。
 # 【为什么冷却要先清零再读】没在冷却时那条路径不存在, data get 会失败,
 #   计分项会保留上一次的旧值 —— 必须先手动归零。
 # ============================================================
@@ -39,14 +41,21 @@ execute if data storage zx:look saved_in run data modify storage manacore:in arg
 execute if data storage zx:look saved_in run data remove storage zx:look saved_in
 
 # ---- 冷却: 看"手上拿的那把武器"还剩多久 ----
-# 【O02】skill 字段由 cache 每秒缓存(zx:look cache."<uuid>".skill), 这里只读存储。
-# 【★ N07 修】必须读**自己 uuid 那份** —— 原来读全局单格, 多人开面板时会读到
-#   别人手上的技能 id(拿它去查自己的冷却路径 ⇒ 显示无关技能/恒 0)。
-#   空手 / 拿别的道具时该键不存在 ⇒ 走下面的守卫, 显示 0(和原来一致)。
+# 【★ 2026-10-18: 改成每刻直读 SelectedItem, 不再走每秒缓存 ★】
+#   用户反馈"换武器后得 0.5 秒左右 CD 才跟着换"。根因就是 cache 每秒才采样一次
+#   主手 skill(见 look/cache 的 O02 说明) —— 平均滞后半秒、最坏整秒。
+#   现在每刻判一次主手物品的 custom_data.skill:
+#     代价 = 开着面板的玩家每刻 1~2 次 SelectedItem 序列化(O02 清掉的是 14 次/刻,
+#     而且只发生在 test_look_on 的人身上) —— 换来 CD 与手持武器严格同步。
+#   ★ 仍然"先删再条件写": 空手 / 拿非本包道具时该键必须真的不存在,
+#     否则会拿上一把武器的 skill 去查冷却, 显示一个根本不相干的剩余时间。
+#   ★ 顺带把 N07 的"必须读自己 uuid 那份"也消掉了 —— 这里写的是 zx:work a,
+#     本来就是本刻本玩家自己的临时节点, 不存在读到别人那份的可能。
 data remove storage zx:work a.skill
-$execute if data storage zx:look cache."$(uuid)".skill run data modify storage zx:work a.skill set from storage zx:look cache."$(uuid)".skill
+execute if data entity @s SelectedItem.components."minecraft:custom_data".skill run data modify storage zx:work a.skill set from entity @s SelectedItem.components."minecraft:custom_data".skill
 
-scoreboard players set #v_cd zx.meta 0
+scoreboard players set #v_cdi zx.meta 0
+scoreboard players set #v_cdd zx.meta 0
 scoreboard players set #v_end zx.meta 0
 execute if data storage zx:work a.skill run function sweetdream:equipment/tool/look/cooldown_get with storage zx:work a
 
@@ -105,5 +114,5 @@ execute if data storage zx:work eq.palette run function sweetdream:equipment/sta
 #   加 "interpret":true 后, 服务器会**把读到的值直接解释成文本组件**;
 #   而「列表」本身就是合法的文本组件写法(["A","B"] ≡ {text:"A",extra:["B"]}),
 #   所以 xline 会被正确拼出来, 而不是被转成字符串。
-title @s actionbar [{"text":"⚔ ","color":"gray"},{"score":{"name":"#v_atk","objective":"zx.meta"},"color":"white"},{"text":"   ❤ ","color":"red"},{"score":{"name":"#v_hp","objective":"zx.meta"},"color":"red"},{"text":"/","color":"dark_red"},{"score":{"name":"#v_hpmax","objective":"zx.meta"},"color":"dark_red"},{"text":"   ✦ ","color":"aqua"},{"score":{"name":"#v_mana","objective":"zx.meta"},"color":"aqua"},{"text":"/","color":"dark_aqua"},{"score":{"name":"#v_manamax","objective":"zx.meta"},"color":"dark_aqua"},{"text":"   ✡ ","color":"light_purple"},{"score":{"name":"#v_fcnt","objective":"zx.meta"},"color":"light_purple"},{"text":"/","color":"dark_purple"},{"score":{"name":"#v_flim","objective":"zx.meta"},"color":"dark_purple"},{"text":"   ⏳ ","color":"yellow"},{"score":{"name":"#v_cd","objective":"zx.meta"},"color":"gold"},{"text":"s","color":"gold"},{"nbt":"xline","storage":"zx:look","interpret":true}]
+title @s actionbar [{"text":"⚔ ","color":"gray"},{"score":{"name":"#v_atk","objective":"zx.meta"},"color":"white"},{"text":"   ❤ ","color":"red"},{"score":{"name":"#v_hp","objective":"zx.meta"},"color":"red"},{"text":"/","color":"dark_red"},{"score":{"name":"#v_hpmax","objective":"zx.meta"},"color":"dark_red"},{"text":"   ✦ ","color":"aqua"},{"score":{"name":"#v_mana","objective":"zx.meta"},"color":"aqua"},{"text":"/","color":"dark_aqua"},{"score":{"name":"#v_manamax","objective":"zx.meta"},"color":"dark_aqua"},{"text":"   ✡ ","color":"light_purple"},{"score":{"name":"#v_fcnt","objective":"zx.meta"},"color":"light_purple"},{"text":"/","color":"dark_purple"},{"score":{"name":"#v_flim","objective":"zx.meta"},"color":"dark_purple"},{"text":"   ⏳ ","color":"yellow"},{"score":{"name":"#v_cdi","objective":"zx.meta"},"color":"gold"},{"text":".","color":"gold"},{"score":{"name":"#v_cdd","objective":"zx.meta"},"color":"gold"},{"text":"s","color":"gold"},{"nbt":"xline","storage":"zx:look","interpret":true}]
 

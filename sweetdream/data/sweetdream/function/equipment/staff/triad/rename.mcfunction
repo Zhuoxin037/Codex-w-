@@ -1,3 +1,4 @@
+execute if entity @s[tag=zx.tv_cast] run function sweetdream:equipment/staff/triad/visual/end
 # ============================================================
 # sweetdream:equipment/staff/triad/rename —— 按当前形态把武器改成对应的名字
 # ------------------------------------------------------------

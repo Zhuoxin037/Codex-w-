@@ -37,7 +37,7 @@ DP = os.path.join(ROOT, 'sweetdream', 'data')
 MOD_DIR = os.path.join(DP, 'sweetdream', 'item_modifier', 'sword_icons')
 FN_DIR = os.path.join(DP, 'sweetdream', 'function', 'visual')
 TAG = os.path.join(DP, 'manacore', 'tags', 'function', 'event', 'second.json')
-RP = os.path.join(ROOT, 'sweetdream_rp_原版风', 'assets', 'sweetdream', 'items')
+RP = os.path.join(ROOT, 'sweetdream_rp_完整版', 'assets', 'sweetdream', 'items')
 
 # ---------------------------------------------------------------- 名单（唯一真相来源）
 # (武器 id, 中文名, 底物)  —— 底物只用于自检"图标挂在正确的原版轮廓上", 不参与生成命令。
@@ -54,6 +54,15 @@ SWORDS = [
     ('rogue_star',   '游星',  'diamond_sword'),
     ('shadow_blade', '影刃',  'diamond_sword'),
     ('verdict',      '神裁',  'netherite_sword'),
+    # 批 12 外观（2026-10-18）：三件新剑的 16×16 平面图标
+    ('tidemark',     '潮痕',  'iron_sword'),
+    ('grayscale',    '灰度',  'iron_sword'),
+    ('crescent',     '缺月',  'netherite_sword'),
+    # 批 16 外观（2026-10-18）：批 14 那批"只做了 give"的剑，补齐平面图标
+    ('backflow_tide', '退汐', 'iron_sword'),
+    ('blind_candle', '盲烛',  'diamond_sword'),
+    ('blood_loss',   '失血',  'diamond_sword'),
+    ('thunder_wedge', '雷楔', 'diamond_sword'),
 ]
 # 火种**不在这里** —— 它有两态、由 equipment/sword/tinder/visual/sync 按 zx.td_on 切，
 # 不参与"一把剑对应固定一个图标"的这套机制。

@@ -366,6 +366,13 @@ def emit():
             fn = 'fx_%s%s.mcfunction' % (sp['style'], '_hit' if kind == 'hit' else '')
             p = os.path.join(BALL, fn)
             body = header(sp, kind) + '\n'.join(lines) + '\n'
+            # Ceobe triad: keep native 3D shells alongside these existing effects.
+            # Updating particles must not silently disconnect the ball visuals.
+            if sp['style'] in ('triad', 'triad_fire', 'triad_gun'):
+                hook = ('execute at @s run function sweetdream:equipment/staff/triad/visual/ball_tick'
+                        if kind == 'trail' else
+                        'function sweetdream:equipment/staff/triad/visual/ball_end')
+                body += '\n# 三形态实际三维弹体；保留原有粒子和命中表现。\n' + hook + '\n'
             old = open(p, encoding='utf-8').read() if os.path.isfile(p) else None
             if old != body:
                 made.append(('改写' if old else '新增') + ' ' + fn)

@@ -24,11 +24,11 @@ function sweetdream:debug/equip_scan {p:"equipment.feet"}
 $data remove storage zx:look cache."$(uuid)"
 $execute if data storage zx:work eq run data modify storage zx:look cache."$(uuid)".eq set from storage zx:work eq
 
-# ③ 手持武器的 skill 字段(观测镜冷却显示的"哪把武器")
-#    ★ skill 是**字符串**(skill:"sweetdream:<id>", 见 _gen_batch5) —— 物品谓词
-#    `custom_data~{skill:{}}` 测不了字符串键, 所以这里保留原来的
-#    `if data entity` 判定(每秒一次, 只对面板玩家, 开销可忽略)。
-$execute if data entity @s SelectedItem.components."minecraft:custom_data".skill run data modify storage zx:look cache."$(uuid)".skill set from entity @s SelectedItem.components."minecraft:custom_data".skill
+# ③ 手持武器的 skill 字段 —— ★ 2026-10-18 起**不再缓存**
+#   用户反馈"换武器后 CD 显示要等 0.5 秒左右才换"。原因就是这里每秒才采样一次
+#   主手 skill, 平均滞后半秒。现在 render_go 每刻直接读 SelectedItem
+#   (只对面版玩家、1 次序列化, 在 O02 清掉的 14 次里只占一小份) —— 这里不再写。
+#   ★ 第 ② 步已经整格删过 cache."<uuid>", 所以旧 skill 键不会残留。
 
 # ④ 面板"当前生命"(原来 render_go 每刻 data get entity @s Health —— 又是一次全量
 #    序列化)。每秒读一次缓存进 zx.hp_show, render_go 每刻只读计分板。

@@ -1,0 +1,11 @@
+{
+  "function": "minecraft:set_components",
+  "components": {
+    "minecraft:item_model": "sweetdream:armor_char_coat",
+    "minecraft:equippable": {
+      "slot": "chest",
+      "asset_id": "sweetdream:armor_char_coat",
+      "equip_sound": "minecraft:item.armor.equip_diamond"
+    }
+  }
+}

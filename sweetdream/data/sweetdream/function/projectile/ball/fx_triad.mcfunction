@@ -12,3 +12,6 @@
 
 particle minecraft:dust{color:[0.55,0.85,1.0],scale:1.3} ~ ~ ~ 0.12 0.12 0.12 0 8 normal
 particle minecraft:snowflake ~ ~ ~ 0.18 0.18 0.18 0.01 5 normal
+
+# 三形态实际三维弹体；保留原有粒子和命中表现。
+execute at @s run function sweetdream:equipment/staff/triad/visual/ball_tick

@@ -10,9 +10,8 @@
 #
 # 【这个文件是生成的】改描述请改 .workbuddy/_new42_lore.py、改标签请改
 #   .workbuddy/_tags_data.py，然后重跑本生成器 + `python .workbuddy/lore_fmt.py --write`。
-# ★ 批 14（2026-10-15 用户定）**只做 give**：技能 / 进度 / updef / 超限石 /
-#   外观 等留后续批次；因此**不挂 item_model**（外观未做，挂了会引用不存在的
-#   模型 -> 游戏里显示紫黑方块）。物品先显示为底材的原版外观。
+# 【外观】批 16（2026-10-18）补齐：item_model 指向 sweetdream:crossbow_feather_sleep
+#   （贴图源 _gen_late_icons.py，接线 _gen_late_rp.py）。
 # ★ 弩的命中结算要靠 sweetdream:feather_sleep 附魔的 post_attack 回调（坑 138：回调
 #   只读**攻击者主手物品**上的附魔）=> **必须挂 enchantments**；漏了它整把弩
 #   会"射得出去、什么都不发生"且零日志。
@@ -21,4 +20,4 @@
 #   ★ enchantment_glint_override=false + tooltip 里藏掉 enchantments：
 #     让附魔生效但不显示附魔名与紫色光效（与既有 10 把弩同一套写法）。
 # ============================================================
-give @s crossbow[item_name={text:"眠羽",bold:true,color:white},lore=[{"text":"✦ 主动技能","color":"gold","bold":true,"italic":false},{"text":"","italic":false,"extra":[{"text":"魔力 ","color":"gray"},{"text":"80","color":"aqua"}]},{"text":" ","italic":false},{"text":"每次射击命中了附有「白昼梦」的生物后，","color":"gray","italic":false},{"text":"消耗其「白昼梦」，并使箭矢分裂出 2 枚","color":"gray","italic":false},{"text":"半透明的羽箭。羽箭分别追踪命中位置 6","color":"gray","italic":false},{"text":"格内最近的其他生物，对其造成一次相当","color":"gray","italic":false},{"text":"于自身最大魔力值 ×0.08 的伤害，并使其","color":"gray","italic":false},{"text":"获得 3 秒缓慢Ⅱ。若只有一个生物，则 2","color":"gray","italic":false},{"text":"枚羽箭合为一枚，伤害改为相当于自身最","color":"gray","italic":false},{"text":"大魔力值 ×0.18。","color":"gray","italic":false}],unbreakable={},enchantments={"sweetdream:feather_sleep":1},enchantment_glint_override=false,custom_data={zx:["feather_sleep","bow"],tags:["dream","max_mana","debuff","slow","consume"]},tooltip_display={hidden_components:["unbreakable","enchantments"]}]
+give @s crossbow[item_name={text:"眠羽",bold:true,color:white},lore=[{"text":"✦ 主动技能","color":"gold","bold":true,"italic":false},{"text":"","italic":false,"extra":[{"text":"魔力 ","color":"gray"},{"text":"80","color":"aqua"}]},{"text":" ","italic":false},{"text":"每次射击命中了附有「白昼梦」的生物后，","color":"gray","italic":false},{"text":"消耗其「白昼梦」，并使箭矢分裂出 2 枚","color":"gray","italic":false},{"text":"半透明的羽箭。羽箭分别追踪命中位置 6","color":"gray","italic":false},{"text":"格内最近的其他生物，对其造成一次相当","color":"gray","italic":false},{"text":"于自身最大魔力值 ×0.08 的伤害，并使其","color":"gray","italic":false},{"text":"获得 3 秒缓慢Ⅱ。若只有一个生物，则 2","color":"gray","italic":false},{"text":"枚羽箭合为一枚，伤害改为相当于自身最","color":"gray","italic":false},{"text":"大魔力值 ×0.18。","color":"gray","italic":false}],unbreakable={},enchantments={"sweetdream:feather_sleep":1},enchantment_glint_override=false,custom_data={zx:["feather_sleep","bow"],tags:["dream","max_mana","debuff","slow","consume"]},tooltip_display={hidden_components:["unbreakable","enchantments"]},item_model="sweetdream:crossbow_feather_sleep"]

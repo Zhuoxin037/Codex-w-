@@ -14,3 +14,6 @@ particle minecraft:flame ~ ~ ~ 0.5 0.45 0.5 0.05 20 normal
 particle minecraft:small_flame ~ ~ ~ 0.5 0.45 0.5 0.04 14 normal
 particle minecraft:dust{color:[1.0,0.5,0.15],scale:1.6} ~ ~ ~ 0.5 0.5 0.5 0.04 16 normal
 playsound minecraft:entity.blaze.shoot player @a ~ ~ ~ 0.7 1.3
+
+# 三形态实际三维弹体；保留原有粒子和命中表现。
+function sweetdream:equipment/staff/triad/visual/ball_end

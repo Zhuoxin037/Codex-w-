@@ -14,6 +14,7 @@
     "sweetdream:equipment/staff/five_curses/visual/tick",
     "animated_java:global/data_manager/on_tick",
     "animated_java:global/on_tick",
-    "sweetdream:boss/fireaxe/tick"
+    "sweetdream:boss/fireaxe/tick",
+    "sweetdream:equipment/staff/triad/visual/tick"
   ]
 }

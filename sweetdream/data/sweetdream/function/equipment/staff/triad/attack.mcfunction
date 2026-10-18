@@ -97,7 +97,7 @@ execute if score @s zx.tri_next matches 1 run data modify storage zx:work ball.t
 #     否则空击那刀命中后又埋一次 ⇒ 重枪从此刀刀为空(2026-10-13 审查发现)。
 #     ★ 必须写在上面那行 set value **之后** —— set value 是整份替换, 写前面会被抹掉。
 execute if score @s zx.tri_next matches 2 run data modify storage zx:work ball.tri_blank set value 1b
-function sweetdream:equipment/staff/attack
+function sweetdream:equipment/staff/triad/visual/attack_success
 
 # ⑧ 状态位用完即清(不管这一刀是"额外"还是"为空", 都只影响这一次)
 scoreboard players set @s zx.tri_next 0

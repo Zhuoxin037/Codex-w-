@@ -13,3 +13,4 @@ scoreboard players set @s sdbf.blocked 0
 scoreboard players set @s sdbf.last_hp 1000000
 function sweetdream:boss/fireaxe/visual/carrier_label
 scoreboard players set @s sdbf.phase 1
+function sweetdream:boss/fireaxe/mechanics/init

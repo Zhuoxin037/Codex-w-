@@ -1,0 +1,41 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "0": "sweetdream_boss:blueprint/reconstruction/fx/crack",
+    "particle": "#0"
+  },
+  "elements": [
+    {
+      "from": [
+        -16,
+        8.015,
+        -16
+      ],
+      "to": [
+        32,
+        8.035,
+        32
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0,
+            5.333333333333333,
+            16,
+            10.666666666666666
+          ],
+          "texture": "#0"
+        },
+        "down": {
+          "uv": [
+            0,
+            5.333333333333333,
+            16,
+            10.666666666666666
+          ],
+          "texture": "#0"
+        }
+      }
+    }
+  ]
+}

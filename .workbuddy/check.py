@@ -4765,10 +4765,16 @@ _REGRESS = [
      '★ N07: render(每刻·每个开面板的人)必须读**自己那份**缓存 cache."<uuid>". '
      '写回/读回全局单格 cache.eq / cache.skill 时, `execute as @a[tag=test_look_on]` '
      '的每一次覆盖都会串人: 装备专属段穿上别人的装备、冷却拿别人的技能 id 去查。'),
+    # ★ 2026-10-18: 手持 skill 改成 render_go **每刻直读 SelectedItem** ——
+    #   走缓存时是每秒采样一次, 换武器后 CD 显示平均滞后 0.5 秒(用户实测)。
+    #   直读写进的是 zx:work a(本刻本玩家), 天然不会串人; 反过来再读/写
+    #   cache."<uuid>".skill 就是那条延迟回来了 ⇒ 用具名片段 + 禁止正则双向锁死。
     (_SD + '/equipment/tool/look/render_go.mcfunction',
-     'cache."$(uuid)".skill',
-     r'storage zx:look cache\.eq\b|storage zx:look cache\.skill\b', None,
-     '★ N07: 冷却读的"手持技能"也必须是自己 uuid 那份。'),
+     'SelectedItem.components."minecraft:custom_data".skill',
+     r'storage zx:look cache\.eq\b|storage zx:look cache\.skill\b'
+     r'|cache\."\$\(uuid\)"\.skill', None,
+     '★ N07 + 2026-10-18: 冷却读的"手持技能"必须每刻直读 SelectedItem 的 '
+     'custom_data.skill, 不许再走每秒缓存(平均滞后 0.5 秒) —— 也绝不许退回全局单格。'),
     (_SD + '/equipment/tool/look/cache.mcfunction',
      'sweetdream:equipment/tool/look/cache_go',
      r'storage zx:look cache\.', None,
@@ -4778,10 +4784,9 @@ _REGRESS = [
      'cache."$(uuid)".eq',
      r'storage zx:look cache\.[a-z]', None,
      '★ N07: 缓存落库必须按 uuid 分片(见 cache 头注释); 写回全局单格 = 多人串人。'),
-    (_SD + '/equipment/tool/look/cache_go.mcfunction',
-     'cache."$(uuid)".skill',
-     r'storage zx:look cache\.[a-z]', None,
-     '★ N07: 手持技能的缓存同样按 uuid 分片。'),
+    # （cache_go 里"手持技能按 uuid 分片"的旧条目已删除：2026-10-18 起 skill
+    #   不再进缓存，改由 render_go 每刻直读；这里若再写 cache.*.skill 会被上一条
+    #   的禁止正则和本条 cache_go 的 `cache\.[a-z]` 正则共同抓到。）
     (_SD + '/equipment/tool/look/toggle.mcfunction',
      'execute if entity @s[tag=test_look_on] run function sweetdream:equipment/tool/look/cache',
      None, None,

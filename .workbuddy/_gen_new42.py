@@ -5,10 +5,11 @@
   ⇒ 本批**只做 give**（物品本体：名字 / 描述 / 底材 / custom_data / 标签），
     技能机制 / 进度记账 / updef / 超限石 / 资源包外观 全部留后续批次 ——
     与批 7 / 11 的口径一致（"先做好 give，效果等一会再做"）。
-  ⇒ 因此**不挂 item_model**（外观没做，挂了会引用不存在的 items/<id>.json
-    ⇒ 游戏里显示缺失模型紫黑方块）。物品先显示为其底材的原版外观。
-    好消息：`visual/*_icon_held` 的自动补绑名单是**按 id 逐条枚举**的（不是通配），
-    新 id 不在名单里，所以不会被自动写上不存在的模型。
+  ⇒ 批 14 当时**不挂 item_model**（外观没做，挂了会引用不存在的 items/<id>.json
+    ⇒ 游戏里显示缺失模型紫黑方块）。
+  ★ 批 16 外观（2026-10-18）：46 件的贴图/模型/items 定义已全部补齐
+    （贴图源 = `_gen_late_icons.py`，接线源 = `_gen_late_rp.py`），所以现在**开始挂**
+    item_model（盔甲连 equippable 一起）。挂之前必须先有资源包那份定义 —— 这条前提不变。
 
 【描述真源】`.workbuddy/_new42_lore.py` 的 ITEMS[].segs（已按包内口径写好正文：
   × 乘号 / 汉字半角留白 / 罗马数字 / 状态「」/ 召唤物“”/ 领域不加括号…）。
@@ -70,6 +71,23 @@ RIGHT_CLICK = ('sword', 'axe', 'staff')
 CONSUMABLE = ('consumable={animation:"none",consume_seconds:0,'
               'has_consume_particles:false,sound:"block.bamboo_wood_button.click_off"}')
 
+# 批 16 外观（2026-10-18）：盔甲 equippable 的三个字段（与 _gen_armor_visual.py 同源）
+EQ_SLOT = {'helmet': 'head', 'chestplate': 'chest', 'leggings': 'legs', 'boots': 'feet'}
+ARMOR_SOUND = {'iron': 'minecraft:item.armor.equip_iron',
+               'diamond': 'minecraft:item.armor.equip_diamond',
+               'netherite': 'minecraft:item.armor.equip_netherite'}
+
+
+def model_key(cat, cid):
+    """item_model 名（与 _gen_late_rp.py 写出的 items 文件名一一对应）。"""
+    if cat == 'armor':
+        return 'armor_' + cid
+    if cat == 'bow':
+        return 'crossbow_' + cid
+    if cat == 'tool':
+        return 'tool_' + cid
+    return cid
+
 
 def has_cooldown(segs):
     for kind, p in segs:
@@ -93,7 +111,6 @@ def build(it, cat, slot, base):
         zx_txt += ',skill:"sweetdream:%s"' % cid
 
     parts = []
-    # ★ 刻意不挂 item_model（外观批次再补；见文件头）。
     parts.append('item_name={text:"%s",bold:true,color:%s}' % (it['name'], it['color']))
     lore = SRC.build_lore(it['segs'])
     parts.append('lore=' + json.dumps(lore, ensure_ascii=False, separators=(',', ':')))
@@ -122,6 +139,18 @@ def build(it, cat, slot, base):
         parts.append(CONSUMABLE)
     parts.append('tooltip_display={hidden_components:[%s]}'
                  % ','.join('"%s"' % h for h in hide))
+    # ★ 批 16 外观（2026-10-18）：46 件的贴图补齐了，这里开始挂 item_model。
+    #   位置与 `_gen_armor_visual.py` / `_gen_offhand_visual.py` 的 comps() 逐字一致：
+    #   tooltip_display 之后、行尾 `]` 之前（否则 _chk_gen_drift.py 判漂移）。
+    #   · 剑/斧/法杖：item_model = sweetdream:<id>
+    #   · 弩        ：item_model = sweetdream:crossbow_<id>（弩的模型键统一带前缀）
+    #   · 副手      ：item_model = sweetdream:tool_<id>
+    #   · 盔甲      ：item_model + equippable 一起给（equippable 一写就是整体替换，
+    #                 slot / asset_id / equip_sound 三个字段必须给全 —— 坑见 RULES 盔甲接入）
+    parts.append('item_model="sweetdream:%s"' % model_key(cat, cid))
+    if cat == 'armor':
+        parts.append('equippable={slot:"%s",asset_id:"sweetdream:armor_%s",equip_sound:%s}'
+                     % (EQ_SLOT[slot], cid, json.dumps(ARMOR_SOUND[TIER[it['rarity']]])))
 
     pre = ''
     if cat in ('staff', 'tool'):
@@ -147,9 +176,8 @@ def header(it, cat, slot, base):
     A.append('#')
     A.append('# 【这个文件是生成的】改描述请改 .workbuddy/_new42_lore.py、改标签请改')
     A.append('#   .workbuddy/_tags_data.py，然后重跑本生成器 + `python .workbuddy/lore_fmt.py --write`。')
-    A.append('# ★ 批 14（2026-10-15 用户定）**只做 give**：技能 / 进度 / updef / 超限石 /')
-    A.append('#   外观 等留后续批次；因此**不挂 item_model**（外观未做，挂了会引用不存在的')
-    A.append('#   模型 -> 游戏里显示紫黑方块）。物品先显示为底材的原版外观。')
+    A.append('# 【外观】批 16（2026-10-18）补齐：item_model 指向 sweetdream:%s' % model_key(cat, it['id']))
+    A.append('#   （贴图源 _gen_late_icons.py，接线 _gen_late_rp.py）。')
     if cat == 'bow':
         A.append('# ★ 弩的命中结算要靠 sweetdream:%s 附魔的 post_attack 回调（坑 138：回调' % it['id'])
         A.append('#   只读**攻击者主手物品**上的附魔）=> **必须挂 enchantments**；漏了它整把弩')
@@ -159,9 +187,11 @@ def header(it, cat, slot, base):
         A.append('#   ★ enchantment_glint_override=false + tooltip 里藏掉 enchantments：')
         A.append('#     让附魔生效但不显示附魔名与紫色光效（与既有 10 把弩同一套写法）。')
     if cat == 'armor':
-        A.append('# ★ 盔甲同样不挂 item_model / equippable（外观未做）；底材自带原版')
-        A.append('#   equippable，穿戴与护甲值照常。visual/armor_icon_held 的补绑名单是**按')
-        A.append('#   id 枚举**的，本件不在名单里 => 不会被自动写上不存在的模型。')
+        A.append('# ★ 盔甲两处一起给：item_model(背包图标) + equippable(穿戴层)。')
+        A.append('#   equippable 一写就是**整体替换**原版组件 => slot / asset_id /')
+        A.append('#   equip_sound 三个字段必须给全，漏一个整条 give 解析失败。')
+        A.append('#   存量(改动前发出的)旧件由 visual/armor_icon_held 每秒补课，')
+        A.append('#   但**背包/箱子里的存量扫不到** => 那些要重新 give。')
     A.append('# ============================================================')
     A.append('')
     return '\n'.join(A)
