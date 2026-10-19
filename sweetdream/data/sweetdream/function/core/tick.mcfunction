@@ -24,6 +24,9 @@
 #   清单在 lib/rearm; check.py 规则 27 盯着它的完整性。
 function sweetdream:lib/rearm
 
+# 殓丝：到第 160 刻或移走副手即清除私有殓结；仅筛持结玩家。
+execute as @a[tag=zx.cfs_knot] run function sweetdream:equipment/tool/coffin_silk/keep
+
 # ============================================================
 # ★★ 调色盘(2026-10-07 批3): “色彩”每刻推进(到点自毁 / 出界 / 追最近生物 / 移动 / 命中结算)
 # ------------------------------------------------------------

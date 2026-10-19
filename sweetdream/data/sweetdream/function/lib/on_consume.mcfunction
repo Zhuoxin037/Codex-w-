@@ -31,7 +31,7 @@ function sweetdream:lib/mark_ember
 
 # ② 回潮扣(副手): 技能消耗「渊海」-> 把被消耗那只 2 格内最多 2 个其他生物拉近 0.75 格
 #    ★ 需要"被消耗的那只"当圆心 ⇒ 这一件要读 mc.target(字符串选择器), 交给宏叶子。
-$execute as $(by) if data storage zx:work mc{mark:"yuanhai",src:"skill"} if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["tide_buckle"]}] run function sweetdream:equipment/tool/tide_buckle/pull with storage zx:work mc
+$execute as $(by) if data storage zx:work mc{mark:"yuanhai",src:"skill"} if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["tide_buckle"]}] run function sweetdream:equipment/tool/tide_buckle/pull
 
 # ③ 烛跬(靴子): 技能消耗「夜火」-> 回 18 魔力; 消耗「流火」-> 回 8 魔力
 $execute as $(by) if data storage zx:work mc{mark:"yehuo",src:"skill"} if items entity @s armor.feet *[minecraft:custom_data~{zx:["candle_step"]}] run function sweetdream:equipment/armor/candle_step/consume

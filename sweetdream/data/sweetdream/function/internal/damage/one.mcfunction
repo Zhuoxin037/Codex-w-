@@ -112,19 +112,18 @@ execute if data storage zx:work ob{type:"sweetdream:skill"} unless data storage 
 #     走消耗入口会白触发余烬/回潮扣/烛跬那些"消耗"被动。
 execute if data storage zx:work ob{type:"sweetdream:skill"} unless data storage zx:work ob{src:"enemy"} if entity @s[tag=zx.status.liuhuo,tag=!zx.status.yehuo] run function sweetdream:equipment/armor/char_coat/on_skill_hit with storage zx:work ob
 
+# ①.8b 绯缝(批 15-4): 同条件下**直接回血**(最大生命值 5%, 6 秒节流)
+#   【与 ①.8 是两件不同装备】殓丝是副手(换「殓结」)、绯缝是胸甲(直接回血);
+#     两件可以同时带：先做不消耗噬心的回血，再让殓丝消耗，避免同一击漏判。
+#   【排在 deal 之后】文案是"命中了…后"; 且回血不该回头影响这一击。
+execute if data storage zx:work ob{type:"sweetdream:true_damage"} unless data storage zx:work ob{src:"enemy"} if entity @s[tag=zx.status.shixin] run function sweetdream:equipment/armor/crimson_seam/on_true_hit with storage zx:work ob
+
 # ①.8 殓丝: 这一下是**真实伤害**且目标还带着「噬心」-> 交给持殓丝的玩家去换「殓结」
-#   【为什么排在 deal **之后**】文案写"且仍存活" —— 被打死的那一只已经从世界移除、
-#     身上的「噬心」也没了, 所以放在 deal 后面才判得出"仍存活"。
+#   【为什么排在 deal 之后】文案写"且仍存活"，由 on_true_hit 显式检查 Health。
 #   【为什么读 ob 而不是 a】deal 里可能有嵌套调用改过 zx:work a; ob 是本批不可变快照。
 #   【为什么不用 a.type 而用 ob.type】同理 —— a 在 deal 之后已经不可信。
 #   【只认"自身造成"】src:"enemy" 的敌方真伤不算(它不是玩家打出来的)。
 execute if data storage zx:work ob{type:"sweetdream:true_damage"} unless data storage zx:work ob{src:"enemy"} if entity @s[tag=zx.status.shixin] run function sweetdream:equipment/tool/coffin_silk/on_true_hit with storage zx:work ob
-
-# ①.8b 绯缝(批 15-4): 同条件下**直接回血**(最大生命值 5%, 6 秒节流)
-#   【与 ①.8 是两件不同装备】殓丝是副手(换「殓结」)、绯缝是胸甲(直接回血);
-#     两件可以同时带 ⇒ 两个钩子各跑各的。
-#   【排在 deal 之后】文案是"命中了…后"; 且回血不该回头影响这一击。
-execute if data storage zx:work ob{type:"sweetdream:true_damage"} unless data storage zx:work ob{src:"enemy"} if entity @s[tag=zx.status.shixin] run function sweetdream:equipment/armor/crimson_seam/on_true_hit with storage zx:work ob
 
 # 圣骸: 保留准确受害者上下文, 已死后不要再用 @e 查找。归属读取不可变的 ob。
 function sweetdream:equipment/axe/sacred_relic/skill_kill with storage zx:work ob

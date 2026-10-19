@@ -16,6 +16,14 @@ data modify storage zx:work mc.done set value 0b
 #    (没穿 / 魔力不够 -> reclaim 原样返回, 不写 done, 走下面正常消耗)
 $execute as $(by) run function sweetdream:equipment/armor/eternity/reclaim {target:"$(target)",mark:"$(mark)"}
 
+# 回潮扣需要消费前的目标身份。原 target 可能含 tag=zx.status.yuanhai，摘标签后重查会变空。
+# 仅技能消费渊海、且消耗者持有回潮扣时快照；按实体保留圆心，支持范围选择器。
+tag @e[tag=zx.tb_source,distance=0..] remove zx.tb_source
+scoreboard players set #tb_snapshot zx.meta 0
+$execute unless data storage zx:work mc{done:1b} if data storage zx:work mc{mark:"yuanhai",src:"skill"} as $(by) if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["tide_buckle"]}] run scoreboard players set #tb_snapshot zx.meta 1
+# 回到原执行者再展开 target，保留 target:"@s" 的原始含义。
+$execute if score #tb_snapshot zx.meta matches 1 as $(target) if entity @s[tag=zx.status.yuanhai] run tag @s add zx.tb_source
+
 # ③ 没补回 -> 真摘掉（走公共出口 tag/unmark, 图标/租约一起收）
 # no-equip-check-ok: tag/unmark 是公共件, 本来就不该判装备(check 规则 equipgate)
 $execute unless data storage zx:work mc{done:1b} run function sweetdream:tag/unmark {target:"$(target)",mark:"$(mark)"}
@@ -25,3 +33,6 @@ $execute unless data storage zx:work mc{done:1b} run function sweetdream:tag/unm
 #     lib/on_consume —— 里面先跑余烬(契约不变: 只认 @s、不认 by), 再按 mc.by
 #     派发给"消耗状态后触发"的装备被动(回潮扣 / 烛跬 …), 那些认的是**消耗者**。
 execute unless data storage zx:work mc{done:1b} run function sweetdream:lib/on_consume with storage zx:work mc
+
+# 本次消费的圆心快照不留到下一轮。
+tag @e[tag=zx.tb_source,distance=0..] remove zx.tb_source

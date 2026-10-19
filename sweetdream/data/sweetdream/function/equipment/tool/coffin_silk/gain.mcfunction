@@ -7,7 +7,8 @@
 # 【门控（文案逐条）】① 未持有「殓结」 ② 魔力足够（≥ 80） ③ 12 秒内最多触发一次
 # ============================================================
 
-# ① 已经持有「殓结」-> 不重复获取
+# ① 先清除过期/已移走的殓结，再判定是否重复获取。
+function sweetdream:equipment/tool/coffin_silk/keep
 execute if entity @s[tag=zx.cfs_knot] run return 0
 
 # ② 12 秒节流（账本存"下次可触发刻"；先置零再取值，坑 141 同款）
@@ -27,7 +28,7 @@ execute if data storage manacore:out r{success:0b} run return 0
 data modify storage zx:work a set value {target:"@e[tag=zx.cfs_v,limit=1]",mark:"shixin",by:"@s",src:"equip"}
 function sweetdream:lib/mark_consume
 
-# ⑤ 获得「殓结」，持续 8 秒（账本存到期刻；到点/移走副手由 on_hurt 收）
+# ⑤ 获得「殓结」，持续 8 秒（keep 每刻清理到期/移走副手）。
 tag @s add zx.cfs_knot
 scoreboard players operation @s zx.cfs_end = #now manacore.meta
 scoreboard players operation @s zx.cfs_end += #160 zx.meta
