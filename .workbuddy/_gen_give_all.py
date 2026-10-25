@@ -30,16 +30,17 @@ BASE = "D:/数据包/sweetdream/data/sweetdream/function"
 OUT = BASE + "/debug/give_all.mcfunction"
 BOX_CAP = 27
 # 盒子方块坐标(和强化台 0,-59,2 错开; 0,-60,2 留给暂存箱)
-#   ★ 每 27 件开一个盒子: 2026-10-15 批 14 加 42 件装备后 = 140 装备 + 56 石头 = 196 件
-#     -> 8 盒(7×27+7)。不够时脚本会 assert 报错(不会静默丢件), 照提示补坐标即可。
-#     坐标都在同一区块内(x=0, z=1..15), 与强化台 0,-59,2 / 暂存箱 0,-60,2 错开。
+#   ★ 每 27 件开一个盒子: 2026-10-20 批二加 14 件后 = 164 装备 + 56 石头 = 220 件
+#     -> 9 盒(8×27+4)。不够时脚本会 assert 报错(不会静默丢件), 照提示补坐标即可。
+#     坐标都在同一区块内(x=0/2, z=1..15), 与强化台 0,-59,2 / 暂存箱 0,-60,2 错开。
 BOX_POS = ["0 -60 1", "0 -60 3", "0 -60 5", "0 -60 7", "0 -60 9", "0 -60 11",
-           "0 -60 13", "0 -60 15"]
+           "0 -60 13", "0 -60 15", "2 -60 1", "2 -60 3", "2 -60 5"]
 # ★ 只能是**染料色**(白/橙/品红/淡蓝/黄/黄绿/粉/灰/淡灰/青/紫/蓝/棕/绿/红/黑)——
 #   潜影盒方块只有这 16 种染色版 + 1 个默认版。写 gold/light_purple/aqua 这种
 #   "只有文字组件才认的颜色", setblock 会失败 -> 中转站建不起来 -> 盒子全发不出去。
 #   (2026-10-04 踩过: 原来写的就是 gold/light_purple/aqua, 玩家拿到的是空的。)
-BOX_COLOR = ["yellow", "purple", "cyan", "red", "lime", "blue", "orange", "pink"]
+BOX_COLOR = ["yellow", "purple", "cyan", "red", "lime", "blue", "orange", "pink",
+             "light_gray", "magenta", "brown"]
 
 # ★ 名字用的**文字组件颜色**和方块色名不是一套! ★
 #   方块色名 purple / cyan / lime 在文字组件里**不合法**
@@ -48,7 +49,8 @@ BOX_COLOR = ["yellow", "purple", "cyan", "red", "lime", "blue", "orange", "pink"
 #   盒子就没名字了。所以这里单独映射一套合法的文字色。
 NAME_COLOR = {"yellow": "yellow", "purple": "light_purple",
               "cyan": "aqua", "red": "red", "lime": "green", "blue": "blue",
-              "orange": "gold", "pink": "light_purple"}
+              "orange": "gold", "pink": "light_purple",
+              "light_gray": "gray", "magenta": "light_purple", "brown": "gold"}
 
 # 盒 A: 装备(按 盔甲 -> 剑 -> 斧 -> 弓 -> 法杖 -> 工具 排)
 A = []

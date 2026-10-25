@@ -35,7 +35,7 @@ execute unless score #tc_x zx.meta matches 1.. run scoreboard players set #tc_x 
 data modify storage manacore:in arg set value {uuid:"",value:0.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 execute store result storage manacore:in arg.value double 1 run scoreboard players get #tc_use zx.meta
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 
 # ③ 清空「天煌」
 scoreboard players set @s zx.tc_n 0

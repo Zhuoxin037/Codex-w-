@@ -227,7 +227,7 @@ SPECS = [
                 P('snowflake', 0.18, 0.18, 0.18, 0.01, 5)],
          hit=[P('snowflake', 0.55, 0.5, 0.55, 0.05, 26),
               P(dust(0.55, 0.85, 1.0, 1.6), 0.5, 0.5, 0.5, 0.04, 18),
-              SND('block.glass.break', 0.7, 1.5)]),
+              SND('block.amethyst_block.break', 0.65, 1.4)]),
 
     dict(style='triad_fire', cn='很热的刀', dir='triad', no_attack=True,
          theme='三形态·热刀 · 橙红炽焰',
@@ -284,7 +284,7 @@ SPECS = [
          hit=[P('witch', 0.55, 0.5, 0.55, 0.03, 18),
               P('soul', 0.45, 0.45, 0.45, 0.02, 12),
               P(dust(0.85, 0.78, 1.0, 1.6), 0.5, 0.5, 0.5, 0.04, 16),
-              SND('block.bell.resonate', 0.6, 1.1)]),
+              SND('block.amethyst_block.resonate', 0.4, 1.3)]),
 
     # ── 折径(2026-10-17 批 15-6): 折了一次又一次的光束 —— 锐利的冷白紫射线
     dict(style='bent_ray', cn='折径', theme='折径 · 锐利冷白紫的折射线',
@@ -302,7 +302,7 @@ SPECS = [
          hit=[P(dust(0.78, 0.12, 0.22, 1.6), 0.5, 0.5, 0.5, 0.03, 20),
               P('crit', 0.4, 0.4, 0.4, 0.08, 12),
               P('damage_indicator', 0.3, 0.3, 0.3, 0.02, 6),
-              SND('entity.vex.ambient', 0.55, 1.2)]),
+              SND('entity.allay.item_thrown', 0.55, 1.2)]),
 
     # ── 彼岸(2026-10-17 批 15-7): 两界之间的水色 —— 深紫灵光 + 魂火, 撞上时向两边撕开
     dict(style='other_shore', cn='彼岸', theme='彼岸 · 深紫灵光与两界之间的水色',
@@ -322,6 +322,43 @@ SPECS = [
               P('lava', 0.4, 0.35, 0.4, 0.0, 6),
               P(dust(1.0, 0.72, 0.28, 1.6), 0.5, 0.5, 0.5, 0.04, 16),
               SND('block.campfire.crackle', 0.7, 1.3)]),
+
+    # ── 决堤(2026-10-21 补普攻): 溃堤 —— 水与泥沙, 落地砸开的浊流
+    dict(style='burst_bank', cn='决堤', theme='决堤 · 溃开的水与泥沙',
+         trail=[P(dust(0.45, 0.66, 0.62, 1.0), 0.12, 0.12, 0.12, 0, 6),
+                P('bubble', 0.12, 0.12, 0.12, 0.01, 4),
+                P('splash', 0.1, 0.1, 0.1, 0.0, 1)],
+         hit=[P('splash', 0.55, 0.5, 0.55, 0.06, 24),
+              P('bubble', 0.45, 0.4, 0.45, 0.02, 16),
+              P(dust(0.5, 0.68, 0.64, 1.5), 0.5, 0.5, 0.5, 0.04, 16),
+              SND('entity.fishing_bobber.splash', 0.75, 0.85)]),
+
+    # ── 囚昼(2026-10-21 补普攻): 把白昼关起来 —— 暗紫囚光 + 冷白针芒
+    dict(style='cage_day', cn='囚昼', theme='囚昼 · 暗紫的囚光',
+         trail=[P(dust(0.42, 0.2, 0.62, 1.2), 0.12, 0.12, 0.12, 0, 7),
+                P('end_rod', 0.1, 0.1, 0.1, 0.005, 3)],
+         hit=[P('end_rod', 0.5, 0.5, 0.5, 0.05, 20),
+              P(dust(0.5, 0.24, 0.72, 1.6), 0.55, 0.5, 0.55, 0.04, 20),
+              P('reverse_portal', 0.4, 0.4, 0.4, 0.03, 10),
+              SND('block.amethyst_block.chime', 0.55, 1.15)]),
+
+    # ── 倾囊(2026-10-21 补普攻): 把魔力压成钉子 —— 铁灰钉尖 + 迸出的蓝屑
+    dict(style='pour_sack', cn='倾囊', theme='倾囊 · 铁灰的钉与迸出的魔屑',
+         trail=[P(dust(0.62, 0.62, 0.66, 1.0), 0.1, 0.1, 0.1, 0, 5),
+                P('crit', 0.1, 0.1, 0.1, 0.01, 3)],
+         hit=[P('crit', 0.4, 0.4, 0.4, 0.07, 14),
+              P('enchanted_hit', 0.4, 0.4, 0.4, 0.05, 12),
+              P(dust(0.4, 0.72, 0.95, 1.5), 0.45, 0.45, 0.45, 0.04, 14),
+              SND('entity.arrow.hit', 0.7, 1.25)]),
+
+    # ── 停针(2026-10-21 补普攻): 时间被钉住 —— 逆流紫光 + 悬停的针芒
+    dict(style='stop_needle', cn='停针', theme='停针 · 被钉住的逆流紫光',
+         trail=[P(dust(0.72, 0.6, 0.95, 1.1), 0.11, 0.11, 0.11, 0, 6),
+                P('reverse_portal', 0.12, 0.12, 0.12, 0.01, 2)],
+         hit=[P('reverse_portal', 0.55, 0.5, 0.55, 0.05, 20),
+              P(dust(0.8, 0.68, 1.0, 1.5), 0.5, 0.5, 0.5, 0.03, 18),
+              P('end_rod', 0.4, 0.4, 0.4, 0.02, 8),
+              SND('block.amethyst_block.chime', 0.6, 0.85)]),
 ]
 
 # 兜底: 没写 style(或写了个不认识的)的新法杖, 至少别是"完全隐形"
@@ -382,26 +419,39 @@ def emit():
 
 # ------------------------------------------------------------------ 派发块
 def dispatch_trail():
-    out = ['# ④ 拖尾外观(按 style 分工 —— 一套 style 一份, 由 _gen_staff_particles.py 维护)']
-    for sp in SPECS:
-        out.append('execute if data entity @s data{style:"%s"} '
-                   'run function sweetdream:projectile/ball/fx_%s'
-                   % (sp['style'], sp['style']))
-    return out
+    """④ 拖尾外观: **单条宏分派**(2026-10-20 卡顿修复)
+
+    原写法是每个 style 一行 `execute if data entity @s data{style:"…"}`。
+    法球飞行期间**每刻**都要过这 24 行 —— 每一行都是一次 `data entity` 读取,
+    也就是把法球实体的 NBT **完整序列化一遍**再比路径。一个球飞 2 秒(40 刻)
+    ≈ 960 次序列化; 连发/多球同飞时是乘法关系。这是"每刻都在烧"的固定开销,
+    与"命中才卡"是两回事。
+
+    而 tick → tick_target 本来就是宏调用(`with entity @s data`), `style` 已经是
+    宏参数 —— 直接用它拼函数名, 展开一次就够, 每刻 0 次 NBT 匹配。
+
+    ★ 兜底不再需要: style 由各武器 attack 写死(生成器 patch_attacks 会对账),
+      真写错了日志会直接报 Unknown function 并指出是哪个名字, 不会静默。
+    """
+    return [
+        '# ④ 拖尾外观(按 style 直接分派 —— 一套 style 一份, 由 _gen_staff_particles.py 维护)',
+        '#   ★★ 2026-10-20 卡顿修复: 原来是每个 style 一行 `if data entity @s data{style:"…"}` ★★',
+        '#     那 24 行意味着法球飞行期间**每刻**对同一个实体做 24 次 NBT 序列化',
+        '#     (2 秒 ≈ 960 次/球, 多球同飞是乘法)。改成宏分派后每刻 0 次。',
+        '#     ★ 本函数是 tick 用 `with entity @s data` 调起来的, $(style) 直接可用。',
+        '$function sweetdream:projectile/ball/fx_$(style)',
+    ]
 
 def dispatch_hit():
-    out = ['# ⑤ 命中表现(按 style 分工 —— 一套 style 一份)']
-    for sp in SPECS:
-        out.append('execute if data entity @s data{style:"%s"} '
-                   'run function sweetdream:projectile/ball/fx_%s_hit'
-                   % (sp['style'], sp['style']))
-    # ★ 兜底行必须带 `execute` 前缀: 一串 unless 后面直接跟 run 不是合法命令
-    guard = ' '.join('unless data entity @s data{style:"%s"}' % sp['style'] for sp in SPECS)
-    out.append('# 兜底: 没写 style / 写了个不认识的 —— 至少别什么都不出')
-    out.append('#   (一行排掉全部已知 style; 以后加新法杖记得在这里补一条 unless —— '
-               '本块由 _gen_staff_particles.py 自动维护, 别手改)')
-    out.append('execute ' + guard + ' run function sweetdream:projectile/ball/fx_plain_hit')
-    return out
+    """⑤ 命中表现: **单条宏分派** + 保留 plain 兜底(见下)"""
+    return [
+        '# ⑤ 命中表现(按 style 直接分派 —— 一套 style 一份)',
+        '#   ★ 同上: 原来 24 条 if + 一条含 24 个 unless 的兜底 = 命中一次 48 次 NBT 序列化。',
+        '#     命中是"打到生物"那一下, 属性伤害投递叠加时更容易看出卡顿 ⇒ 一并改掉。',
+        '#   ★ 兜底不需要: fire 已保证每个球都带 style(缺了就补 "plain", 见 fire ①),',
+        '#     而 plain 自己有 fx_plain / fx_plain_hit 两份文件, 宏分派照样能走。',
+        '$function sweetdream:projectile/ball/fx_$(style)_hit',
+    ]
 
 def patch_dispatch(path, start_marker, end_marker, new_lines, tag):
     if not os.path.isfile(path):
@@ -447,7 +497,10 @@ def patch_pop():
     return 'pop 改写(改成宏函数, 复用各自的拖尾)'
 
 def patch_tick_pop_calls():
-    p = os.path.join(BALL, 'tick.mcfunction')
+    # ★ 2026-10-20: 法球 tick 已拆成 tick(wrapper) + tick_target(真实现),
+    #   拖尾派发块与 pop 调用都在 tick_target 里 —— 这两个 patch 必须改指它,
+    #   否则每次跑生成器都会报"找不到派发块 marker / pop 调用"并 exit 1。
+    p = os.path.join(BALL, 'tick_target.mcfunction')
     txt = open(p, encoding='utf-8').read()
     old = 'function sweetdream:projectile/ball/pop'
     new = 'function sweetdream:projectile/ball/pop with entity @s data'
@@ -504,7 +557,7 @@ if __name__ == '__main__':
         print('  (全部已最新)')
 
     print('\n=== 派发 ===')
-    print('  tick ④: ' + patch_dispatch(os.path.join(BALL, 'tick.mcfunction'),
+    print('  tick ④: ' + patch_dispatch(os.path.join(BALL, 'tick_target.mcfunction'),
                                         '# ④ 拖尾外观', '# ⑤ 射程耗尽',
                                         dispatch_trail(), 'tick'))
     print('  hit  ⑤: ' + patch_dispatch(os.path.join(BALL, 'hit.mcfunction'),

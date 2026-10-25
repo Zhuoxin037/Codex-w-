@@ -18,28 +18,43 @@
 # 【DoT 挂在生物身上】tag zx.fd_t + data.zx.fd{uuid,u0..u3}(释放者身份):
 #   每秒由 second 驱动 one 结算; 目标脱离时停(自然到期/被解)的下一秒摘标收工
 #   —— "接下来的时停时间内"天然限定, 不用另设计时器。
+# 【超限·堕梦(2026-10-23 批 K9)】魔力 500→**600**(冷却 100 秒不变);
+#   时停 3→**4 秒**、已有者 +2→**+3 秒**; 每秒伤害 ×0.04→**×0.05**,
+#   且"受到超过 6 次本次伤害后"后续提升为 **×0.08**。
+#   ★ 后两条(系数与次数)是**目标侧**结算的(one 里拿不到施法者), 所以
+#     "这一份 DoT 是不是超限档"必须在⑨挂标记时就拍进目标身上的 zx.fd_ol(0/1),
+#     次数记 zx.fd_n。与"记在生物身上的临时量要配收尸"一致: one 摘标时一并清。
 # ============================================================
 
 # ⓪ 撤销自己的进度(不撤的话只有第一次右键会触发)
 advancement revoke @s only sweetdream:equipment/staff/fallen_dream
 
+# ⓪.5 超限判定: 主/副手任一件是超限·堕梦(只认 `ol:"fallen_dream"` 这个值)
+scoreboard players set #fd_ol zx.meta 0
+execute if items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["fallen_dream"],ol:"fallen_dream"}] run scoreboard players set #fd_ol zx.meta 1
+execute if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["fallen_dream"],ol:"fallen_dream"}] run scoreboard players set #fd_ol zx.meta 1
+
 # ① 拿 uuid
 function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return fail
 
-# ② 只读检查: 冷却 + 魔力 500
+# ② 只读检查: 冷却 + 魔力(原版 500 / 超限 600)
 data modify storage manacore:in arg set value {uuid:"",skill:"sweetdream:fallen_dream",mana:500.0}
+execute if score #fd_ol zx.meta matches 1 run data modify storage manacore:in arg.mana set value 600.0
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/skill/check
 execute if data storage manacore:out r{reason:"cooldown"} run tellraw @s [{"text":"堕梦冷却中，还剩 ","color":"red"},{"nbt":"r.remaining","storage":"manacore:out"},{"text":" tick","color":"red"}]
-execute if data storage manacore:out r{reason:"mana"} run tellraw @s [{"text":"魔力不足（需要 500）","color":"red"}]
+execute if score #fd_ol zx.meta matches 0 if data storage manacore:out r{reason:"mana"} run tellraw @s [{"text":"魔力不足（需要 500）","color":"red"}]
+execute if score #fd_ol zx.meta matches 1 if data storage manacore:out r{reason:"mana"} run tellraw @s [{"text":"魔力不足（需要 600）","color":"red"}]
 execute unless data storage manacore:out r{success:1b} run return fail
 
-# ③ 扣魔力 500
+# ③ 扣魔力(500 / 600)
 data modify storage manacore:in arg set value {uuid:"",value:500.0}
+execute if score #fd_ol zx.meta matches 1 run data modify storage manacore:in arg.value set value 600.0
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
-execute if data storage manacore:out r{success:0b} run tellraw @s [{"text":"魔力不足（需要 500）","color":"red"}]
+function sweetdream:lib/mana/pay
+execute if score #fd_ol zx.meta matches 0 if data storage manacore:out r{success:0b} run tellraw @s [{"text":"魔力不足（需要 500）","color":"red"}]
+execute if score #fd_ol zx.meta matches 1 if data storage manacore:out r{success:0b} run tellraw @s [{"text":"魔力不足（需要 600）","color":"red"}]
 execute if data storage manacore:out r{success:0b} run return fail
 
 # ④ 起冷却 100 秒
@@ -73,13 +88,15 @@ tag @e[tag=zx.fd_area,tag=zx.stop] add zx.fd_old
 data modify storage zx:work mk set value {target:"@e[tag=zx.fd_area]",mark:"dream"}
 function sweetdream:tag/mark with storage zx:work mk
 
-# ⑦ 原本未时停的: 时停 3 秒(60 tick)
+# ⑦ 原本未时停的: 时停 3 秒(超限 4 秒 = 80 tick)
 data modify storage zx:work fz set value {target:"@e[tag=zx.fd_new]",ticks:60}
+execute if score #fd_ol zx.meta matches 1 run data modify storage zx:work fz.ticks set value 80
 function sweetdream:lib/timestop with storage zx:work fz
 
-# ⑧ 原本已在时停里的: 时停时间 +2 秒(直接给结束时刻加 40 tick, 见头注释)
+# ⑧ 原本已在时停里的: 时停时间 +2 秒(超限 +3 秒; 直接给结束时刻加 tick, 见头注释)
 #   ★ 只认 zx.fd_old(快照) —— 认 zx.stop 会把 ⑦ 刚时停的这批一起加时。
 execute as @e[tag=zx.fd_old] run scoreboard players add @s zx.ts_end 40
+execute if score #fd_ol zx.meta matches 1 as @e[tag=zx.fd_old] run scoreboard players add @s zx.ts_end 20
 
 # ⑨ 全部挂 DoT 标记 + 释放者身份
 #   ★ execute store result entity 只收"单个实体"(多目标会让整个函数加载失败,
@@ -96,6 +113,14 @@ execute as @e[tag=zx.fd_area] run data modify entity @s data.zx.fd.u1 set from s
 execute as @e[tag=zx.fd_area] run data modify entity @s data.zx.fd.u2 set from storage zx:work fd.u2
 execute as @e[tag=zx.fd_area] run data modify entity @s data.zx.fd.u3 set from storage zx:work fd.u3
 tag @e[tag=zx.fd_area] add zx.fd_t
+
+# ⑨.5 超限档位与次数**拍进目标**(one 是目标侧驱动, 那里拿不到施法者)
+#   zx.fd_ol = 这一份 DoT 是不是超限档(系数 ×0.05, 6 次后 ×0.08)
+#   zx.fd_n  = 已经结算过几次(>6 ⇒ 之后的每一跳都走 ×0.08)
+#   ★ 重复施法要**从头计数**: 每次挂 DoT 都归零(文案是"本次伤害"的第几次)。
+execute as @e[tag=zx.fd_area] run scoreboard players set @s zx.fd_n 0
+execute as @e[tag=zx.fd_area] run scoreboard players set @s zx.fd_ol 0
+execute if score #fd_ol zx.meta matches 1 as @e[tag=zx.fd_area] run scoreboard players set @s zx.fd_ol 1
 
 # ⑩ 表现 + 清理
 execute at @s run particle minecraft:dust{color:[0.35,0.3,0.4],scale:1.5} ~ ~1 ~ 1.6 0.8 1.6 0.04 40 normal

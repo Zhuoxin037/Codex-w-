@@ -47,7 +47,32 @@ execute unless data storage zx:work a.u3 run data modify storage zx:work a.u3 se
 #   换成"从 ob 复原"之后, 无论中途谁动过 a, 每只目标都在开打前被重新拉回基准值。
 # ============================================================
 
+data modify storage zx:work damage_stack append value {previous:{},input:{}}
+data modify storage zx:work damage_stack[-1].previous set from storage zx:work ob
+data modify storage zx:work damage_stack[-1].input set from storage zx:work a
 data modify storage zx:work ob set from storage zx:work a
+
+# ============================================================
+# 【★ 攻击者 Y(×100): 这一批只反查一次 ★】(2026-10-23 第五次卡顿修复)
+# ------------------------------------------------------------
+# 【为什么】「升痕」加伤要判"这一击是不是来自更高处", 得拿攻击者 Y 和目标 Y 比。
+#   原来 stg_mul 里写的是 `data get entity @a[nbt={UUID:...}] Pos[1]` —— 那是
+#   **整份玩家 NBT 序列化**(≈10 ms, 见 lib/u_by 头注释)。范围伤害 `execute as`
+#   逐个目标打 ⇒ 打 10 只、每只 3 层升痕就是 30 次 ≈ 0.3 秒, 全压在同一刻。
+# 【做法】这里(循环之前)反查一次攻击者, 把 Y×100 存进 #stg_ay, 并冻进 ob.ay;
+#   internal/damage/one 每只目标开工时从 ob.ay 复原 —— 嵌套伤害改过 #stg_ay
+#   也不会串味(ob 是本批不可变快照, 与现行约定一致)。
+# 【代价】一批一次 `data get entity` + 一次零 NBT 的计分项反查; 原本是每只一次。
+# ============================================================
+data modify storage zx:work ub set value {u0:0,u1:0,u2:0,u3:0}
+data modify storage zx:work ub.u0 set from storage zx:work a.u0
+data modify storage zx:work ub.u1 set from storage zx:work a.u1
+data modify storage zx:work ub.u2 set from storage zx:work a.u2
+data modify storage zx:work ub.u3 set from storage zx:work a.u3
+function sweetdream:lib/u_by
+scoreboard players set #stg_ay zx.meta 0
+execute as @a[tag=zx.ub,limit=1] store result score #stg_ay zx.meta run data get entity @s Pos[1] 100
+execute store result storage zx:work ob.ay int 1 run scoreboard players get #stg_ay zx.meta
 
 # ============================================================
 # 【★★★ 把"本次技能走的是哪条倍率通道"一并冻进 ob ★★★】(2026-10-16 批 15-4)
@@ -67,6 +92,20 @@ data modify storage zx:work ob set from storage zx:work a
 #   前面没有 calc, 这一行取不到值就不写 ⇒ 下游 data get 读到 0 ⇒ 判成"不算基础攻击力类"。
 #   宁可少给, 不可能多给。
 # ============================================================
-data modify storage zx:work ob.attack_mul set from storage zx:work ch.attack_mul
+execute if data storage zx:work ob.channel_atk run data modify storage zx:work ob.attack_mul set from storage zx:work ob.channel_atk
+execute unless data storage zx:work ob.attack_mul run data modify storage zx:work ob.attack_mul set from storage zx:work ch.attack_mul
+
+# ★ 倾囊超限（2026-10-23 批 K8）：8 秒「固定伤害追伤」窗口 ★
+#   只判两件事：这一笔是固定伤害（fixed:1b）+ 场上确实有窗口开着（#ps_live ≥ 1）。
+#   两个都不成立时只多两条计分项判定，不做玩家反查（反查 UUID 是热路径，见 ol_add）。
+#   ★ 算出结果只写进**专用节点 zx:work psadd**，绝不碰 ob（ob 是这一批的不可变基准，
+#     谁都能写它，范围伤害就会串味）；真正加进这一笔的地方在 one 里（ol_apply）。
+#   ★ psadd 每笔进来先清，避免上一笔的追伤串到这一笔。
+data remove storage zx:work psadd
+execute if data storage zx:work ob{fixed:1b} if score #ps_live zx.meta matches 1.. run function sweetdream:equipment/staff/pour_sack/ol_add with storage zx:work ob
 
 $execute as $(target) run function sweetdream:internal/damage/one
+
+data modify storage zx:work ob set from storage zx:work damage_stack[-1].previous
+data modify storage zx:work a set from storage zx:work damage_stack[-1].input
+data remove storage zx:work damage_stack[-1]

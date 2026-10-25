@@ -71,7 +71,9 @@ summon minecraft:lightning_bolt ~ ~ ~ {Tags:["zx.th_own"]}
 #      射手身份靠 aw.u0..u3(起放电那刻以射手身份存进锚的归属 UUID, 见 ④)。
 #      射手若已死亡/不在, 这条自然不执行(无副作用)。
 #   ★ 排在 ④ 之后: 本件的伤害走 zx:work a + with_from(不读 manacore:out), 不会被覆盖。
-$execute at @s as @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run function sweetdream:lib/on_lightning
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute at @s as @a[tag=zx.ub,limit=1] run function sweetdream:lib/on_lightning
 
 # ---- ⑦ 清场(走廊标签; 下一跳开头还会再清一次, 这里只是不留脏) ----
 tag @e[tag=zx.arc_on,distance=0..] remove zx.arc_on

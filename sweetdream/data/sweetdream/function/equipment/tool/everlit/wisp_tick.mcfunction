@@ -1,10 +1,20 @@
 # 每秒、@s=逻辑 marker。攻击仍以主人为中心，并且不消耗魔力。
-$execute unless entity @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},distance=0..,limit=1] run return run function sweetdream:equipment/tool/everlit/wisp_gone
-$execute unless items entity @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},distance=0..,limit=1] weapon.offhand *[minecraft:custom_data~{zx:["everlit"]}] run return run function sweetdream:equipment/tool/everlit/wisp_gone
-$execute if entity @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},tag=zx.el_seen,distance=0..,limit=1] run return run function sweetdream:equipment/tool/everlit/wisp_gone
-$tag @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},distance=0..,limit=1] add zx.el_seen
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute unless entity @a[tag=zx.ub,distance=0..,limit=1] run return run function sweetdream:equipment/tool/everlit/wisp_gone
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute unless items entity @a[tag=zx.ub,distance=0..,limit=1] weapon.offhand *[minecraft:custom_data~{zx:["everlit"]}] run return run function sweetdream:equipment/tool/everlit/wisp_gone
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute if entity @a[tag=zx.ub,tag=zx.el_seen,distance=0..,limit=1] run return run function sweetdream:equipment/tool/everlit/wisp_gone
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+tag @a[tag=zx.ub,distance=0..,limit=1] add zx.el_seen
 tag @a[tag=zx.el_own] remove zx.el_own
-$tag @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},distance=0..,limit=1] add zx.el_own
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+tag @a[tag=zx.ub,distance=0..,limit=1] add zx.el_own
 function sweetdream:equipment/tool/everlit/visual/ensure
 # 不再tp乘客 marker，否则会让它从唯一显示载体上下车。
 scoreboard players remove @s zx.el_cd 1

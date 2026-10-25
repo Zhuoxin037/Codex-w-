@@ -21,8 +21,17 @@ execute unless data storage zx:data self{ok:1b} run return fail
 # ①.2 拍下超限乘区(与同批法杖一致; 本件暂无超限石, mod 会直接返回)
 function sweetdream:overlimit/api/snap
 
+# ①.3 超限判定(批 K9): 主/副手任一件是超限·折径
+#   超限·普攻: 魔力 60→**80**、固定伤害 8→**20**、「折光」1 层→**最多 3 层**。
+#   ★ 层数上限要在**命中回调**里用(mark_zg 的执行者是生物, 读不到玩家的杖)
+#     ⇒ 结果塞进**球的 data**(ol), 与五世恶咒 / 堕梦 / 引雷针同一条路。
+scoreboard players set #br_ol zx.meta 0
+execute if items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["bent_ray"],ol:"bent_ray"}] run scoreboard players set #br_ol zx.meta 1
+execute if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["bent_ray"],ol:"bent_ray"}] run scoreboard players set #br_ol zx.meta 1
+
 # ② 只读检查: 魔力 60(普攻不进冷却)
 data modify storage manacore:in arg set value {uuid:"",skill:"sweetdream:br_attack",mana:60.0}
+execute if score #br_ol zx.meta matches 1 run data modify storage manacore:in arg.mana set value 80.0
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 data modify storage zx:work olv.mana set from storage manacore:in arg.mana
 function sweetdream:overlimit/api/mod
@@ -36,17 +45,20 @@ execute unless data storage manacore:out r{success:1b} run return fail
 data modify storage manacore:in arg set value {uuid:"",value:60.0}
 data modify storage manacore:in arg.value set from storage zx:work olv.mana
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 execute if data storage manacore:out r{success:0b} run tellraw @s [{"text":"魔力不足（需要 ","color":"red"},{"score":{"name":"#br_need","objective":"zx.meta"},"color":"red"},{"text":"）","color":"red"}]
 execute if data storage manacore:out r{success:0b} run return fail
 
-# ④ 算伤害: 固定 8(普攻面板)
+# ④ 算伤害: 固定 8(超限 20)
 data modify storage manacore:in arg set value {uuid:"",custom_damage:8.0}
+execute if score #br_ol zx.meta matches 1 run data modify storage manacore:in arg.custom_damage set value 20.0
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function sweetdream:overlimit/api/mod
 function manacore:api/damage/calc
 
 # ⑤ 装球射出去 + 命中回调(命中即附加「折光」)
-data modify storage zx:work ball set value {dmg:0.0,style:"bent_ray",hit:"sweetdream:equipment/staff/bent_ray/ball_hit"}
+#   ol = 这一发是不是超限版(给 ball_hit → mark_zg 的"折光最多 3 层"用)
+data modify storage zx:work ball set value {dmg:0.0,style:"bent_ray",hit:"sweetdream:equipment/staff/bent_ray/ball_hit",ol:0b}
+execute if score #br_ol zx.meta matches 1 run data modify storage zx:work ball.ol set value 1b
 data modify storage zx:work ball.dmg set from storage manacore:out r.damage
 function sweetdream:equipment/staff/attack

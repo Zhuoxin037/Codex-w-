@@ -33,7 +33,7 @@ execute unless score #arc_ol zx.meta matches 1.. run scoreboard players set @s z
 # ① 扣魔力(固定 30 —— 与 lore 的「魔力 30」逐字对应)
 data modify storage manacore:in arg set value {uuid:"",value:30.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 
 # ② 魔力不足 -> 这一发不附加「电刺」: 箭不打 zx.arc_ok, hook_arrow 自然就不会
 #    给 zx.arc_arr 打标 -> hook_victim 开头那句门控直接收工。

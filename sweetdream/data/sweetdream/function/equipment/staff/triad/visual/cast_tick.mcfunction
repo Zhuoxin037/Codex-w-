@@ -4,7 +4,7 @@ scoreboard players set #tv_form zx.meta 0
 execute if score @s zx.tri_form matches 1..2 run scoreboard players operation #tv_form zx.meta = @s zx.tri_form
 execute unless score @s zx.tv_form = #tv_form zx.meta run return run function sweetdream:equipment/staff/triad/visual/end
 scoreboard players set #tv_slot zx.meta -1
-execute if score @s zx.tv_hand matches 0 store result score #tv_slot zx.meta run data get entity @s SelectedItemSlot
+execute if score @s zx.tv_hand matches 0 store result score #tv_slot zx.meta run data get storage zx:triad_watch player.SelectedItemSlot
 execute if score @s zx.tv_hand matches 0 unless score @s zx.tv_slot = #tv_slot zx.meta run return run function sweetdream:equipment/staff/triad/visual/end
 execute if score @s zx.tv_hand matches 0 unless items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["triad"]}] run return run function sweetdream:equipment/staff/triad/visual/end
 execute if score @s zx.tv_hand matches 1 unless items entity @s weapon.offhand *[minecraft:custom_data~{zx:["triad"]}] run return run function sweetdream:equipment/staff/triad/visual/end

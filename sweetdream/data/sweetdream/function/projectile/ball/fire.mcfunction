@@ -34,6 +34,11 @@ function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return fail
 data modify storage zx:work ball.uuid set from storage zx:data self.uuid
 data modify storage zx:work ball merge value {u0:0,u1:0,u2:0,u3:0,yaw:0,pitch:0}
+# ★ 2026-10-20: style 必须有值 —— tick_target / hit 现在用 `$(style)` **直接拼函数名**
+#   (原来是 24 条 `if data {style:"…"}` 逐条比 NBT, 法球每刻都要过一遍)。
+#   宏参数取不到会让那一行报"缺少参数"; 所以在这里兜住: 没写 style 就补 "plain",
+#   它有现成的 fx_plain / fx_plain_hit 两份文件。staff/attack 也会补一次, 两层保险。
+execute unless data storage zx:work ball.style run data modify storage zx:work ball.style set value "plain"
 # ★ hit(命中回调)只"缺了才补默认", 绝不能在 merge 里写死成 "" ★
 #   以前这行是 merge value {...,hit:""} —— merge 会**覆盖**已有键, 于是调用方
 #   (堕梦 attack 里)装好的 hit:".../fallen_dream/ball_hit" 被抹成空串,
@@ -45,15 +50,16 @@ execute unless data storage zx:work ball.hit run data modify storage zx:work bal
 
 # ② 归属: 玩家 UUID 的四个整数(打伤害时用它拼 by, 击杀才算在你头上)
 #    —— 直接从实体读, 不用按 uuid 去翻 manacore 的记录, 所以这里不需要宏
-execute store result storage zx:work ball.u0 int 1 run data get entity @s UUID[0]
-execute store result storage zx:work ball.u1 int 1 run data get entity @s UUID[1]
-execute store result storage zx:work ball.u2 int 1 run data get entity @s UUID[2]
-execute store result storage zx:work ball.u3 int 1 run data get entity @s UUID[3]
-
-# ③ 朝向: 记下发射那一刻的视线(yaw = 左右, pitch = 上下)
-#    记下来之后这颗球就直线飞, 你发射完回头/抬头都不会影响它
-execute store result storage zx:work ball.yaw int 1 run data get entity @s Rotation[0]
-execute store result storage zx:work ball.pitch int 1 run data get entity @s Rotation[1]
+# One synchronous player snapshot for owner and aim; no snapshot survives this call.
+data remove storage zx:ball_fire player
+data modify storage zx:ball_fire player set from entity @s
+data modify storage zx:work ball.u0 set from storage zx:ball_fire player.UUID[0]
+data modify storage zx:work ball.u1 set from storage zx:ball_fire player.UUID[1]
+data modify storage zx:work ball.u2 set from storage zx:ball_fire player.UUID[2]
+data modify storage zx:work ball.u3 set from storage zx:ball_fire player.UUID[3]
+execute store result storage zx:work ball.yaw int 1 run data get storage zx:ball_fire player.Rotation[0]
+execute store result storage zx:work ball.pitch int 1 run data get storage zx:ball_fire player.Rotation[1]
+data remove storage zx:ball_fire player
 
 # ④ 软锁(让普攻"好命中"的关键一步)
 #   为什么要它: 法球又小又快, 纯直线飞的话手感上很难命中 —— 特别是打人偶、
@@ -63,19 +69,31 @@ execute store result storage zx:work ball.pitch int 1 run data get entity @s Rot
 #   所以"大致对准了"才会锁上, 不是无脑自瞄。锁不到也没关系:
 #   t0..t3 全是 0, 法球就按原朝向直线飞(和以前一样)。
 #   (UUID 用四个整数记, 是因为选择器里没法写 UUID 文本 —— 和 with_from 一个道理)
-tag @e[tag=zx.bt] remove zx.bt
-execute anchored eyes positioned ^ ^ ^2 run tag @e[type=!#sweetdream:no_damage,distance=..1.8,sort=nearest,limit=1] add zx.bt
-execute unless entity @e[tag=zx.bt,limit=1] anchored eyes positioned ^ ^ ^5 run tag @e[type=!#sweetdream:no_damage,distance=..2.5,sort=nearest,limit=1] add zx.bt
-execute unless entity @e[tag=zx.bt,limit=1] anchored eyes positioned ^ ^ ^10 run tag @e[type=!#sweetdream:no_damage,distance=..3.0,sort=nearest,limit=1] add zx.bt
+# ★ 2026-10-21 收窄瞄准吸附(玩家: "法球偏移范围改小一点") ★
+#   原 1.8 / 2.5 / 3.0 太宽容 —— 准星擦着怪的肩膀过去, 球照样会拐过去命中,
+#   手感上像"自瞄"。现在收到 1.2 / 1.6 / 2.0:
+#     近距离(2 格)只认准星 1.2 格内, 中距离 1.6, 远距离 2.0。
+#   仍然保留"大致对准即可"的初衷(不然法球太快太难中), 但擦边球不再拐。
+scoreboard players reset @e[scores={zx.bt=1}] zx.bt
+execute anchored eyes positioned ^ ^ ^2 run scoreboard players set @e[type=!#sweetdream:no_damage,distance=..1.2,sort=nearest,limit=1] zx.bt 1
+execute unless entity @e[scores={zx.bt=1},limit=1] anchored eyes positioned ^ ^ ^5 run scoreboard players set @e[type=!#sweetdream:no_damage,distance=..1.6,sort=nearest,limit=1] zx.bt 1
+execute unless entity @e[scores={zx.bt=1},limit=1] anchored eyes positioned ^ ^ ^10 run scoreboard players set @e[type=!#sweetdream:no_damage,distance=..2.0,sort=nearest,limit=1] zx.bt 1
 data modify storage zx:work ball merge value {t0:0,t1:0,t2:0,t3:0}
-execute if entity @e[tag=zx.bt,limit=1] store result storage zx:work ball.t0 int 1 run data get entity @e[tag=zx.bt,limit=1] UUID[0]
-execute if entity @e[tag=zx.bt,limit=1] store result storage zx:work ball.t1 int 1 run data get entity @e[tag=zx.bt,limit=1] UUID[1]
-execute if entity @e[tag=zx.bt,limit=1] store result storage zx:work ball.t2 int 1 run data get entity @e[tag=zx.bt,limit=1] UUID[2]
-execute if entity @e[tag=zx.bt,limit=1] store result storage zx:work ball.t3 int 1 run data get entity @e[tag=zx.bt,limit=1] UUID[3]
-tag @e[tag=zx.bt] remove zx.bt
+execute if entity @e[scores={zx.bt=1},limit=1] store result storage zx:work ball.t0 int 1 run data get entity @e[scores={zx.bt=1},limit=1] UUID[0]
+execute if entity @e[scores={zx.bt=1},limit=1] store result storage zx:work ball.t1 int 1 run data get entity @e[scores={zx.bt=1},limit=1] UUID[1]
+execute if entity @e[scores={zx.bt=1},limit=1] store result storage zx:work ball.t2 int 1 run data get entity @e[scores={zx.bt=1},limit=1] UUID[2]
+execute if entity @e[scores={zx.bt=1},limit=1] store result storage zx:work ball.t3 int 1 run data get entity @e[scores={zx.bt=1},limit=1] UUID[3]
+data modify storage zx:work ball.target_uuid set value "00000000-0000-0000-0000-000000000000"
+execute as @e[scores={zx.bt=1},limit=1] run function sweetdream:projectile/ball/cache_target_uuid
 
-# ⑤ 生成载体: 眼睛前方 1.5 格处, 先挂临时标签方便定位
-execute anchored eyes run summon minecraft:marker ^ ^ ^1.5 {Tags:["zx.ball","zx.ball_new"],data:{}}
+scoreboard players reset @e[scores={zx.bt=1}] zx.bt
+
+# ⑤ 生成载体: 眼睛前方 1.2 格处, 先挂临时标签方便定位
+# ★ 2026-10-21 由 1.5 收到 1.2(玩家: "法球偏移范围改小一点") ★
+#   1.5 格在贴脸打的时候会直接生成在怪/方块内部, 看起来像"球凭空出现在眼前"。
+#   收到 1.2 仍然在判定箱外(玩家眼睛到自身碰撞箱边缘约 0.3), 但出膛位置贴手,
+#   视觉上"从法杖口飞出去"更明显。撞墙情形由 tick 第 1 刻的不自判兜住。
+execute anchored eyes run summon minecraft:marker ^ ^ ^1.2 {Tags:["zx.ball","zx.ball_new"],data:{}}
 
 # ⑥ 把参数整体灌进载体, 顺便挂上射程分数, 最后摘掉临时标签
 data modify entity @e[tag=zx.ball_new,limit=1] data set from storage zx:work ball

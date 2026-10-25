@@ -1,0 +1,44 @@
+{
+	"credit": "Made with Animated Java (https://github.com/Animated-Java/animated-java) via Blockbench",
+	"textures": {
+		"6": "sweetdream_boss:blueprint/dream_knight/knight_tabard_clean",
+		"particle": "minecraft:item/pufferfish"
+	},
+	"display": {
+		"head": {
+			"rotation": [0, 180, 0]
+		}
+	},
+	"elements": [
+		{
+			"from": [4.875, -11.9, 7.72],
+			"to": [10.775, 8, 8],
+			"faces": {
+				"north": {
+					"uv": [0.03125, 0.03125, 0.6875, 2.21875],
+					"texture": "#6"
+				},
+				"east": {
+					"uv": [1.46875, 0.03125, 1.53125, 2.21875],
+					"texture": "#6"
+				},
+				"south": {
+					"uv": [0.75, 0.03125, 1.40625, 2.21875],
+					"texture": "#6"
+				},
+				"west": {
+					"uv": [1.59375, 0.03125, 1.65625, 2.21875],
+					"texture": "#6"
+				},
+				"up": {
+					"uv": [1.71875, 0.03125, 2.375, 0.09375],
+					"texture": "#6"
+				},
+				"down": {
+					"uv": [2.4375, 0.03125, 3.09375, 0.09375],
+					"texture": "#6"
+				}
+			}
+		}
+	]
+}

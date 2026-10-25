@@ -5,9 +5,9 @@
 # 【执行者/位置】施法者
 # 【技能原文】"对离自身最近的一个生物造成 最大魔力值 ×0.5 的伤害，之后对其 2 格内的
 #   生物造成 最大魔力值 ×0.1 的伤害。"
-# 【★ 2026-10-07 用户改口径: 两段之间隔 0.35 秒, 不再同刻打完 ★】
+# 【★ 2026-10-07 用户改口径: 两段之间隔 0.5 秒, 不再同刻打完 ★】
 #   同刻两段会被生物的受伤无敌帧吃掉一段(0.1 那一段基本白打)。所以:
-#     本文件 = **只打第 1 段**, 打完给玩家排 zx.as_d = 7(7 刻 = 0.35 秒);
+#     本文件 = **只打第 1 段**, 打完给玩家排 zx.as_d = 7(10 刻 = 0.5 秒);
 #     core/tick 到点驱动 tick_step -> dmg2 打第 2 段(以"那一只"为圆心)。
 #   ★ 锚点用标签 zx.as_t 钉在**那一只生物身上**(不是 marker): 段② 要"对其 2 格内",
 #     "其"就是这只生物 —— 它活着就还在原处 / 被击退后的新位置。它要是被第 1 段打死了,
@@ -16,7 +16,7 @@
 #   (苦痛 agony/cast、惑梦 delusion/skill 同款)。cast ③ 已经预检过 8 格内有没有生物。
 # 【归属】with_from 用施法者 UUID 四整数拼 by —— 第 2 段挂在别处执行也算施法者的。
 # 【数值改哪】倍率 0.5 = recalc; 0.1 = recalc2; 2 格 = dmg2 的选择器;
-#   间隔 = 本文件 ④ 的 `set @s zx.as_d 7` 与 core/tick 的 `zx.as_d=1..`(7 刻 = 0.35 秒)。
+#   间隔 = 本文件 ④ 的 `set @s zx.as_d 10` 与 core/tick 的 `zx.as_d=1..`(10 刻 = 0.5 秒)。
 # ============================================================
 
 # ⓪ 圈出"离自身最近的 1 个生物"
@@ -44,5 +44,5 @@ function sweetdream:internal/damage/with_from with storage zx:work a
 execute at @e[tag=zx.as_t,distance=0..,limit=1] run particle minecraft:dust{color:[0.2,0.5,1.0],scale:1.2} ~ ~1 ~ 0.6 0.6 0.6 0.05 24 normal
 execute at @e[tag=zx.as_t,distance=0..,limit=1] run particle minecraft:end_rod ~ ~1 ~ 0.4 0.4 0.4 0.1 16 normal
 
-# ④ 排第 2 段: 0.35 秒(7 刻)后以"那一只"为圆心打 2 格 —— 由 core/tick 驱动 tick_step
-scoreboard players set @s zx.as_d 7
+# ④ 排第 2 段: 0.5 秒(10 刻)后以"那一只"为圆心打 2 格 —— 由 core/tick 驱动 tick_step
+scoreboard players set @s zx.as_d 10

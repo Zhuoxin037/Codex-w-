@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
-    "sweetdream_boss:reconstruction/on_load"
+    "sweetdream_boss:reconstruction/on_load",
+    "sweetdream_boss:dream_knight/on_load",
+    "sweetdream_boss:husk/on_load"
   ]
 }

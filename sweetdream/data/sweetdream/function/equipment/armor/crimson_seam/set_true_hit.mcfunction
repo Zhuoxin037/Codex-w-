@@ -19,11 +19,15 @@
 execute unless data storage zx:work a.num unless data storage zx:work a.damage run return 0
 
 # ① 施法者还在线吗
-$execute unless entity @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run return 0
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute unless entity @a[tag=zx.ub,limit=1] run return 0
 
 # ② 施法者侧的判定与动作（穿齐 / 5 秒节流 / 有绯结 / 消耗 1 层 / 2 秒抗性Ⅰ）
 #    —— 走一个叶子件, 它把结果写进 #cr_ok
-$execute as @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run function sweetdream:equipment/armor/crimson_seam/amp_go
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute as @a[tag=zx.ub,limit=1] run function sweetdream:equipment/armor/crimson_seam/amp_go
 execute unless score #cr_ok zx.meta matches 1 run return 0
 
 # ③ 伤害 ×1.15（独立乘区 = 乘在三条通道求和之后；#115 已在 core/load 注册）
@@ -47,4 +51,6 @@ data modify storage zx:work a.damage set from storage zx:work a.num
 function sweetdream:lib/num/plain
 
 # ⑤ 表现（在**施法者**身上放）
-$execute at @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run particle minecraft:crit ~ ~1 ~ 0.4 0.5 0.4 0.05 12 normal
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute at @a[tag=zx.ub,limit=1] run particle minecraft:crit ~ ~1 ~ 0.4 0.5 0.4 0.05 12 normal

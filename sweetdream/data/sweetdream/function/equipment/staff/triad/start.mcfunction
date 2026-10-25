@@ -15,7 +15,7 @@ data modify storage manacore:in arg set value {uuid:"",id:"sweetdream:triad",typ
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/formation/create
 
-# ② 开强化: 15 秒(由 second 每秒 -1, 归零时切回冰斧)
+# ② 开强化: 15 秒(由 second 每秒 -1, 归零时结束强化; 形态保留)
 scoreboard players set @s zx.tri_strong 15
 
 tellraw @s [{"text":"「很冰的斧」: 术阵展开，武器被动强化 15 秒","color":"aqua"}]

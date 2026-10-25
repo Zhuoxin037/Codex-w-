@@ -8,5 +8,7 @@
 
 tag @s remove zx.br_g
 scoreboard players reset @s zx.br_gl
+#   (批 K9) 层数一并清 —— "消除其「折光」"是整份消掉, 不是减一层
+scoreboard players reset @s zx.br_gn
 particle minecraft:end_rod ~ ~1 ~ 0.3 0.3 0.3 0.15 10 normal
 playsound minecraft:block.amethyst_block.chime player @a ~ ~ ~ 0.5 1.8

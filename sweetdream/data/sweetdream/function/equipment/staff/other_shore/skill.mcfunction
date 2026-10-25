@@ -53,7 +53,7 @@ execute unless entity @e[tag=zx.os_sel,distance=0..] run return fail
 # ⑥ 扣魔力 -450
 data modify storage manacore:in arg set value {uuid:"",value:450.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 execute if data storage manacore:out r{success:0b} run return fail
 
 # ⑦ 记冷却 55 秒
@@ -89,5 +89,5 @@ tag @e[tag=zx.os_splash,distance=0..] remove zx.os_splash
 
 # ⑬ 表现: 彼岸的门开了一下
 execute rotated ~ 0 positioned ^ ^ ^2 run particle minecraft:portal ~ ~1 ~ 1.6 0.9 1.6 0.15 30 normal
-execute at @s run playsound minecraft:block.portal.trigger player @a ~ ~ ~ 0.7 1.3
-execute at @s run playsound minecraft:entity.enderman.portal player @a ~ ~ ~ 0.6 0.9
+execute at @s run playsound minecraft:block.conduit.activate player @a ~ ~ ~ 0.7 1.1
+execute at @s run playsound minecraft:entity.enderman.teleport player @a ~ ~ ~ 0.55 0.8

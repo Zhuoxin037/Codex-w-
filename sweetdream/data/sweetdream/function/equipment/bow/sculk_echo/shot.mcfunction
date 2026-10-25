@@ -39,7 +39,7 @@ execute if items entity @s weapon.mainhand *[custom_data~{zx:["sculk_echo"],ol:"
 # ② 扣魔力(固定 100)
 data modify storage manacore:in arg set value {uuid:"",value:100.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 
 # ③ 魔力不足 -> 这一发不生效(清旧数据, 提示)
 execute if data storage manacore:out r{success:0b} run data modify storage zx:work se.uuid set from storage zx:data self.uuid

@@ -27,6 +27,9 @@
   2. **数值 = "lore 涉及该数值就打"**（含属性加成，"魔力值上限 +100" → `max_mana`）。
   3. `debuff`（削弱）= **凡给敌方挂负面状态就算**（缓慢/虚弱/发光/反胃/燃烧/冰冻/时停/护甲减半/击退…）；
      原先与它重合的 `weaken`（减益）**已删**，统一用 `debuff`。
+     ★ 2026-10-19 复核补：`timestop` / `freeze` / `slow` **是 `debuff` 的子类**，但实物里 11 件时停只有 2 件
+       同时打了 `debuff` ⇒ 现状是"timestop 不自动带 debuff"。两种口径都自洽，**但必须全局一致**；
+       目前按"不自动带"沿用（改动等于 9 件同时加词，另案处理）。
   4. `field`（领域）**只认 lore 明写"领域"的**（凡出现就照打；先例 威霆 / 神裁 / 云迹）。
      ★ 领域 = **范围增益 / 减益**，这是包内**固定叫法**，实现上**要占 1 个术阵位**。
   5. `formation`（术阵）**凡 lore 出现"术阵"就照打**（用户的设计意图：限流高强度持续技）。
@@ -36,31 +39,45 @@
           划范围靠技能自己挂标签扫周围（先例 `wind_ontheground` 的 `zx.wg_cN` + `hit_pass`）。
   6. `summon`（召唤物）**只算独立实体**，lore 里用弯引号 `“”` 标出（入梦体/共鸣水晶/色彩/朽木/暗潮/暗海/旋风…）。
   7. `heal`（治疗）**只算"恢复/回复生命"**（回魔不算）——2026-10-15 批 14 起启用（续火等 10 件）。
+     ★ 2026-10-19 复核补：「自身获得「X」，持续 N 秒」+ X 自带效果 ⇒ 算 `buff`（先例 `liaoyuan` 燎原）；
+       `blind_candle` 烛火原先漏了，已补。但**没有"效果/持续"措辞、纯层数资源的**（如「静息」「毒浆」）不算。
   8. 装备**私有资源**（熔浆/燃灰/酒浆/冰凌/风声…）**不进标签**（它们是"资源"不是"分类"）。
   9. **类别词不进 `tags`**（走 `zx[1]`：`sword/axe/bow/staff/helmet/chestplate/leggings/boots/armor/tool`）。
  10. **超限形态 = 基础标签 + `overlimit`**（敲超限时由 `station/api/apply_go` 追加）。
  11. **套装效果两件都打**（lore 写在每件上就都打）。
  12. ★ `consume`（消耗）**只认消耗/清除/解除"某个状态或私有资源"**（消耗流火 / 清除渊海 / 消耗圣痕 / 解除冰冻 / 清除静息）。
      **"消耗 N 魔力(值)" 这类固定费用不算** `consume`（费用另有 `cur_mana` 口径，见 13）。先例：神裁/脑髓蛭的"消耗 50 魔力"都没 `consume`；天使核心的 `consume` 来自"消耗圣痕"。
+     ★ 2026-10-19 复核补：**清除/吸收"私有资源"或自攒层数同样算**（先例：`empty_pillow` 清除「静息」→ 有；
+       `backlight` 清除「回照」→ 有；`flame_brokenbody` 清除「熔浆」/ 吸收「夜火」→ **原先漏了，已补**）。
+       反例噪音：`wind_ontheground` 清除「风声」没有 `consume`，属历史不一致，未擅自改动。
  13. ★ `cur_mana`（当前魔力）**只认"魔力作为口径/资源"**：伤害按当前魔力算、条件判"当前魔力值 ≤ N%"、按"本次消耗的魔力"回算。
      **被动触发的固定费用（"消耗 30 魔力并附加…"）不算**（先例：天使核心/神裁/反弹 都无 `cur_mana`）。
  14. ★ `flat`（固定值）**只认正文里的"固定伤害/保底"**（如"12 点固定伤害"）。
      **普攻/技能的拼色行「伤害 N」不算**（先例：共鸣水晶/终末启示 的"伤害 7 / 伤害 20" 都无 `flat`）。
+     ★★ 2026-10-19 用户口径（设计方向，不是判定规则）：「**固定伤害不一定要写成一次性技能**，
+        那样太无趣」。**"一段状态期间，之后每次攻击都附带 N 点固定伤害"** 完全算 `flat`，
+        而且这是更鼓励的写法。实现上这类附伤**不吃任何乘区**（否则就不是"固定"了），
+        所以 `flat` 与 `base_atk`/`indep_mul` 天然不该同时出现在一件附伤型装备上。
  15. ★ "范围留痕"类（如雨迹的"水迹"、"重溟/凝壳/迟庭"的领域除外）**不打标签**——只有 lore 明写"领域"才 `field`（口径 4）。
+ 16. ★★ **`lightning` 不属于状态体系**（2026-10-19 首次纠正，2026-10-22 用户再定：**归「机制」组**）。
+     它虽然是"lore 提到就打"的效果词，但**闪电不能被"附加"、也没有"消耗闪电"这种设计**，
+     与五大状态（`liuhuo/yehuo/shixin/yuanhai/dream`）不同质 ⇒ 分组归「机制」，不再占状态组。
+     凡做"某状态应有 apply/consume"的推断，状态池只能用 `STATUS_KEYS`，**不能按 GROUP 筛**。
+ 17. ★ **`apply` 只服务"可施加的状态"**：五大状态 + 圣痕 / 电刺等私有层数。**冰冻 / 减速 / 时停走专词
+     （`freeze`/`slow`/`timestop`），不再打 `apply`**。⇒ 统计时 "附加 + 冰冻" 恒为 0 是**口径正确**，
+     不是设计缺失。（6 件冰冻 lore 全写"使其冰冻 N 秒"却无 `apply`，即为本条约定的实物体现。）
 """
 
 # ---------------------------------------------------------------- 词汇表（28 词）
 #   cat: 分组（词表用） · label: 中文名 · desc: 语义说明
 VOCAB = [
-    # ---- 状态（6）「涉及就打」----
+    # ---- 状态（5）「涉及就打」----
     ("liuhuo", "状态", "流火", "lore 涉及「流火」状态"),
     ("yehuo", "状态", "夜火", "lore 涉及「夜火」状态"),
     ("shixin", "状态", "噬心", "lore 涉及「噬心」状态"),
     ("yuanhai", "状态", "渊海", "lore 涉及「渊海」状态"),
     ("dream", "状态", "白昼梦", "lore 涉及「白昼梦」状态"),
-    # ★ 2026-10-13 用户加: 闪电不是五大状态之一, 但同为"涉及就打"的效果词, 归状态组。
-    #   口径照第 1 条: lore 出现「闪电 / 落雷 / 雷击 / 电」就打(电弧的「电刺 / 电线」同族)。
-    ("lightning", "状态", "闪电", "lore 涉及「闪电 / 落雷 / 雷击 / 电」（负离子 / 超•负•荷 / 威霆 / 电弧 / 雷鸣）"),
+    # ★ 2026-10-22 用户定: 闪电**不是状态**, 归「机制」组（见下方 机制 段末条）。
 
     # ---- 数值口径（6）「lore 提到该数值就打」----
     ("max_hp", "数值", "最大生命值", "涉及「最大生命值 / 生命值上限」（含属性加成）"),
@@ -70,7 +87,7 @@ VOCAB = [
     ("true_dmg", "数值", "真实伤害", "伤害记为真实伤害"),
     ("flat", "数值", "固定值", "保底 / 固定值伤害"),
 
-    # ---- 作用 / 机制（15）----
+    # ---- 作用 / 机制（16）----
     ("debuff", "机制", "削弱", "给敌方挂负面状态（缓慢/虚弱/发光/反胃/燃烧/冰冻/时停/护甲减半/击退…）"),
     ("heal", "机制", "治疗", "治疗 / 回血（★ 2026-10-15 批 14 起有装备使用：续火/归息/失血/彼岸/绯缝/剜霜/踏灰/沸痕/殓丝/杂纹）"),
     ("consume", "机制", "消耗", "消耗 / 清除某个状态（消耗流火 / 清除渊海 / 移除噬心…）"),
@@ -86,12 +103,21 @@ VOCAB = [
     ("timestop", "机制", "时停", "时停 / 定身"),
     ("freeze", "机制", "冰冻", "冰冻"),
     ("slow", "机制", "减速", "lore 里的「缓慢」"),
+    # ★ 2026-10-22 用户定: 闪电是**机制**不是状态。同为"涉及就打"的效果词, 但不进状态池。
+    #   口径: lore 出现「闪电 / 落雷 / 雷击 / 电」就打(电弧的「电刺 / 电线」同族)。
+    ("lightning", "机制", "闪电", "lore 涉及「闪电 / 落雷 / 雷击 / 电」（负离子 / 超•负•荷 / 威霆 / 电弧 / 引雷针 / 雷鸣 / 雷楔）"),
 
     # ---- 超限标记（1）----
     ("overlimit", "超限", "超限", "超限形态（= 基础标签 + 本词；敲超限时追加）"),
 ]
 
 VOCAB_KEYS = [v[0] for v in VOCAB]
+
+# ---------------------------------------------------------------- 词性（★ 统计期望时必须用这组）
+#   GROUP 字段（"状态"/"数值"/"机制"）是**查询分组**，不是词性：`lightning` 按用户口径
+#   归「机制」（2026-10-22），它**不是状态**。任何"某状态应该能附加/消耗"的推断都只能用 STATUS_KEYS。
+STATUS_KEYS = ['liuhuo', 'yehuo', 'shixin', 'yuanhai', 'dream']   # 五大状态，可积累可消费
+EFFECT_KEYS = ['lightning']                                        # 效果词：触发即生效，不积累不消费
 
 # ---------------------------------------------------------------- 逐件标签表
 #   顺序 = [状态] [数值] [机制]；类别不进此表（走 zx[1]）。
@@ -100,7 +126,7 @@ TAGS = {
     "aurora_dream":      ["dream", "timestop"],
     "deepsea_echo":      ["yuanhai", "cur_mana", "apply", "buff"],
     "everfrost":         ["cur_mana", "freeze", "debuff"],
-    "flame_brokenbody":  ["yehuo", "max_mana", "cd_down"],
+    "flame_brokenbody":  ["yehuo", "max_mana", "consume", "cd_down"],
     "hengdao":           ["max_mana", "dash"],
     "hush":              ["max_mana", "dash"],
     "liaoyuan":          ["liuhuo", "max_mana", "apply", "buff"],
@@ -118,6 +144,14 @@ TAGS = {
     "tidemark":          ["yuanhai", "max_mana", "apply"],
     "grayscale":         ["liuhuo", "cur_mana", "debuff", "apply"],
     "crescent":          ["base_atk", "max_mana", "cd_down"],
+    # ---- 批一 · 阶段补全(2026-10-20) ----
+    "yebu":              ["slow", "debuff"],
+    "gousi":             ["attract", "slow", "debuff", "indep_mul"],
+    "chengxing":         ["flat", "base_atk"],
+    # ---- 批二 · 标签补缺(2026-10-20) ----
+    "profane":           ["shixin", "base_atk", "consume", "indep_mul", "cd_down"],
+    "way_back":          ["summon", "dash", "heal"],
+    "empty_seat":        ["flat", "formation", "debuff"],
 
     # ================= 斧 axe（15）=================
     "agony":             ["max_hp", "base_atk", "formation"],
@@ -140,6 +174,12 @@ TAGS = {
                           "true_dmg", "timestop", "formation", "summon"],
     "anchor":            ["max_mana", "base_atk", "dash"],
     "scorch_bone":       ["liuhuo", "yehuo", "base_atk", "max_mana", "apply", "consume"],
+    # ---- 批一 · 阶段补全(2026-10-20) ----
+    "xiugou":            ["summon", "base_atk"],
+    # ---- 批二 · 标签补缺(2026-10-20) ----
+    "bind_ember":        ["liuhuo", "apply", "slow", "debuff", "cd_down"],
+    "grave_tablet":      ["true_dmg", "base_atk", "cd_down"],
+    "sunken_weight":     ["flat", "slow", "debuff"],
 
     # ================= 弩 bow（6）=================
     "arc":               ["lightning", "cur_mana", "base_atk"],
@@ -154,6 +194,11 @@ TAGS = {
     "burst_dawn":        ["max_mana", "base_atk", "formation", "summon", "slow", "debuff"],
     # ---- 批 13 · 过渡/终端补缺(2026-10-13) ----
     "backstring":        ["dash", "buff", "flat"],
+    # ---- 批一 · 阶段补全(2026-10-20) ----
+    "lianshi":           ["cur_mana", "base_atk"],
+    "tiejili":           ["slow", "debuff", "field"],
+    # ---- 批二 · 标签补缺(2026-10-20) ----
+    "night_bind":        ["yehuo", "slow", "debuff"],
 
     # ================= 法杖 staff（12）=================
     "apocalypse":        ["max_mana", "cur_mana", "formation", "debuff"],
@@ -173,6 +218,11 @@ TAGS = {
     "five_curses":       ["cur_mana", "true_dmg", "slow", "debuff"],
     # ---- 批 13 · 过渡/终端补缺(2026-10-13) ----
     "thunderrod":        ["lightning", "debuff"],
+    # ---- 批二 · 标签补缺(2026-10-20) ----
+    "burst_bank":        ["cur_mana", "dash", "debuff"],
+    "cage_day":          ["dream", "apply", "base_atk", "debuff", "max_mana"],
+    "stop_needle":       ["timestop", "cd_down", "max_mana"],
+    "pour_sack":         ["cur_mana", "flat"],
 
     # ================= 盔甲 armor（25）=================
     "blaze_armor":       ["liuhuo", "max_mana", "buff", "debuff", "apply"],
@@ -200,6 +250,13 @@ TAGS = {
     "stellar_elegy":     ["liuhuo", "yehuo", "yuanhai", "dream", "shixin", "max_mana", "cur_mana", "buff"],
     "styx_walk":         ["shixin", "max_mana", "summon", "apply", "slow", "debuff", "indep_mul"],
     "withered_garden":   ["yuanhai", "max_mana", "summon", "apply", "slow", "debuff", "buff"],
+    # ---- 批一 · 阶段补全(2026-10-20) ----
+    "zhuzu":             ["field", "flat", "debuff"],
+    "lvshuang":          ["slow", "debuff", "buff"],
+    "dongtu":            ["heal", "buff", "max_hp"],
+    "huilan":            ["heal", "max_hp"],
+    # ---- 批二 · 标签补缺(2026-10-20) ----
+    "breathing_soil":    ["heal", "formation", "field", "max_hp"],
 
     # ================= 副手 tool（8）=================
     "bitter_cold":       ["yuanhai", "slow", "debuff", "apply"],
@@ -213,13 +270,16 @@ TAGS = {
     # ---- 批 13 · 过渡/终端补缺(2026-10-13) ----
     "frostmirror":       ["freeze", "cd_down", "debuff"],
     "everlit":           ["summon", "true_dmg", "cur_mana"],
+    # ---- 批二 · 标签补缺(2026-10-20) ----
+    "sip_frost":         ["heal", "slow", "debuff"],
+    "retro_shine":       ["true_dmg"],
 
     # ================= 批 14 · NEW.md 42 件（2026-10-15）=================
     # ★ 五套双件套(燧行/潮线/缝心/浅梦/残烛)的 10 件：套装段写在两件上 ⇒ 口径 11
     #   "套装效果两件都打"，所以两件的标签都含套装段的词。
     # ---- 剑 sword（4）----
     "backflow_tide":     ["yuanhai", "max_mana", "debuff", "consume", "dash"],
-    "blind_candle":      ["yehuo", "max_mana", "consume"],
+    "blind_candle":      ["yehuo", "max_mana", "consume", "buff"],
     "blood_loss":        ["shixin", "max_hp", "true_dmg", "heal", "consume"],
     "thunder_wedge":     ["lightning", "base_atk", "summon", "formation"],
     # ---- 斧 axe（4）----
@@ -270,6 +330,27 @@ TAGS = {
     "mottle_vein":       ["liuhuo", "yehuo", "shixin", "yuanhai", "dream", "max_hp",
                           "max_mana", "debuff", "heal", "buff", "consume", "indep_mul",
                           "timestop", "dash"],
+
+    # ================= 批 15 · 白昼梦系列 9 件（2026-10-25）=================
+    # ★ 只出 give，机制未实装。★ 私有资源（碎刀/烛火/泵动/水墙/海浪/光效/回光）
+    #   一律**不进词表**（口径 8：私有资源是"资源"不是"分类"）。
+    # ★ 套装段写在两件上 ⇒ 两件的标签都含套装段的词（口径 11）。
+    # ---- 弩 bow（1）----
+    "bone_breaker":      ["summon", "base_atk", "cur_mana"],
+    # ---- 盔甲 armor（8 · 全传说）----
+    "bright_candle":     ["liuhuo", "yehuo", "max_mana", "cur_mana", "summon", "apply",
+                          "consume", "buff"],
+    "borrow_fire":       ["liuhuo", "max_mana", "true_dmg", "debuff", "apply"],
+    "heart_vein":        ["shixin", "max_mana", "slow", "debuff", "apply", "heal"],
+    "profile":           ["shixin", "max_mana", "max_hp", "cur_mana", "indep_mul", "apply",
+                          "heal"],
+    "tide_fold":         ["yuanhai", "max_mana", "cur_mana", "summon", "apply", "slow",
+                          "debuff", "buff", "flat"],
+    "ebb_tide":          ["yuanhai", "max_mana", "summon", "slow", "debuff", "buff",
+                          "indep_mul"],
+    "glimmer":           ["dream", "max_mana", "cur_mana", "indep_mul", "heal", "buff",
+                          "debuff"],
+    "late_dusk":         ["dream", "max_mana", "buff"],
 }
 
 

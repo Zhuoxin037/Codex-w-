@@ -26,10 +26,10 @@ execute unless items entity @s armor.chest *[minecraft:custom_data~{zx:["blaze_a
 
 # ② 已记仇的: AngryAt 精确等于我 -> 连根拔掉
 data modify storage zx:work ba set value {u0:0,u1:0,u2:0,u3:0}
-execute store result storage zx:work ba.u0 int 1 run data get entity @s UUID[0]
-execute store result storage zx:work ba.u1 int 1 run data get entity @s UUID[1]
-execute store result storage zx:work ba.u2 int 1 run data get entity @s UUID[2]
-execute store result storage zx:work ba.u3 int 1 run data get entity @s UUID[3]
+execute store result storage zx:work ba.u0 int 1 run scoreboard players get @s manacore.u0
+execute store result storage zx:work ba.u1 int 1 run scoreboard players get @s manacore.u1
+execute store result storage zx:work ba.u2 int 1 run scoreboard players get @s manacore.u2
+execute store result storage zx:work ba.u3 int 1 run scoreboard players get @s manacore.u3
 function sweetdream:equipment/armor/blaze_armor/pig_calm with storage zx:work ba
 
 # ③ "附近有不穿金甲的玩家"这条挑人通道: 16 格内的猪灵一律清掉

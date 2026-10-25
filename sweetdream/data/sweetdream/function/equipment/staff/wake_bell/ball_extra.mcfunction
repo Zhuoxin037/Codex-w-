@@ -25,4 +25,4 @@ execute at @s run function sweetdream:api/damage
 
 # ③ 表现: 梦被敲了一下
 execute at @e[tag=zx.ball_hit,distance=0..,tag=zx.status.dream,limit=1] run particle minecraft:witch ~ ~1 ~ 0.4 0.5 0.4 0.02 12 normal
-execute at @e[tag=zx.ball_hit,distance=0..,tag=zx.status.dream,limit=1] run playsound minecraft:block.bell.resonate player @a ~ ~ ~ 0.6 1.5
+execute at @e[tag=zx.ball_hit,distance=0..,tag=zx.status.dream,limit=1] run playsound minecraft:block.amethyst_block.resonate player @a ~ ~ ~ 0.4 1.4

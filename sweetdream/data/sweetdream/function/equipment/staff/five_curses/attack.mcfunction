@@ -26,8 +26,14 @@ execute unless data storage zx:data self{ok:1b} run return fail
 # ①.2 拍下超限乘区
 function sweetdream:overlimit/api/snap
 
-# ② 只读检查: 魔力 100(普攻不进冷却)
+# ①.5 超限判定(批 K9): 主/副手任一件是超限·五世恶咒 ⇒ 普攻 100→**150**
+scoreboard players set #fcv_ol zx.meta 0
+execute if items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["five_curses"],ol:"five_curses"}] run scoreboard players set #fcv_ol zx.meta 1
+execute if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["five_curses"],ol:"five_curses"}] run scoreboard players set #fcv_ol zx.meta 1
+
+# ② 只读检查: 魔力 100(超限 150; 普攻不进冷却)
 data modify storage manacore:in arg set value {uuid:"",skill:"sweetdream:fcv_attack",mana:100.0}
+execute if score #fcv_ol zx.meta matches 1 run data modify storage manacore:in arg.mana set value 150.0
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 data modify storage zx:work olv.mana set from storage manacore:in arg.mana
 function sweetdream:overlimit/api/mod
@@ -37,11 +43,11 @@ execute store result score #fcv_need zx.meta run data get storage zx:work olv.ma
 execute if data storage manacore:out r{reason:"mana"} run tellraw @s [{"text":"魔力不足(需要 ","color":"red"},{"score":{"name":"#fcv_need","objective":"zx.meta"},"color":"red"},{"text":")","color":"red"}]
 execute unless data storage manacore:out r{success:1b} run return fail
 
-# ③ 扣魔力 100(超限后的值)
+# ③ 扣魔力 100(超限 150) —— 用 olv.mana(mod 已算过的值), 与上面的检查同源
 data modify storage manacore:in arg set value {uuid:"",value:100.0}
 data modify storage manacore:in arg.value set from storage zx:work olv.mana
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 execute if data storage manacore:out r{success:0b} run tellraw @s [{"text":"魔力不足(需要 ","color":"red"},{"score":{"name":"#fcv_need","objective":"zx.meta"},"color":"red"},{"text":")","color":"red"}]
 execute if data storage manacore:out r{success:0b} run return fail
 
@@ -60,7 +66,10 @@ function sweetdream:overlimit/api/mod
 function manacore:api/damage/calc
 
 # ⑤ 装球出膛: 伤害交给法球, 命中回调只叠世咒
-data modify storage zx:work ball set value {dmg:0.0,style:"five_curses",hit:"sweetdream:equipment/staff/five_curses/ball_hit"}
+#   ★ 把"这一发是不是超限版"塞进球的 data(ol), 让 ball_hit 那一侧也能分档 ——
+#     命中回调是**以法球为执行者**跑的, 那时拿不到玩家, 读不了 SelectedItem。
+data modify storage zx:work ball set value {dmg:0.0,style:"five_curses",hit:"sweetdream:equipment/staff/five_curses/ball_hit",ol:0b}
+execute if score #fcv_ol zx.meta matches 1 run data modify storage zx:work ball.ol set value 1b
 data modify storage zx:work ball.dmg set from storage manacore:out r.damage
 function sweetdream:equipment/staff/attack
 

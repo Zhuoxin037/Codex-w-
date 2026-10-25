@@ -30,10 +30,19 @@
 #   所以让它按**标签**取目标(不与坐标相关), 就不会被误判/真判错。
 # ============================================================
 
-# ⓪ 节流倒计时: 每刻 -1(@s = 水晶; 计分项不存在 = "可以触发")
-#   ★ 用倒计时(而不是记"上次触发的时刻"): 本项目的连续性一律走差值/倒计时,
+# 【★★ 2026-10-20 第二次卡顿修复: 本文件的两个"本刻戳"全部改成计分项 ★★】
+#   改动: zx.ch_act(本刻有触发) / zx.ch_p(本刻结算目标) —— 从**实体 tag** 改成**计分项**。
+#   为什么: 偏振光/终末天启的光束**持续照着**水晶 ⇒ 每 0.5 秒(zx.ch_cd 节流)走一次
+#   完整结算 ⇒ 对水晶 3/5 格内的**每一个生物**先 add 再 remove 同一个 tag。
+#   一次 addTag/removeTag 命中就 setChanged() ⇒ 该实体所在 chunk 标脏 ⇒ 下一次存盘
+#   整份重写(与 2026-10-20 法球、偏振光本体那两次同一机理)。
+#   偏振光持续 5 秒 = 10 轮, 玩家感受就是"打一下卡一下"。
+#   计分项只写内存, 且 zx.ch_p 用完即清(zx.ch_act=0 的那刻不清, 见 ⑥)。
+#   ★ 语义 1:1: 原来 `if entity @s[tag=zx.ch_act]` → 现在 `if score @s zx.ch_act matches 1`。
+# ⓪ 节流倒计时**已挪到 pass_check**（2026-10-20）—— 它必须每刻都减，
+#   而本函数现在只在"可能有事件"的刻才会被调用，放在这里会漏减。
+#   ★ 原来是倒计时(而不是记"上次触发的时刻"): 本项目的连续性一律走差值/倒计时,
 #     免得踩"每秒清 + 同秒判"那类必然失效的写法(见 RULES 58)。
-execute if score @s zx.ch_cd matches 1.. run scoreboard players remove @s zx.ch_cd 1
 
 # ① 本刻判定: **节流已过** 且 (附近有自己人的法球 || 正被自己人的光束照着)
 #   → 给**水晶**挂一个"本刻戳" zx.ch_act(每刻开头先摘, 所以它只代表"这一
@@ -42,40 +51,44 @@ execute if score @s zx.ch_cd matches 1.. run scoreboard players remove @s zx.ch_
 #      (2026-10-09 修: 修好高度差之后, 单次触发会在水晶余下的 8 秒里**每刻重复
 #      结算** —— ch_p 打完伤害不摘, 于是 `if entity @e[tag=zx.ch_p]` 每刻都成立,
 #      现象 = 射一发球, 水晶像疯了似的连炸上百下。门控必须用"本刻戳"。)
-tag @s remove zx.ch_act
+scoreboard players set @s zx.ch_act 0
 
 #   来源 a: 自己人的法球 —— 基准抬到法球飞行高度(~1.6), 见头注释的"位置口径"
-$execute unless score @s zx.ch_cd matches 1.. positioned ~ ~1.6 ~ if entity @e[tag=zx.ball,distance=..1.5,nbt={data:{u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}},tag=!zx.ch_pass] run tag @s add zx.ch_act
+$execute unless score @s zx.ch_cd matches 1.. positioned ~ ~1.6 ~ if entity @e[tag=zx.ball,distance=..1.5,nbt={data:{u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}},tag=!zx.ch_pass] run scoreboard players set @s zx.ch_act 1
 
 #   来源 b: 自己人的**持续光束**(终末天启光柱 / 偏振光光线) —— 它们在各自的每刻
 #     表现里给"照到的水晶"打 zx.ch_beam 戳(final_revelation/beam_go ⑤ 与
 #     polarized_light/beam_step ②)。这里读戳, 读完立刻清(它和本刻戳一样是一次性的)。
-execute if entity @s[tag=zx.ch_beam] unless score @s zx.ch_cd matches 1.. run tag @s add zx.ch_act
-tag @s remove zx.ch_beam
+execute if score @s zx.ch_beam matches 1 unless score @s zx.ch_cd matches 1.. run scoreboard players set @s zx.ch_act 1
+scoreboard players set @s zx.ch_beam 0
 
 # ①' 本刻真的触发了 -> 压满节流: 接下来 10 tick(0.5 秒)内不再触发
-execute if entity @s[tag=zx.ch_act] run scoreboard players set @s zx.ch_cd 10
+execute if score @s zx.ch_act matches 1 run scoreboard players set @s zx.ch_cd 10
 
 # ② 本刻真有触发(球或光束) -> 重圈"水晶 N 格内全部生物"(原版 3 / 超限 5; ★ 基准 = 水晶本身, 不抬 —— 人和怪都在地上)
-execute if entity @s[tag=zx.ch_act] run tag @e[tag=zx.ch_p] remove zx.ch_p
-execute if entity @s[tag=zx.ch_act] run tag @e[type=!#sweetdream:no_damage,distance=..3] add zx.ch_p
-execute if entity @s[tag=zx.ch_act] if data entity @s data.zx.ch{ol:1} run tag @e[type=!#sweetdream:no_damage,distance=..5] add zx.ch_p
+execute if score @s zx.ch_act matches 1 run scoreboard players set @e[scores={zx.ch_p=1}] zx.ch_p 0
+execute if score @s zx.ch_act matches 1 run scoreboard players set @e[type=!#sweetdream:no_damage,distance=..3] zx.ch_p 1
+execute if score @s zx.ch_act matches 1 if data entity @s data.zx.ch{ol:1} run scoreboard players set @e[type=!#sweetdream:no_damage,distance=..5] zx.ch_p 1
 
 # ②' 超限另加"释放者 3 格内的全部生物" —— 先反查释放者, 再以他为圆心圈一次
-$execute if entity @s[tag=zx.ch_act] if data entity @s data.zx.ch{ol:1} as @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] at @s run tag @e[type=!#sweetdream:no_damage,distance=..3] add zx.ch_p
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute if score @s zx.ch_act matches 1 if data entity @s data.zx.ch{ol:1} as @a[tag=zx.ub,limit=1] at @s run scoreboard players set @e[type=!#sweetdream:no_damage,distance=..3] zx.ch_p 1
 
 # ③ 给那颗球打"已触发"戳(每颗球对每颗水晶只触发一次; 同样用抬高的基准找它)
 $execute positioned ~ ~1.6 ~ as @e[tag=zx.ball,distance=..1.5,nbt={data:{u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}},tag=!zx.ch_pass] run tag @s add zx.ch_pass
 
 # ④ 反查释放者, 交给他结算(执行者=玩家 -> 归属正确)
 #   ★ 门控 = "本刻戳" —— 只有"正好这一下"才结算, 不是"标签还挂着"就一直结算。
-$execute if entity @s[tag=zx.ch_act] as @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] if entity @e[tag=zx.ch_p,limit=1] run function sweetdream:equipment/staff/chime/pass_go with storage zx:work chp
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute if score @s zx.ch_act matches 1 as @a[tag=zx.ub,limit=1] if entity @e[scores={zx.ch_p=1},limit=1] run function sweetdream:equipment/staff/chime/pass_go with storage zx:work chp
 
 # ⑤ 表现(水晶被法术激发的环; 执行者/坐标仍是水晶; 同样只在"本刻触发"时播一次)
-execute if entity @s[tag=zx.ch_act] run particle minecraft:enchant ~ ~0.6 ~ 0.6 0.6 0.6 0.4 24 normal
-execute if entity @s[tag=zx.ch_act] run particle minecraft:end_rod ~ ~0.6 ~ 0.8 0.8 0.8 0.02 16 normal
-execute if entity @s[tag=zx.ch_act] run playsound minecraft:block.amethyst_block.resonate player @a ~ ~ ~ 0.7 1.5
+execute if score @s zx.ch_act matches 1 run particle minecraft:enchant ~ ~0.6 ~ 0.6 0.6 0.6 0.4 24 normal
+execute if score @s zx.ch_act matches 1 run particle minecraft:end_rod ~ ~0.6 ~ 0.8 0.8 0.8 0.02 16 normal
+execute if score @s zx.ch_act matches 1 run playsound minecraft:block.amethyst_block.resonate player @a ~ ~ ~ 0.7 1.5
 
 # ⑥ 收尾: 摘掉本轮的目标标签 —— 让 ch_p 的生命周期只有"本刻"(圈 -> 用 -> 摘),
 #   下一次触发从空开始; 也不会在水晶消失后把标签留在生物身上。
-execute if entity @s[tag=zx.ch_act] run tag @e[tag=zx.ch_p] remove zx.ch_p
+execute if score @s zx.ch_act matches 1 run scoreboard players set @e[scores={zx.ch_p=1}] zx.ch_p 0

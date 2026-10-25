@@ -5,7 +5,7 @@ function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return 0
 data modify storage manacore:in arg set value {uuid:"",value:80.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay_pas
 execute unless data storage manacore:out r{success:1b} run return 0
 
 # 三个 0.25 格小步：每步重算朝向、检查脚部和头部。

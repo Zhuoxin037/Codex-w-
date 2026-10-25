@@ -42,7 +42,7 @@ execute store result score #py_x zx.meta run data get storage manacore:out r.val
 data modify storage manacore:in arg set value {uuid:"",value:0.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 execute store result storage manacore:in arg.value double 1 run scoreboard players get #py_x zx.meta
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 
 # ④ 起冷却 240 秒
 data modify storage manacore:in arg set value {uuid:"",skill:"sweetdream:pyre",cooldown_seconds:240.0,reduce:1b}

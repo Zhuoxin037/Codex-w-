@@ -15,6 +15,11 @@ execute as @a[tag=zx.av_cast] at @s run function sweetdream:equipment/axe/anchor
 scoreboard players set @a zx.an_pull 0
 data remove storage zx:anchor players
 data modify storage zx:anchor floor set value [880,736,649,649,649,681,758,784,704,551,388,315,354,377,382,386,388,389,390,390,390,390]
+# ★ 沉锚"锁定"标签兜底清洗(2026-10-23): 三维度各清一遍, 免得上一局残留的
+#   zx.an_lock 挂在怪身上(/reload / 进世界都会走这里)。
+execute in minecraft:overworld run tag @e[tag=zx.an_lock,distance=0..] remove zx.an_lock
+execute in minecraft:the_nether run tag @e[tag=zx.an_lock,distance=0..] remove zx.an_lock
+execute in minecraft:the_end run tag @e[tag=zx.an_lock,distance=0..] remove zx.an_lock
 execute in minecraft:overworld run kill @e[type=minecraft:item_display,tag=zx.av_anchor,distance=0..]
 execute in minecraft:the_nether run kill @e[type=minecraft:item_display,tag=zx.av_anchor,distance=0..]
 execute in minecraft:the_end run kill @e[type=minecraft:item_display,tag=zx.av_anchor,distance=0..]

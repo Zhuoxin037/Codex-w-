@@ -14,6 +14,8 @@
     "sweetdream:equipment/staff/five_curses/visual/load",
     "animated_java:global/on_load",
     "sweetdream:boss/fireaxe/load",
-    "sweetdream:equipment/staff/triad/visual/load"
+    "sweetdream:equipment/staff/triad/visual/load",
+    "sweetdream:boss/knight/load",
+    "sweetdream:boss/husk/load"
   ]
 }

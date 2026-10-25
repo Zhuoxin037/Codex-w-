@@ -1,0 +1,21 @@
+{
+  "criteria": {
+    "shot": {
+      "trigger": "shot_crossbow",
+      "conditions": {
+        "item": {
+          "predicates": {
+            "minecraft:custom_data": {
+              "zx": [
+                "lianshi"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "rewards": {
+    "function": "sweetdream:equipment/bow/lianshi/shot"
+  }
+}

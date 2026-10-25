@@ -49,7 +49,7 @@ execute unless data storage manacore:out r{success:1b} run return fail
 data modify storage manacore:in arg set value {uuid:"",value:350.0}
 data modify storage manacore:in arg.value set from storage zx:work olv.mana
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 execute if data storage manacore:out r{success:0b} run tellraw @s [{"text":"魔力不足(需要 ","color":"red"},{"score":{"name":"#tw_need","objective":"zx.meta"},"color":"red"},{"text":")","color":"red"}]
 execute if data storage manacore:out r{success:0b} run return fail
 
@@ -69,4 +69,4 @@ execute as @e[tag=zx.tw_tgt,distance=0..] run function sweetdream:equipment/staf
 
 # ⑧ 表现
 execute at @s run particle minecraft:witch ~ ~1 ~ 2.0 0.6 2.0 0.1 30 normal
-execute at @s run playsound minecraft:entity.wither.shoot player @a ~ ~ ~ 0.7 1.3
+execute at @s run playsound minecraft:entity.breeze.wind_burst player @a ~ ~ ~ 0.7 1.3

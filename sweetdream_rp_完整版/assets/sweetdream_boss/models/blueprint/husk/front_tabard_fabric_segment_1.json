@@ -1,0 +1,49 @@
+{
+	"credit": "Made with Animated Java (https://github.com/Animated-Java/animated-java) via Blockbench",
+	"textures": {
+		"0": "sweetdream_boss:blueprint/husk/c_optimized_0_512",
+		"particle": "minecraft:item/pufferfish"
+	},
+	"display": {
+		"head": {
+			"rotation": [0, 180, 0]
+		}
+	},
+	"elements": [
+		{
+			"from": [4.94335, 3.03771, 7.94511],
+			"to": [11.15612, 8.09912, 8.22839],
+			"rotation": {
+				"angle": 0,
+				"axis": "y",
+				"origin": [8.04974, 5.56842, 8.08675]
+			},
+			"faces": {
+				"north": {
+					"uv": [1.125, 7.90625, 2.125, 8.71875],
+					"texture": "#0"
+				},
+				"east": {
+					"uv": [4.8125, 1.71875, 4.875, 2.53125],
+					"texture": "#0"
+				},
+				"south": {
+					"uv": [0.03125, 8.15625, 1.03125, 8.96875],
+					"texture": "#0"
+				},
+				"west": {
+					"uv": [4.9375, 1.71875, 5, 2.53125],
+					"texture": "#0"
+				},
+				"up": {
+					"uv": [2.1875, 7.90625, 3.1875, 7.96875],
+					"texture": "#0"
+				},
+				"down": {
+					"uv": [2.1875, 8.03125, 3.1875, 8.09375],
+					"texture": "#0"
+				}
+			}
+		}
+	]
+}

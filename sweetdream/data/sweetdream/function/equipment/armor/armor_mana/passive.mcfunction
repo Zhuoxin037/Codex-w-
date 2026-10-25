@@ -92,6 +92,24 @@ execute if items entity @s armor.feet *[minecraft:custom_data~{zx:["rain_trace"]
 execute if items entity @s armor.head *[minecraft:custom_data~{zx:["backlight"]}] run scoreboard players add #want zx.meta 160
 execute if items entity @s armor.legs *[minecraft:custom_data~{zx:["gyre"]}] run scoreboard players add #want zx.meta 140
 
+# ---- 批 14(2026-10-25)· 白昼梦系列 ----
+#   明烛(头盔) +180 / 借火(胸) +200 / 心脉(胸) +200 / 剖面(腿) +180
+#   折潮(头盔) +180 / 返汐(靴) +180 / 浮光(头盔) +180 / 迟暮(腿) +200
+#   ★ 数字逐字取自用户 2026-10-25 的文案(本系列整体高于终端稿 +160/+170, 待用户裁定)。
+execute if items entity @s armor.head *[minecraft:custom_data~{zx:["bright_candle"]}] run scoreboard players add #want zx.meta 180
+execute if items entity @s armor.chest *[minecraft:custom_data~{zx:["borrow_fire"]}] run scoreboard players add #want zx.meta 200
+execute if items entity @s armor.chest *[minecraft:custom_data~{zx:["heart_vein"]}] run scoreboard players add #want zx.meta 200
+execute if items entity @s armor.legs *[minecraft:custom_data~{zx:["profile"]}] run scoreboard players add #want zx.meta 180
+execute if items entity @s armor.head *[minecraft:custom_data~{zx:["tide_fold"]}] run scoreboard players add #want zx.meta 180
+execute if items entity @s armor.feet *[minecraft:custom_data~{zx:["ebb_tide"]}] run scoreboard players add #want zx.meta 180
+execute if items entity @s armor.head *[minecraft:custom_data~{zx:["glimmer"]}] run scoreboard players add #want zx.meta 180
+execute if items entity @s armor.legs *[minecraft:custom_data~{zx:["late_dusk"]}] run scoreboard players add #want zx.meta 200
+# ---- 套装「暮光」（浮光·头盔 + 迟暮·护腿）----
+#   文案(用户 2026-10-25 16:53 原稿, 逐字): "自身最大魔力值 +50。"
+#   ★ 上一版按我自己的设计稿写过 +40 —— 已作废, 以用户原稿的 **+50** 为准。
+#   ★ 两件必须**同时**穿着: 用两条 if 串起来（写成 `if ... if ...` 就是 AND）。
+execute if items entity @s armor.head *[minecraft:custom_data~{zx:["glimmer"]}] if items entity @s armor.legs *[minecraft:custom_data~{zx:["late_dusk"]}] run scoreboard players add #want zx.meta 50
+
 # ---- ④ 差值 = 该有的 - 账本已加的; 不为 0 就补/退 ----
 scoreboard players operation #diff zx.meta = #want zx.meta
 scoreboard players operation #diff zx.meta -= @s zx.am_mana

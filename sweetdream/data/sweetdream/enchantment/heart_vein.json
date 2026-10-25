@@ -1,0 +1,40 @@
+{
+  "anvil_cost": 0,
+  "description": {
+    "text": "心脉"
+  },
+  "supported_items": "minecraft:netherite_chestplate",
+  "weight": 1,
+  "max_level": 1,
+  "min_cost": {
+    "base": 1,
+    "per_level_above_first": 0
+  },
+  "max_cost": {
+    "base": 1,
+    "per_level_above_first": 0
+  },
+  "slots": [
+    "chest"
+  ],
+  "effects": {
+    "minecraft:post_attack": [
+      {
+        "enchanted": "victim",
+        "affected": "victim",
+        "effect": {
+          "type": "minecraft:run_function",
+          "function": "sweetdream:equipment/armor/heart_vein/on_hurt"
+        }
+      },
+      {
+        "enchanted": "victim",
+        "affected": "attacker",
+        "effect": {
+          "type": "minecraft:run_function",
+          "function": "sweetdream:equipment/armor/heart_vein/from_entity"
+        }
+      }
+    ]
+  }
+}

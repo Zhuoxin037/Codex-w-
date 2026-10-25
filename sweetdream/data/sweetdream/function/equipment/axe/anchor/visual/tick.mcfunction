@@ -1,5 +1,7 @@
 scoreboard players add @s zx.av_life 1
-execute if entity @s[nbt={Health:0.0f}] run return run function sweetdream:equipment/axe/anchor/visual/end
+# ★ 2026-10-23: `nbt={Health:0.0f}` 每刻一次 = 玩家整份 NBT 序列化(≈10 ms)。
+#   换成原版 health 计分项 zx.hp_c(引擎自动同步, 纯计分板读取)。
+execute if score @s zx.hp_c matches ..0 run return run function sweetdream:equipment/axe/anchor/visual/end
 execute if score @s zx.av_life matches 70.. run return run function sweetdream:equipment/axe/anchor/visual/end
 function sweetdream:equipment/axe/anchor/visual/dimension
 execute unless score @s zx.av_dim = #av_dim zx.meta run return run function sweetdream:equipment/axe/anchor/visual/end

@@ -1,0 +1,85 @@
+{
+	"credit": "Made with Animated Java (https://github.com/Animated-Java/animated-java) via Blockbench",
+	"textures": {
+		"0": "sweetdream_boss:blueprint/husk/c_optimized_0_512",
+		"1": "sweetdream_boss:blueprint/husk/c_optimized_1_512",
+		"particle": "minecraft:item/pufferfish"
+	},
+	"display": {
+		"head": {
+			"rotation": [0, 180, 0]
+		}
+	},
+	"elements": [
+		{
+			"from": [4.925, 3.07377, 7.82961],
+			"to": [11.05698, 5.14681, 8.07016],
+			"rotation": {
+				"angle": 0,
+				"axis": "y",
+				"origin": [7.99099, 4.11029, 7.94989]
+			},
+			"faces": {
+				"north": {
+					"uv": [11.21875, 8, 12.1875, 8.34375],
+					"texture": "#0"
+				},
+				"east": {
+					"uv": [7.90625, 1.9375, 7.96875, 2.28125],
+					"texture": "#0"
+				},
+				"south": {
+					"uv": [12.25, 8.375, 13.21875, 8.71875],
+					"texture": "#0"
+				},
+				"west": {
+					"uv": [8.03125, 1.9375, 8.09375, 2.28125],
+					"texture": "#0"
+				},
+				"up": {
+					"uv": [11.21875, 8.40625, 12.1875, 8.46875],
+					"texture": "#0"
+				},
+				"down": {
+					"uv": [11.21875, 8.53125, 12.1875, 8.59375],
+					"texture": "#0"
+				}
+			}
+		},
+		{
+			"from": [4.96063, 5.01486, 7.82846],
+			"to": [10.95551, 8.0548, 8.06968],
+			"rotation": {
+				"angle": 0,
+				"axis": "y",
+				"origin": [7.95807, 6.53483, 7.94907]
+			},
+			"faces": {
+				"north": {
+					"uv": [10.21875, 8.90625, 11.15625, 9.40625],
+					"texture": "#0"
+				},
+				"east": {
+					"uv": [0.78125, 10.9375, 0.84375, 11.4375],
+					"texture": "#1"
+				},
+				"south": {
+					"uv": [11.21875, 9.1875, 12.15625, 9.6875],
+					"texture": "#0"
+				},
+				"west": {
+					"uv": [13.0625, 13.09375, 13.125, 13.59375],
+					"texture": "#0"
+				},
+				"up": {
+					"uv": [6.0625, 6.65625, 7, 6.71875],
+					"texture": "#0"
+				},
+				"down": {
+					"uv": [10.21875, 9.46875, 11.15625, 9.53125],
+					"texture": "#0"
+				}
+			}
+		}
+	]
+}

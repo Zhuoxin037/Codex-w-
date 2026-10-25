@@ -221,11 +221,11 @@ R = {k: [] for k in ['fn', 'tag', 'macro', 'sel', 'adv', 'json', 'rp', 'sched', 
                      'dollar', 'regcap', 'regobj', 'regname', 'rege',
                      'selfmacro', 'dspace', 'storescale', 'opnum',
                      'floatz', 'base', 'oldname', 'rearm', 'const',
-                     'equip', 'melee', 'lorestyle', 'glint',
+                     'equip', 'melee', 'lorestyle', 'loresp', 'glint',
                      'chanhack', 'chandef', 'chref', 'olchan', 'olvcache',
                      'smwind', 'regsent', 'numloss', 'shulker', 'posnbt', 'obnode',
                      'dstore', 'pname', 'nbtint', 'scorelive', 'nowith', 'crossgate',
-                     'hbslot', 'strent', 'nbtempty', 'objmiss', 'asnoat',
+                     'hbslot', 'strent', 'nbtempty', 'objmiss', 'asnoat', 'selfrec',
                      'animdata', 'attrleave', 'ttl',
                      'ctrlmul', 'dimflag', 'enemysrc', 'reloadttl', 'dimsel',
                      'equipgate', 'storid', 'braceval', 'dmgch', 'dmgord', 'panelrow',
@@ -311,6 +311,12 @@ for fnk, fp in functions.items():
     except Exception as e:
         R['fn'].append((str(fp), 0, 'READ FAIL %s' % e)); continue
     cmds = []
+    # 规则 selfrec: 记录本函数到目前为止有没有出现过 return。
+    #   包内有一大批合法的**尾部递归铺点**(bent_ray/chain、rain_trace/fill、
+    #   triad/more_one、manacore 的 index/scan 等), 形式就是行首 function 自己
+    #   调自己, 但前面**一定有 return 出口**; 只有【第一条 return 之前就自调用】
+    #   才是必死的无条件递归(2026-10-25 lib/mana/pay 事故的形态)。
+    seen_return = False
     pending_ok = False   # 紧邻上方的注释里带 dup-ok -> 这行允许与上一行重复(有意为之)
     empty_ok_pending = False   # 紧邻上方的注释里带 empty-ok -> 规则 45 放行
     for i, line in enumerate(lines, 1):
@@ -327,6 +333,11 @@ for fnk, fp in functions.items():
             continue
         cmds.append((i, s, pending_ok))
         pending_ok = False
+        # ★ 不能用 s.split('#')[0] ★ 本包的计分项名就以 '#' 开头（#tri_more / #br_lay）,
+        #   按 '#' 切会把整条命令切没 ⇒ 永远看不到 `run return 0`, seen_return 恒 False,
+        #   于是一大批合法的尾部递归被误报成"无条件自递归"。
+        if 'return' in s.split():
+            seen_return = True
         if macro_var.search(s) and not line.lstrip().startswith('$'):
             R['macro'].append((str(fp), i, s))
         # 16) 反过来: 带了 $ 却没有 $(变量) —— 同样让整个函数作废
@@ -652,6 +663,17 @@ for fnk, fp in functions.items():
                 tgt = ns + ':' + tgt
             if tgt not in functions:
                 R['fn'].append((str(fp), i, tgt))
+            elif tgt == fnk and s.lstrip().startswith('function ') and not seen_return:
+                # 2026-10-25 真实事故: 批量把 145 处 `manacore:api/mana/consume` 换成
+                # sweetdream:lib/mana/pay 的脚本**把 pay 自己也换掉了** ⇒ 它第 ① 步
+                # 变成自己调自己, /reload 后每次施法栈溢出。加这条守门堵死这一类
+                # "批量替换脚本污染被新建文件" 的事故。
+                # ★ 只报**无条件**自调用(整行就是 `function <自己>`):
+                #   包里有一大批合法的"自递归铺点"(loop / chain / ray / probe,
+                #   manacore 的 index/scan 也是), 它们一律写成
+                #   `execute if … run function <自己>` —— 带终止条件, 不能报。
+                R['selfrec'].append((str(fp), i,
+                                     '无条件自己调用自己 = 无限递归 <-> %s' % tgt))
         for m in tag_call.finditer(cmd_part):
             t = '#' + m.group(1)
             if t not in tagfiles:
@@ -927,9 +949,14 @@ for f in (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'enchantment').glob('*.j
         # (行首加 #)时, 子串仍在, 规则会被"假满足"放过去。
         body = [l for l in shotf.read_text(encoding='utf-8').splitlines()
                 if l.strip() and not l.strip().startswith('#')]
-        if not any('manacore:api/mana/consume' in l for l in body):
+        # ★ 2026-10-25 批 14: 全包扣费已统一改走 sweetdream:lib/mana/pay(它内部
+        #   第一步就是 manacore:api/mana/consume, 另加"实际花费"记账)。两个入口
+        #   都算"有扣费", 否则新入口会让这 17 把弩全部误报。
+        if not any(('manacore:api/mana/consume' in l or 'sweetdream:lib/mana/pay' in l)
+                   for l in body):
             R['crossshot'].append((str(shotf.relative_to(ROOT).as_posix()),
-                                   'shot 里没有调用 manacore:api/mana/consume -> 射击不消耗魔力'
+                                   'shot 里没有调用 manacore:api/mana/consume / '
+                                   'sweetdream:lib/mana/pay -> 射击不消耗魔力'
                                    '(2026-10-12 电弧事故)'))
 
 # 42bb) give 里引用的本包附魔 id 必须在 enchantment/ 目录下有定义 ——
@@ -1328,6 +1355,73 @@ if LF is not None:
                         msg += ' | 首个差异: %s -> %s' % (a[:48], b[:48])
                         break
                 R['lorestyle'].append((str(f), msg))
+
+
+# ---- 31b) 物品描述的段间空行 ----
+#   每个 ✦ 小标题(首个除外)前面必须有一个空行元素, 且不许出现**两个连续空行**。
+#   规范实例: backlight / beach_vein —— `✦ 被动技能 … 空行 ✦ 套装效果`。
+#   ★ 真实事故 2026-10-25: 批 13 九件(碎骨/明烛/借火/心脉/剖面/折潮/返汐/浮光/迟暮)
+#     全部漏了段间空行, 标题紧贴上一段正文 —— 用户逐个看出来才补。零日志、零解析错。
+_SP_ELEM = lambda e: isinstance(e, dict) and 'extra' not in e and \
+    str(e.get('text', '')).strip() == ''
+
+
+def _iter_lore_json(src):
+    """把文件里每个 lore=[…] / lore:[…] 数组按括号配对切出来(跳过字符串里的方括号)
+
+    两种形态都有: give 里是 NBT 的 `lore=[…]`, overlimit/def 里是 SNBT 的 `lore:[…]`
+    (2026-10-25 deepsea_echo 的段间空行就漏在后者, 只匹配 `=` 会整批漏检)。
+    """
+    for m in re.finditer(r'lore\s*[:=]\s*\[', src):
+        st = m.end() - 1
+        depth, ins, esc = 0, False, False
+        for j in range(st, len(src)):
+            c = src[j]
+            if ins:
+                if esc:
+                    esc = False
+                elif c == '\\':
+                    esc = True
+                elif c == '"':
+                    ins = False
+                continue
+            if c == '"':
+                ins = True
+            elif c == '[':
+                depth += 1
+            elif c == ']':
+                depth -= 1
+                if depth == 0:
+                    yield src[st:j + 1]
+                    break
+
+
+for pack in PACKS:
+    for f in (ROOT / pack / 'data').rglob('*.mcfunction'):
+        try:
+            src = f.read_text(encoding='utf-8')
+        except Exception:
+            continue
+        if 'lore=[' not in src and 'lore:[' not in src:
+            continue
+        for blk in _iter_lore_json(src):
+            try:
+                arr = json.loads(blk)
+            except Exception:
+                continue          # SNBT 形态由 _chk_lore.py 管, 这里只验 JSON 形态
+            if not isinstance(arr, list) or not arr:
+                continue
+            for i, e in enumerate(arr):
+                if not isinstance(e, dict):
+                    continue
+                t = str(e.get('text', ''))
+                if not (e.get('bold') and t.startswith('✦')):
+                    continue
+                if i > 0 and not _SP_ELEM(arr[i - 1]):
+                    R['loresp'].append((str(f), '「%s」前没有空行 -> 段与段会贴在一起' % t))
+            for i in range(1, len(arr)):
+                if _SP_ELEM(arr[i]) and _SP_ELEM(arr[i - 1]):
+                    R['loresp'].append((str(f), '第 %d 个元素起出现两个连续空行' % (i + 1)))
 
 ret_only = re.compile(r'(?:^|\brun\s+)return\b')
 for fnk, fp in functions.items():
@@ -3594,6 +3688,15 @@ for _ed_fn in sorted(functions):
             continue
         if 'type=minecraft:item_display' in _ed_s or 'type=item_display' in _ed_s:
             continue
+        # ★ 2026-10-21 语义豁免: `sort=nearest`(+ `limit=1`) 是**"挑一个目标"**的写法,
+        #   不是"到达/命中判据"。真正的到达判据问的是"某个已知实体还在不在范围内",
+        #   绝不会带 sort/limit(带了就是"从一堆里挑最近的")。
+        #   起因: 法球软锁探针(projectile/ball/fire ④)把吸附半径从 ..1.8/..2.5/..3.0
+        #   收到 ..1.2/..1.6/..2.0, 于是落进 <=1.6 的判定窗里 —— 那两行恰好带
+        #   `sort=nearest,limit=1`, 而它们的语义是"发射瞬间选一只值得追的生物"。
+        #   polarized_light 的真实事故(`distance=0..0.5` 判到达)不带 sort, 仍会被抓。
+        if 'sort=nearest' in _ed_s:
+            continue
         for _ed_m in re.finditer(r'distance=(?:0\.\.|\.\.)([0-9]+(?:\.[0-9]+)?)', _ed_s):
             if float(_ed_m.group(1)) > 1.6:
                 continue
@@ -4765,16 +4868,22 @@ _REGRESS = [
      '★ N07: render(每刻·每个开面板的人)必须读**自己那份**缓存 cache."<uuid>". '
      '写回/读回全局单格 cache.eq / cache.skill 时, `execute as @a[tag=test_look_on]` '
      '的每一次覆盖都会串人: 装备专属段穿上别人的装备、冷却拿别人的技能 id 去查。'),
-    # ★ 2026-10-18: 手持 skill 改成 render_go **每刻直读 SelectedItem** ——
-    #   走缓存时是每秒采样一次, 换武器后 CD 显示平均滞后 0.5 秒(用户实测)。
-    #   直读写进的是 zx:work a(本刻本玩家), 天然不会串人; 反过来再读/写
-    #   cache."<uuid>".skill 就是那条延迟回来了 ⇒ 用具名片段 + 禁止正则双向锁死。
+    # ★ 2026-10-20: 每刻核对当前物品组件；缓存命中不序列化玩家，
+    #   不同skill换手当刻回退一次SelectedItem读取。不是每秒采样缓存。
     (_SD + '/equipment/tool/look/render_go.mcfunction',
-     'SelectedItem.components."minecraft:custom_data".skill',
+     'function sweetdream:equipment/tool/look/skill_live with storage zx:work a',
      r'storage zx:look cache\.eq\b|storage zx:look cache\.skill\b'
      r'|cache\."\$\(uuid\)"\.skill', None,
-     '★ N07 + 2026-10-18: 冷却读的"手持技能"必须每刻直读 SelectedItem 的 '
-     'custom_data.skill, 不许再走每秒缓存(平均滞后 0.5 秒) —— 也绝不许退回全局单格。'),
+     '★ N07: 每刻验证当前主手skill；不能退回每秒采样或全局单格。'),
+    (_SD + '/equipment/tool/look/skill_live.mcfunction',
+     'skill_cache."$(uuid)"', r'storage zx:look cache\.skill\b', None,
+     '★ N07: 已验证skill的提示缓存必须按玩家UUID隔离。'),
+    (_SD + '/equipment/tool/look/skill_live.mcfunction',
+     'SelectedItem.components."minecraft:custom_data".skill', None, None,
+     '★ 换为不同skill时必须当刻读取，不能等每秒cache刷新。'),
+    (_SD + '/equipment/tool/look/skill_cached.mcfunction',
+     'if items entity @s weapon.mainhand *[minecraft:custom_data~{skill:"$(skill)"}]', None, None,
+     '★ 只有当前真实主手skill组件完全匹配，才可使用提示缓存。'),
     (_SD + '/equipment/tool/look/cache.mcfunction',
      'sweetdream:equipment/tool/look/cache_go',
      r'storage zx:look cache\.', None,
@@ -5106,6 +5215,8 @@ TITLE = {'fn': 'function 引用不存在的目标', 'tag': '#tag 引用无对应
                     '**解析失败、物品凭空消失**(日志只有一行 "Failed to load function"。'
                     '注意另一半: 定义存在但没退出世界重进时同样会挂 —— 附魔是注册表, /reload 不补)',
          'lorestyle': '物品描述的版式不是 lore_fmt 的输出(数字没留白 / 用了 * 当乘号…)',
+         'loresp': '物品描述没有段间空行: ✦ 小标题紧贴上一段正文, 或出现两个连续空行'
+                   '(2026-10-25 批 13 九件全漏; 规范: 每个 ✦ 前留一个 {"text":" "})',
          'chanhack': '技能倍率: 又把面板读数塞进 base_attack(旧口径 hack, 面板没法归类)',
          'chandef': '技能倍率三通道: 口径表(lib/skill_mul/def)和技能文件对不上'
                     '(面板会漏显示或归错列, 静默)',
@@ -5174,6 +5285,8 @@ TITLE = {'fn': 'function 引用不存在的目标', 'tag': '#tag 引用无对应
          'asnoat': 'execute as @e/@a[...] run function 但链上没有 at @s / positioned '
                    '—— as 不换坐标, 被调函数里的 ~ 和 dx=/distance= 会取在原点'
                    '(真实事故: 清醒梦的漫彩范围真伤一次都打不到人)',
+         'selfrec': '函数自己调用自己 = 无限递归(2026-10-25 事故: 批量替换脚本'
+                    '把新建的 lib/mana/pay 自己也换掉了, 每次施法栈溢出)',
          'animdata': '打了 zx.anim 标签却没写 data.zx.anim —— lib/anim_step 的宏参数绑不上, '
                      '被调函数一条命令都不跑: 召唤物会定在起始帧、永远不动(静默)',
          'attrleave': 'attribute modifier 有 add 却全包没有同 id 的 remove —— 修饰符是'

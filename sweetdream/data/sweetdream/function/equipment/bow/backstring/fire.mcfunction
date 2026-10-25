@@ -14,21 +14,35 @@
 #   射空不该后撤。
 # 【保底 12 点为什么不过 calc】文案写的是"12 点伤害"(固定值 flat, 不吃倍率),
 #   所以直接用 api/damage 打数值, 不走 manacore 的三通道。
+# 【★ 超限(批 K7, 2026-10-23) ★】主手那把带 ol:"backstring" 时(shot 已把
+#   zx.bs_ol 写进玩家身上), 本函数有三处不同:
+#     · 迅捷Ⅱ 2 秒 -> 5 秒;
+#     · 弦满保底 12 -> 30 点;
+#     · 多出一段「8 点固定真伤 + 逐次翻倍」, 结算在 ol_bite(层数记在目标身上)。
+#   位移 2 格、扣费口径这些都不变。
 # ============================================================
 
 # ① 后撤 2 格(撞墙即停)
 execute at @s positioned ^ ^ ^-2 if block ~ ~ ~ #minecraft:replaceable if block ~ ~1 ~ #minecraft:replaceable run tp @s ~ ~ ~
 execute at @s run particle minecraft:small_gust ~ ~1.0 ~ 0.3 0.3 0.3 0.03 8 normal
 
-# ② 2 秒迅捷Ⅱ(amplifier 0-based: Ⅱ = 1; true = 不显示粒子)
+# ② 迅捷Ⅱ: 普通 2 秒 / 超限 5 秒(amplifier 0-based: Ⅱ = 1; true = 不显示粒子)
 effect give @s minecraft:speed 2 1 true
+execute if score @s zx.bs_ol matches 1 run effect give @s minecraft:speed 5 1 true
 
-# ③ 弦满: 这一发带保底伤害 -> 打 12 点固定值, 打完清掉标志
+# ③ 弦满: 这一发带保底伤害 -> 普通 12 点 / 超限 30 点固定值, 打完清掉标志
 #   【为什么用 distance=0..】裸 @e 会跨维度搜到别的维度里残留的同名标签(坑 55);
 #     distance=0.. 在这里兼任"锁在射手所在维度"(命中那只必然与射手同维度)。
 execute if score @s zx.bs_ready matches 1 run data modify storage zx:in arg set value {target:"@e[tag=zx.bs_v,distance=0..,limit=1]",damage:12.0}
+execute if score @s zx.bs_ready matches 1 if score @s zx.bs_ol matches 1 run data modify storage zx:in arg.damage set value 30.0
 execute if score @s zx.bs_ready matches 1 run function sweetdream:api/damage
 execute if score @s zx.bs_ready matches 1 run particle minecraft:crit ~ ~1 ~ 0.4 0.4 0.4 0.05 10 normal
+
+# ③.5 【超限·批 K7】被动 8 点固定真伤 + 逐次翻倍(层数记在目标身上)
+#   ★ 必须排在清 zx.bs_ready 之前: ol_bite 要用它判"这一发是不是弦满那发"
+#     (弦满命中已翻满 3 次的目标 -> 额外再翻一层, 单独 12 秒)。
+execute if score @s zx.bs_ol matches 1 run function sweetdream:equipment/bow/backstring/ol_bite
+
 execute if score @s zx.bs_ready matches 1 run scoreboard players set @s zx.bs_ready 0
 
 # ④ 收尾: 清掉本次用过的临时标签(否则会污染下一箭)

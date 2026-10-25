@@ -1,0 +1,22 @@
+tag @s add sd.hk.current_body
+execute store result score @s sdh.hp1000 run data get entity @s Health 1000
+scoreboard players operation @s sdh.hp = @s sdh.hp1000
+scoreboard players operation @s sdh.hp /= #1000 sdh.tmp
+execute if score @s sdh.hp1000 matches ..0 as @e[tag=sd.hk.current_rig,distance=0..,limit=1] run function sweetdream:boss/husk/death/start
+execute if entity @e[tag=sd.hk.current_rig,tag=sd.hk.dead,distance=0..,limit=1] run return run tag @s remove sd.hk.current_body
+execute store result storage sweetdream:husk args.id int 1 run scoreboard players get @s sdh.id
+function sweetdream:boss/husk/bar/update with storage sweetdream:husk args
+execute if entity @s[tag=zx.stop] run tag @e[tag=sd.hk.current_rig,distance=0..,limit=1] add sd.hk.frozen
+execute if entity @s[tag=zx.stop] run return run tag @s remove sd.hk.current_body
+function sweetdream:boss/husk/hurt/read
+function sweetdream:boss/husk/reflection/process
+execute if score @s sdh.rest matches 1.. run scoreboard players remove @s sdh.rest 1
+execute if score @s sdh.defcd matches 1.. run scoreboard players remove @s sdh.defcd 1
+execute if score @s sdh.pending_cd matches 1 if score @s sdh.rest matches 0 run scoreboard players set @s sdh.defcd 240
+execute if score @s sdh.pending_cd matches 1 if score @s sdh.rest matches 0 run scoreboard players set @s sdh.pending_cd 0
+function sweetdream:boss/husk/ground/tick
+function sweetdream:boss/husk/target/tick
+function sweetdream:boss/husk/dispatch
+execute at @s rotated ~ 0 positioned ^0.06875 ^0 ^0.125 run tp @e[tag=sd.hk.current_rig,distance=0..,limit=1] ~ ~ ~ ~ 0
+tag @e[tag=sd.hk.target,distance=0..] remove sd.hk.target
+tag @s remove sd.hk.current_body

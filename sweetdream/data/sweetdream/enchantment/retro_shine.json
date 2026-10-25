@@ -1,0 +1,41 @@
+{
+  "anvil_cost": 4,
+  "description": {
+    "text": "反照"
+  },
+  "effects": {
+    "minecraft:post_attack": [
+      {
+        "enchanted": "victim",
+        "affected": "victim",
+        "effect": {
+          "type": "minecraft:run_function",
+          "function": "sweetdream:equipment/tool/retro_shine/on_hurt"
+        }
+      },
+      {
+        "enchanted": "victim",
+        "affected": "attacker",
+        "effect": {
+          "type": "minecraft:run_function",
+          "function": "sweetdream:equipment/tool/retro_shine/reflect"
+        }
+      }
+    ]
+  },
+  "max_cost": {
+    "base": 50,
+    "per_level_above_first": 0
+  },
+  "max_level": 1,
+  "min_cost": {
+    "base": 1,
+    "per_level_above_first": 0
+  },
+  "primary_items": "minecraft:recovery_compass",
+  "slots": [
+    "offhand"
+  ],
+  "supported_items": "minecraft:recovery_compass",
+  "weight": 1
+}

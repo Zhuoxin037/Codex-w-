@@ -183,6 +183,23 @@ data modify storage zx:reg b append value {l:"俯冲就绪",o:"zx.sv_launch",c:"
 # ---- 深海的回响 (deepsea_echo) ----
 data modify storage zx:reg b append value {l:"下一波倒计时",o:"zx.de_t",c:"aqua",n:"tick",e:"deepsea_echo"}
 
+# ---- 永恒 (eternity) ----
+#   ★ 2026-10-21 补(玩家第三次提"哪些地方没接入观测镜"): 它的 apply_mana 一直在维护
+#     zx.et_mana 这本账, 但 b 表没登记 —— 面板上"魔力上限"里少了 +280 的来源。
+#   ★ 同批补的还有 沉溺忘川彼岸 / 漫步冥河之上 / 体外魔力泵 三件, 都是同一形态:
+#     有 apply_mana + 自己的 zx.<id>_mana 账本, 只是没往这张表登记。
+data modify storage zx:reg b append value {l:"魔力上限",o:"zx.et_mana",c:"aqua",n:"",e:"eternity"}
+
+# ---- 沉溺忘川彼岸 (lethe_shore) ----
+data modify storage zx:reg b append value {l:"魔力上限",o:"zx.lt_mana",c:"aqua",n:"",e:"lethe_shore"}
+
+# ---- 漫步冥河之上 (styx_walk) ----
+data modify storage zx:reg b append value {l:"魔力上限",o:"zx.sw_mana",c:"aqua",n:"",e:"styx_walk"}
+
+# ---- 体外魔力泵 (mana_pump) ----
+#   副手才生效 —— 没放副手时这本账是 0, b 表"值为 0 不显示"的特性正好。
+data modify storage zx:reg b append value {l:"魔力上限",o:"zx.mp_mana",c:"aqua",n:"",e:"mana_pump"}
+
 # ---- 全局兜底类(平时是 0, 出现就说明有情况) ----
 data modify storage zx:reg b append value {l:"魔力下限保护垫付",o:"zx.floor_mana",c:"dark_aqua",n:"",e:"all"}
 
@@ -250,7 +267,7 @@ data modify storage zx:reg layer append value {o:"zx.fr_light",l:"圣光",c:"gol
 # ---- 脑髓蛭「蛊虫」(最多 10 层; 满 10 层进入消耗模式, 每次攻击 -1 层, 消耗完重新积累) ----
 data modify storage zx:reg layer append value {o:"zx.bl_gu",l:"蛊虫",c:"green",e:"brain_leech",n:"层",max:10}
 # ---- 回锋「断刃」(最多 3 层; 攻击攒层, 主动消耗全部、每层重复一次) ----
-data modify storage zx:reg layer append value {o:"zx.rb_blade",l:"断刃",c:"white",e:"rebound",n:"层",max:3}
+data modify storage zx:reg layer append value {o:"zx.rb_blade",l:"断刃",c:"white",e:"rebound",n:"层",max:4}
 # ---- 歌谣「曲调」(最多 8 层; 手持歌谣击杀攒层, 主动消耗殆尽) ----
 data modify storage zx:reg layer append value {o:"zx.bd_tune",l:"曲调",c:"gold",e:"ballad",n:"层",max:8}
 # ---- 威霆「天煌」(0..2000 点; 手持未攻击时每刻 +1, 换术阵时清空) ----
@@ -286,6 +303,29 @@ data modify storage zx:reg layer append value {o:"zx.cr_knit",l:"绯结",c:"red"
 #   ★ 2026-10-17 补(玩家原话: "给自己附加的层数观测镜没显示"): 15-7 实装时漏登记。
 #   ★ 凡是"给自己攒层"的机制, 加完代码必须回来登记这张表 —— 守门规则 layreg 会抓。
 data modify storage zx:reg layer append value {o:"zx.bld_n",l:"心血",c:"dark_red",e:"blood_loss",n:"层",max:3}
+# ---- 沉砣「砣」(最多 5 层; 每次命中 +1, 每层 +2 固定伤害、-4% 移速, 受伤立刻清零) ----
+#   ★ 2026-10-21 补(玩家第三次提"哪些地方没接入观测镜"): 实装时漏登记。
+#     它是**武器**不是护甲, e 填 sunken_weight 即可(手持才显示), 没有第二件。
+#   ★ 数值是 lore 原话: "最多 5 层", 所以 max 写 5。
+data modify storage zx:reg layer append value {o:"zx.sw_n",l:"砣",c:"dark_gray",e:"sunken_weight",n:"层",max:5}
+# ---- 幻昼「白昼梦叠层」(最多 10 层 = 基础攻击力 +20; 攻击附有白昼梦的生物时 +1) ----
+#   ★ 2026-10-21 补: lore 明写"最多叠加 10 次", 但观测镜从来没显示过。
+#   ★ 与「剑魂/居合」同款判定: 这套加成写在「● 异彩 ● 幻昼」套装效果里, 但它加的是
+#     **攻击力**而不是"只在两件都在时才成立的条件值" —— 只要穿着幻昼就有这条机制
+#     (异彩只是套装另一半), 所以 e 只填 mirage, 不重复登记 iridescent。
+data modify storage zx:reg layer append value {o:"zx.mr_atk2",l:"白昼",c:"light_purple",e:"mirage",n:"层",max:10}
+# ---- 幻昼「受伤叠层」(无硬上限; 每次受到伤害 +1 层, 每层基础攻击力 +1, 5 秒逐层到期) ----
+#   ★ 2026-10-21 补。lore 只说"可叠加"、没给数字 —— 所以 max 写 0(只显示当前层数,
+#     不摆 "x/N", 否则会凭空给玩家一个不存在的上限)。
+#   ★ 它和「白昼」是**两条独立机制**(一个受击、一个命中), 必须分开显示,
+#     合成一条会让"刚挨打攻击力却没涨"看起来像 bug。
+data modify storage zx:reg layer append value {o:"zx.mr_atk1",l:"受击",c:"red",e:"mirage",n:"层",max:0}
+# ---- 迟暮「回光」(2026-10-25 用户原稿) ----
+#   玩家自己攒的层数(自身被附加白昼梦 ⇒ +1 层, 15 秒统一到期) ⇒ 必须登记,
+#   否则观测镜上看不见(规则 layreg 会拦)。
+#   ★ max 写 0: 原文没说层数上限("附加一层…累计消耗 3 层") —— 凭空给个 x/N 上限
+#     会让玩家以为攒到 N 就满, 而实际还能继续攒。
+data modify storage zx:reg layer append value {o:"zx.ld_s",l:"回光",c:"dark_purple",e:"late_dusk",n:"层",max:3}
 
 
 # ============================================================
@@ -444,6 +484,42 @@ data modify storage zx:reg names.thorn_vein set value "刺纹"
 data modify storage zx:reg names.rain_trace set value "雨迹"
 data modify storage zx:reg names.empty_pillow set value "空枕"
 data modify storage zx:reg names.mottle_vein set value "杂纹"
+# ---- 批一 · 阶段补全(2026-10-20) ----
+data modify storage zx:reg names.yebu set value "曳步"
+data modify storage zx:reg names.xiugou set value "锈犬"
+data modify storage zx:reg names.zhuzu set value "驻足"
+data modify storage zx:reg names.gousi set value "钩丝"
+data modify storage zx:reg names.lianshi set value "连矢"
+data modify storage zx:reg names.tiejili set value "铁蒺藜"
+data modify storage zx:reg names.lvshuang set value "履霜"
+data modify storage zx:reg names.dongtu set value "冻土"
+data modify storage zx:reg names.huilan set value "回澜"
+data modify storage zx:reg names.chengxing set value "秤星"
+# ---- 批二 · 标签补缺(2026-10-20) ----
+data modify storage zx:reg names.profane set value "剖心"
+data modify storage zx:reg names.grave_tablet set value "断碑"
+data modify storage zx:reg names.burst_bank set value "决堤"
+data modify storage zx:reg names.breathing_soil set value "息土"
+data modify storage zx:reg names.cage_day set value "囚昼"
+data modify storage zx:reg names.way_back set value "归途"
+data modify storage zx:reg names.stop_needle set value "停针"
+data modify storage zx:reg names.empty_seat set value "虚位"
+data modify storage zx:reg names.bind_ember set value "缚烬"
+data modify storage zx:reg names.sunken_weight set value "沉砣"
+data modify storage zx:reg names.night_bind set value "夜缚"
+data modify storage zx:reg names.sip_frost set value "饮霜"
+data modify storage zx:reg names.retro_shine set value "反照"
+data modify storage zx:reg names.pour_sack set value "倾囊"
+# ---- 批 15 · 白昼梦系列 9 件(2026-10-25) ----
+data modify storage zx:reg names.bone_breaker set value "碎骨"
+data modify storage zx:reg names.bright_candle set value "明烛"
+data modify storage zx:reg names.borrow_fire set value "借火"
+data modify storage zx:reg names.heart_vein set value "心脉"
+data modify storage zx:reg names.profile set value "剖面"
+data modify storage zx:reg names.tide_fold set value "折潮"
+data modify storage zx:reg names.ebb_tide set value "返汐"
+data modify storage zx:reg names.glimmer set value "浮光"
+data modify storage zx:reg names.late_dusk set value "迟暮"
 
 # ============================================================
 # tg: 每个 /trigger 调试入口
@@ -481,4 +557,8 @@ data modify storage zx:reg menu append value {k:"menu",n:"重新打印这个菜�
 data modify storage zx:reg menu append value {k:"give",n:"发潜影盒: 装备 28 件 + 强化材料 7 块(分两盒)"}
 
 # ---------- 记录本版本的表位上限(给 gen_reg_unroll.py / check.py 数用) ----------
-data modify storage zx:reg cap set value {b:56,a:8,menu:12,layer:23}
+data modify storage zx:reg cap set value {b:60,a:8,menu:12,layer:27}
+
+# Shared armor ledgers were not exposed in self-stats (58 -> 60 rows, existing cap 60).
+data modify storage zx:reg b append value {l:"通用盔甲魔力上限合计",o:"zx.am_mana",c:"aqua",n:"含浮光·迟暮套装",e:"all"}
+data modify storage zx:reg b append value {l:"通用盔甲生命上限合计",o:"zx.ah_hp",c:"red",n:"",e:"all"}

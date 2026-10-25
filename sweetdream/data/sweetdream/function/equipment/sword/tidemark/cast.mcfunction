@@ -22,6 +22,16 @@
 # ⓪ 撤销自己的进度
 advancement revoke @s only sweetdream:equipment/sword/tidemark
 
+# ⓪.5 【超限分流】(2026-10-23 批 K1) 敲过超限石(ol:"tidemark")的潮痕, 右键放的是
+#      「超限·潮痕」: 120 蓝 / 18 秒 / 前方 4×5 / 最大魔力 ×0.1 / 全体附「渊海」。
+#   ★ 主副手都判, 而且判 ol 的**值**是不是 tidemark —— 只判 .ol 键在不在的话,
+#     副手拿着别的超限武器会误走超限分支(照 liuguang/cast ⓪.5 那一课)。
+scoreboard players set #tm_ol zx.meta 0
+execute if items entity @s weapon.mainhand iron_sword[minecraft:custom_data~{zx:["tidemark"],ol:"tidemark"}] run scoreboard players set #tm_ol zx.meta 1
+execute if items entity @s weapon.offhand iron_sword[minecraft:custom_data~{zx:["tidemark"],ol:"tidemark"}] run scoreboard players set #tm_ol zx.meta 1
+execute if score #tm_ol zx.meta matches 1 run function sweetdream:equipment/sword/tidemark/overlimit
+execute if score #tm_ol zx.meta matches 1 run return 0
+
 # ① 拿 uuid
 function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return fail
@@ -43,7 +53,7 @@ execute rotated ~ 0 positioned ^ ^ ^2 unless entity @e[type=!#sweetdream:no_dama
 # ④ 扣魔力 -30
 data modify storage manacore:in arg set value {uuid:"",value:30.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 execute if data storage manacore:out r{success:0b} run return fail
 
 # ⑤ 记冷却 20 秒

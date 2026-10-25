@@ -1,0 +1,3 @@
+$execute store success score @s zx.rt_hit run damage @s $(amount) minecraft:mob_attack by @e[tag=sd.hk.current_body,distance=0..,limit=1]
+execute if score @s zx.rt_hit matches 1 if entity @e[tag=sd.hk.current_body,scores={sdh.state=14},distance=0..,limit=1] at @s facing entity @e[tag=sd.hk.current_body,distance=0..,limit=1] feet positioned ^ ^ ^-0.45 if block ~ ~ ~ #sweetdream:boss_passable if block ~ ~1 ~ #sweetdream:boss_passable run tp @s ~ ~ ~
+execute if score @s zx.rt_hit matches 1 run function sweetdream:equipment/tool/retro_shine/from_entity {source:"@e[tag=sd.hk.current_body,distance=0..,limit=1]"}

@@ -13,6 +13,22 @@
 #     会恒不成立(2026-10-09 修)。详见 pass_set 头注释的"位置口径"。
 # ============================================================
 
+# ⓪ 节流倒计时: 每刻 -1(@s = 水晶; 计分项不存在 = "可以触发")
+#   ★★ 2026-10-20 从 pass_set 挪过来 ★★ 必须在下面的事件闸**之前**:
+#     这个倒计时是按**真实时间**走的(0.5 秒 = 10 刻), 不能因为"这刻没事件"就停,
+#     否则 cd 永远不归零 ⇒ 下次真有事件时被自己的旧 cd 挡住, 表现 = 水晶偶尔不触发。
+execute if score @s zx.ch_cd matches 1.. run scoreboard players remove @s zx.ch_cd 1
+
+# ⓪' ★ 2026-10-20 卡顿修复: 本刻根本不可能有事件 -> 直接收工 ★
+#   事件只有两条来源(见 pass_set 的 ① 来源 a / 来源 b):
+#     · 附近有自己人的法球(宽松粗筛 2.5 格, pass_set 内部再按 1.5 格 + NBT 精筛);
+#     · 正被自己人的持续光束照着(zx.ch_beam = 1)。
+#   两条都不成立时, pass_set 的 80 行(含 4 次从实体 NBT 抄 UUID + 1 次宏解析)
+#   全是白烧 —— 而水晶一放就是 8 秒(160 刻), 平时就杵在那里。
+#   ★ 闸放在"备 UUID"之前: 连那 4 行 data modify 都省掉。
+#   ★ 语义不变: 闸只判"有没有可能", 精筛仍然全在 pass_set 里。
+execute unless score @s zx.ch_beam matches 1 unless entity @e[tag=zx.ball,distance=..2.5,limit=1] run return 0
+
 # ① 把水晶身上的"释放者 UUID 四 int"抄进宏节点(pass_set 要拼选择器)
 data modify storage zx:work chp set value {u0:0,u1:0,u2:0,u3:0}
 data modify storage zx:work chp.u0 set from entity @s data.zx.ch.u0

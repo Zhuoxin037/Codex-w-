@@ -36,11 +36,11 @@
 # ---- ① 读三条加算百分比(x100; 池子里 0.30 -> 30) ----
 #   一律"先归零再 store": data get 读不到时 store 不执行, 会留着上一个值。
 scoreboard players set #a_m zx.meta 0
-execute store result score #a_m zx.meta run data get storage zx:work add.mm 100
+execute store result score #a_m zx.meta run data get storage zx:work add.mm 1000
 scoreboard players set #a_a zx.meta 0
-execute store result score #a_a zx.meta run data get storage zx:work add.atk 100
+execute store result score #a_a zx.meta run data get storage zx:work add.atk 1000
 scoreboard players set #a_o zx.meta 0
-execute store result score #a_o zx.meta run data get storage zx:work add.oth 100
+execute store result score #a_o zx.meta run data get storage zx:work add.oth 1000
 
 # ---- ② 三条都没有正贡献 -> 走人 ----
 #   (沿用旧的 `matches 1..`: 纯负加成 / 全 0 都不施加 —— 与历史行为一致)
@@ -51,11 +51,11 @@ scoreboard players operation #ax zx.meta += #a_o zx.meta
 execute unless score #ax zx.meta matches 1.. run return 0
 
 # ---- ③ K_i = 100 + add_i(mul_pct 的 mul 档: 1.5 -> 150) ----
-scoreboard players set #k_m zx.meta 100
+scoreboard players set #k_m zx.meta 1000
 scoreboard players operation #k_m zx.meta += #a_m zx.meta
-scoreboard players set #k_a zx.meta 100
+scoreboard players set #k_a zx.meta 1000
 scoreboard players operation #k_a zx.meta += #a_a zx.meta
-scoreboard players set #k_o zx.meta 100
+scoreboard players set #k_o zx.meta 1000
 scoreboard players operation #k_o zx.meta += #a_o zx.meta
 
 # ---- ④ 读四条分量(x1000, int; 由 calc 的 ⑤b 落进 out) ----
@@ -74,12 +74,18 @@ execute store result score #s_x zx.meta run data get storage manacore:out r.seg_
 #      传 `obj:"zx.meta"`(mul_pct 按 $(obj) 读输入/写出参)。原来漏了这个参数 ⇒
 #      mul_pct 去 manacore.math 读 #s_*/#k_* ⇒ 一律读不到(0) ⇒ 只要本轮有增伤,
 #      重算结果就是 0(报告例 115 -> 0)。守门 check.py 的 `mulobj` 锁着这条接线。
-function manacore:internal/damage/mul_pct {src:"#s_m",mul:"#k_m",obj:"zx.meta"}
-scoreboard players operation #tot zx.meta = #mul_out zx.meta
-function manacore:internal/damage/mul_pct {src:"#s_a",mul:"#k_a",obj:"zx.meta"}
-scoreboard players operation #tot zx.meta += #mul_out zx.meta
-function manacore:internal/damage/mul_pct {src:"#s_o",mul:"#k_o",obj:"zx.meta"}
-scoreboard players operation #tot zx.meta += #mul_out zx.meta
+scoreboard players operation #mp_src zx.meta = #s_m zx.meta
+scoreboard players operation #mp_mul zx.meta = #k_m zx.meta
+function sweetdream:lib/math/mul_permille
+scoreboard players operation #tot zx.meta = #mp_out zx.meta
+scoreboard players operation #mp_src zx.meta = #s_a zx.meta
+scoreboard players operation #mp_mul zx.meta = #k_a zx.meta
+function sweetdream:lib/math/mul_permille
+scoreboard players operation #tot zx.meta += #mp_out zx.meta
+scoreboard players operation #mp_src zx.meta = #s_o zx.meta
+scoreboard players operation #mp_mul zx.meta = #k_o zx.meta
+function sweetdream:lib/math/mul_permille
+scoreboard players operation #tot zx.meta += #mp_out zx.meta
 scoreboard players operation #tot zx.meta += #s_x zx.meta
 
 # ---- ⑥ 独立乘区(乘在"加算合并"之后) ----

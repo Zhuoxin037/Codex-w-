@@ -17,6 +17,15 @@
 
 advancement revoke @s only sweetdream:equipment/sword/grayscale
 
+# ⓪.5 【超限分流】(2026-10-23 批 K1) 敲过超限石(ol:"grayscale")的灰度, 右键放的是
+#      「超限·灰度」: 120 蓝 / 12 秒 / 5 格 / 最大魔力 ×0.1 / 已燃烧者多吃一发 ×0.08 真伤。
+#   ★ 主副手都判, 而且判 ol 的**值**是不是 grayscale(照 liuguang/cast ⓪.5 那一课)。
+scoreboard players set #gs_ol zx.meta 0
+execute if items entity @s weapon.mainhand iron_sword[minecraft:custom_data~{zx:["grayscale"],ol:"grayscale"}] run scoreboard players set #gs_ol zx.meta 1
+execute if items entity @s weapon.offhand iron_sword[minecraft:custom_data~{zx:["grayscale"],ol:"grayscale"}] run scoreboard players set #gs_ol zx.meta 1
+execute if score #gs_ol zx.meta matches 1 run function sweetdream:equipment/sword/grayscale/overlimit
+execute if score #gs_ol zx.meta matches 1 run return 0
+
 function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return fail
 
@@ -36,7 +45,7 @@ execute unless entity @e[type=!#sweetdream:no_damage,distance=..2] run return fa
 # ③ 扣魔力 -30
 data modify storage manacore:in arg set value {uuid:"",value:30.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 execute if data storage manacore:out r{success:0b} run return fail
 
 # ④ 记冷却 18 秒

@@ -1,0 +1,21 @@
+{
+  "criteria": {
+    "shot": {
+      "trigger": "shot_crossbow",
+      "conditions": {
+        "item": {
+          "predicates": {
+            "minecraft:custom_data": {
+              "zx": [
+                "night_bind"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "rewards": {
+    "function": "sweetdream:equipment/bow/night_bind/shot"
+  }
+}

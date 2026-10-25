@@ -19,10 +19,10 @@
 # ============================================================
 
 # ① 上一刻在裂缝上、这一刻已走出去的 -> 朝裂缝中心拉回 1.5 格
-execute as @e[type=!#sweetdream:no_damage,tag=zx.fi_on,distance=3.01..4.5] at @s facing entity @e[tag=zx.fi_field,distance=0..,limit=1,sort=nearest] feet run tp @s ^ ^ ^1.5
+execute as @e[type=!#sweetdream:no_damage,scores={zx.fi_on=1},distance=3.01..4.5] at @s facing entity @e[tag=zx.fi_field,distance=0..,limit=1,sort=nearest] feet run tp @s ^ ^ ^1.5
 
 # ② 清掉"带标记但已不在圈内"的残留(拉回后仍在圈内的不会被清)
-execute as @e[type=!#sweetdream:no_damage,tag=zx.fi_on,distance=3.01..] run tag @s remove zx.fi_on
+scoreboard players set @e[type=!#sweetdream:no_damage,scores={zx.fi_on=1},distance=3.01..] zx.fi_on 0
 
 # ③ 本刻在裂缝上的全部生物打标记(供下一刻判断"它是从圈里走出来的")
-execute as @e[type=!#sweetdream:no_damage,distance=..3] run tag @s add zx.fi_on
+scoreboard players set @e[type=!#sweetdream:no_damage,distance=..3] zx.fi_on 1

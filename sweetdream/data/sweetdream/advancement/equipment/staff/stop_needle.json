@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "cast": {
+            "trigger": "minecraft:consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "stop_needle"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:equipment/staff/stop_needle/cast"
+    }
+}

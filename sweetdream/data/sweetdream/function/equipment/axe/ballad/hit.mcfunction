@@ -24,11 +24,21 @@ execute if items entity @s weapon.mainhand diamond_axe[custom_data~{zx:["ballad"
 execute if items entity @s weapon.offhand diamond_axe[custom_data~{zx:["ballad"]}] run scoreboard players set #bd_ok zx.meta 1
 execute unless score #bd_ok zx.meta matches 1 run return 0
 
+# 超限判定 -> 写私有 storage(后面 api/damage 那条链会动 # 字头分数, storage 不会)
+scoreboard players set #bd_ol zx.meta 0
+execute if items entity @s weapon.mainhand diamond_axe[custom_data~{zx:["ballad"],ol:"ballad"}] run scoreboard players set #bd_ol zx.meta 1
+execute if items entity @s weapon.offhand diamond_axe[custom_data~{zx:["ballad"],ol:"ballad"}] run scoreboard players set #bd_ol zx.meta 1
+data modify storage zx:work bdly.ol set value 0
+execute if score #bd_ol zx.meta matches 1 run data modify storage zx:work bdly.ol set value 1
+
 # ★ 按游戏刻去重
 execute if score @s zx.bd_lt = #now manacore.meta run return 0
 scoreboard players operation @s zx.bd_lt = #now manacore.meta
 
-# 没挂状态 -> 什么都不做
+# 超限: 这一次攻击也攒一点「曲调」—— 但必须**排在奏响之后**(见 ④.5),
+#   否则刚攒的那一层会被本次奏响当场用掉(X 变成 X+1)。
+# 没挂状态 -> 只攒层, 然后收工
+execute unless score @s zx.bd_song matches 1 run function sweetdream:equipment/axe/ballad/ol_tune
 execute unless score @s zx.bd_song matches 1 run return 0
 scoreboard players set @s zx.bd_song 0
 
@@ -73,6 +83,12 @@ function sweetdream:lib/timestop with storage zx:work fz
 # ④ 清除全部「曲调」+ 清标记
 scoreboard players set @s zx.bd_tune 0
 tag @e[tag=zx.bd_mark,distance=0..] remove zx.bd_mark
+
+# ④.5 超限: 这一击本身也算"攻击", 攒一点「曲调」(必须排在清层之后)
+function sweetdream:equipment/axe/ballad/ol_tune
+
+# ④.6 超限: 奏响后召唤（9-X）个「音符」(内部判超限 + 用 #bd_x 的旧值)
+execute if score #bd_x zx.meta matches 1.. run function sweetdream:equipment/axe/ballad/ol_spawn
 
 # ⑤ 表现
 execute at @s run particle minecraft:note ~ ~1 ~ 1.6 0.6 1.6 0.08 40 normal

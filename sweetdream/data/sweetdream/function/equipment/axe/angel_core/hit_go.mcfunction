@@ -41,7 +41,7 @@ execute if score #ac_m zx.meta matches ..79 run return 0
 # ⑤ 消耗 80 魔力(扣不动就什么都不做)
 data modify storage manacore:in arg set value {uuid:"",value:80.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 execute if data storage manacore:out r{success:0b} run tag @e[tag=zx.ac_t] remove zx.ac_t
 execute if data storage manacore:out r{success:0b} run return 0
 

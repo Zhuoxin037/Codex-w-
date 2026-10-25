@@ -1,7 +1,13 @@
 # @s=marker；原三维度每刻各一次扫描。下线/切维度/卸下/死亡及时清理。
-$execute unless entity @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},distance=0..,limit=1] run return run function sweetdream:equipment/tool/everlit/wisp_gone
-$execute if entity @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},nbt={Health:0.0f},distance=0..,limit=1] run return run function sweetdream:equipment/tool/everlit/wisp_gone
-$execute unless items entity @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},distance=0..,limit=1] weapon.offhand *[minecraft:custom_data~{zx:["everlit"]}] run return run function sweetdream:equipment/tool/everlit/wisp_gone
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute unless entity @a[tag=zx.ub,distance=0..,limit=1] run return run function sweetdream:equipment/tool/everlit/wisp_gone
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute if entity @a[tag=zx.ub,nbt={Health:0.0f},distance=0..,limit=1] run return run function sweetdream:equipment/tool/everlit/wisp_gone
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute unless items entity @a[tag=zx.ub,distance=0..,limit=1] weapon.offhand *[minecraft:custom_data~{zx:["everlit"]}] run return run function sweetdream:equipment/tool/everlit/wisp_gone
 function sweetdream:equipment/tool/everlit/visual/ensure
 execute unless score @s zx.el_clock matches 0.. run function sweetdream:equipment/tool/everlit/visual/init
 scoreboard players operation #el_mod zx.meta = @s zx.el_clock

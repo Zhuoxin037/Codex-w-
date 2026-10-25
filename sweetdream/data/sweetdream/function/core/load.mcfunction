@@ -69,6 +69,19 @@ execute unless data storage zx:config obj_rb_rep run scoreboard objectives add z
 execute unless data storage zx:config obj_rb_rep run data modify storage zx:config obj_rb_rep set value 1b
 execute unless data storage zx:config obj_rb_t run scoreboard objectives add zx.rb_t dummy
 execute unless data storage zx:config obj_rb_t run data modify storage zx:config obj_rb_t set value 1b
+#   zx.rb_omul = 回锋主动**当前这一段**的倍率(千分比整数, 2000 = ×2.0)
+#     ★ 2026-10-23 用户纠正口径: "每重复一次则**当次**伤害加倍率", 不是整体加倍率。
+#       ⇒ 第 1 段 ×2(2000), 每重复一次本段倍率 ×2 ⇒ 4 层时各段 = 2/4/8/16/32。
+#       由 cast 起手 set 2000、tick_step 每段打之前 `×= #2`(仅超限时), recalc 换算成 double。
+#     layer-skip: 这是"这一段"的倍率, 玩家要看的是层数 zx.rb_blade(已登记)
+execute unless data storage zx:config obj_rb_omul run scoreboard objectives add zx.rb_omul dummy
+execute unless data storage zx:config obj_rb_omul run data modify storage zx:config obj_rb_omul set value 1b
+#   zx.rb_ol = 这一轮连击是不是**超限·回锋**放的(0/1, 跨刻保留到连击打完)
+#     ★ 必须挂在玩家身上: tick_step 是在 0.35 秒之后跑的, 那时手上的剑未必还是回锋,
+#       不能再 `if items` 判一遍(与"换手仍生效"同源的坑)。
+#     layer-skip: 内部旗标, 不是层数
+execute unless data storage zx:config obj_rb_ol run scoreboard objectives add zx.rb_ol dummy
+execute unless data storage zx:config obj_rb_ol run data modify storage zx:config obj_rb_ol set value 1b
 
 # ---- 批2 · 斧(2026-10-07) ----
 # 崩裂(2026-10-07 批2):
@@ -90,6 +103,24 @@ execute unless data storage zx:config obj_dg_on run scoreboard objectives add zx
 execute unless data storage zx:config obj_dg_on run data modify storage zx:config obj_dg_on set value 1b
 execute unless data storage zx:config obj_dg_buf run scoreboard objectives add zx.dg_buf dummy
 execute unless data storage zx:config obj_dg_buf run data modify storage zx:config obj_dg_buf set value 1b
+# 超限·饮鸩(2026-10-23 批 K4) —— 第二形态的五个账(全部在**玩家**身上):
+#   zx.dg_ol2  = 1 = 第一形态已经放过, 血量 >60% 时再按一次可进第二形态
+#   zx.dg_mode = 2 = 第二形态进行中(每一下满蓄力平A 触发一次 ol_hit)
+#   zx.dg_n    = 本形态已触发次数(0..4, 满 4 次关模式)
+#   zx.dg_on2  = 第二形态加成的剩余秒数(10 -> 0, 到点 ol_strip)
+#   zx.dg_buf2 = 第二形态往面板 base_attack 里加了多少(账本, 撤除时按它减回去)
+#   ★ 与第一形态的 dg_on / dg_buf **分开两份**: 两段可以同时在身上
+#     (第一形态 12 秒还没到期时就开了第二形态), 共用一本账会被减两次。
+execute unless data storage zx:config obj_dg_ol2 run scoreboard objectives add zx.dg_ol2 dummy
+execute unless data storage zx:config obj_dg_ol2 run data modify storage zx:config obj_dg_ol2 set value 1b
+execute unless data storage zx:config obj_dg_mode run scoreboard objectives add zx.dg_mode dummy
+execute unless data storage zx:config obj_dg_mode run data modify storage zx:config obj_dg_mode set value 1b
+execute unless data storage zx:config obj_dg_n run scoreboard objectives add zx.dg_n dummy
+execute unless data storage zx:config obj_dg_n run data modify storage zx:config obj_dg_n set value 1b
+execute unless data storage zx:config obj_dg_on2 run scoreboard objectives add zx.dg_on2 dummy
+execute unless data storage zx:config obj_dg_on2 run data modify storage zx:config obj_dg_on2 set value 1b
+execute unless data storage zx:config obj_dg_buf2 run scoreboard objectives add zx.dg_buf2 dummy
+execute unless data storage zx:config obj_dg_buf2 run data modify storage zx:config obj_dg_buf2 set value 1b
 # 葬火(2026-10-07 批2):
 #   zx.py_x   = 放空的魔力值 X(第二段的伤害基数; 0 = 没有待结算的葬火)
 #   zx.py_rdy = 「下一次攻击」已就绪(1 = 右键之后还没打出那一下)
@@ -113,6 +144,27 @@ execute unless data storage zx:config obj_bd_song run scoreboard objectives add 
 execute unless data storage zx:config obj_bd_song run data modify storage zx:config obj_bd_song set value 1b
 execute unless data storage zx:config obj_bd_lt run scoreboard objectives add zx.bd_lt dummy
 execute unless data storage zx:config obj_bd_lt run data modify storage zx:config obj_bd_lt set value 1b
+# 超限·歌谣(2026-10-23 批 K5):
+#   zx.blt_lt = 攻击攒层之后记的 tick(kill 拿它去重: 一击必杀不该加两点)
+#   zx.nt_t   = 「音符」marker 上的倒计时刻数(20 -> 0, 到 0 铺路径结算)
+#   zx.nt_d   = 「音符」marker 上的路径伤害整点(基础攻击力 × X)
+#   ★ nt_t / nt_d 是**召唤物身上**的推进量, 不进观测镜 layer 表。
+execute unless data storage zx:config obj_blt_lt run scoreboard objectives add zx.blt_lt dummy
+execute unless data storage zx:config obj_blt_lt run data modify storage zx:config obj_blt_lt set value 1b
+execute unless data storage zx:config obj_nt_t run scoreboard objectives add zx.nt_t dummy
+execute unless data storage zx:config obj_nt_t run data modify storage zx:config obj_nt_t set value 1b
+execute unless data storage zx:config obj_nt_d run scoreboard objectives add zx.nt_d dummy
+execute unless data storage zx:config obj_nt_d run data modify storage zx:config obj_nt_d set value 1b
+#
+# 超限·剜霜 frost_carve（2026-10-23 批 K5）：
+#   zx.frc_fr = 「披霜」剩余份数(0..3; 受击消耗一份, 冻住攻击者及其 3 格内 2 秒)
+#   zx.frc_ft = 「披霜」剩余秒数(12 -> 0, 到点把 frc_fr 清 0)
+#   ★ 记在**玩家自己**身上, 但它是"一份一份的使用次数"而不是持续累积的层数,
+#     观测镜没有对应行(与饮鸩 dg_on2 同族), 不进 layer 表。
+execute unless data storage zx:config obj_frc_fr run scoreboard objectives add zx.frc_fr dummy
+execute unless data storage zx:config obj_frc_fr run data modify storage zx:config obj_frc_fr set value 1b
+execute unless data storage zx:config obj_frc_ft run scoreboard objectives add zx.frc_ft dummy
+execute unless data storage zx:config obj_frc_ft run data modify storage zx:config obj_frc_ft set value 1b
 # 威霆(2026-10-07 批2):
 #   zx.tc_n    = 「天煌」点数(0..2000; 观测镜第二行显示见 lib/reg/build 的 layer 表)
 #   zx.tc_on   = 场上是否有自己的术阵(1 = 有; 术阵结束由 field_end 反查施法者清 0)
@@ -172,6 +224,27 @@ execute unless data storage zx:config obj_ch_end run data modify storage zx:conf
 #               用户 2026-10-09 定: 可以持续触发, 但每 0.5 秒最多一次)
 execute unless data storage zx:config obj_ch_cd run scoreboard objectives add zx.ch_cd dummy
 execute unless data storage zx:config obj_ch_cd run data modify storage zx:config obj_ch_cd set value 1b
+#   zx.ch_beam = "这一刻正被自己人的持续光束照着"(1 = 有戳; 由光束每步置 1,
+#                pass_set 读完立刻清 0)。★ 2026-10-20 从实体 tag 改成计分项 ——
+#                原来每步给水晶 marker add 一次 tag、pass_set 每刻 remove,
+#                光束持续期间等于每刻都在写 marker 的实体 NBT(chunk 每刻变脏)。
+execute unless data storage zx:config obj_ch_beam run scoreboard objectives add zx.ch_beam dummy
+execute unless data storage zx:config obj_ch_beam run data modify storage zx:config obj_ch_beam set value 1b
+# ★ 2026-10-20 第二轮卡顿修复(pass_set 的两个"本刻戳"从实体 tag 改成计分项):
+#   偏振光/终末天启的光束会**持续照着**水晶 ⇒ 每 0.5 秒(zx.ch_cd 节流)走一次完整
+#   结算 ⇒ 对水晶 3/5 格内每一个生物先 addTag 再 removeTag。命中就 setChanged(),
+#   所在 chunk 标脏 ⇒ 存盘重写整份 chunk。玩家感受 = "打一下卡一下"。
+#   zx.ch_act = 这颗水晶"本刻有触发"(每刻开头清 0, 有球穿过/被光束照着才置 1)
+#   zx.ch_p   = "本轮结算的目标"(圈 -> 打 -> 清, 生命周期只有本刻)
+execute unless data storage zx:config obj_ch_act run scoreboard objectives add zx.ch_act dummy
+execute unless data storage zx:config obj_ch_act run data modify storage zx:config obj_ch_act set value 1b
+execute unless data storage zx:config obj_ch_p run scoreboard objectives add zx.ch_p dummy
+execute unless data storage zx:config obj_ch_p run data modify storage zx:config obj_ch_p set value 1b
+#   zx.ch_mine = "这颗水晶属于当前正在铺光的那位施法者" —— 由 polarized_light/cry_scan
+#                每**束**光算一次(原来在 beam_step 里每**步**算一次, 且要 NBT 匹配),
+#                beam_step 每步只按它做 scores 筛。没水晶时 #pl_has=0, 整行不跑。
+execute unless data storage zx:config obj_ch_mine run scoreboard objectives add zx.ch_mine dummy
+execute unless data storage zx:config obj_ch_mine run data modify storage zx:config obj_ch_mine set value 1b
 # 调色盘(2026-10-07 批3):
 #   zx.pal_c1 / zx.pal_c2 = 玩家身上两个"颜色槽"(0 空 / 1 红 / 2 黄 / 3 蓝)
 #   zx.pal_id / zx.pal_rng / zx.pal_thr / zx.pal_mul / zx.pal_blu / zx.pal_n
@@ -259,6 +332,14 @@ execute unless data storage zx:config obj_fm_t run data modify storage zx:config
 #   zx.fd_t = 距上次释放技能还剩几秒(10 -> 0; 由 on_cast 拉满, passive 每秒 -1, 归零兑现)
 execute unless data storage zx:config obj_fd_t run scoreboard objectives add zx.fd_t dummy
 execute unless data storage zx:config obj_fd_t run data modify storage zx:config obj_fd_t set value 1b
+# 堕梦·超限(2026-10-23 批 K9): 两个记在**被时停的生物**身上的临时量
+#   zx.fd_ol = 这一份 DoT 是不是超限档(0/1; one 里拿不到施法者, 只能挂 DoT 时拍进来)
+#   zx.fd_n  = 这一份 DoT 已经跳了几次(>6 ⇒ 之后每跳 ×0.08)
+#   ★ 都由 one 在"脱离时停摘标"时一并清 0 —— 记在生物身上的临时分数必须配收尸。
+execute unless data storage zx:config obj_fd_ol run scoreboard objectives add zx.fd_ol dummy
+execute unless data storage zx:config obj_fd_ol run data modify storage zx:config obj_fd_ol set value 1b
+execute unless data storage zx:config obj_fd_n run scoreboard objectives add zx.fd_n dummy
+execute unless data storage zx:config obj_fd_n run data modify storage zx:config obj_fd_n set value 1b
 
 # 装备效果用的"账本": 每个来源自己身上"已经加进面板多少"
 #   装备加成只能靠"穿上加、脱下减"的差值写法(面板是一个数, 没有加成层),
@@ -442,6 +523,36 @@ execute unless data storage zx:config obj_an_boost run data modify storage zx:co
 execute unless data storage zx:config obj_an_2nd run scoreboard objectives add zx.an_2nd dummy
 execute unless data storage zx:config obj_an_2nd run data modify storage zx:config obj_an_2nd set value 1b
 
+# 超限·沉锚(2026-10-23 批 K6) —— 注意前缀用 anc, 不要抢负离子(anion)的 an_*
+#   zx.anc_ol   = 这次施法是不是超限版(cast ⓪.6 拍, impact 分档读)
+#   zx.anc_back = "回到原处"窗口还剩几秒(cast 设 4, lib/second 每秒 -1, ol_back 清 0)
+#   zx.anc_bt   = 锚点 marker 自己的剩余秒数(4 -> 0 由 lib/second 每秒 -1, 归零 kill)
+#   zx.anc_own  = 锚点 marker 的主人指纹(施法者 UUID[0]), 多人同窗口时不串
+execute unless data storage zx:config obj_anc_ol run scoreboard objectives add zx.anc_ol dummy
+execute unless data storage zx:config obj_anc_ol run data modify storage zx:config obj_anc_ol set value 1b
+execute unless data storage zx:config obj_anc_back run scoreboard objectives add zx.anc_back dummy
+execute unless data storage zx:config obj_anc_back run data modify storage zx:config obj_anc_back set value 1b
+execute unless data storage zx:config obj_anc_bt run scoreboard objectives add zx.anc_bt dummy
+execute unless data storage zx:config obj_anc_bt run data modify storage zx:config obj_anc_bt set value 1b
+execute unless data storage zx:config obj_anc_own run scoreboard objectives add zx.anc_own dummy
+execute unless data storage zx:config obj_anc_own run data modify storage zx:config obj_anc_own set value 1b
+
+# 超限·焦骨 / 重溟 / 陨星(2026-10-23 批 K6)
+#   zx.scb_ol  = 这次施法是不是超限·焦骨(cast ⓪.6 拍; 分档读)
+#   zx.db_ol   = 这次施法是不是超限·重溟(cast ⓪.6 拍; 消耗上限/倍率/领域参数都读它)
+#   zx.db_r    = 领域(marker 身上)的半径 —— 普通 3 / 超限 5 / 合并后 8·11·14。
+#                ★ 放计分项而不是 marker NBT: field_tick 每秒读一次, 不写盘就不标脏。
+#   zx.mt_keep = 熔星形态是不是超限版(1 = 换手也不结束、被动照掷)。cast 拍, end 清 0。
+#                ★ 只有"触发键"(cast)判手持; 时长/概率/每刻结算一律不判主手。
+execute unless data storage zx:config obj_scb_ol run scoreboard objectives add zx.scb_ol dummy
+execute unless data storage zx:config obj_scb_ol run data modify storage zx:config obj_scb_ol set value 1b
+execute unless data storage zx:config obj_db_ol run scoreboard objectives add zx.db_ol dummy
+execute unless data storage zx:config obj_db_ol run data modify storage zx:config obj_db_ol set value 1b
+execute unless data storage zx:config obj_db_r run scoreboard objectives add zx.db_r dummy
+execute unless data storage zx:config obj_db_r run data modify storage zx:config obj_db_r set value 1b
+execute unless data storage zx:config obj_mt_keep run scoreboard objectives add zx.mt_keep dummy
+execute unless data storage zx:config obj_mt_keep run data modify storage zx:config obj_mt_keep set value 1b
+
 # 电弧超限(2026-10-12 批 I1)
 #   zx.arc_ol = 离弦那刻"手里这把是不是超限版"的快照(1/0; shot 拍, hook_victim 分流读)
 #               ★ 为什么存玩家身上: 配对/伤害都发生在**受害者那一侧**(附魔回调),
@@ -506,6 +617,11 @@ execute unless data storage zx:config obj_an_lt run scoreboard objectives add zx
 execute unless data storage zx:config obj_an_lt run data modify storage zx:config obj_an_lt set value 1b
 execute unless data storage zx:config obj_an_pull run scoreboard objectives add zx.an_pull dummy
 execute unless data storage zx:config obj_an_pull run data modify storage zx:config obj_an_pull set value 1b
+#   沉锚: zx.an_own = 挂在**目标生物**身上, 记"把我锁住的是谁"(施法者 UUID 的第 0 个 int)
+#   —— 2026-10-23 卡顿修复引入: 配合标签 zx.an_lock, 让牵引/飞锚每刻找目标时
+#   走"标签 + 整数比较"而不是 `@e[nbt={UUID:[I;...]}]`(后者 = 整份 NBT 序列化)。
+execute unless data storage zx:config obj_an_own run scoreboard objectives add zx.an_own dummy
+execute unless data storage zx:config obj_an_own run data modify storage zx:config obj_an_own set value 1b
 
 # 深海的回响 · 连续水刃：96 帧待机、48 帧施法，复用原有施法标记与入口。
 execute unless data storage zx:config obj_de_cast run scoreboard objectives add zx.de_cast dummy
@@ -619,6 +735,20 @@ execute unless data storage zx:config obj_es_gate run data modify storage zx:con
 execute unless data storage zx:config obj_ds_gate run scoreboard objectives add zx.ds_gate dummy
 execute unless data storage zx:config obj_ds_gate run data modify storage zx:config obj_ds_gate set value 1b
 
+# ---- 批 K7(2026-10-23)· 弩超限四件的"这一发是超限弩射的"标记 ----
+#   为什么统一叫 *_ol: 弩的命中结算全在附魔回调里, 那时手里拿的未必还是这把弩 ⇒
+#   "超限"必须在 shot 那一刻写进**射手身上**(与 *_paid 同一层, 坑 141)。
+#   · rs_ov = 逆弦(用 ov 而不是 ol: 该文件里 #rs_ol 已经是"进了强化档"的局部假名)
+#   · ds_ol = 黯日
+#   · dt_ol = 龙舌
+#   (退弦的 bs_ol 放在批 13 那段一起写了, 见 obj_bs_ol)
+execute unless data storage zx:config obj_rs_ov run scoreboard objectives add zx.rs_ov dummy
+execute unless data storage zx:config obj_rs_ov run data modify storage zx:config obj_rs_ov set value 1b
+execute unless data storage zx:config obj_ds_ol run scoreboard objectives add zx.ds_ol dummy
+execute unless data storage zx:config obj_ds_ol run data modify storage zx:config obj_ds_ol set value 1b
+execute unless data storage zx:config obj_dt_ol run scoreboard objectives add zx.dt_ol dummy
+execute unless data storage zx:config obj_dt_ol run data modify storage zx:config obj_dt_ol set value 1b
+
 # ---- 批 15-2(2026-10-15)· 消耗钩子四件: 归息 / 殓丝 / 回潮扣 / 烛跬 ----
 #   三件"不可再次触发 / 持续 N 秒"的记账，一律记在**玩家自己**身上:
 #     lb_cd    = 归息"下次可触发"的 tick 时刻(+160 刻 = 8 秒)
@@ -729,6 +859,25 @@ execute unless data storage zx:config obj_bs_n run scoreboard objectives add zx.
 execute unless data storage zx:config obj_bs_n run data modify storage zx:config obj_bs_n set value 1b
 execute unless data storage zx:config obj_bs_ready run scoreboard objectives add zx.bs_ready dummy
 execute unless data storage zx:config obj_bs_ready run data modify storage zx:config obj_bs_ready set value 1b
+#   ★ 批 K7(2026-10-23)超限·退弦 ----
+#     bs_ol   = 玩家侧: "这一发是超限弩射出的"(写在射手身上, 与 bs_paid 同构)
+#     bsb_n   = 目标侧: 被动已翻倍次数(0..3, 满 3 不再涨)
+#     bsb_t   = 目标侧: 主层剩余刻(6 秒 = 120; 归 0 时 bsb_n 一并清 0)
+#     bsb_x   = 目标侧: 「弦满额外再翻倍一次」那一层(0/1, 独立计时)
+#     bsb_xt  = 目标侧: 额外层剩余刻(12 秒 = 240)
+#   为什么要记在**目标身上**: 文案是"对该生物射中一次则该固定伤害翻倍" ⇒ 每只独立。
+#   为什么用 4 个而不是 2 个: 主层(最多 3 层, 6 秒)与弦满额外层(1 层, 12 秒)的
+#   计时与上限都不同, 混在一个计分项里无法表达"额外那层单独持续 12 秒"。
+execute unless data storage zx:config obj_bs_ol run scoreboard objectives add zx.bs_ol dummy
+execute unless data storage zx:config obj_bs_ol run data modify storage zx:config obj_bs_ol set value 1b
+execute unless data storage zx:config obj_bsb_n run scoreboard objectives add zx.bsb_n dummy
+execute unless data storage zx:config obj_bsb_n run data modify storage zx:config obj_bsb_n set value 1b
+execute unless data storage zx:config obj_bsb_t run scoreboard objectives add zx.bsb_t dummy
+execute unless data storage zx:config obj_bsb_t run data modify storage zx:config obj_bsb_t set value 1b
+execute unless data storage zx:config obj_bsb_x run scoreboard objectives add zx.bsb_x dummy
+execute unless data storage zx:config obj_bsb_x run data modify storage zx:config obj_bsb_x set value 1b
+execute unless data storage zx:config obj_bsb_xt run scoreboard objectives add zx.bsb_xt dummy
+execute unless data storage zx:config obj_bsb_xt run data modify storage zx:config obj_bsb_xt set value 1b
 #   冰鉴(副手): fm_cd = 内置冷却的**到期时刻**(now + 80; 存到期刻而不是倒计时,
 #     与法杖普攻门控同招 —— 不需要每刻有人去扣它)
 execute unless data storage zx:config obj_fm_cd run scoreboard objectives add zx.fm_cd dummy
@@ -739,6 +888,24 @@ execute unless data storage zx:config obj_el_cd run data modify storage zx:confi
 #   引雷针(法杖): tr_due = 预约落雷的**到期刻**(now + 20; 由 core/tick 每刻判)
 execute unless data storage zx:config obj_tr_due run scoreboard objectives add zx.tr_due dummy
 execute unless data storage zx:config obj_tr_due run data modify storage zx:config obj_tr_due set value 1b
+#   引雷针·超限(2026-10-23 批 K9):
+#     zx.tr_ol    = 主人这一轮主动是不是超限档(0/1; 排队的雷跨刻, 要按它加 ×0.1 附伤)
+#     zx.tr_bonus = 手上有没有"下次技能额外再放一次"的增益(0/1)
+#     zx.tr_bdue  = 那个增益的**到期刻**(now + 240 = 12 秒)
+#     ★ 三个都记在**玩家**身上: 落雷时执行者就是主人(排队 marker 用 UUID 换回来的),
+#       直接 @s 落分最稳, 不用反查。
+execute unless data storage zx:config obj_tr_ol run scoreboard objectives add zx.tr_ol dummy
+execute unless data storage zx:config obj_tr_ol run data modify storage zx:config obj_tr_ol set value 1b
+execute unless data storage zx:config obj_tr_bonus run scoreboard objectives add zx.tr_bonus dummy
+execute unless data storage zx:config obj_tr_bonus run data modify storage zx:config obj_tr_bonus set value 1b
+execute unless data storage zx:config obj_tr_bdue run scoreboard objectives add zx.tr_bdue dummy
+execute unless data storage zx:config obj_tr_bdue run data modify storage zx:config obj_tr_bdue set value 1b
+#     zx.tr_hn / zx.tr_he = 记在**被雷笼罩的生物**身上: 5 秒窗口内被劈的次数 / 窗口到期刻。
+#     ★ 记在生物身上的临时分数: 窗口过期即归零(bolt_cnt ⓪), 不会无限累加。
+execute unless data storage zx:config obj_tr_hn run scoreboard objectives add zx.tr_hn dummy
+execute unless data storage zx:config obj_tr_hn run data modify storage zx:config obj_tr_hn set value 1b
+execute unless data storage zx:config obj_tr_he run scoreboard objectives add zx.tr_he dummy
+execute unless data storage zx:config obj_tr_he run data modify storage zx:config obj_tr_he set value 1b
 execute unless data storage zx:config obj_bd_mode run scoreboard objectives add zx.bd_mode dummy
 execute unless data storage zx:config obj_bd_mode run data modify storage zx:config obj_bd_mode set value 1b
 
@@ -799,6 +966,9 @@ execute unless data storage zx:config obj_fb_lava run data modify storage zx:con
 #   #2 用于"当前魔力 ×2 < 上限"这种比较, #3 用于"每 3 秒一次"的取模
 scoreboard players set #2 zx.meta 2
 scoreboard players set #3 zx.meta 3
+#   #4 用于"连乘两次 ×2"(批二 10-20: 写成两条相邻的 `*= #2` 会被 check 的
+#   "相邻重复"规则拦下, 合并成一次 `*= #4` 语义完全相同且更省一行)。
+scoreboard players set #4 zx.meta 4
 # 焚舟烈空换算用的常量:
 #   #20 = 每 20 点烈空算一档, #30 = 每档 +30 魔力上限
 #   ⚠️ 这两个不建的话 `#im_p /= #20` 会变成除以 0 —— 命令报错会中断整个
@@ -821,6 +991,18 @@ execute unless data storage zx:config damage_type run data modify storage zx:con
 # 清掉残留的法球(比如 /reload 时正在飞的那几颗)。法球是实体, 留着才是真残留;
 # 而"读档以后接着飞"没有任何意义, 所以每次加载一律清空。
 kill @e[tag=zx.ball]
+# ★ 2026-10-21: 法球的两个临时计分项也要在加载时全局归零 ★
+#   zx.ball_touch / zx.bt 是"本刻临时标记", 正常由 ball/tick_target、ball/fire 当场清;
+#   但旧版判据范围写错(查询全维度、清理 4 格), 已经在存档里留下了一批脏分 ——
+#   脏分会让**下一颗球直接判命中并当场消失**(详见 tick_target ②的说明)。
+#   这里读取时全维度扫一次把它洗干净, 之后每刻只走 4 格, 不再全量遍历。
+#   三个维度都要扫: load 的默认上下文只在主世界, 脏分可能留在下界/末地。
+execute in minecraft:overworld run scoreboard players reset @e[distance=0..,scores={zx.ball_touch=1}] zx.ball_touch
+execute in minecraft:the_nether run scoreboard players reset @e[distance=0..,scores={zx.ball_touch=1}] zx.ball_touch
+execute in minecraft:the_end run scoreboard players reset @e[distance=0..,scores={zx.ball_touch=1}] zx.ball_touch
+execute in minecraft:overworld run scoreboard players reset @e[distance=0..,scores={zx.bt=1}] zx.bt
+execute in minecraft:the_nether run scoreboard players reset @e[distance=0..,scores={zx.bt=1}] zx.bt
+execute in minecraft:the_end run scoreboard players reset @e[distance=0..,scores={zx.bt=1}] zx.bt
 # 同理: 清掉残留的「共鸣水晶」marker(批3 共鸣), 免得 /reload 后留下孤儿。
 kill @e[tag=zx.ch_cry]
 # 同理: 清掉残留的“色彩”item_display(批3 调色盘; 2026-10-08 从 marker 换成可见光球)。
@@ -892,6 +1074,13 @@ execute unless data storage zx:config obj_em_gate run scoreboard objectives add 
 execute unless data storage zx:config obj_em_gate run data modify storage zx:config obj_em_gate set value 1b
 execute unless data storage zx:config obj_em_seen run scoreboard objectives add zx.em_seen dummy
 execute unless data storage zx:config obj_em_seen run data modify storage zx:config obj_em_seen set value 1b
+#   zx.em_burn = 余烬「上一次扫描时还在燃烧」的边沿标记(1 = 有)。
+#     ★ 2026-10-20 卡顿修复: 从实体 tag 改成计分项。scan_one 每 5 刻做一次
+#       「清掉 9 格内全部标记 → 给还在燃烧的重新打上」, tag 版等于每 5 刻
+#       写一遍范围内所有生物的实体 NBT(chunk 反复变脏)。计分项语义完全等价:
+#       1 = 上次扫到时在烧、0 = 不在烧, 没分数的目标等同"从没打过标记"。
+execute unless data storage zx:config obj_em_burn run scoreboard objectives add zx.em_burn dummy
+execute unless data storage zx:config obj_em_burn run data modify storage zx:config obj_em_burn set value 1b
 # 余烬高频扫描的次数锚(每 5 刻 +1, 见 core/tick 那段分频) ——
 #   排查"余烬还是不触发"时先看它涨不涨: 不涨 = 扫描压根没跑。
 execute unless data storage zx:config obj_em_scan run scoreboard objectives add zx.em_scan dummy
@@ -979,8 +1168,10 @@ execute unless data storage zx:config obj_mr_mana run scoreboard objectives add 
 execute unless data storage zx:config obj_mr_mana run data modify storage zx:config obj_mr_mana set value 1b
 execute unless data storage zx:config obj_mr_atk run scoreboard objectives add zx.mr_atk dummy
 execute unless data storage zx:config obj_mr_atk run data modify storage zx:config obj_mr_atk set value 1b
+# 幻昼「受击」: 层数 zx.mr_atk1 (无上限; 每次受到伤害 +1 层, 每层基础攻击力 +1, 5 秒逐层到期)
 execute unless data storage zx:config obj_mr_atk1 run scoreboard objectives add zx.mr_atk1 dummy
 execute unless data storage zx:config obj_mr_atk1 run data modify storage zx:config obj_mr_atk1 set value 1b
+# 幻昼「白昼」: 层数 zx.mr_atk2 (0..10; 攻击附有白昼梦的生物 +1 层, 每层基础攻击力 +2, 8 秒逐层到期)
 execute unless data storage zx:config obj_mr_atk2 run scoreboard objectives add zx.mr_atk2 dummy
 execute unless data storage zx:config obj_mr_atk2 run data modify storage zx:config obj_mr_atk2 set value 1b
 # 幻昼套装"每层独立到期"的环形记账格(见 equipment/armor/mirage/expire):
@@ -1020,6 +1211,13 @@ execute unless data storage zx:config obj_mr_b8 run data modify storage zx:confi
 # ---- 七把新武器(2026-10-04)专用的计分项 ----
 # ------------------------------------------------------------
 # 沉渊(chenyuan): 无独立状态(靠通用标签「渊海」和冷却本身)
+#   超限(2026-10-23 批 K5):
+#   zx.cy_mmn = "下一个最大魔力值技能 +10%" 还挂着(1 = 有; 兑现一次置 0)
+#   zx.cy_mml = 兑现的同刻去重戳(一次技能多段/多目标只算一次)
+execute unless data storage zx:config obj_cy_mmn run scoreboard objectives add zx.cy_mmn dummy
+execute unless data storage zx:config obj_cy_mmn run data modify storage zx:config obj_cy_mmn set value 1b
+execute unless data storage zx:config obj_cy_mml run scoreboard objectives add zx.cy_mml dummy
+execute unless data storage zx:config obj_cy_mml run data modify storage zx:config obj_cy_mml set value 1b
 # 影刃(shadow_blade): sb_end = "5 秒内击杀"窗口的结束时刻(框架时钟 #now)
 execute unless data storage zx:config obj_sb_end run scoreboard objectives add zx.sb_end dummy
 execute unless data storage zx:config obj_sb_end run data modify storage zx:config obj_sb_end set value 1b
@@ -1050,6 +1248,16 @@ execute unless data storage zx:config obj_sv_step run data modify storage zx:con
 # 天穹「升痕」层数(0..3, 挂在**生物**身上; 用计分项而不是标签, 因为要数层)
 execute unless data storage zx:config obj_stg run scoreboard objectives add zx.stg dummy
 execute unless data storage zx:config obj_stg run data modify storage zx:config obj_stg set value 1b
+# 超限·天穹(2026-10-23 批 K4): 两个"这一次施法是不是超限 / 是不是连锁段"的标记(玩家身上)
+#   zx.sv_ol = 1 = 这一次用的是超限版(cast 拍; impact 拍成 #sv_ol 快照后清零)
+#   zx.sv_cn = 1 = 这一次俯冲是"消耗 ≥10 层升痕"之后的**连锁段**
+#              (ol_chain 设, 连锁段的 impact 末尾清零; 它同时决定跃升高度 0.6 格/刻)
+#   ★ 都是"一次施法内"的临时标记, 但必须进 player_reset 清单(玩家在俯冲途中死亡重生
+#     会重建实体, 残留的 sv_cn 会让下一次跃升变成 6 格、并且跃完自动俯冲)。
+execute unless data storage zx:config obj_sv_ol run scoreboard objectives add zx.sv_ol dummy
+execute unless data storage zx:config obj_sv_ol run data modify storage zx:config obj_sv_ol set value 1b
+execute unless data storage zx:config obj_sv_cn run scoreboard objectives add zx.sv_cn dummy
+execute unless data storage zx:config obj_sv_cn run data modify storage zx:config obj_sv_cn set value 1b
 # 天穹「升痕」衰减计时(秒, 挂在**生物**身上): 每 15 秒 −1 层, 见 status/decay_stg
 execute unless data storage zx:config obj_stg_t run scoreboard objectives add zx.stg_t dummy
 execute unless data storage zx:config obj_stg_t run data modify storage zx:config obj_stg_t set value 1b
@@ -1152,6 +1360,31 @@ execute unless data storage zx:config obj_pl_ol run scoreboard objectives add zx
 execute unless data storage zx:config obj_pl_ol run data modify storage zx:config obj_pl_ol set value 1b
 execute unless data storage zx:config obj_pl_ct run scoreboard objectives add zx.pl_ct dummy
 execute unless data storage zx:config obj_pl_ct run data modify storage zx:config obj_pl_ct set value 1b
+# ★ 2026-10-20 卡顿修复: 光线的两个"一次性戳"从实体 tag 改成计分项。
+#   原先 beam/beam_one 每刻给**生物** add 再 remove zx.pl_cur / zx.pl_d ——
+#   每刻都让那只生物所在 chunk 变脏, EntityStorage 于是每刻重写整份 chunk
+#   (与 2026-10-20 法球那次是同一个机理)。计分项只动内存里的分数,
+#   不碰实体 NBT。语义完全等价: 1 = 有戳, 0 = 没戳。
+#   zx.pl_cur = 本条光线正在画的目标(beam_step 的"到达"判据)
+#   zx.pl_d   = 本刻已经画过的目标(超限三道光线逐轮筛选用, 每刻开头整体归零)
+execute unless data storage zx:config obj_pl_cur run scoreboard objectives add zx.pl_cur dummy
+execute unless data storage zx:config obj_pl_cur run data modify storage zx:config obj_pl_cur set value 1b
+execute unless data storage zx:config obj_pl_d run scoreboard objectives add zx.pl_d dummy
+execute unless data storage zx:config obj_pl_d run data modify storage zx:config obj_pl_d set value 1b
+# ★ 2026-10-20 第二轮: zx.pl_f = 铺点降频计数器(0 -> 1 -> 2 -> 0 循环, =1 的那刻跳过)。
+#   光点从"每刻一遍"改成"每 2 刻一遍": end_rod 粒子寿命约 0.5~0.75 秒, 0.1 秒补一次
+#   视觉上完全连续, 而递归开销直接减半(超限三道光的递归是最贵的一段)。
+execute unless data storage zx:config obj_pl_f run scoreboard objectives add zx.pl_f dummy
+execute unless data storage zx:config obj_pl_f run data modify storage zx:config obj_pl_f set value 1b
+# ★ 同一批卡顿修复(2026-10-20): 另外两处"每刻给生物写实体 tag"的临时戳。
+#   · zx.se_path = 幽匿残响(超限箭矢飞行期间)以箭为中心框内全部生物的本刻标记,
+#                 tick_live 每刻"清全部→框内重打", 于是每刻写 N 个生物的 NBT。
+#   · zx.fi_on   = 裂地「裂缝锁」的"上一刻是否在圈内"标记, 同样每刻重算。
+#   两者都只在自己那一个函数里用(已 grep 全包确认), 换成计分项后语义不变。
+execute unless data storage zx:config obj_se_path run scoreboard objectives add zx.se_path dummy
+execute unless data storage zx:config obj_se_path run data modify storage zx:config obj_se_path set value 1b
+execute unless data storage zx:config obj_fi_on run scoreboard objectives add zx.fi_on dummy
+execute unless data storage zx:config obj_fi_on run data modify storage zx:config obj_fi_on set value 1b
 # 启示录(apocalypse):
 #   zx.ap_pre = 每刻魔力快照(×100, 判"这次技能消耗了多少蓝"用, 见 apocalypse/snap)
 #   zx.ap_on  = 灾示状态还剩几秒(玩家身上, 0 = 没在灾示)
@@ -1180,6 +1413,13 @@ execute unless data storage zx:config obj_ap_p2 run scoreboard objectives add zx
 execute unless data storage zx:config obj_ap_p2 run data modify storage zx:config obj_ap_p2 set value 1b
 execute unless data storage zx:config obj_ap_p3 run scoreboard objectives add zx.ap_p3 dummy
 execute unless data storage zx:config obj_ap_p3 run data modify storage zx:config obj_ap_p3 set value 1b
+# 启示录超限(批 K8): 第 4 页 / 快捷栏那件是否超限版 / 本次是否"至少三页"
+execute unless data storage zx:config obj_ap_p4 run scoreboard objectives add zx.ap_p4 dummy
+execute unless data storage zx:config obj_ap_p4 run data modify storage zx:config obj_ap_p4 set value 1b
+execute unless data storage zx:config obj_ap_ol run scoreboard objectives add zx.ap_ol dummy
+execute unless data storage zx:config obj_ap_ol run data modify storage zx:config obj_ap_ol set value 1b
+execute unless data storage zx:config obj_ap_big run scoreboard objectives add zx.ap_big dummy
+execute unless data storage zx:config obj_ap_big run data modify storage zx:config obj_ap_big set value 1b
 execute unless data storage zx:config obj_ap_cur run scoreboard objectives add zx.ap_cur dummy
 execute unless data storage zx:config obj_ap_cur run data modify storage zx:config obj_ap_cur set value 1b
 # 枯枝园(withered_garden):
@@ -1306,6 +1546,17 @@ scoreboard players set #8 zx.meta 8
 #     而 `%= 0` 是真会**除零中断整个函数**的(严格说 %= 0 会让整条 operation 失败,
 #     后面那句坐标写入一条都不会跑 ⇒ 箭雨静默消失)。
 scoreboard players set #200 zx.meta 200
+#   #800 = 箭雨落点的 8 格跨度(2026-10-25 起是**普通**档: 落点 ±4.00 格, 用户拍板扩 2 格)。
+#     lib/rnd 出来的是 0..399(见 lib/rnd 头注), 先 %800 只会把 >399 的部分留着,
+#     所以要配合 `-= #400` 把范围平移成 -400..+399 ⇒ ±4.00 格。
+scoreboard players set #800 zx.meta 800
+#   #1200 / #600 = 箭雨落点的 12 格跨度(**超限**档: 落点 ±6.00 格, 2026-10-25 同批扩 2 格)。
+#     ★ 这两条是 2026-10-25 新增的 —— 超限档原来用 #800/#400(±4 格), 扩 2 格后需要
+#       跨度 12 格, 而包里没有现成的 1200/600, 必须**先 set 再用**:
+#       `%= 0`(常数没 set 过时值为 0)会让整条 operation 失败 ⇒ 箭雨静默消失、零日志
+#       (rain_deal 头注里的老坑)。平移量 = 跨度的一半 = 600。
+scoreboard players set #1200 zx.meta 1200
+scoreboard players set #600 zx.meta 600
 
 # ---- 第一批效果用的常数(2026-10-06 晚) ----
 #   #40  = 2 秒(暗海停留判定 / 暗海 +2 秒)
@@ -1386,6 +1637,9 @@ scoreboard players set #9 zx.meta 9
 scoreboard players set #10 zx.meta 10
 # 百分比换算常量: #100 配合已有的 #3, "上限 ×3 ÷100" 就是 ×0.03
 scoreboard players set #100 zx.meta 100
+# 千分比换算常量（2026-10-20 批二加）: 血量快照一律 ×1000 定点（zx.hp_snap / zx.hl_hp），
+#   读数回到"点"要 ÷1000。⚠️ 别和 #100 混用 —— 那是百分比。
+scoreboard players set #1000 zx.meta 1000
 # 万分比换算常量(2026-10-04 加): 升级的 mhp 一路上是"百分数 ×100"(即单位为 0.01%),
 #   所以"最大魔力 × #up_pct"之后要 ÷10000 才是真百分比 —— 只除 #100 会**大 100 倍**。
 #   #5000 = 10000 的一半, 用来做四舍五入(1.5% of 300 = 4.5 -> 5)。
@@ -1405,6 +1659,8 @@ scoreboard players set #32768 zx.meta 32768
 #   白昼梦的"控制时长 +20%"用已有的 #20 + #100 算(ticks ×20 ÷100 = 加两成), 不另设常量。
 scoreboard players set #115 zx.meta 115
 scoreboard players set #80 zx.meta 80
+# #13 = 1.3 的分子（启示录超限"该页 >500 时本次灾示 +30%"用 ×13÷10）
+scoreboard players set #13 zx.meta 13
 
 # ---- 通用标签的剩余秒数(TTL) + 图标淡出帧号 ----
 #   zx.tt.<英文名> = 该标签还剩几秒: tag/mark_one 施加/刷新时 set 满值, tag/ttl_tick
@@ -1425,6 +1681,16 @@ execute unless data storage zx:config obj_tt_dream run scoreboard objectives add
 execute unless data storage zx:config obj_tt_dream run data modify storage zx:config obj_tt_dream set value 1b
 execute unless data storage zx:config obj_icon_fade run scoreboard objectives add zx.icon_fade dummy
 execute unless data storage zx:config obj_icon_fade run data modify storage zx:config obj_icon_fade set value 1b
+
+# ---- 倾囊超限(2026-10-23 批 K8): 8 秒「固定伤害追伤」窗口 ----
+#   zx.ps_add = 本窗口每次固定伤害额外追加多少点(整数)
+#   zx.ps_at  = 窗口到期时刻(用框架时钟 #now 比较; 0 = 没开)
+#   ★ 另有一个全局闸 #ps_live(zx.meta): 当前有几名玩家窗口开着。with_from 的钩子
+#     靠它决定"要不要反查施法者" —— 没人开窗口时一行都不跑。
+execute unless data storage zx:config obj_ps_add run scoreboard objectives add zx.ps_add dummy
+execute unless data storage zx:config obj_ps_add run data modify storage zx:config obj_ps_add set value 1b
+execute unless data storage zx:config obj_ps_at run scoreboard objectives add zx.ps_at dummy
+execute unless data storage zx:config obj_ps_at run data modify storage zx:config obj_ps_at set value 1b
 
 # ---- 通用逐帧动画: 轨道表(见 lib/anim_step) ----
 #   14 帧的关键帧, 数组下标 0..13 = 第 1..14 帧(下标 13 是终态)。
@@ -1557,6 +1823,19 @@ execute unless data storage zx:config obj_fcv_rec run scoreboard objectives add 
 execute unless data storage zx:config obj_fcv_rec run data modify storage zx:config obj_fcv_rec set value 1b
 execute unless data storage zx:config obj_fcv_t run scoreboard objectives add zx.fcv_t dummy
 execute unless data storage zx:config obj_fcv_t run data modify storage zx:config obj_fcv_t set value 1b
+#   zx.fcv_pct = **这一份世咒**到期/被结算时按百分之几结算(30 / 40 / 80 / 100)。
+#     2026-10-23 批 K9: 原来是全局假名 #fcv_pct, 但它是**全局**的, "同一刻先放主动(80)再
+#     普攻收尾(30)"会串味; 而且"记录窗口自然到期"那条路压根拿不到施法者。
+#     ⇒ 落咒当下(curse_step ⓪.5)就拍进目标身上, final 只读目标自己那份。
+#     layer-skip: 是"档位参数", 不是层数
+execute unless data storage zx:config obj_fcv_pct run scoreboard objectives add zx.fcv_pct dummy
+execute unless data storage zx:config obj_fcv_pct run data modify storage zx:config obj_fcv_pct set value 1b
+#   zx.fcv_3v = 第三世易伤的**千分比 ×10**(120 = +20% / 140 = +40%, 超限·主动档)。
+#     受击侧 internal/damage/vuln_fcv3 是"挨打的那只在跑", 那时拿不到施法者,
+#     所以挂易伤时就把百分比一起记在目标身上; 读不到按 120 兜底。
+#     layer-skip: 同上, 不是层数
+execute unless data storage zx:config obj_fcv_3v run scoreboard objectives add zx.fcv_3v dummy
+execute unless data storage zx:config obj_fcv_3v run data modify storage zx:config obj_fcv_3v set value 1b
 #   zx.fcv_u0..u3 = **施加这份世咒的玩家**的 UUID 四段。
 #     终世可能在"记录窗口自然到期"时结算(那一刻施法者未必就在旁边),
 #     而"击杀返还魔力"必须记到**施法者**头上 ⇒ 世咒落在谁身上就得记住是谁下的。
@@ -1575,7 +1854,8 @@ execute unless data storage zx:config obj_fcv_t4 run scoreboard objectives add z
 execute unless data storage zx:config obj_fcv_t4 run data modify storage zx:config obj_fcv_t4 set value 1b
 
 #   zx.tri_form   = 「很冰的斧」当前形态(0 = 冰斧 / 1 = 热刀 / 2 = 重枪), 记在**玩家**身上。
-#   zx.tri_strong = 主动技能的"强化"还剩几秒(术阵期间 15 → 0), 归零切回冰斧。
+#   zx.tri_strong = 主动技能的"强化"还剩几秒(术阵期间 15 → 0), 归零只结束强化;
+#     ★ 2026-10-22 起归零**不再切回冰斧** —— 形态常驻(用户定)。
 #   zx.tri_next   = 下一次普攻的状态位(0 = 正常 / 1 = 额外再打 2 次 / 2 = 这一刀为空)。
 #   ★ 前缀用 tri_ 而不是 td_: zx.td_* 已经被「火种」(sword/tinder) 占用
 #     (td_on = 燃烧状态 / td_lt = 攻击去重戳), 别混。
@@ -1691,6 +1971,16 @@ execute unless data storage zx:config obj_twg_own run scoreboard objectives add 
 execute unless data storage zx:config obj_twg_own run data modify storage zx:config obj_twg_own set value 1b
 execute unless data storage zx:config obj_twg_gate run scoreboard objectives add zx.twg_gate dummy
 execute unless data storage zx:config obj_twg_gate run data modify storage zx:config obj_twg_gate set value 1b
+#   超限·雷楔(2026-10-23 批 K3)：
+#     zx.twg_dot  = 生物身上「雷击残留」的剩余秒数(0 = 没有; lib/second 每秒 -1)。
+#     zx.twg_dotk = 档位(1 = 3 秒 / 当前魔力 ×0.07；2 = 5 秒 / 最大魔力 ×0.08)。
+#   ★ 这两个**记在敌人身上**, 所以不是"玩家自攒层数", 不进 lib/reg/build 的 layer 表。
+#   ★ 必须在 core/load 声明 + 重跑 _gen_reset_scores.py 吗? —— 不需要进 player_reset:
+#     它们挂在生物身上, 玩家重生不会带走它们, 而且 0 = 未激活、lib/second 会推到底。
+execute unless data storage zx:config obj_twg_dot run scoreboard objectives add zx.twg_dot dummy
+execute unless data storage zx:config obj_twg_dot run data modify storage zx:config obj_twg_dot set value 1b
+execute unless data storage zx:config obj_twg_dotk run scoreboard objectives add zx.twg_dotk dummy
+execute unless data storage zx:config obj_twg_dotk run data modify storage zx:config obj_twg_dotk set value 1b
 
 # ---- 批 15-6 · 范围主动 + 连锁(2026-10-17) ----
 #   盲烛（剑 · 史诗）
@@ -1708,12 +1998,21 @@ execute unless data storage zx:config obj_bcd_cd run data modify storage zx:conf
 #   折径（法杖 · 史诗）
 #     「折光」不在五状态受管词表里(mark_one 逐字校验), 所以自成一套:
 #       zx.br_g  = 身上有折光(纯标签, 选择器用)
-#       zx.br_gl = **折光的到期绝对刻**(> #now 才有效; 15 秒 = 300 刻)
+#       zx.br_gl = **折光的到期绝对刻**(> #now 才有效; 10 秒 = 200 刻, 2026-10-23 起)
 #     ★ 过期不主动清标签 —— 所有判定都同时看"到期刻 > #now", 残留不会误判;
 #       被折径主动消耗时(take_zg)一起清。所以它不需要进每秒扫描。
 #     ★ 它记在**生物**身上(不是玩家), 因此不进 event/player_reset 的清单。
 execute unless data storage zx:config obj_br_gl run scoreboard objectives add zx.br_gl dummy
 execute unless data storage zx:config obj_br_gl run data modify storage zx:config obj_br_gl set value 1b
+#     zx.br_gn = 身上的「折光」**层数**(原版恒 1 / 超限最多 3; 记在生物身上)。
+#       主动技能按它决定"额外射几道分光束"。被 take_zg 消耗时一并 reset。
+execute unless data storage zx:config obj_br_gn run scoreboard objectives add zx.br_gn dummy
+execute unless data storage zx:config obj_br_gn run data modify storage zx:config obj_br_gn set value 1b
+#     zx.br_ol = 记在**玩家**身上: 这一轮主动/普攻是不是超限·折径(0/1)。
+#       ★ 必须挂在玩家: 主动是一条递归 9 段的链, 每一段都要读档位, 而递归全程
+#         执行者都是施法者本人 ⇒ 读 @s 不会被同刻别人的施法串掉(meta 假名会)。
+execute unless data storage zx:config obj_br_ol run scoreboard objectives add zx.br_ol dummy
+execute unless data storage zx:config obj_br_ol run data modify storage zx:config obj_br_ol set value 1b
 
 #   命缕（法杖 · 史诗）—— 两套丝线各用一套计分项, 互不干扰
 #     普攻血丝(记在**生物**身上):
@@ -1749,6 +2048,21 @@ execute unless data storage zx:config obj_ft_end run scoreboard objectives add z
 execute unless data storage zx:config obj_ft_end run data modify storage zx:config obj_ft_end set value 1b
 execute unless data storage zx:config obj_ft_got run scoreboard objectives add zx.ft_got dummy
 execute unless data storage zx:config obj_ft_got run data modify storage zx:config obj_ft_got set value 1b
+# 命缕超限(批 K9):
+#   zx.ft_pol  = 这一发普攻是不是超限版(attack 每次重写; settle 用它决定 0.05/0.06 与是否节流)
+#   zx.ft2_end = 第二组丝线的到期时刻(玩家; 只有超限才赋非 0, 基础版恒 0)
+#   zx.ft_tg1  = 第一组是否已绷紧过(幂等旗标, 收场时清)
+#   zx.ft2n    = 第二组的实例号(生物)     zx.ft_cn = 该生物被几条丝连着(1 / 2)
+execute unless data storage zx:config obj_ft_pol run scoreboard objectives add zx.ft_pol dummy
+execute unless data storage zx:config obj_ft_pol run data modify storage zx:config obj_ft_pol set value 1b
+execute unless data storage zx:config obj_ft2_end run scoreboard objectives add zx.ft2_end dummy
+execute unless data storage zx:config obj_ft2_end run data modify storage zx:config obj_ft2_end set value 1b
+execute unless data storage zx:config obj_ft_tg1 run scoreboard objectives add zx.ft_tg1 dummy
+execute unless data storage zx:config obj_ft_tg1 run data modify storage zx:config obj_ft_tg1 set value 1b
+execute unless data storage zx:config obj_ft2n run scoreboard objectives add zx.ft2n dummy
+execute unless data storage zx:config obj_ft2n run data modify storage zx:config obj_ft2n set value 1b
+execute unless data storage zx:config obj_ft_cn run scoreboard objectives add zx.ft_cn dummy
+execute unless data storage zx:config obj_ft_cn run data modify storage zx:config obj_ft_cn set value 1b
 
 # ---- 批 15-7 · 连接/转化/资源(2026-10-17) ----
 #   彼岸（法杖 · 传说）: 普攻命中后的附加判断"对同一个生物 8 秒内最多触发一次"
@@ -1897,6 +2211,217 @@ execute unless data storage zx:config obj_gy_cd run data modify storage zx:confi
 execute unless data storage zx:config obj_gyr_st run scoreboard objectives add zx.gyr_st dummy
 execute unless data storage zx:config obj_gyr_st run data modify storage zx:config obj_gyr_st set value 1b
 
+# 法球临时标记（2026-10-20 延迟修复）：原来是 tag，每刻 add/remove 会给生物
+#   Entity.setChanged() -> chunk 脏 -> EntityStorage 每刻重写整个 chunk（连玩家
+#   43KB 的 NBT 一起压缩）。JFR 实测保存吃掉 53% 的服务端时间。改成计分项后
+#   数据只落在 scoreboard.dat，不再碰实体 NBT。
+#   ★ 只覆盖"每刻(tick_target)"和"发射(fire)"两处；hit 的 zx.ball_hit 仍是 tag
+#     —— 它要作为字符串塞进 {target:"@e[...]"}，带花括号会让整个函数不加载。
+execute unless data storage zx:config obj_bt run scoreboard objectives add zx.bt dummy
+execute unless data storage zx:config obj_bt run data modify storage zx:config obj_bt set value 1b
+execute unless data storage zx:config obj_ball_touch run scoreboard objectives add zx.ball_touch dummy
+execute unless data storage zx:config obj_ball_touch run data modify storage zx:config obj_ball_touch set value 1b
+
+# 空枕的「本次受害者」标记（2026-10-20 同上）：原来 internal/damage/deal 每次伤害都
+#   给受害者 add/remove zx.ep_vic —— 所有伤害来源（近战/弩/法球/技能）都走这里，
+#   等于每一下攻击都写两次实体 NBT。改成分数后这条链不再产生脏 chunk。
+#   on_deal 里原来那处 `{target:"@e[tag=zx.ep_vic,...]"}` 已改成 `execute as ... {target:"@s"}`，
+#   避免字符串里出现花括号（见 check.py 的 set value 配平规则）。
+execute unless data storage zx:config obj_ep_vic run scoreboard objectives add zx.ep_vic dummy
+execute unless data storage zx:config obj_ep_vic run data modify storage zx:config obj_ep_vic set value 1b
+
+
+# ============================================================
+# 批一 10 件（2026-10-20 实装）：技能状态计分项
+# ------------------------------------------------------------
+# 【为什么全部用计分项而不是 tag】2026-10-20 定位到的延迟根因就是"每刻给生物
+#   add/remove tag ⇒ Entity.setChanged ⇒ EntityStorage 每刻重写整个 chunk"。
+#   这些新件的状态一律落在 scoreboard.dat 上，不碰实体 NBT。
+# 【★ 每件都要在 player_reset 里清】跑 _gen_reset_scores.py --write
+#   （它扫的是本文件里每一条"新建计分项"的完整命令）。
+#
+# 曳步 yebu：zx.yb  = 目标身上"本件给的缓慢"到期刻（0 = 没记过账，自愈）
+#            zx.ybu = 上次升级刻 +80（4 秒内最多升一次）
+execute unless data storage zx:config obj_yb run scoreboard objectives add zx.yb dummy
+execute unless data storage zx:config obj_yb run data modify storage zx:config obj_yb set value 1b
+execute unless data storage zx:config obj_ybu run scoreboard objectives add zx.ybu dummy
+execute unless data storage zx:config obj_ybu run data modify storage zx:config obj_ybu set value 1b
+# 曳步·超限（2026-10-23 批 K1）：缓慢Ⅲ 的叠加账 + 一次性的移速惩罚
+#   zx.yb3   = 缓慢Ⅲ 的累计到期刻（叠时长叠它，上限 now+240 = 12 秒）
+#   zx.ybm   = 1 = 这只生物已经吃过"基础移速 -50%"那一次（**每生物仅一次**，永不复位）
+#   zx.yb_be = 移速惩罚的结束刻（ol_bind_sweep 每秒判到点摘属性）
+execute unless data storage zx:config obj_yb3 run scoreboard objectives add zx.yb3 dummy
+execute unless data storage zx:config obj_yb3 run data modify storage zx:config obj_yb3 set value 1b
+execute unless data storage zx:config obj_ybm run scoreboard objectives add zx.ybm dummy
+execute unless data storage zx:config obj_ybm run data modify storage zx:config obj_ybm set value 1b
+execute unless data storage zx:config obj_yb_be run scoreboard objectives add zx.yb_be dummy
+execute unless data storage zx:config obj_yb_be run data modify storage zx:config obj_yb_be set value 1b
+#
+# 站定检测 lib/still（驻足 / 冻土共用）
+#   zx.st_n = 连续静止刻数（上限 200，移动归 0）；st_x/st_z = 上次采样坐标(×100)
+#   st_i    = 是否已建立基准
+execute unless data storage zx:config obj_st_n run scoreboard objectives add zx.st_n dummy
+execute unless data storage zx:config obj_st_n run data modify storage zx:config obj_st_n set value 1b
+execute unless data storage zx:config obj_st_x run scoreboard objectives add zx.st_x dummy
+execute unless data storage zx:config obj_st_x run data modify storage zx:config obj_st_x set value 1b
+execute unless data storage zx:config obj_st_z run scoreboard objectives add zx.st_z dummy
+execute unless data storage zx:config obj_st_z run data modify storage zx:config obj_st_z set value 1b
+execute unless data storage zx:config obj_st_i run scoreboard objectives add zx.st_i dummy
+execute unless data storage zx:config obj_st_i run data modify storage zx:config obj_st_i set value 1b
+#
+# 驻足 zhuzu：zz_w=1 正在等这 1.5 秒；zz_t 剩余刻；zz_on=1 领域在场上；
+#             zz_cd 冷却到期刻；zz_me 本件领域归属（UUID[0]）
+execute unless data storage zx:config obj_zz_w run scoreboard objectives add zx.zz_w dummy
+execute unless data storage zx:config obj_zz_w run data modify storage zx:config obj_zz_w set value 1b
+execute unless data storage zx:config obj_zz_t run scoreboard objectives add zx.zz_t dummy
+execute unless data storage zx:config obj_zz_t run data modify storage zx:config obj_zz_t set value 1b
+execute unless data storage zx:config obj_zz_on run scoreboard objectives add zx.zz_on dummy
+execute unless data storage zx:config obj_zz_on run data modify storage zx:config obj_zz_on set value 1b
+execute unless data storage zx:config obj_zz_cd run scoreboard objectives add zx.zz_cd dummy
+execute unless data storage zx:config obj_zz_cd run data modify storage zx:config obj_zz_cd set value 1b
+execute unless data storage zx:config obj_zz_me run scoreboard objectives add zx.zz_me dummy
+execute unless data storage zx:config obj_zz_me run data modify storage zx:config obj_zz_me set value 1b
+# 领域 marker 上的 zx.zz_ft（剩余秒）与 zx.zz_own（归属）—— 同一批，一并登记
+execute unless data storage zx:config obj_zz_ft run scoreboard objectives add zx.zz_ft dummy
+execute unless data storage zx:config obj_zz_ft run data modify storage zx:config obj_zz_ft set value 1b
+execute unless data storage zx:config obj_zz_own run scoreboard objectives add zx.zz_own dummy
+execute unless data storage zx:config obj_zz_own run data modify storage zx:config obj_zz_own set value 1b
+#
+# 冻土 dongtu：dng_on=1 生效中；dng_l 剩余秒；dng_hp 每秒回复量；
+#              dng_cd 冷却到期刻（从中断那刻起 20 秒）
+execute unless data storage zx:config obj_dng_on run scoreboard objectives add zx.dng_on dummy
+execute unless data storage zx:config obj_dng_on run data modify storage zx:config obj_dng_on set value 1b
+execute unless data storage zx:config obj_dng_l run scoreboard objectives add zx.dng_l dummy
+execute unless data storage zx:config obj_dng_l run data modify storage zx:config obj_dng_l set value 1b
+execute unless data storage zx:config obj_dng_hp run scoreboard objectives add zx.dng_hp dummy
+execute unless data storage zx:config obj_dng_hp run data modify storage zx:config obj_dng_hp set value 1b
+execute unless data storage zx:config obj_dng_cd run scoreboard objectives add zx.dng_cd dummy
+execute unless data storage zx:config obj_dng_cd run data modify storage zx:config obj_dng_cd set value 1b
+#
+# 回澜 huilan：hl_hp 上刻血量快照(×1000)；hl_dmg 这一下的量(×1000)；
+#              hl_t 剩余刻；hl_on=1 有待结算
+execute unless data storage zx:config obj_hl_hp run scoreboard objectives add zx.hl_hp dummy
+execute unless data storage zx:config obj_hl_hp run data modify storage zx:config obj_hl_hp set value 1b
+execute unless data storage zx:config obj_hl_dmg run scoreboard objectives add zx.hl_dmg dummy
+execute unless data storage zx:config obj_hl_dmg run data modify storage zx:config obj_hl_dmg set value 1b
+execute unless data storage zx:config obj_hl_t run scoreboard objectives add zx.hl_t dummy
+execute unless data storage zx:config obj_hl_t run data modify storage zx:config obj_hl_t set value 1b
+execute unless data storage zx:config obj_hl_on run scoreboard objectives add zx.hl_on dummy
+execute unless data storage zx:config obj_hl_on run data modify storage zx:config obj_hl_on set value 1b
+#
+# ============ 批二 14 件（2026-10-20 实装）============
+# 通用：hp_snap 上刻血量快照(×1000)，供反照/归途/息土算"这一下受了多少"
+execute unless data storage zx:config obj_hp_snap run scoreboard objectives add zx.hp_snap dummy
+execute unless data storage zx:config obj_hp_snap run data modify storage zx:config obj_hp_snap set value 1b
+# 剖心 profane：pf_poke = 普攻延长噬心的下次可触发刻
+execute unless data storage zx:config obj_pf_poke run scoreboard objectives add zx.pf_poke dummy
+execute unless data storage zx:config obj_pf_poke run data modify storage zx:config obj_pf_poke set value 1b
+# 剖心 profane：pf_slot = 施法那一刻剖心所在的快捷栏格(0..8); 超限的"前面武器 -10 秒"要用
+#   layer-skip: 这是"快捷栏位置", 不是玩家要看的数值
+execute unless data storage zx:config obj_pf_slot run scoreboard objectives add zx.pf_slot dummy
+execute unless data storage zx:config obj_pf_slot run data modify storage zx:config obj_pf_slot set value 1b
+# 饮霜 sip_frost：sf_acc 已攒治疗量；sf_cd = 下次可触发刻
+execute unless data storage zx:config obj_sf_acc run scoreboard objectives add zx.sf_acc dummy
+execute unless data storage zx:config obj_sf_acc run data modify storage zx:config obj_sf_acc set value 1b
+execute unless data storage zx:config obj_sf_cd run scoreboard objectives add zx.sf_cd dummy
+execute unless data storage zx:config obj_sf_cd run data modify storage zx:config obj_sf_cd set value 1b
+# 反照 retro_shine：rt_cd = 下次可反弹刻
+execute unless data storage zx:config obj_rt_cd run scoreboard objectives add zx.rt_cd dummy
+execute unless data storage zx:config obj_rt_cd run data modify storage zx:config obj_rt_cd set value 1b
+# 息土 breathing_soil：so_ft 领域剩余秒；so_cd 下次可触发刻；so_hc "受伤回1"的下次可触发刻
+execute unless data storage zx:config obj_so_ft run scoreboard objectives add zx.so_ft dummy
+execute unless data storage zx:config obj_so_ft run data modify storage zx:config obj_so_ft set value 1b
+execute unless data storage zx:config obj_so_cd run scoreboard objectives add zx.so_cd dummy
+execute unless data storage zx:config obj_so_cd run data modify storage zx:config obj_so_cd set value 1b
+execute unless data storage zx:config obj_so_hc run scoreboard objectives add zx.so_hc dummy
+execute unless data storage zx:config obj_so_hc run data modify storage zx:config obj_so_hc set value 1b
+# 归途 way_back：wb_on=1 灯亮着；wb_t 剩余秒；wb_dmg 累计受伤(×1000)；wb_low=1 曾低于 50%
+execute unless data storage zx:config obj_wb_on run scoreboard objectives add zx.wb_on dummy
+execute unless data storage zx:config obj_wb_on run data modify storage zx:config obj_wb_on set value 1b
+execute unless data storage zx:config obj_wb_t run scoreboard objectives add zx.wb_t dummy
+execute unless data storage zx:config obj_wb_t run data modify storage zx:config obj_wb_t set value 1b
+execute unless data storage zx:config obj_wb_dmg run scoreboard objectives add zx.wb_dmg dummy
+execute unless data storage zx:config obj_wb_dmg run data modify storage zx:config obj_wb_dmg set value 1b
+execute unless data storage zx:config obj_wb_low run scoreboard objectives add zx.wb_low dummy
+execute unless data storage zx:config obj_wb_low run data modify storage zx:config obj_wb_low set value 1b
+# 沉砣 sunken_weight: 层数 zx.sw_n (0..5, 每层 +2 固定伤害 / -4% 移速, 受伤清零)
+execute unless data storage zx:config obj_sw_n run scoreboard objectives add zx.sw_n dummy
+execute unless data storage zx:config obj_sw_n run data modify storage zx:config obj_sw_n set value 1b
+# 决堤 burst_bank：bb_on=1 突进中；bb_left 剩余 0.5 格步数；bb_run 已走步数；bb_paid 本次消耗
+execute unless data storage zx:config obj_bb_on run scoreboard objectives add zx.bb_on dummy
+execute unless data storage zx:config obj_bb_on run data modify storage zx:config obj_bb_on set value 1b
+execute unless data storage zx:config obj_bb_left run scoreboard objectives add zx.bb_left dummy
+execute unless data storage zx:config obj_bb_left run data modify storage zx:config obj_bb_left set value 1b
+execute unless data storage zx:config obj_bb_run run scoreboard objectives add zx.bb_run dummy
+execute unless data storage zx:config obj_bb_run run data modify storage zx:config obj_bb_run set value 1b
+execute unless data storage zx:config obj_bb_paid run scoreboard objectives add zx.bb_paid dummy
+execute unless data storage zx:config obj_bb_paid run data modify storage zx:config obj_bb_paid set value 1b
+# 决堤超限(批 K8): 水流地带的到期时刻 / 每秒伤害
+execute unless data storage zx:config obj_bb_wt run scoreboard objectives add zx.bb_wt dummy
+execute unless data storage zx:config obj_bb_wt run data modify storage zx:config obj_bb_wt set value 1b
+execute unless data storage zx:config obj_bb_wd run scoreboard objectives add zx.bb_wd dummy
+execute unless data storage zx:config obj_bb_wd run data modify storage zx:config obj_bb_wd set value 1b
+#
+# 锈犬 xiugou（marker 侧）：xg_ft 剩余秒；xg_n 已咬次数；xg_own 归属 UUID[0]
+execute unless data storage zx:config obj_xg_ft run scoreboard objectives add zx.xg_ft dummy
+execute unless data storage zx:config obj_xg_ft run data modify storage zx:config obj_xg_ft set value 1b
+execute unless data storage zx:config obj_xg_n run scoreboard objectives add zx.xg_n dummy
+execute unless data storage zx:config obj_xg_n run data modify storage zx:config obj_xg_n set value 1b
+execute unless data storage zx:config obj_xg_own run scoreboard objectives add zx.xg_own dummy
+execute unless data storage zx:config obj_xg_own run data modify storage zx:config obj_xg_own set value 1b
+#
+# 超限·锈犬 xiugou（2026-10-23 批 K4）：
+#   marker 侧：zx.xg_hc = 对**当前目标**的连击数(0..4, 满 5 触发后归零)；
+#             zx.xg_tg / zx.xg_th = 目标指纹(UUID[3] / UUID[0]) —— 换目标就清零。
+#   生物侧：  zx.svul  = 「被召唤物攻击受到伤害 +30%」的剩余秒数(0 = 没有)。
+#   ★ 连击记在**犬**身上(文案"锈犬每对一个生物"), 承伤 debuff 记在**生物**身上。
+execute unless data storage zx:config obj_xg_hc run scoreboard objectives add zx.xg_hc dummy
+execute unless data storage zx:config obj_xg_hc run data modify storage zx:config obj_xg_hc set value 1b
+execute unless data storage zx:config obj_xg_tg run scoreboard objectives add zx.xg_tg dummy
+execute unless data storage zx:config obj_xg_tg run data modify storage zx:config obj_xg_tg set value 1b
+execute unless data storage zx:config obj_xg_th run scoreboard objectives add zx.xg_th dummy
+execute unless data storage zx:config obj_xg_th run data modify storage zx:config obj_xg_th set value 1b
+execute unless data storage zx:config obj_svul run scoreboard objectives add zx.svul dummy
+execute unless data storage zx:config obj_svul run data modify storage zx:config obj_svul set value 1b
+#
+# 钩丝 gousi（玩家侧）：gs_st 剩余步数(12 起步，0=空闲)；gs_own 锁定的 tag 后缀
+execute unless data storage zx:config obj_gs_st run scoreboard objectives add zx.gs_st dummy
+execute unless data storage zx:config obj_gs_st run data modify storage zx:config obj_gs_st set value 1b
+execute unless data storage zx:config obj_gs_own run scoreboard objectives add zx.gs_own dummy
+execute unless data storage zx:config obj_gs_own run data modify storage zx:config obj_gs_own set value 1b
+#
+# 超限·钩丝 gousi（玩家侧, 2026-10-23 批 K3）：
+#   zx.gs3   = 本次施法走的是超限三目标闭环(1)；0 = 空闲。
+#              pull_go 靠它分流, ol_done 收尾清零, cast 出手时也按 ol 标记重置。
+#   zx.gs3p  = 「下三次技能伤害」的百分点(0/10/20/30, 封顶 30)。每拉到一个 +10。
+#              ★ 三层**共享**三次, 不是每层各三次(已定口径)。
+#   zx.gs3n  = 这份加成还剩几次技能(0..3)。
+#   zx.gs3lt = 上次消费的绝对刻 —— 同一次施法里可能连算好几遍 calc(剖心就三遍),
+#              不去重会把"下三次"一次吃光(先例 zx.mm_add_lt)。
+execute unless data storage zx:config obj_gs3 run scoreboard objectives add zx.gs3 dummy
+execute unless data storage zx:config obj_gs3 run data modify storage zx:config obj_gs3 set value 1b
+execute unless data storage zx:config obj_gs3p run scoreboard objectives add zx.gs3p dummy
+execute unless data storage zx:config obj_gs3p run data modify storage zx:config obj_gs3p set value 1b
+execute unless data storage zx:config obj_gs3n run scoreboard objectives add zx.gs3n dummy
+execute unless data storage zx:config obj_gs3n run data modify storage zx:config obj_gs3n set value 1b
+execute unless data storage zx:config obj_gs3lt run scoreboard objectives add zx.gs3lt dummy
+execute unless data storage zx:config obj_gs3lt run data modify storage zx:config obj_gs3lt set value 1b
+#
+# 铁蒺藜 tiejili（marker 侧）：tjl_ft 剩余秒
+execute unless data storage zx:config obj_tjl_ft run scoreboard objectives add zx.tjl_ft dummy
+execute unless data storage zx:config obj_tjl_ft run data modify storage zx:config obj_tjl_ft set value 1b
+#
+# 履霜 lvshuang：lsh_i 已建基准；lsh_px/pz 上次撒点坐标(×100)；lsh_ft 霜片剩余秒
+execute unless data storage zx:config obj_lsh_i run scoreboard objectives add zx.lsh_i dummy
+execute unless data storage zx:config obj_lsh_i run data modify storage zx:config obj_lsh_i set value 1b
+execute unless data storage zx:config obj_lsh_px run scoreboard objectives add zx.lsh_px dummy
+execute unless data storage zx:config obj_lsh_px run data modify storage zx:config obj_lsh_px set value 1b
+execute unless data storage zx:config obj_lsh_pz run scoreboard objectives add zx.lsh_pz dummy
+execute unless data storage zx:config obj_lsh_pz run data modify storage zx:config obj_lsh_pz set value 1b
+execute unless data storage zx:config obj_lsh_ft run scoreboard objectives add zx.lsh_ft dummy
+execute unless data storage zx:config obj_lsh_ft run data modify storage zx:config obj_lsh_ft set value 1b
+
+
 
 # 长明灯灵：显示与状态计分项（2026-10-14）
 function sweetdream:equipment/tool/everlit/visual/load
@@ -1904,3 +2429,407 @@ function sweetdream:equipment/tool/everlit/visual/load
 function sweetdream:equipment/sword/flame_brokenbody/visual/load
 function sweetdream:equipment/axe/anchor/visual/load
 function sweetdream:equipment/bow/burst_dawn/visual/load
+execute unless data storage zx:config obj_hurt_evt run scoreboard objectives add zx.hurt_evt dummy
+execute unless data storage zx:config obj_hurt_evt run data modify storage zx:config obj_hurt_evt set value 1b
+execute unless data storage zx:config obj_hurt_at run scoreboard objectives add zx.hurt_at dummy
+execute unless data storage zx:config obj_hurt_at run data modify storage zx:config obj_hurt_at set value 1b
+execute unless data storage zx:config obj_sf_hp run scoreboard objectives add zx.sf_hp dummy
+execute unless data storage zx:config obj_sf_hp run data modify storage zx:config obj_sf_hp set value 1b
+data modify storage zx:work shot_stack set value []
+execute unless data storage zx:config obj_nb_extra run scoreboard objectives add zx.nb_extra dummy
+execute unless data storage zx:config obj_nb_extra run data modify storage zx:config obj_nb_extra set value 1b
+execute unless data storage zx:config obj_tjl_end run scoreboard objectives add zx.tjl_end dummy
+execute unless data storage zx:config obj_tjl_end run data modify storage zx:config obj_tjl_end set value 1b
+execute unless data storage zx:config obj_tjl_next run scoreboard objectives add zx.tjl_next dummy
+execute unless data storage zx:config obj_tjl_next run data modify storage zx:config obj_tjl_next set value 1b
+execute unless data storage zx:config obj_tjl_id run scoreboard objectives add zx.tjl_id dummy
+execute unless data storage zx:config obj_tjl_id run data modify storage zx:config obj_tjl_id set value 1b
+scoreboard players add #tjl_serial zx.meta 0
+data modify storage zx:work damage_stack set value []
+scoreboard players set #15 zx.meta 15
+execute unless data storage zx:config obj_rt_hit run scoreboard objectives add zx.rt_hit dummy
+execute unless data storage zx:config obj_rt_hit run data modify storage zx:config obj_rt_hit set value 1b
+execute unless data storage zx:config obj_hurt_total run scoreboard objectives add zx.hurt_total minecraft.custom:minecraft.damage_taken
+execute unless data storage zx:config obj_hurt_total run data modify storage zx:config obj_hurt_total set value 1b
+execute unless data storage zx:config obj_hurt_seen run scoreboard objectives add zx.hurt_seen dummy
+execute unless data storage zx:config obj_hurt_seen run data modify storage zx:config obj_hurt_seen set value 1b
+
+# ===== 碎骨(2026-10-25 批 14): 「碎刀」三把旋转刀刃 =====
+#   zx.bb_own  = 刀刃属于谁(主人的 UUID 第 0 个整数, 用来判"自己场上还有没有碎刀")
+#   zx.bb_life = 还剩几刻(8 秒 = 160 刻)
+#   zx.bb_a    = 当前角度档位(0..23, 每刻 +1)
+#   zx.bb_dmg  = 这一把刀造成的伤害 ×1000(基础攻击力 ×0.3, 每 20 刻跟着面板重算)
+execute unless data storage zx:config obj_bb_own run scoreboard objectives add zx.bb_own dummy
+execute unless data storage zx:config obj_bb_own run data modify storage zx:config obj_bb_own set value 1b
+execute unless data storage zx:config obj_bb_life run scoreboard objectives add zx.bb_life dummy
+execute unless data storage zx:config obj_bb_life run data modify storage zx:config obj_bb_life set value 1b
+execute unless data storage zx:config obj_bb_a run scoreboard objectives add zx.bb_a dummy
+execute unless data storage zx:config obj_bb_a run data modify storage zx:config obj_bb_a set value 1b
+execute unless data storage zx:config obj_bb_dmg run scoreboard objectives add zx.bb_dmg dummy
+execute unless data storage zx:config obj_bb_dmg run data modify storage zx:config obj_bb_dmg set value 1b
+#    24 = 角度档位数(每档 15°); 没 set 过的常数一律是 0, `operation -= #24` 会白减
+scoreboard players set #24 zx.meta 24
+#    重载 / 换存档时把上一局的刀清干净(临时表现实体, 不该跨局留着)
+kill @e[tag=zx.bb_blade]
+kill @e[tag=zx.bb_new]
+
+# ===== 明烛(2026-10-25 批 14): 「烛火」 =====
+#   zx.bc_life = 烛火还剩几秒(10 秒)
+#   zx.bc_own  = 烛火属于谁(主人的 UUID 第 0 个整数)
+#   zx.bc_gate = 主人"下次可以再召唤烛火"的绝对 tick(8 秒节流)
+#   zx.bc_dw   = 生物在烛火圈里的**累计**停留秒数(记在生物身上 —— 见下方清洗)
+execute unless data storage zx:config obj_bc_life run scoreboard objectives add zx.bc_life dummy
+execute unless data storage zx:config obj_bc_life run data modify storage zx:config obj_bc_life set value 1b
+execute unless data storage zx:config obj_bc_own run scoreboard objectives add zx.bc_own dummy
+execute unless data storage zx:config obj_bc_own run data modify storage zx:config obj_bc_own set value 1b
+execute unless data storage zx:config obj_bc_gate run scoreboard objectives add zx.bc_gate dummy
+execute unless data storage zx:config obj_bc_gate run data modify storage zx:config obj_bc_gate set value 1b
+execute unless data storage zx:config obj_bc_dw run scoreboard objectives add zx.bc_dw dummy
+execute unless data storage zx:config obj_bc_dw run data modify storage zx:config obj_bc_dw set value 1b
+#    ★★ 临时分数打在生物身上会**永久留在存档** ⇒ 三维度兜底全清(铁律 ④)。
+#       这条分数只用于计时、不挂任何判死逻辑, 残留不会误杀, 但仍必须清。
+execute in minecraft:overworld as @e[distance=0..] run scoreboard players reset @s zx.bc_dw
+execute in minecraft:the_nether as @e[distance=0..] run scoreboard players reset @s zx.bc_dw
+execute in minecraft:the_end as @e[distance=0..] run scoreboard players reset @s zx.bc_dw
+kill @e[tag=zx.bc_fire]
+kill @e[tag=zx.bc_new]
+
+# ===== 借火(2026-10-25 批 14) =====
+#   zx.bf_rdy  = 充能(1 = 下一次平A 会触发借火)
+#   zx.bf_end  = 目标身上"削减到点"的绝对 tick
+#   zx.bf_oend = 玩家身上"增益到点"的绝对 tick
+#   zx.bf_mana = 套装 +100 上限的账本(到点按它退还)
+execute unless data storage zx:config obj_bf_rdy run scoreboard objectives add zx.bf_rdy dummy
+execute unless data storage zx:config obj_bf_rdy run data modify storage zx:config obj_bf_rdy set value 1b
+execute unless data storage zx:config obj_bf_end run scoreboard objectives add zx.bf_end dummy
+execute unless data storage zx:config obj_bf_end run data modify storage zx:config obj_bf_end set value 1b
+execute unless data storage zx:config obj_bf_oend run scoreboard objectives add zx.bf_oend dummy
+execute unless data storage zx:config obj_bf_oend run data modify storage zx:config obj_bf_oend set value 1b
+execute unless data storage zx:config obj_bf_mana run scoreboard objectives add zx.bf_mana dummy
+execute unless data storage zx:config obj_bf_mana run data modify storage zx:config obj_bf_mana set value 1b
+#    250 = 剩余燃烧时间(刻) -> 伤害×1000 的换算系数(÷20 换秒 ×5 = ×0.25 ⇒ ×250 定点)
+#    50  = 2% 的定点除数(×1000 ÷ 50 = ×0.02 ×1000)
+scoreboard players set #250 zx.meta 250
+scoreboard players set #50 zx.meta 50
+#    重载时把上一局没撤干净的 modifier 与标签清一遍(modifier 存在实体上, 会跨局留着)
+execute as @a run attribute @s minecraft:armor modifier remove sweetdream:bf_a_up
+execute as @a run attribute @s minecraft:armor_toughness modifier remove sweetdream:bf_t_up
+execute as @e[tag=zx.bf_strip,distance=0..] run attribute @s minecraft:armor modifier remove sweetdream:bf_a_dn
+execute as @e[tag=zx.bf_strip,distance=0..] run attribute @s minecraft:armor_toughness modifier remove sweetdream:bf_t_dn
+tag @e[tag=zx.bf_strip,distance=0..] remove zx.bf_strip
+
+# ===== 心脉(2026-10-25 批 14): 「泵动」 =====
+#   zx.hv_cd   = 玩家"受击上噬心"的下次可触发绝对 tick(6 秒节流, 打在玩家身上)
+#   zx.hv_t    = 「泵动」剩余刻数(记在生物身上)
+#   zx.hv_gate = 移动结算的 0.5 秒闸门(记在生物身上)
+#   zx.hv_px/py/pz = 上一次结算时的锚点坐标 ×100(记在生物身上)
+#   zx.hv_u0..u3   = 这一份泵动属于哪个玩家(UUID 四个 int, 记在生物身上)
+execute unless data storage zx:config obj_hv_cd run scoreboard objectives add zx.hv_cd dummy
+execute unless data storage zx:config obj_hv_cd run data modify storage zx:config obj_hv_cd set value 1b
+execute unless data storage zx:config obj_hv_t run scoreboard objectives add zx.hv_t dummy
+execute unless data storage zx:config obj_hv_t run data modify storage zx:config obj_hv_t set value 1b
+execute unless data storage zx:config obj_hv_gate run scoreboard objectives add zx.hv_gate dummy
+execute unless data storage zx:config obj_hv_gate run data modify storage zx:config obj_hv_gate set value 1b
+execute unless data storage zx:config obj_hv_px run scoreboard objectives add zx.hv_px dummy
+execute unless data storage zx:config obj_hv_px run data modify storage zx:config obj_hv_px set value 1b
+execute unless data storage zx:config obj_hv_py run scoreboard objectives add zx.hv_py dummy
+execute unless data storage zx:config obj_hv_py run data modify storage zx:config obj_hv_py set value 1b
+execute unless data storage zx:config obj_hv_pz run scoreboard objectives add zx.hv_pz dummy
+execute unless data storage zx:config obj_hv_pz run data modify storage zx:config obj_hv_pz set value 1b
+execute unless data storage zx:config obj_hv_u0 run scoreboard objectives add zx.hv_u0 dummy
+execute unless data storage zx:config obj_hv_u0 run data modify storage zx:config obj_hv_u0 set value 1b
+execute unless data storage zx:config obj_hv_u1 run scoreboard objectives add zx.hv_u1 dummy
+execute unless data storage zx:config obj_hv_u1 run data modify storage zx:config obj_hv_u1 set value 1b
+execute unless data storage zx:config obj_hv_u2 run scoreboard objectives add zx.hv_u2 dummy
+execute unless data storage zx:config obj_hv_u2 run data modify storage zx:config obj_hv_u2 set value 1b
+execute unless data storage zx:config obj_hv_u3 run scoreboard objectives add zx.hv_u3 dummy
+execute unless data storage zx:config obj_hv_u3 run data modify storage zx:config obj_hv_u3 set value 1b
+#    ★★ 前 9 个（除 hv_cd）全打在**生物**身上 ⇒ 永久留存档, 三维度兜底全清(铁律 ④)。
+#       它们只用于计时/锚点/归属, 不挂任何判死逻辑, 残留不会误杀, 但仍必须清。
+execute in minecraft:overworld as @e[distance=0..] run function sweetdream:equipment/armor/heart_vein/pump_end
+execute in minecraft:the_nether as @e[distance=0..] run function sweetdream:equipment/armor/heart_vein/pump_end
+execute in minecraft:the_end as @e[distance=0..] run function sweetdream:equipment/armor/heart_vein/pump_end
+
+# ===== 剖面 + 魔力花费账本(2026-10-25 批 14) =====
+#   zx.pm_sum = 玩家累计**实际花掉**的魔力(魔力 ×1000; 由 lib/mana/pay 记账)
+#   zx.pf_mul = 剖面"+20%"的百分点 / zx.pf_mn = 剩余次数 / zx.pf_mt = 窗口到期绝对 tick
+#   zx.pf_lt  = 同刻去重(玩家)
+#   zx.pf_hit = 这只生物被穿剖面的人打了几次(记在生物身上)
+#   zx.pf_hl  = 同刻同目标去重(记在生物身上)
+#   zx.pf_cd  = 每只生物"兑现"的 8 秒节流 / zx.pf_scd = 套装的 10 秒节流(记在生物身上)
+execute unless data storage zx:config obj_pm_sum run scoreboard objectives add zx.pm_sum dummy
+execute unless data storage zx:config obj_pm_sum run data modify storage zx:config obj_pm_sum set value 1b
+execute unless data storage zx:config obj_pf_mul run scoreboard objectives add zx.pf_mul dummy
+execute unless data storage zx:config obj_pf_mul run data modify storage zx:config obj_pf_mul set value 1b
+execute unless data storage zx:config obj_pf_mn run scoreboard objectives add zx.pf_mn dummy
+execute unless data storage zx:config obj_pf_mn run data modify storage zx:config obj_pf_mn set value 1b
+execute unless data storage zx:config obj_pf_mt run scoreboard objectives add zx.pf_mt dummy
+execute unless data storage zx:config obj_pf_mt run data modify storage zx:config obj_pf_mt set value 1b
+execute unless data storage zx:config obj_pf_lt run scoreboard objectives add zx.pf_lt dummy
+execute unless data storage zx:config obj_pf_lt run data modify storage zx:config obj_pf_lt set value 1b
+execute unless data storage zx:config obj_pf_hit run scoreboard objectives add zx.pf_hit dummy
+execute unless data storage zx:config obj_pf_hit run data modify storage zx:config obj_pf_hit set value 1b
+execute unless data storage zx:config obj_pf_hl run scoreboard objectives add zx.pf_hl dummy
+execute unless data storage zx:config obj_pf_hl run data modify storage zx:config obj_pf_hl set value 1b
+execute unless data storage zx:config obj_pf_cd run scoreboard objectives add zx.pf_cd dummy
+execute unless data storage zx:config obj_pf_cd run data modify storage zx:config obj_pf_cd set value 1b
+execute unless data storage zx:config obj_pf_scd run scoreboard objectives add zx.pf_scd dummy
+execute unless data storage zx:config obj_pf_scd run data modify storage zx:config obj_pf_scd set value 1b
+#    ★★ pf_hit / pf_hl / pf_cd / pf_scd 打在**生物**身上 ⇒ 永久留存档, 三维度兜底全清。
+execute in minecraft:overworld as @e[distance=0..] run scoreboard players reset @s zx.pf_hit
+execute in minecraft:the_nether as @e[distance=0..] run scoreboard players reset @s zx.pf_hit
+execute in minecraft:the_end as @e[distance=0..] run scoreboard players reset @s zx.pf_hit
+execute in minecraft:overworld as @e[distance=0..] run scoreboard players reset @s zx.pf_hl
+execute in minecraft:the_nether as @e[distance=0..] run scoreboard players reset @s zx.pf_hl
+execute in minecraft:the_end as @e[distance=0..] run scoreboard players reset @s zx.pf_hl
+execute in minecraft:overworld as @e[distance=0..] run scoreboard players reset @s zx.pf_cd
+execute in minecraft:the_nether as @e[distance=0..] run scoreboard players reset @s zx.pf_cd
+execute in minecraft:the_end as @e[distance=0..] run scoreboard players reset @s zx.pf_cd
+execute in minecraft:overworld as @e[distance=0..] run scoreboard players reset @s zx.pf_scd
+execute in minecraft:the_nether as @e[distance=0..] run scoreboard players reset @s zx.pf_scd
+execute in minecraft:the_end as @e[distance=0..] run scoreboard players reset @s zx.pf_scd
+
+# ===== 折潮(2026-10-25 批 14): 水墙 =====
+#   —— 记在**墙 marker** 身上（活 10 秒, 到寿由 wall_end 自己清）
+#   zx.tf_life = 剩余刻数 / zx.tf_fx = 粒子间隔计数 / zx.tf_id = 墙编号(0..3)
+#   zx.tf_u0..u3 = 立墙的人(UUID 四个 int)
+#   —— 记在**生物/玩家**身上（★ 永久留存档, 三维度兜底清）
+#   zx.tf_cw = 上次穿过的墙编号 / zx.tf_ct = 那次节流的到期绝对 tick
+#   zx.tf_mg = 主人回蓝的 2 秒闸门(到期绝对 tick)
+#   —— 记在玩家身上
+#   zx.tf_sum = 累计实际花掉的魔力(魔力 ×1000; 攒够 150000 立一面墙)
+execute unless data storage zx:config obj_tf_life run scoreboard objectives add zx.tf_life dummy
+execute unless data storage zx:config obj_tf_life run data modify storage zx:config obj_tf_life set value 1b
+execute unless data storage zx:config obj_tf_fx run scoreboard objectives add zx.tf_fx dummy
+execute unless data storage zx:config obj_tf_fx run data modify storage zx:config obj_tf_fx set value 1b
+execute unless data storage zx:config obj_tf_id run scoreboard objectives add zx.tf_id dummy
+execute unless data storage zx:config obj_tf_id run data modify storage zx:config obj_tf_id set value 1b
+execute unless data storage zx:config obj_tf_u0 run scoreboard objectives add zx.tf_u0 dummy
+execute unless data storage zx:config obj_tf_u0 run data modify storage zx:config obj_tf_u0 set value 1b
+execute unless data storage zx:config obj_tf_u1 run scoreboard objectives add zx.tf_u1 dummy
+execute unless data storage zx:config obj_tf_u1 run data modify storage zx:config obj_tf_u1 set value 1b
+execute unless data storage zx:config obj_tf_u2 run scoreboard objectives add zx.tf_u2 dummy
+execute unless data storage zx:config obj_tf_u2 run data modify storage zx:config obj_tf_u2 set value 1b
+execute unless data storage zx:config obj_tf_u3 run scoreboard objectives add zx.tf_u3 dummy
+execute unless data storage zx:config obj_tf_u3 run data modify storage zx:config obj_tf_u3 set value 1b
+execute unless data storage zx:config obj_tf_cw run scoreboard objectives add zx.tf_cw dummy
+execute unless data storage zx:config obj_tf_cw run data modify storage zx:config obj_tf_cw set value 1b
+execute unless data storage zx:config obj_tf_ct run scoreboard objectives add zx.tf_ct dummy
+execute unless data storage zx:config obj_tf_ct run data modify storage zx:config obj_tf_ct set value 1b
+execute unless data storage zx:config obj_tf_mg run scoreboard objectives add zx.tf_mg dummy
+execute unless data storage zx:config obj_tf_mg run data modify storage zx:config obj_tf_mg set value 1b
+execute unless data storage zx:config obj_tf_sum run scoreboard objectives add zx.tf_sum dummy
+execute unless data storage zx:config obj_tf_sum run data modify storage zx:config obj_tf_sum set value 1b
+#    ★★ tf_cw / tf_ct / tf_mg 打在**生物**身上 ⇒ 永久留存档(铁律), 三维度兜底全清。
+execute in minecraft:overworld as @e[distance=0..] run scoreboard players reset @s zx.tf_cw
+execute in minecraft:the_nether as @e[distance=0..] run scoreboard players reset @s zx.tf_cw
+execute in minecraft:the_end as @e[distance=0..] run scoreboard players reset @s zx.tf_cw
+execute in minecraft:overworld as @e[distance=0..] run scoreboard players reset @s zx.tf_ct
+execute in minecraft:the_nether as @e[distance=0..] run scoreboard players reset @s zx.tf_ct
+execute in minecraft:the_end as @e[distance=0..] run scoreboard players reset @s zx.tf_ct
+execute in minecraft:overworld as @e[distance=0..] run scoreboard players reset @s zx.tf_mg
+execute in minecraft:the_nether as @e[distance=0..] run scoreboard players reset @s zx.tf_mg
+execute in minecraft:the_end as @e[distance=0..] run scoreboard players reset @s zx.tf_mg
+#    墙是纯表现 marker, 重载直接清场(走 wall_end, 顺手把分数也 reset 掉)
+execute in minecraft:overworld as @e[tag=zx.tf_wall,distance=0..] at @s run function sweetdream:equipment/armor/tide_fold/wall_end
+execute in minecraft:the_nether as @e[tag=zx.tf_wall,distance=0..] at @s run function sweetdream:equipment/armor/tide_fold/wall_end
+execute in minecraft:the_end as @e[tag=zx.tf_wall,distance=0..] at @s run function sweetdream:equipment/armor/tide_fold/wall_end
+scoreboard players set #tf_seq zx.meta 0
+
+# ===== 返汐(2026-10-25 批 14): 海浪 =====
+#   —— 记在**海浪 marker** 身上（活 5 秒, 到寿/被顶掉由 wave_end 清）
+#   zx.et_life = 剩余刻数 / zx.et_fx = 粒子间隔 / zx.et_wid = 属于哪只渊海生物
+#   —— 记在**生物**身上（★ 永久留存档, 三维度兜底清）
+#   zx.et_e  = 移速削减档位(0..30, 每档 -1%)
+#   zx.et_du = "减速 modifier 是否已经挂上"的账本(0/1)
+#   zx.et_on = "这一秒在不在浪上"的戳(存的是 #now)
+#   zx.et_wid= 这只生物自己的海浪编号(稳定, 用于"旧片被新片顶掉")
+#   zx.et_ok = 位移锚点建过没有 / zx.et_px/py/pz = 上次补片锚点(坐标 ×100)
+#   —— 记在**玩家**身上
+#   zx.et_s  = 自身移速加成档位(0..20, 每档 +1%)
+#   zx.et_su = "加速 modifier 是否已经挂上"的账本(0/1)
+#   zx.et_b  = 靴子本体 +10% 移速的账本(0/1)
+#   zx.et_sa = 补片采样的 0.5 秒闸门(到期绝对 tick)
+execute unless data storage zx:config obj_et_life run scoreboard objectives add zx.et_life dummy
+execute unless data storage zx:config obj_et_life run data modify storage zx:config obj_et_life set value 1b
+execute unless data storage zx:config obj_et_fx run scoreboard objectives add zx.et_fx dummy
+execute unless data storage zx:config obj_et_fx run data modify storage zx:config obj_et_fx set value 1b
+execute unless data storage zx:config obj_et_wid run scoreboard objectives add zx.et_wid dummy
+execute unless data storage zx:config obj_et_wid run data modify storage zx:config obj_et_wid set value 1b
+execute unless data storage zx:config obj_et_e run scoreboard objectives add zx.et_e dummy
+execute unless data storage zx:config obj_et_e run data modify storage zx:config obj_et_e set value 1b
+execute unless data storage zx:config obj_et_du run scoreboard objectives add zx.et_du dummy
+execute unless data storage zx:config obj_et_du run data modify storage zx:config obj_et_du set value 1b
+execute unless data storage zx:config obj_et_on run scoreboard objectives add zx.et_on dummy
+execute unless data storage zx:config obj_et_on run data modify storage zx:config obj_et_on set value 1b
+execute unless data storage zx:config obj_et_ok run scoreboard objectives add zx.et_ok dummy
+execute unless data storage zx:config obj_et_ok run data modify storage zx:config obj_et_ok set value 1b
+execute unless data storage zx:config obj_et_px run scoreboard objectives add zx.et_px dummy
+execute unless data storage zx:config obj_et_px run data modify storage zx:config obj_et_px set value 1b
+execute unless data storage zx:config obj_et_py run scoreboard objectives add zx.et_py dummy
+execute unless data storage zx:config obj_et_py run data modify storage zx:config obj_et_py set value 1b
+execute unless data storage zx:config obj_et_pz run scoreboard objectives add zx.et_pz dummy
+execute unless data storage zx:config obj_et_pz run data modify storage zx:config obj_et_pz set value 1b
+execute unless data storage zx:config obj_et_s run scoreboard objectives add zx.et_s dummy
+execute unless data storage zx:config obj_et_s run data modify storage zx:config obj_et_s set value 1b
+execute unless data storage zx:config obj_et_su run scoreboard objectives add zx.et_su dummy
+execute unless data storage zx:config obj_et_su run data modify storage zx:config obj_et_su set value 1b
+execute unless data storage zx:config obj_et_b run scoreboard objectives add zx.et_b dummy
+execute unless data storage zx:config obj_et_b run data modify storage zx:config obj_et_b set value 1b
+execute unless data storage zx:config obj_et_sa run scoreboard objectives add zx.et_sa dummy
+execute unless data storage zx:config obj_et_sa run data modify storage zx:config obj_et_sa set value 1b
+#    ★★ et_e / et_du / et_on / et_wid / et_ok / et_px/py/pz 打在**生物**身上 ⇒ 永久留存档
+execute in minecraft:overworld as @e[distance=0..] run function sweetdream:equipment/armor/ebb_tide/entity_reset
+execute in minecraft:the_nether as @e[distance=0..] run function sweetdream:equipment/armor/ebb_tide/entity_reset
+execute in minecraft:the_end as @e[distance=0..] run function sweetdream:equipment/armor/ebb_tide/entity_reset
+#    海浪是纯表现 marker, 重载直接清场
+execute in minecraft:overworld as @e[tag=zx.et_wave,distance=0..] at @s run function sweetdream:equipment/armor/ebb_tide/wave_end
+execute in minecraft:the_nether as @e[tag=zx.et_wave,distance=0..] at @s run function sweetdream:equipment/armor/ebb_tide/wave_end
+execute in minecraft:the_end as @e[tag=zx.et_wave,distance=0..] at @s run function sweetdream:equipment/armor/ebb_tide/wave_end
+scoreboard players set #et_wid zx.meta 0
+#    脱下靴子时把身上残留的两条 modifier 摘掉(重载 = 一次全量重挂)
+execute as @a run scoreboard players set @s zx.et_b 0
+execute as @a[scores={zx.et_su=1}] run attribute @s minecraft:movement_speed modifier remove sweetdream:et_up
+execute as @a run scoreboard players set @s zx.et_su 0
+
+# ===== 浮光(2026-10-25 ★按用户 16:53 原稿重写★): 红 / 绿 / 黄 三色 + 白 =====
+#   ★★ 上一版(碎光 / 棱镜残片 / 合光 / 白光束)与"优先补齐缺色"都是我自编的, 已全部
+#      作废 —— 用户原稿是"随机获得一种光效"。别再复活。
+#   —— 记在**玩家**身上
+#   zx.gl_r / gl_g / gl_y = 是否拥有该色(0/1); **三个都 1 就是"白"**(不另设白光标志位)
+#   zx.gl_lh   = 上次"受伤 or 发了一道光"的时刻 —— 8 秒(160 刻)的门槛
+#   zx.gl_hp   = 上一刻的生命值(zx.hp_c); 变小 ⇒ 失去全部光效
+#   zx.gl_hacc = 毫血累加器(绿 1%/白 3% 每秒只有 0.2~0.6 点, 整数除法会整个吃掉)
+#   zx.gl_spd  = 自身移速 modifier 账本(0 没挂 / 1 = 黄 +20% / 2 = 白 +30%)
+#   zx.gl_cd   = 白·群体白昼梦的下次可触发时刻(3 秒节流)
+#   —— 记在**生物**身上(★ 永久留存档, 三维度兜底清)
+#   zx.gl_slt  = 被浮光减速的剩余刻(2 秒缓冲; 到期自己摘 modifier)
+#   zx.gl_fv   = 该生物当前挂着哪一档减速(0 / 40 / 45)
+execute unless data storage zx:config obj_gl_r run scoreboard objectives add zx.gl_r dummy
+execute unless data storage zx:config obj_gl_r run data modify storage zx:config obj_gl_r set value 1b
+execute unless data storage zx:config obj_gl_g run scoreboard objectives add zx.gl_g dummy
+execute unless data storage zx:config obj_gl_g run data modify storage zx:config obj_gl_g set value 1b
+execute unless data storage zx:config obj_gl_y run scoreboard objectives add zx.gl_y dummy
+execute unless data storage zx:config obj_gl_y run data modify storage zx:config obj_gl_y set value 1b
+execute unless data storage zx:config obj_gl_lh run scoreboard objectives add zx.gl_lh dummy
+execute unless data storage zx:config obj_gl_lh run data modify storage zx:config obj_gl_lh set value 1b
+execute unless data storage zx:config obj_gl_hp run scoreboard objectives add zx.gl_hp dummy
+execute unless data storage zx:config obj_gl_hp run data modify storage zx:config obj_gl_hp set value 1b
+execute unless data storage zx:config obj_gl_hacc run scoreboard objectives add zx.gl_hacc dummy
+execute unless data storage zx:config obj_gl_hacc run data modify storage zx:config obj_gl_hacc set value 1b
+execute unless data storage zx:config obj_gl_spd run scoreboard objectives add zx.gl_spd dummy
+execute unless data storage zx:config obj_gl_spd run data modify storage zx:config obj_gl_spd set value 1b
+execute unless data storage zx:config obj_gl_cd run scoreboard objectives add zx.gl_cd dummy
+execute unless data storage zx:config obj_gl_cd run data modify storage zx:config obj_gl_cd set value 1b
+execute unless data storage zx:config obj_gl_slt run scoreboard objectives add zx.gl_slt dummy
+execute unless data storage zx:config obj_gl_slt run data modify storage zx:config obj_gl_slt set value 1b
+execute unless data storage zx:config obj_gl_fv run scoreboard objectives add zx.gl_fv dummy
+execute unless data storage zx:config obj_gl_fv run data modify storage zx:config obj_gl_fv set value 1b
+#    ★★ 生物侧的 gl_slt / gl_fv 必须**连 modifier 一起撤** —— 只清分数的话
+#       那条 -40%/-45% 移速会永远留在怪身上(实体数据, 不是效果)。
+#    摘 modifier 时两条都试: 挂 40 的那只 remove 45 会失败, 但两行各自独立, 无副作用。
+execute in minecraft:overworld as @e[tag=zx.gl_sl,distance=0..] run attribute @s minecraft:movement_speed modifier remove sweetdream:gl_slow40
+execute in minecraft:overworld as @e[tag=zx.gl_sl,distance=0..] run attribute @s minecraft:movement_speed modifier remove sweetdream:gl_slow45
+execute in minecraft:overworld as @e[tag=zx.gl_sl,distance=0..] run tag @s remove zx.gl_sl
+execute in minecraft:overworld as @e[distance=0..] run scoreboard players reset @s zx.gl_slt
+execute in minecraft:overworld as @e[distance=0..] run scoreboard players reset @s zx.gl_fv
+execute in minecraft:the_nether as @e[tag=zx.gl_sl,distance=0..] run attribute @s minecraft:movement_speed modifier remove sweetdream:gl_slow40
+execute in minecraft:the_nether as @e[tag=zx.gl_sl,distance=0..] run attribute @s minecraft:movement_speed modifier remove sweetdream:gl_slow45
+execute in minecraft:the_nether as @e[tag=zx.gl_sl,distance=0..] run tag @s remove zx.gl_sl
+execute in minecraft:the_nether as @e[distance=0..] run scoreboard players reset @s zx.gl_slt
+execute in minecraft:the_nether as @e[distance=0..] run scoreboard players reset @s zx.gl_fv
+execute in minecraft:the_end as @e[tag=zx.gl_sl,distance=0..] run attribute @s minecraft:movement_speed modifier remove sweetdream:gl_slow40
+execute in minecraft:the_end as @e[tag=zx.gl_sl,distance=0..] run attribute @s minecraft:movement_speed modifier remove sweetdream:gl_slow45
+execute in minecraft:the_end as @e[tag=zx.gl_sl,distance=0..] run tag @s remove zx.gl_sl
+execute in minecraft:the_end as @e[distance=0..] run scoreboard players reset @s zx.gl_slt
+execute in minecraft:the_end as @e[distance=0..] run scoreboard players reset @s zx.gl_fv
+#    玩家侧: 重载清光(否则重进世界会带着上一局的三色), 移速 modifier 也要摘
+#    ★ 必须先按账本摘再 reset 账本 —— 顺序反过来就再也找不到"挂过没有"了。
+execute as @a[scores={zx.gl_spd=1..}] run attribute @s minecraft:movement_speed modifier remove sweetdream:gl_spd
+execute as @a run scoreboard players reset @s zx.gl_r
+execute as @a run scoreboard players reset @s zx.gl_g
+execute as @a run scoreboard players reset @s zx.gl_y
+execute as @a run scoreboard players reset @s zx.gl_lh
+execute as @a run scoreboard players reset @s zx.gl_hp
+execute as @a run scoreboard players reset @s zx.gl_hacc
+execute as @a run scoreboard players reset @s zx.gl_spd
+execute as @a run scoreboard players reset @s zx.gl_cd
+execute as @a run scoreboard players reset @s zx.gl_slt
+execute as @a run scoreboard players reset @s zx.gl_fv
+
+# ===== 迟暮(2026-10-25 ★按用户 16:53 原稿重写★): 「回光」+ 5 秒伤害记录 =====
+#   ★★ 上一版(暮账 / 暮痕 / 背水)是我自编的, 已全部作废 —— 别再复活。
+#   —— 记在**玩家**身上
+#   zx.ld_s  = 「回光」层数(自身被附加白昼梦时 +1, 15 秒统一到期)
+#   zx.ld_t  = 回光到期时刻(#now + 300)
+#   zx.ld_c  = 累计消耗**次数**(到 3 ⇒ 抗性提升Ⅴ, 随即归零重新数; 不是可攒资源)
+#   zx.ld_r5 = 抗性提升Ⅴ的到期时刻(≥1 = 这个抗性是我们给的, 受伤即清)
+#   —— 记在**生物**身上(★ 永久留存档, 三维度兜底清)
+#   zx.ld_rt = 伤害记录窗口剩余刻(100 = 5 秒)
+#   zx.ld_rec= 窗口内累计伤害(×1000 定点)
+#   zx.ld_u0..u3 = 这笔账算谁的(攻击者 UUID; 结算时投递用)
+execute unless data storage zx:config obj_ld_s run scoreboard objectives add zx.ld_s dummy
+execute unless data storage zx:config obj_ld_s run data modify storage zx:config obj_ld_s set value 1b
+execute unless data storage zx:config obj_ld_t run scoreboard objectives add zx.ld_t dummy
+execute unless data storage zx:config obj_ld_t run data modify storage zx:config obj_ld_t set value 1b
+execute unless data storage zx:config obj_ld_c run scoreboard objectives add zx.ld_c dummy
+execute unless data storage zx:config obj_ld_c run data modify storage zx:config obj_ld_c set value 1b
+execute unless data storage zx:config obj_ld_r5 run scoreboard objectives add zx.ld_r5 dummy
+execute unless data storage zx:config obj_ld_r5 run data modify storage zx:config obj_ld_r5 set value 1b
+execute unless data storage zx:config obj_ld_rt run scoreboard objectives add zx.ld_rt dummy
+execute unless data storage zx:config obj_ld_rt run data modify storage zx:config obj_ld_rt set value 1b
+execute unless data storage zx:config obj_ld_rec run scoreboard objectives add zx.ld_rec dummy
+execute unless data storage zx:config obj_ld_rec run data modify storage zx:config obj_ld_rec set value 1b
+execute unless data storage zx:config obj_ld_u0 run scoreboard objectives add zx.ld_u0 dummy
+execute unless data storage zx:config obj_ld_u0 run data modify storage zx:config obj_ld_u0 set value 1b
+execute unless data storage zx:config obj_ld_u1 run scoreboard objectives add zx.ld_u1 dummy
+execute unless data storage zx:config obj_ld_u1 run data modify storage zx:config obj_ld_u1 set value 1b
+execute unless data storage zx:config obj_ld_u2 run scoreboard objectives add zx.ld_u2 dummy
+execute unless data storage zx:config obj_ld_u2 run data modify storage zx:config obj_ld_u2 set value 1b
+execute unless data storage zx:config obj_ld_u3 run scoreboard objectives add zx.ld_u3 dummy
+execute unless data storage zx:config obj_ld_u3 run data modify storage zx:config obj_ld_u3 set value 1b
+#    生物侧: 记录窗口的分数三维度兜底清 + 摘标签
+#    ★ 只清分数不摘标签的话, core/tick 会一直对着一只"带标签但窗口已关"的怪空转。
+execute in minecraft:overworld as @e[distance=0..] run tag @s remove zx.ld_rec_on
+execute in minecraft:the_nether as @e[distance=0..] run tag @s remove zx.ld_rec_on
+execute in minecraft:the_end as @e[distance=0..] run tag @s remove zx.ld_rec_on
+execute in minecraft:overworld as @e[distance=0..] run scoreboard players reset @s zx.ld_rt
+execute in minecraft:the_nether as @e[distance=0..] run scoreboard players reset @s zx.ld_rt
+execute in minecraft:the_end as @e[distance=0..] run scoreboard players reset @s zx.ld_rt
+execute in minecraft:overworld as @e[distance=0..] run scoreboard players reset @s zx.ld_rec
+execute in minecraft:the_nether as @e[distance=0..] run scoreboard players reset @s zx.ld_rec
+execute in minecraft:the_end as @e[distance=0..] run scoreboard players reset @s zx.ld_rec
+execute in minecraft:overworld as @e[distance=0..] run scoreboard players reset @s zx.ld_u0
+execute in minecraft:the_nether as @e[distance=0..] run scoreboard players reset @s zx.ld_u0
+execute in minecraft:the_end as @e[distance=0..] run scoreboard players reset @s zx.ld_u0
+execute in minecraft:overworld as @e[distance=0..] run scoreboard players reset @s zx.ld_u1
+execute in minecraft:the_nether as @e[distance=0..] run scoreboard players reset @s zx.ld_u1
+execute in minecraft:the_end as @e[distance=0..] run scoreboard players reset @s zx.ld_u1
+execute in minecraft:overworld as @e[distance=0..] run scoreboard players reset @s zx.ld_u2
+execute in minecraft:the_nether as @e[distance=0..] run scoreboard players reset @s zx.ld_u2
+execute in minecraft:the_end as @e[distance=0..] run scoreboard players reset @s zx.ld_u2
+execute in minecraft:overworld as @e[distance=0..] run scoreboard players reset @s zx.ld_u3
+execute in minecraft:the_nether as @e[distance=0..] run scoreboard players reset @s zx.ld_u3
+execute in minecraft:the_end as @e[distance=0..] run scoreboard players reset @s zx.ld_u3
+#    玩家侧: 回光/累计/抗性标记清零（不该跨重载或重进世界留存）
+execute as @a run scoreboard players reset @s zx.ld_s
+execute as @a run scoreboard players reset @s zx.ld_t
+execute as @a run scoreboard players reset @s zx.ld_c
+execute as @a run scoreboard players reset @s zx.ld_r5
+
+execute unless data storage zx:config obj_gl_wt run scoreboard objectives add zx.gl_wt dummy
+data modify storage zx:config obj_gl_wt set value 1b
+execute unless data storage zx:config obj_regen_milli run scoreboard objectives add zx.regen_milli dummy
+data modify storage zx:config obj_regen_milli set value 1b
+execute unless data storage zx:config obj_regen_last_m run scoreboard objectives add zx.regen_last_m dummy
+data modify storage zx:config obj_regen_last_m set value 1b
+execute unless data storage zx:config obj_et_stack_t run scoreboard objectives add zx.et_stack_t dummy
+data modify storage zx:config obj_et_stack_t set value 1b
+
+execute unless data storage zx:config obj_hv_hacc run scoreboard objectives add zx.hv_hacc dummy
+data modify storage zx:config obj_hv_hacc set value 1b
+execute unless data storage zx:config obj_bc_touch run scoreboard objectives add zx.bc_touch dummy
+data modify storage zx:config obj_bc_touch set value 1b
+
+execute unless data storage zx:config obj_tf_exp run scoreboard objectives add zx.tf_exp dummy
+data modify storage zx:config obj_tf_exp set value 1b

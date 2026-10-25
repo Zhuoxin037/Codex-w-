@@ -29,12 +29,24 @@ execute unless score @s zx.atk_ok matches 1 run return 0
 execute if score @s zx.an_lt = #now manacore.meta run return 0
 scoreboard players operation @s zx.an_lt = #now manacore.meta
 
-# 10% 概率
-execute unless predicate sweetdream:chance_10 run return 0
+# 概率: 普通 10%(predicate) / 超限 30%(#rnd %10 < 3)
+#   ★ 超限分档看的是**手里这把**有没有 ol:"anchor", 不是看什么状态计分项。
+scoreboard players set #anc_ol zx.meta 0
+execute if items entity @s weapon.mainhand diamond_axe[custom_data~{ol:"anchor"}] run scoreboard players set #anc_ol zx.meta 1
+execute if items entity @s weapon.offhand diamond_axe[custom_data~{ol:"anchor"}] run scoreboard players set #anc_ol zx.meta 1
 
-# ⑤ 前方 1 格内的生物(俯仰归零, 免得打到脚前地面)
+execute if score #anc_ol zx.meta matches 0 unless predicate sweetdream:chance_10 run return 0
+execute if score #anc_ol zx.meta matches 1 run function sweetdream:lib/rnd
+execute if score #anc_ol zx.meta matches 1 run scoreboard players operation #anc_r zx.meta = #rnd zx.meta
+execute if score #anc_ol zx.meta matches 1 run scoreboard players operation #anc_r zx.meta %= #10 zx.meta
+execute if score #anc_ol zx.meta matches 1 if score #anc_r zx.meta >= #3 zx.meta run return 0
+
+# ⑤ 前方 N 格内的生物(俯仰归零, 免得打到脚前地面)
+#   普通 "前方 1 格" = 中心 ^ ^ ^1 + 半径 1; 超限 "前方 2 格" = 中心 ^ ^ ^1.5 + 半径 1.5
+#   (生物有体积, 中心与半径取同一值时的覆盖 = 0..2N; 与原件同一口径)
 tag @e[tag=zx.an_t] remove zx.an_t
-execute rotated ~ 0 positioned ^ ^ ^1 run tag @e[type=!#sweetdream:no_damage,distance=..1] add zx.an_t
+execute if score #anc_ol zx.meta matches 0 rotated ~ 0 positioned ^ ^ ^1 run tag @e[type=!#sweetdream:no_damage,distance=..1] add zx.an_t
+execute if score #anc_ol zx.meta matches 1 rotated ~ 0 positioned ^ ^ ^1.5 run tag @e[type=!#sweetdream:no_damage,distance=..1.5] add zx.an_t
 execute unless entity @e[tag=zx.an_t,distance=0..,limit=1] run return 0
 
 # ⑥ 伤害 = 自身最大魔力 ×0.06

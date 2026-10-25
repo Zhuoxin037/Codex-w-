@@ -59,4 +59,4 @@ data modify storage zx:work a.locked set value 1b
 
 # 表现: 每只被冻生物身上一撮霜花 + 一声冰裂
 $execute at @e[tag=zx.ef_$(uuid)] run particle minecraft:snowflake ~ ~1 ~ 0.4 0.6 0.4 0.02 24 normal
-$execute at @e[tag=zx.ef_$(uuid)] run playsound minecraft:block.glass.break player @a ~ ~ ~ 0.6 1.6
+$execute at @e[tag=zx.ef_$(uuid)] run playsound minecraft:block.amethyst_block.break player @a ~ ~ ~ 0.6 1.6

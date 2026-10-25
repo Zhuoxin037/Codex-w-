@@ -14,7 +14,7 @@ execute unless data storage zx:data self{ok:1b} run return 0
 # ② 消耗 30 魔力（够才扣；不够就保留武装, 直接收工）
 data modify storage manacore:in arg set value {uuid:"",value:30.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay_pas
 execute unless data storage manacore:out r{success:1b} run return 0
 
 # ③ 给目标附加「白昼梦」（附着 -> tag/mark）

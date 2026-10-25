@@ -12,6 +12,9 @@
 #   想表达"一个算出来的点", 只能借实体的 Pos —— marker 不 tick、开销极小、用完即杀。
 # 【随机源】lib/rnd(LCG)。不要用"坐标小数位 + 当前 tick"那类和攻击节奏耦合的源:
 #   站着不动打同一只怪会一直落在同一个点(lib/rnd 头注里有这个坑)。
+# 【★ 落点半径两档 ★】普通 ±4 格 / 超限 ±6 格。
+#   (2026-10-25 用户拍板整体 +2 格: 原 ±2 / ±4 ⇒ 现 ±4 / ±6, 文案同步改「其 4 格内」。)
+#   两档用 #800/#400 与 #1200/#600 两套取模, 必须互斥, 见 ② 的注释。
 # 【精度 0.01 格】计分项是 Java int, 存不了小数 —— 全程按"百分之一格"做整数运算:
 #   读坐标时用 scale 100 拉成整数, 加完偏移再用 double 0.01 写回去。
 # ============================================================
@@ -28,19 +31,29 @@ execute unless entity @e[tag=zx.dt_v,distance=0..,limit=1] run return 0
 kill @e[tag=zx.dt_drop,distance=0..]
 execute at @e[tag=zx.dt_v,limit=1] run summon minecraft:marker ~ ~ ~ {Tags:["zx.dt_drop"]}
 
-# ② 两个随机偏移, 各 ∈ [-200, +199] ⇒ 约 ±2.00 格(文案的「其 2 格内」)
-#    【★ 这两个常数必须先 set 过 ★】#400 在 core/load 里已有(=20 秒那批),
-#      #200 是 2026-10-13 为箭雨新增的。绝不能写一个没 set 过的常数:
-#      它的值是 0, 而 `operation ... %= 0` 会让**整条命令失败**(等价于除零),
-#      后面所有 Pos 写入一条都不执行 ⇒ 箭雨整段静默消失、零日志。
+# ② 两个随机偏移: 普通 ∈ [-400, +399] ⇒ 约 ±4.00 格; 超限 ∈ [-600, +599] ⇒ 约 ±6.00 格
+#    【★ 2026-10-25 用户拍板: 落点范围整体 +2 格 ★】普通 2 格 -> 4 格, 超限 4 格 -> 6 格
+#      (文案同步改成「其 4 格内」)。跨度因此是 8 格 / 12 格, 平移量 = 跨度的一半。
+#    【★ 这四个常数必须先 set 过 ★】#800 / #400 / #200 在 core/load 里已有;
+#      #1200 / #600 是 2026-10-25 为"超限扩到 6 格"新增的(见 core/load 的注释)。
+#      绝不能写一个没 set 过的常数: 它的值是 0, 而 `operation ... %= 0` 会让
+#      **整条命令失败**(等价于除零) ⇒ 后面所有 Pos 写入一条都不执行,
+#      箭雨整段静默消失、零日志 —— 这是本函数历史最贵的一个坑。
+#    【★ 两档必须**互斥** ★】由 zx.dt_ol(0 = 原版 / 1 = 超限)二选一, 不能连着做两个取模:
+#      先 %800 再 %1200 等于没做(值已经小于 800), 顺序写反了表现就是"超限仍然只落 4 格",
+#      而且零日志。
 function sweetdream:lib/rnd
 scoreboard players operation #dt_rx zx.meta = #rnd zx.meta
-scoreboard players operation #dt_rx zx.meta %= #400 zx.meta
-scoreboard players operation #dt_rx zx.meta -= #200 zx.meta
+execute if score @s zx.dt_ol matches 0 run scoreboard players operation #dt_rx zx.meta %= #800 zx.meta
+execute if score @s zx.dt_ol matches 0 run scoreboard players operation #dt_rx zx.meta -= #400 zx.meta
+execute if score @s zx.dt_ol matches 1 run scoreboard players operation #dt_rx zx.meta %= #1200 zx.meta
+execute if score @s zx.dt_ol matches 1 run scoreboard players operation #dt_rx zx.meta -= #600 zx.meta
 function sweetdream:lib/rnd
 scoreboard players operation #dt_rz zx.meta = #rnd zx.meta
-scoreboard players operation #dt_rz zx.meta %= #400 zx.meta
-scoreboard players operation #dt_rz zx.meta -= #200 zx.meta
+execute if score @s zx.dt_ol matches 0 run scoreboard players operation #dt_rz zx.meta %= #800 zx.meta
+execute if score @s zx.dt_ol matches 0 run scoreboard players operation #dt_rz zx.meta -= #400 zx.meta
+execute if score @s zx.dt_ol matches 1 run scoreboard players operation #dt_rz zx.meta %= #1200 zx.meta
+execute if score @s zx.dt_ol matches 1 run scoreboard players operation #dt_rz zx.meta -= #600 zx.meta
 
 # ③ 受害者坐标 + 随机偏移 = 这一根的落点(只动 x / z; y 沿用受害者脚下的高度)
 execute store result score #dt_px zx.meta run data get entity @e[tag=zx.dt_drop,limit=1] Pos[0] 100

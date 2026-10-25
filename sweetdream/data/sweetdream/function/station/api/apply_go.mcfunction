@@ -66,6 +66,14 @@ $execute if data storage zx:work st{kind:"overlimit"} run data modify entity @e[
 #      对不存在的键 append 会**静默失败** ⇒ 先判后补。
 #      【一次性】overlimit/api/fit 已保证"没敲过才放行", 所以不会重复追加。
 execute if data storage zx:work st{kind:"overlimit"} unless data entity @e[tag=zx.st_tmp,limit=1] equipment.mainhand.components."minecraft:custom_data".tags run data modify entity @e[tag=zx.st_tmp,limit=1] equipment.mainhand.components."minecraft:custom_data".tags set value []
+# ②.4b 【灰度·超限: 基数标签 cur_mana -> max_mana】(2026-10-23 用户口径)
+#   灰度原版是"当前魔力 ×0.08"(tags 里的 cur_mana 就是这条的语义标记), 超限改成
+#   "最大魔力 ×0.1" —— 标签不跟着换, 标签体系/总表上它还写着"按当前魔力算"。
+#   【为什么整段重建】custom_data.tags 是个列表, 命令没有"按值删元素"的手段;
+#     这一件的标签是 give 里写死的那四个词(见 grayscale/give 的 tags),
+#     重建是唯一不会误删别的词的写法。**改 give 的 tags 要同步改这一行**。
+#   【必须在 append overlimit 之前】否则 overlimit 会被这一次 set 冲掉。
+execute if data storage zx:work st{kind:"overlimit",of:"grayscale"} run data modify entity @e[tag=zx.st_tmp,limit=1] equipment.mainhand.components."minecraft:custom_data".tags set value ["liuhuo","max_mana","debuff","apply"]
 execute if data storage zx:work st{kind:"overlimit"} run data modify entity @e[tag=zx.st_tmp,limit=1] equipment.mainhand.components."minecraft:custom_data".tags append value "overlimit"
 
 # ②.5 【名字和描述都要跟着变】光改数据、物品看上去还是老样子, 拿着会以为没生效。

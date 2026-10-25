@@ -12,8 +12,16 @@
 # ① 表现: 楔子上半空持续冒电火花
 execute at @s run particle minecraft:electric_spark ~ ~0.5 ~ 0.3 0.5 0.3 0.02 4 normal
 
-# ② 剩余秒数 -1
+# ② 超限: 对范围内带 DoT 的生物结算这一秒
+#   ★ 排在倒计时**之前** ★ 先打这一秒的伤害、再减寿命。
+#     反过来写的话，寿命归零那一秒会先 kill 掉自己、这一跳永远漏掉。
+execute if entity @s[tag=zx.twg_ol] run function sweetdream:equipment/sword/thunder_wedge/ol_tick
+
+# ③ 剩余秒数 -1
 scoreboard players remove @s zx.twg_ft 1
 
-# ③ 到点收摊(8 秒)
+# ④ 到点收摊(原版 8 秒 / 超限 10 秒)
+#   ★ 先打 zx.twg_end 临时标签 ★ 只有"自然到期"才炸那场收尾落雷;
+#     cast ⑧ 收掉旧雷楔(换一个重放)时不该炸 —— 那不是"结束后"。
+execute if score @s zx.twg_ft matches ..0 run tag @s add zx.twg_end
 execute if score @s zx.twg_ft matches ..0 run function sweetdream:equipment/sword/thunder_wedge/wedge_end

@@ -5,6 +5,8 @@
 # 【规则】文案: "带有「升痕」的生物受到来自比自身位置更高的攻击时, 每层「升痕」
 #   使本次技能伤害提升 5%。"
 #     -> 本次伤害 x(1 + 5% x 层数), 层数夹在 1..3。
+#   【超限·天穹(2026-10-23 批 K4)】每层 **10%**(见 ④: 按攻击者手里那把是不是
+#     超限版分档)。层数上限仍是 3。
 # 【"来自更高处"怎么判】任一成立即可:
 #   · 攻击者带 zx.sv_high —— 天穹俯冲起手时给自己打的标记(落地那一瞬玩家未必比目标高,
 #     光比 Y 会漏判, 所以俯冲走这个标记)
@@ -21,26 +23,42 @@
 # ============================================================
 
 # ① 攻击者在不在? 不在(离线 / 无归属) -> 不改
-$execute unless entity @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run return 0
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute unless entity @a[tag=zx.ub,limit=1] run return 0
 
 # ② 目标 Y 与攻击者 Y(各 x100)
+#   【★ 攻击者 Y 不再在这里读 ★】2026-10-23 卡顿修复: `data get entity <玩家> Pos[1]`
+#   会把玩家**整份 NBT**(含背包 DataComponents)写出来, ≈10 ms —— 天穹半径 6 打 10 只、
+#   每只 3 层升痕 ⇒ 30 次 ×10 ms = 一次落地 0.3 秒的顿帧。
+#   现在攻击者 Y 由 with_from **每批只反查一次**, 存进 #stg_ay; 再由 one 每只目标
+#   从 ob.ay 复原(嵌套伤害改过它也不怕)。这里只剩"读目标 Y"这一条(生物 NBT 便宜)。
 execute store result score #vy zx.meta run data get entity @s Pos[1] 100
-scoreboard players set #ay zx.meta 0
-$execute store result score #ay zx.meta run data get entity @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] Pos[1] 100
+scoreboard players operation #ay zx.meta = #stg_ay zx.meta
 
 # ③ "来自更高处"? 高 0.5 格以上, 或带天穹俯冲标记
 scoreboard players set #hi zx.meta 0
 scoreboard players operation #dy zx.meta = #ay zx.meta
 scoreboard players operation #dy zx.meta -= #vy zx.meta
 execute if score #dy zx.meta matches 50.. run scoreboard players set #hi zx.meta 1
-$execute if entity @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},tag=zx.sv_high,limit=1] run scoreboard players set #hi zx.meta 1
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute if entity @a[tag=zx.ub,tag=zx.sv_high,limit=1] run scoreboard players set #hi zx.meta 1
 execute if score #hi zx.meta matches 0 run return 0
 
-# ④ 夹层数到 1..3, 算乘区(x100) = 100 + 5 × 层数
+# ④ 夹层数到 1..3, 算乘区(x100) = 100 + (5 或 10) × 层数
+#   【超限·天穹(2026-10-23 批 K4)】每层从 5% 抬到 **10%**。
+#   ★ 判据必须落在**攻击者手里那把**上: 「升痕」的加伤是"这把武器"的被动,
+#     别人拿着普通天穹(或别的武器)来打, 仍然是每层 5%。
+#   ★ 攻击者是玩家(① 已经确认在线), 所以直接拿 UUID 反查他手里那件 —— 主副手都判。
 execute if score #stg zx.meta matches 4.. run scoreboard players set #stg zx.meta 3
+scoreboard players set #stg_per zx.meta 5
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute as @a[tag=zx.ub,limit=1] run function sweetdream:internal/damage/stg_per
 scoreboard players set #mul zx.meta 100
 scoreboard players operation #acc zx.meta = #stg zx.meta
-scoreboard players operation #acc zx.meta *= #5 zx.meta
+scoreboard players operation #acc zx.meta *= #stg_per zx.meta
 scoreboard players operation #mul zx.meta += #acc zx.meta
 
 # ⑤ 底数(x1000) <- 这一批的原始伤害(基准快照) -> ×乘区 -> 写回 a.num

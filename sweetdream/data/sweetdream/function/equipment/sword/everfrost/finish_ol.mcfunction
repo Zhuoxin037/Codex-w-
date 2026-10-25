@@ -22,7 +22,7 @@ execute at @s run function sweetdream:api/damage
 
 # ③ 表现
 $execute at @e[tag=zx.ef_$(uuid),distance=0..] run particle minecraft:snowflake ~ ~1 ~ 0.4 0.6 0.4 0.04 24 normal
-$execute at @e[tag=zx.ef_$(uuid),distance=0..] run playsound minecraft:block.glass.break player @a ~ ~ ~ 0.8 0.7
+$execute at @e[tag=zx.ef_$(uuid),distance=0..] run playsound minecraft:block.amethyst_block.break player @a ~ ~ ~ 0.8 0.7
 
 # ④ 收尾: 摘标记 / 删记录 / 摘"等结算"的 tag(和基础版 hit_due 一致)
 $tag @e[tag=zx.ef_$(uuid)] remove zx.ef_$(uuid)

@@ -6,4 +6,6 @@
 #   zx.tri_next = 2 ⇒ 下一次普攻伤害归零(见 attack 第 ⑤ 步)。
 # ============================================================
 
-$execute as @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run scoreboard players set @s zx.tri_next 2
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute as @a[tag=zx.ub,limit=1] run scoreboard players set @s zx.tri_next 2

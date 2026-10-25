@@ -21,7 +21,7 @@ function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return 0
 data modify storage manacore:in arg set value {uuid:"",value:80.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay_pas
 execute if data storage manacore:out r{success:0b} run return 0
 
 # ④ 消耗目标身上的「噬心」（装备被动消耗 -> src:"equip"，别触发"技能消耗"那几件）

@@ -18,6 +18,8 @@
 #   【为什么不用 @a @a 两边都写选择器】scoreboard operation 的 target 和 source
 #   都写多目标时语义容易踩坑(会按"每个 target 配每个 source"配对), 拆开写最稳。
 execute as @a run scoreboard players operation @s zx.regen_last = @s zx.regen_extra
+execute as @a run scoreboard players operation @s zx.regen_last_m = @s zx.regen_milli
+scoreboard players set @a zx.regen_milli 0
 scoreboard players set @a zx.regen_extra 0
 
 # ---- ② 重新打开所有 /trigger 调试入口 ----

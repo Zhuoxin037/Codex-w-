@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "cast": {
+            "trigger": "minecraft:consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "burst_bank"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:equipment/staff/burst_bank/cast"
+    }
+}

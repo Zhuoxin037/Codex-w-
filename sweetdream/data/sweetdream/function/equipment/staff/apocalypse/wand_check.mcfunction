@@ -20,3 +20,17 @@ execute if items entity @s hotbar.5 *[custom_data~{zx:["apocalypse"]}] run tag @
 execute if items entity @s hotbar.6 *[custom_data~{zx:["apocalypse"]}] run tag @s add zx.ap_has
 execute if items entity @s hotbar.7 *[custom_data~{zx:["apocalypse"]}] run tag @s add zx.ap_has
 execute if items entity @s hotbar.8 *[custom_data~{zx:["apocalypse"]}] run tag @s add zx.ap_has
+
+# ---- 顺手算「快捷栏里那件是不是超限版」（批 K8：超限 4 页 / 灾示 ×0.8）----
+#   ★ 为什么也在这里算：spend 是在 cooling_start 事件里被调的，那时手里未必还拿着
+#     这根杖；而"能记几页"取决于杖的版本。跟 zx.ap_has 同一处算，条件天然一致。
+scoreboard players set @s zx.ap_ol 0
+execute if items entity @s hotbar.0 *[custom_data~{zx:["apocalypse"],ol:"apocalypse"}] run scoreboard players set @s zx.ap_ol 1
+execute if items entity @s hotbar.1 *[custom_data~{zx:["apocalypse"],ol:"apocalypse"}] run scoreboard players set @s zx.ap_ol 1
+execute if items entity @s hotbar.2 *[custom_data~{zx:["apocalypse"],ol:"apocalypse"}] run scoreboard players set @s zx.ap_ol 1
+execute if items entity @s hotbar.3 *[custom_data~{zx:["apocalypse"],ol:"apocalypse"}] run scoreboard players set @s zx.ap_ol 1
+execute if items entity @s hotbar.4 *[custom_data~{zx:["apocalypse"],ol:"apocalypse"}] run scoreboard players set @s zx.ap_ol 1
+execute if items entity @s hotbar.5 *[custom_data~{zx:["apocalypse"],ol:"apocalypse"}] run scoreboard players set @s zx.ap_ol 1
+execute if items entity @s hotbar.6 *[custom_data~{zx:["apocalypse"],ol:"apocalypse"}] run scoreboard players set @s zx.ap_ol 1
+execute if items entity @s hotbar.7 *[custom_data~{zx:["apocalypse"],ol:"apocalypse"}] run scoreboard players set @s zx.ap_ol 1
+execute if items entity @s hotbar.8 *[custom_data~{zx:["apocalypse"],ol:"apocalypse"}] run scoreboard players set @s zx.ap_ol 1

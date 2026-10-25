@@ -32,8 +32,8 @@ execute at @s anchored eyes positioned ^ ^-0.12 ^12 run particle minecraft:end_r
 #     5 个圆心(2/5.5/9/12.5/16)间距 3.5 < 2×2 ⇒ 相邻球充分重叠(最细处约 1.9 格宽)。
 #   ★ 判定留在准星轴上, **不带** ^-0.12 的视觉偏移(和 scan 一个口径, 见坑 69)。
 #   ★ 这条只"打戳", 不结算、不播粒子 —— 结算全在 chime 那边, 免得两处各写一套。
-$execute at @s anchored eyes positioned ^ ^ ^2 run tag @e[type=minecraft:marker,tag=zx.ch_cry,distance=..2,nbt={data:{zx:{ch:{u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}}}}] add zx.ch_beam
-$execute at @s anchored eyes positioned ^ ^ ^5.5 run tag @e[type=minecraft:marker,tag=zx.ch_cry,distance=..2,nbt={data:{zx:{ch:{u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}}}}] add zx.ch_beam
-$execute at @s anchored eyes positioned ^ ^ ^9 run tag @e[type=minecraft:marker,tag=zx.ch_cry,distance=..2,nbt={data:{zx:{ch:{u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}}}}] add zx.ch_beam
-$execute at @s anchored eyes positioned ^ ^ ^12.5 run tag @e[type=minecraft:marker,tag=zx.ch_cry,distance=..2,nbt={data:{zx:{ch:{u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}}}}] add zx.ch_beam
-$execute at @s anchored eyes positioned ^ ^ ^16 run tag @e[type=minecraft:marker,tag=zx.ch_cry,distance=..2,nbt={data:{zx:{ch:{u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}}}}] add zx.ch_beam
+$execute at @s anchored eyes positioned ^ ^ ^2 run scoreboard players set @e[type=minecraft:marker,tag=zx.ch_cry,distance=..2,nbt={data:{zx:{ch:{u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}}}}] zx.ch_beam 1
+$execute at @s anchored eyes positioned ^ ^ ^5.5 run scoreboard players set @e[type=minecraft:marker,tag=zx.ch_cry,distance=..2,nbt={data:{zx:{ch:{u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}}}}] zx.ch_beam 1
+$execute at @s anchored eyes positioned ^ ^ ^9 run scoreboard players set @e[type=minecraft:marker,tag=zx.ch_cry,distance=..2,nbt={data:{zx:{ch:{u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}}}}] zx.ch_beam 1
+$execute at @s anchored eyes positioned ^ ^ ^12.5 run scoreboard players set @e[type=minecraft:marker,tag=zx.ch_cry,distance=..2,nbt={data:{zx:{ch:{u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}}}}] zx.ch_beam 1
+$execute at @s anchored eyes positioned ^ ^ ^16 run scoreboard players set @e[type=minecraft:marker,tag=zx.ch_cry,distance=..2,nbt={data:{zx:{ch:{u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}}}}] zx.ch_beam 1

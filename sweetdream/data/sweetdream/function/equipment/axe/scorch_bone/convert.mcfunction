@@ -12,9 +12,14 @@
 function sweetdream:tag/unmark {target:"@e[tag=zx.sc_t,distance=0..,limit=1]",mark:"liuhuo"}
 function sweetdream:tag/mark {target:"@e[tag=zx.sc_t,distance=0..,limit=1]",mark:"yehuo"}
 
+# 返还: 普通 40 / 超限 本次消耗 260 的 50% = 130
+scoreboard players set #sc_r zx.meta 40
+execute if score @s zx.scb_ol matches 1 run scoreboard players set #sc_r zx.meta 130
 data modify storage manacore:in arg set value {uuid:"",value:40.0}
+execute store result storage manacore:in arg.value double 1 run scoreboard players get #sc_r zx.meta
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/mana/add
+execute if score @s zx.scb_ol matches 1 run tellraw @s [{"text":"焦骨: 「流火」化为「夜火」 · 返还 ","color":"gold"},{"score":{"name":"#sc_r","objective":"zx.meta"},"color":"aqua"},{"text":" 魔力","color":"gold"}]
 
 # 表现: 流火被"烧成"夜火的那一下
 execute at @e[tag=zx.sc_t,distance=0..,limit=1] run particle minecraft:soul_fire_flame ~ ~0.6 ~ 0.5 0.5 0.5 0.02 20 normal

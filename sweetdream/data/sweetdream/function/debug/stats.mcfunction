@@ -76,10 +76,10 @@ execute store result score #g_fcnt zx.meta run data get storage manacore:out r.c
 execute store result score #g_flim zx.meta run data get storage manacore:out r.limit
 
 # ---- 原版属性(游戏里真正生效的那一套) ----
-execute store result storage zx:work pl.v_atk double 1 run attribute @s minecraft:attack_damage get
-execute store result storage zx:work pl.v_hpmax double 1 run attribute @s minecraft:max_health get
-execute store result storage zx:work pl.v_armor double 1 run attribute @s minecraft:armor get
-execute store result storage zx:work pl.v_speed double 1 run attribute @s minecraft:movement_speed get
+execute store result storage zx:work pl.v_atk double 0.001 run attribute @s minecraft:attack_damage get 1000
+execute store result storage zx:work pl.v_hpmax double 0.001 run attribute @s minecraft:max_health get 1000
+execute store result storage zx:work pl.v_armor double 0.001 run attribute @s minecraft:armor get 1000
+execute store result storage zx:work pl.v_speed double 0.001 run attribute @s minecraft:movement_speed get 1000
 execute store result score #g_hp zx.meta run data get entity @s Health 1
 execute store result score #g_hpmax zx.meta run attribute @s minecraft:max_health get
 
@@ -109,13 +109,16 @@ scoreboard players operation #rp zx.meta *= #rt zx.meta
 scoreboard players set #k1000 zx.meta 1000
 scoreboard players operation #rp zx.meta /= #k1000 zx.meta
 execute store result storage zx:work pl.regen_pack double 0.001 run scoreboard players get #rp zx.meta
-execute store result storage zx:work pl.regen_add double 1 run scoreboard players get @s zx.regen_last
-execute store result score #rt zx.meta run scoreboard players get @s zx.regen_last
+scoreboard players operation #rt zx.meta = @s zx.regen_last
+scoreboard players operation #rt zx.meta *= #1000 zx.meta
+scoreboard players add @s zx.regen_last_m 0
+scoreboard players operation #rt zx.meta += @s zx.regen_last_m
+execute store result storage zx:work pl.regen_add double 0.001 run scoreboard players get #rt zx.meta
 scoreboard players operation #rp zx.meta += #rt zx.meta
 execute store result storage zx:work pl.regen_total double 0.001 run scoreboard players get #rp zx.meta
 
 # 【冷却缩减百分比】0.25 -> 25.0, 屏幕上直接是"缩短百分之几"
-execute store result storage zx:work pl.cd_pct double 100 run data get storage zx:work pl.cooldown_reduction
+execute store result storage zx:work pl.cd_pct double 0.1 run data get storage zx:work pl.cooldown_reduction 1000
 
 # ------------------------------------------------------------
 # ④ 装备扫描 —— 穿着什么报什么的名单(zx:work eq.<id> = 1b)
@@ -241,6 +244,12 @@ tellraw @s [{"text":"  术阵      ","color":"gray"},{"score":{"name":"#g_fcnt",
 #   本函数仍然只读玩家数据(与全文件"只读"的约定一致)。
 # ============================================================
 tellraw @s [{"text":"── 在身效果 ──","color":"dark_gray"}]
+data modify storage zx:look xline set value [{text:""}]
+scoreboard players set #ly_first zx.meta 1
+function sweetdream:lib/look/new_equipment
+tellraw @s [{"nbt":"xline","storage":"zx:look","interpret":true}]
+execute if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["wrath"]}] run tellraw @s [{text:"  愠怒独立增伤仅适用于最大魔力值相关技能。",color:"dark_gray"}]
+tellraw @s [{text:"  通道倍率包含当前待消耗增益；特定目标的易伤按目标状态结算。",color:"dark_gray"}]
 
 # ---- 空枕「静息」：距上次造成伤害还差几秒 / 已就绪(下次攻击附「白昼梦」) ----
 scoreboard players operation #g_s zx.meta = #now manacore.meta

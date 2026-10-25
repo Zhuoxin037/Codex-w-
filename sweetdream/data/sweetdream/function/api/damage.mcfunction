@@ -13,18 +13,24 @@
 #             想穿甲(无视护甲)就填 minecraft:magic
 # 【默认类型 sweetdream:skill 是什么】本包自己注册的伤害类型
 #   (data/sweetdream/damage_type/skill.json): 表现和玩家平砍一样(照样吃护甲、
-#   保护附魔、抗性), 但它被加进了原版的 `minecraft:bypasses_cooldown` 标签 ——
-#   于是**不再被生物的受伤无敌帧吃掉**。
-#   为什么要这样: 没有它的时候, 同一 tick 里的多段伤害(多个术阵中心重叠、
-#   多颗法球、深海一波接一波)只有第一段生效, 后面的全被吃掉 —— 这就是
-#   "技能打上去没伤害/伤害丢失"的根源。(注意: 它和每段间隔 ≥20 tick 的老
-#   办法不冲突, 间隔够的话本来也不会丢。)
-#   想自己另注册别的类型: 照 skill.json 写一份, 再把自己加进
-#   data/minecraft/tags/damage_type/bypasses_cooldown.json 即可。
-#   ★ 2026-10-10: **原版平砍类型 `minecraft:player_attack` 也已加进同一个标签** ——
-#     目的是让**玩家普攻**不再被无敌帧吃掉（"高频自动伤害把平A目标锁死"的根源）。
-#     副作用: 过去拿"把默认类型退回 `player_attack`"来**关掉** bypass 的老办法**已失效**
-#     （它现在同样 bypass）；真要"不 bypass"得多注册一个类型并别加进标签。
+#   保护附魔、抗性)。
+#   ★★ 2026-10-25 用户拍板: **本包伤害重新吃原版受伤无敌帧(0.5 秒)** ★★
+#     2026-09-29 起 sweetdream:skill / true_damage / knight_blade 与原版
+#     `minecraft:player_attack` 四个类型都挂在 `minecraft:bypasses_cooldown` 标签里
+#     ⇒ 多段技能不会被无敌帧吃掉。
+#     ★ 现在标签里**只留 `minecraft:player_attack`**:
+#       · sweetdream:skill / true_damage / knight_blade 三个**本包类型已移除**
+#         ⇒ 本包伤害从此吃无敌帧(这就是本次改动的目的);
+#       · `minecraft:player_attack` **故意保留** —— 它是 2026-10-10 修
+#         "高频技能伤害把玩家平A锁死(平A 走差额分支 ⇒ player_hurt_entity 不触发
+#          ⇒ 整条平A命中链一行不跑)"的修复, 不是设计偏好; 留着它, 普攻永远走
+#         全额分支、必定触发命中链。
+#     ⇒ **同目标多段必须自己错开 ≥10 tick(0.5 秒)**, 否则第二段往后静默丢失、
+#       零日志(无敌帧字段 `aj` 没有 NBT 出口, 见 RULES.md「受伤无敌帧」)。
+#       ★ 本次已同步把"每 7 刻(0.35 秒)一段"的三处(回锋 rb_t / 苍星 as_d /
+#         红莲 rl_t)一律改成 **10 刻** —— 7 < 10, 不改就会吃掉后半段。
+#     想单独豁免某一处: 用 `minecraft:player_attack` 这个类型(它还在标签里),
+#     或另注册一个类型加进标签 —— 这是唯一的绕法, 别再去找 NBT。
 #   read    : 填 "manacore" 时, 忽略 damage, 直接从 manacore:out r.damage 取
 #             —— 这就是"把 manacore 算出来的伤害用进 /damage"的开关
 #   src     : **来源标记**(2026-10-06 加)。留空 = "ally"(我方技能, 默认);
@@ -63,7 +69,7 @@ execute unless data storage zx:work a{src:"enemy"} run data modify storage zx:wo
 #   ★ 玩家永不带 zx.status.dream(标签只贴非玩家活体) -> 对玩家零影响;
 #     只有"会走本包技能系统的怪"才命中(原版生物基本没有, 属面向未来的钩子)。
 #     当敌方技能实装(经 api/enemy_damage 进来)时, 敌方施法者若带白昼梦则自动 −20%。
-execute if entity @s[tag=zx.status.dream] run function sweetdream:internal/damage/out_mul_tag
+execute unless data storage zx:work a{fixed:1b} if entity @s[tag=zx.status.dream] run function sweetdream:internal/damage/out_mul_tag
 
 # 数值 -> 纯数字字符串(num_str)
 data modify storage zx:work a.num set from storage zx:work a.damage

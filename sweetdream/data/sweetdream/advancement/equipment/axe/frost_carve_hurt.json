@@ -1,0 +1,10 @@
+{
+    "criteria": {
+        "hurt": {
+            "trigger": "entity_hurt_player"
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:equipment/axe/frost_carve/on_hurt"
+    }
+}

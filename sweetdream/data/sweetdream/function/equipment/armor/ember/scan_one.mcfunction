@@ -33,11 +33,11 @@ scoreboard players add @s zx.em_scan 1
 
 # ④ 旧标记里, 已经不再燃烧的 -> 流火/夜火
 scoreboard players set #em_conv zx.meta 0
-execute as @e[type=!#sweetdream:hit_scan_exclude,tag=zx.em_burn,distance=..9] at @s run function sweetdream:equipment/armor/ember/burned_out
+execute as @e[type=!#sweetdream:hit_scan_exclude,scores={zx.em_burn=1},distance=..9] at @s run function sweetdream:equipment/armor/ember/burned_out
 scoreboard players operation @s zx.em_conv += #em_conv zx.meta
 
 # ⑤ 清掉本轮范围内的旧标记(远处不清, 见顶部注释)
-tag @e[type=!#sweetdream:hit_scan_exclude,tag=zx.em_burn,distance=..9] remove zx.em_burn
+scoreboard players set @e[type=!#sweetdream:hit_scan_exclude,scores={zx.em_burn=1},distance=..9] zx.em_burn 0
 
 # ⑥ 当前还在燃烧的, 打上标记, 给下一次扫描做边沿检测
 #   zx.em_seen 是**累计**计数(不是"当前几只"): 每扫一次、每看到一只燃烧的

@@ -79,7 +79,7 @@ execute at @s unless entity @e[type=!#sweetdream:no_damage,distance=..3] run ret
 data modify storage manacore:in arg set value {uuid:"",value:0.0}
 execute store result storage manacore:in arg.value double 1 run scoreboard players get #mq_cost zx.meta
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 execute if data storage manacore:out r{success:0b} run tellraw @s [{"text":"魔力不足（需要 ","color":"red"},{"score":{"name":"#mq_cost","objective":"zx.meta"},"color":"red"},{"text":"）","color":"red"}]
 execute if data storage manacore:out r{success:0b} run return fail
 

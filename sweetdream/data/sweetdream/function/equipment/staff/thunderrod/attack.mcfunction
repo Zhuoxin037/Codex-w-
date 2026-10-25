@@ -22,8 +22,16 @@ execute unless data storage zx:data self{ok:1b} run return fail
 # ①.2 拍下超限乘区
 function sweetdream:overlimit/api/snap
 
+# ①.3 超限判定(批 K9): 主/副手任一件是超限·引雷针
+#   超限·普攻: 魔力 20→**60**、1 秒后的闪电 1→**2 道**(道数在 ball_hit 里按球上的
+#   ol 标记分流 —— 命中回调以法球为执行者, 读不到玩家手上的杖)。
+scoreboard players set #tr_ol zx.meta 0
+execute if items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["thunderrod"],ol:"thunderrod"}] run scoreboard players set #tr_ol zx.meta 1
+execute if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["thunderrod"],ol:"thunderrod"}] run scoreboard players set #tr_ol zx.meta 1
+
 # ② 只读检查: 魔力 20(普攻不进冷却)
 data modify storage manacore:in arg set value {uuid:"",skill:"sweetdream:tr_attack",mana:20.0}
+execute if score #tr_ol zx.meta matches 1 run data modify storage manacore:in arg.mana set value 60.0
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 data modify storage zx:work olv.mana set from storage manacore:in arg.mana
 function sweetdream:overlimit/api/mod
@@ -37,11 +45,13 @@ execute unless data storage manacore:out r{success:1b} run return fail
 data modify storage manacore:in arg set value {uuid:"",value:20.0}
 data modify storage manacore:in arg.value set from storage zx:work olv.mana
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 execute if data storage manacore:out r{success:0b} run tellraw @s [{"text":"魔力不足(需要 ","color":"red"},{"score":{"name":"#tr_need","objective":"zx.meta"},"color":"red"},{"text":")","color":"red"}]
 execute if data storage manacore:out r{success:0b} run return fail
 
 # ④ 普攻直伤 = 1(引子, 不吃倍率 —— 落雷才是主体)
-data modify storage zx:work ball set value {dmg:1.0,style:"thunderrod"}
+#   ol = 这一发是不是超限版(给 ball_hit 的"降两道雷"用)
+data modify storage zx:work ball set value {dmg:1.0,style:"thunderrod",ol:0b}
+execute if score #tr_ol zx.meta matches 1 run data modify storage zx:work ball.ol set value 1b
 data modify storage zx:work ball.hit set value "sweetdream:equipment/staff/thunderrod/ball_hit"
 function sweetdream:equipment/staff/attack

@@ -42,4 +42,4 @@ execute if entity @e[tag=zx.os_splash,distance=0..] run function sweetdream:equi
 
 # ⑥ 表现: 两界在它们身上合拢
 execute at @e[tag=zx.os_sel,tag=zx.os_both,distance=0..,limit=1] run particle minecraft:reverse_portal ~ ~1 ~ 1.2 0.9 1.2 0.35 24 normal
-execute at @e[tag=zx.os_sel,tag=zx.os_both,distance=0..,limit=1] run playsound minecraft:entity.enderman.death player @a ~ ~ ~ 0.5 1.5
+execute at @e[tag=zx.os_sel,tag=zx.os_both,distance=0..,limit=1] run playsound minecraft:block.amethyst_block.resonate player @a ~ ~ ~ 0.55 0.7

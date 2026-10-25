@@ -9,7 +9,7 @@
 # 额外消耗 50 魔力(不够就什么都不做)
 data modify storage manacore:in arg set value {uuid:"",value:50.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 execute if data storage manacore:out r{success:0b} run return 0
 
 # 目标已附带「渊海」? (选择器不能写两个 tag=, 所以先翻成一个标记)

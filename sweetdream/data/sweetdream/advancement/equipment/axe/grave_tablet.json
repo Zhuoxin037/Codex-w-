@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "cast": {
+            "trigger": "minecraft:consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "grave_tablet"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:equipment/axe/grave_tablet/cast"
+    }
+}

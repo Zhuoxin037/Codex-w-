@@ -1,0 +1,3 @@
+$data merge entity $(hand_l) {transformation:[0.000000015f,1.500050414f,-0.000000053f,0.140625021f,1.500050414f,-0.000000015f,-0.00000001f,2.665175538f,-0.00000001f,-0.000000053f,-1.500050414f,1.218749975f,0f,0f,0f,1f],start_interpolation:0,interpolation_duration:1}
+$data merge entity $(cape_lower) {transformation:[-1.874942977f,-0.003876574f,0.017917804f,-0.005709951f,0.006264108f,1.586851164f,0.998804979f,1.388518572f,-0.017228943f,0.998817099f,-1.586762367f,-0.373920231f,0f,0f,0f,1f],start_interpolation:0,interpolation_duration:1}
+$data merge entity $(front_cloth) {transformation:[-1.5f,0f,0f,-0.01635f,0f,1.495074712f,-0.121456186f,2.593175531f,0f,-0.121456186f,-1.495074712f,0.855f,0f,0f,0f,1f],start_interpolation:0,interpolation_duration:1}

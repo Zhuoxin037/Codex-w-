@@ -7,5 +7,7 @@
 # ============================================================
 
 scoreboard players set @s zx.mt_on 0
+# 超限·陨星(批 K6): "换手仍生效"的旗标也要一起清 —— 不清就永远跳过"没握就 end"
+scoreboard players set @s zx.mt_keep 0
 attribute @s minecraft:attack_speed modifier remove sweetdream:meteor
 tellraw @s [{"text":"熔星形态结束。","color":"gray","italic":true}]

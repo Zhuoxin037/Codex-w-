@@ -6,7 +6,7 @@
 #     冰斧 概率 20%→60%, 伤害改 最大魔力 ×0.05
 #     热刀 概率 40%→100%, 每次 -1 护甲, 命中 3 次后 -1 护甲韧性(结束后恢复)
 #     重枪 下次不再为空, 且每次使目标抗性提升失效 2 秒
-#   强化结束后切回「很冰的斧」。
+#   强化结束后**保留当前形态**(2026-10-22 用户定, 不再强制切回冰斧)。
 # 【★ 为什么"再按一次"不扣蓝也不进冷却 ★】文案说"使用后若再次使用该技能则切换",
 #   而技能本身有 80 秒冷却 —— 真等冷却好了再按, 强化早就结束了(15 秒)。
 #   所以"再按一次"指的是**强化期间**再按: 那时只做形态切换, 不重复扣蓝/进冷却。
@@ -36,7 +36,7 @@ execute unless data storage manacore:out r{success:1b} run return fail
 # ④ 扣魔力 500
 data modify storage manacore:in arg set value {uuid:"",value:500.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 execute if data storage manacore:out r{success:0b} run tellraw @s [{"text":"魔力不足（需要 500）","color":"red"}]
 execute if data storage manacore:out r{success:0b} run return fail
 

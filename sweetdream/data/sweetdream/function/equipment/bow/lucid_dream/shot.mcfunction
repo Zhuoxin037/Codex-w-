@@ -21,7 +21,7 @@ scoreboard players add @s zx.ld_dream 0
 # ① 扣魔力(固定 180)
 data modify storage manacore:in arg set value {uuid:"",value:180.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 
 # ② 魔力不足 -> 这一发不生效
 execute if data storage manacore:out r{success:0b} run data modify storage zx:work ld.uuid set from storage zx:data self.uuid

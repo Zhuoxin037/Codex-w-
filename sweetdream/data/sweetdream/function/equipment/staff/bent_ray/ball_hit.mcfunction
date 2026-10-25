@@ -16,5 +16,10 @@
 #     真被消耗时会一起清掉。这样不必为它加一条每秒扫描。
 # ============================================================
 
+# ⓪ 分档: 这一发是不是超限版(从球的 data.ol 读回来, 理由见 attack ①.3)
+#   ⇒ mark_zg 用它决定「折光」上限(原版 1 层 / 超限 3 层)。
+scoreboard players set #br_ol zx.meta 0
+execute if data entity @s data{ol:1b} run scoreboard players set #br_ol zx.meta 1
+
 # ① 这一发命中的每只都附加(刷新)折光
 execute as @e[tag=zx.ball_hit,distance=0..] at @s run function sweetdream:equipment/staff/bent_ray/mark_zg

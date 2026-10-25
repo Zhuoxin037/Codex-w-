@@ -32,7 +32,7 @@ execute if score #cc_m zx.meta matches ..150 run return 0
 # ④ 再消耗 120 魔力(在 320 之外)
 data modify storage manacore:in arg set value {uuid:"",value:120.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 execute if data storage manacore:out r{success:0b} run return 0
 
 # ⑤ 「冰凌」恢复至 3 层(下一发 = 第 4 层)

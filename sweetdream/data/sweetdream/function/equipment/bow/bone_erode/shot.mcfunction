@@ -48,7 +48,7 @@ execute if items entity @s weapon.mainhand *[custom_data~{zx:["bone_erode"],ol:"
 data modify storage manacore:in arg set value {uuid:"",value:0.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 execute store result storage manacore:in arg.value double 0.01 run scoreboard players get #be_cost zx.meta
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 
 # ③ 魔力不足 -> 这一发什么都不做(清掉旧数据, 免得命中时读到上一发)
 execute if data storage manacore:out r{success:0b} run data modify storage zx:work be.uuid set from storage zx:data self.uuid

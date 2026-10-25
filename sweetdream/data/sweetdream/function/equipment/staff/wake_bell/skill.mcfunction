@@ -39,7 +39,7 @@ execute unless entity @e[type=!#sweetdream:no_damage,distance=0.1..8,tag=zx.stat
 # ④ 扣魔力 -400
 data modify storage manacore:in arg set value {uuid:"",value:400.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 execute if data storage manacore:out r{success:0b} run return fail
 
 # ⑤ 记冷却 70 秒
@@ -74,7 +74,7 @@ execute at @s run function sweetdream:api/damage
 # ⑩ 表现 + 清理
 execute at @e[tag=zx.wb_ok,distance=0..,limit=1] run particle minecraft:witch ~ ~1 ~ 0.6 0.8 0.6 0.05 30 normal
 execute at @e[tag=zx.wb_ok,distance=0..,limit=1] run particle minecraft:soul ~ ~1 ~ 0.4 0.6 0.4 0.02 16 normal
-playsound minecraft:block.bell.use player @a ~ ~ ~ 1.0 0.7
+playsound minecraft:block.amethyst_block.chime player @a ~ ~ ~ 0.8 1.0
 playsound minecraft:block.conduit.attack.target player @a ~ ~ ~ 0.7 1.2
 
 tag @e[tag=zx.wb_tgt,distance=0..] remove zx.wb_tgt

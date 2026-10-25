@@ -45,7 +45,7 @@ execute unless data storage manacore:out r{success:1b} run return fail
 data modify storage manacore:in arg set value {uuid:"",value:80.0}
 data modify storage manacore:in arg.value set from storage zx:work olv.mana
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 execute if data storage manacore:out r{success:0b} run tellraw @s [{"text":"魔力不足(需要 ","color":"red"},{"score":{"name":"#pl_need","objective":"zx.meta"},"color":"red"},{"text":")","color":"red"}]
 execute if data storage manacore:out r{success:0b} run return fail
 
@@ -66,6 +66,9 @@ function manacore:api/formation/create
 #   —— 两头都是真的 5 秒, 只有"结算节奏"不同(1 秒 / 0.5 秒)。
 scoreboard players set @s zx.pl_t 5
 scoreboard players set @s zx.pl_ct 0
+# ★ 2026-10-20: 铺点降频计数器归零(beam ⓪.0 每刻 +1, =1 的那刻跳过铺点)
+#   不清零也能跑(只是从上次残留值继续), 但清一下相位更稳, 首次光束不会延迟半拍。
+scoreboard players set @s zx.pl_f 0
 
 # ⑦ 表现
 execute at @s run playsound minecraft:block.beacon.power_select player @a ~ ~ ~ 0.7 1.8

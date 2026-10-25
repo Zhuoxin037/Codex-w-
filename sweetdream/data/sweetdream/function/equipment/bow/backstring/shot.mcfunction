@@ -12,6 +12,8 @@
 #   没蓝 -> 这一发不位移(命中回调自然收工), 提示一句。
 # 【★ 计数按"射击事件"计, 不按"命中"计 ★】文案是"每累计 3 次射击", 不是
 #   "每 3 次命中"。多重射击 3 支箭也只算 1 次射击(进度只触发一次)。
+# 【★ 超限(批 K7) ★】主手这把带 ol:"backstring" 时: 每发 30 -> 60 魔力;
+#   并把"这一发是超限弩射的"写进 zx.bs_ol(命中回调那边靠它分档)。
 # ============================================================
 
 advancement revoke @s only sweetdream:equipment/bow/backstring
@@ -25,10 +27,17 @@ execute unless data storage zx:data self{ok:1b} run return fail
 #   "魔力照扣, 但后撤 / 保底伤害一点都没有", 而且**零日志**, 极难排查。
 execute unless data entity @s SelectedItem.components."minecraft:enchantments" run tellraw @s [{"text":"⚠ 手上这把「退弦」是旧版本(没有机制附魔) —— 命中效果不会生效, 请重新 give 一把","color":"red"}]
 
-# ① 扣魔力(固定 30 —— 与 lore 的「魔力 30」逐字对应)
+# ⓪.5 这一发是不是超限版(主手这把带 ol:"backstring" —— 批 K7)
+#   ★ 命中回调那边只认"这一发付没付过账"(zx.bs_paid), 拿不到"当时手里是哪把弩";
+#     所以"超限"必须在这里就写进玩家身上, 与 bs_paid 同一层(坑 141 同族)。
+scoreboard players set @s zx.bs_ol 0
+execute if items entity @s weapon.mainhand crossbow[custom_data~{ol:"backstring"}] run scoreboard players set @s zx.bs_ol 1
+
+# ① 扣魔力(普通 30 / 超限 60 —— 与 lore 的「魔力 30 / 60」逐字对应)
 data modify storage manacore:in arg set value {uuid:"",value:30.0}
+execute if score @s zx.bs_ol matches 1 run data modify storage manacore:in arg.value set value 60.0
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 
 # ② 魔力不足 -> 这一发不生效
 #   ★ 必须把"这一发付过账"**显式写成 0**(坑 141): 命中回调读的是**射手身上**的

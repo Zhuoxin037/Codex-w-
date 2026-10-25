@@ -61,6 +61,15 @@ execute in minecraft:overworld as @e[tag=zx.fi_field,distance=0..] at @s run fun
 execute in minecraft:the_nether as @e[tag=zx.fi_field,distance=0..] at @s run function sweetdream:equipment/axe/fissure/lock_tick
 execute in minecraft:the_end as @e[tag=zx.fi_field,distance=0..] at @s run function sweetdream:equipment/axe/fissure/lock_tick
 
+# 超限·歌谣(2026-10-23 批 K5): 「音符」每刻推进 —— 倒计时 1 秒 -> 铺路径 -> 结算 -> 自毁。
+#   ★ 必须每刻: 音符只活 20 刻, 挂成每秒就等于永远不结算(玩家技能白放)。
+#   ★ 选择器只按标签、不写 type: 音符现在是 marker, 但调色盘那次换型教训就是
+#     "改了 A 忘了 B ⇒ 整段匹配零个实体, 且零日志"。
+#   ★ 三维度各写一遍 + distance=0.. (同调色盘 / 崩裂裂缝 / 神裁领域)。
+execute in minecraft:overworld as @e[tag=zx.bd_note,distance=0..] at @s run function sweetdream:equipment/axe/ballad/ol_note_tick
+execute in minecraft:the_nether as @e[tag=zx.bd_note,distance=0..] at @s run function sweetdream:equipment/axe/ballad/ol_note_tick
+execute in minecraft:the_end as @e[tag=zx.bd_note,distance=0..] at @s run function sweetdream:equipment/axe/ballad/ol_note_tick
+
 # 【备份公共输入口】下面三套每刻逻辑都会写 manacore:in arg(观测镜要查术阵数量),
 #   不还回去的话你在聊天栏手填的参数每刻都被冲掉 —— 见 lib/in_bak。
 function sweetdream:lib/in_bak
@@ -70,9 +79,7 @@ function sweetdream:lib/in_bak
 #   lib/step 里会比"施法刻坐标"与"当前坐标"，任一轴超阈值就兑现。
 #   ★ 必须每刻：位移技能的落点在 1~3 刻内就到位，每秒判会直接错过。
 #   ★ 三维度各写一遍：`@a` 只搜执行维度，只写一行的话在下界/末地放技能永远检测不到。
-execute in minecraft:overworld as @a[tag=zx.sm_chk] at @s run function sweetdream:lib/step
-execute in minecraft:the_nether as @a[tag=zx.sm_chk] at @s run function sweetdream:lib/step
-execute in minecraft:the_end as @a[tag=zx.sm_chk] at @s run function sweetdream:lib/step
+execute as @a[tag=zx.sm_chk] at @s run function sweetdream:lib/step
 
 # ★ 回旋的绕后过程（批 14 补技能，2026-10-17 改"有过程"）★
 #   近战命中兑现「旋步」后设 zx.gyr_st = 1，之后**每刻推一步**：
@@ -151,7 +158,7 @@ execute as @a[scores={zx.hush=1..}] at @s run function sweetdream:equipment/swor
 #   到点/倒计时耗尽由 back_finish 收尾并打回程一击(×0.2)。只筛带标签的人。
 execute as @a[tag=zx.hs_back] at @s run function sweetdream:equipment/sword/hush/back_step
 
-# 回锋(2026-10-07 批1): 主动的"每 0.35 秒重复一次"倒计时(zx.rb_t 7->0 = 7 刻)
+# 回锋(2026-10-07 批1): 主动的"每 0.5 秒重复一次"倒计时(zx.rb_t 10->0 = 10 刻)
 #   ★ 筛 `zx.rb_t=1..` 是天然停摆: 打完最后一段就停在 0, 不再被选中, 不用额外清标签。
 #   必须在 lib/in_restore 之前 —— tick_step 里的 recalc 要用公共输入口 manacore:in arg。
 execute as @a[scores={zx.rb_t=1..}] at @s run function sweetdream:equipment/sword/rebound/tick_step
@@ -187,7 +194,7 @@ execute in minecraft:the_end as @e[tag=zx.sr_relic,distance=0..] at @s run funct
 #   ★ 三维度各写一遍 + 每行 distance=0..: #minecraft:tick 只在主世界跑, 裸 @e 会跨维度重复处理。
 #   ★ 只管表现; 计时/寿命仍在 lib/second 的 relic_tick(每秒)。
 
-# 红莲(2026-10-07 批2): 主动"每 0.35 秒推一段"倒计时(zx.rl_t 7->0 = 7 刻)
+# 红莲(2026-10-07 批2): 主动"每 0.5 秒推一段"倒计时(zx.rl_t 10->0 = 10 刻)
 #   ★ 用户口径: 多段都依次隔 0.35 秒(同刻打完会被受伤无敌帧吃掉, 等于只有第一下掉血)。
 #   ★ 筛 `zx.rl_t=1..` 是天然停摆: 打完最后一段就停在 0, 不再被选中, 不用额外清标签。
 #   必须在 lib/in_restore 之前 —— tick_step 里的 recalc 要用公共输入口 manacore:in arg。
@@ -199,7 +206,7 @@ execute as @a[scores={zx.rl_t=1..}] at @s run function sweetdream:equipment/axe/
 #   必须在 lib/in_restore 之前 —— second_strike 里的 calc 要用公共输入口 manacore:in arg。
 execute as @a[scores={zx.an_2nd=1..}] at @s run function sweetdream:equipment/axe/anion/second_strike
 
-# 苍蓝星(2026-10-07 批2): 主动第 2 段的 0.35 秒倒计时(zx.as_d 7->0 = 7 刻)
+# 苍蓝星(2026-10-07 批2): 主动第 2 段的 0.5 秒倒计时(zx.as_d 10->0 = 10 刻)
 #   ★ 用户口径: 主动两段依次隔 0.35 秒(同刻第二段会被受伤无敌帧吃掉)。
 #   ★ 筛 `zx.as_d=1..` 是天然停摆: 落地后 tick_step 统一把它清 0, 不再被选中。
 #   必须在 lib/in_restore 之前 —— tick_step 里的 recalc2 要用公共输入口 manacore:in arg。
@@ -410,6 +417,16 @@ execute in minecraft:overworld as @e[distance=0..,tag=zx.ld_mark] at @s run func
 execute in minecraft:the_nether as @e[distance=0..,tag=zx.ld_mark] at @s run function sweetdream:equipment/bow/lucid_dream/hit_extra
 execute in minecraft:the_end as @e[distance=0..,tag=zx.ld_mark] at @s run function sweetdream:equipment/bow/lucid_dream/hit_extra
 
+# 超限·退弦(批 K7): 被动 8 点固定真伤的"翻倍层"计时(主层 6 秒 / 弦满额外层 12 秒)
+#   【为什么每刻】两套计时都要精确到 6 秒 / 12 秒, 走每秒一次的 lib/second 会把
+#     6 秒变成 5~7 秒; 而带 zx.bsb 的生物寥寥几只, 平时选择器全空(开销为零)。
+#   【★ 必须 at @s ★】ol_tick 目前不画粒子, 但保持与邻居一致的写法 —— 以后要加
+#     表现时不会因为它默默画在世界原点而查半天(清醒梦 hit_extra 就栽过这个坑)。
+#   【三维度三行 + distance=0..】裸 @e 会跨维度搜索, 同一只生物每刻会被减三次。
+execute in minecraft:overworld as @e[distance=0..,tag=zx.bsb] at @s run function sweetdream:equipment/bow/backstring/ol_tick
+execute in minecraft:the_nether as @e[distance=0..,tag=zx.bsb] at @s run function sweetdream:equipment/bow/backstring/ol_tick
+execute in minecraft:the_end as @e[distance=0..,tag=zx.bsb] at @s run function sweetdream:equipment/bow/backstring/ol_tick
+
 
 # 霜矢:「箭打中了谁」由弩上自带的附魔回调(hook_arrow / hook_victim)交给原版判定
 
@@ -571,6 +588,10 @@ execute in minecraft:the_end as @e[distance=0..,type=minecraft:lightning_bolt,ta
 execute in minecraft:overworld as @e[distance=0..,tag=zx.tr_pend] at @s if score @s zx.tr_due <= #now manacore.meta run function sweetdream:equipment/staff/thunderrod/pend_go with entity @s data.zx.tr
 execute in minecraft:the_nether as @e[distance=0..,tag=zx.tr_pend] at @s if score @s zx.tr_due <= #now manacore.meta run function sweetdream:equipment/staff/thunderrod/pend_go with entity @s data.zx.tr
 execute in minecraft:the_end as @e[distance=0..,tag=zx.tr_pend] at @s if score @s zx.tr_due <= #now manacore.meta run function sweetdream:equipment/staff/thunderrod/pend_go with entity @s data.zx.tr
+# 引雷针·超限: 主动技能排队的"三道雷"(错开 10 tick 躲无敌帧), 与上面同形态
+execute in minecraft:overworld as @e[distance=0..,tag=zx.tr_sk] at @s if score @s zx.tr_due <= #now manacore.meta run function sweetdream:equipment/staff/thunderrod/pend_go_sk with entity @s data.zx.tr
+execute in minecraft:the_nether as @e[distance=0..,tag=zx.tr_sk] at @s if score @s zx.tr_due <= #now manacore.meta run function sweetdream:equipment/staff/thunderrod/pend_go_sk with entity @s data.zx.tr
+execute in minecraft:the_end as @e[distance=0..,tag=zx.tr_sk] at @s if score @s zx.tr_due <= #now manacore.meta run function sweetdream:equipment/staff/thunderrod/pend_go_sk with entity @s data.zx.tr
 
 # 长明(everlit, 2026-10-13 批 13): 「灯灵」的**每刻表现**
 #   ★ 表现必须每刻画(坑 147): 挂每秒 = 20 帧里只有 1 帧有粒子 => 肉眼看不见。
@@ -611,4 +632,108 @@ execute in minecraft:the_end as @e[tag=zx.bv_backfx,distance=0..] at @s run func
 execute in minecraft:the_end as @e[tag=zx.bv_flight,distance=0..] at @s run function sweetdream:equipment/bow/burst_dawn/visual/flight_tick
 execute in minecraft:the_end as @e[tag=zx.bv_muzzle,distance=0..] at @s run function sweetdream:equipment/bow/burst_dawn/visual/fx_tick
 execute in minecraft:the_end as @e[tag=zx.bv_impact,distance=0..] at @s run function sweetdream:equipment/bow/burst_dawn/visual/fx_tick
+
+# ============================================================
+# 批一 10 件（2026-10-20 实装）每刻/每 2 刻/每 5 刻的状态机
+# ------------------------------------------------------------
+# 【顺序说明】血量快照必须**先**拍（回澜靠"上刻值 − 实时值"算受伤量），
+#   其余都是各自独立的状态机，互相不读对方的一半成品。
+# 【成本】站定检测每 2 刻、钩丝步进每 5 刻；三双靴子/回澜的入口第一行都先判装备，
+#   不穿就一条命令退出 —— 空跑不会给每刻预算添负担。
+# ============================================================
+# 血量快照（回澜 / 反照 / 归途 共用，**带装备门控**，见 lib/hp_snap）
+# ★ 2026-10-20 第四次卡顿修复: 原来是两条无条件的 `data get entity @s Health`
+#   （同一个值读两遍）。spark 实测这条栈占服务端忙时 52.2%、≈10ms/次
+#   ⇒ 20ms/tick。现在合成一条、且不穿那四件就完全跳过。
+execute as @a run function sweetdream:lib/hp_snap
+execute as @a[scores={zx.hl_on=1}] run scoreboard players remove @s zx.hl_t 1
+execute as @a[scores={zx.hl_on=1,zx.hl_t=..0}] run function sweetdream:equipment/armor/huilan/settle
+
+# 站定检测（驻足 / 冻土共用）：每 2 刻一次
+scoreboard players operation #st_ph zx.meta = #now manacore.meta
+scoreboard players operation #st_ph zx.meta %= #2 zx.meta
+execute if score #st_ph zx.meta matches 0 as @a run function sweetdream:lib/still
+
+# 驻足 / 冻土 / 履霜
+execute as @a run function sweetdream:equipment/armor/zhuzu/tick
+execute as @a run function sweetdream:equipment/armor/dongtu/tick
+execute as @a run function sweetdream:equipment/armor/lvshuang/tick
+
+# 钩丝：每 5 刻拉 0.5 格
+scoreboard players operation #gs_ph zx.meta = #now manacore.meta
+scoreboard players operation #gs_ph zx.meta %= #5 zx.meta
+execute if score #gs_ph zx.meta matches 0 as @a[scores={zx.gs_st=1..}] run function sweetdream:equipment/sword/gousi/pull_go
+
+# 批二：决堤逐格突进（每刻最多 2 格，撞停/走完自动 land）
+execute as @a[scores={zx.bb_on=1}] at @s run function sweetdream:equipment/staff/burst_bank/dash_tick
+
+# 批 K8：决堤超限「水流地带」每秒一跳（伤害 + 缓慢Ⅰ / 自身迅捷Ⅰ / 到点收 marker）
+scoreboard players operation #bb_ph zx.meta = #now manacore.meta
+scoreboard players operation #bb_ph zx.meta %= #20 zx.meta
+execute if score #bb_ph zx.meta matches 0 as @a[scores={zx.bb_wt=1..}] at @s run function sweetdream:equipment/staff/burst_bank/wet_own
+
+execute as @e[type=marker,tag=zx.bb_ctrl] at @s run function sweetdream:equipment/staff/burst_bank/watch with entity @s data.bb
 function sweetdream:lib/in_restore
+execute as @a[scores={zx.wb_on=1}] if score @s zx.wb_t <= #now manacore.meta run function sweetdream:equipment/sword/way_back/end
+
+# 批 K8：倾囊超限「固定伤害追伤」窗口到点收尸（zx.ps_at = 到期时刻）
+#   ★ 每刻都必须扫：到期时刻一到就要把那三个数清干净，晚一刻就多追一次伤害。
+execute as @a[scores={zx.ps_at=1..}] if score @s zx.ps_at <= #now manacore.meta run function sweetdream:equipment/staff/pour_sack/ol_expire
+execute as @a run function sweetdream:equipment/axe/bind_ember/equip
+function sweetdream:equipment/bow/tiejili/slow_tick
+
+# 批 14(2026-10-25)：碎骨「碎刀」三把旋转刀刃，每刻各自贴准星转动 + 碰到的生物吃基础攻击力×0.3
+#   ★ 三维度各一行 + `distance=0..`：裸 @e 会跨维度重复跑（范式速查第 10 条）。
+execute in minecraft:overworld as @e[tag=zx.bb_blade,distance=0..] at @s run function sweetdream:equipment/bow/bone_breaker/blade_tick
+execute in minecraft:the_nether as @e[tag=zx.bb_blade,distance=0..] at @s run function sweetdream:equipment/bow/bone_breaker/blade_tick
+execute in minecraft:the_end as @e[tag=zx.bb_blade,distance=0..] at @s run function sweetdream:equipment/bow/bone_breaker/blade_tick
+
+# 批 14(2026-10-25)：心脉「泵动」—— 带泵动的生物每移动一格吃一次最大生命 ×0.05 + 1 秒缓慢Ⅳ
+#   ★ 三维度各一行 + `distance=0..`：裸 @e 会跨维度重复跑（范式速查第 10 条）。
+#   ★ 平时没人带 zx.hv_pump ⇒ 三行各只是一次空集合过滤，零开销。
+execute in minecraft:overworld as @e[tag=zx.hv_pump,distance=0..] at @s run function sweetdream:equipment/armor/heart_vein/pump_tick
+execute in minecraft:the_nether as @e[tag=zx.hv_pump,distance=0..] at @s run function sweetdream:equipment/armor/heart_vein/pump_tick
+execute in minecraft:the_end as @e[tag=zx.hv_pump,distance=0..] at @s run function sweetdream:equipment/armor/heart_vein/pump_tick
+
+# 批 14(2026-10-25)：剖面「每消耗 100 魔力」—— 攒够就换一份噬心 + 下一次技能 +20%
+#   ★ 平时没人攒够 100000（=100 魔力）⇒ 一行空过滤，零开销。
+#   ★ 攒够了但没穿剖面 ⇒ pm_sum 会一直留着；由 lib/second 每秒对"没穿的人"清零。
+execute as @a[scores={zx.pm_sum=100000..}] if items entity @s armor.legs *[minecraft:custom_data~{zx:["profile"]}] run function sweetdream:equipment/armor/profile/spend
+
+# 批 14(2026-10-25)：折潮「水墙」—— 每刻驱动每一面墙（寿命 / 粒子 / 穿过判定）
+#   ★ 三维度各一行 + `distance=0..`：裸 @e 会跨维度重复跑（范式速查第 10 条）。
+#   ★ 平时没有墙 ⇒ 三行各只是一次空集合过滤，零开销。
+execute in minecraft:overworld as @e[tag=zx.tf_wall,distance=0..] at @s run function sweetdream:equipment/armor/tide_fold/wall_tick
+execute in minecraft:the_nether as @e[tag=zx.tf_wall,distance=0..] at @s run function sweetdream:equipment/armor/tide_fold/wall_tick
+execute in minecraft:the_end as @e[tag=zx.tf_wall,distance=0..] at @s run function sweetdream:equipment/armor/tide_fold/wall_tick
+#   折潮「消耗 150 魔力」—— 攒够就立一面墙（满了不扣账, 见 spend）
+execute as @a[scores={zx.tf_sum=150000..}] if items entity @s armor.head *[minecraft:custom_data~{zx:["tide_fold"]}] run function sweetdream:equipment/armor/tide_fold/spend
+
+# 批 14(2026-10-25)：返汐「海浪」—— 每刻驱动每一片浪（寿命 / 粒子）
+#   ★ 档位加减**不在这里**（那必须每秒一次, 且在同一个时间切片里完成, 见 ebb_tide/second）
+#   ★ 三维度各一行 + `distance=0..`: 裸 @e 会跨维度重复跑。
+execute in minecraft:overworld as @e[tag=zx.et_wave,distance=0..] at @s run function sweetdream:equipment/armor/ebb_tide/wave_tick
+execute in minecraft:the_nether as @e[tag=zx.et_wave,distance=0..] at @s run function sweetdream:equipment/armor/ebb_tide/wave_tick
+execute in minecraft:the_end as @e[tag=zx.et_wave,distance=0..] at @s run function sweetdream:equipment/armor/ebb_tide/wave_tick
+#   返汐: 给 8 格内带「渊海」的生物补海浪（内部有 0.5 秒闸门）
+execute as @a if items entity @s armor.feet *[minecraft:custom_data~{zx:["ebb_tide"]}] at @s run function sweetdream:equipment/armor/ebb_tide/sample
+
+# 批 14 更正(2026-10-25 用户原稿)：浮光 —— 每刻心跳
+#   ① 生命值减少 ⇒ 失去全部光效;  ② 8 秒(160 刻)未受伤 ⇒ 随机获得一种光效。
+#   ★ 只对**穿着浮光头盔**的玩家跑（通常 1 人）, 别写成对所有玩家广播。
+execute as @a[scores={zx.gl_wt=1..}] at @s run function sweetdream:equipment/armor/glimmer/maintain
+execute as @a[scores={zx.ld_s=1..}] run function sweetdream:equipment/armor/late_dusk/expire
+execute as @a if items entity @s armor.head *[minecraft:custom_data~{zx:["glimmer"]}] at @s run function sweetdream:equipment/armor/glimmer/tick
+#   被浮光减速的生物: 2 秒没被刷到就自己摘掉 modifier（三维度各一行 + distance=0..）
+#   ★ 脱装备 / 走出 10 格之后没人负责摘, 全靠这个倒计时兜底。
+execute in minecraft:overworld as @e[tag=zx.gl_sl,distance=0..] run function sweetdream:equipment/armor/glimmer/foe_tick
+execute in minecraft:the_nether as @e[tag=zx.gl_sl,distance=0..] run function sweetdream:equipment/armor/glimmer/foe_tick
+execute in minecraft:the_end as @e[tag=zx.gl_sl,distance=0..] run function sweetdream:equipment/armor/glimmer/foe_tick
+
+# 批 14 更正(2026-10-25 用户原稿)：迟暮「5 秒伤害记录」窗口
+#   —— 每刻给带 zx.ld_rec_on 的生物倒计时, 归零那一拍结算（late_dusk/rec_tick → settle）。
+#   ★ 三维度各一行 + `distance=0..`：裸 @e 会跨维度重复跑（范式速查第 10 条）。
+#   ★ 平时没有窗口 ⇒ 三行各只是一次空集合过滤，零开销。
+execute in minecraft:overworld as @e[tag=zx.ld_rec_on,distance=0..] at @s run function sweetdream:equipment/armor/late_dusk/rec_tick
+execute in minecraft:the_nether as @e[tag=zx.ld_rec_on,distance=0..] at @s run function sweetdream:equipment/armor/late_dusk/rec_tick
+execute in minecraft:the_end as @e[tag=zx.ld_rec_on,distance=0..] at @s run function sweetdream:equipment/armor/late_dusk/rec_tick

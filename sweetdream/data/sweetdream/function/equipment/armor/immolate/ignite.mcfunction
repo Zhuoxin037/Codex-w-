@@ -14,6 +14,6 @@ scoreboard players set #im_f zx.meta 0
 execute store result score #im_f zx.meta run data get entity @s Fire
 execute unless score #im_f zx.meta matches 10.. run data merge entity @s {Fire:10s}
 
-tag @s add zx.em_burn
+scoreboard players set @s zx.em_burn 1
 
 particle minecraft:flame ~ ~1 ~ 0.3 0.4 0.3 0.02 10 normal

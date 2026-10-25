@@ -55,7 +55,7 @@ execute unless entity @e[tag=zx.bp_tgt,distance=0..,limit=1] run return fail
 # ④ 扣魔力 80
 data modify storage manacore:in arg set value {uuid:"",value:80.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 execute if data storage manacore:out r{success:0b} run tellraw @s [{"text":"魔力不足（需要 80）","color":"red"}]
 execute if data storage manacore:out r{success:0b} run return fail
 
@@ -68,7 +68,7 @@ function manacore:api/cooldown/start
 #   ★ 先拍"带不带"再消耗: 消耗之后标签就没了, 那时再判永远为假(静默只打 12)。
 scoreboard players set #bp_true zx.meta 0
 execute if entity @e[tag=zx.bp_tgt,distance=0..,tag=zx.status.dream,limit=1] run scoreboard players set #bp_true zx.meta 1
-execute if score #bp_true zx.meta matches 1 run data modify storage zx:work a set value {target:"@e[tag=zx.bp_tgt,distance=0..,limit=1]",mark:"dream",src:"skill"}
+execute if score #bp_true zx.meta matches 1 run data modify storage zx:work a set value {fixed:1b,target:"@e[tag=zx.bp_tgt,distance=0..,limit=1]",mark:"dream",src:"skill"}
 execute if score #bp_true zx.meta matches 1 run function sweetdream:lib/mark_consume
 #   ★ 只有"真消耗"才转真伤: 穿「永恒」时标签被原地补回(mc.done = 1b), 不算消耗,
 #     本次仍按 12 点固定伤害结算。
@@ -81,7 +81,7 @@ data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 
 # ⑧ 打过去(只打射线锁定的那一只; 真伤换类型)
-data modify storage zx:in arg set value {target:"@e[tag=zx.bp_tgt,distance=0..,limit=1]",damage:0.0,type:"minecraft:player_attack"}
+data modify storage zx:in arg set value {fixed:1b,target:"@e[tag=zx.bp_tgt,distance=0..,limit=1]",damage:0.0,type:"minecraft:player_attack"}
 execute if score #bp_true zx.meta matches 1 run data modify storage zx:in arg.type set value "sweetdream:true_damage"
 data modify storage zx:in arg.damage set from storage manacore:out r.damage
 execute at @s run function sweetdream:api/damage

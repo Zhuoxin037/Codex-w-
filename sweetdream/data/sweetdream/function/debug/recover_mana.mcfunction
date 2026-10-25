@@ -16,4 +16,4 @@ execute unless data storage zx:data self{ok:1b} run return fail
 
 data modify storage manacore:in arg set value {uuid:"",value:-1000.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay

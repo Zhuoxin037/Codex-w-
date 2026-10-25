@@ -7,4 +7,6 @@
 #   ★ 半径写死 5 —— 文案给的就是"半径为 5 格", 没有第二档数值。
 # ============================================================
 
-$execute as @e[tag=zx.mq_f] at @s if entity @a[distance=..5,nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run scoreboard players set #mq_in zx.meta 1
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute as @e[tag=zx.mq_f] at @s if entity @a[distance=..5,tag=zx.ub,limit=1] run scoreboard players set #mq_in zx.meta 1

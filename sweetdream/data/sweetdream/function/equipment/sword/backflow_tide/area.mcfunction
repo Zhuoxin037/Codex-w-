@@ -20,8 +20,12 @@
 # 清上一轮残留(重复施放或别人残留都不会串味)
 tag @e[tag=zx.bft_hit,distance=0..] remove zx.bft_hit
 
-# 框"前方 4 格"(世界轴方盒近似, 口径同 重溟 / 烈火残躯)
-execute anchored eyes positioned ^ ^ ^2.0 positioned ~-2.0 ~-1.3 ~-2.0 run tag @e[type=!#sweetdream:no_damage,dx=4.0,dy=2.6,dz=4.0] add zx.bft_hit
+# 框覆盖范围(世界轴方盒近似, 口径同 重溟 / 烈火残躯)
+#   未超限: 眼前 4 格深 × 4 格宽(原版)
+#   超限·退汐(2026-10-23 批 K2): 眼前 **6 格**深 × 6 格宽 —— 中心从 2.0 挪到 3.0、边长 4->6
+#   ⚠️ #bft_ol 由 cast ③ 设好, 这里只读; 两行互斥, 同一刻只会框一次。
+execute if score #bft_ol zx.meta matches 0 anchored eyes positioned ^ ^ ^2.0 positioned ~-2.0 ~-1.3 ~-2.0 run tag @e[type=!#sweetdream:no_damage,dx=4.0,dy=2.6,dz=4.0] add zx.bft_hit
+execute if score #bft_ol zx.meta matches 1 anchored eyes positioned ^ ^ ^3.0 positioned ~-3.0 ~-1.3 ~-3.0 run tag @e[type=!#sweetdream:no_damage,dx=6.0,dy=2.6,dz=6.0] add zx.bft_hit
 
 # 基础段伤害: 最大魔力值 ×0.08(值已由 cast ⑥ 算好)
 #   ★ 执行者仍是**施法者本人** -> 击杀归属/结算口径都对(同 verdict / 崩裂 area)
@@ -29,6 +33,6 @@ data modify storage zx:in arg set value {target:"@e[type=!#sweetdream:no_damage,
 data modify storage zx:in arg.damage set from storage zx:work bft.dmg
 execute at @s run function sweetdream:api/damage
 
-# 表现: 一道贴着地面扫过去的水刃
+# 表现: 一道贴着地面扫过去的水刃(超限的另外两道在 cast ⑪)
 execute rotated ~ 0 positioned ^ ^ ^2 run particle minecraft:splash ~ ~0.5 ~ 2.0 0.5 2.0 0.05 26 normal
 execute rotated ~ 0 positioned ^ ^ ^2 run particle minecraft:bubble ~ ~0.4 ~ 1.8 0.4 1.8 0.03 16 normal

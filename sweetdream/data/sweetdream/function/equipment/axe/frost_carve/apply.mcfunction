@@ -32,13 +32,15 @@ data modify storage zx:in arg set value {target:"@e[tag=zx.frc_thaw,distance=0..
 data modify storage zx:in arg.damage set from storage zx:work frc.dmg2
 execute if entity @e[tag=zx.frc_thaw,distance=0..,limit=1] run function sweetdream:api/damage
 
-# ⑤ 没冻的: 冰冻 1 秒(= 20 刻)
+# ⑤ 没冻的: 冰冻 1 秒(= 20 刻) / 超限 3 秒(= 60 刻)
 #   lib/freeze 要宏参数 {target, ticks}; target 可以直接给范围选择器(内部 execute as 逐个处理)
+#   ★ 刻数从 zx:work frc.icz 取(cast ⑦.5 按是否超限写好), 不要在这里再判一次物品
 data modify storage zx:work fz set value {target:"",ticks:20}
+data modify storage zx:work fz.ticks set from storage zx:work frc.icz
 data modify storage zx:work fz.target set value "@e[tag=zx.frc_cold,distance=0..]"
 execute if entity @e[tag=zx.frc_cold,distance=0..,limit=1] run function sweetdream:lib/freeze with storage zx:work fz
 
 # ⑥ 表现
 execute at @e[tag=zx.frc_thaw,distance=0..,limit=1] run particle minecraft:snowflake ~ ~1 ~ 0.4 0.5 0.4 0.08 20 normal
 execute at @e[tag=zx.frc_cold,distance=0..,limit=1] run particle minecraft:snowflake ~ ~1 ~ 0.4 0.5 0.4 0.05 16 normal
-execute as @e[tag=zx.frc_thaw,distance=0..] run playsound minecraft:block.glass.break player @a ~ ~ ~ 0.6 1.4
+execute as @e[tag=zx.frc_thaw,distance=0..] run playsound minecraft:block.amethyst_block.break player @a ~ ~ ~ 0.6 1.4

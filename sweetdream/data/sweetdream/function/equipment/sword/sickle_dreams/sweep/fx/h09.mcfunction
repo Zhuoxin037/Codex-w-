@@ -283,6 +283,6 @@ particle minecraft:dust{color:[0.94,0.84,1.00],scale:0.90} ^-2.5123 ^1.1500 ^1.1
 particle minecraft:dust{color:[0.78,0.56,0.96],scale:0.75} ^-2.3866 ^1.1500 ^1.0626 0.00 0.00 0.00 0 1 normal @a[distance=..32]
 particle minecraft:dust{color:[0.48,0.24,0.70],scale:0.60} ^-2.2359 ^1.1500 ^0.9955 0.00 0.00 0.00 0 1 normal @a[distance=..32]
 particle minecraft:dust{color:[0.30,0.11,0.46],scale:0.48} ^-2.0852 ^1.1500 ^0.9284 0.00 0.00 0.00 0 1 normal @a[distance=..32]
-playsound minecraft:entity.warden.sonic_boom player @a[distance=..32] ~ ~1 ~ 0.60 1.15
+playsound minecraft:entity.iron_golem.attack player @a[distance=..32] ~ ~1 ~ 0.60 1.15
 playsound minecraft:entity.warden.attack_impact player @a[distance=..24] ~ ~1 ~ 0.60 0.80
 playsound minecraft:block.amethyst_block.break player @a[distance=..24] ~ ~1 ~ 0.90 0.65

@@ -22,6 +22,20 @@
 advancement revoke @s only sweetdream:equipment/axe/skyvault
 tag @s remove zx.sv_high
 
+# ⓪.5 【超限分流】(2026-10-23 批 K4)
+#   ★ 天穹是**两段式**, 原版与超限的流程完全一样(跃升 -> 等 0.5 秒 -> 俯冲 -> 落地结算),
+#     差别只在数值与"落点结算里的连锁"。所以不另开 overlimit 文件, 只在这里拍一个
+#     快照 zx.sv_ol, 由 impact / rise_step 读它分档。
+#   原版: 400 蓝 / 跃升 6 格 / 半径 5 / 每层 +5% / 每层额外 ×2 / ≥6 层 -30 秒
+#   超限: 530 蓝 / 跃升 8 格 / 半径 6 / 每层 +10% / 每层额外 ×3 / ≥6 层 -35 秒 / ≥10 层连锁
+#   判据判 ol 的**值**, 主副手都判。
+scoreboard players set #sv_ol zx.meta 0
+execute if items entity @s weapon.mainhand netherite_axe[minecraft:custom_data~{zx:["skyvault"],ol:"skyvault"}] run scoreboard players set #sv_ol zx.meta 1
+execute if items entity @s weapon.offhand netherite_axe[minecraft:custom_data~{zx:["skyvault"],ol:"skyvault"}] run scoreboard players set #sv_ol zx.meta 1
+scoreboard players operation @s zx.sv_ol = #sv_ol zx.meta
+# 注意: 这里**不能**清 zx.sv_cn —— 第二段(俯冲)也是走本函数进来的, 而连锁段的
+# "自动俯冲"靠的就是 sv_cn = 1。清它放在下面 ④ 之前(真正起手那一段)。
+
 # ① 拿 uuid
 function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return fail
@@ -37,19 +51,26 @@ execute if entity @s[tag=zx.sv_air] run return 0
 # 已经进入俯冲 -> 同样收工(别又去走跃升那段)
 execute if entity @s[tag=zx.sv_dive] run return 0
 
-# ④ 只读检查: 冷却 + 魔力 400
+# ④ 只读检查: 冷却 + 魔力 400 / 超限 530
+#   ★ 走到这里才是"真正起手第一段" —— 清掉上一次可能残留的连锁段标记
+#     (它只服务于"俯冲之后的那次自动俯冲"; 残留会让这次跃升变 6 格并自动俯冲)。
+scoreboard players set @s zx.sv_cn 0
 data modify storage manacore:in arg set value {uuid:"",skill:"sweetdream:skyvault",mana:400.0}
+execute if score #sv_ol zx.meta matches 1 run data modify storage manacore:in arg.mana set value 530.0
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/skill/check
 execute if data storage manacore:out r{reason:"cooldown"} run tellraw @s [{"text":"天穹冷却中, 还剩 ","color":"red"},{"nbt":"r.remaining","storage":"manacore:out"},{"text":" tick","color":"red"}]
-execute if data storage manacore:out r{reason:"mana"} run tellraw @s [{"text":"魔力不足(需要 400)","color":"red"}]
+execute if data storage manacore:out r{reason:"mana"} if score #sv_ol zx.meta matches 0 run tellraw @s [{"text":"魔力不足(需要 400)","color":"red"}]
+execute if data storage manacore:out r{reason:"mana"} if score #sv_ol zx.meta matches 1 run tellraw @s [{"text":"魔力不足(需要 530)","color":"red"}]
 execute unless data storage manacore:out r{success:1b} run return fail
 
-# ⑤ 扣魔力 400
+# ⑤ 扣魔力 400 / 530
 data modify storage manacore:in arg set value {uuid:"",value:400.0}
+execute if score #sv_ol zx.meta matches 1 run data modify storage manacore:in arg.value set value 530.0
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
-execute if data storage manacore:out r{success:0b} run tellraw @s [{"text":"魔力不足(需要 400)","color":"red"}]
+function sweetdream:lib/mana/pay
+execute if data storage manacore:out r{success:0b} if score #sv_ol zx.meta matches 0 run tellraw @s [{"text":"魔力不足(需要 400)","color":"red"}]
+execute if data storage manacore:out r{success:0b} if score #sv_ol zx.meta matches 1 run tellraw @s [{"text":"魔力不足(需要 530)","color":"red"}]
 execute if data storage manacore:out r{success:0b} run return fail
 
 # ⑥ 起冷却 60 秒

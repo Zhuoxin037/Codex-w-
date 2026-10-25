@@ -18,5 +18,9 @@
 # 【步数从哪来】zx.sv_rise(cast 里清零, 每刻 +1; 到 11 由 rise_end 收尾)。
 # ============================================================
 
-tp @s ~ ~0.6 ~
+# 超限第一段: 每刻 0.8 格(10 刻 = **8 格**); 原版与"连锁段"每刻 0.6 格(10 刻 = 6 格)
+#   ★ 三条互斥: 判 sv_ol / sv_cn 两个计分项; 没有分数时都是"不匹配", 落到原版那一行。
+execute if score @s zx.sv_ol matches 1 unless score @s zx.sv_cn matches 1 run tp @s ~ ~0.8 ~
+execute if score @s zx.sv_ol matches 1 if score @s zx.sv_cn matches 1 run tp @s ~ ~0.6 ~
+execute unless score @s zx.sv_ol matches 1 run tp @s ~ ~0.6 ~
 execute at @s run particle minecraft:cloud ~ ~0.3 ~ 0.4 0.15 0.4 0.02 4 normal

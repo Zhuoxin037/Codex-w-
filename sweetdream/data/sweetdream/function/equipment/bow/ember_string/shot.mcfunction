@@ -22,7 +22,7 @@ execute unless data entity @s SelectedItem.components."minecraft:enchantments" r
 # ① 扣魔力 80
 data modify storage manacore:in arg set value {uuid:"",value:80.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 
 # ② 魔力不足 -> 这一发不生效(显式清掉付账标记, 坑 141)
 execute if data storage manacore:out r{success:0b} run scoreboard players set @s zx.es_paid 0

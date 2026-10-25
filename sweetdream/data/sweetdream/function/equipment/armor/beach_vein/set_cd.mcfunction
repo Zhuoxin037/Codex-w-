@@ -19,21 +19,31 @@
 # ============================================================
 
 # ① 施法者还在线吗
-$execute unless entity @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run return 0
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute unless entity @a[tag=zx.ub,limit=1] run return 0
 
 # ② 他穿齐「潮线」两件吗（● 候潮 = 胸甲 / ● 滩纹 = 护腿）
 scoreboard players set #tw_on zx.meta 0
-$execute as @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] if items entity @s armor.chest *[minecraft:custom_data~{zx:["tide_watch"]}] if items entity @s armor.legs *[minecraft:custom_data~{zx:["beach_vein"]}] run scoreboard players set #tw_on zx.meta 1
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute as @a[tag=zx.ub,limit=1] if items entity @s armor.chest *[minecraft:custom_data~{zx:["tide_watch"]}] if items entity @s armor.legs *[minecraft:custom_data~{zx:["beach_vein"]}] run scoreboard players set #tw_on zx.meta 1
 execute unless score #tw_on zx.meta matches 1 run return 0
 
 # ③ 6 秒节流（记在施法者身上, 所以要在他的上下文里判）
 #    ★ 施法者的记分项只能 `as` 过去读写 —— 本函数执行者是目标。
-$execute as @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run scoreboard players set #tw_due zx.meta 0
-$execute as @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run execute store result score #tw_due zx.meta run scoreboard players get @s zx.tw_set_cd
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute as @a[tag=zx.ub,limit=1] run scoreboard players set #tw_due zx.meta 0
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute as @a[tag=zx.ub,limit=1] run execute store result score #tw_due zx.meta run scoreboard players get @s zx.tw_set_cd
 execute if score #tw_due zx.meta > #now manacore.meta run return 0
 
 # ④ 读他主手那把的 skill 字段（先在玩家上下文里取）
-$execute as @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run function sweetdream:equipment/armor/beach_vein/read_skill
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute as @a[tag=zx.ub,limit=1] run function sweetdream:equipment/armor/beach_vein/read_skill
 execute unless data storage zx:work tw.skill run return 0
 
 # ⑤ 那个技能在冷却中吗（剩余 > 0）
@@ -52,8 +62,14 @@ data modify storage manacore:in arg.skill set from storage zx:work tw.skill
 function manacore:api/cooldown/reduce
 
 # ⑦ 表现（在**施法者**身上放, 不是目标）
-$execute at @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run particle minecraft:bubble ~ ~1 ~ 0.4 0.5 0.4 0.01 10 normal
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute at @a[tag=zx.ub,limit=1] run particle minecraft:bubble ~ ~1 ~ 0.4 0.5 0.4 0.01 10 normal
 
 # ⑧ 记下"下次可触发刻"（现在 + 120 刻 = 6 秒）, 写在**施法者**的账本上
-$execute as @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run scoreboard players operation @s zx.tw_set_cd = #now manacore.meta
-$execute as @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run scoreboard players operation @s zx.tw_set_cd += #120 zx.meta
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute as @a[tag=zx.ub,limit=1] run scoreboard players operation @s zx.tw_set_cd = #now manacore.meta
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute as @a[tag=zx.ub,limit=1] run scoreboard players operation @s zx.tw_set_cd += #120 zx.meta

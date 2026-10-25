@@ -53,11 +53,15 @@ execute if data storage zx:work ap{ok:1b} run scoreboard players operation #used
 execute if data storage zx:work ap{ok:1b} run scoreboard players operation #used zx.meta -= #now_m zx.meta
 
 # ⑤ 消耗 ≥100(即 #used ≥ 10000)且还有空页 → 记一页(写进第 n 页, n+1)
+#   ★ 页上限分档（批 K8）：基础 3 页 / 超限 4 页（zx.ap_ol 由 wand_check 每刻算）。
+scoreboard players set #ap_cap zx.meta 2
+execute if score @s zx.ap_ol matches 1 run scoreboard players set #ap_cap zx.meta 3
 scoreboard players set #rec zx.meta 0
-execute if score #used zx.meta matches 10000.. if score @s zx.ap_n matches ..2 run scoreboard players set #rec zx.meta 1
+execute if score #used zx.meta matches 10000.. if score @s zx.ap_n <= #ap_cap zx.meta run scoreboard players set #rec zx.meta 1
 execute if score #rec zx.meta matches 1 if score @s zx.ap_n matches 0 run scoreboard players operation @s zx.ap_p1 = #used zx.meta
 execute if score #rec zx.meta matches 1 if score @s zx.ap_n matches 1 run scoreboard players operation @s zx.ap_p2 = #used zx.meta
 execute if score #rec zx.meta matches 1 if score @s zx.ap_n matches 2 run scoreboard players operation @s zx.ap_p3 = #used zx.meta
+execute if score #rec zx.meta matches 1 if score @s zx.ap_n matches 3 run scoreboard players operation @s zx.ap_p4 = #used zx.meta
 execute if score #rec zx.meta matches 1 run scoreboard players add @s zx.ap_n 1
 execute if score #rec zx.meta matches 1 run scoreboard players set @s zx.ap_done 1
 execute if score #rec zx.meta matches 1 run tellraw @s [{"text":"启示录记录了一页「启示」（现有 ","color":"gold"},{"score":{"name":"*","objective":"zx.ap_n"},"color":"yellow"},{"text":" 页）","color":"gold"}]

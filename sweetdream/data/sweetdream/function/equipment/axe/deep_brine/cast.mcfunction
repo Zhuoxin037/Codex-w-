@@ -28,16 +28,23 @@
 # ⓪ 撤销自己的进度
 advancement revoke @s only sweetdream:equipment/axe/deep_brine
 
+# ⓪.6 这一次是不是超限版(亲手/副手那把带 ol:"deep_brine")
+scoreboard players set @s zx.db_ol 0
+execute if items entity @s weapon.mainhand diamond_axe[custom_data~{ol:"deep_brine"}] run scoreboard players set @s zx.db_ol 1
+execute if items entity @s weapon.offhand diamond_axe[custom_data~{ol:"deep_brine"}] run scoreboard players set @s zx.db_ol 1
+
 # ① 拿 uuid
 function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return fail
 
-# ② 只读检查: 冷却 + 魔力 280
+# ② 只读检查: 冷却 + 魔力 280 / 超限 400
 data modify storage manacore:in arg set value {uuid:"",skill:"sweetdream:deep_brine",mana:280.0}
+execute if score @s zx.db_ol matches 1 run data modify storage manacore:in arg.mana set value 400.0
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/skill/check
 execute if data storage manacore:out r{reason:"cooldown"} run tellraw @s [{"text":"重溟冷却中，还剩 ","color":"red"},{"nbt":"r.remaining","storage":"manacore:out"},{"text":" tick","color":"red"}]
-execute if data storage manacore:out r{reason:"mana"} run tellraw @s [{"text":"魔力不足（需要 280）","color":"red"}]
+execute if score @s zx.db_ol matches 0 if data storage manacore:out r{reason:"mana"} run tellraw @s [{"text":"魔力不足（需要 280）","color":"red"}]
+execute if score @s zx.db_ol matches 1 if data storage manacore:out r{reason:"mana"} run tellraw @s [{"text":"魔力不足（需要 400）","color":"red"}]
 execute unless data storage manacore:out r{success:1b} run return fail
 
 # ③ 前方有目标吗? 没有就整个不放(不扣蓝、不进冷却)
@@ -46,11 +53,12 @@ execute unless data storage manacore:out r{success:1b} run return fail
 execute rotated ~ 0 positioned ^ ^ ^2 unless entity @e[type=!#sweetdream:no_damage,distance=..2.5] run tellraw @s [{"text":"前方没有目标","color":"red"}]
 execute rotated ~ 0 positioned ^ ^ ^2 unless entity @e[type=!#sweetdream:no_damage,distance=..2.5] run return fail
 
-# ④ 扣魔力 280
+# ④ 扣魔力 280 / 超限 400
 data modify storage manacore:in arg set value {uuid:"",value:280.0}
+execute if score @s zx.db_ol matches 1 run data modify storage manacore:in arg.value set value 400.0
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
-execute if data storage manacore:out r{success:0b} run tellraw @s [{"text":"魔力不足（需要 280）","color":"red"}]
+function sweetdream:lib/mana/pay
+execute if data storage manacore:out r{success:0b} run tellraw @s [{"text":"魔力不足","color":"red"}]
 execute if data storage manacore:out r{success:0b} run return fail
 
 # ⑤ 起冷却 45 秒
@@ -58,8 +66,9 @@ data modify storage manacore:in arg set value {uuid:"",skill:"sweetdream:deep_br
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/cooldown/start
 
-# ⑥ 算立即段伤害: 自身最大魔力值 ×0.1(给 area 用)
+# ⑥ 算立即段伤害: 自身最大魔力值 ×0.1 / 超限 ×0.12(给 area 用)
 data modify storage manacore:in arg set value {uuid:"",max_mana_mul:0.1}
+execute if score @s zx.db_ol matches 1 run data modify storage manacore:in arg.max_mana_mul set value 0.12
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:work db.dmg set from storage manacore:out r.damage
@@ -80,23 +89,13 @@ data modify storage zx:work dbf.u3 set from entity @s UUID[3]
 # ⑧ 框出"前方 5×4"并打立即段伤害(见 area)
 function sweetdream:equipment/axe/deep_brine/area
 
-# ⑨ 从"这一发打到的"里挑出带「渊海」的 -> 就近取最多 2 个, 逐个消耗+开领域
+# ⑨ 从"这一发打到的"里挑出带「渊海」的 -> 普通版就近取最多 2 个, 超限版**全部**
 #   ★ 必须排在 ⑧ **之后**: 此刻 zx.db_hit 才是"这一发打到的那批"。
 tag @e[tag=zx.db_ysel] remove zx.db_ysel
 execute as @e[tag=zx.db_hit,distance=0..] if entity @s[tag=zx.status.yuanhai] run tag @s add zx.db_ysel
 
-# 第 1 个
-tag @e[tag=zx.db_cur] remove zx.db_cur
-execute at @s run tag @e[tag=zx.db_ysel,distance=0..,sort=nearest,limit=1] add zx.db_cur
-execute if entity @e[tag=zx.db_cur,distance=0..,limit=1] run function sweetdream:equipment/axe/deep_brine/dom_one
-tag @e[tag=zx.db_cur] remove zx.db_ysel
-tag @e[tag=zx.db_cur] remove zx.db_cur
-
-# 第 2 个(第 1 个已从候选里摘掉, 所以"就近 1 个"自然轮到下一个)
-execute at @s run tag @e[tag=zx.db_ysel,distance=0..,sort=nearest,limit=1] add zx.db_cur
-execute if entity @e[tag=zx.db_cur,distance=0..,limit=1] run function sweetdream:equipment/axe/deep_brine/dom_one
-tag @e[tag=zx.db_cur] remove zx.db_ysel
-tag @e[tag=zx.db_cur] remove zx.db_cur
+execute if score @s zx.db_ol matches 1 run function sweetdream:equipment/axe/deep_brine/ol_dom_all
+execute if score @s zx.db_ol matches 0 run function sweetdream:equipment/axe/deep_brine/dom_two
 
 # ⑩ 收尾: 清本轮全部临时标签, 不留残余
 tag @e[tag=zx.db_ysel] remove zx.db_ysel

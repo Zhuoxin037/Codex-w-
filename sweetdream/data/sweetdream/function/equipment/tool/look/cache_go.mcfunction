@@ -12,13 +12,16 @@
 # ============================================================
 
 # ① 装备在身名单: 复用 equip_scan(它把 <id> 写进 zx:work eq.<id>), 完了整体搬进缓存
+# One player serialization per synchronous scan; slot extraction uses this same snapshot.
+data remove storage zx:look_scan player
+data modify storage zx:look_scan player set from entity @s
 data remove storage zx:work eq
-function sweetdream:debug/equip_scan {p:"SelectedItem"}
-function sweetdream:debug/equip_scan {p:"equipment.offhand"}
-function sweetdream:debug/equip_scan {p:"equipment.head"}
-function sweetdream:debug/equip_scan {p:"equipment.chest"}
-function sweetdream:debug/equip_scan {p:"equipment.legs"}
-function sweetdream:debug/equip_scan {p:"equipment.feet"}
+function sweetdream:equipment/tool/look/equip_snapshot {p:"SelectedItem"}
+function sweetdream:equipment/tool/look/equip_snapshot {p:"equipment.offhand"}
+function sweetdream:equipment/tool/look/equip_snapshot {p:"equipment.head"}
+function sweetdream:equipment/tool/look/equip_snapshot {p:"equipment.chest"}
+function sweetdream:equipment/tool/look/equip_snapshot {p:"equipment.legs"}
+function sweetdream:equipment/tool/look/equip_snapshot {p:"equipment.feet"}
 
 # ② 先把自己那一格清空, 再把"这一秒真实存在的键"写回去
 $data remove storage zx:look cache."$(uuid)"
@@ -36,4 +39,7 @@ $execute if data storage zx:work eq run data modify storage zx:look cache."$(uui
 #      criterion 的刻度(×2 与否)没有先例背书, 别拿来做显示。
 #    ★ 计分板天然是"每人一份", 这一项不需要 uuid 分片。
 scoreboard players set @s zx.hp_show 0
-execute store result score @s zx.hp_show run data get entity @s Health
+execute store result score @s zx.hp_show run data get storage zx:look_scan player.Health
+
+# Never retain a full player snapshot after this synchronous scan.
+data remove storage zx:look_scan player

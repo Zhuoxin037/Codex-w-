@@ -9,7 +9,8 @@
 scoreboard players operation @s zx.ap_cur = @s zx.ap_p1
 scoreboard players operation @s zx.ap_p1 = @s zx.ap_p2
 scoreboard players operation @s zx.ap_p2 = @s zx.ap_p3
-scoreboard players set @s zx.ap_p3 0
+scoreboard players operation @s zx.ap_p3 = @s zx.ap_p4
+scoreboard players set @s zx.ap_p4 0
 scoreboard players remove @s zx.ap_n 1
 function sweetdream:equipment/staff/apocalypse/visual/consume
 execute at @s run playsound minecraft:block.note_block.chime player @s ~ ~ ~ 0.8 1.6

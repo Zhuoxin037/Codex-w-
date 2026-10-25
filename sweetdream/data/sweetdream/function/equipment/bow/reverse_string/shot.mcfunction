@@ -16,10 +16,17 @@ execute unless data storage zx:data self{ok:1b} run return fail
 # ⓪ 旧弩自检(坑 144)
 execute unless data entity @s SelectedItem.components."minecraft:enchantments" run tellraw @s [{"text":"⚠ 手上这把「逆弦」是旧版本(没有机制附魔) —— 命中效果不会生效, 请重新 give 一把","color":"red"}]
 
-# ① 扣魔力 100
+# ⓪.5 这一发是不是超限版(主手这把带 ol:"reverse_string" —— 批 K7)
+#   ★ 命中回调只认"这一发付没付过账"(zx.rs_paid), 拿不到"当时手里是哪把弩";
+#     所以"超限"必须在这里写进玩家身上(与 bs_paid 同一层, 坑 141 同族)。
+scoreboard players set @s zx.rs_ov 0
+execute if items entity @s weapon.mainhand crossbow[custom_data~{ol:"reverse_string"}] run scoreboard players set @s zx.rs_ov 1
+
+# ① 扣魔力(普通 100 / 超限 280)
 data modify storage manacore:in arg set value {uuid:"",value:100.0}
+execute if score @s zx.rs_ov matches 1 run data modify storage manacore:in arg.value set value 280.0
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 
 # ② 魔力不足 -> 这一发不生效(显式清掉付账标记, 坑 141)
 execute if data storage manacore:out r{success:0b} run scoreboard players set @s zx.rs_paid 0
@@ -28,7 +35,6 @@ execute if data storage manacore:out r{success:0b} run return fail
 
 # ③ 记下"这一发付过账"(写在射手身上, 不写在箭上 —— 坑 141)
 scoreboard players set @s zx.rs_paid 1
-
 # ④ 表现: 反向蓄能的冷蓝色弦光
 execute at @s run particle minecraft:end_rod ~ ~1.2 ~ 0.2 0.25 0.2 0.0 6 normal
 execute at @s run particle minecraft:electric_spark ~ ~1.2 ~ 0.2 0.25 0.2 0.01 5 normal

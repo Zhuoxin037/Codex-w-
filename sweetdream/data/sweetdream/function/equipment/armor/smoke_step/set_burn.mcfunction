@@ -34,12 +34,16 @@
 execute unless data storage zx:work a.num unless data storage zx:work a.damage run return 0
 
 # ① 施法者还在线吗
-$execute unless entity @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run return 0
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute unless entity @a[tag=zx.ub,limit=1] run return 0
 
 # ② 他穿齐「燧行」两件吗（● 燧帽 = 头盔 / ● 烟履 = 靴子）
 #    切到玩家上下文才能判 items —— 判定写在同一条 execute 里，避免多一次往返。
 scoreboard players set #sb_on zx.meta 0
-$execute as @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] if items entity @s armor.head *[minecraft:custom_data~{zx:["flint_hat"]}] if items entity @s armor.feet *[minecraft:custom_data~{zx:["smoke_step"]}] run scoreboard players set #sb_on zx.meta 1
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute as @a[tag=zx.ub,limit=1] if items entity @s armor.head *[minecraft:custom_data~{zx:["flint_hat"]}] if items entity @s armor.feet *[minecraft:custom_data~{zx:["smoke_step"]}] run scoreboard players set #sb_on zx.meta 1
 execute unless score #sb_on zx.meta matches 1 run return 0
 
 # ③ 这一击是"基础攻击力类"技能吗（attack_mul > 0）

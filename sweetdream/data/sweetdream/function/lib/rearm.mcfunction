@@ -85,6 +85,8 @@ advancement revoke @a only sweetdream:equipment/bow/burst_dawn
 #   (批 13 2026-10-13: 退弦(弩·射击) / 引雷针(法杖·右键) / 冰鉴(副手·受击)
 #    三条进度同样是"自撤销型", 按契约登记到这里。)
 advancement revoke @a only sweetdream:equipment/bow/backstring
+#   (批 14 2026-10-25: 碎骨(弩) —— 射击进度 + shot 首行自撤销, 同契约。)
+advancement revoke @a only sweetdream:equipment/bow/bone_breaker
 #   (批 15-1 2026-10-15: 眠羽/烬弦/逆弦/黯日 四把弩接上命中结算 —— 各自新增
 #    "射击进度 + shot 扣蓝", shot 首行 `advancement revoke @s only <自己>`,
 #    属自撤销型, 按契约登记到这里。)
@@ -149,6 +151,7 @@ advancement revoke @a only sweetdream:equipment/axe/fissure
 advancement revoke @a only sweetdream:equipment/axe/dream_reader
 advancement revoke @a only sweetdream:equipment/axe/dream_reader_hit
 advancement revoke @a only sweetdream:equipment/axe/draught
+advancement revoke @a only sweetdream:equipment/axe/draught_hit
 advancement revoke @a only sweetdream:equipment/axe/pyre
 advancement revoke @a only sweetdream:equipment/axe/pyre_hit
 advancement revoke @a only sweetdream:equipment/axe/ballad
@@ -226,6 +229,39 @@ advancement revoke @a only sweetdream:overlimit/arc
 advancement revoke @a only sweetdream:overlimit/tinder
 advancement revoke @a only sweetdream:overlimit/fissure
 advancement revoke @a only sweetdream:overlimit/chime
+# ---- 批 J4 · 超限·剑 9 / 斧 10 / 弩 4 / 法杖 9(2026-10-23) ----
+advancement revoke @a only sweetdream:overlimit/yebu
+advancement revoke @a only sweetdream:overlimit/rebound
+advancement revoke @a only sweetdream:overlimit/tidemark
+advancement revoke @a only sweetdream:overlimit/grayscale
+advancement revoke @a only sweetdream:overlimit/backflow_tide
+advancement revoke @a only sweetdream:overlimit/profane
+advancement revoke @a only sweetdream:overlimit/way_back
+advancement revoke @a only sweetdream:overlimit/gousi
+advancement revoke @a only sweetdream:overlimit/thunder_wedge
+advancement revoke @a only sweetdream:overlimit/xiugou
+advancement revoke @a only sweetdream:overlimit/draught
+advancement revoke @a only sweetdream:overlimit/skyvault
+advancement revoke @a only sweetdream:overlimit/frost_carve
+advancement revoke @a only sweetdream:overlimit/ballad
+advancement revoke @a only sweetdream:overlimit/chenyuan
+advancement revoke @a only sweetdream:overlimit/anchor
+advancement revoke @a only sweetdream:overlimit/scorch_bone
+advancement revoke @a only sweetdream:overlimit/deep_brine
+advancement revoke @a only sweetdream:overlimit/meteor
+advancement revoke @a only sweetdream:overlimit/backstring
+advancement revoke @a only sweetdream:overlimit/reverse_string
+advancement revoke @a only sweetdream:overlimit/dark_sun
+advancement revoke @a only sweetdream:overlimit/dragon_tongue
+advancement revoke @a only sweetdream:overlimit/five_curses
+advancement revoke @a only sweetdream:overlimit/pour_sack
+advancement revoke @a only sweetdream:overlimit/burst_bank
+advancement revoke @a only sweetdream:overlimit/apocalypse
+advancement revoke @a only sweetdream:overlimit/fate_thread
+advancement revoke @a only sweetdream:overlimit/cage_day
+advancement revoke @a only sweetdream:overlimit/fallen_dream
+advancement revoke @a only sweetdream:overlimit/thunderrod
+advancement revoke @a only sweetdream:overlimit/bent_ray
 advancement revoke @a only sweetdream:equipment/armor/dionysus_helmet_hit
 # ---- 批 11 · 剑(2026-10-12): 潮痕 / 灰度 / 缺月(主动 + 被动) ----
 advancement revoke @a only sweetdream:equipment/sword/tidemark
@@ -272,6 +308,7 @@ advancement revoke @a only sweetdream:equipment/sword/blind_candle_hit
 advancement revoke @a only sweetdream:equipment/axe/death_bell
 #   剜霜(斧)右键主动(consume_item -> cast 首行 revoke), 同契约登记。
 advancement revoke @a only sweetdream:equipment/axe/frost_carve
+advancement revoke @a only sweetdream:equipment/axe/frost_carve_hurt
 #   醒梦钟(法杖)右键分派(consume_item -> cast 首行 revoke)。
 advancement revoke @a only sweetdream:equipment/staff/wake_bell
 #   折径(法杖)右键分派(consume_item -> cast 首行 revoke)。
@@ -304,3 +341,48 @@ advancement revoke @a only sweetdream:equipment/armor/gyre_hit
 #   原版近战普攻不走 deal ⇒ 平A 永远不附「白昼梦」。补这条 player_hurt_entity。
 #   自撤销型进度(首行 revoke) => 必须登记，否则 /reload 后平A 不再触发。
 advancement revoke @a only sweetdream:equipment/armor/empty_pillow_hit
+
+# ---- 批一 10 件补技能(2026-10-20): 七个自撤销型进度 ----
+#   全部是"每命中/每受伤触发一次"的技术类进度，奖励函数首行 revoke 自己 ⇒ 必须登记，
+#   否则某次命令预算爆量把奖励函数跳过一次，这些被动就永久静默失效
+#   （见本文件开头 2026-10-04 那次事故）。
+#   ★ 履霜 / 冻土 走的是每刻状态机，没有进度，所以不在这个名单里。
+advancement revoke @a only sweetdream:equipment/sword/yebu_hit
+advancement revoke @a only sweetdream:equipment/sword/chengxing_hit
+advancement revoke @a only sweetdream:equipment/armor/zhuzu_hurt
+advancement revoke @a only sweetdream:equipment/axe/xiugou
+advancement revoke @a only sweetdream:equipment/sword/gousi
+
+# ---- 批二 14 件补技能(2026-10-20): 十九个自撤销型进度 ----
+#   与批一同一契约: 奖励函数首行 `advancement revoke @s only …` 撤自己 ⇒
+#   某次命令预算爆量跳过奖励函数时, 进度会永远停在"已完成", 这之后该被动
+#   永久静默(零日志)。这里在 /reload 时统一撤销一遍, 给它一次重来的机会。
+#   ★ 饮霜(sip_frost) 走的是 lib/heal 的治疗量钩子, 没有进度, 不在名单里。
+#   ★ 息土 / 归途 另有每刻状态机, 但那两件**同时**挂着受击进度, 要登记。
+#   剑: 剖心 / 虚位 / 归途
+advancement revoke @a only sweetdream:equipment/sword/profane
+advancement revoke @a only sweetdream:equipment/sword/profane_hit
+advancement revoke @a only sweetdream:equipment/sword/empty_seat
+advancement revoke @a only sweetdream:equipment/sword/empty_seat_hit
+advancement revoke @a only sweetdream:equipment/sword/way_back
+#   斧: 断碑 / 沉砣 / 缚烬
+advancement revoke @a only sweetdream:equipment/axe/grave_tablet
+advancement revoke @a only sweetdream:equipment/axe/sunken_weight
+advancement revoke @a only sweetdream:equipment/axe/sunken_weight_hit
+advancement revoke @a only sweetdream:equipment/axe/sunken_weight_hurt
+advancement revoke @a only sweetdream:equipment/axe/bind_ember
+#   弩: 夜缚(只有命中那一条)
+#   法杖: 囚昼 / 停针 / 倾囊 / 决堤
+advancement revoke @a only sweetdream:equipment/staff/cage_day
+advancement revoke @a only sweetdream:equipment/staff/stop_needle
+advancement revoke @a only sweetdream:equipment/staff/pour_sack
+advancement revoke @a only sweetdream:equipment/staff/burst_bank
+#   盔甲 / 副手: 息土(受击) / 反照(受击)
+advancement revoke @a only sweetdream:equipment/armor/breathing_soil_hurt
+advancement revoke @a only sweetdream:internal/hurt
+advancement revoke @a only sweetdream:equipment/bow/lianshi
+advancement revoke @a only sweetdream:equipment/bow/tiejili
+advancement revoke @a only sweetdream:equipment/bow/night_bind
+#   (批 14 2026-10-25: 借火(胸甲) —— 平A 命中进度, 首行自撤销, 同契约。)
+advancement revoke @a only sweetdream:equipment/armor/borrow_fire_hit
+advancement revoke @a only sweetdream:equipment/armor/profile_hit

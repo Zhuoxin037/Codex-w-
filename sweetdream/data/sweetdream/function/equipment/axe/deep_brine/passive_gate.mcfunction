@@ -15,5 +15,9 @@
 scoreboard players add @s zx.db_pd 0
 execute if score @s zx.db_pd > #now manacore.meta run return 0
 scoreboard players operation @s zx.db_pd = #now manacore.meta
-scoreboard players operation @s zx.db_pd += #200 zx.meta
+# 冷却间隔: 普通 200 刻(10 秒) / 超限 60 刻(3 秒)
+#   #dbp_ol 是 hit_go ②.5 拍的(1 = 这一次拿的是超限·重溟)。
+scoreboard players set #db_gap zx.meta 200
+execute if score #dbp_ol zx.meta matches 1 run scoreboard players set #db_gap zx.meta 60
+scoreboard players operation @s zx.db_pd += #db_gap zx.meta
 tag @s add zx.db_pass

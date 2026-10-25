@@ -1,0 +1,26 @@
+scoreboard players set @s sdk.pose 23
+# Verified saved Blockbench pose; original 1.5x size and mesh normalization retained.
+$data merge entity $(pelvis) {transformation: [-1.5f,0f,0f,-0.0057f,0f,1.5f,0f,2.307f,0f,0f,-1.5f,0.42195f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}
+$data merge entity $(waist) {transformation: [-1.5f,0f,0f,-0.0057f,0f,1.5f,0.00705f,2.62575f,0f,0.00705f,-1.5f,0.42195f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}
+$data merge entity $(chest) {transformation: [-1.5f,0f,-0.00525f,-0.0057f,0f,1.5f,-0.00615f,2.79435f,0.00525f,-0.00615f,-1.5f,0.4602f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}
+$data merge entity $(head) {transformation: [-1.5f,0f,-0.00015f,-0.00585f,0f,1.5f,-0.00015f,3.7458f,0.00015f,-0.00015f,-1.5f,0.4281f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}
+$data merge entity $(shoulder_r) {transformation: [-1.5f,0f,-0.00525f,-0.6246f,0f,1.5f,-0.00615f,3.4035f,0.00525f,-0.00615f,-1.5f,0.4224f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}
+$data merge entity $(hand_r) {transformation: [-1.5f,0.0066f,-0.00585f,-0.83145f,0.00705f,1.4958f,-0.1128f,2.02575f,0.00525f,-0.11295f,-1.4958f,0.5133f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}
+$data merge entity $(weapon_knight_sword) {transformation: [-1.8603f,-0.4575f,-0.85455f,-0.8043f,-0.69075f,-0.67185f,1.8633f,1.82805f,-0.6801f,1.9338f,0.4452f,0.51165f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}
+$data merge entity $(shoulder_l) {transformation: [-1.5f,0f,-0.00525f,0.61275f,0f,1.5f,-0.00615f,3.40365f,0.00525f,-0.00615f,-1.5f,0.4179f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}
+$data merge entity $(hand_l) {transformation: [-1.5f,-0.0075f,-0.0048f,0.7617f,-0.00705f,1.4958f,-0.1128f,2.0256f,0.0054f,-0.1128f,-1.4958f,0.5076f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}
+$data merge entity $(cape) {transformation: [-1.5f,0f,-0.00525f,-0.0075f,0f,1.5f,-0.00615f,3.56115f,0.00525f,-0.00615f,-1.5f,-0.02895f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}
+$data merge entity $(cape_upper) {transformation: [-1.875f,0.00075f,-0.0066f,-0.0075f,0f,1.85985f,0.23775f,3.56115f,0.0066f,0.23775f,-1.85985f,-0.02895f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}
+$data merge entity $(cape_mid) {transformation: [-1.875f,0.00105f,-0.0066f,-0.00795f,0f,1.85145f,0.2964f,2.7012f,0.0066f,0.2964f,-1.85145f,-0.1389f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}
+$data merge entity $(cape_lower) {transformation: [-1.8744f,0.0105f,-0.04365f,-0.00855f,-0.00615f,1.746f,0.68325f,1.3836f,0.04455f,0.68325f,-1.74555f,-0.3498f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}
+$data merge entity $(thigh_r) {transformation: [-1.4991f,0.00825f,0.0519f,-0.4557f,0.0009f,1.4856f,-0.2076f,2.32185f,-0.0525f,-0.20745f,-1.4847f,0.4125f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}
+$data merge entity $(shin_r) {transformation: [-1.4991f,-0.00795f,0.0519f,-0.4611f,-0.0012f,1.48755f,0.19245f,1.4085f,-0.0525f,0.1923f,-1.48665f,0.54945f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}
+$data merge entity $(foot_r) {transformation: [-1.4877f,0f,-0.19155f,-0.4557f,0f,1.5f,-0.0003f,0.42285f,0.19155f,-0.0003f,-1.4877f,0.41745f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}
+$data merge entity $(thigh_l) {transformation: [-1.4991f,-0.00825f,-0.0519f,0.4443f,-0.0009f,1.4856f,-0.20775f,2.3091f,0.0525f,-0.20745f,-1.4847f,0.4125f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}
+$data merge entity $(shin_l) {transformation: [-1.4991f,0.00795f,-0.0519f,0.44955f,0.0012f,1.4874f,0.19365f,1.39905f,0.0525f,0.1935f,-1.4865f,0.54915f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}
+$data merge entity $(foot_l) {transformation: [-1.48575f,0f,0.2061f,0.4443f,0f,1.5f,-0.0003f,0.42285f,-0.2061f,-0.0003f,-1.48575f,0.41745f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}
+$data merge entity $(front_cloth) {transformation: [-1.5f,0f,0f,-0.0222f,0f,1.48575f,-0.2061f,2.5977f,0f,-0.2061f,-1.48575f,0.855f,0f,0f,0f,1f],start_interpolation: 0,interpolation_duration: 1}
+$data merge entity $(upperarm_r) {transformation: [-1.499908241f,0.007114269f,-0.00398484f,-0.737996257f,0.00717702f,1.499721975f,-0.02395225f,3.215960568f,0.003870679f,-0.023970963f,-1.499733854f,0.416417108f,0f,0f,0f,1f],start_interpolation:0,interpolation_duration:1}
+$data merge entity $(forearm_r) {transformation: [-1.499912603f,0.004390969f,-0.005841779f,-0.900024423f,0.004821124f,1.495608498f,-0.113680248f,2.654376181f,0.005492154f,-0.113697675f,-1.49560486f,0.430504801f,0f,0f,0f,1f],start_interpolation:0,interpolation_duration:1}
+$data merge entity $(upperarm_l) {transformation: [-1.499993945f,-0.00623359f,-0.005584999f,0.72596179f,-0.006147369f,1.499828777f,-0.022972495f,3.216097548f,0.005679763f,-0.022949249f,-1.499830976f,0.411001959f,0f,0f,0f,1f],start_interpolation:0,interpolation_duration:1}
+$data merge entity $(forearm_l) {transformation: [-1.499995622f,-0.006505159f,-0.004764789f,0.758785087f,-0.006121986f,1.495617009f,-0.114648025f,2.653864896f,0.005248008f,-0.114626922f,-1.495621948f,0.424179377f,0f,0f,0f,1f],start_interpolation:0,interpolation_duration:1}

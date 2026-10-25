@@ -13,16 +13,21 @@
 #   直接 tag add 会得到一个"永不过期、也不显示"的假状态。
 # ============================================================
 
-# ① 8 秒节流
+# ① 8 秒节流（基础版）
+#   ★ 超限版**没有**这条 —— 用户 2026-10-23 拍板"有意放开重复触发限制"（§五 第 8 条）。
+#     所以四句全部挂 `zx.ft_pol matches 0`；zx.ft_pol 由普攻入口每次重写（0/1），
+#     有分数，`matches 0` 判得住（没分数时恒假 ⇒ 千万别在别处调 settle）。
 scoreboard players add @s zx.ft_pd 0
-execute if score @s zx.ft_pd > #now manacore.meta run return 0
-scoreboard players operation @s zx.ft_pd = #now manacore.meta
-scoreboard players add @s zx.ft_pd 160
+execute if score @s zx.ft_pol matches 0 if score @s zx.ft_pd > #now manacore.meta run return 0
+execute if score @s zx.ft_pol matches 0 run scoreboard players operation @s zx.ft_pd = #now manacore.meta
+execute if score @s zx.ft_pol matches 0 run scoreboard players add @s zx.ft_pd 160
 
-# ② 伤害 = 最大魔力值 ×0.05(先重取 uuid: 平A链不经过 lib/uuid, 直接读会读到别人)
+# ② 伤害 = 最大魔力值 ×0.05（超限 ×0.06）
+#   (先重取 uuid: 平A链不经过 lib/uuid, 直接读会读到别人)
 function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return 0
 data modify storage manacore:in arg set value {uuid:"",max_mana_mul:0.05,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0}
+execute if score @s zx.ft_pol matches 1 run data modify storage manacore:in arg.max_mana_mul set value 0.06
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:work ft.dmg set from storage manacore:out r.damage
@@ -47,4 +52,4 @@ scoreboard players reset @e[tag=zx.ft_src,distance=0..] zx.ft_ln_end
 
 # ⑦ 表现: 血丝绷断
 execute at @e[tag=zx.ft_src,distance=0..,limit=1] run particle minecraft:dust{color:[0.75,0.1,0.2],scale:1.4} ~ ~1 ~ 0.5 0.6 0.5 0.02 24 normal
-execute at @e[tag=zx.ft_src,distance=0..,limit=1] run playsound minecraft:entity.vex.hurt player @a ~ ~ ~ 0.7 1.5
+execute at @e[tag=zx.ft_src,distance=0..,limit=1] run playsound minecraft:block.amethyst_block.resonate player @a ~ ~ ~ 0.7 1.5

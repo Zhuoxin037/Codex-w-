@@ -42,7 +42,7 @@ execute unless data storage zx:data self{ok:1b} run return 0
 # ⑥ 消耗 60 魔力（够才扣）
 data modify storage manacore:in arg set value {uuid:"",value:60.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay_pas
 execute unless data storage manacore:out r{success:1b} run return 0
 
 # ⑦ 给它附加「噬心」（附着 -> tag/mark）

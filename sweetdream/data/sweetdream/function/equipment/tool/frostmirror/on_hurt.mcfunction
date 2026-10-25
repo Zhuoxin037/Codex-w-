@@ -40,7 +40,7 @@ execute at @s run tag @e[type=!#sweetdream:no_damage,distance=..3,sort=nearest,l
 data modify storage zx:work fz set value {target:"@e[tag=zx.fm_t,distance=0..,limit=1]",ticks:20}
 execute if entity @e[tag=zx.fm_t,distance=0..,limit=1] run function sweetdream:lib/freeze with storage zx:work fz
 execute at @e[tag=zx.fm_t,distance=0..,limit=1] run particle minecraft:snowflake ~ ~1.0 ~ 0.5 0.6 0.5 0.03 14 normal
-execute at @e[tag=zx.fm_t,distance=0..,limit=1] run playsound minecraft:block.glass.break player @a ~ ~ ~ 0.6 1.4
+execute at @e[tag=zx.fm_t,distance=0..,limit=1] run playsound minecraft:block.amethyst_block.break player @a ~ ~ ~ 0.6 1.4
 
 # ⑤ 当前主手装备的主动技能冷却 -1 秒
 function sweetdream:lib/uuid

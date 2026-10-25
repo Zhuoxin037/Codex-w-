@@ -4,7 +4,7 @@ execute as @a[tag=!test_pending_return] run function sweetdream:equipment/tool/e
 tag @a[tag=zx.el_host] remove zx.el_host
 tag @a[tag=zx.el_seen] remove zx.el_seen
 tag @a[tag=zx.el_own] remove zx.el_own
-execute as @a unless entity @s[nbt={Health:0.0f}] if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["everlit"]}] run tag @s add zx.el_host
+execute as @a if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["everlit"]}] unless score @s zx.hp_c matches ..0 run tag @s add zx.el_host
 execute in minecraft:overworld as @e[type=minecraft:marker,tag=zx.el_wisp,distance=0..] at @s run function sweetdream:equipment/tool/everlit/wisp_tick_dispatch
 execute in minecraft:overworld as @e[type=minecraft:item_display,tag=zx.el_visual,distance=0..] at @s run function sweetdream:equipment/tool/everlit/visual/keep
 execute in minecraft:the_nether as @e[type=minecraft:marker,tag=zx.el_wisp,distance=0..] at @s run function sweetdream:equipment/tool/everlit/wisp_tick_dispatch

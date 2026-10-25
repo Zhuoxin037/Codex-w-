@@ -37,7 +37,7 @@ execute unless data storage manacore:out r{success:1b} run return fail
 # ③ 扣魔力 450
 data modify storage manacore:in arg set value {uuid:"",value:450.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 execute if data storage manacore:out r{success:0b} run tellraw @s [{"text":"魔力不足（需要 450）","color":"red"}]
 execute if data storage manacore:out r{success:0b} run return fail
 
@@ -53,6 +53,11 @@ function manacore:api/formation/create
 
 # ⑥ 无页提示(不拦施法)
 execute if score @s zx.ap_n matches ..0 run tellraw @s [{"text":"没有可消耗的「启示」—— 灾示不会发生","color":"gray"}]
+
+# ⑥.5 超限（批 K8）：施法时手里至少 3 页 ⇒ 本次**所有**灾示 +50%（结束时还有缓慢Ⅴ）
+#   ★ 必须排在 ⑦ consume_page **之前**：那一句会把 ap_n 减 1，之后就判不出"施法时几页"。
+scoreboard players set @s zx.ap_big 0
+execute if score @s zx.ap_ol matches 1 if score @s zx.ap_n matches 3.. run scoreboard players set @s zx.ap_big 1
 
 # ⑦ 点火: 施法那一刻先消耗第一页(没有页就跳过), 当前页 = 它的魔力值
 # 初始化视觉，必须先于 consume_page 统计本次已消耗页数。

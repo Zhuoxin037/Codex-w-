@@ -11,7 +11,7 @@
 # 【两个计时器】"每 4 秒依次消耗一层"和"每 3 秒一次灾示"是两条,
 #   别合成一个(描述里是两个独立的节奏)。
 # 【模型】2026-10-07: 用户已画好模型, 所以本条目带 `item_model` 字段
-#   (其余三根法杖仍不写)。模型见 sweetdream_rp/assets/sweetdream/
+#   (其余三根法杖仍不写)。模型见 sweetdream_rp_完整版/assets/sweetdream/
 #   items/apocalypse.json —— 按 custom_model_data 分发的完整树。
 #   ★ 生成器会给它自动配 custom_model_data={floats:[0.0f]}(成对写)。
 #   ★ 历史坑: 2026-10-05 那版 note 写着"故意不写 item_model", 后来模型

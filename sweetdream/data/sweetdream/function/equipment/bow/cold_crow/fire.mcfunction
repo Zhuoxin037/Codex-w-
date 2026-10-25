@@ -58,7 +58,7 @@ execute if score #tier zx.meta matches 3.. run function sweetdream:internal/dama
 $execute at $(target) run particle minecraft:snowflake ~ ~1 ~ 1.4 0.8 1.4 0.05 40 normal
 $execute at $(target) run particle minecraft:snowflake ~ ~1 ~ 0.8 0.5 0.8 0.05 20 normal
 $execute at $(target) run playsound minecraft:entity.player.hurt_freeze player @a ~ ~ ~ 0.9 1.0
-execute if score #tier zx.meta matches 4 run playsound minecraft:block.glass.break player @a ~ ~ ~ 1.0 0.8
+execute if score #tier zx.meta matches 4 run playsound minecraft:block.amethyst_block.break player @a ~ ~ ~ 1.0 0.8
 
 # 收尾: 三个"把两三个回调接起来的"标签都要清干净, 否则会污染下一发
 #   (zx.cc_arr 是逐箭快照那条线新加的, 忘了清就会让下一发读到上一发的箭)

@@ -12,7 +12,11 @@
 # ============================================================
 
 # ① 施法者还在线吗
-$execute unless entity @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run return 0
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute unless entity @a[tag=zx.ub,limit=1] run return 0
 
 # ② 交给玩家上下文里的叶子件（穿着判定 / 节流 / 算 5% / 治疗 都在那边做）
-$execute as @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run function sweetdream:equipment/armor/crimson_seam/heal_go
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute as @a[tag=zx.ub,limit=1] run function sweetdream:equipment/armor/crimson_seam/heal_go

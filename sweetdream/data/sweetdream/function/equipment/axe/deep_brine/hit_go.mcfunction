@@ -27,6 +27,13 @@ execute as @e[tag=zx.victim,distance=0..,limit=1] if entity @s[tag=zx.status.yua
 execute if score #db_ys zx.meta matches 0 run tag @e[tag=zx.victim] remove zx.victim
 execute if score #db_ys zx.meta matches 0 run return 0
 
+# ②.5 这一次是不是超限版(亲手/副手那把带 ol:"deep_brine")
+#   ★ 拍成假玩家 #dbp_ol 再往下走: ③ 的 gait 是 `as <那只生物>` 跑的, 那里读不到
+#     玩家的主手(执行者已经换成生物了)。假玩家跨函数/跨执行者都还在。
+scoreboard players set #dbp_ol zx.meta 0
+execute if items entity @s weapon.mainhand diamond_axe[custom_data~{ol:"deep_brine"}] run scoreboard players set #dbp_ol zx.meta 1
+execute if items entity @s weapon.offhand diamond_axe[custom_data~{ol:"deep_brine"}] run scoreboard players set #dbp_ol zx.meta 1
+
 # ③ 逐目标节流(记在**那只生物**身上; 通过时它自己会挂上 zx.db_pass)
 tag @e[tag=zx.db_pass] remove zx.db_pass
 execute as @e[tag=zx.victim,distance=0..,limit=1] run function sweetdream:equipment/axe/deep_brine/passive_gate

@@ -10,4 +10,6 @@
 #   (check 规则 asnoat), 所以目标靠 crystal_end 已经圈好的标签 zx.ch_e。
 # ============================================================
 
-$execute if data storage zx:work che{ol:1} as @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run function sweetdream:equipment/staff/chime/crystal_end_go
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute if data storage zx:work che{ol:1} as @a[tag=zx.ub,limit=1] run function sweetdream:equipment/staff/chime/crystal_end_go

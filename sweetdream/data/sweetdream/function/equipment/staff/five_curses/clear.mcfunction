@@ -12,6 +12,9 @@
 scoreboard players set @s zx.fcv_st 0
 scoreboard players set @s zx.fcv_rec 0
 scoreboard players set @s zx.fcv_t 0
+#   (2026-10-23 批 K9 新增的两个"随档位落下的参数"也要一并清掉, 免得下一份世咒读残值)
+scoreboard players set @s zx.fcv_pct 0
+scoreboard players set @s zx.fcv_3v 0
 tag @s remove zx.fcv_3
 tag @s remove zx.fcv_5
 # 第四世破甲: 一并摘标签 + 归零它自己的倒计时(与 armor_uncut 保持一致)

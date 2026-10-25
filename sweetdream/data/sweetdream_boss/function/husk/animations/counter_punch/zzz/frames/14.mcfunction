@@ -1,0 +1,8 @@
+# Native Blockbench pose; hidden fire transforms are held at canonical zero.
+$data merge entity $(fx_modeled_wave_0) {transformation:[-0.60666667f,0f,0f,-0.75f,0f,0.63333333f,0f,0.0375f,0f,0f,-0.60666667f,0.8125f,0f,0f,0f,1f],start_interpolation:0,interpolation_duration:1}
+$data merge entity $(fx_modeled_wave_1) {transformation:[0.30333333f,0f,-0.52538874f,-0.75f,0f,0.63333333f,0f,0.0375f,0.52538874f,0f,0.30333333f,0.8125f,0f,0f,0f,1f],start_interpolation:0,interpolation_duration:1}
+$data merge entity $(fx_modeled_wave_2) {transformation:[0.30333333f,0f,0.52538874f,-0.75f,0f,0.63333333f,0f,0.0375f,-0.52538874f,0f,0.30333333f,0.8125f,0f,0f,0f,1f],start_interpolation:0,interpolation_duration:1}
+$data merge entity $(fx_arm_fire_right) {transformation:[-0.37271071f,0.03129834f,0.33182396f,-0.84750408f,0.01718886f,-0.49532314f,0.06602677f,0.67872289f,0.33285323f,0.06062512f,0.36814851f,0.86414008f,0f,0f,0f,1f],start_interpolation:0,interpolation_duration:1}
+$data merge entity $(fx_modeled_ash) {transformation:[-0.4875f,0f,0f,-0.75f,0f,0.4875f,0f,0.0625f,0f,0f,-0.4875f,0.8125f,0f,0f,0f,1f],start_interpolation:0,interpolation_duration:1}
+$data merge entity $(fx_guard_sparks_right) {transformation:[-0.37271071f,0.07132259f,-0.32557613f,-0.83810572f,0.01718886f,0.49188107f,0.08807697f,0.40981124f,0.33285323f,0.05446189f,-0.3691106f,0.87634563f,0f,0f,0f,1f],start_interpolation:0,interpolation_duration:1}
+$data merge entity $(fx_guard_impact_right) {transformation:[-0.8945057f,0.17117422f,-0.78138271f,-0.83810572f,0.04125327f,1.18051458f,0.21138472f,0.40981124f,0.79884775f,0.13070854f,-0.88586543f,0.87634563f,0f,0f,0f,1f],start_interpolation:0,interpolation_duration:1}

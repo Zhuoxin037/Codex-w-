@@ -18,11 +18,13 @@ data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/stats/get
 execute store result score #frc_mh zx.meta run data get storage manacore:out r.value 1000
 
-# ② 10% -> 整点数
-#   r.value 已经被 ×1000 放大过, 所以 10% = ÷10000(一次到位; 连写两次 ÷100 会撞上
-#   check.py 的「同文件相邻完全重复」规则)。#10000 由 core/load 设好。
+# ② 百分比 -> 整点数(pct = 10 常态 / 20 超限, 由 cast ⑦.5 写进 zx:work frc.pct)
+#   r.value 已经被 ×1000 放大过: ÷10000 先折成 10% 的整点, 再 ×pct ÷10 得到 pct%。
+execute store result score #frc_pct zx.meta run data get storage zx:work frc.pct
 scoreboard players operation #heal_pt zx.meta = #frc_mh zx.meta
 scoreboard players operation #heal_pt zx.meta /= #10000 zx.meta
+scoreboard players operation #heal_pt zx.meta *= #frc_pct zx.meta
+scoreboard players operation #heal_pt zx.meta /= #10 zx.meta
 
 # ③ 回血(撤上限由 core/tick 在下一拍做, 详见 lib/heal 文件头)
 function sweetdream:lib/heal
@@ -30,4 +32,4 @@ function sweetdream:lib/heal
 # ④ 表现
 execute at @s run particle minecraft:heart ~ ~1.4 ~ 0.4 0.4 0.4 0.0 6 normal
 execute at @s run playsound minecraft:block.amethyst_block.chime player @a ~ ~ ~ 0.6 1.4
-tellraw @s [{"text":"剜霜解冻回响（恢复最大生命值 10%）","color":"aqua"}]
+tellraw @s [{"text":"剜霜解冻回响（恢复最大生命值 ","color":"aqua"},{"score":{"name":"#frc_pct","objective":"zx.meta"},"color":"aqua"},{"text":"%）","color":"aqua"}]

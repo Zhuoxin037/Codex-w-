@@ -47,7 +47,7 @@ execute unless data storage manacore:out r{can_create:1b} run return 0
 # ⑤ 扣 80 魔力(魔力不足的分支: 一个字节都不扣, 也不起 CD、不占术阵位)
 data modify storage manacore:in arg set value {uuid:"",value:80.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay_pas
 execute unless data storage manacore:out r{success:1b} run return 0
 
 # ⑥ 起 20 秒 CD(走到这里 = "这一次真的发生了")

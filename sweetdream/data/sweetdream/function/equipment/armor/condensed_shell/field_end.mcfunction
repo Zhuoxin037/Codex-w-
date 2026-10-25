@@ -18,7 +18,7 @@ function manacore:api/formation/remove
 # ② 表现: 壳碎掉
 particle minecraft:snowflake ~ ~0.2 ~ 1.6 0.1 1.6 0.01 20 normal
 particle minecraft:poof ~ ~0.2 ~ 1.2 0.1 1.2 0.02 14 normal
-playsound minecraft:block.glass.break player @a ~ ~ ~ 0.7 0.9
+playsound minecraft:block.amethyst_block.break player @a ~ ~ ~ 0.7 0.9
 
 # ③ 收掉自己
 kill @s

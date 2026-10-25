@@ -21,6 +21,11 @@
 scoreboard players set #stg zx.meta 0
 execute if entity @s[scores={zx.stg=1..}] store result score #stg zx.meta run scoreboard players get @s zx.stg
 
+# ①.5a-2 攻击者 Y(×100)从本批快照复原 —— 每批只在 with_from 反查一次(见那里)
+#   嵌套伤害(击杀记账 / 收尾钩子触发的新一次 calc)可能改过 #stg_ay, 这里拉回基准值。
+scoreboard players set #stg_ay zx.meta 0
+execute if data storage zx:work ob.ay store result score #stg_ay zx.meta run data get storage zx:work ob.ay
+
 # ①.5b ★ 整份复原 deal 的入参(基准 = zx:work ob) ★
 #   num_str / type / u0..u3 是 deal 那条宏的参数; damage 是下面 stg_mul 的底数。
 #   ★★ 2026-10-10 修 F08: 原来是"挑字段恢复", **漏了 num** ★★
@@ -36,7 +41,7 @@ data modify storage zx:work a set from storage zx:work ob
 #   【开销】平时(目标没升痕)只多一条选择器判定; 走这条的只有被天穹打过、且被居高临下
 #   命中的生物, 很罕见。stg_mul 的宏参数用 $(u0).., 上面刚复原过, 一定在。
 #   stg_mul 满足条件时会**就地覆盖** a.num / a.damage / a.num_str(交给下面的 deal)。
-execute if score #stg zx.meta matches 1.. run function sweetdream:internal/damage/stg_mul with storage zx:work a
+execute unless data storage zx:work a{fixed:1b} if score #stg zx.meta matches 1.. run function sweetdream:internal/damage/stg_mul with storage zx:work a
 
 # ①.5d 通用标签的"受击侧加乘"(2026-10-06 加)
 #   · 夜火: 受到技能伤害 +15%  —— "技能伤害"包含两种来源:
@@ -52,9 +57,16 @@ execute if score #stg zx.meta matches 1.. run function sweetdream:internal/damag
 #     internal/damage/vuln_tag。
 #   ★ 放在 stg_mul(升痕)**之后**: vuln_tag 以当前 a.num 为底, 语义是"升痕算完再乘一道";
 #     反过来(以 ob.num 为底)会让两者互相顶掉, 只生效一个。
-execute if entity @s[tag=zx.status.yehuo] if data storage zx:work a{type:"sweetdream:skill"} unless data storage zx:work a{src:"enemy"} run function sweetdream:internal/damage/vuln_tag
-execute if entity @s[tag=zx.status.yehuo] if data storage zx:work a{src:"enemy"} run function sweetdream:internal/damage/vuln_tag
-execute if data storage zx:work a{type:"sweetdream:true_damage"} if entity @s[tag=zx.status.shixin] run function sweetdream:internal/damage/vuln_tag
+execute unless data storage zx:work a{fixed:1b} if entity @s[tag=zx.status.yehuo] if data storage zx:work a{type:"sweetdream:skill"} unless data storage zx:work a{src:"enemy"} run function sweetdream:internal/damage/vuln_tag
+execute unless data storage zx:work a{fixed:1b} if entity @s[tag=zx.status.yehuo] if data storage zx:work a{src:"enemy"} run function sweetdream:internal/damage/vuln_tag
+execute unless data storage zx:work a{fixed:1b} if data storage zx:work a{type:"sweetdream:true_damage"} if entity @s[tag=zx.status.shixin] run function sweetdream:internal/damage/vuln_tag
+
+# ①.5d' 超限·锈犬(2026-10-23 批 K4): 目标带「被召唤物攻击 +30%」(zx.svul 秒数),
+#   且本次投递带 sm:1b(由召唤物自己打标记) -> 这一段 ×1.30。
+#   ★ 两个条件缺一不可: 只判标签会让玩家自己的伤害也吃 30%;
+#     只判 sm 会让场上所有召唤物对谁都更疼。
+#   ★ 只在 sm 标记存在时才多这一条选择器判定 —— 绝大多数伤害(玩家平A/技能)一行就过。
+execute unless data storage zx:work a{fixed:1b} if data storage zx:work a{sm:1b} if entity @s[scores={zx.svul=1..}] run function sweetdream:internal/damage/vuln_summon
 
 # ①.5e 五世恶咒·第三世: 带 zx.fcv_3 的目标, **技能伤害**额外 ×1.20(2026-10-13 批 12)
 #   【为什么单独一条、不并进 vuln_tag】vuln_tag 的 115 是夜火/噬心共用的固定值;
@@ -63,7 +75,24 @@ execute if data storage zx:work a{type:"sweetdream:true_damage"} if entity @s[ta
 #     对同一次伤害重复加乘(那会变成 ×1.15×1.20, 不是文案里的二选一)。
 #     ★ 若目标同时带夜火和世咒三世, 两条**各**跑一次(= ×1.38)—— 那是两个不同
 #       debuff 叠加, 属于预期(与"夜火 + 噬心"同族)。
-execute if entity @s[tag=zx.fcv_3] if data storage zx:work a{type:"sweetdream:skill"} unless data storage zx:work a{src:"enemy"} run function sweetdream:internal/damage/vuln_fcv3
+execute unless data storage zx:work a{fixed:1b} if entity @s[tag=zx.fcv_3] if data storage zx:work a{type:"sweetdream:skill"} unless data storage zx:work a{src:"enemy"} run function sweetdream:internal/damage/vuln_fcv3
+
+# ①.5e' 返汐(靴子, 2026-10-25 批 14): 目标正被海浪减速 ⇒ 受到的伤害 +0.3%/档(最多 +9%)
+#   【文案】"生物受到的伤害也将根据在海浪上的移速来增加，每比初始数值慢 10% 则
+#     其受到的伤害 +3%。"
+#   【为什么放在**受击侧**而不是 damage_calc hook】damage_calc 每次施法只算**一遍**,
+#     结果再分发给每只目标(见 api/damage) ⇒ 那里只能读施法者、读不到"这一只是不是
+#     在浪上"。返汐自己的施法者侧加成走 ebb_tide/hook_calc, 受害者侧必须在这里。
+#   【为什么也认敌方来源】文案只说"生物受到的伤害", 没限定来源 ⇒ 不筛 type/src。
+execute unless data storage zx:work a{fixed:1b} if entity @s[scores={zx.et_e=1..}] run function sweetdream:internal/damage/vuln_ebb
+
+# ①.5e'' 迟暮(护腿, 2026-10-25 用户原稿): 受到伤害 ⇒ 立即清除抗性提升Ⅴ
+#   【文案】"累计消耗 3 层「回光」后获得 15 秒抗性提升Ⅴ，若受到伤害则立即清除抗性提升。"
+#   【判据】zx.ld_r5 = 那个抗性的到期时刻（≥1 = 是我们给的, 才允许清）
+#     —— 用标记而不是无条件 `effect clear`, 免得把别的来源的扛性一起抹掉。
+#   【为什么在受击侧最前面】它只跟"我挨打了"有关, 与其他乘区无交集。
+execute if entity @s[type=minecraft:player,scores={zx.ld_r5=1..}] run effect clear @s minecraft:resistance
+execute if entity @s[type=minecraft:player,scores={zx.ld_r5=1..}] run scoreboard players set @s zx.ld_r5 0
 
 # ①.5f 燧行套装(批次 15-4): 目标带「流火」时, 施法者的"基础攻击力类"技能伤害 ×1.12
 #   【为什么排在 vuln_tag / 世咒之后】它们都是"乘在 a.num 上"的乘区, 先乘谁结果一样;
@@ -72,7 +101,7 @@ execute if entity @s[tag=zx.fcv_3] if data storage zx:work a{type:"sweetdream:sk
 #     再改就没有消费者了。所以本段与 ①.6 的世咒记录都落在 deal 前。
 #   【判据分工】"目标带流火"在本地判(entity @s); "施法者穿齐两件 + 本次走 atk 通道"
 #     由被调函数判 —— 它需要 ob 里的施法者 UUID, 只能用宏展开。
-execute if data storage zx:work ob{type:"sweetdream:skill"} unless data storage zx:work ob{src:"enemy"} if entity @s[tag=zx.status.liuhuo] run function sweetdream:equipment/armor/smoke_step/set_burn with storage zx:work ob
+execute unless data storage zx:work a{fixed:1b} if data storage zx:work ob{type:"sweetdream:skill"} unless data storage zx:work ob{src:"enemy"} if entity @s[tag=zx.status.liuhuo] run function sweetdream:equipment/armor/smoke_step/set_burn with storage zx:work ob
 
 # ①.5g 缝心套装(批次 15-4): 对带「噬心」的目标造成**真实伤害**时, 有「绯结」就消耗 1 层,
 #   这一段真伤 ×1.15(独立乘区) + 施法者 2 秒抗性提升Ⅰ(该强化 5 秒节流)
@@ -81,15 +110,56 @@ execute if data storage zx:work ob{type:"sweetdream:skill"} unless data storage 
 #     节流 / 消耗"全在被调函数里(它需要 ob 的 UUID 才能反查到人)。
 #   ★ 与 ①.8 是**两件事**: 殓丝(副手)换「殓结」, 缝心(胸甲)吃「绯结」的现成增益 ——
 #     同条件不同装备, 各跑各的, 互不影响(两件可以同时带)。
-execute if data storage zx:work ob{type:"sweetdream:true_damage"} unless data storage zx:work ob{src:"enemy"} if entity @s[tag=zx.status.shixin] run function sweetdream:equipment/armor/crimson_seam/set_true_hit with storage zx:work ob
+execute unless data storage zx:work a{fixed:1b} if data storage zx:work ob{type:"sweetdream:true_damage"} unless data storage zx:work ob{src:"enemy"} if entity @s[tag=zx.status.shixin] run function sweetdream:equipment/armor/crimson_seam/set_true_hit with storage zx:work ob
+
+# ①.5h 明烛(批 14, 2026-10-25): 对带「流火」的目标造成伤害 ⇒ 在其位置召唤「烛火」
+#   【为什么挂在 one 而不是进度】"造成伤害"要覆盖近战 / 弩 / 技能 / 真伤**全部来源**,
+#     而进度只覆盖原版事件那几种(与 ①.5 空枕那条同一条理由)。
+#   【判据分工】本地只判"目标带流火"; 施法者侧的"戴着明烛吗 / 8 秒节流"全在
+#     被调函数里(它要用 ob 的 UUID 反查到人)。选不到人 = 无归属伤害, 自然跳过。
+
+# ①.5i 借火(批 14, 2026-10-25): 对**在燃烧**的生物造成伤害 ⇒ 下一次平A 充能
+#   【判据分工】本地只判"目标在燃烧"; 施法者侧的"穿没穿借火"在被调函数里。
+#   ★ `type=!player`: 这一条要读目标的 Fire(NBT), 玩家 NBT 序列化 ≈10ms/次
+#     —— 对玩家目标一律跳过(卡顿坑 1)。
+
+# 缚烬：流火与原版缓慢必须同时成立，非固定段才乘 1.5。
+execute unless data storage zx:work a{fixed:1b} if entity @s[tag=zx.status.liuhuo] if data entity @s active_effects[{id:"minecraft:slowness"}] run function sweetdream:equipment/axe/bind_ember/multiply with storage zx:work a
+
+# 倾囊超限（批 K8）：这一笔带「固定伤害追伤」窗口 → 先把 psadd 并进 a.fixed_add
+#   ★ 必须在下面 fixed_add 那行之前：fixed_add 负责把 a.fixed_add 加进 a.num 并重算
+#     num_str，之后再改 fixed_add 就没有消费者了。
+execute if data storage zx:work psadd run function sweetdream:equipment/staff/pour_sack/ol_apply
+
+execute if data storage zx:work a.fixed_add run function sweetdream:internal/damage/fixed_add
 
 # ①.6 五世恶咒·第五世: 记录窗口开着时, 把这一下累计进 zx.fcv_rec(2026-10-13 批 12)
 #   【为什么放在 deal **之前**】此时 a.num 已是最终伤害(升痕/易伤都算完了),
 #     记到的是"实际要打出去多少"; 放到 deal 之后再读就已经被别的调用点改过了。
 execute if entity @s[tag=zx.fcv_5] run function sweetdream:equipment/staff/five_curses/record
 
+# ①.6b 迟暮「记录接下来 5 秒其受到的伤害」(2026-10-25 用户原稿)
+#   【为什么放在 deal **之前**】同 ①.6: 此时 a.num 已是最终伤害, 记到的是"实际打出去多少"。
+#   【★ 记全部来源 ★】文案是"其受到的伤害", 不区分谁打的 ⇒ 只按"窗口开着没有"判,
+#     由 late_dusk/record 自己判 zx.ld_rt。
+execute if entity @s[scores={zx.ld_rt=1..}] run function sweetdream:equipment/armor/late_dusk/record
+
+# 夜缚的弹射引用这一段最终技能数值；千分单位保留小数。
+execute if data storage zx:work a{nb_measure:1b} store result score @s zx.nb_extra run data get storage zx:work a.num 1000
+
 # ② 打伤害(有攻击者就带 by; 选不到人(离线)就退化成无归属, 照样打得出来)
+execute if entity @s[tag=sd.hk.body] run function sweetdream:boss/husk/hurt/before_skill
+# Per-invocation result stack remains valid across recursive proc damage.
+execute unless data storage zx:work hit_success_stack run data modify storage zx:work hit_success_stack set value []
+data modify storage zx:work hit_success_stack append value {result:{ok:0b}}
 function sweetdream:internal/damage/deal with storage zx:work a
+execute if data storage zx:work hit_success_stack[-1].result{ok:1b} unless data storage zx:work ob{src:"enemy"} if entity @s[tag=zx.status.liuhuo] run function sweetdream:equipment/armor/bright_candle/on_hit with storage zx:work ob
+execute if data storage zx:work hit_success_stack[-1].result{ok:1b} unless data storage zx:work ob{src:"enemy"} unless entity @s[type=minecraft:player] run function sweetdream:equipment/armor/borrow_fire/on_hit with storage zx:work ob
+execute if entity @s[tag=sd.hk.body] run data modify storage sweetdream:husk skill_kind set value {true:0b,dot:0b}
+execute if entity @s[tag=sd.hk.body] run execute if data storage zx:work ob{type:"sweetdream:true_damage"} run data modify storage sweetdream:husk skill_kind.true set value 1b
+execute if entity @s[tag=sd.hk.body] run execute if data storage zx:work ob{dot:1b} run data modify storage sweetdream:husk skill_kind.dot set value 1b
+execute if entity @s[tag=sd.hk.body] run function sweetdream:boss/husk/hurt/after_skill
+execute if entity @s[type=player] run function sweetdream:equipment/tool/retro_shine/from_skill with storage zx:work ob
 
 # ①.9 批 15-4 · 潮线的两段(顺序不可反, 见下)
 #   ① 潮线**套装**: 技能伤害命中**已带「渊海」**的生物 -> 主手主动技能冷却 -2 秒(6 秒节流)
@@ -112,6 +182,15 @@ execute if data storage zx:work ob{type:"sweetdream:skill"} unless data storage 
 #     走消耗入口会白触发余烬/回潮扣/烛跬那些"消耗"被动。
 execute if data storage zx:work ob{type:"sweetdream:skill"} unless data storage zx:work ob{src:"enemy"} if entity @s[tag=zx.status.liuhuo,tag=!zx.status.yehuo] run function sweetdream:equipment/armor/char_coat/on_skill_hit with storage zx:work ob
 
+# ①.9c 迟暮·消耗「回光」(护腿, 2026-10-25 用户原稿)
+#   【文案】"自身对附有「白昼梦」的生物造成伤害时消耗一层「回光」，之后使其时停
+#     2 秒并记录接下来 5 秒其受到的伤害。"
+#   【为什么排在 deal 之后】文案是"造成伤害时" —— 这一击已经打出去了才算数。
+#   【★ 只对非玩家目标 ★】白昼梦只贴非玩家活体（tag/mark 的既有口径）, 这里跟它对齐。
+#   【★ 传的是 ob 的 u0..u3 ★】要反查**动手的人**才能扣他身上的回光;
+#     裸调会因为缺 $(u0) 整段跳过（宏行规则）。
+execute if data storage zx:work hit_success_stack[-1].result{ok:1b} if entity @s[type=!minecraft:player,tag=zx.status.dream] run function sweetdream:equipment/armor/late_dusk/hit with storage zx:work ob
+
 # ①.8b 绯缝(批 15-4): 同条件下**直接回血**(最大生命值 5%, 6 秒节流)
 #   【与 ①.8 是两件不同装备】殓丝是副手(换「殓结」)、绯缝是胸甲(直接回血);
 #     两件可以同时带：先做不消耗噬心的回血，再让殓丝消耗，避免同一击漏判。
@@ -125,6 +204,17 @@ execute if data storage zx:work ob{type:"sweetdream:true_damage"} unless data st
 #   【只认"自身造成"】src:"enemy" 的敌方真伤不算(它不是玩家打出来的)。
 execute if data storage zx:work ob{type:"sweetdream:true_damage"} unless data storage zx:work ob{src:"enemy"} if entity @s[tag=zx.status.shixin] run function sweetdream:equipment/tool/coffin_silk/on_true_hit with storage zx:work ob
 
+# ①.10 剖面(批 14, 2026-10-25): 对带「噬心」的生物造成伤害 ⇒ 命中次数 +1(满 3 次兑现)
+#   【为什么排在 deal 之后】文案是"造成 3 次伤害**后**"; 且兑现的回血不该回头影响这一击。
+#   ★ 原版平A 不经过这里 ⇒ 那一路由进度 equipment/armor/profile_hit 补(见 hit_melee)。
+#   ★ 两条路都进 profile/count, 它内部用 zx.pf_hl 做"同刻同目标"去重。
+execute if data storage zx:work hit_success_stack[-1].result{ok:1b} unless data storage zx:work ob{src:"enemy"} if entity @s[tag=zx.status.shixin] run function sweetdream:equipment/armor/profile/count with storage zx:work ob
+
+# ①.11 套装·剖脉(批 14, 2026-10-25): 对**同时**带「噬心」和「泵动」的生物造成伤害
+#   ⇒ 立即触发一次剖面的全部效果 + 两者各 +1 秒（每只 10 秒一次）
+#   【为什么排在 ①.10 之后】套装是"在这一击之上再补一份", 先记满三下再补, 顺序不影响数值。
+execute if data storage zx:work hit_success_stack[-1].result{ok:1b} unless data storage zx:work ob{src:"enemy"} if entity @s[tag=zx.status.shixin,tag=zx.hv_pump] run function sweetdream:equipment/armor/profile/set_bonus with storage zx:work ob
+
 # 圣骸: 保留准确受害者上下文, 已死后不要再用 @e 查找。归属读取不可变的 ob。
 function sweetdream:equipment/axe/sacred_relic/skill_kill with storage zx:work ob
 
@@ -133,3 +223,6 @@ function sweetdream:equipment/axe/sacred_relic/skill_kill with storage zx:work o
 #   (原版 post_attack 只读攻击者主手物品, 附魔挂在靴子上不触发 ⇒ 这行从来没生效)。
 #   现在技能击杀也走原版 player_killed_entity 进度: 本包技能伤害都带 `by <玩家>`
 #   (见 internal/damage/deal), 击杀会正常归到玩家头上, 5 条标签进度照常触发。
+
+# Always pop after all victim-side callbacks; nested one calls have their own entry.
+data remove storage zx:work hit_success_stack[-1]

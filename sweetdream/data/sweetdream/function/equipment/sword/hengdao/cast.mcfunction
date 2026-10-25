@@ -37,7 +37,7 @@ execute at @s run playsound minecraft:entity.player.attack.sweep player @a ~ ~ ~
 # ⑤ 扣魔力 -15
 data modify storage manacore:in arg set value {uuid:"",value:15.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 execute if data storage manacore:out r{success:0b} run return fail
 
 # ⑥ 记冷却

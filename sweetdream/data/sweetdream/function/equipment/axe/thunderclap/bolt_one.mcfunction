@@ -22,4 +22,6 @@ $execute rotated $(ang) 0 positioned ^ ^ ^1.0 run summon minecraft:lightning_bol
 #     要在最前面、`as` 放最后(顺序反了雷的落点会跑到玩家脚下, 同 arc/ol_fire)。
 #   ★ u0..u3 由 bolt_go 写进 marker、bolt_fx 摊进 zx:work bs(宏参数只能取键)。
 #     全 0(找不到射手)时选不到人 ⇒ 整行安全空转。
-$execute rotated $(ang) 0 positioned ^ ^ ^1.0 as @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run function sweetdream:lib/on_lightning
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+$execute rotated $(ang) 0 positioned ^ ^ ^1.0 as @a[tag=zx.ub,limit=1] run function sweetdream:lib/on_lightning

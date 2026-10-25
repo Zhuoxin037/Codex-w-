@@ -49,6 +49,13 @@ for s in staffs:
     txt = open(os.path.join(STAFF, s, 'attack.mcfunction'), encoding='utf-8').read()
     m = re.search(r'data modify storage zx:work ball set value \{([^}]*)\}', txt)
     if not m:
+        # ★ 2026-10-20 批二: 有的法杖在设计稿里**根本没有 ✦ 普攻 段**(纯技能法杖),
+        #   它们的 attack.mcfunction 只写 `return 0` 接住普通右键 —— 这是正确实现,
+        #   不是漏写。判据 = 去掉注释后全文只剩一条 return(不生成球 = 不起拖尾)。
+        body = [l.strip() for l in txt.split('\n')
+                if l.strip() and not l.strip().startswith('#')]
+        if body and all(l.startswith('return') for l in body):
+            continue
         err('[%s] attack 里找不到 `ball set value {...}` 那一行' % s)
         continue
     ms = re.search(r'style:"([a-z_]*)"', m.group(1))
@@ -74,13 +81,35 @@ for s in used:
             err('缺文件 %s' % fn)
 
 # ---- ④ 派发覆盖
-tick = open(os.path.join(BALL, 'tick.mcfunction'), encoding='utf-8').read()
+# ★ 2026-10-20: 法球 tick 已拆成 tick(wrapper) + tick_target(真实现)。
+#   ④ 拖尾派发块在 tick_target 里 —— 继续读 tick 会对每把法杖都误报"隐形"。
+tick = open(os.path.join(BALL, 'tick_target.mcfunction'), encoding='utf-8').read()
 hit = open(os.path.join(BALL, 'hit.mcfunction'), encoding='utf-8').read()
+
+# ★★ 2026-10-20 第二次改派发形态: 从"每个 style 一行 `if data …{style:"x"}`"
+#    改成**单条宏分派**。原因见 _gen_staff_particles.dispatch_trail 的注释
+#    (每刻 24 次实体 NBT 序列化)。所以这里也要认两种形态:
+#      · 宏形态  —— 只要那一行在, 所有 style 都被覆盖(函数名由 $(style) 拼);
+#      · 字面量形态(旧版/回退) —— 仍然逐个 style 找。
+#    ★ 宏形态下"fx_<style> 文件是否存在"由 ③ 保证, 不会漏。
+MACRO_TRAIL = re.search(r'\$function\s+sweetdream:projectile/ball/fx_\$\(style\)\s*$',
+                        tick, re.M) is not None
+MACRO_HIT = re.search(r'\$function\s+sweetdream:projectile/ball/fx_\$\(style\)_hit\s*$',
+                      hit, re.M) is not None
+if not MACRO_TRAIL and not MACRO_HIT:
+    pass
 for s in sorted(used):
-    if 'data{style:"%s"}' % s not in tick:
+    if not MACRO_TRAIL and 'data{style:"%s"}' % s not in tick:
         err('ball/tick ④ 里没有 style:"%s" 的派发 —— 这把法杖飞起来是隐形的' % s)
-    if 'data{style:"%s"}' % s not in hit:
+    if not MACRO_HIT and 'data{style:"%s"}' % s not in hit:
         err('ball/hit ⑤ 里没有 style:"%s" 的派发 —— 这把法杖命中走兜底白烟' % s)
+
+# ---- ④.5 宏分派的**前提**必须成立: fire 要给 style 兜底
+#   宏 `fx_$(style)` 取不到参数时那一行会直接失败(不报语法错, 只是没表现)。
+fire = open(os.path.join(BALL, 'fire.mcfunction'), encoding='utf-8').read()
+if MACRO_TRAIL or MACRO_HIT:
+    if 'unless data storage zx:work ball.style' not in fire:
+        err('fire 里没有 style 兜底 —— 宏分派取不到参数时该发法球会完全没有表现')
 
 # ---- ⑤ 孤儿 fx(没人派的)
 for fn in sorted(os.listdir(BALL)):

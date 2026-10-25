@@ -111,5 +111,7 @@ function sweetdream:lib/mm_add/scan_mul
 # ②⅞ 把加算池统一折进三条通道倍率(加算 = 先合并再乘一次; 见 padd_apply 头注释)
 #    ★ 必须排在 ②½~②¾¾¾ **全部之后**(否则后写的还没进池子)。
 #    ★ 顺序上它是最后一步 —— 以前后面还有 ③(折"待生效的风声加成"), 那个整段删掉了。
+function sweetdream:lib/skill_mul/pending
 function sweetdream:lib/skill_mul/padd_apply
+function sweetdream:lib/skill_mul/independent
 

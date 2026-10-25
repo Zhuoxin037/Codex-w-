@@ -50,7 +50,7 @@ execute rotated ~ 0 positioned ^ ^ ^2.5 unless entity @e[type=!#sweetdream:no_da
 # ④ 扣魔力 -200
 data modify storage manacore:in arg set value {uuid:"",value:200.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 execute if data storage manacore:out r{success:0b} run return fail
 
 # ⑤ 记冷却 30 秒

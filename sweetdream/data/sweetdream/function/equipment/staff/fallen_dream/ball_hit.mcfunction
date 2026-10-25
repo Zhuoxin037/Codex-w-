@@ -39,3 +39,10 @@ execute unless data storage zx:work a{target:""} run function sweetdream:interna
 
 # ③ 带梦命中的小表现(让"打真伤"看得见)
 execute as @e[tag=zx.ball_hit,tag=zx.status.dream] at @s run particle minecraft:witch ~ ~1 ~ 0.4 0.6 0.4 0.02 12 normal
+
+# ④ ★ 超限·堕梦: 命中后有 **20% 概率**额外使其时停 1 秒(2026-10-23 批 K9) ★
+#   ★ 逐只独立掷点: "有 20% 的概率"指的是**每只**各有 20%, 不是"这一发全体一起中"。
+#     ⇒ `as` 循环里每只各摇一次 lib/rnd(它写的是全局假名 #rnd, 一轮一读一回, 不串)。
+#   ★ 1 秒 = 20 tick; lib/timestop 的重入语义是"取较长那次" ⇒ 目标身上已有更长时停
+#     时不会被缩短(正好符合"额外"这个词)。
+execute if data entity @s data{ol:1b} as @e[tag=zx.ball_hit] at @s run function sweetdream:equipment/staff/fallen_dream/ol_stop

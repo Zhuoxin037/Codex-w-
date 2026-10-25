@@ -37,6 +37,17 @@ execute unless data storage zx:data self{ok:1b} run return fail
 # ①.2 拍下超限乘区(与同批武器一致; 本件无超限石, mod 会直接返回)
 function sweetdream:overlimit/api/snap
 
+# ①.3 超限分流(2026-10-23 批 K3): 敲过超限石(ol:"thunder_wedge")的雷楔
+#   ① "雷楔"持续 8 → **10 秒**
+#   ② "8 格内" → **12 格**
+#   ③ 被闪电命中的生物挂 DoT(3 秒 ×0.07 当前魔力; 期间再被雷命中 → 5 秒 ×0.08 最大魔力)
+#   ④ 结束(自然到期)时对范围内**全部**生物各落一道雷
+#   魔力 300 / 冷却 60 秒不变(文案没写)。
+#   ★ 判 ol 的**值**是不是 thunder_wedge, 且主副手都判(照 liuguang/cast ⓪.5)。
+scoreboard players set #twg_ol zx.meta 0
+execute if items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["thunder_wedge"],ol:"thunder_wedge"}] run scoreboard players set #twg_ol zx.meta 1
+execute if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["thunder_wedge"],ol:"thunder_wedge"}] run scoreboard players set #twg_ol zx.meta 1
+
 # ② 只读检查: 冷却 60 秒 + 魔力 300
 data modify storage manacore:in arg set value {uuid:"",skill:"sweetdream:thunder_wedge",mana:300.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
@@ -53,7 +64,7 @@ execute unless data storage manacore:out r{success:1b} run return fail
 data modify storage manacore:in arg set value {uuid:"",value:300.0}
 data modify storage manacore:in arg.value set from storage zx:work olv.mana
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 execute if data storage manacore:out r{success:0b} run tellraw @s [{"text":"魔力不足（需要 ","color":"red"},{"score":{"name":"#twg_need","objective":"zx.meta"},"color":"red"},{"text":"）","color":"red"}]
 execute if data storage manacore:out r{success:0b} run return fail
 
@@ -73,13 +84,19 @@ function manacore:api/damage/calc
 #   formation/create 与 cooldown 那两套都会往 manacore:out 里写自己的 r.*, 抄晚了就是
 #   "伤害凭空变成 0"(静默, 没日志)。所以 damage 一算完立刻落到 zx:work twg。
 #   【宏参数只能取键、不能取下标】(坑 129) ⇒ UUID 的四个整数先摊成 u0..u3。
-data modify storage zx:work twg set value {dmg:0.0,uu:"",u0:0,u1:0,u2:0,u3:0}
+data modify storage zx:work twg set value {dmg:0.0,uu:"",u0:0,u1:0,u2:0,u3:0,ol:0,ft:8}
 data modify storage zx:work twg.dmg set from storage manacore:out r.damage
 data modify storage zx:work twg.uu set from storage zx:data self.uuid
 execute store result storage zx:work twg.u0 int 1 run data get entity @s UUID[0]
 execute store result storage zx:work twg.u1 int 1 run data get entity @s UUID[1]
 execute store result storage zx:work twg.u2 int 1 run data get entity @s UUID[2]
 execute store result storage zx:work twg.u3 int 1 run data get entity @s UUID[3]
+
+# 超限: marker 打上 zx.twg_ol 标签(12 格 / DoT / 结束落雷全靠它) + 寿命 10 秒
+#   ★ 用标签而不是 NBT 里的 ol:1 ★ 选择器能直接 `@e[tag=zx.twg_ol]`,
+#     而 `if data entity @s data.zx.ol` 只判"键在不在" —— ol:0b 也算在, 分不开。
+execute if score #twg_ol zx.meta matches 1 run data modify storage zx:work twg.ol set value 1
+execute if score #twg_ol zx.meta matches 1 run data modify storage zx:work twg.ft set value 10
 
 # ⑦ 记下"我是谁" -> #twg_me(UUID[0]), 用来收掉自己那只旧雷楔
 scoreboard players set #twg_me zx.meta 0
@@ -94,8 +111,11 @@ execute in minecraft:overworld as @e[type=marker,tag=zx.twg_wedge,distance=0..] 
 execute in minecraft:the_nether as @e[type=marker,tag=zx.twg_wedge,distance=0..] if score @s zx.twg_own = #twg_me zx.meta run function sweetdream:equipment/sword/thunder_wedge/wedge_end
 execute in minecraft:the_end as @e[type=marker,tag=zx.twg_wedge,distance=0..] if score @s zx.twg_own = #twg_me zx.meta run function sweetdream:equipment/sword/thunder_wedge/wedge_end
 
-# ⑨ 在框架里登记一个真术阵(占 1 个术阵位; 8 秒后由 wedge_end 删掉)
+# ⑨ 在框架里登记一个真术阵(占 1 个术阵位; 到时由 wedge_end 删掉)
+#   超限: 10 秒 / 半径 12(文案的"12 格内")。
 data modify storage manacore:in arg set value {uuid:"",id:"sweetdream:thunder_wedge",type:"wedgeyard",duration_seconds:8.0,data:{radius:8.0}}
+execute if score #twg_ol zx.meta matches 1 run data modify storage manacore:in arg.duration_seconds set value 10.0
+execute if score #twg_ol zx.meta matches 1 run data modify storage manacore:in arg.data.radius set value 12.0
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/formation/create
 
@@ -107,4 +127,5 @@ execute at @s run function sweetdream:equipment/sword/thunder_wedge/wedge_one wi
 # ⑪ 表现 + 提示
 execute at @s run particle minecraft:electric_spark ~ ~1 ~ 0.4 0.9 0.4 0.15 45 normal
 execute at @s run playsound minecraft:item.trident.thunder player @a ~ ~ ~ 0.8 0.7
-tellraw @s [{"text":"雷楔: 术阵已展开（8 秒）","color":"gold"}]
+execute if score #twg_ol zx.meta matches 0 run tellraw @s [{"text":"雷楔: 术阵已展开（8 秒）","color":"gold"}]
+execute if score #twg_ol zx.meta matches 1 run tellraw @s [{"text":"雷楔: 术阵已展开（10 秒 · 12 格 · 雷击会留下持续伤害）","color":"light_purple"}]

@@ -46,13 +46,17 @@ execute store result score #se_pcry zx.meta run data get entity @s data.zx.se.cr
 # 【ol 从哪来】箭自带的逐箭快照 data.zx.se.ol(离弦时拍的); 读不到就当基础版。
 scoreboard players set #se_ol zx.meta 0
 execute store result score #se_ol zx.meta run data get entity @s data.zx.se.ol 1
-tag @e[distance=0..,tag=zx.se_path] remove zx.se_path
-execute if score #se_ol zx.meta matches 0 at @s positioned ~-2.5 ~-2.5 ~-2.5 run tag @e[type=!#sweetdream:no_damage,dx=5.0,dy=5.0,dz=5.0] add zx.se_path
-execute if score #se_ol zx.meta matches 1 at @s positioned ~-3.5 ~-3.5 ~-3.5 run tag @e[type=!#sweetdream:no_damage,dx=7.0,dy=7.0,dz=7.0] add zx.se_path
+scoreboard players set @e[distance=0..,scores={zx.se_path=1}] zx.se_path 0
+execute if score #se_ol zx.meta matches 0 at @s positioned ~-2.5 ~-2.5 ~-2.5 run scoreboard players set @e[type=!#sweetdream:no_damage,dx=5.0,dy=5.0,dz=5.0] zx.se_path 1
+execute if score #se_ol zx.meta matches 1 at @s positioned ~-3.5 ~-3.5 ~-3.5 run scoreboard players set @e[type=!#sweetdream:no_damage,dx=7.0,dy=7.0,dz=7.0] zx.se_path 1
 
 # ⑤ 打伤害(带射手归属; 三倍按每刻一次统一 roll)
 function sweetdream:equipment/bow/sculk_echo/path_roll
-data modify storage zx:work a set value {target:"@e[tag=zx.se_path]",damage:0.0,type:"minecraft:player_attack",u0:0,u1:0,u2:0,u3:0}
+data modify storage zx:work a set value {target:"@e[]",damage:0.0,type:"minecraft:player_attack",u0:0,u1:0,u2:0,u3:0}
+# ★ target 分两步写: 带 scores={…} 的选择器**不能**塞进 set value 的复合值里
+#   (check 规则 braceval —— 复合值里的字符串出现花括号会把 NBT 读取器带偏)。
+#   写成"整体是字符串"的单值就合法。
+data modify storage zx:work a.target set value "@e[scores={zx.se_path=1}]"
 execute if data storage zx:config damage_type run data modify storage zx:work a.type set from storage zx:config damage_type
 execute store result storage zx:work a.damage double 0.01 run scoreboard players get #se_pdmg zx.meta
 execute store result storage zx:work a.u0 int 1 run data get entity @s data.zx.se.u0
@@ -69,4 +73,4 @@ particle minecraft:sculk_charge{roll:0.0} ~ ~ ~ 2.0 0.6 2.0 0.0 1 normal
 # ⑦ 收尾
 # 【★ 同样要 distance=0.. ★】(注意: 上面 ⑤ 那一句里的 "@e[tag=zx.se_path]" 是写进 storage
 #   的**字符串**, 由 lib 那边当选择器用, 不加 distance —— 两处别搞混)
-tag @e[distance=0..,tag=zx.se_path] remove zx.se_path
+scoreboard players set @e[distance=0..,scores={zx.se_path=1}] zx.se_path 0

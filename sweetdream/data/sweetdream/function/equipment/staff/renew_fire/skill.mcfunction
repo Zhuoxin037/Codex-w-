@@ -32,7 +32,7 @@ execute unless data storage manacore:out r{success:1b} run return fail
 # ④ 扣魔力 50
 data modify storage manacore:in arg set value {uuid:"",value:50.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 execute if data storage manacore:out r{success:0b} run tellraw @s [{"text":"魔力不足（需要 50）","color":"red"}]
 execute if data storage manacore:out r{success:0b} run return fail
 

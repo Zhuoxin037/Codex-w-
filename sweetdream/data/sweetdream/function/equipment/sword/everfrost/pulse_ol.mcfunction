@@ -70,4 +70,4 @@ scoreboard players add #ef_pn zx.meta 20
 $execute store result storage zx:data ef."$(uuid)".pn int 1 run scoreboard players get #ef_pn zx.meta
 
 # ⑨ 表现(整批一小片霜)
-$execute at @e[tag=zx.ef_$(uuid),distance=0..] run playsound minecraft:block.glass.break player @a ~ ~ ~ 0.4 1.8
+$execute at @e[tag=zx.ef_$(uuid),distance=0..] run playsound minecraft:block.amethyst_block.break player @a ~ ~ ~ 0.4 1.8

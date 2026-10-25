@@ -7,10 +7,16 @@
     "sweetdream:equipment/armor/styx_walk/hook_calc",
     "sweetdream:equipment/tool/seraph_wing/hook_calc",
     "sweetdream:lib/mm_add/hook_calc",
+    "sweetdream:equipment/axe/chenyuan/hook_calc",
     "sweetdream:equipment/staff/begonia/hook_calc",
     "sweetdream:equipment/armor/dionysus_helmet/hook_calc",
     "sweetdream:equipment/armor/mottle_vein/hook_calc",
+    "sweetdream:equipment/armor/profile/hook_calc",
+    "sweetdream:equipment/armor/ebb_tide/hook_calc",
+    "sweetdream:equipment/armor/glimmer/hook_add",
     "sweetdream:lib/dmg_add_apply",
-    "sweetdream:equipment/tool/wrath/hook_calc"
+    "sweetdream:equipment/sword/gousi/hook_calc",
+    "sweetdream:equipment/tool/wrath/hook_calc",
+    "sweetdream:equipment/armor/glimmer/hook_calc"
   ]
 }

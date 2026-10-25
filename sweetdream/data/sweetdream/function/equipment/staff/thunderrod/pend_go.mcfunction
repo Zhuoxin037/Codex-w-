@@ -12,7 +12,9 @@
 # ============================================================
 
 # ① 落雷(以主人为执行者算伤害, 位置留在命中点)
-$execute at @s as @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run function sweetdream:equipment/staff/thunderrod/bolt_atk
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute at @s as @a[tag=zx.ub,limit=1] run function sweetdream:equipment/staff/thunderrod/bolt_atk
 
 # ② 撤掉自己(一次性 marker, 不摘的话会每刻重复触发)
 kill @s

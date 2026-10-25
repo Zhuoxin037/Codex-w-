@@ -49,7 +49,7 @@ execute if entity @s[tag=zx.ag_t] unless data entity @s {Health:0.0f} run return
 tag @s remove zx.ag_t
 execute at @s run particle minecraft:dust{color:[0.45,0.1,0.55],scale:1.6} ~ ~1 ~ 1.0 0.8 1.0 0.06 40 normal
 execute at @s run particle minecraft:sonic_boom ~ ~1 ~ 0 0 0 0.0 1 normal
-execute at @s run playsound minecraft:entity.warden.sonic_boom player @a ~ ~ ~ 0.6 1.4
+execute at @s run playsound minecraft:entity.iron_golem.attack player @a ~ ~ ~ 0.6 1.4
 
 # ⑥ AoE: 对 2 格内全部生物造成相当于死者最大生命值的伤害
 #   (先把尸体自己从集合里摘掉, 免得对已死之人再打一下)

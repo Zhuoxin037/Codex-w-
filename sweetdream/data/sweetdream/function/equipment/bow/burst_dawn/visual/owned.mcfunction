@@ -1,8 +1,8 @@
 # 身上主体仅手持时显示；技能黑片与烟带另属背后，不占肩部。
-$execute if entity @s[nbt={Health:0.0f}] run kill @e[tag=zx.bv_sh,tag=zx.bv_$(uuid),distance=0..,limit=1]
-$execute if entity @s[nbt={Health:0.0f}] run kill @e[tag=zx.bv_backfx,tag=zx.bv_$(uuid),distance=0..,limit=1]
-execute if entity @s[nbt={Health:0.0f}] run scoreboard players set @s zx.bv_back 0
-execute if entity @s[nbt={Health:0.0f}] run return 0
+$execute if score @s zx.hp_c matches ..0 run kill @e[tag=zx.bv_sh,tag=zx.bv_$(uuid),distance=0..,limit=1]
+$execute if score @s zx.hp_c matches ..0 run kill @e[tag=zx.bv_backfx,tag=zx.bv_$(uuid),distance=0..,limit=1]
+execute if score @s zx.hp_c matches ..0 run scoreboard players set @s zx.bv_back 0
+execute if score @s zx.hp_c matches ..0 run return 0
 $execute unless score #bv_held zx.meta matches 1 run kill @e[tag=zx.bv_sh,tag=zx.bv_$(uuid),distance=0..,limit=1]
 execute unless score #bv_held zx.meta matches 1 run tag @s remove zx.bv_wearing
 execute if score #bv_held zx.meta matches 1 run function sweetdream:equipment/bow/burst_dawn/visual/hand_pose

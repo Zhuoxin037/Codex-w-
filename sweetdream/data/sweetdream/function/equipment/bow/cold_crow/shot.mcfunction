@@ -65,7 +65,7 @@ execute if score #tier zx.meta matches 4 run scoreboard players set #cost zx.met
 data modify storage manacore:in arg set value {uuid:"",value:0.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 execute store result storage manacore:in arg.value double 1 run scoreboard players get #cost zx.meta
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 
 # ③ 魔力不足 —— 这一发只当普通箭, **不附加任何冰凌层数**
 #   【★ 为什么这里必须清掉射手名下的旧数据 ★】
@@ -128,7 +128,7 @@ execute unless score #tier zx.meta matches 4 run scoreboard players add @s zx.cc
 execute at @s run particle minecraft:snowflake ~ ~1.3 ~ 0.5 0.4 0.5 0.02 12 normal
 execute at @s run particle minecraft:snowflake ~ ~1.3 ~ 0.3 0.3 0.3 0.02 8 normal
 execute at @s run playsound minecraft:item.crossbow.shoot player @a ~ ~ ~ 0.7 1.2
-execute if score #tier zx.meta matches 4 run playsound minecraft:block.glass.break player @a ~ ~ ~ 0.8 1.5
+execute if score #tier zx.meta matches 4 run playsound minecraft:block.amethyst_block.break player @a ~ ~ ~ 0.8 1.5
 
 # 寒鸦模型：扣费成功后同步冰凌，第四发播放短暂霜光。
 function sweetdream:equipment/bow/cold_crow/model/on_shot

@@ -2,9 +2,14 @@
 # sweetdream:equipment/staff/five_curses/final —— 「终世」结算(造成记录伤害的 N%)
 # ------------------------------------------------------------
 # 【执行者】被打中的那只生物(@s = 目标)
-# 【入参】#fcv_pct zx.meta = 结算百分比(30 = 终世默认的 30% / 80 = 主动强化的 80%)
-#   ★ 为什么用假玩家而不是宏参数: 调用方在"12 格内全体"的循环里逐个调本函数,
-#     同一个百分比不会变, 假玩家够用; 走宏反而要给每次调用都绑一次 storage。
+# 【入参】**目标身上的 zx.fcv_pct** = 结算百分比(30 = 终世默认 / 40 = 超限·终世 /
+#   80 = 主动强化 / 100 = 超限·主动)
+#   ★ 2026-10-23 批 K9 改成"记在目标身上": 原来用全局假名 #fcv_pct 由调用方在调用前
+#     set —— 它是**全局**的, 同一刻"先放主动(80)再普攻收尾(30)"会串成按 80% 结算;
+#     更根本的问题是**自然到期**那条路(second)压根拿不到施法者, 只能靠目标身上的记录。
+#     现在落咒时(curse_step ⓪.5)就把比例拍进目标, 主动结算前由 skill 覆盖成 80/100,
+#     本函数只读目标自己那份 —— 每一份世咒各记各的, 天然不串。
+#   ★ 读不到(老存档/异常)时按 **30** 兜底 = 原版行为。
 # 【文案】终世: 对其造成记录伤害的 30% **真实伤害**, 之后清除「世咒」。
 #   主动技能把已在第五世的目标"立即结算终世", 比例由 30% 提高到 80%。
 # 【定点】zx.fcv_rec 记的是"伤害 ×1000"; 乘百分比再除 100 ⇒ 结果仍是 ×1000,
@@ -17,6 +22,8 @@
 # ============================================================
 
 # ① 伤害 = 记录伤害 × pct / 100(单位仍是 ×1000)
+scoreboard players set #fcv_pct zx.meta 30
+execute if score @s zx.fcv_pct matches 1.. run scoreboard players operation #fcv_pct zx.meta = @s zx.fcv_pct
 scoreboard players operation #fcv_d zx.meta = @s zx.fcv_rec
 scoreboard players operation #fcv_d zx.meta *= #fcv_pct zx.meta
 scoreboard players operation #fcv_d zx.meta /= #100 zx.meta

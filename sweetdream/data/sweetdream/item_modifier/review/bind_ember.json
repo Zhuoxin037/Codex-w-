@@ -1,0 +1,15 @@
+[
+  {
+    "function": "minecraft:set_enchantments",
+    "enchantments": {
+      "sweetdream:bind_ember": 1
+    },
+    "add": false
+  },
+  {
+    "function": "minecraft:set_components",
+    "components": {
+      "minecraft:enchantment_glint_override": false
+    }
+  }
+]

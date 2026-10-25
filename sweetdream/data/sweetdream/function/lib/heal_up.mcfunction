@@ -38,6 +38,12 @@
 # ============================================================
 
 # ① 若上一轮还没撤（同一刻连点 / core/tick 尚未收尾），先把旧的摘掉
+#   ★ 2026-10-19 起 lib/heal 会在**算量之前**就摘旧 + 清两个标签（见其 ⑤ 段），
+#     所以正常路径下这里不会命中。保留它是为了两条不变量：
+#     · 单独调 heal_up 的人（目前没有）也不会叠加两个同名修饰符；
+#     · 万一 lib/heal 的 ⑤ 被误删，这里还能兜住"重复 add 同一 ID"的失败。
+#     **不要**因为"这里不命中"就删掉 —— check.py 对 heal_up 的摘除唯一允许的形态
+#     就是这两行带 `execute if` 门控的写法（裸 remove = 一键满血老路）。
 execute if entity @s[tag=zx.heal_p] run attribute @s minecraft:max_health modifier remove sweetdream:heal_cap
 execute if entity @s[tag=zx.heal_on] run attribute @s minecraft:max_health modifier remove sweetdream:heal_cap
 

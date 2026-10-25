@@ -9,6 +9,8 @@
 # ============================================================
 
 data modify storage manacore:in arg set value {uuid:"",max_mana_mul:0.08,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0}
+# 超限: 0.08 -> 0.1(只在这条"有增益"分支里改 —— 文案的超限幅度就写在这一支上)
+execute if data storage zx:work cy{ol:1} run data modify storage manacore:in arg.max_mana_mul set value 0.1
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:in arg set value {target:"@e[tag=zx.cy_hit]",read:"manacore"}

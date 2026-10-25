@@ -26,6 +26,12 @@
 #   它们各只覆盖一部分来源, 留着只会和轮询重复结算。
 # ============================================================
 
+# ⓪.5 ★ 批 K8：这一发是不是超限版命缕 ★
+#   命中回调里 @s 是法球，而玩家很可能已经换手 ⇒ 只能读球上带着的快照（attack 写的 ol）。
+#   下游 line_mark（执行者是被命中的生物）读不到球，所以在这里统一拍成计分项。
+scoreboard players set #ft_olx zx.meta 0
+execute if data entity @s data{ol:1} run scoreboard players set #ft_olx zx.meta 1
+
 # ① 先算出"血丝还有效"的候选(选择器不能判分, 只能先打一层临时标签)
 #   ★ 半径 6: 本次命中者最多落在球那个 2.2 盒子里, src 又要在它 5 格内 ⇒ 6 够。
 #   ★ 过期血丝只用这个标签过滤, 不主动摘 zx.ft_ln(清理归 settle)。
@@ -36,15 +42,18 @@ execute as @e[tag=zx.ft_ln,distance=0..6] if score @s zx.ft_ln_end > #now manaco
 tag @e[tag=zx.ft_src,distance=0..] remove zx.ft_src
 #   甲: 本次命中者自己就带有效血丝(最近的一只)
 execute as @e[tag=zx.ball_hit,tag=zx.ft_lnok,distance=0..,sort=nearest,limit=1] run tag @s add zx.ft_src
-#   乙: 甲没找到 -> 以最近的那个命中者为圆心, 5 格内挑一只带有效血丝的其他生物
+#   乙: 甲没找到 -> 以最近的那个命中者为圆心, 5 格(超限 8 格)内挑一只带有效血丝的其他生物
 #       (distance=0.01.. 天然排除它自己: 不会拿"自己和自己"结算)
-execute unless entity @e[tag=zx.ft_src,distance=0..,limit=1] as @e[tag=zx.ball_hit,distance=0..,sort=nearest,limit=1] at @s run tag @e[tag=zx.ft_lnok,distance=0.01..5,sort=nearest,limit=1] add zx.ft_src
+#   ★ 两档互斥：matches 0 / matches 1，别让 8 格那条在 5 格那条之后又跑一次。
+execute unless entity @e[tag=zx.ft_src,distance=0..,limit=1] if score #ft_olx zx.meta matches 0 as @e[tag=zx.ball_hit,distance=0..,sort=nearest,limit=1] at @s run tag @e[tag=zx.ft_lnok,distance=0.01..5,sort=nearest,limit=1] add zx.ft_src
+execute unless entity @e[tag=zx.ft_src,distance=0..,limit=1] if score #ft_olx zx.meta matches 1 as @e[tag=zx.ball_hit,distance=0..,sort=nearest,limit=1] at @s run tag @e[tag=zx.ft_lnok,distance=0.01..8,sort=nearest,limit=1] add zx.ft_src
 
-# ③ 找"另一个": src 5 格内、本次也命中、且不是它自己
+# ③ 找"另一个": src 5 格(超限 8 格)内、本次也命中、且不是它自己
 #   ★ 必须带"src 存在"的门控: 否则 execute at 会退回世界原点执行, 可能在 0,0,0 附近
 #     误标一只当 other(虽然 ④ 还会拦一次, 但临时标签乱跑没必要)。
 tag @e[tag=zx.ft_other,distance=0..] remove zx.ft_other
-execute if entity @e[tag=zx.ft_src,distance=0..,limit=1] at @e[tag=zx.ft_src,distance=0..,limit=1] run tag @e[tag=zx.ball_hit,distance=0.01..5,tag=!zx.ft_src,sort=nearest,limit=1] add zx.ft_other
+execute if entity @e[tag=zx.ft_src,distance=0..,limit=1] if score #ft_olx zx.meta matches 0 at @e[tag=zx.ft_src,distance=0..,limit=1] run tag @e[tag=zx.ball_hit,distance=0.01..5,tag=!zx.ft_src,sort=nearest,limit=1] add zx.ft_other
+execute if entity @e[tag=zx.ft_src,distance=0..,limit=1] if score #ft_olx zx.meta matches 1 at @e[tag=zx.ft_src,distance=0..,limit=1] run tag @e[tag=zx.ball_hit,distance=0.01..8,tag=!zx.ft_src,sort=nearest,limit=1] add zx.ft_other
 
 # ④ 两者都在才结算; 结算要以**发射者身份**做(算伤要面板、击杀归属要玩家)
 execute if entity @e[tag=zx.ft_src,distance=0..,limit=1] if entity @e[tag=zx.ft_other,distance=0..,limit=1] run function sweetdream:equipment/staff/fate_thread/settle_from_ball

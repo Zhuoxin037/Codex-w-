@@ -20,6 +20,10 @@ function sweetdream:lib/atk_charge
 execute unless score @s zx.atk_ok matches 1 run return 0
 
 scoreboard players set #mt_ok zx.meta 0
+# 超限·陨星(批 K6): 形态开着且 mt_keep=1 -> 换手也照样掷陨石(文案"被动仍旧生效")
+#   ★ 必须**同时**判 mt_on ≥1 —— 只判 mt_keep 的话, 形态结束后(万一 end 没跑到)
+#     拿着任何武器都会掷陨石。
+execute if score @s zx.mt_keep matches 1 if score @s zx.mt_on matches 1.. run scoreboard players set #mt_ok zx.meta 1
 execute if items entity @s weapon.mainhand diamond_axe[custom_data~{zx:["meteor"]}] run scoreboard players set #mt_ok zx.meta 1
 execute if items entity @s weapon.offhand diamond_axe[custom_data~{zx:["meteor"]}] run scoreboard players set #mt_ok zx.meta 1
 execute unless score #mt_ok zx.meta matches 1 run return 0

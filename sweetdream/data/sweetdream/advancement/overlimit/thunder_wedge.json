@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "thunder_wedge": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "ol_thunder_wedge"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:overlimit/apply/thunder_wedge"
+    }
+}

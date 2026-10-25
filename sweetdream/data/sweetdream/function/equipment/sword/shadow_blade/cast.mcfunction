@@ -49,7 +49,7 @@ execute unless entity @e[type=!#sweetdream:no_damage,distance=0.1..10] run retur
 # ④ 扣魔力 120
 data modify storage manacore:in arg set value {uuid:"",value:120.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 execute if data storage manacore:out r{success:0b} run tellraw @s [{"text":"魔力不足(需要 120)","color":"red"}]
 execute if data storage manacore:out r{success:0b} run return fail
 

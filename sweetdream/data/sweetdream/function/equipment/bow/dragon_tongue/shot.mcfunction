@@ -27,10 +27,17 @@ execute unless data storage zx:data self{ok:1b} run return fail
 #     只能重新 give。所以在每次射击时自查一次并明说。
 execute unless data entity @s SelectedItem.components."minecraft:enchantments" run tellraw @s [{"text":"⚠ 手上这把「龙舌」是旧版本(没有机制附魔) —— 命中效果不会生效, 请重新 give 一把","color":"red"}]
 
-# ① 扣魔力(固定 60 —— 与 lore 的「魔力 60」逐字对应)
+# ⓪.5 这一发是不是超限版(主手这把带 ol:"dragon_tongue" —— 批 K7)
+#   ★ 命中回调只认"这一发付没付过账"(zx.dt_paid), 拿不到"当时手里是哪把弩";
+#     所以"超限"必须在这里写进玩家身上(与 dt_paid 同一层, 坑 141 同族)。
+scoreboard players set @s zx.dt_ol 0
+execute if items entity @s weapon.mainhand crossbow[custom_data~{ol:"dragon_tongue"}] run scoreboard players set @s zx.dt_ol 1
+
+# ① 扣魔力(普通 60 / 超限 100 —— 与 lore 的「魔力 60 / 100」逐字对应)
 data modify storage manacore:in arg set value {uuid:"",value:60.0}
+execute if score @s zx.dt_ol matches 1 run data modify storage manacore:in arg.value set value 100.0
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 
 # ② 魔力不足 -> 这一发不附加任何效果
 #   ★ 必须把"这一发付过账"**显式写成 0**(坑 141): 命中回调读的是**射手身上**的

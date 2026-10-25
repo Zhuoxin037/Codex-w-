@@ -16,8 +16,18 @@ execute if score #st_gate zx.meta matches 0 run return fail
 function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return fail
 
-# ①.2 拍下超限乘区(同批法杖一致; 本件暂无超限石, mod 会直接返回)
+# ①.2 拍下超限乘区(同批法杖一致)
 function sweetdream:overlimit/api/snap
+
+# ①.3 超限分档（批 K8）：血丝 5→10 秒、触发半径 5→8 格、系数 ×0.05→×0.06、去掉 8 秒节流
+#   ★ 两条路都要写 ★
+#     · zx:work ball.ol = 随法球飞过去，命中回调（ball_hit/line_mark）读它；
+#       命中时玩家大概率已经换手/收杖，判物品只能靠发射那一刻拍下的这份快照。
+#     · @s zx.ft_pol  = 记在发射者身上，settle 算系数与节流时用。
+scoreboard players set #ft_ol zx.meta 0
+execute if items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["fate_thread"],ol:"fate_thread"}] run scoreboard players set #ft_ol zx.meta 1
+execute if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["fate_thread"],ol:"fate_thread"}] run scoreboard players set #ft_ol zx.meta 1
+scoreboard players operation @s zx.ft_pol = #ft_ol zx.meta
 
 # ② 只读检查: 魔力 80(普攻不进冷却)
 data modify storage manacore:in arg set value {uuid:"",skill:"sweetdream:ft_attack",mana:80.0}
@@ -34,7 +44,7 @@ execute unless data storage manacore:out r{success:1b} run return fail
 data modify storage manacore:in arg set value {uuid:"",value:80.0}
 data modify storage manacore:in arg.value set from storage zx:work olv.mana
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 execute if data storage manacore:out r{success:0b} run tellraw @s [{"text":"魔力不足（需要 ","color":"red"},{"score":{"name":"#ft_need","objective":"zx.meta"},"color":"red"},{"text":"）","color":"red"}]
 execute if data storage manacore:out r{success:0b} run return fail
 
@@ -45,6 +55,7 @@ function sweetdream:overlimit/api/mod
 function manacore:api/damage/calc
 
 # ⑤ 装球射出去 + 命中回调(留丝线 / 触发结算)
-data modify storage zx:work ball set value {dmg:0.0,style:"fate_thread",hit:"sweetdream:equipment/staff/fate_thread/ball_hit"}
+data modify storage zx:work ball set value {dmg:0.0,style:"fate_thread",hit:"sweetdream:equipment/staff/fate_thread/ball_hit",ol:0}
+execute if score #ft_ol zx.meta matches 1 run data modify storage zx:work ball.ol set value 1
 data modify storage zx:work ball.dmg set from storage manacore:out r.damage
 function sweetdream:equipment/staff/attack

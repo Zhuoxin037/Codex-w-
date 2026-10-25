@@ -9,7 +9,9 @@
 tag @e[tag=zx.mq_dmg] remove zx.mq_dmg
 
 # ① 领域还在 -> 打领域内的生物(半径 5, 文案原话)
-$execute as @e[tag=zx.mq_f] at @s if entity @a[distance=..5,nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run tag @e[type=!#sweetdream:no_damage,distance=..5] add zx.mq_dmg
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute as @e[tag=zx.mq_f] at @s if entity @a[distance=..5,tag=zx.ub,limit=1] run tag @e[type=!#sweetdream:no_damage,distance=..5] add zx.mq_dmg
 
 # ② 领域已经散了 -> 退回"主动技能"自身的口径: 自身 3 格内
 #   ★ 这一条不能省 ★ 2026-10-08 起释放窗口不再要求站在领域里(见 cast ③),

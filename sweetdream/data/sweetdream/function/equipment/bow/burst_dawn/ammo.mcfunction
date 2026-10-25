@@ -57,4 +57,4 @@ scoreboard players set @s zx.bd_mode 2
 
 # ⑤ 表现: 弹药化掉的那只影炸开一团魂火
 execute at @s run particle minecraft:soul ~ ~1.2 ~ 0.6 0.6 0.6 0.05 24 normal
-execute at @s run playsound minecraft:entity.wither.shoot player @a ~ ~ ~ 0.7 1.3
+execute at @s run playsound minecraft:entity.breeze.wind_burst player @a ~ ~ ~ 0.7 1.3

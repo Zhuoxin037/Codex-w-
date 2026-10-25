@@ -28,4 +28,4 @@ execute unless data storage zx:work a{target:""} run function sweetdream:interna
 #     用户要求: 普攻命中本身保持静音, 只有 20% 触发「噬心」这一下才出声。
 #     (音量/音高与原先 fx_twilight_hit 里的一致; 想调改这一行)
 execute as @e[tag=zx.ball_hit,distance=0..] at @s run particle minecraft:witch ~ ~1 ~ 0.4 0.6 0.4 0.03 14 normal
-execute at @e[tag=zx.ball_hit,distance=0..] run playsound minecraft:entity.wither.shoot player @a ~ ~ ~ 0.55 1.2
+execute at @e[tag=zx.ball_hit,distance=0..] run playsound minecraft:entity.breeze.wind_burst player @a ~ ~ ~ 0.55 1.2

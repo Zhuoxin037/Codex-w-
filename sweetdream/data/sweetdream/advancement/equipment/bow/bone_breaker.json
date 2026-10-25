@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "bone_breaker": {
+            "trigger": "shot_crossbow",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "bone_breaker"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "sweetdream:equipment/bow/bone_breaker/shot"
+    }
+}

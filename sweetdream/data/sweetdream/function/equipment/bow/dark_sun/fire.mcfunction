@@ -16,6 +16,13 @@
 # 【★ 命中位置要先存 ★】影矢以"命中位置"为圆心, 而受害者可能被这一段伤害打死;
 #   实体一旦移除, `at @e[tag=zx.ds_v]` 就取不到坐标了 ⇒ 结算**之前**先把坐标
 #   落在一个 marker 上。
+# 【★ 超限(批 K7, 2026-10-23) ★】主手那把带 ol:"dark_sun"(shot 已把 zx.ds_ol
+#   写进玩家身上)时, 本函数有四处不同:
+#     · 扣费 320 -> 420(在 shot 里);
+#     · 卡"当前魔力"换成"最大魔力"(other_base 直接给 max_mana 的读数);
+#     · 流火加成 30% -> 40%(0.12 -> 0.168);
+#     · **去掉 20 秒节流**(文案: 有意放开重复触发限制) —— 每发命中都完整结算;
+#     · 影矢从"最近 4 个"改成"范围内全部"(在 volley 里)。
 # ============================================================
 
 # ⓪ 受害者还在吗
@@ -23,10 +30,12 @@ execute unless entity @e[tag=zx.ds_v,distance=0..,limit=1] run return 0
 
 # ① 节流: **整段** 20 秒(2026-10-15 用户拍板)。
 #   ★ 先 `add 0` 把没分数的玩家补成 0 —— 计分项"没分数"时 `if score` 判不成立。
+#   ★ 超限(批 K7): 文案明确去掉"20 秒内最多触发一次" ⇒ 超限版**完全不节流**
+#     (既不判也不续), 每一发命中都完整结算。所以下面三句都挂着 `ds_ol = 0`。
 scoreboard players add @s zx.ds_gate 0
-execute if score @s zx.ds_gate > #now manacore.meta run return 0
-scoreboard players operation @s zx.ds_gate = #now manacore.meta
-scoreboard players operation @s zx.ds_gate += #400 zx.meta
+execute if score @s zx.ds_ol matches 0 if score @s zx.ds_gate > #now manacore.meta run return 0
+execute if score @s zx.ds_ol matches 0 run scoreboard players operation @s zx.ds_gate = #now manacore.meta
+execute if score @s zx.ds_ol matches 0 run scoreboard players operation @s zx.ds_gate += #400 zx.meta
 
 # ② 拍"命中前"状态快照(挂受害者身上, 坑 123) + 记下"命中位置"
 tag @e[tag=zx.ds_hadl,distance=0..] remove zx.ds_hadl
@@ -37,8 +46,22 @@ kill @e[tag=zx.ds_pos,distance=0..]
 execute at @e[tag=zx.ds_v,limit=1] run summon minecraft:marker ~ ~ ~ {Tags:["zx.ds_pos"]}
 
 # ③ 额外伤害 = 当前魔力值 ×0.12; 命中前带流火 -> 系数 ×1.3; 命中前带夜火 -> 整段 ×1.5
-data modify storage manacore:in arg set value {uuid:"",other_mul:0.12,independent_multiplier:1.0}
+#   ★ 超限(批 K7)三处不同 ★
+#     · 基数换成**最大**魔力值(文案"相当于自身最大魔力值 ×0.12");
+#     · 流火加成 30% -> 40%(0.12 -> 0.168);
+#     · 夜火的 50% 仍是"独立乘区", 不变。
+#   【最大魔力怎么拿】calc 的 other_base 可以直接给数值 ⇒ 先用 stats/get 读一次
+#     max_mana, 再把它塞进 other_base。普通版仍传 -1(= 面板 current_mana)。
+data modify storage zx:work ds.mm set value 0.0
+data modify storage manacore:in arg set value {uuid:"",key:"max_mana"}
+data modify storage manacore:in arg.uuid set from storage zx:work ds.uuid
+function manacore:api/stats/get
+execute if data storage manacore:out r.value run data modify storage zx:work ds.mm set from storage manacore:out r.value
+
+data modify storage manacore:in arg set value {uuid:"",other_mul:0.12,other_base:-1.0,independent_multiplier:1.0}
+execute if score @s zx.ds_ol matches 1 run data modify storage manacore:in arg.other_base set from storage zx:work ds.mm
 execute if entity @e[tag=zx.ds_hadl,distance=0..,limit=1] run data modify storage manacore:in arg.other_mul set value 0.156
+execute if entity @e[tag=zx.ds_hadl,distance=0..,limit=1] if score @s zx.ds_ol matches 1 run data modify storage manacore:in arg.other_mul set value 0.168
 execute if entity @e[tag=zx.ds_hady,distance=0..,limit=1] run data modify storage manacore:in arg.independent_multiplier set value 1.5
 data modify storage manacore:in arg.uuid set from storage zx:work ds.uuid
 function manacore:api/damage/calc

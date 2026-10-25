@@ -52,6 +52,14 @@ data modify storage zx:work a.u2 set from entity @s data.zx.u[2]
 data modify storage zx:work a.u3 set from entity @s data.zx.u[3]
 function sweetdream:internal/damage/with_from with storage zx:work a
 
+# ④.5 超限: 被这一道雷命中的生物挂上"雷楔"持续伤害
+#   ★ 放在本件伤害**之后** ★ 文案是"被闪电命中**后**的 3 秒内每秒都会受到…";
+#     放在前面的话这一发主伤也会踩上 DoT 的节拍(观感上多跳一次)。
+#   ★ 只对超限雷楔(带 zx.twg_ol)生效 ★ 原版文案里没有这一段。
+#   ★ 选择器 distance=..1 与 ④ 的 `a.target` 完全一致 —— "对其 1 格内的生物"是同一批,
+#     两处写不同的半径迟早会出现"吃到主伤却没吃到 DoT"的鬼故事。
+execute if entity @s[tag=zx.twg_ol] as @e[type=!#sweetdream:no_damage,distance=..1] at @s run function sweetdream:equipment/sword/thunder_wedge/ol_dot_apply
+
 # ⑤ "自身召唤闪电"的公共收尾钩子(跨武器效果)
 #   ★ 排在本件自己的伤害**之后**(RULES 坑 154 ①);
 #   ★ `as` 只换身份、不动位置 ⇒ 位置仍是命中位置; **不许**写 `at @s`。

@@ -47,6 +47,35 @@ KNOWN_EXEMPT = {
     'everlit': '灯灵 GUI 模型：equipment/tool/everlit/model_sync 扫 hotbar/inventory/offhand 写 tool_everlit',
     'anchor': '3D 手持候选（items/anchor.json = 四向静态审阅模型，握姿待用户验收）占着这个 key；'
               '平面图标已画好（textures/item/vanilla/anchor.png + models/item/vanilla/anchor.json）未挂',
+    # ---- 批一 10 件（2026-10-20）：用户定"先做 give"，外观留后续批次 ----
+    #   give 生成器 `_gen_batch17.py` 里 MODEL=False；补外观时按
+    #   _gen_late_icons.py(贴图) -> _gen_late_rp.py(接线) -> MODEL=True 的顺序，再把这几行删掉。
+    'yebu':     '批一 give 先行：外观未做（_gen_batch17.py MODEL=False）',
+    'xiugou':   '批一 give 先行：外观未做（_gen_batch17.py MODEL=False）',
+    'zhuzu':    '批一 give 先行：外观未做（_gen_batch17.py MODEL=False）',
+    'gousi':    '批一 give 先行：外观未做（_gen_batch17.py MODEL=False）',
+    'lianshi':  '批一 give 先行：外观未做（_gen_batch17.py MODEL=False）',
+    'tiejili':  '批一 give 先行：外观未做（_gen_batch17.py MODEL=False）',
+    'lvshuang': '批一 give 先行：外观未做（_gen_batch17.py MODEL=False）',
+    'dongtu':   '批一 give 先行：外观未做（_gen_batch17.py MODEL=False）',
+    'huilan':   '批一 give 先行：外观未做（_gen_batch17.py MODEL=False）',
+    'chengxing':'批一 give 先行：外观未做（_gen_batch17.py MODEL=False）',
+    # ---- 批二 14 件（2026-10-20）：同上，先 give 后外观 ----
+    #   give 生成器 `_gen_batch18.py` 里 MODEL=False。
+    'profane':        '批二 give 先行：外观未做（_gen_batch18.py MODEL=False）',
+    'grave_tablet':   '批二 give 先行：外观未做（_gen_batch18.py MODEL=False）',
+    'burst_bank':     '批二 give 先行：外观未做（_gen_batch18.py MODEL=False）',
+    'breathing_soil': '批二 give 先行：外观未做（_gen_batch18.py MODEL=False）',
+    'cage_day':       '批二 give 先行：外观未做（_gen_batch18.py MODEL=False）',
+    'way_back':       '批二 give 先行：外观未做（_gen_batch18.py MODEL=False）',
+    'stop_needle':    '批二 give 先行：外观未做（_gen_batch18.py MODEL=False）',
+    'empty_seat':     '批二 give 先行：外观未做（_gen_batch18.py MODEL=False）',
+    'bind_ember':     '批二 give 先行：外观未做（_gen_batch18.py MODEL=False）',
+    'sunken_weight':  '批二 give 先行：外观未做（_gen_batch18.py MODEL=False）',
+    'night_bind':     '批二 give 先行：外观未做（_gen_batch18.py MODEL=False）',
+    'sip_frost':      '批二 give 先行：外观未做（_gen_batch18.py MODEL=False）',
+    'retro_shine':    '批二 give 先行：外观未做（_gen_batch18.py MODEL=False）',
+    'pour_sack':      '批二 give 先行：外观未做（_gen_batch18.py MODEL=False）',
 }
 
 

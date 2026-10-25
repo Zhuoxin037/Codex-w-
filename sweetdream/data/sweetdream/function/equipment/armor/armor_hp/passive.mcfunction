@@ -20,6 +20,8 @@ scoreboard players set #want zx.meta 0
 execute if items entity @s armor.chest *[minecraft:custom_data~{zx:["boil_trace"]}] run scoreboard players add #want zx.meta 4
 # ---- 批 15-4(2026-10-16): 绯缝(胸甲) +4 ----
 execute if items entity @s armor.chest *[minecraft:custom_data~{zx:["crimson_seam"]}] run scoreboard players add #want zx.meta 4
+# ---- 批 14(2026-10-25): 剖面(护腿) +6 ----
+execute if items entity @s armor.legs *[minecraft:custom_data~{zx:["profile"]}] run scoreboard players add #want zx.meta 6
 
 # ---- ② 与账本比差值（差值制：换装那一秒自动补/退） ----
 #   ★ 先 `add 0` 把没分数的玩家补成 0 —— 计分项"没分数"时 `if score` 判**不成立**,

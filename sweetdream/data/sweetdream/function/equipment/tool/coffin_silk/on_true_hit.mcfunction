@@ -21,13 +21,17 @@ tag @s add zx.cfs_v
 
 # ③ 反查"造成这一下真伤的玩家"，且他副手确实持着殓丝
 scoreboard players set #cfs_held zx.meta 0
-$execute as @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run function sweetdream:equipment/tool/coffin_silk/held
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute as @a[tag=zx.ub,limit=1] run function sweetdream:equipment/tool/coffin_silk/held
 execute unless score #cfs_held zx.meta matches 1 run tag @s remove zx.cfs_v
 execute unless score #cfs_held zx.meta matches 1 run return 0
 
 # ④ 交给玩家侧（未持「殓结」+ 魔力足够 + 12 秒节流 -> 扣 80 魔力、消耗目标「噬心」、给自己「殓结」）
 data modify storage zx:work cfs.target set value "@e[tag=zx.cfs_v,limit=1]"
-$execute as @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] at @s run function sweetdream:equipment/tool/coffin_silk/gain
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute as @a[tag=zx.ub,limit=1] at @s run function sweetdream:equipment/tool/coffin_silk/gain
 
 # ⑤ 收尾
 tag @e[tag=zx.cfs_v,distance=0..] remove zx.cfs_v

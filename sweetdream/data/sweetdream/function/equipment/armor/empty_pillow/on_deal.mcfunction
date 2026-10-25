@@ -28,14 +28,14 @@ scoreboard players operation @s zx.ep_hit = #now manacore.meta
 execute unless entity @s[tag=zx.ep_rest] run return 0
 
 # ④ 有静息: 先按"目标有没有梦"分开, 但两条路都要清静息
-execute if entity @e[tag=zx.ep_vic,limit=1,tag=zx.status.dream] run tag @s remove zx.ep_rest
-execute if entity @e[tag=zx.ep_vic,limit=1,tag=zx.status.dream] run return 0
+execute if entity @e[scores={zx.ep_vic=1},limit=1,tag=zx.status.dream] run tag @s remove zx.ep_rest
+execute if entity @e[scores={zx.ep_vic=1},limit=1,tag=zx.status.dream] run return 0
 
 # ⑤ 目标没梦 -> 附「白昼梦」+ 清静息
-function sweetdream:tag/mark {target:"@e[tag=zx.ep_vic,limit=1]",mark:"dream"}
+execute as @e[scores={zx.ep_vic=1},limit=1] run function sweetdream:tag/mark {target:"@s",mark:"dream"}
 tag @s remove zx.ep_rest
 
 # ⑥ 表现: 一枕软雾落下
-execute at @e[tag=zx.ep_vic,limit=1] run particle minecraft:dust{color:[0.80,0.72,0.95],scale:1.1} ~ ~1 ~ 0.4 0.5 0.4 0.01 12 normal
-execute at @e[tag=zx.ep_vic,limit=1] run particle minecraft:cloud ~ ~1 ~ 0.3 0.3 0.3 0.01 6 normal
-execute at @e[tag=zx.ep_vic,limit=1] run playsound minecraft:block.wool.place player @a ~ ~ ~ 0.6 0.8
+execute at @e[scores={zx.ep_vic=1},limit=1] run particle minecraft:dust{color:[0.80,0.72,0.95],scale:1.1} ~ ~1 ~ 0.4 0.5 0.4 0.01 12 normal
+execute at @e[scores={zx.ep_vic=1},limit=1] run particle minecraft:cloud ~ ~1 ~ 0.3 0.3 0.3 0.01 6 normal
+execute at @e[scores={zx.ep_vic=1},limit=1] run playsound minecraft:block.wool.place player @a ~ ~ ~ 0.6 0.8

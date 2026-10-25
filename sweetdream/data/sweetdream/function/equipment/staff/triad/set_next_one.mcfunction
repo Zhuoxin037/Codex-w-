@@ -6,4 +6,6 @@
 #   只能用 UUID 四段拼出选择器反查玩家(全包同款写法, 见 internal/damage/deal)。
 # ============================================================
 
-$execute as @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run scoreboard players set @s zx.tri_next 1
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute as @a[tag=zx.ub,limit=1] run scoreboard players set @s zx.tri_next 1

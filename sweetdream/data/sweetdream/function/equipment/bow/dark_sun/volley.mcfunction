@@ -17,8 +17,11 @@
 execute unless entity @e[tag=zx.ds_pos,limit=1] run return 0
 
 # ① 圈"命中位置 6 格内最近的 4 个其他生物"(排除被命中者)
+#   ★ 超限(批 K7): 文案改成"范围内**全部**其他生物" ⇒ 去掉 sort/limit。
+#     两行必须互斥 —— 都跑的话普通版会先圈 4 只、超限版再往同一批标签上叠加。
 tag @e[tag=zx.ds_t,distance=0..] remove zx.ds_t
-execute at @e[tag=zx.ds_pos,limit=1] run tag @e[type=!#sweetdream:no_damage,distance=..6,tag=!zx.ds_v,sort=nearest,limit=4] add zx.ds_t
+execute if score @s zx.ds_ol matches 0 at @e[tag=zx.ds_pos,limit=1] run tag @e[type=!#sweetdream:no_damage,distance=..6,tag=!zx.ds_v,sort=nearest,limit=4] add zx.ds_t
+execute if score @s zx.ds_ol matches 1 at @e[tag=zx.ds_pos,limit=1] run tag @e[type=!#sweetdream:no_damage,distance=..6,tag=!zx.ds_v] add zx.ds_t
 
 # 诊断锚 #ds_dbg7 = 这一轮影矢点到几只(0 = 周围没有其他生物, 属正常)
 scoreboard players set #ds_dbg7 zx.meta 0
@@ -32,7 +35,9 @@ execute as @e[tag=zx.ds_t] at @s run particle minecraft:item{item:{id:"minecraft
 execute as @e[tag=zx.ds_t] at @s run particle minecraft:soul_fire_flame ~ ~1 ~ 0.2 0.3 0.2 0.01 6 normal
 
 # ④ 影矢伤害 = 当前魔力值 ×0.08(每只一份, 带射手归属)
-data modify storage manacore:in arg set value {uuid:"",other_mul:0.08}
+#   ★ 超限(批 K7): 基数跟主段一起换成**最大**魔力值(fire ③ 已把它读进 ds.mm)。
+data modify storage manacore:in arg set value {uuid:"",other_mul:0.08,other_base:-1.0}
+execute if score @s zx.ds_ol matches 1 run data modify storage manacore:in arg.other_base set from storage zx:work ds.mm
 data modify storage manacore:in arg.uuid set from storage zx:work ds.uuid
 function manacore:api/damage/calc
 data modify storage zx:work ds.sdmg set value 0.0

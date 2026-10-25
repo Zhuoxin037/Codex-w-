@@ -37,7 +37,7 @@ execute unless data storage manacore:out r{success:1b} run return fail
 # ③ 扣魔力 400
 data modify storage manacore:in arg set value {uuid:"",value:400.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 execute if data storage manacore:out r{success:0b} run return fail
 
 # ④ 起冷却 40 秒

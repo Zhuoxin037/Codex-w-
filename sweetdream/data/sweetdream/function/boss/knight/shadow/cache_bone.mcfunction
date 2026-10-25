@@ -1,0 +1,25 @@
+function sweetdream:boss/knight/shadow/uuid
+execute if entity @s[tag=sd.kn.shadow.part.pelvis] run data modify storage sweetdream:knight shadow_args.pelvis set from storage animated_java:gu out
+execute if entity @s[tag=sd.kn.shadow.part.waist] run data modify storage sweetdream:knight shadow_args.waist set from storage animated_java:gu out
+execute if entity @s[tag=sd.kn.shadow.part.chest] run data modify storage sweetdream:knight shadow_args.chest set from storage animated_java:gu out
+execute if entity @s[tag=sd.kn.shadow.part.head] run data modify storage sweetdream:knight shadow_args.head set from storage animated_java:gu out
+execute if entity @s[tag=sd.kn.shadow.part.shoulder_r] run data modify storage sweetdream:knight shadow_args.shoulder_r set from storage animated_java:gu out
+execute if entity @s[tag=sd.kn.shadow.part.upperarm_r] run data modify storage sweetdream:knight shadow_args.upperarm_r set from storage animated_java:gu out
+execute if entity @s[tag=sd.kn.shadow.part.forearm_r] run data modify storage sweetdream:knight shadow_args.forearm_r set from storage animated_java:gu out
+execute if entity @s[tag=sd.kn.shadow.part.hand_r] run data modify storage sweetdream:knight shadow_args.hand_r set from storage animated_java:gu out
+execute if entity @s[tag=sd.kn.shadow.part.weapon_knight_sword] run data modify storage sweetdream:knight shadow_args.weapon_knight_sword set from storage animated_java:gu out
+execute if entity @s[tag=sd.kn.shadow.part.shoulder_l] run data modify storage sweetdream:knight shadow_args.shoulder_l set from storage animated_java:gu out
+execute if entity @s[tag=sd.kn.shadow.part.upperarm_l] run data modify storage sweetdream:knight shadow_args.upperarm_l set from storage animated_java:gu out
+execute if entity @s[tag=sd.kn.shadow.part.forearm_l] run data modify storage sweetdream:knight shadow_args.forearm_l set from storage animated_java:gu out
+execute if entity @s[tag=sd.kn.shadow.part.hand_l] run data modify storage sweetdream:knight shadow_args.hand_l set from storage animated_java:gu out
+execute if entity @s[tag=sd.kn.shadow.part.cape] run data modify storage sweetdream:knight shadow_args.cape set from storage animated_java:gu out
+execute if entity @s[tag=sd.kn.shadow.part.cape_upper] run data modify storage sweetdream:knight shadow_args.cape_upper set from storage animated_java:gu out
+execute if entity @s[tag=sd.kn.shadow.part.cape_mid] run data modify storage sweetdream:knight shadow_args.cape_mid set from storage animated_java:gu out
+execute if entity @s[tag=sd.kn.shadow.part.cape_lower] run data modify storage sweetdream:knight shadow_args.cape_lower set from storage animated_java:gu out
+execute if entity @s[tag=sd.kn.shadow.part.thigh_r] run data modify storage sweetdream:knight shadow_args.thigh_r set from storage animated_java:gu out
+execute if entity @s[tag=sd.kn.shadow.part.shin_r] run data modify storage sweetdream:knight shadow_args.shin_r set from storage animated_java:gu out
+execute if entity @s[tag=sd.kn.shadow.part.foot_r] run data modify storage sweetdream:knight shadow_args.foot_r set from storage animated_java:gu out
+execute if entity @s[tag=sd.kn.shadow.part.thigh_l] run data modify storage sweetdream:knight shadow_args.thigh_l set from storage animated_java:gu out
+execute if entity @s[tag=sd.kn.shadow.part.shin_l] run data modify storage sweetdream:knight shadow_args.shin_l set from storage animated_java:gu out
+execute if entity @s[tag=sd.kn.shadow.part.foot_l] run data modify storage sweetdream:knight shadow_args.foot_l set from storage animated_java:gu out
+execute if entity @s[tag=sd.kn.shadow.part.front_cloth] run data modify storage sweetdream:knight shadow_args.front_cloth set from storage animated_java:gu out

@@ -24,7 +24,7 @@
 #   会报 "Macro without variables" 并作废**整个函数**(check 规则 dollar / RULES 16)。
 #   宏函数里非 $ 开头的行照常按普通命令执行。
 scoreboard players set #t zx.meta 0
-$execute store result score #t zx.meta run data get storage zx:work add.$(ch) 100
+$execute store result score #t zx.meta run data get storage zx:work add.$(ch) 1000
 # ★★ 必须 players add, 不能写 `players operation #t zx.meta += $(pct)` ★★
 #   宏是**运行时**才替换并解析的: 加载期 $(pct) 被当成合法宏参数放过(所以日志里
 #   一个错都没有), 真跑起来那行变成 `players operation #t zx.meta += 10` ——
@@ -33,5 +33,7 @@ $execute store result score #t zx.meta run data get storage zx:work add.$(ch) 10
 #   是这里唯一正确的写法(2026-10-08 真实事故: 这一行让愿景/共振/漫步冥河/炽天使/
 #   mm_add 全部"加算"加成一起失效, 而 check.py 当时 0 报告 —— 宏展开成的字面量
 #   在静态文本里看不出来, 已给规则 24 补上"宏运算数"分支)。
-$scoreboard players add #t zx.meta $(pct)
-$execute store result storage zx:work add.$(ch) double 0.01 run scoreboard players get #t zx.meta
+$scoreboard players set #put_pct zx.meta $(pct)
+scoreboard players operation #put_pct zx.meta *= #10 zx.meta
+scoreboard players operation #t zx.meta += #put_pct zx.meta
+$execute store result storage zx:work add.$(ch) double 0.001 run scoreboard players get #t zx.meta

@@ -21,11 +21,15 @@
 # ============================================================
 
 # ① 施法者还在线吗
-$execute unless entity @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run return 0
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute unless entity @a[tag=zx.ub,limit=1] run return 0
 
 # ② 他穿着「焦衣」吗（胸甲）
 scoreboard players set #cc_on zx.meta 0
-$execute as @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] if items entity @s armor.chest *[minecraft:custom_data~{zx:["char_coat"]}] run scoreboard players set #cc_on zx.meta 1
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute as @a[tag=zx.ub,limit=1] if items entity @s armor.chest *[minecraft:custom_data~{zx:["char_coat"]}] run scoreboard players set #cc_on zx.meta 1
 execute unless score #cc_on zx.meta matches 1 run return 0
 
 # ③ 目标仍要满足"带流火 + 未带夜火"（one 里已判过一次，这里复判 —— 本件要能独立测，
@@ -33,19 +37,25 @@ execute unless score #cc_on zx.meta matches 1 run return 0
 execute unless entity @s[tag=zx.status.liuhuo,tag=!zx.status.yehuo] run return 0
 
 # ④ 10 秒节流（账本记在**施法者**身上）
-$execute as @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run scoreboard players set #cc_due zx.meta 0
-$execute as @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run execute store result score #cc_due zx.meta run scoreboard players get @s zx.cc_cd
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute as @a[tag=zx.ub,limit=1] run scoreboard players set #cc_due zx.meta 0
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute as @a[tag=zx.ub,limit=1] run execute store result score #cc_due zx.meta run scoreboard players get @s zx.cc_cd
 execute if score #cc_due zx.meta > #now manacore.meta run return 0
 
 # ⑤ 拿施法者的 uuid（扣魔力的公共输入口要它）
-$execute as @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run function sweetdream:lib/uuid
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute as @a[tag=zx.ub,limit=1] run function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return 0
 data modify storage zx:work cc.uuid set from storage zx:data self.uuid
 
 # ⑥ 消耗 80 魔力（够才扣）
 data modify storage manacore:in arg set value {uuid:"",value:80.0}
 data modify storage manacore:in arg.uuid set from storage zx:work cc.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay_pas
 execute unless data storage manacore:out r{success:1b} run return 0
 
 # ⑦ 转化：先摘「流火」，再挂「夜火」
@@ -60,5 +70,9 @@ execute at @s run particle minecraft:soul_fire_flame ~ ~0.8 ~ 0.4 0.5 0.4 0.01 1
 execute at @s run playsound minecraft:item.firecharge.use player @a ~ ~ ~ 0.6 1.1
 
 # ⑨ 记下"下次可触发刻"（现在 + 200 刻 = 10 秒）
-$execute as @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run scoreboard players operation @s zx.cc_cd = #now manacore.meta
-$execute as @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run scoreboard players operation @s zx.cc_cd += #200 zx.meta
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute as @a[tag=zx.ub,limit=1] run scoreboard players operation @s zx.cc_cd = #now manacore.meta
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute as @a[tag=zx.ub,limit=1] run scoreboard players operation @s zx.cc_cd += #200 zx.meta

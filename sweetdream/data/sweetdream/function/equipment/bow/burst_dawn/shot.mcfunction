@@ -50,7 +50,7 @@ execute if score #bd_hit zx.meta matches 1.. run return 0
 # ② 首发: 扣魔力 799(与 lore 的「魔力 799」逐字对应)
 data modify storage manacore:in arg set value {uuid:"",value:799.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 execute if data storage manacore:out r{success:0b} run scoreboard players set @s zx.bd_paid 0
 execute if data storage manacore:out r{success:0b} run tellraw @s [{"text":"魔力不足 —— 「爆裂黎明」无法启爆（需要 799）","color":"red"}]
 execute if data storage manacore:out r{success:0b} run return fail
@@ -69,7 +69,7 @@ function sweetdream:equipment/bow/burst_dawn/cast with storage zx:work bd
 # ④ 表现
 execute at @s run particle minecraft:flash ~ ~1.2 ~ 0 0 0 0 1 normal
 execute at @s run particle minecraft:soul ~ ~1.2 ~ 1.2 0.8 1.2 0.05 40 normal
-execute at @s run playsound minecraft:entity.warden.sonic_boom player @a ~ ~ ~ 0.6 1.6
+execute at @s run playsound minecraft:entity.iron_golem.attack player @a ~ ~ ~ 0.6 1.6
 execute at @s run playsound minecraft:block.conduit.activate player @a ~ ~ ~ 0.8 0.6
 
 # ⑤ 「启示录」记页(与其余弩同款)

@@ -28,23 +28,37 @@
 function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return fail
 
-# ② 只读检查: 冷却好没好 + 魔力 240
+# ①.5 超限分档（2026-10-23 批 K9）
+#   魔力 240→350、选中半径 10→12 格、相连 2→6 个、持续 7→12 秒、
+#   真伤 ×0.3→×0.5、去掉"最多 6 次"、新增第二段连接（12 格内最多 4 个噬心者 / 18 秒）、
+#   两条丝同时连着的目标改吃 ×0.8、距离断开 12→16 格、到期绷紧 10×连接数 + 附噬心。
+scoreboard players set #ft_ol zx.meta 0
+execute if items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["fate_thread"],ol:"fate_thread"}] run scoreboard players set #ft_ol zx.meta 1
+execute if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["fate_thread"],ol:"fate_thread"}] run scoreboard players set #ft_ol zx.meta 1
+scoreboard players set #ft_ml zx.meta 240
+execute if score #ft_ol zx.meta matches 1 run scoreboard players set #ft_ml zx.meta 350
+
+# ② 只读检查: 冷却好没好 + 魔力(基础 240 / 超限 350)
 data modify storage manacore:in arg set value {uuid:"",skill:"sweetdream:fate_thread",mana:240.0}
+execute store result storage manacore:in arg.mana double 1.0 run scoreboard players get #ft_ml zx.meta
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/skill/check
 
 execute if data storage manacore:out r{reason:"cooldown"} run tellraw @s [{"text":"命缕冷却中，还剩 ","color":"red"},{"nbt":"r.remaining","storage":"manacore:out"},{"text":" tick","color":"red"}]
-execute if data storage manacore:out r{reason:"mana"} run tellraw @s [{"text":"魔力不足（需要 240）","color":"red"}]
+execute if data storage manacore:out r{reason:"mana"} run tellraw @s [{"text":"魔力不足（需要 ","color":"red"},{"score":{"name":"#ft_ml","objective":"zx.meta"},"color":"red"},{"text":"）","color":"red"}]
 execute unless data storage manacore:out r{success:1b} run return fail
 
-# ③ 10 格内有噬心者吗? 没有就整个不放
-execute unless entity @e[type=!#sweetdream:no_damage,distance=0.1..10,tag=zx.status.shixin] run tellraw @s [{"text":"附近没有附有「噬心」的生物","color":"red"}]
-execute unless entity @e[type=!#sweetdream:no_damage,distance=0.1..10,tag=zx.status.shixin] run return fail
+# ③ 有噬心者吗? 没有就整个不放（半径：基础 10 / 超限 12）
+execute if score #ft_ol zx.meta matches 0 unless entity @e[type=!#sweetdream:no_damage,distance=0.1..10,tag=zx.status.shixin] run tellraw @s [{"text":"附近没有附有「噬心」的生物","color":"red"}]
+execute if score #ft_ol zx.meta matches 1 unless entity @e[type=!#sweetdream:no_damage,distance=0.1..12,tag=zx.status.shixin] run tellraw @s [{"text":"附近没有附有「噬心」的生物","color":"red"}]
+execute if score #ft_ol zx.meta matches 0 unless entity @e[type=!#sweetdream:no_damage,distance=0.1..10,tag=zx.status.shixin] run return fail
+execute if score #ft_ol zx.meta matches 1 unless entity @e[type=!#sweetdream:no_damage,distance=0.1..12,tag=zx.status.shixin] run return fail
 
-# ④ 扣魔力 -240
-data modify storage manacore:in arg set value {uuid:"",value:240.0}
+# ④ 扣魔力（基础 240 / 超限 350）
+data modify storage manacore:in arg set value {uuid:"",value:0.0}
+execute store result storage manacore:in arg.value double 1.0 run scoreboard players get #ft_ml zx.meta
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 execute if data storage manacore:out r{success:0b} run return fail
 
 # ⑤ 记冷却 40 秒
@@ -61,16 +75,21 @@ function manacore:api/cooldown/start
 execute unless score @s zx.ft_mine matches 0 run function sweetdream:equipment/staff/fate_thread/watch_end
 tag @e[tag=zx.ft_main,distance=0..] remove zx.ft_main
 tag @e[tag=zx.ft_lk,distance=0..] remove zx.ft_lk
+tag @e[tag=zx.ft_lk2,distance=0..] remove zx.ft_lk2
 tag @e[tag=zx.ft_hit2,distance=0..] remove zx.ft_hit2
 #   自己的实例索引先归零(下面 ⑩ 会写成新的) —— 否则旧号在这中间被 tick 读到会去找旧主目标
 scoreboard players set @s zx.ft_mine 0
+scoreboard players set @s zx.ft2_end 0
 tag @s remove zx.ft_link
 
-# ⑦ 选主目标: 自身 10 格内**最近的**噬心者
-execute as @e[type=!#sweetdream:no_damage,distance=0.1..10,tag=zx.status.shixin,sort=nearest,limit=1] run tag @s add zx.ft_main
+# ⑦ 选主目标: 自身 10 格(超限 12 格)内**最近的**噬心者
+execute if score #ft_ol zx.meta matches 0 as @e[type=!#sweetdream:no_damage,distance=0.1..10,tag=zx.status.shixin,sort=nearest,limit=1] run tag @s add zx.ft_main
+execute if score #ft_ol zx.meta matches 1 as @e[type=!#sweetdream:no_damage,distance=0.1..12,tag=zx.status.shixin,sort=nearest,limit=1] run tag @s add zx.ft_main
 
-# ⑧ 相连者: 主目标 6 格内最多 2 个**其他**生物
-execute at @e[tag=zx.ft_main,distance=0..,limit=1] run tag @e[type=!#sweetdream:no_damage,distance=0.01..6,tag=!zx.ft_main,sort=nearest,limit=2] add zx.ft_lk
+# ⑧ 相连者: 主目标 6 格内最多 2 个(超限 6 个)**其他**生物
+#   ★ limit 不能取变量 ⇒ 两档互斥写。
+execute if score #ft_ol zx.meta matches 0 at @e[tag=zx.ft_main,distance=0..,limit=1] run tag @e[type=!#sweetdream:no_damage,distance=0.01..6,tag=!zx.ft_main,sort=nearest,limit=2] add zx.ft_lk
+execute if score #ft_ol zx.meta matches 1 at @e[tag=zx.ft_main,distance=0..,limit=1] run tag @e[type=!#sweetdream:no_damage,distance=0.01..6,tag=!zx.ft_main,sort=nearest,limit=6] add zx.ft_lk
 
 # ⑨ 实例号 = **施法刻(#now)**
 #   ★★ 2026-10-17 事故(存档实证) ★★
@@ -96,6 +115,13 @@ scoreboard players add @s zx.ft_mine 0
 scoreboard players operation @s zx.ft_mine = #ft_iid zx.meta
 scoreboard players operation @s zx.ft_end = #now manacore.meta
 scoreboard players add @s zx.ft_end 140
+execute if score #ft_ol zx.meta matches 1 run scoreboard players add @s zx.ft_end 100
+
+# ⑪.5 ★ 超限：第二段连接（12 格内最多 4 个噬心者 / 18 秒）★
+#   ★ 必须排在 ⑪ 的实例号之后：ol_link2 要给它们写 zx.ft2n。
+execute if score #ft_ol zx.meta matches 1 run function sweetdream:equipment/staff/fate_thread/ol_link2
+execute if score #ft_ol zx.meta matches 1 run scoreboard players operation @s zx.ft2_end = #now manacore.meta
+execute if score #ft_ol zx.meta matches 1 run scoreboard players add @s zx.ft2_end 360
 scoreboard players set @s zx.ft_got 0
 #   ★ zx.ft_scan / zx.ft_max 两个排查期诊断量已于 2026-10-17 删除(结论: 训练人偶不吃伤害)。
 #   ★ 入口用**标签**而不是判分: core/tick 里 `@a[tag=zx.ft_link]` 在选择器层就筛掉了
@@ -105,7 +131,7 @@ tag @e[tag=zx.ft_new,distance=0..] remove zx.ft_new
 
 # ⑫ 表现 + 提示
 execute at @e[tag=zx.ft_main,distance=0..,limit=1] run particle minecraft:dust{color:[0.75,0.1,0.2],scale:1.6} ~ ~1 ~ 1.0 1.0 1.0 0.02 40 normal
-playsound minecraft:entity.vex.ambient player @a ~ ~ ~ 0.9 0.8
+playsound minecraft:entity.allay.item_thrown player @a ~ ~ ~ 0.9 0.8
 tellraw @s [{"text":"绯色丝线已连结（7 秒）","color":"light_purple"}]
 # ★ 2026-10-17: 补一句"打哪只" —— 文案里的"其"只指**主目标**, 打相连者不会结算。
 #   前三轮复测都卡在这个理解差上(玩家以为"随便打一只都行"), 提示里必须写明。

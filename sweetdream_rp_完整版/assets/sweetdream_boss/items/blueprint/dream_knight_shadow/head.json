@@ -1,0 +1,16 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "sweetdream_boss:blueprint/dream_knight_shadow/head",
+    "tints": [
+      {
+        "type": "minecraft:dye",
+        "default": [
+          1,
+          1,
+          1
+        ]
+      }
+    ]
+  }
+}

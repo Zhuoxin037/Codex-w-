@@ -42,7 +42,7 @@ execute unless entity @e[type=!#sweetdream:no_damage,distance=0.1..6] run return
 # ④ 扣魔力 -380
 data modify storage manacore:in arg set value {uuid:"",value:380.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 execute if data storage manacore:out r{success:0b} run return fail
 
 # ⑤ 记冷却 10 秒

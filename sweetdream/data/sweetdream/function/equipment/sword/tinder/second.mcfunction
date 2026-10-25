@@ -35,7 +35,7 @@ execute if score #td_m zx.meta matches ..400 run return 0
 # 消耗 350 魔力
 data modify storage manacore:in arg set value {uuid:"",value:350.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 execute if data storage manacore:out r{success:0b} run return 0
 
 # 点燃

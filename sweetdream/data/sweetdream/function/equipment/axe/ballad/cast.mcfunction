@@ -21,16 +21,29 @@
 # ⓪ 撤销自己的进度
 advancement revoke @s only sweetdream:equipment/axe/ballad
 
+# ⓪.5 【超限分流】敲过超限石(ol:"ballad")的歌谣: 300 蓝 / 20 秒 / 曲调来源
+#   "击杀"->"攻击或击杀" / 奏响后额外召唤（9-X）个「音符」。
+#   判据判 ol 的**值**, 主副手都要判(与 liuguang/xiugou 同一套标准写法)。
+#   ★ 超限标记落进私有 storage zx:work bdly —— hit 那条链(平A)读不到本次 cast
+#     的任何 # 字头分数, 但它能读到 storage(20 秒内不会被别人碰)。
+scoreboard players set #bd_ol zx.meta 0
+execute if items entity @s weapon.mainhand diamond_axe[minecraft:custom_data~{zx:["ballad"],ol:"ballad"}] run scoreboard players set #bd_ol zx.meta 1
+execute if items entity @s weapon.offhand diamond_axe[minecraft:custom_data~{zx:["ballad"],ol:"ballad"}] run scoreboard players set #bd_ol zx.meta 1
+data modify storage zx:work bdly.ol set value 0
+execute if score #bd_ol zx.meta matches 1 run data modify storage zx:work bdly.ol set value 1
+
 # ① 拿 uuid
 function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return fail
 
-# ② 只读检查: 冷却 + 魔力 240
+# ② 只读检查: 冷却 + 魔力 240 / 超限 300
 data modify storage manacore:in arg set value {uuid:"",skill:"sweetdream:ballad",mana:240.0}
+execute if score #bd_ol zx.meta matches 1 run data modify storage manacore:in arg.mana set value 300.0
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/skill/check
 execute if data storage manacore:out r{reason:"cooldown"} run tellraw @s [{"text":"歌谣冷却中，还剩 ","color":"red"},{"nbt":"r.remaining","storage":"manacore:out"},{"text":" tick","color":"red"}]
-execute if data storage manacore:out r{reason:"mana"} run tellraw @s [{"text":"魔力不足（需要 240）","color":"red"}]
+execute if data storage manacore:out r{reason:"mana"} if score #bd_ol zx.meta matches 0 run tellraw @s [{"text":"魔力不足（需要 240）","color":"red"}]
+execute if data storage manacore:out r{reason:"mana"} if score #bd_ol zx.meta matches 1 run tellraw @s [{"text":"魔力不足（需要 300）","color":"red"}]
 execute unless data storage manacore:out r{success:1b} run return fail
 
 # ③ 至少 1 层「曲调」, 否则整个不放
@@ -38,15 +51,17 @@ execute if score @s zx.bd_tune matches 1.. run scoreboard players add #bd_t zx.m
 execute unless score @s zx.bd_tune matches 1.. run tellraw @s [{"text":"「曲调」为 0, 先击杀生物积攒","color":"red"}]
 execute unless score @s zx.bd_tune matches 1.. run return fail
 
-# ④ 扣魔力 240
+# ④ 扣魔力 240 / 超限 300
 data modify storage manacore:in arg set value {uuid:"",value:240.0}
+execute if score #bd_ol zx.meta matches 1 run data modify storage manacore:in arg.value set value 300.0
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 execute if data storage manacore:out r{success:0b} run tellraw @s [{"text":"魔力不足（需要 240）","color":"red"}]
 execute if data storage manacore:out r{success:0b} run return fail
 
-# ⑤ 起冷却 30 秒
+# ⑤ 起冷却 30 秒 / 超限 20 秒
 data modify storage manacore:in arg set value {uuid:"",skill:"sweetdream:ballad",cooldown_seconds:30.0,reduce:1b}
+execute if score #bd_ol zx.meta matches 1 run data modify storage manacore:in arg.cooldown_seconds set value 20.0
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/cooldown/start
 

@@ -109,8 +109,10 @@ data modify storage zx:config wchan.blood_loss set value {mm:0b,atk:0b,oth:0b}
 data modify storage zx:config wchan.angel_core set value {mm:1b,atk:1b,oth:0b}
 # 陨星: 陨石伤害 = 基础攻击力 ×4
 data modify storage zx:config wchan.meteor set value {mm:0b,atk:1b,oth:0b}
-# 天穹: 俯冲冲击 = 最大魔力 ×0.12(mm), 每层升痕额外 基础攻击力 ×2(atk)
-data modify storage zx:config wchan.skyvault set value {mm:1b,atk:1b,oth:0b}
+# 天穹: 俯冲冲击 = 最大魔力 ×0.12(mm), 每层升痕额外 基础攻击力 ×2/×3(atk);
+#   ★ 超限(2026-10-23 批 K4)的"≥10 层连锁段"= **当前**魔力 ×0.1 ⇒ 多一条 oth。
+#     它现在横跨三条通道, 表里全标 1b(这只影响面板归类显示, 结算仍以技能文件为准)。
+data modify storage zx:config wchan.skyvault set value {mm:1b,atk:1b,oth:1b}
 # 寒鸦: 最大魔力 ×0.1 / ×0.25
 data modify storage zx:config wchan.cold_crow set value {mm:1b,atk:0b,oth:0b}
 # 风行于大地之上: 普攻 = 当前魔力 ×0.04(其他), 爆发/回响 = 最大魔力 ×0.07 / ×0.04
@@ -247,8 +249,9 @@ data modify storage zx:config wchan.arc set value {mm:0b,atk:1b,oth:1b}
 # ---- 批 11 · 剑(2026-10-12): 潮痕 / 灰度 / 缺月 ----
 # 潮痕: 前方 4×2 = 最大魔力 ×0.08 -> mm
 data modify storage zx:config wchan.tidemark set value {mm:1b,atk:0b,oth:0b}
-# 灰度: 自身 2 格 = 当前魔力 ×0.08 -> oth
-data modify storage zx:config wchan.grayscale set value {mm:0b,atk:0b,oth:1b}
+# 灰度: 原版 自身 2 格 = 当前魔力 ×0.08 -> oth;
+#   超限(2026-10-23 批 K1) 5 格 = **最大魔力** ×0.1 + 真伤 ×0.08 -> mm => 两条都走
+data modify storage zx:config wchan.grayscale set value {mm:1b,atk:0b,oth:1b}
 # 缺月: 被动 1/2 档 = 基础攻击力 ×2/×4(atk); 3 档 = 最大魔力 ×0.08(mm);
 #   主动结算 = 最大魔力 ×0.12 + 基础攻击力 ×4(mm + atk) => 两条都走
 data modify storage zx:config wchan.crescent set value {mm:1b,atk:1b,oth:0b}
@@ -303,3 +306,30 @@ data modify storage zx:config wchan.triad set value {mm:1b,atk:1b,oth:0b}
 #   登记全 0 是为了让 check 的"每件走 calc 的装备都要有通道声明"覆盖到(同失血)。
 data modify storage zx:config wchan.broken_page set value {mm:0b,atk:0b,oth:0b}
 data modify storage zx:config wchan.renew_fire set value {mm:0b,atk:0b,oth:0b}
+
+# ---- 批二 14 件(2026-10-20): 只有这四件走三条通道, 其余是固定值/真伤 ----
+# 剖心(下界剑): 三档预结算都走 attack_mul —— 主目标 ×5 / 主目标带噬心 ×8(独立乘区 1.2)
+#   / 2 格内溅射 ×4 + 1.2; 被动那一下是 ×1(相当于"照常打一次")。
+data modify storage zx:config wchan.profane set value {mm:0b,atk:1b,oth:0b}
+# 断碑(下界斧): 基础攻击力 ×4; 目标护甲 >= 15 时再套独立乘区 1.8(真伤通道)。
+data modify storage zx:config wchan.grave_tablet set value {mm:0b,atk:1b,oth:0b}
+# 夜缚：主段基础攻击力×5；弹射读取本次额外技能伤害数值的60%。
+data modify storage zx:config wchan.night_bind set value {mm:0b,atk:1b,oth:0b}
+# 缚烬：主动基础攻击力×6；被动在目标同时流火和缓慢时将原伤害乘1.5。
+data modify storage zx:config wchan.bind_ember set value {mm:0b,atk:1b,oth:0b}
+# 囚昼主动与普攻均使用最大魔力通道。
+
+# ---- 批十八四件纯技能法杖(2026-10-21 补普攻): 只登记**普攻**走的通道 ----
+# 决堤: 普攻 = 当前魔力 ×0.03(other_mul); 主动是固定路径伤害, 不走通道。
+data modify storage zx:config wchan.burst_bank set value {mm:0b,atk:0b,oth:1b}
+# 囚昼: 普攻 = 最大魔力 ×0.025; 主动 = 最大魔力 ×0.12，走最大魔力通道。
+data modify storage zx:config wchan.cage_day set value {mm:1b,atk:0b,oth:0b}
+# 停针: 普攻 = 最大魔力 ×0.02。
+data modify storage zx:config wchan.stop_needle set value {mm:1b,atk:0b,oth:0b}
+# 倾囊: 普攻 = 固定 16 点, 一条通道都不走 —— 登记全 0 让 check 的覆盖面成立。
+data modify storage zx:config wchan.pour_sack set value {mm:0b,atk:0b,oth:0b}
+# 引雷针(超限·2026-10-23 批 K9): 主动的每道雷额外附加 **最大魔力 ×0.1**(ol_bolt)。
+#   原版本体只有"原版闪电那 5 点"(不走通道), 超限才多出这条 mm ⇒ 这里给 mm:1b。
+data modify storage zx:config wchan.thunderrod set value {mm:1b,atk:0b,oth:0b}
+# 折径(超限·2026-10-23 批 K9): 主动本体 = 最大魔力 ×0.05(原版 ×0.04), 走 mm 通道。
+data modify storage zx:config wchan.bent_ray set value {mm:1b,atk:0b,oth:0b}

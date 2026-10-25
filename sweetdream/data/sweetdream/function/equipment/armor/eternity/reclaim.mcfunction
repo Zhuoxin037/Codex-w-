@@ -59,7 +59,7 @@ execute if score #et_again zx.meta matches 1.. run return 0
 # ④ 扣 50(consume 保证"要么完整扣、要么不扣")
 data modify storage manacore:in arg set value {uuid:"",value:50.0}
 data modify storage manacore:in arg.uuid set from storage zx:work etr.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay_pas
 execute unless data storage manacore:out r{success:1b} run return 0
 
 # ⑤ 再次附着: 公共接口刷新标签(租约 + 图标一起回来)

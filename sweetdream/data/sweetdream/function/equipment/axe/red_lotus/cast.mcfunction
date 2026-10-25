@@ -11,13 +11,13 @@
 #   ① 触发: 右键。
 #   ② 目标范围: 消耗 —— 自身 5 格内带「流火」/「夜火」的生物; 伤害 —— 自身 5 格(流火)/6 格(夜火)内全部。
 #   ③ 次数: "每消耗一层" -> 每只带标签的生物算一层, 有几只就打几次(见下)。
-#   ④ 时长: 起手即打第一段; 之后**每 0.35 秒(7 刻)一段**, 依次打完剩下的(见 tick_step)。
+#   ④ 时长: 起手即打第一段; 之后**每 0.5 秒(10 刻)一段**, 依次打完剩下的(见 tick_step)。
 # 【★ 2026-10-07 用户改口径: 不再同刻一次性打完 ★】
 #   原来 N 只带标签的生物会在**同一刻**各触发一次打击 —— 而生物的受伤无敌帧是 0.5 秒,
 #   同一刻的第二下起基本被吃掉(等于只有第一下真的掉血)。用户要求改成
-#   "**多段都依次隔 0.35 秒**"(照回锋的写法):
-#     第 1 段当场打, 剩下的由 core/tick 驱动 tick_step 每 7 刻推一段。
-#   实现见 step / step_fire / step_night / tick_step; 间隔 7 刻 = 0.35 秒。
+#   "**多段都依次隔 0.5 秒**"(照回锋的写法):
+#     第 1 段当场打, 剩下的由 core/tick 驱动 tick_step 每 10 刻推一段。
+#   实现见 step / step_fire / step_night / tick_step; 间隔 10 刻 = 0.5 秒。
 #
 # 【★★ 超限·红莲 的差别(逐字照抄 oldef."red_lotus".lore)★★】
 #   "使用后消耗自身 5 格内全部生物的「流火」或「夜火」效果。每消耗一层「流火」则对
@@ -37,7 +37,7 @@
 #     "打几段"的数在消耗前就数好了, 记在 zx.rl_rep 上, 所以后段不依赖标签还在不在。
 # 【数值改哪】倍率 1/3(基础)与 1.5/4(超限) = recalc; 半径 5/6 = hit_fire/hit_night;
 #   燃烧 40/100 tick = hit_fire/hit_night 的 `zx:work rl.n`; "6 层"门槛 = 本文件 ⑪;
-#   间隔 = tick_step 的 `set @s zx.rl_t 7`(7 刻 = 0.35 秒) 与 core/tick 的 `zx.rl_t=1..`。
+#   间隔 = tick_step 的 `set @s zx.rl_t 10`(10 刻 = 0.5 秒) 与 core/tick 的 `zx.rl_t=1..`。
 # ============================================================
 
 # ⓪ 撤销自己的进度
@@ -48,7 +48,7 @@ function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return fail
 
 # ①' 超限快照: 手里这把是不是超限版(判一次存到玩家身上)
-#   ★ 为什么要拍快照: 连击是"每 0.35 秒一段"跨刻走的, 那些段由 core/tick 驱动,
+#   ★ 为什么要拍快照: 连击是"每 0.5 秒一段"跨刻走的, 那些段由 core/tick 驱动,
 #     到那时"手里那把"已经不一定还是红莲了(见 RULES 的"施法快照")。
 #     本段链上读它的地方: recalc(倍率 1.5/4)、hit_fire/hit_night(6 格 + 燃烧)、
 #     cast ⑪(>=6 层才开"流火雨")。
@@ -72,7 +72,7 @@ execute unless entity @e[type=!#sweetdream:no_damage,tag=zx.status.liuhuo,distan
 # ④ 扣魔力 80
 data modify storage manacore:in arg set value {uuid:"",value:80.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 execute if data storage manacore:out r{success:0b} run return fail
 
 # ⑤ 起冷却 30 秒
@@ -112,9 +112,9 @@ scoreboard players operation #rl_tot zx.meta = @s zx.rl_rep
 # ⑧ 立刻打第 1 段(流火优先; 没有流火就打夜火)
 function sweetdream:equipment/axe/red_lotus/step
 
-# ⑨ 剩下的每 0.35 秒(7 刻)推一段, 由 core/tick 驱动 tick_step 直到 rl_rep 用完
+# ⑨ 剩下的每 0.5 秒(10 刻)推一段, 由 core/tick 驱动 tick_step 直到 rl_rep 用完
 scoreboard players remove @s zx.rl_rep 1
-execute if score @s zx.rl_rep matches 1.. run scoreboard players set @s zx.rl_t 7
+execute if score @s zx.rl_rep matches 1.. run scoreboard players set @s zx.rl_t 10
 
 # ⑩ 消耗掉这些「流火」「夜火」(统一入口; 逐只走, 让余烬/永恒收得到)
 data modify storage zx:work a set value {target:"@e[tag=zx.rl_fire,distance=0..]",mark:"liuhuo",by:"@s"}

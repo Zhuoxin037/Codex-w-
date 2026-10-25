@@ -19,8 +19,17 @@
 
 $summon minecraft:marker ~ ~ ~ {Tags:["zx.tr_pend","zx.tr_new"],data:{zx:{tr:{u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}}}}
 
-execute as @e[tag=zx.tr_new,distance=..3,limit=1] run scoreboard players operation @s zx.tr_due = #now manacore.meta
-execute as @e[tag=zx.tr_new,distance=..3,limit=1] run scoreboard players add @s zx.tr_due 20
+# 超限·引雷针: **两道**雷(2026-10-23 批 K9)。
+#   ★ 第二道要**错开 10 tick**: 原版受击后有 10 tick 无敌帧, 同一刻连劈两道的话
+#     第二道打不进伤害(只看见两道雷光、只吃一次伤害) ⇒ 第二道挪到 now+30(1.5 秒)。
+#     用 tag zx.tr_d2 区分两批 marker(zx.tr_new 是"刚生成还没设到期刻"的通用标签)。
+execute if data entity @s data{ol:1b} run summon minecraft:marker ~ ~ ~ {Tags:["zx.tr_pend","zx.tr_new","zx.tr_d2"]}
+execute if data entity @s data{ol:1b} run data modify entity @e[tag=zx.tr_d2,tag=zx.tr_new,distance=..3,limit=1] data.zx.tr set from entity @e[tag=!zx.tr_d2,tag=zx.tr_new,distance=..3,limit=1] data.zx.tr
+
+execute as @e[tag=zx.tr_new,tag=!zx.tr_d2,distance=..3,limit=1] run scoreboard players operation @s zx.tr_due = #now manacore.meta
+execute as @e[tag=zx.tr_new,tag=!zx.tr_d2,distance=..3,limit=1] run scoreboard players add @s zx.tr_due 20
+execute as @e[tag=zx.tr_new,tag=zx.tr_d2,distance=..3,limit=1] run scoreboard players operation @s zx.tr_due = #now manacore.meta
+execute as @e[tag=zx.tr_new,tag=zx.tr_d2,distance=..3,limit=1] run scoreboard players add @s zx.tr_due 30
 tag @e[tag=zx.tr_new,distance=..3] remove zx.tr_new
 
 # 引雷针"指着"命中点的一丝电光(预约感, 真正的雷 1 秒后到)

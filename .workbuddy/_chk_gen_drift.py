@@ -40,7 +40,8 @@ def _body(p):
 
 
 # 所有"直接写 equipment/*/give.mcfunction"的生成器都要登记在这里。
-GENERATORS = ('_gen_batch5.py', '_gen_batch6.py', '_gen_batch7.py', '_gen_new42.py')
+GENERATORS = ('_gen_batch5.py', '_gen_batch6.py', '_gen_batch7.py', '_gen_new42.py',
+              '_gen_batch17.py', '_gen_batch18.py', '_gen_batch13_give.py')
 
 
 def main():

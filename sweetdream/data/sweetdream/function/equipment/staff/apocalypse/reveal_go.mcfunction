@@ -26,9 +26,24 @@ tag @e[type=!#sweetdream:no_damage,distance=..8] add zx.ap_area
 data modify storage zx:work a set value {target:"@e[tag=zx.ap_area]",damage:0.0,type:"minecraft:player_attack",u0:0,u1:0,u2:0,u3:0}
 execute if data storage zx:config damage_type run data modify storage zx:work a.type set from storage zx:config damage_type
 
-# ③ 换算伤害: 正常 ×0.5 / 最后一次 ×1.5(见头注释)
-execute if score @s zx.ap_on matches 4.. store result storage zx:work a.num double 0.005 run scoreboard players get @s zx.ap_cur
-execute if score @s zx.ap_on matches ..3 store result storage zx:work a.num double 0.0075 run scoreboard players get @s zx.ap_cur
+# ③ 换算伤害（批 K8 改成"千分比 × 定点页值 ÷ 100000"，两档只是一行数字不同）
+#   基础：×0.5 = 500‰；最后一次（ap_on ≤ 3）×1.5 = 750‰
+#   超限：×0.8 = 800‰；"至少消耗了三页"则**所有**灾示 ×1.5 = 1200‰
+#     ★ 超限把"最后一次 +50%"改成了"全程 +50%"（文案变了），所以两条互斥、
+#       不再叠加：超限时只认 zx.ap_big，基础时只认 ap_on。
+#   ★ >500 页的 +30%（独立乘区，超限专属）：在这里乘进倍率即可 ——
+#     灾示是数值直投、本来就不经过 calc 的三条通道，乘在这里与独立乘区等价。
+scoreboard players set #ap_mul zx.meta 500
+execute if score @s zx.ap_on matches ..3 run scoreboard players set #ap_mul zx.meta 750
+execute if score @s zx.ap_ol matches 1 run scoreboard players set #ap_mul zx.meta 800
+execute if score @s zx.ap_ol matches 1 if score @s zx.ap_big matches 1 run scoreboard players set #ap_mul zx.meta 1200
+execute if score @s zx.ap_ol matches 1 if score @s zx.ap_cur matches 50001.. run scoreboard players operation #ap_mul zx.meta *= #13 zx.meta
+execute if score @s zx.ap_ol matches 1 if score @s zx.ap_cur matches 50001.. run scoreboard players operation #ap_mul zx.meta /= #10 zx.meta
+scoreboard players operation #ap_v zx.meta = @s zx.ap_cur
+scoreboard players operation #ap_v zx.meta /= #100 zx.meta
+scoreboard players operation #ap_v zx.meta *= #ap_mul zx.meta
+scoreboard players operation #ap_v zx.meta /= #1000 zx.meta
+execute store result storage zx:work a.num double 1.0 run scoreboard players get #ap_v zx.meta
 function sweetdream:lib/num/plain
 
 # ④ 归属: 从执行者(玩家)的 UUID 抄
@@ -40,9 +55,13 @@ data modify storage zx:work a.u3 set from entity @s UUID[3]
 # ⑤ 打出去
 function sweetdream:internal/damage/with_from with storage zx:work a
 
-# ⑥ >500 光效: 发光 5 秒 + 虚弱Ⅱ(amp 1) 5 秒, 只对本次目标
-execute if score @s zx.ap_cur matches 50001.. run effect give @e[tag=zx.ap_area] minecraft:glowing 5 0 true
-execute if score @s zx.ap_cur matches 50001.. run effect give @e[tag=zx.ap_area] minecraft:weakness 5 1 true
+# ⑥ >500 光效: 发光 + 虚弱Ⅱ, 只对本次目标
+#   ★ 时长分档（批 K8）：基础 5 秒 / 超限 10 秒；两档互斥写，别顺序叠加
+#     （effect 后一条会把前一条的时长覆盖掉，写串了就永远是 10 秒）。
+execute if score @s zx.ap_cur matches 50001.. if score @s zx.ap_ol matches 0 run effect give @e[tag=zx.ap_area] minecraft:glowing 5 0 true
+execute if score @s zx.ap_cur matches 50001.. if score @s zx.ap_ol matches 0 run effect give @e[tag=zx.ap_area] minecraft:weakness 5 1 true
+execute if score @s zx.ap_cur matches 50001.. if score @s zx.ap_ol matches 1 run effect give @e[tag=zx.ap_area] minecraft:glowing 10 0 true
+execute if score @s zx.ap_cur matches 50001.. if score @s zx.ap_ol matches 1 run effect give @e[tag=zx.ap_area] minecraft:weakness 10 1 true
 
 # ⑦ 表现(执行者就是玩家, 位置已生效)
 function sweetdream:equipment/staff/apocalypse/visual/world_burst

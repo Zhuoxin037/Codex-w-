@@ -13,4 +13,4 @@
 particle minecraft:witch ~ ~ ~ 0.55 0.5 0.55 0.03 18 normal
 particle minecraft:soul ~ ~ ~ 0.45 0.45 0.45 0.02 12 normal
 particle minecraft:dust{color:[0.85,0.78,1.0],scale:1.6} ~ ~ ~ 0.5 0.5 0.5 0.04 16 normal
-playsound minecraft:block.bell.resonate player @a ~ ~ ~ 0.6 1.1
+playsound minecraft:block.amethyst_block.resonate player @a ~ ~ ~ 0.4 1.3

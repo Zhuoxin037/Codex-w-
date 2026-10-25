@@ -1,0 +1,1 @@
+tellraw @s [{text:"空壳：",color:"gold"},{text:"/function sweetdream:boss/husk/summon",color:"white",click_event:{action:"run_command",command:"/function sweetdream:boss/husk/summon"}},{text:"  清除：/function sweetdream:boss/husk/remove_all",color:"gray"}]

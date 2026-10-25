@@ -28,7 +28,7 @@ execute unless data entity @s SelectedItem.components."minecraft:enchantments" r
 # ① 扣魔力(固定 80 —— 与 lore 的「魔力 80」逐字对应)
 data modify storage manacore:in arg set value {uuid:"",value:80.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 
 # ② 魔力不足 -> 这一发不附加任何效果
 #   ★ 必须把"这一发付过账"**显式写成 0**(坑 141): 命中回调读的是**射手身上**的

@@ -22,6 +22,14 @@ execute unless data storage zx:data self{ok:1b} run return fail
 # ①.2 拍下超限乘区
 function sweetdream:overlimit/api/snap
 
+# ①.3 超限判定(批 K9): 主/副手任一件是超限·堕梦
+#   ★ 超限不改普攻的魔力与伤害(文案 50 / ×0.03 都照旧), 只多一条:
+#     "之后有 20% 的概率额外使其时停 1 秒" —— 结算在命中回调 ball_hit, 而回调
+#     是以法球为执行者跑的 ⇒ 结果必须塞进**球的 data**(和 fdmg 同一条路)。
+scoreboard players set #fd_ol zx.meta 0
+execute if items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["fallen_dream"],ol:"fallen_dream"}] run scoreboard players set #fd_ol zx.meta 1
+execute if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["fallen_dream"],ol:"fallen_dream"}] run scoreboard players set #fd_ol zx.meta 1
+
 # ② 只读检查: 魔力 50(普攻不进冷却)
 data modify storage manacore:in arg set value {uuid:"",skill:"sweetdream:fd_attack",mana:50.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
@@ -37,7 +45,7 @@ execute unless data storage manacore:out r{success:1b} run return fail
 data modify storage manacore:in arg set value {uuid:"",value:50.0}
 data modify storage manacore:in arg.value set from storage zx:work olv.mana
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 execute if data storage manacore:out r{success:0b} run tellraw @s [{"text":"魔力不足(需要 ","color":"red"},{"score":{"name":"#fd_need","objective":"zx.meta"},"color":"red"},{"text":")","color":"red"}]
 execute if data storage manacore:out r{success:0b} run return fail
 
@@ -48,6 +56,8 @@ function sweetdream:overlimit/api/mod
 function manacore:api/damage/calc
 
 # ⑤ 装球: dmg = 0(ball/hit 不打伤害), 真正的伤害在 fdmg, 命中后回调结算
-data modify storage zx:work ball set value {dmg:0.0,style:"fallen_dream",hit:"sweetdream:equipment/staff/fallen_dream/ball_hit",fdmg:0.0}
+#   ol = 这一发是不是超限版(给 ball_hit 的"20% 概率时停 1 秒"用)
+data modify storage zx:work ball set value {dmg:0.0,style:"fallen_dream",hit:"sweetdream:equipment/staff/fallen_dream/ball_hit",fdmg:0.0,ol:0b}
+execute if score #fd_ol zx.meta matches 1 run data modify storage zx:work ball.ol set value 1b
 data modify storage zx:work ball.fdmg set from storage manacore:out r.damage
 function sweetdream:equipment/staff/attack

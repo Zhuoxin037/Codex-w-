@@ -57,7 +57,7 @@ execute unless entity @e[type=!#sweetdream:no_damage,distance=0.1..12] run retur
 #   这里 value:、以及 give 描述里的"魔力 X" —— 三处要一起改。
 data modify storage manacore:in arg set value {uuid:"",value:350.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 # 【这条提示千万别删】检查用的数字和这里扣的数字如果对不上, 就会"检查通过、扣不动";
 #   而扣不动时如果一声不吭, 表现就是"右键毫无反应", 极难查。
 #   (踩过一次: 检查写 10、扣写 350, 结果什么都没发生。)

@@ -21,23 +21,43 @@
 # ⓪ 撤销自己的进度
 advancement revoke @s only sweetdream:equipment/axe/draught
 
+# ⓪.5 【超限分流】敲过超限石(ol:"draught")的饮鸩: 360 蓝 / 加成 = **本次伤害数值** /
+#     持续 **12** 秒 / 放完之后血量 >60% 可再来一次(第二形态 = 每攻击一次自伤 10% 换 +10% 攻击)。
+#   判据判 ol 的**值**(不是 .ol 键在不在), 主副手都判。
+scoreboard players set #dg_ol zx.meta 0
+execute if items entity @s weapon.mainhand iron_axe[minecraft:custom_data~{zx:["draught"],ol:"draught"}] run scoreboard players set #dg_ol zx.meta 1
+execute if items entity @s weapon.offhand iron_axe[minecraft:custom_data~{zx:["draught"],ol:"draught"}] run scoreboard players set #dg_ol zx.meta 1
+
 # ① 拿 uuid
 function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return fail
 
+# ①.5 【第二形态】上一轮已经放过超限·饮鸩(zx.dg_ol2 = 1) -> 这一下右键放的是第二形态
+#   ★ 必须排在冷却检查**之前** ★ 两段共用同一条 80 秒冷却, 再走一次 check
+#     第二段就永远放不出来(玩家看到的就是"用了没反应")。
+#   ol_second 自己判"血量 > 60%", 不管成不成都会把 #dg2 置 1 (= 这一下已被它接管),
+#   外面的 cast 直接收工, 不会回头又放一遍第一形态。
+scoreboard players set #dg2 zx.meta 0
+execute if score #dg_ol zx.meta matches 1 if score @s zx.dg_ol2 matches 1 run function sweetdream:equipment/axe/draught/ol_second
+execute if score #dg2 zx.meta matches 1 run return 0
+
 # ② 只读检查: 冷却 + 魔力 160
 data modify storage manacore:in arg set value {uuid:"",skill:"sweetdream:draught",mana:160.0}
+execute if score #dg_ol zx.meta matches 1 run data modify storage manacore:in arg.mana set value 360.0
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/skill/check
 execute if data storage manacore:out r{reason:"cooldown"} run tellraw @s [{"text":"饮鸩冷却中，还剩 ","color":"red"},{"nbt":"r.remaining","storage":"manacore:out"},{"text":" tick","color":"red"}]
-execute if data storage manacore:out r{reason:"mana"} run tellraw @s [{"text":"魔力不足（需要 160）","color":"red"}]
+execute if data storage manacore:out r{reason:"mana"} if score #dg_ol zx.meta matches 0 run tellraw @s [{"text":"魔力不足（需要 160）","color":"red"}]
+execute if data storage manacore:out r{reason:"mana"} if score #dg_ol zx.meta matches 1 run tellraw @s [{"text":"魔力不足（需要 360）","color":"red"}]
 execute unless data storage manacore:out r{success:1b} run return fail
 
-# ③ 扣魔力 160
+# ③ 扣魔力 160 / 360
 data modify storage manacore:in arg set value {uuid:"",value:160.0}
+execute if score #dg_ol zx.meta matches 1 run data modify storage manacore:in arg.value set value 360.0
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
-execute if data storage manacore:out r{success:0b} run tellraw @s [{"text":"魔力不足（需要 160）","color":"red"}]
+function sweetdream:lib/mana/pay
+execute if data storage manacore:out r{success:0b} if score #dg_ol zx.meta matches 0 run tellraw @s [{"text":"魔力不足（需要 160）","color":"red"}]
+execute if data storage manacore:out r{success:0b} if score #dg_ol zx.meta matches 1 run tellraw @s [{"text":"魔力不足（需要 360）","color":"red"}]
 execute if data storage manacore:out r{success:0b} run return fail
 
 # ④ 起冷却 80 秒
@@ -47,6 +67,7 @@ function manacore:api/cooldown/start
 
 # ⑤ 先撤掉上一轮残留的加成(防叠加)
 execute if score @s zx.dg_buf matches 1.. run function sweetdream:equipment/axe/draught/strip
+execute if score @s zx.dg_buf2 matches 1.. run function sweetdream:equipment/axe/draught/ol_strip
 
 # ⑥ 记自伤前的血量(×10 = 0.1 精度)
 execute store result score #dg_b zx.meta run data get entity @s Health 10
@@ -66,11 +87,17 @@ execute store result storage zx:in arg.damage double 0.1 run scoreboard players 
 function sweetdream:api/damage
 
 # ⑧ 记自伤后的血量, 算**实际**损失(×10 -> ÷10 取整)
+#   【超限改口径】文案从"自身**受到的**伤害"改成"**本次伤害数值**" ⇒ 直接用
+#     ⑦ 算好的计划值(#dg_hit ÷ 10), 不再看血条前后差 —— 被减伤/被护甲吃掉的部分
+#     照样算进加成里。这也是文案"基数: 自身受到的伤害 -> 本次伤害数值"的落地。
 execute store result score #dg_a zx.meta run data get entity @s Health 10
 scoreboard players operation #dg_lost zx.meta = #dg_b zx.meta
 scoreboard players operation #dg_lost zx.meta -= #dg_a zx.meta
 execute if score #dg_lost zx.meta matches ..0 run scoreboard players set #dg_lost zx.meta 0
 scoreboard players operation #dg_lost zx.meta /= #10 zx.meta
+scoreboard players operation #dg_plan zx.meta = #dg_hit zx.meta
+scoreboard players operation #dg_plan zx.meta /= #10 zx.meta
+execute if score #dg_ol zx.meta matches 1 run scoreboard players operation #dg_lost zx.meta = #dg_plan zx.meta
 
 # ⑨ 加成 = 实际受到的伤害(写进 base_attack; 账本 zx.dg_buf 同值)
 scoreboard players operation @s zx.dg_buf = #dg_lost zx.meta
@@ -79,8 +106,13 @@ data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 execute store result storage manacore:in arg.value double 1 run scoreboard players get #dg_lost zx.meta
 function manacore:api/stats/add
 
-# ⑩ 计时 10 秒 + 表现
+# ⑩ 计时 10 秒(超限 12 秒) + 表现
 scoreboard players set @s zx.dg_on 10
+execute if score #dg_ol zx.meta matches 1 run scoreboard players set @s zx.dg_on 12
+# 超限: 打完这一发就"解锁第二形态" —— 血量 >60% 时再按一次右键进第二形态(见 ol_second)
+execute if score #dg_ol zx.meta matches 1 run scoreboard players set @s zx.dg_ol2 1
 execute at @s run particle minecraft:item{count:6,item:{id:"minecraft:fermented_spider_eye"}} ~ ~1 ~ 0.4 0.4 0.4 0.05 12 normal
 execute at @s run playsound minecraft:entity.generic.drink player @a ~ ~ ~ 0.9 0.7
-tellraw @s [{"text":"饮鸩: 以 ","color":"dark_red"},{"score":{"name":"#dg_lost","objective":"zx.meta"},"color":"red"},{"text":" 点生命的代价, 换来等量的基础攻击力(10 秒)","color":"dark_red"}]
+execute unless score #dg_ol zx.meta matches 1 run tellraw @s [{"text":"饮鸩: 以 ","color":"dark_red"},{"score":{"name":"#dg_lost","objective":"zx.meta"},"color":"red"},{"text":" 点生命的代价, 换来等量的基础攻击力(10 秒)","color":"dark_red"}]
+execute if score #dg_ol zx.meta matches 1 run tellraw @s [{"text":"饮鸩: 以 ","color":"dark_red"},{"score":{"name":"#dg_lost","objective":"zx.meta"},"color":"red"},{"text":" 点生命的代价, 换来等量的基础攻击力(12 秒)","color":"dark_red"}]
+execute if score #dg_ol zx.meta matches 1 run tellraw @s [{"text":"血量高于 60% 时可以再按一次, 改为「每攻击一次: 自伤 10% 最大生命, 基础攻击力 +10%」(最多 4 次)","color":"gray","italic":true}]

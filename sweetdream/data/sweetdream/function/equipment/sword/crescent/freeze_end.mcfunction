@@ -32,4 +32,4 @@ scoreboard players set @s zx.cr_b 0
 execute at @s run particle minecraft:end_rod ~ ~1 ~ 3.0 0.6 3.0 0.06 90 normal
 execute at @s run particle minecraft:enchanted_hit ~ ~1 ~ 2.0 0.8 2.0 0.1 40 normal
 execute at @s run playsound minecraft:entity.player.attack.strong player @a ~ ~ ~ 1.0 0.7
-execute at @s run playsound minecraft:entity.wither.shoot player @a ~ ~ ~ 0.5 1.6
+execute at @s run playsound minecraft:entity.breeze.wind_burst player @a ~ ~ ~ 0.5 1.6

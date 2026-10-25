@@ -1,0 +1,21 @@
+{
+  "criteria": {
+    "shot": {
+      "trigger": "shot_crossbow",
+      "conditions": {
+        "item": {
+          "predicates": {
+            "minecraft:custom_data": {
+              "zx": [
+                "tiejili"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "rewards": {
+    "function": "sweetdream:equipment/bow/tiejili/shot"
+  }
+}

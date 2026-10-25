@@ -9,7 +9,7 @@
 
 execute unless entity @e[tag=zx.gyr_t,distance=..32] run return 0
 
-data modify storage zx:work a set value {target:"@e[tag=zx.gyr_t,distance=..32]",type:"minecraft:player_attack"}
+data modify storage zx:work a set value {fixed:1b,target:"@e[tag=zx.gyr_t,distance=..32]",type:"minecraft:player_attack"}
 data modify storage zx:work a.num set value 24.0
 function sweetdream:lib/num/plain
 execute if data storage zx:config damage_type run data modify storage zx:work a.type set from storage zx:config damage_type

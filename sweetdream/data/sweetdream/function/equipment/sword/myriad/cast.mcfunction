@@ -89,7 +89,7 @@ execute at @s unless entity @e[type=!#sweetdream:no_damage,distance=..3] run ret
 data modify storage manacore:in arg set value {uuid:"",value:0.0}
 execute store result storage manacore:in arg.value double 1 run scoreboard players get #mq_cost zx.meta
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 execute if data storage manacore:out r{success:0b} run tellraw @s [{"text":"魔力不足（需要 ","color":"red"},{"score":{"name":"#mq_cost","objective":"zx.meta"},"color":"red"},{"text":"）","color":"red"}]
 execute if data storage manacore:out r{success:0b} run return fail
 
@@ -121,7 +121,7 @@ execute if score @s zx.mq_ol matches 1 if entity @e[tag=zx.mq_dmg,limit=1] run f
 execute at @s run particle minecraft:sonic_boom ~ ~1.2 ~ 0 0 0 0.0 1 normal
 execute at @s run particle minecraft:sculk_soul ~ ~1 ~ 1.6 0.8 1.6 0.02 40 normal
 execute at @s run particle minecraft:dust{color:[0.9,0.15,0.2],scale:1.2} ~ ~1 ~ 1.4 0.8 1.4 0.05 30 normal
-execute at @s run playsound minecraft:entity.warden.sonic_boom player @a ~ ~ ~ 0.7 1.6
+execute at @s run playsound minecraft:entity.iron_golem.attack player @a ~ ~ ~ 0.7 1.6
 execute at @s run playsound minecraft:block.sculk_catalyst.bloom player @a ~ ~ ~ 0.6 0.9
 
 # ⑬ 预约换手: 千散(方向 1)。等几 tick 让通用回手先跑完(见 myriad/swap)

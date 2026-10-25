@@ -66,7 +66,7 @@ execute if entity @e[tag=zx.mq_dmg,limit=1] unless score #mq_isq zx.meta matches
 
 # ⑥ 表现
 execute at @s run particle minecraft:flash ~ ~1.2 ~ 0 0 0 0.0 1 normal
-execute at @s run playsound minecraft:entity.warden.sonic_boom player @a ~ ~ ~ 0.6 1.8
+execute at @s run playsound minecraft:entity.iron_golem.attack player @a ~ ~ ~ 0.6 1.8
 
 # ⑦ 预约换手 —— ★ 两支都换, 只是方向相反 ★
 #   方向由"手里是哪把"决定: 千散 => 切回万念(方向 2) / 万念 => 切成千散(方向 1)。

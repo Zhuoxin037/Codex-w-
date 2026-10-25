@@ -22,7 +22,9 @@
 # ============================================================
 
 tag @a[tag=zx.bd_owner] remove zx.bd_owner
-$tag @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] add zx.bd_owner
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+tag @a[tag=zx.ub,limit=1] add zx.bd_owner
 execute unless entity @a[tag=zx.bd_owner] run return 0
 
 tag @e[tag=zx.bd_t,distance=0..] remove zx.bd_t
@@ -32,5 +34,7 @@ execute as @e[tag=zx.bd_t,distance=0..] at @s run damage @s 0.01 minecraft:gener
 tag @e[tag=sd.fb.taunt_source,distance=0..] remove sd.fb.taunt_source
 tag @s add sd.fb.taunt_source
 execute as @e[tag=zx.bd_t,tag=sd.fb.body,distance=0..] at @s run function sweetdream:boss/fireaxe/taunt/apply
+execute as @e[tag=zx.bd_t,tag=sd.kn.body,distance=0..] at @s run function sweetdream:boss/knight/taunt/apply
+execute as @e[tag=zx.bd_t,tag=sd.hk.body,distance=0..] at @s run function sweetdream:boss/husk/taunt/apply
 tag @s remove sd.fb.taunt_source
 tag @e[tag=zx.bd_t,distance=0..] remove zx.bd_t

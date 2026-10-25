@@ -22,6 +22,10 @@
 # ============================================================
 
 # ① 以释放者本人为执行者
-$execute as @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run function manacore:api/damage/calc
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute as @a[tag=zx.ub,limit=1] run function manacore:api/damage/calc
 # ② 找不到人(离线) -> 退回当前执行者, 至少还能按面板算
-$execute unless entity @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run function manacore:api/damage/calc
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute unless entity @a[tag=zx.ub,limit=1] run function manacore:api/damage/calc

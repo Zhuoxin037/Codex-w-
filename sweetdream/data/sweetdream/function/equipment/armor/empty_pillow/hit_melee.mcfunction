@@ -26,9 +26,9 @@ function sweetdream:lib/victim
 execute unless entity @e[tag=zx.victim,distance=0..,limit=1] run return 0
 
 # ④ 交给 on_deal（它认 zx.ep_vic：记"造成伤害时刻" + 兑现静息）
-tag @e[tag=zx.victim] add zx.ep_vic
+scoreboard players set @e[tag=zx.victim] zx.ep_vic 1
 function sweetdream:equipment/armor/empty_pillow/on_deal
-tag @e[tag=zx.ep_vic] remove zx.ep_vic
+scoreboard players reset @e[scores={zx.ep_vic=1}] zx.ep_vic
 
 # ⑤ 清掉受害者的临时标签（lib/victim 自己会清，这里只是兜底）
 tag @e[tag=zx.victim] remove zx.victim

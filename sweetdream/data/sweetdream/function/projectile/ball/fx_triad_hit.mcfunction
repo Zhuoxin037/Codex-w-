@@ -12,7 +12,7 @@
 
 particle minecraft:snowflake ~ ~ ~ 0.55 0.5 0.55 0.05 26 normal
 particle minecraft:dust{color:[0.55,0.85,1.0],scale:1.6} ~ ~ ~ 0.5 0.5 0.5 0.04 18 normal
-playsound minecraft:block.glass.break player @a ~ ~ ~ 0.7 1.5
+playsound minecraft:block.amethyst_block.break player @a ~ ~ ~ 0.65 1.4
 
 # 三形态实际三维弹体；保留原有粒子和命中表现。
 function sweetdream:equipment/staff/triad/visual/ball_end

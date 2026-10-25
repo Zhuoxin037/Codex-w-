@@ -25,7 +25,7 @@ execute at @s run function sweetdream:api/damage
 
 # ③ 表现: 冰壳碎裂
 execute at @e[tag=zx.ef_fin,distance=0..] run particle minecraft:snowflake ~ ~1 ~ 0.4 0.6 0.4 0.04 24 normal
-execute at @e[tag=zx.ef_fin,distance=0..] run playsound minecraft:block.glass.break player @a ~ ~ ~ 0.8 0.7
+execute at @e[tag=zx.ef_fin,distance=0..] run playsound minecraft:block.amethyst_block.break player @a ~ ~ ~ 0.8 0.7
 
 # ④ 收尾: 摘掉"本轮标记"(它们已经吃到最后一下了, 之后的每秒那下不再算它们)
 #    再摘掉临时标签 —— 这两行不动施法者记录: 别的还冻着的目标要继续打。

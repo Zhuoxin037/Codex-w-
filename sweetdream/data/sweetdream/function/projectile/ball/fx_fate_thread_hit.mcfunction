@@ -13,4 +13,4 @@
 particle minecraft:dust{color:[0.78,0.12,0.22],scale:1.6} ~ ~ ~ 0.5 0.5 0.5 0.03 20 normal
 particle minecraft:crit ~ ~ ~ 0.4 0.4 0.4 0.08 12 normal
 particle minecraft:damage_indicator ~ ~ ~ 0.3 0.3 0.3 0.02 6 normal
-playsound minecraft:entity.vex.ambient player @a ~ ~ ~ 0.55 1.2
+playsound minecraft:entity.allay.item_thrown player @a ~ ~ ~ 0.55 1.2

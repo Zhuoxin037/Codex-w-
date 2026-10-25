@@ -12,6 +12,12 @@
 
 tag @s remove zx.sv_rising
 scoreboard players reset @s zx.sv_rise
+
+# 超限·连锁段(zx.sv_cn = 1): 跃升到顶**自动**俯冲 —— 玩家不用再按右键
+#   (文案: "再次跃升 6 格并在 0.5 秒后向自身准星位置俯冲")
+execute if score @s zx.sv_cn matches 1 run function sweetdream:equipment/axe/skyvault/dive_ready
+execute if score @s zx.sv_cn matches 1 run return 0
+
 tag @s add zx.sv_air
 scoreboard players set @s zx.sv_launch 0
 execute at @s run particle minecraft:end_rod ~ ~1 ~ 0.8 0.5 0.8 0.05 24 normal

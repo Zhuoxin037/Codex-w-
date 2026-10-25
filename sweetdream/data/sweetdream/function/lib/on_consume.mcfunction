@@ -51,3 +51,17 @@ $execute as $(by) if items entity @s armor.legs *[minecraft:custom_data~{zx:["mo
 #      「旋步」。该效果 12 秒内最多触发一次。"
 #    ★ src:"skill" —— 文案写的是"自身**技能**成功消费", 装备被动顺手消耗不算。
 $execute as $(by) if data storage zx:work mc{mark:"yuanhai",src:"skill"} if items entity @s armor.legs *[minecraft:custom_data~{zx:["gyre"]}] run function sweetdream:equipment/armor/gyre/get
+
+# ⑥ 心脉(胸甲, 2026-10-25 批 14): 自身消耗「噬心」-> 给它附加「泵动」5 秒(上限 12 秒)
+#    【文案(逐字)】"若自身消耗了「噬心」效果则使其附加持续 5 秒的「泵动」（最多 12 秒）。"
+#    ★ 不按 src 过滤: 文案只写"自身消耗了", 不限定"技能消耗"（与 ④ 杂纹同口径）。
+#    ★ 已带泵动的那一次由 heart_vein/consume 内部走"叠加 + 立即 ×0.08"分支。
+#    ★ 「泵动」是私有资源, 不进标签词表。
+$execute as $(by) if data storage zx:work mc{mark:"shixin"} if items entity @s armor.chest *[minecraft:custom_data~{zx:["heart_vein"]}] run function sweetdream:equipment/armor/heart_vein/consume with storage zx:work mc
+
+# ⑦ 折潮(头盔, 2026-10-25 批 14): 消耗「渊海」-> 在自身位置立一面水墙
+#    【文案(逐字)】"自身在消耗「渊海」或消耗了 150 魔力值后在自身位置生成一面长 8 格
+#      持续 10 秒的水墙，水墙同时只能存在 4 个。"
+#    ★ 不按 src 过滤: 设计稿 §六 明确"指本包里**任意一次**对渊海的消费成功
+#      (不限哪个装备消费的)" ⇒ 装备被动顺手消费的也算(与 ④ 杂纹同口径)。
+$execute as $(by) if data storage zx:work mc{mark:"yuanhai"} if items entity @s armor.head *[minecraft:custom_data~{zx:["tide_fold"]}] run function sweetdream:equipment/armor/tide_fold/new

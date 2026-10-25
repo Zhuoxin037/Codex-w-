@@ -18,4 +18,6 @@ data modify storage zx:work chc.mm set value 0.03
 execute if data entity @s data.zx.ch{ol:1} run data modify storage zx:work chc.mm set value 0.05
 
 # ② 反查释放者 -> 交给他结算
-$execute as @a[nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]},limit=1] run function sweetdream:equipment/staff/chime/crystal_go with storage zx:work chc
+$data modify storage zx:work ub set value {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+function sweetdream:lib/u_by
+execute as @a[tag=zx.ub,limit=1] run function sweetdream:equipment/staff/chime/crystal_go with storage zx:work chc

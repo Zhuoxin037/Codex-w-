@@ -55,7 +55,7 @@ execute unless entity @e[tag=zx.bld_tgt,distance=0..] run return fail
 # ⑤ 扣魔力 -120
 data modify storage manacore:in arg set value {uuid:"",value:120.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/mana/consume
+function sweetdream:lib/mana/pay
 execute if data storage manacore:out r{success:0b} run return fail
 
 # ⑥ 记冷却 24 秒

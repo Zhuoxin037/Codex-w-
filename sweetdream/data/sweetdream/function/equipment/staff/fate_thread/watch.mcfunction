@@ -30,9 +30,19 @@ execute if score @s zx.ft_mine matches 0 run tag @s remove zx.ft_link
 execute if score @s zx.ft_mine matches 0 run return 0
 scoreboard players operation #ft_iid zx.meta = @s zx.ft_mine
 
-# ② 7 秒到点 -> 收场(不依赖 marker: marker 没生成/提前没了也一定会结束)
-execute if score @s zx.ft_end <= #now manacore.meta run function sweetdream:equipment/staff/fate_thread/watch_end
-execute if score @s zx.ft_end <= #now manacore.meta run return 0
+# ② 到期处理
+#   基础版（zx.ft2_end 从不赋值 = 0）：7 秒整条收场，行为与改动前逐字一致。
+#   超限版（zx.ft2_end > 0）：
+#     · 第一组 12 秒到期 → 先绷紧一次 + 摘掉第一组的相连者（主目标保留），
+#       整条丝继续跑到第二组的 18 秒；
+#     · 第二组 18 秒到期 → 收场（watch_end 里再绷第二组）。
+#   ★ "绷紧只做一次"靠 zx.ft_tg1 幂等：ft_end 过期后会每刻都进来，
+#     不立旗标就会每刻绷一次（10×N 连发几十遍）。
+scoreboard players add @s zx.ft2_end 0
+scoreboard players add @s zx.ft_tg1 0
+execute if score @s zx.ft_end <= #now manacore.meta if score @s zx.ft_tg1 matches 0 run function sweetdream:equipment/staff/fate_thread/ol_pre_end
+execute if score @s zx.ft2_end <= #now manacore.meta run function sweetdream:equipment/staff/fate_thread/watch_end
+execute if score @s zx.ft2_end <= #now manacore.meta run return 0
 
 # ③ 钉住本实例的主目标
 #   ★ 全维度搜(不写 execute in): 玩家刚换维度时丝可能还在原世界。
@@ -45,9 +55,12 @@ execute unless entity @e[tag=zx.ft_wt,limit=1] run return 0
 execute unless entity @e[tag=zx.ft_wt,tag=zx.status.shixin,limit=1] run function sweetdream:equipment/staff/fate_thread/watch_end
 execute unless entity @e[tag=zx.ft_wt,tag=zx.status.shixin,limit=1] run return 0
 
-# ⑤ 与主目标距离 >12 格的相连者, 断掉它自己那条(只剩主目标那根丝)
+# ⑤ 与主目标距离超限的相连者, 断掉它自己那条(只剩主目标那根丝)
 #   ★ 以**主目标当前位置**为圆心(主目标会走, 不能用施放点)
-execute at @e[tag=zx.ft_wt,limit=1] as @e[tag=zx.ft_lk,distance=12.01..] if score @s zx.ft_n = #ft_iid zx.meta run tag @s remove zx.ft_lk
+#   ★ 半径分档（批 K9）：基础 12 格 / 超限 16 格；第二组同一条规则。
+execute if score @s zx.ft2_end matches 0 at @e[tag=zx.ft_wt,limit=1] as @e[tag=zx.ft_lk,distance=12.01..] if score @s zx.ft_n = #ft_iid zx.meta run tag @s remove zx.ft_lk
+execute if score @s zx.ft2_end matches 1.. at @e[tag=zx.ft_wt,limit=1] as @e[tag=zx.ft_lk,distance=16.01..] if score @s zx.ft_n = #ft_iid zx.meta run tag @s remove zx.ft_lk
+execute if score @s zx.ft2_end matches 1.. at @e[tag=zx.ft_wt,limit=1] as @e[tag=zx.ft_lk2,distance=16.01..] if score @s zx.ft2n = #ft_iid zx.meta run tag @s remove zx.ft_lk2
 
 # ⑤-b 丝线表现(★ 2026-10-17 第二版: marker 取消后, 表现改由这里每刻画 ★)
 #   ★★ 第四版追加: **主目标要一眼认出来** ★★
@@ -85,36 +98,56 @@ scoreboard players operation #ft_diff zx.meta -= #ft_cur zx.meta
 # 没掉血(回血 / 自然再生 / 被无敌帧吃掉) -> 本刻不结算
 execute if score #ft_diff zx.meta matches ..0 run return 0
 
-# ⑦ 次数上限(整条丝共用 6 次; 记在**玩家**身上 -> 换目标也不重置)
+# ⑦ 次数上限（**只有基础版有**；超限版文案里没有"最多触发 6 次"）
 scoreboard players add @s zx.ft_got 0
-execute if score @s zx.ft_got matches 6.. run return 0
+execute if score @s zx.ft2_end matches 0 if score @s zx.ft_got matches 6.. run return 0
 
-# ⑧ 算「本次伤害 ×0.3」: 把差值当 other_base 传进 calc(计分项 -> double 走 store 缩放)
+# ⑧ 算「本次伤害 × 倍率」: 把差值当 other_base 传进 calc(计分项 -> double 走 store 缩放)
+#   基础 0.3 / 超限单丝 0.5；超限双丝 0.8 单独再算一份（dmg2）。
 execute store result storage zx:work ft.db double 0.001 run scoreboard players get #ft_diff zx.meta
 function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return 0
 data modify storage manacore:in arg set value {uuid:"",other_base:0.0,other_mul:0.3}
+execute if score @s zx.ft2_end matches 1.. run data modify storage manacore:in arg.other_mul set value 0.5
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 data modify storage manacore:in arg.other_base set from storage zx:work ft.db
 function manacore:api/damage/calc
+data modify storage zx:work ft.dmg1 set from storage manacore:out r.damage
+execute if score @s zx.ft2_end matches 1.. run data modify storage manacore:in arg.other_mul set value 0.8
+execute if score @s zx.ft2_end matches 1.. run function manacore:api/damage/calc
+execute if score @s zx.ft2_end matches 1.. run data modify storage zx:work ft.dmg2 set from storage manacore:out r.damage
 
 # ⑨ 圈出**本实例**的相连者(选择器不能判分, 先打标签)
+#   ★ 双丝组（zx.ft_cn ≥ 2）单独一组：文案"若相连的生物有两个或以上丝线同时相连
+#     则改为受到本次伤害 x0.8"。
 tag @e[tag=zx.ft_hit2] remove zx.ft_hit2
-execute as @e[tag=zx.ft_lk] if score @s zx.ft_n = #ft_iid zx.meta run tag @s add zx.ft_hit2
-execute unless entity @e[tag=zx.ft_hit2,limit=1] run return 0
+tag @e[tag=zx.ft_hit3] remove zx.ft_hit3
+execute as @e[tag=zx.ft_lk] if score @s zx.ft_n = #ft_iid zx.meta unless score @s zx.ft_cn matches 2.. run tag @s add zx.ft_hit2
+execute if score @s zx.ft2_end matches 1.. as @e[tag=zx.ft_lk2] if score @s zx.ft2n = #ft_iid zx.meta unless score @s zx.ft_cn matches 2.. run tag @s add zx.ft_hit2
+execute if score @s zx.ft2_end matches 1.. as @e[tag=zx.ft_lk2] if score @s zx.ft2n = #ft_iid zx.meta if score @s zx.ft_cn matches 2.. run tag @s add zx.ft_hit3
+execute as @e[tag=zx.ft_lk] if score @s zx.ft_n = #ft_iid zx.meta if score @s zx.ft_cn matches 2.. run tag @s add zx.ft_hit3
+execute unless entity @e[tag=zx.ft_hit2,limit=1] unless entity @e[tag=zx.ft_hit3,limit=1] run return 0
 
 # ⑩ 打过去(真实伤害); 以主目标为圆心 —— 相连者必在同维度
+#   甲：单丝组（基础 0.3 / 超限 0.5）
 data modify storage zx:in arg set value {target:"@e[tag=zx.ft_hit2,distance=0..]",damage:0.0,type:"sweetdream:true_damage"}
-data modify storage zx:in arg.damage set from storage manacore:out r.damage
+data modify storage zx:in arg.damage set from storage zx:work ft.dmg1
 execute at @e[tag=zx.ft_wt,limit=1] run function sweetdream:api/damage
+#   乙：双丝组（超限 0.8）
+execute if entity @e[tag=zx.ft_hit3,limit=1] run data modify storage zx:in arg set value {target:"@e[tag=zx.ft_hit3,distance=0..]",damage:0.0,type:"sweetdream:true_damage"}
+execute if entity @e[tag=zx.ft_hit3,limit=1] run data modify storage zx:in arg.damage set from storage zx:work ft.dmg2
+execute if entity @e[tag=zx.ft_hit3,limit=1] at @e[tag=zx.ft_wt,limit=1] run function sweetdream:api/damage
 
 # ⑪ 次数 +1(记在玩家身上 -> 整条丝共用)
 scoreboard players add @s zx.ft_got 1
 
 # ⑫ 表现: 丝线被扯动一下
 execute at @e[tag=zx.ft_hit2,limit=1] run particle minecraft:dust{color:[0.75,0.1,0.2],scale:1.4} ~ ~1 ~ 0.4 0.5 0.4 0.02 16 normal
-execute at @e[tag=zx.ft_hit2,limit=1] run playsound minecraft:entity.vex.hurt player @a ~ ~ ~ 0.5 1.7
+execute at @e[tag=zx.ft_hit2,limit=1] run playsound minecraft:block.amethyst_block.resonate player @a ~ ~ ~ 0.5 1.7
+execute at @e[tag=zx.ft_hit3,limit=1] run particle minecraft:dust{color:[1.0,0.18,0.28],scale:1.6} ~ ~1 ~ 0.4 0.5 0.4 0.02 18 normal
+execute at @e[tag=zx.ft_hit3,limit=1] run playsound minecraft:block.amethyst_block.resonate player @a ~ ~ ~ 0.6 1.9
 
 # ⑬ 收尾(本刻现打的临时标签一律摘掉)
 tag @e[tag=zx.ft_wt] remove zx.ft_wt
 tag @e[tag=zx.ft_hit2] remove zx.ft_hit2
+tag @e[tag=zx.ft_hit3] remove zx.ft_hit3

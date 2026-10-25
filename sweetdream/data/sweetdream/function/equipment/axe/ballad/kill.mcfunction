@@ -15,6 +15,11 @@ advancement revoke @s only sweetdream:equipment/axe/ballad_kill
 # 武器门控: 主手或副手是歌谣才记
 execute unless items entity @s weapon.mainhand diamond_axe[custom_data~{zx:["ballad"]}] unless items entity @s weapon.offhand diamond_axe[custom_data~{zx:["ballad"]}] run return 0
 
+# 超限: 同一刻的"攻击"已经攒过一点了 -> 这一杀不再加
+#   (一击必杀会同时触发 player_hurt_entity 与 player_killed_entity 两个进度;
+#    文案写的是"攻击**或**击杀", 不是两次)
+execute if score @s zx.blt_lt = #now manacore.meta run return 0
+
 # 上限 8 层
 execute if score @s zx.bd_tune matches 8.. run return 0
 scoreboard players add @s zx.bd_tune 1

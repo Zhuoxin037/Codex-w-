@@ -17,5 +17,14 @@ data modify storage zx:work fcv.u1 set from entity @s data.u1
 data modify storage zx:work fcv.u2 set from entity @s data.u2
 data modify storage zx:work fcv.u3 set from entity @s data.u3
 
+# ⓪.5 分档旗标: 这一发是不是**超限·五世恶咒**射的(从球的 data.ol 读回来)
+#   ★ 为什么必须从球上带: 命中回调是**以法球为执行者**跑的(projectile/ball/hit 第 ⑥ 步),
+#     此刻手上拿的未必还是这根杖(连射/切栏都算), 读 SelectedItem 会读错人。
+#     ⇒ attack 装球时把结果写进 ball.ol, 这里原样取回。
+scoreboard players set #fcv_ol zx.meta 0
+execute if data entity @s data{ol:1b} run scoreboard players set #fcv_ol zx.meta 1
+#   普攻推进 ⇒ 不是主动档
+scoreboard players set #fcv_skl zx.meta 0
+
 # ① 命中的每只生物: 推进一世
 execute as @e[tag=zx.ball_hit] at @s run function sweetdream:equipment/staff/five_curses/curse_step

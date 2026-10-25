@@ -14,9 +14,9 @@
 #   ② 算这一箭的伤害 —— 用射手**当前**魔力值(已扣掉这发的 60)。
 #   ③ 消除「夜火」  —— 走 lib/mark_consume, 让「永恒」(不消、原地刷新)与
 #      「余烬」(消掉流火/夜火给被动)两件装备正常生效。
-#   ④ 放箭雨        —— 在**被打中的那只**周围 2 格内随机落 X×3 根箭;
+#   ④ 放箭雨        —— 在**被打中的那只**周围 4 格内随机落 X×3 根箭;
 #      ★ 随机的是**落点**, 不是"随机挑一只生物"(2026-10-13 用户反馈修正):
-#      每根箭先在 2 格范围内取一个随机坐标落下, 再看那个点上站着谁 ——
+#      每根箭先在 4 格范围内取一个随机坐标落下, 再看那个点上站着谁 ——
 #      落在空地就是空的(合法结果), 落在某只脚下就打它。详见 rain_deal。
 # 【为什么伤害只算一次】"每根箭的伤害"是同一个公式(取决于射手当前魔力与 X),
 #   所以算一次、给每根箭复用。伤害本身照常过 manacore 的 calc(通道加成、
@@ -29,9 +29,16 @@
 #   再用"一支箭那么大"的判定箱(0.8×2.2×0.8)在那个点上找站着的生物。
 #   于是" arrow 到底砸到谁"由**落点**决定, 而不是预先挑好的目标 ⇒ 会落空、会
 #   不均分, 这才是箭雨该有的样子。
+# 【★ 超限(批 K7, 2026-10-23) ★】主手那把带 ol:"dragon_tongue"(shot 已把
+#   zx.dt_ol 写进玩家身上)时, 本函数有四处不同:
+#     · 扣费 60 -> 100(在 shot 里);
+#     · X 的**计数半径** 8 -> 10 格(① 里两档互斥);
+#     · 箭雨**落点半径** 4 -> 6 格(在 rain_deal ②, 用 #800/#400 与 #1200/#600 两套互斥);
+#     · 箭数 > 20 时, 箭雨结束后再加一段范围伤害 + 附「流火」(⑥.5 -> ol_burst)。
+#   每根箭的伤害式子(当前魔力 × X × 0.01)、夜火记 2 点这些口径都不变。
 # ============================================================
 
-# ① X = 被打中那只 6 格内带「流火」或「夜火」的生物数(每只只数一次)
+# ① X = 被打中那只 8 格内带「流火」或「夜火」的生物数(每只只数一次)
 #    【★ 为什么以「受害者」为中心而不是「射手」★】2026-10-13 用户实测反馈修正:
 #      原实现按**射手** 6 格数, 而弩射程远远超过 6 格 —— 站远处射一只带夜火的怪,
 #      那只怪根本不在射手 6 格内 ⇒ X = 0 ⇒ 箭数 0、伤害 0, 整发技能在最常用的
@@ -50,11 +57,14 @@
 #    再给带夜火的每只**额外 +1** ⇒ 夜火 = 2、流火 = 1、两者都有 = 2(取高值)。
 #    ★ 由此 X ≥ 2 恒成立: 被射中那只必定带夜火(hook_victim 的门控), 它自己就贡献 2。
 tag @e[tag=zx.dt_x,distance=0..] remove zx.dt_x
-execute at @e[tag=zx.dt_v,limit=1] as @e[type=!#sweetdream:no_damage,tag=zx.status.liuhuo,distance=..6] run tag @s add zx.dt_x
-execute at @e[tag=zx.dt_v,limit=1] as @e[type=!#sweetdream:no_damage,tag=zx.status.yehuo,distance=..6] run tag @s add zx.dt_x
+execute if score @s zx.dt_ol matches 0 at @e[tag=zx.dt_v,limit=1] as @e[type=!#sweetdream:no_damage,tag=zx.status.liuhuo,distance=..8] run tag @s add zx.dt_x
+execute if score @s zx.dt_ol matches 0 at @e[tag=zx.dt_v,limit=1] as @e[type=!#sweetdream:no_damage,tag=zx.status.yehuo,distance=..8] run tag @s add zx.dt_x
+execute if score @s zx.dt_ol matches 1 at @e[tag=zx.dt_v,limit=1] as @e[type=!#sweetdream:no_damage,tag=zx.status.liuhuo,distance=..10] run tag @s add zx.dt_x
+execute if score @s zx.dt_ol matches 1 at @e[tag=zx.dt_v,limit=1] as @e[type=!#sweetdream:no_damage,tag=zx.status.yehuo,distance=..10] run tag @s add zx.dt_x
 scoreboard players set #dt_x zx.meta 0
 execute as @e[tag=zx.dt_x,distance=0..] run scoreboard players add #dt_x zx.meta 1
-execute at @e[tag=zx.dt_v,limit=1] as @e[type=!#sweetdream:no_damage,tag=zx.status.yehuo,distance=..6] run scoreboard players add #dt_x zx.meta 1
+execute if score @s zx.dt_ol matches 0 at @e[tag=zx.dt_v,limit=1] as @e[type=!#sweetdream:no_damage,tag=zx.status.yehuo,distance=..8] run scoreboard players add #dt_x zx.meta 1
+execute if score @s zx.dt_ol matches 1 at @e[tag=zx.dt_v,limit=1] as @e[type=!#sweetdream:no_damage,tag=zx.status.yehuo,distance=..10] run scoreboard players add #dt_x zx.meta 1
 
 # ② 这一箭的伤害 = 当前魔力 × X × 0.01
 #    【走 calc 的 other 通道】other_base 默认就是"玩家当前魔力", 所以把
@@ -120,6 +130,14 @@ scoreboard players set #dt_dbg6 zx.meta 0
 scoreboard players set #dt_dbg7 zx.meta 0
 scoreboard players set #dt_i zx.meta 0
 function sweetdream:equipment/bow/dragon_tongue/rain_one
+
+# ⑥.5 【超限·批 K7】箭数 > 20 -> 箭雨结束后额外一段
+#   文案:「若本次箭数量超过20个则在结束后额外对范围内的生物造成一次相当于自身
+#          当前魔力值 x X x0.01 的伤害并使其附加「流火」。」
+#   ★ 判据用 #dt_n(= X×3, 真正的箭数), 不能用 X 本身。
+#   ★ 伤害复用 dt.dmg: 它已经是"当前魔力 × X × 0.01", 与文案完全同一式子。
+#   ★ 必须排在 ⑦ 清标签之前(ol_burst 要用 zx.dt_v 当圆心)。
+execute if score @s zx.dt_ol matches 1 if score #dt_n zx.meta matches 21.. run function sweetdream:equipment/bow/dragon_tongue/ol_burst
 
 # ⑦ 收尾: 清掉本次用过的计数标签(否则会污染下一箭)
 #    (zx.dt_aoe 已随旧口径一并删除; zx.dt_drop / zx.dt_hit 由 rain_deal 自己管)
