@@ -1,5 +1,5 @@
 {
-  "credit": "返汐海浪：直径5格，双面贴地水面与16帧动画水纹；坐标以item display原点(8,8,8)为基准。",
+  "credit": "返汐海浪：直径2格，双面贴地水面与16帧动画水纹；坐标以item display原点(8,8,8)为基准。",
   "ambientocclusion": false,
   "gui_light": "front",
   "textures": {

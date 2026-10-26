@@ -185,9 +185,9 @@
   },
   "unhandled_root_fields": {
     "runtime_scale": [
-      5,
-      5,
-      5
+      2,
+      2,
+      2
     ],
     "wall_tints": []
   }

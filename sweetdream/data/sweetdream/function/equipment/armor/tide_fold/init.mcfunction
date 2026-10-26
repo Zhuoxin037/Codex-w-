@@ -11,4 +11,4 @@ scoreboard players operation @s zx.tf_end = #now manacore.meta
 scoreboard players add @s zx.tf_end 200
 data modify entity @s data.cross set value {}
 
-function sweetdream:equipment/visual/water/create {model:"sweetdream:tide_wall",sx:8.0,sy:2.4,sz:1.0,life_obj:"zx.tf_life",kind:"wall"}
+function sweetdream:equipment/visual/water/create {model:"sweetdream:tide_wall",sx:8.0,sy:5.0,sz:1.0,life_obj:"zx.tf_life",kind:"wall"}

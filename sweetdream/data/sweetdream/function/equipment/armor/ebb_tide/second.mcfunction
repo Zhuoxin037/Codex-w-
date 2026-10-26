@@ -17,9 +17,9 @@
 execute as @a run function sweetdream:equipment/armor/ebb_tide/base_sync
 
 # ---------- ② 生物侧: 在浪上 +1 档(封顶 30) ----------
-execute in minecraft:overworld as @e[tag=zx.et_wave,distance=0..] at @s as @e[type=!#sweetdream:no_damage,distance=..2.5] at @s run function sweetdream:equipment/armor/ebb_tide/wave_on
-execute in minecraft:the_nether as @e[tag=zx.et_wave,distance=0..] at @s as @e[type=!#sweetdream:no_damage,distance=..2.5] at @s run function sweetdream:equipment/armor/ebb_tide/wave_on
-execute in minecraft:the_end as @e[tag=zx.et_wave,distance=0..] at @s as @e[type=!#sweetdream:no_damage,distance=..2.5] at @s run function sweetdream:equipment/armor/ebb_tide/wave_on
+execute in minecraft:overworld as @e[tag=zx.et_wave,distance=0..] at @s as @e[type=!#sweetdream:no_damage,distance=..1] at @s run function sweetdream:equipment/armor/ebb_tide/wave_on
+execute in minecraft:the_nether as @e[tag=zx.et_wave,distance=0..] at @s as @e[type=!#sweetdream:no_damage,distance=..1] at @s run function sweetdream:equipment/armor/ebb_tide/wave_on
+execute in minecraft:the_end as @e[tag=zx.et_wave,distance=0..] at @s as @e[type=!#sweetdream:no_damage,distance=..1] at @s run function sweetdream:equipment/armor/ebb_tide/wave_on
 
 # ---------- ③ 生物侧: 有档位但这一秒不在浪上 ⇒ -10 档(封底 0) ----------
 execute in minecraft:overworld as @e[distance=0..,scores={zx.et_e=1..}] unless score @s zx.et_on = #now manacore.meta run function sweetdream:equipment/armor/ebb_tide/decay_dn

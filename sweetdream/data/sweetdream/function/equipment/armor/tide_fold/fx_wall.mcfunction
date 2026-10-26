@@ -7,12 +7,12 @@
 # 【为什么不用 fill】会真的改方块 —— 领域类一律纯 marker + 粒子（范式速查第 ① 条）。
 # ============================================================
 
-execute at @s positioned ^-4 ^1.2 ^ run particle minecraft:falling_water ~ ~ ~ 0.15 1.1 0.15 0.06 5
-execute at @s positioned ^-2 ^1.2 ^ run particle minecraft:falling_water ~ ~ ~ 0.15 1.1 0.15 0.06 5
-execute at @s positioned ^0 ^1.2 ^ run particle minecraft:falling_water ~ ~ ~ 0.15 1.1 0.15 0.06 5
-execute at @s positioned ^2 ^1.2 ^ run particle minecraft:falling_water ~ ~ ~ 0.15 1.1 0.15 0.06 5
-execute at @s positioned ^4 ^1.2 ^ run particle minecraft:falling_water ~ ~ ~ 0.15 1.1 0.15 0.06 5
+execute at @s positioned ^-4 ^2.5 ^ run particle minecraft:falling_water ~ ~ ~ 0.15 2.4 0.15 0.06 5
+execute at @s positioned ^-2 ^2.5 ^ run particle minecraft:falling_water ~ ~ ~ 0.15 2.4 0.15 0.06 5
+execute at @s positioned ^0 ^2.5 ^ run particle minecraft:falling_water ~ ~ ~ 0.15 2.4 0.15 0.06 5
+execute at @s positioned ^2 ^2.5 ^ run particle minecraft:falling_water ~ ~ ~ 0.15 2.4 0.15 0.06 5
+execute at @s positioned ^4 ^2.5 ^ run particle minecraft:falling_water ~ ~ ~ 0.15 2.4 0.15 0.06 5
 
-execute at @s positioned ^-2 ^1.2 ^ run particle minecraft:bubble ~ ~ ~ 0.15 1.1 0.15 0.02 4
-execute at @s positioned ^0 ^1.2 ^ run particle minecraft:bubble ~ ~ ~ 0.15 1.1 0.15 0.02 4
-execute at @s positioned ^2 ^1.2 ^ run particle minecraft:bubble ~ ~ ~ 0.15 1.1 0.15 0.02 4
+execute at @s positioned ^-2 ^2.5 ^ run particle minecraft:bubble ~ ~ ~ 0.15 2.4 0.15 0.02 4
+execute at @s positioned ^0 ^2.5 ^ run particle minecraft:bubble ~ ~ ~ 0.15 2.4 0.15 0.02 4
+execute at @s positioned ^2 ^2.5 ^ run particle minecraft:bubble ~ ~ ~ 0.15 2.4 0.15 0.02 4

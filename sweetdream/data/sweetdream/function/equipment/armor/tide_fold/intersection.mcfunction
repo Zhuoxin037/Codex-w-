@@ -56,5 +56,5 @@ scoreboard players operation #m4_src zx.meta = #tf_cy zx.meta
 scoreboard players operation #m4_src zx.meta -= #tf_py zx.meta
 function sweetdream:lib/math/mul_10000
 scoreboard players operation #tf_py zx.meta += #m4_out zx.meta
-execute unless score #tf_py zx.meta matches 0..154 run return 0
+execute unless score #tf_py zx.meta matches 0..320 run return 0
 function sweetdream:equipment/armor/tide_fold/cross with storage zx:work tf_pair

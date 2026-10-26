@@ -9,8 +9,8 @@ execute unless items entity @s armor.feet *[minecraft:custom_data~{zx:["ebb_tide
 # ============================================================
 
 # ① 这一秒在不在浪上(任意一片都算 —— 海浪没有归属, 见 wave_new)
-execute at @s if entity @e[tag=zx.et_wave,distance=..2.5,limit=1] run scoreboard players add @s zx.et_s 1
-execute at @s unless entity @e[tag=zx.et_wave,distance=..2.5,limit=1] run scoreboard players remove @s zx.et_s 10
+execute at @s if entity @e[tag=zx.et_wave,distance=..1,limit=1] run scoreboard players add @s zx.et_s 1
+execute at @s unless entity @e[tag=zx.et_wave,distance=..1,limit=1] run scoreboard players remove @s zx.et_s 10
 
 # ② 夹到 0..20
 execute if score @s zx.et_s matches 21.. run scoreboard players set @s zx.et_s 20

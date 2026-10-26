@@ -12,6 +12,6 @@ scoreboard players operation @s zx.et_stack_t = #now manacore.meta
 
 scoreboard players operation @s zx.et_on = #now manacore.meta
 scoreboard players add @s zx.et_e 1
-execute if entity @e[tag=zx.et_set,distance=..2.5,limit=1] run scoreboard players add @s zx.et_e 1
+execute if entity @e[tag=zx.et_set,distance=..1,limit=1] run scoreboard players add @s zx.et_e 1
 execute if score @s zx.et_e matches 31.. run scoreboard players set @s zx.et_e 30
 function sweetdream:equipment/armor/ebb_tide/speed_dn

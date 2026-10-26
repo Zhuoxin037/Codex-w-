@@ -1,5 +1,5 @@
 effect give @s minecraft:speed 2 0 true
-execute unless entity @e[tag=zx.et_wave,distance=..2.5,limit=1] run return 0
+execute unless entity @e[tag=zx.et_wave,distance=..1,limit=1] run return 0
 function sweetdream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return 0
 data modify storage manacore:in arg set value {uuid:"",value:20.0}
