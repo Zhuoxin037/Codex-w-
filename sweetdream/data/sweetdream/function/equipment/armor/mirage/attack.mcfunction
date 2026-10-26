@@ -57,6 +57,6 @@ execute unless entity @e[tag=zx.mr_t,limit=1] run return 0
 
 # ③ 两次独立判定(20% 附加白昼梦 + 20% 时停), 随机源见 dream_roll
 #    (随机源已经和坐标/节奏脱钩了, 不用再把 tick 拷到 #mr_now 里)
-execute as @e[tag=zx.mr_t,limit=1] run function sweetdream:equipment/armor/mirage/dream_roll
+execute as @e[tag=zx.mr_t,limit=1] run function sweetdream:equipment/armor/mirage/dream_roll with storage zx:work mr_v
 
 tag @e[tag=zx.mr_t] remove zx.mr_t

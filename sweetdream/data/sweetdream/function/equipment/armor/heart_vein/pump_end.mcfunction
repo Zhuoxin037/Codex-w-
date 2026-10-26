@@ -19,3 +19,6 @@ scoreboard players reset @s zx.hv_u0
 scoreboard players reset @s zx.hv_u1
 scoreboard players reset @s zx.hv_u2
 scoreboard players reset @s zx.hv_u3
+
+scoreboard players reset @s zx.hv_walk
+scoreboard players reset @s zx.hv_path_v

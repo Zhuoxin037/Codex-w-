@@ -56,7 +56,12 @@ tag @e[tag=zx.ir_t] remove zx.ir_t
 execute at @s positioned ~-6 ~-6 ~-6 as @e[type=!#sweetdream:no_damage,dx=12.0,dy=12.0,dz=12.0,sort=random,limit=3] run tag @s add zx.ir_t
 
 # ⑤ 逐只随机挑两种效果(随机源见 roll; 已经和坐标/节奏无关, 不用再传 tick 进去)
-execute as @e[tag=zx.ir_t] at @s run function sweetdream:equipment/armor/iridescent/roll
+data modify storage zx:work ir_owner set value {}
+execute store result storage zx:work ir_owner.u0 int 1 run scoreboard players get @s manacore.u0
+execute store result storage zx:work ir_owner.u1 int 1 run scoreboard players get @s manacore.u1
+execute store result storage zx:work ir_owner.u2 int 1 run scoreboard players get @s manacore.u2
+execute store result storage zx:work ir_owner.u3 int 1 run scoreboard players get @s manacore.u3
+function sweetdream:equipment/armor/iridescent/dispatch with storage zx:work ir_owner
 
 tag @e[tag=zx.ir_t] remove zx.ir_t
 tag @a[tag=zx.ir_src] remove zx.ir_src

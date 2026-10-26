@@ -1,3 +1,4 @@
+function sweetdream:internal/native/registry_tick
 # ============================================================
 # sweetdream:core/tick —— 每游戏刻执行
 # ------------------------------------------------------------
@@ -731,9 +732,27 @@ execute in minecraft:the_nether as @e[tag=zx.gl_sl,distance=0..] run function sw
 execute in minecraft:the_end as @e[tag=zx.gl_sl,distance=0..] run function sweetdream:equipment/armor/glimmer/foe_tick
 
 # 批 14 更正(2026-10-25 用户原稿)：迟暮「5 秒伤害记录」窗口
-#   —— 每刻给带 zx.ld_rec_on 的生物倒计时, 归零那一拍结算（late_dusk/rec_tick → settle）。
+#   —— 每刻观察 zx.lr_watch 目标；每份 zx.lr_record 独立按创建时刻到期结算。
 #   ★ 三维度各一行 + `distance=0..`：裸 @e 会跨维度重复跑（范式速查第 10 条）。
-#   ★ 平时没有窗口 ⇒ 三行各只是一次空集合过滤，零开销。
-execute in minecraft:overworld as @e[tag=zx.ld_rec_on,distance=0..] at @s run function sweetdream:equipment/armor/late_dusk/rec_tick
-execute in minecraft:the_nether as @e[tag=zx.ld_rec_on,distance=0..] at @s run function sweetdream:equipment/armor/late_dusk/rec_tick
-execute in minecraft:the_end as @e[tag=zx.ld_rec_on,distance=0..] at @s run function sweetdream:equipment/armor/late_dusk/rec_tick
+#   ★ 没有记录时只执行空集合筛选。
+execute in minecraft:overworld as @e[tag=zx.lr_watch,distance=0..] at @s run function sweetdream:equipment/armor/late_dusk/watch
+execute in minecraft:overworld as @e[tag=zx.lr_record,distance=0..] at @s run function sweetdream:equipment/armor/late_dusk/rec_tick
+execute in minecraft:the_nether as @e[tag=zx.lr_watch,distance=0..] at @s run function sweetdream:equipment/armor/late_dusk/watch
+execute in minecraft:the_nether as @e[tag=zx.lr_record,distance=0..] at @s run function sweetdream:equipment/armor/late_dusk/rec_tick
+execute in minecraft:the_end as @e[tag=zx.lr_watch,distance=0..] at @s run function sweetdream:equipment/armor/late_dusk/watch
+execute in minecraft:the_end as @e[tag=zx.lr_record,distance=0..] at @s run function sweetdream:equipment/armor/late_dusk/rec_tick
+
+execute in minecraft:overworld as @e[tag=zx.bc_fire,distance=0..] at @s run function sweetdream:equipment/armor/bright_candle/candle_tick
+execute in minecraft:overworld as @e[tag=zx.bc_contact,distance=0..] if score @s zx.bc_end <= #now manacore.meta run kill @s
+
+execute in minecraft:the_nether as @e[tag=zx.bc_fire,distance=0..] at @s run function sweetdream:equipment/armor/bright_candle/candle_tick
+execute in minecraft:the_nether as @e[tag=zx.bc_contact,distance=0..] if score @s zx.bc_end <= #now manacore.meta run kill @s
+
+execute in minecraft:the_end as @e[tag=zx.bc_fire,distance=0..] at @s run function sweetdream:equipment/armor/bright_candle/candle_tick
+execute in minecraft:the_end as @e[tag=zx.bc_contact,distance=0..] if score @s zx.bc_end <= #now manacore.meta run kill @s
+
+execute in minecraft:overworld as @e[tag=zx.tf_prev,distance=0..] run function sweetdream:equipment/armor/tide_fold/previous_tick
+
+execute in minecraft:the_nether as @e[tag=zx.tf_prev,distance=0..] run function sweetdream:equipment/armor/tide_fold/previous_tick
+
+execute in minecraft:the_end as @e[tag=zx.tf_prev,distance=0..] run function sweetdream:equipment/armor/tide_fold/previous_tick

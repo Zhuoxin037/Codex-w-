@@ -142,7 +142,7 @@ execute if entity @s[tag=zx.fcv_5] run function sweetdream:equipment/staff/five_
 #   【为什么放在 deal **之前**】同 ①.6: 此时 a.num 已是最终伤害, 记到的是"实际打出去多少"。
 #   【★ 记全部来源 ★】文案是"其受到的伤害", 不区分谁打的 ⇒ 只按"窗口开着没有"判,
 #     由 late_dusk/record 自己判 zx.ld_rt。
-execute if entity @s[scores={zx.ld_rt=1..}] run function sweetdream:equipment/armor/late_dusk/record
+execute if entity @s[tag=zx.lr_watch] run function sweetdream:equipment/armor/late_dusk/watch
 
 # 夜缚的弹射引用这一段最终技能数值；千分单位保留小数。
 execute if data storage zx:work a{nb_measure:1b} store result score @s zx.nb_extra run data get storage zx:work a.num 1000
@@ -153,6 +153,8 @@ execute if entity @s[tag=sd.hk.body] run function sweetdream:boss/husk/hurt/befo
 execute unless data storage zx:work hit_success_stack run data modify storage zx:work hit_success_stack set value []
 data modify storage zx:work hit_success_stack append value {result:{ok:0b}}
 function sweetdream:internal/damage/deal with storage zx:work a
+execute if score #native_active zx.meta matches 1 unless entity @s[type=minecraft:player] if entity @s[type=#sweetdream:living] run function sweetdream:internal/native/stamp
+execute if entity @s[tag=zx.lr_watch] run function sweetdream:equipment/armor/late_dusk/watch
 execute if data storage zx:work hit_success_stack[-1].result{ok:1b} unless data storage zx:work ob{src:"enemy"} if entity @s[tag=zx.status.liuhuo] run function sweetdream:equipment/armor/bright_candle/on_hit with storage zx:work ob
 execute if data storage zx:work hit_success_stack[-1].result{ok:1b} unless data storage zx:work ob{src:"enemy"} unless entity @s[type=minecraft:player] run function sweetdream:equipment/armor/borrow_fire/on_hit with storage zx:work ob
 execute if entity @s[tag=sd.hk.body] run data modify storage sweetdream:husk skill_kind set value {true:0b,dot:0b}

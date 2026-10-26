@@ -25,3 +25,5 @@ execute if entity @s[tag=zx.status.liuhuo] run attribute @s minecraft:armor modi
 execute if entity @s[tag=zx.status.dream] run attribute @s minecraft:attack_damage modifier add sweetdream:tag_dream_atk -0.2 add_multiplied_base
 
 function sweetdream:tag/icon_refresh
+
+function sweetdream:internal/native/enroll

@@ -386,3 +386,5 @@ advancement revoke @a only sweetdream:equipment/bow/night_bind
 #   (批 14 2026-10-25: 借火(胸甲) —— 平A 命中进度, 首行自撤销, 同契约。)
 advancement revoke @a only sweetdream:equipment/armor/borrow_fire_hit
 advancement revoke @a only sweetdream:equipment/armor/profile_hit
+
+advancement revoke @a only sweetdream:internal/native_hit

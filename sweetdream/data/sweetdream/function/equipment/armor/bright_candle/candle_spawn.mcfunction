@@ -16,4 +16,11 @@ execute as @e[tag=zx.bc_new,distance=0..] run scoreboard players set @s zx.bc_li
 # ② 归属(主人 u0 —— 回蓝时要反查他)
 execute as @e[tag=zx.bc_new,distance=0..] store result score @s zx.bc_own run data get storage zx:work bc.u0
 
+scoreboard players add #bc_id zx.meta 1
+scoreboard players operation @e[tag=zx.bc_new,distance=0..,limit=1] zx.bc_id = #bc_id zx.meta
+scoreboard players operation @e[tag=zx.bc_new,distance=0..,limit=1] zx.bc_end = #now manacore.meta
+scoreboard players add @e[tag=zx.bc_new,distance=0..,limit=1] zx.bc_end 200
+scoreboard players operation @e[tag=zx.bc_new,distance=0..,limit=1] zx.bc_next = #now manacore.meta
+scoreboard players add @e[tag=zx.bc_new,distance=0..,limit=1] zx.bc_next 20
+scoreboard players set @e[tag=zx.bc_new,distance=0..,limit=1] zx.bc_fx 0
 tag @e[tag=zx.bc_new,distance=0..] remove zx.bc_new

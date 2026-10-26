@@ -36,10 +36,10 @@ execute if score #ir_a zx.meta matches 0 run function sweetdream:equipment/armor
 execute if score #ir_a zx.meta matches 1 run function sweetdream:equipment/armor/iridescent/eff_2
 execute if score #ir_a zx.meta matches 2 run function sweetdream:equipment/armor/iridescent/eff_3
 execute if score #ir_a zx.meta matches 3 run function sweetdream:equipment/armor/iridescent/eff_4
-execute if score #ir_a zx.meta matches 4 run function sweetdream:equipment/armor/iridescent/eff_5
+$execute if score #ir_a zx.meta matches 4 run function sweetdream:equipment/armor/iridescent/eff_5 {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
 
 execute if score #ir_c zx.meta matches 0 run function sweetdream:equipment/armor/iridescent/eff_1
 execute if score #ir_c zx.meta matches 1 run function sweetdream:equipment/armor/iridescent/eff_2
 execute if score #ir_c zx.meta matches 2 run function sweetdream:equipment/armor/iridescent/eff_3
 execute if score #ir_c zx.meta matches 3 run function sweetdream:equipment/armor/iridescent/eff_4
-execute if score #ir_c zx.meta matches 4 run function sweetdream:equipment/armor/iridescent/eff_5
+$execute if score #ir_c zx.meta matches 4 run function sweetdream:equipment/armor/iridescent/eff_5 {u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}

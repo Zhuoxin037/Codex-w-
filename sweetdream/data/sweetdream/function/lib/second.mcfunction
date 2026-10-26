@@ -293,9 +293,9 @@ execute as @a run function sweetdream:internal/review/migrate
 execute as @a run function sweetdream:equipment/armor/bright_candle/second
 # 明烛「烛火」：每秒一跳（计时 + 烤流火成夜火 + 主人站圈内回蓝）
 #   ★ 三维度各一行 + `distance=0..`：裸 @e 会跨维度重复跑（范式速查第 10 条）。
-execute in minecraft:overworld as @e[tag=zx.bc_fire,distance=0..] at @s run function sweetdream:equipment/armor/bright_candle/candle_tick
-execute in minecraft:the_nether as @e[tag=zx.bc_fire,distance=0..] at @s run function sweetdream:equipment/armor/bright_candle/candle_tick
-execute in minecraft:the_end as @e[tag=zx.bc_fire,distance=0..] at @s run function sweetdream:equipment/armor/bright_candle/candle_tick
+# Candle lifetime/dwell moved to core/tick.
+# Candle lifetime/dwell moved to core/tick.
+# Candle lifetime/dwell moved to core/tick.
 # 借火(批 14)：5 秒到点撤掉"削减目标护甲 / 转移到自己身上"的两组 modifier
 execute in minecraft:overworld as @e[tag=zx.bf_strip,distance=0..] if score @s zx.bf_end <= #now manacore.meta at @s run function sweetdream:equipment/armor/borrow_fire/unstrip
 execute in minecraft:the_nether as @e[tag=zx.bf_strip,distance=0..] if score @s zx.bf_end <= #now manacore.meta at @s run function sweetdream:equipment/armor/borrow_fire/unstrip
@@ -317,3 +317,11 @@ execute as @a at @s run function sweetdream:equipment/armor/glimmer/apply
 
 # 批 14 更正(2026-10-25 用户原稿)：迟暮 —— 「回光」15 秒到期 / 抗性提升Ⅴ标记收尾
 execute as @a run function sweetdream:equipment/armor/late_dusk/second
+
+execute in minecraft:overworld as @e[tag=zx.lr_watch,distance=0..] run function sweetdream:equipment/armor/late_dusk/watch_validate
+
+execute in minecraft:the_nether as @e[tag=zx.lr_watch,distance=0..] run function sweetdream:equipment/armor/late_dusk/watch_validate
+
+execute in minecraft:the_end as @e[tag=zx.lr_watch,distance=0..] run function sweetdream:equipment/armor/late_dusk/watch_validate
+
+function sweetdream:internal/native/registry_gc

@@ -32,7 +32,7 @@ execute if entity @e[scores={zx.ep_vic=1},limit=1,tag=zx.status.dream] run tag @
 execute if entity @e[scores={zx.ep_vic=1},limit=1,tag=zx.status.dream] run return 0
 
 # ⑤ 目标没梦 -> 附「白昼梦」+ 清静息
-execute as @e[scores={zx.ep_vic=1},limit=1] run function sweetdream:tag/mark {target:"@s",mark:"dream"}
+function sweetdream:tag/mark {target:"@e[scores={zx.ep_vic=1},limit=1]",mark:"dream"}
 tag @s remove zx.ep_rest
 
 # ⑥ 表现: 一枕软雾落下

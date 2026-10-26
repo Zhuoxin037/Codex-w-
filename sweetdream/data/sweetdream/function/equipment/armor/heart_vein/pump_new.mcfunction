@@ -17,11 +17,9 @@ scoreboard players set @s zx.hv_t 100
 
 # ② 闸门归零（第一刻就能结算, 不用等 0.5 秒）
 scoreboard players set @s zx.hv_gate 0
+function sweetdream:equipment/armor/heart_vein/path_init
 
 # ③ 锚点 = 当前坐标（×100, 1 格 = 100）
-execute store result score @s zx.hv_px run data get entity @s Pos[0] 100
-execute store result score @s zx.hv_py run data get entity @s Pos[1] 100
-execute store result score @s zx.hv_pz run data get entity @s Pos[2] 100
 
 # ④ 归属: 从 $(by) 身上搬 4 个整数到本只身上
 $execute as $(by) store result score #hv_u0 zx.meta run scoreboard players get @s manacore.u0

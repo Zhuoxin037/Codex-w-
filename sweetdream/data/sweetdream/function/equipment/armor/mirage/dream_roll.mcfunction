@@ -23,8 +23,8 @@ scoreboard players operation #mr_r zx.meta = #rnd zx.meta
 scoreboard players operation #mr_r zx.meta %= #5 zx.meta
 
 # ② 命中 0 -> 附加「白昼梦」(五状态图标系统的 "dream", 公共接口)
-execute if score #mr_r zx.meta matches 0 run data modify storage zx:work ic set value {target:"@s",mark:"dream"}
-execute if score #mr_r zx.meta matches 0 run function sweetdream:tag/mark with storage zx:work ic
+$execute if score #mr_r zx.meta matches 0 run data modify storage zx:work ic set value {target:"@s",mark:"dream",u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+execute if score #mr_r zx.meta matches 0 run function sweetdream:tag/mark_owned with storage zx:work ic
 
 # ③ 没带白昼梦(这一下没中、以前也没有) -> 到此为止, 不掷时停
 execute unless entity @s[tag=zx.status.dream] run return 0

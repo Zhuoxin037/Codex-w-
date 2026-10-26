@@ -1,0 +1,3 @@
+$execute in minecraft:overworld as @e[tag=zx.lr_watch,distance=0..,scores={zx.sid=$(tid)}] at @s run function sweetdream:equipment/armor/late_dusk/settle {base:$(base),u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+$execute in minecraft:the_nether as @e[tag=zx.lr_watch,distance=0..,scores={zx.sid=$(tid)}] at @s run function sweetdream:equipment/armor/late_dusk/settle {base:$(base),u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+$execute in minecraft:the_end as @e[tag=zx.lr_watch,distance=0..,scores={zx.sid=$(tid)}] at @s run function sweetdream:equipment/armor/late_dusk/settle {base:$(base),u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}

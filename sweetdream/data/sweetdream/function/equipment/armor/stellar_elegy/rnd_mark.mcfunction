@@ -1,3 +1,7 @@
+execute store result storage zx:work se_owner.u0 int 1 run scoreboard players get @s manacore.u0
+execute store result storage zx:work se_owner.u1 int 1 run scoreboard players get @s manacore.u1
+execute store result storage zx:work se_owner.u2 int 1 run scoreboard players get @s manacore.u2
+execute store result storage zx:work se_owner.u3 int 1 run scoreboard players get @s manacore.u3
 # ============================================================
 # sweetdream:equipment/armor/stellar_elegy/rnd_mark —— 超限版追加: 随机附一个效果
 # ------------------------------------------------------------
@@ -21,4 +25,4 @@
 #     沿用会读成"回声的东西"。
 # ============================================================
 
-execute as @e[tag=zx.marked,tag=!zx.star_rnd] run function sweetdream:equipment/armor/stellar_elegy/rnd_mark_one
+execute as @e[tag=zx.marked,tag=!zx.star_rnd] run function sweetdream:equipment/armor/stellar_elegy/rnd_mark_one with storage zx:work se_owner

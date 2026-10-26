@@ -14,12 +14,8 @@
 # ============================================================
 
 # ① 锚点归位（这次结算的位置）
-scoreboard players operation @s zx.hv_px = #hv_cx zx.meta
-scoreboard players operation @s zx.hv_py = #hv_cy zx.meta
-scoreboard players operation @s zx.hv_pz = #hv_cz zx.meta
 
 # ② 闸门 0.5 秒（10 刻）
-scoreboard players set @s zx.hv_gate 10
 
 # ③ ×0.05 的伤害（归属 = 挂泵动时抄下的那位玩家）
 function sweetdream:equipment/armor/heart_vein/owner

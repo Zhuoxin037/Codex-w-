@@ -16,4 +16,4 @@ data modify storage zx:work fz set value {target:"@s",ticks:20}
 function sweetdream:lib/timestop with storage zx:work fz
 
 data modify storage zx:work ic set value {target:"@s",mark:"dream"}
-function sweetdream:tag/mark with storage zx:work ic
+$function sweetdream:tag/mark_owned {target:"@s",mark:"dream",u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}

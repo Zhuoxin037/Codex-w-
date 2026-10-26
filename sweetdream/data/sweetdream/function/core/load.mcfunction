@@ -2833,3 +2833,79 @@ data modify storage zx:config obj_bc_touch set value 1b
 
 execute unless data storage zx:config obj_tf_exp run scoreboard objectives add zx.tf_exp dummy
 data modify storage zx:config obj_tf_exp set value 1b
+
+execute in minecraft:overworld run kill @e[tag=zx.bc_contact,distance=0..]
+
+execute in minecraft:the_nether run kill @e[tag=zx.bc_contact,distance=0..]
+
+execute in minecraft:the_end run kill @e[tag=zx.bc_contact,distance=0..]
+
+execute in minecraft:overworld run kill @e[tag=zx.tf_prev,distance=0..]
+execute in minecraft:overworld run kill @e[tag=zx.lr_record,distance=0..]
+execute in minecraft:overworld as @e[tag=zx.lr_watch,distance=0..] run tag @s remove zx.lr_watch
+
+execute in minecraft:the_nether run kill @e[tag=zx.tf_prev,distance=0..]
+execute in minecraft:the_nether run kill @e[tag=zx.lr_record,distance=0..]
+execute in minecraft:the_nether as @e[tag=zx.lr_watch,distance=0..] run tag @s remove zx.lr_watch
+
+execute in minecraft:the_end run kill @e[tag=zx.tf_prev,distance=0..]
+execute in minecraft:the_end run kill @e[tag=zx.lr_record,distance=0..]
+execute in minecraft:the_end as @e[tag=zx.lr_watch,distance=0..] run tag @s remove zx.lr_watch
+
+execute unless data storage zx:config obj_bc_end run scoreboard objectives add zx.bc_end dummy
+data modify storage zx:config obj_bc_end set value 1b
+execute unless data storage zx:config obj_bc_far run scoreboard objectives add zx.bc_far dummy
+data modify storage zx:config obj_bc_far set value 1b
+execute unless data storage zx:config obj_bc_fx run scoreboard objectives add zx.bc_fx dummy
+data modify storage zx:config obj_bc_fx set value 1b
+execute unless data storage zx:config obj_bc_id run scoreboard objectives add zx.bc_id dummy
+data modify storage zx:config obj_bc_id set value 1b
+execute unless data storage zx:config obj_bc_near run scoreboard objectives add zx.bc_near dummy
+data modify storage zx:config obj_bc_near set value 1b
+execute unless data storage zx:config obj_bc_next run scoreboard objectives add zx.bc_next dummy
+data modify storage zx:config obj_bc_next set value 1b
+execute unless data storage zx:config obj_bc_parent run scoreboard objectives add zx.bc_parent dummy
+data modify storage zx:config obj_bc_parent set value 1b
+execute unless data storage zx:config obj_bc_target run scoreboard objectives add zx.bc_target dummy
+data modify storage zx:config obj_bc_target set value 1b
+execute unless data storage zx:config obj_hv_path_v run scoreboard objectives add zx.hv_path_v dummy
+data modify storage zx:config obj_hv_path_v set value 1b
+execute unless data storage zx:config obj_hv_walk run scoreboard objectives add zx.hv_walk dummy
+data modify storage zx:config obj_hv_walk set value 1b
+execute unless data storage zx:config obj_lr_ab run scoreboard objectives add zx.lr_ab dummy
+data modify storage zx:config obj_lr_ab set value 1b
+execute unless data storage zx:config obj_lr_end run scoreboard objectives add zx.lr_end dummy
+data modify storage zx:config obj_lr_end set value 1b
+execute unless data storage zx:config obj_lr_hp run scoreboard objectives add zx.lr_hp dummy
+data modify storage zx:config obj_lr_hp set value 1b
+execute unless data storage zx:config obj_lr_live run scoreboard objectives add zx.lr_live dummy
+data modify storage zx:config obj_lr_live set value 1b
+execute unless data storage zx:config obj_lr_sum run scoreboard objectives add zx.lr_sum dummy
+data modify storage zx:config obj_lr_sum set value 1b
+execute unless data storage zx:config obj_nh_ab run scoreboard objectives add zx.nh_ab dummy
+data modify storage zx:config obj_nh_ab set value 1b
+execute unless data storage zx:config obj_nh_hp run scoreboard objectives add zx.nh_hp dummy
+data modify storage zx:config obj_nh_hp set value 1b
+execute unless data storage zx:config obj_nh_stamp run scoreboard objectives add zx.nh_stamp dummy
+data modify storage zx:config obj_nh_stamp set value 1b
+execute unless data storage zx:config obj_sid run scoreboard objectives add zx.sid dummy
+data modify storage zx:config obj_sid set value 1b
+execute unless data storage zx:config obj_tf_born run scoreboard objectives add zx.tf_born dummy
+data modify storage zx:config obj_tf_born set value 1b
+execute unless data storage zx:config obj_tf_cx run scoreboard objectives add zx.tf_cx dummy
+data modify storage zx:config obj_tf_cx set value 1b
+execute unless data storage zx:config obj_tf_cy run scoreboard objectives add zx.tf_cy dummy
+data modify storage zx:config obj_tf_cy set value 1b
+execute unless data storage zx:config obj_tf_cz run scoreboard objectives add zx.tf_cz dummy
+data modify storage zx:config obj_tf_cz set value 1b
+execute unless data storage zx:config obj_tf_end run scoreboard objectives add zx.tf_end dummy
+data modify storage zx:config obj_tf_end set value 1b
+execute unless data storage zx:config obj_tf_nx run scoreboard objectives add zx.tf_nx dummy
+data modify storage zx:config obj_tf_nx set value 1b
+execute unless data storage zx:config obj_tf_nz run scoreboard objectives add zx.tf_nz dummy
+data modify storage zx:config obj_tf_nz set value 1b
+execute unless data storage zx:config obj_tf_seen run scoreboard objectives add zx.tf_seen dummy
+data modify storage zx:config obj_tf_seen set value 1b
+
+execute unless data storage zx:config obj_native_gen run scoreboard objectives add zx.native_gen dummy
+data modify storage zx:config obj_native_gen set value 1b

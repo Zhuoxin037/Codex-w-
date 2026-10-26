@@ -26,7 +26,7 @@ execute if score #se_r zx.meta matches 2 run data modify storage zx:work ic set 
 execute if score #se_r zx.meta matches 2 run function sweetdream:tag/mark with storage zx:work ic
 execute if score #se_r zx.meta matches 3 run data modify storage zx:work ic set value {target:"@s",mark:"shixin"}
 execute if score #se_r zx.meta matches 3 run function sweetdream:tag/mark with storage zx:work ic
-execute if score #se_r zx.meta matches 4 run data modify storage zx:work ic set value {target:"@s",mark:"dream"}
-execute if score #se_r zx.meta matches 4 run function sweetdream:tag/mark with storage zx:work ic
+$execute if score #se_r zx.meta matches 4 run data modify storage zx:work ic set value {target:"@s",mark:"dream",u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+execute if score #se_r zx.meta matches 4 run function sweetdream:tag/mark_owned with storage zx:work ic
 
 execute if score #se_r zx.meta matches 0..4 run tag @s add zx.star_rnd

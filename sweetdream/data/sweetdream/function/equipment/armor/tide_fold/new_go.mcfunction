@@ -20,6 +20,7 @@ scoreboard players operation @e[tag=zx.tf_new,limit=1] zx.tf_u2 = #tf_u2 zx.meta
 scoreboard players operation @e[tag=zx.tf_new,limit=1] zx.tf_u3 = #tf_u3 zx.meta
 
 # ③ 表现（以墙为执行者: 沿本地 X 轴铺开, 见 fx_wall）
+execute as @e[tag=zx.tf_new,limit=1] at @s run function sweetdream:equipment/armor/tide_fold/init
 execute as @e[tag=zx.tf_new,limit=1] at @s run function sweetdream:equipment/armor/tide_fold/fx_wall
 tag @e[tag=zx.tf_new,limit=1] remove zx.tf_new
 
