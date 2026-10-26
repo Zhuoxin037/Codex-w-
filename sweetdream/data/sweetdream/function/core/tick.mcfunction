@@ -763,3 +763,7 @@ execute in minecraft:the_nether as @e[type=minecraft:text_display,tag=zx.damage_
 execute if data storage zx:config damage_text{enabled:1b} if entity @a in minecraft:the_nether as @e[type=#sweetdream:living,type=!minecraft:player,distance=0..] run function sweetdream:lib/damage_text/sample
 execute in minecraft:the_end as @e[type=minecraft:text_display,tag=zx.damage_text,distance=0..] at @s run function sweetdream:lib/damage_text/tick
 execute if data storage zx:config damage_text{enabled:1b} if entity @a in minecraft:the_end as @e[type=#sweetdream:living,type=!minecraft:player,distance=0..] run function sweetdream:lib/damage_text/sample
+
+execute in minecraft:overworld as @e[type=minecraft:item_display,tag=zx.water_visual,distance=0..] run function sweetdream:equipment/visual/water/tick
+execute in minecraft:the_nether as @e[type=minecraft:item_display,tag=zx.water_visual,distance=0..] run function sweetdream:equipment/visual/water/tick
+execute in minecraft:the_end as @e[type=minecraft:item_display,tag=zx.water_visual,distance=0..] run function sweetdream:equipment/visual/water/tick

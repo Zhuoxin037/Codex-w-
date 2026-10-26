@@ -5,6 +5,7 @@ scoreboard players operation #et_w zx.meta = @s zx.et_wid
 summon minecraft:marker ~ ~ ~ {Tags:["zx.et_wave","zx.et_new"]}
 scoreboard players set @e[tag=zx.et_new,limit=1] zx.et_life 100
 scoreboard players operation @e[tag=zx.et_new,limit=1] zx.et_wid = #et_w zx.meta
+execute as @e[tag=zx.et_new,limit=1] at @s run function sweetdream:equipment/visual/water/create {model:"sweetdream:ebb_wave",sx:5.0,sy:5.0,sz:5.0,life_obj:"zx.et_life",kind:"wave"}
 tag @e[tag=zx.et_new,limit=1] remove zx.et_new
 particle minecraft:splash ~ ~0.1 ~ 1.2 0.05 1.2 0.08 14
 particle minecraft:bubble ~ ~0.1 ~ 1.2 0.05 1.2 0.02 8

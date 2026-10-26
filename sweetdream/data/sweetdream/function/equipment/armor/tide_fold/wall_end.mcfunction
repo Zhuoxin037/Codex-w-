@@ -14,4 +14,6 @@ scoreboard players reset @s zx.tf_u0
 scoreboard players reset @s zx.tf_u1
 scoreboard players reset @s zx.tf_u2
 scoreboard players reset @s zx.tf_u3
+function sweetdream:equipment/visual/water/remove
+scoreboard players reset @s zx.sid
 kill @s

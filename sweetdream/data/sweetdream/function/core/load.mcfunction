@@ -1,3 +1,7 @@
+execute unless data storage zx:config obj_fx_link run scoreboard objectives add zx.fx_link dummy
+data modify storage zx:config obj_fx_link set value 1b
+execute unless data storage zx:config obj_fx_life run scoreboard objectives add zx.fx_life dummy
+data modify storage zx:config obj_fx_life set value 1b
 # ============================================================
 # sweetdream:core/load —— 加载 / 重载时执行
 # ------------------------------------------------------------
@@ -2954,3 +2958,7 @@ execute in minecraft:the_end run kill @e[type=minecraft:text_display,tag=zx.dama
 scoreboard players reset @a zx.ld_t1
 scoreboard players reset @a zx.ld_t2
 scoreboard players reset @a zx.ld_t3
+
+execute in minecraft:overworld as @e[type=minecraft:item_display,tag=zx.water_visual,distance=0..] run function sweetdream:equipment/visual/water/end
+execute in minecraft:the_nether as @e[type=minecraft:item_display,tag=zx.water_visual,distance=0..] run function sweetdream:equipment/visual/water/end
+execute in minecraft:the_end as @e[type=minecraft:item_display,tag=zx.water_visual,distance=0..] run function sweetdream:equipment/visual/water/end

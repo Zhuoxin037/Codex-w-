@@ -1,0 +1,17 @@
+{
+  "hand_animation_on_swap": false,
+  "model": {
+    "type": "minecraft:model",
+    "model": "sweetdream:item/tide_wall",
+    "tints": [
+      {
+        "type": "minecraft:constant",
+        "value": -12011290
+      },
+      {
+        "type": "minecraft:constant",
+        "value": -4852225
+      }
+    ]
+  }
+}

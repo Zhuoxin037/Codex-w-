@@ -1,0 +1,760 @@
+{
+  "credit": "折潮水墙：8×2.4格；单个显示实体，原版流水纹理与常量水色，顶部/底部浅色水沫。",
+  "ambientocclusion": false,
+  "gui_light": "front",
+  "textures": {
+    "water": "minecraft:block/water_flow",
+    "particle": "minecraft:block/water_flow"
+  },
+  "elements": [
+    {
+      "name": "流水_1_1",
+      "from": [
+        0,
+        8.18,
+        7
+      ],
+      "to": [
+        2,
+        15.89,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "流水_1_2",
+      "from": [
+        0,
+        15.89,
+        7
+      ],
+      "to": [
+        2,
+        23.6,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 0
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "流水_2_1",
+      "from": [
+        2,
+        8.18,
+        7
+      ],
+      "to": [
+        4,
+        15.89,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "流水_2_2",
+      "from": [
+        2,
+        15.89,
+        7
+      ],
+      "to": [
+        4,
+        23.6,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "流水_3_1",
+      "from": [
+        4,
+        8.18,
+        7
+      ],
+      "to": [
+        6,
+        15.89,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "流水_3_2",
+      "from": [
+        4,
+        15.89,
+        7
+      ],
+      "to": [
+        6,
+        23.6,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "流水_4_1",
+      "from": [
+        6,
+        8.18,
+        7
+      ],
+      "to": [
+        8,
+        15.89,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "流水_4_2",
+      "from": [
+        6,
+        15.89,
+        7
+      ],
+      "to": [
+        8,
+        23.6,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "流水_5_1",
+      "from": [
+        8,
+        8.18,
+        7
+      ],
+      "to": [
+        10,
+        15.89,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "流水_5_2",
+      "from": [
+        8,
+        15.89,
+        7
+      ],
+      "to": [
+        10,
+        23.6,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "流水_6_1",
+      "from": [
+        10,
+        8.18,
+        7
+      ],
+      "to": [
+        12,
+        15.89,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "流水_6_2",
+      "from": [
+        10,
+        15.89,
+        7
+      ],
+      "to": [
+        12,
+        23.6,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "流水_7_1",
+      "from": [
+        12,
+        8.18,
+        7
+      ],
+      "to": [
+        14,
+        15.89,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "流水_7_2",
+      "from": [
+        12,
+        15.89,
+        7
+      ],
+      "to": [
+        14,
+        23.6,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "流水_8_1",
+      "from": [
+        14,
+        8.18,
+        7
+      ],
+      "to": [
+        16,
+        15.89,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "流水_8_2",
+      "from": [
+        14,
+        15.89,
+        7
+      ],
+      "to": [
+        16,
+        23.6,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 0
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 0
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 0
+        }
+      }
+    },
+    {
+      "name": "上沿水沫",
+      "from": [
+        0,
+        23.6,
+        7
+      ],
+      "to": [
+        16,
+        24,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 1
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 1
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 1
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 1
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 1
+        }
+      }
+    },
+    {
+      "name": "下沿水沫",
+      "from": [
+        0,
+        8,
+        7
+      ],
+      "to": [
+        16,
+        8.18,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 1
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 1
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 1
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 1
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water",
+          "tintindex": 1
+        }
+      }
+    }
+  ],
+  "display": {
+    "fixed": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ]
+    }
+  }
+}

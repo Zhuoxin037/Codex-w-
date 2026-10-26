@@ -1,0 +1,97 @@
+{
+  "credit": "返汐海浪：直径5格，双面贴地水面与16帧动画水纹；坐标以item display原点(8,8,8)为基准。",
+  "ambientocclusion": false,
+  "gui_light": "front",
+  "textures": {
+    "water": "sweetdream:item/tide_deep",
+    "ripple": "sweetdream:item/tide_ripple",
+    "particle": "sweetdream:item/tide_deep"
+  },
+  "elements": [
+    {
+      "name": "海面底层",
+      "from": [
+        0,
+        8.1,
+        0
+      ],
+      "to": [
+        16,
+        8.12,
+        16
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#water"
+        }
+      }
+    },
+    {
+      "name": "动画水纹",
+      "from": [
+        0,
+        8.18,
+        0
+      ],
+      "to": [
+        16,
+        8.2,
+        16
+      ],
+      "faces": {
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#ripple"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#ripple"
+        }
+      }
+    }
+  ],
+  "display": {
+    "fixed": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ]
+    }
+  }
+}

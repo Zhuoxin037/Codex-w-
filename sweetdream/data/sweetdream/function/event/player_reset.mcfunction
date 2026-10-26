@@ -363,6 +363,8 @@ scoreboard players reset @s zx.ft_n
 scoreboard players reset @s zx.ft_pd
 scoreboard players reset @s zx.ft_pol
 scoreboard players reset @s zx.ft_tg1
+scoreboard players reset @s zx.fx_life
+scoreboard players reset @s zx.fx_link
 scoreboard players reset @s zx.fz_end
 scoreboard players reset @s zx.gd_mana
 scoreboard players reset @s zx.gd_n

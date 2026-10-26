@@ -8,4 +8,6 @@
 
 scoreboard players reset @s zx.et_life
 scoreboard players reset @s zx.et_wid
+function sweetdream:equipment/visual/water/remove
+scoreboard players reset @s zx.sid
 kill @s
