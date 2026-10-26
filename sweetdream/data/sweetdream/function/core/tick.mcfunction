@@ -707,8 +707,7 @@ execute as @a[scores={zx.pm_sum=100000..}] if items entity @s armor.legs *[minec
 execute in minecraft:overworld as @e[tag=zx.tf_wall,distance=0..] at @s run function sweetdream:equipment/armor/tide_fold/wall_tick
 execute in minecraft:the_nether as @e[tag=zx.tf_wall,distance=0..] at @s run function sweetdream:equipment/armor/tide_fold/wall_tick
 execute in minecraft:the_end as @e[tag=zx.tf_wall,distance=0..] at @s run function sweetdream:equipment/armor/tide_fold/wall_tick
-#   折潮「消耗 150 魔力」—— 攒够就立一面墙（满了不扣账, 见 spend）
-execute as @a[scores={zx.tf_sum=150000..}] if items entity @s armor.head *[minecraft:custom_data~{zx:["tide_fold"]}] run function sweetdream:equipment/armor/tide_fold/spend
+#   折潮耗魔生成改由lib/mana/pay按每笔扣费结算；每次最多一面，不逐刻兑现积压。
 
 # 批 14(2026-10-25)：返汐「海浪」—— 每刻驱动每一片浪（寿命 / 粒子）
 #   ★ 档位加减**不在这里**（那必须每秒一次, 且在同一个时间切片里完成, 见 ebb_tide/second）

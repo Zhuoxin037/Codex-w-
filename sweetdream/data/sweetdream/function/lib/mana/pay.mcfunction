@@ -13,7 +13,7 @@
 #     一律照旧可用。
 # 【记在哪】玩家自己的两个**互相独立**的累计账本（单位 = 魔力 ×1000, 即毫魔力点）:
 #     zx.pm_sum —— 「剖面」用(每攒够 100000 = 100 魔力, 扣一次 100000)
-#     zx.tf_sum —— 「折潮」用(每攒够 150000 = 150 魔力, 扣一次 150000)
+#     zx.tf_sum —— 「折潮」用(150魔力累计门槛；每笔扣费最多1面，只留不足门槛的零头)
 #   ★ 迟暮原来也在这儿记一份 zx.ld_sum —— 2026-10-25 按用户原稿重写后,
 #     迟暮改成「回光」层数机制, **不再依赖花掉的魔力** ⇒ 那一份账本已删除。
 #   ★★ 为什么是三份而不是共用一份 ★★
@@ -51,4 +51,6 @@ execute unless entity @s[type=minecraft:player] run return 0
 scoreboard players set #pm_v zx.meta 0
 execute store result score #pm_v zx.meta run data get storage manacore:in arg.value 1000
 execute if score #pm_v zx.meta matches 1.. run scoreboard players operation @s zx.pm_sum += #pm_v zx.meta
-execute if score #pm_v zx.meta matches 1.. run scoreboard players operation @s zx.tf_sum += #pm_v zx.meta
+# 折潮只在这笔成功的正数扣费内结算一次；不留给每刻循环批量兑现。
+execute unless items entity @s armor.head *[minecraft:custom_data~{zx:["tide_fold"]}] run scoreboard players set @s zx.tf_sum 0
+execute if score #pm_v zx.meta matches 1.. if items entity @s armor.head *[minecraft:custom_data~{zx:["tide_fold"]}] run function sweetdream:equipment/armor/tide_fold/on_mana

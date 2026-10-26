@@ -2601,7 +2601,7 @@ execute in minecraft:the_end as @e[distance=0..] run scoreboard players reset @s
 #   zx.tf_cw = 上次穿过的墙编号 / zx.tf_ct = 那次节流的到期绝对 tick
 #   zx.tf_mg = 主人回蓝的 2 秒闸门(到期绝对 tick)
 #   —— 记在玩家身上
-#   zx.tf_sum = 累计实际花掉的魔力(魔力 ×1000; 攒够 150000 立一面墙)
+#   zx.tf_sum = 累计实际花掉的魔力(魔力 ×1000; 150000门槛，每笔扣费最多1面；成功后只留零头)
 execute unless data storage zx:config obj_tf_life run scoreboard objectives add zx.tf_life dummy
 execute unless data storage zx:config obj_tf_life run data modify storage zx:config obj_tf_life set value 1b
 execute unless data storage zx:config obj_tf_fx run scoreboard objectives add zx.tf_fx dummy
