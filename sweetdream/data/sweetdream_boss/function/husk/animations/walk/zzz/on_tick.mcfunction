@@ -7,5 +7,5 @@ execute if score @s sweetdream_boss.husk.walk.frame matches -1 run function swee
 data remove storage animated_java:temp args
 execute store result storage animated_java:temp args.frame int 1 run scoreboard players get @s sweetdream_boss.husk.walk.frame
 function sweetdream_boss:husk/animations/walk/zzz/apply_frame with storage animated_java:temp args
-execute if score @s sweetdream_boss.husk.walk.frame matches 14.. run return run scoreboard players set @s sweetdream_boss.husk.walk.frame 0
+execute if score @s sweetdream_boss.husk.walk.frame matches 12.. run return run scoreboard players set @s sweetdream_boss.husk.walk.frame 0
 scoreboard players add @s sweetdream_boss.husk.walk.frame 1

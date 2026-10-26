@@ -2,6 +2,7 @@
   "values": [
     "sweetdream:lib/dmg_ch",
     "sweetdream:lib/dmg_add_clear",
+    "sweetdream:profession/hook_base",
     "sweetdream:upgrade/api/dmg_held",
     "sweetdream:equipment/armor/resonance/hook_calc",
     "sweetdream:equipment/armor/styx_walk/hook_calc",
@@ -15,8 +16,10 @@
     "sweetdream:equipment/armor/ebb_tide/hook_calc",
     "sweetdream:equipment/armor/glimmer/hook_add",
     "sweetdream:lib/dmg_add_apply",
+    "sweetdream:profession/mage/book_hook",
     "sweetdream:equipment/sword/gousi/hook_calc",
     "sweetdream:equipment/tool/wrath/hook_calc",
-    "sweetdream:equipment/armor/glimmer/hook_calc"
+    "sweetdream:equipment/armor/glimmer/hook_calc",
+    "sweetdream:profession/hook_independent"
   ]
 }

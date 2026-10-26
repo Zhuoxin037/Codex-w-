@@ -38,7 +38,9 @@
 #       sweetdream:lib/mana/pay`（自己调自己 = 无限递归, /reload 后每一次施法都会
 #       直接把服务端栈打满）。批量替换脚本必须**排除被新建的那个文件本身**。
 #       现在这里写死前置包接口, 且下面加了 check.py 的 selfrec 守门。
+function sweetdream:profession/pay_prepare
 function manacore:api/mana/consume
+execute if entity @s[type=minecraft:player] run function sweetdream:profession/paid
 
 # ② 没扣成功 ⇒ 一个字节都没花, 不记账
 execute unless data storage manacore:out r{success:1b} run return 0

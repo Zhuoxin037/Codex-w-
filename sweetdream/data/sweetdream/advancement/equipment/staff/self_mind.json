@@ -1,0 +1,17 @@
+{
+  "criteria": {
+    "use": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "predicates": {
+            "minecraft:custom_data": "{zx:[\"self_mind\"]}"
+          }
+        }
+      }
+    }
+  },
+  "rewards": {
+    "function": "sweetdream:equipment/staff/self_mind/cast"
+  }
+}

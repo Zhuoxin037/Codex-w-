@@ -1,0 +1,7 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "sweetdream:item/profession/empathy"
+  },
+  "hand_animation_on_swap": false
+}

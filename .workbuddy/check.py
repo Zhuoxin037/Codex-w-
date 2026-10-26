@@ -1996,6 +1996,9 @@ for f in eqdir.rglob('*.mcfunction'):
         if re.search(r'\bdata\s+get\b', l):
             continue
         for fld, tag in CH_FIELD.items():
+            # A literal zero explicitly disables the framework's legacy channel fallback.
+            if re.search(r'(?<![a-z_])' + re.escape(fld) + r'\s*:\s*0(?:\.0*)?[fd]?(?=[,}])', l):
+                continue
             if fld in l and tag not in wchan.get(eid, set()):
                 R['chandef'].append((f, '第 %d 行 "%s" 的技能用了 %s(%s), 但 lib/skill_mul/def '
                                         '没给它标 %s:1b —— 面板会漏显示/归错列'
@@ -5092,6 +5095,11 @@ for _hk, _hp in functions.items():
         if _hl.strip().startswith('#'):
             continue
         if _HEALTH_W.search(_hl):
+            # NPCs can be initialized directly. Keep rejecting player-capable targets.
+            _npc = re.search(r'entity\s+@e\[([^]]+)\]', _hl)
+            _typed = re.search(r'(?:^|,)type=(?:minecraft:)?([a-z_]+)(?:,|$)', _npc.group(1)) if _npc else None
+            if _typed and _typed.group(1) != 'player':
+                continue
             R['regress'].append((_hp, _hi,
                 '★写实体 Health★ —— 原版禁止用命令改**玩家** NBT(`/data` / `/execute store` 抛 '
                 '"Unable to modify player data"), 对玩家永远不生效且零日志; 生物又不需要。'

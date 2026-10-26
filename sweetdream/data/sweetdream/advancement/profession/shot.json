@@ -1,0 +1,11 @@
+{
+  "criteria": {
+    "use": {
+      "trigger": "minecraft:shot_crossbow",
+      "conditions": {}
+    }
+  },
+  "rewards": {
+    "function": "sweetdream:profession/shot"
+  }
+}

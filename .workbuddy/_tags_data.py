@@ -372,3 +372,7 @@ if __name__ == "__main__":
             print("  [×] %s 用了词表外的标签 %s" % (cid, t))
     else:
         print("全部标签都在词汇表内 ✓")
+
+
+# 职业系统（用户《职业系统.md》）。
+TAGS.update({'dream_waker': ['buff'], 'grimoire': ['max_mana', 'cur_mana', 'consume', 'indep_mul'], 'eagle_hat': ['max_mana'], 'mana_crystal': ['max_mana', 'formation'], 'mana_imbue': ['max_mana', 'consume'], 'foresight': ['max_mana', 'max_hp', 'heal', 'buff', 'debuff', 'slow', 'liuhuo', 'yehuo', 'shixin', 'yuanhai', 'dream', 'consume'], 'self_mind': ['cur_mana', 'max_mana', 'max_hp', 'heal', 'consume', 'dash'], 'illusion': ['max_mana', 'base_atk', 'formation', 'true_dmg', 'consume', 'timestop'], 'empathy': ['max_hp', 'buff'], 'indwell': ['cur_mana', 'formation', 'consume', 'debuff', 'slow']})

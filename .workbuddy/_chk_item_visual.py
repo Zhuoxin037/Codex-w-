@@ -43,6 +43,13 @@ errs = []
 
 # ★ 三个"give 里故意不写 item_model"的例外。都有独立的运行时写入者，不是漏接线：
 KNOWN_EXEMPT = {
+    # 2026-10-26 用户确认：新职业法杖／副手／道具暂用原版追溯指针。
+    'dream_waker': '用户确认使用追溯指针原版外观；旧 job_* 模型键兼容为原版指针',
+    'grimoire': '用户确认使用追溯指针原版外观；旧 job_* 模型键兼容为原版指针',
+    'mana_crystal': '用户确认使用追溯指针原版外观；旧 job_* 模型键兼容为原版指针',
+    'foresight': '用户确认使用追溯指针原版外观；旧 job_* 模型键兼容为原版指针',
+    'self_mind': '用户确认使用追溯指针原版外观；旧 job_* 模型键兼容为原版指针',
+    'indwell': '用户确认使用追溯指针原版外观；旧 job_* 模型键兼容为原版指针',
     'tinder': '两态图标：equipment/sword/tinder/visual/sync 按 zx.td_on 每刻写 tinder_on/off',
     'everlit': '灯灵 GUI 模型：equipment/tool/everlit/model_sync 扫 hotbar/inventory/offhand 写 tool_everlit',
     'anchor': '3D 手持候选（items/anchor.json = 四向静态审阅模型，握姿待用户验收）占着这个 key；'

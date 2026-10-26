@@ -11,4 +11,5 @@ data modify storage manacore:work a set value {uuid:"",value:0.0}
 data modify storage manacore:work a merge from storage manacore:in arg
 data modify storage manacore:work a.op set value "add"
 function manacore:api/player/ensure
+function sweetdream:profession/mana_restore_gate
 function manacore:internal/mana/apply with storage manacore:work a

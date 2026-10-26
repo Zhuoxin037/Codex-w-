@@ -12,3 +12,5 @@
 data modify storage manacore:work a set value {uuid:""}
 data modify storage manacore:work a merge from storage manacore:in arg
 execute if data storage manacore:work a.uuid run function manacore:internal/mana/regen_get with storage manacore:work a
+
+execute if entity @s[type=minecraft:player,scores={zx.job=1}] run function sweetdream:profession/mage/regen_preview

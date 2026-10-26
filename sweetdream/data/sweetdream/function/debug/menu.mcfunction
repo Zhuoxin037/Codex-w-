@@ -33,6 +33,7 @@ execute if data storage zx:reg menu[14] run function sweetdream:debug/menu_item 
 execute if data storage zx:reg menu[15] run function sweetdream:debug/menu_item with storage zx:reg menu[15]
 execute if data storage zx:reg menu[16] run function sweetdream:debug/menu_item with storage zx:reg menu[16]
 execute if data storage zx:reg menu[17] run function sweetdream:debug/menu_item with storage zx:reg menu[17]
+execute if data storage zx:reg menu[18] run function sweetdream:debug/menu_item with storage zx:reg menu[18]
 
 tellraw @s [{"text":"── 没上菜单的其它入口 ──","color":"dark_gray"}]
 tellraw @s [{"text":"  用 /function 前缀 + sweetdream:debug/<名字>, 名字列表:","color":"gray"}]

@@ -1,0 +1,17 @@
+{
+  "criteria": {
+    "use": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "predicates": {
+            "minecraft:custom_data": "{zx:[\"indwell\"]}"
+          }
+        }
+      }
+    }
+  },
+  "rewards": {
+    "function": "sweetdream:equipment/staff/indwell/cast"
+  }
+}

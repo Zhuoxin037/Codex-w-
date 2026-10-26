@@ -24,7 +24,7 @@
   界面也看不出来)。所以改成: 把所有东西按 27 一件一件塞, 塞满就开下一个盒子。
   当前 28 装备 + 7 材料 = 35 件 -> 正好两盒(27 + 8)。
 """
-import glob, io
+import glob, io, re
 
 BASE = "D:/数据包/sweetdream/data/sweetdream/function"
 OUT = BASE + "/debug/give_all.mcfunction"
@@ -60,8 +60,14 @@ for cat in ("armor", "sword", "axe", "bow", "staff", "tool"):
 B = sorted(glob.glob(BASE + "/upgrade/item/*.mcfunction")) + \
     sorted(glob.glob(BASE + "/overlimit/item/*.mcfunction"))
 
-ITEMS = A + B
-BOXES = [ITEMS[i:i + BOX_CAP] for i in range(0, len(ITEMS), BOX_CAP)]
+# 用户确认：职业专属装备与通用醒梦仪独立成盒，不混入普通装备／石头。
+ROLE = [p for p in A if re.search(r'profession:[14]\b', io.open(p, encoding="utf-8").read())
+        or p.replace("\\", "/").endswith("/dream_waker/give.mcfunction")]
+NORMAL = [p for p in A if p not in ROLE] + B
+ITEMS = NORMAL + ROLE
+BOXES = [NORMAL[i:i + BOX_CAP] for i in range(0, len(NORMAL), BOX_CAP)]
+NORMAL_BOX_COUNT = len(BOXES)
+BOXES += [ROLE[i:i + BOX_CAP] for i in range(0, len(ROLE), BOX_CAP)]
 assert len(BOXES) <= len(BOX_POS), "盒子数超过预留坐标数, 请给 BOX_POS 再加一个坐标"
 
 
@@ -124,8 +130,11 @@ A_("data modify block 0 -60 2 Items set value []")
 #    `set value '{"text":"..."}'` 会把整串当成**纯字符串**塞进去, 游戏里看到的就是
 #    这行 JSON 源码, 而不是渲染后的名字。所以引号一律不加。
 for k, pos in enumerate(BOX_POS[:len(BOXES)]):
-    txt = '{"text":"sweetdream · 盒%d (%d 件)","color":"%s","italic":false}' % (
-        k + 1, len(BOXES[k]), NAME_COLOR[BOX_COLOR[k % len(BOX_COLOR)]])
+    if k >= NORMAL_BOX_COUNT:
+        txt = '{"text":"sweetdream · 职业装备（%d 件）","color":"light_purple","italic":false}' % len(BOXES[k])
+    else:
+        txt = '{"text":"sweetdream · 盒%d (%d 件)","color":"%s","italic":false}' % (
+            k + 1, len(BOXES[k]), NAME_COLOR[BOX_COLOR[k % len(BOX_COLOR)]])
     A_('data modify block %s CustomName set value %s' % (pos, txt))
 A_("#   【兜底提示】要是中转站没建成(区块没加载 / 你不在主世界), 后面全都会")
 A_("#   静默失败 —— 与其让你以为发了但没给, 不如直接说出来。")

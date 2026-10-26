@@ -333,3 +333,17 @@ data modify storage zx:config wchan.pour_sack set value {mm:0b,atk:0b,oth:0b}
 data modify storage zx:config wchan.thunderrod set value {mm:1b,atk:0b,oth:0b}
 # 折径(超限·2026-10-23 批 K9): 主动本体 = 最大魔力 ×0.05(原版 ×0.04), 走 mm 通道。
 data modify storage zx:config wchan.bent_ray set value {mm:1b,atk:0b,oth:0b}
+
+data modify storage zx:config wchan.mana_crystal set value {mm:1b,atk:0b,oth:0b}
+
+data modify storage zx:config wchan.mana_imbue set value {mm:1b,atk:0b,oth:0b}
+
+data modify storage zx:config wchan.foresight set value {mm:1b,atk:0b,oth:0b}
+
+data modify storage zx:config wchan.self_mind set value {mm:1b,atk:0b,oth:1b}
+
+data modify storage zx:config wchan.illusion set value {mm:1b,atk:1b,oth:0b}
+
+data modify storage zx:config wchan.empathy set value {mm:0b,atk:0b,oth:0b}
+
+data modify storage zx:config wchan.indwell set value {mm:0b,atk:0b,oth:1b}

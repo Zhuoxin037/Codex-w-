@@ -9,4 +9,5 @@
 data modify storage manacore:work a set value {uuid:"",value:0.0}
 data modify storage manacore:work a merge from storage manacore:in arg
 function manacore:api/player/ensure
+function sweetdream:profession/mana_restore_gate
 execute if data storage manacore:work a.uuid run function manacore:internal/mana/force with storage manacore:work a

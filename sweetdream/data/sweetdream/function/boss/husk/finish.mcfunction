@@ -1,3 +1,5 @@
+scoreboard players set @s sdh.speed 0
+scoreboard players set @s sdh.walktempo 0
 scoreboard players set @s sdh.state 0
 scoreboard players set @s sdh.age 0
 scoreboard players set @s sdh.energy 0

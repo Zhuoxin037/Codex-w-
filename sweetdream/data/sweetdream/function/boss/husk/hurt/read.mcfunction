@@ -9,8 +9,7 @@ execute unless score @s sdh.state matches 21 unless score @s sdh.state matches 3
 scoreboard players operation @s sdh.prevent = @s sdh.loss
 scoreboard players operation @s sdh.prevent *= #13 sdh.tmp
 scoreboard players operation @s sdh.prevent /= #7 sdh.tmp
-scoreboard players operation @s sdh.energy += @s sdh.prevent
-execute if score @s sdh.energy matches 70001.. run scoreboard players set @s sdh.energy 70000
+scoreboard players operation @s sdh.energy += @s sdh.loss
 scoreboard players operation @s sdh.pending_ref = @s sdh.prevent
 scoreboard players operation @s sdh.pending_ref /= #5 sdh.tmp
 execute if score @s sdh.pending_ref matches 3501.. run scoreboard players set @s sdh.pending_ref 3500

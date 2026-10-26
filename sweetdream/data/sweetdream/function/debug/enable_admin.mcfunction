@@ -29,3 +29,6 @@ scoreboard players enable @s zx.dbg_shixin
 scoreboard players enable @s zx.dbg_yuanhai
 
 scoreboard players enable @s zx.dbg_dream
+
+scoreboard players enable @s zx.job_tg
+scoreboard players enable @s zx.jobpick_tg

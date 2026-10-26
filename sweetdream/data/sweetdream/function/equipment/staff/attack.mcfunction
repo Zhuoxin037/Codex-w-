@@ -29,3 +29,6 @@ playsound minecraft:item.trident.throw player @a ~ ~ ~ 0.45 1.5
 
 # ③ 交给法球发射器
 function sweetdream:projectile/ball/fire
+
+execute if score @s zx.job matches 1 run function sweetdream:profession/mage/add_orb
+execute if score @s zx.job matches 2 run function sweetdream:profession/berserker/attack

@@ -6,3 +6,5 @@ execute if score @s sdh.state matches 13 run return run function sweetdream:boss
 execute if score @s sdh.state matches 14 run return run function sweetdream:boss/husk/action/shoulder_bump
 execute if score @s sdh.state matches 20..24 run return run function sweetdream:boss/husk/action/guard
 execute if score @s sdh.state matches 30..33 run function sweetdream:boss/husk/action/counter
+
+execute if score @s sdh.state matches 40..43 run function sweetdream:boss/husk/leap/tick

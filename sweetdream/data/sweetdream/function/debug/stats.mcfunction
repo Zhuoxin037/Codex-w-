@@ -30,6 +30,8 @@
 # ============================================================
 
 tellraw @s [{"text":"========== 自己的数值 ==========","color":"gold"}]
+function sweetdream:profession/display_name
+tellraw @s [{"text":"  职业 ","color":"gray"},{"nbt":"profession_name","storage":"zx:work","color":"white"}]
 
 # ------------------------------------------------------------
 # ① 先拿 uuid, 并且把"拿没拿到"变成一个计分项(免得后面静默失败)

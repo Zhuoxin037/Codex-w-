@@ -46,6 +46,12 @@ data modify storage manacore:in arg set value {uuid:"",skill:"sweetdream:hengdao
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/cooldown/start
 
+# 伤害在突进结束时结算，保存本次施法的魔导书／悲喜增益；换手不会丢失。
+scoreboard players set @s zx.j_hd_book 0
+scoreboard players set @s zx.j_hd_sor 0
+execute if score @s zx.j_book_t = #now manacore.meta run scoreboard players set @s zx.j_hd_book 1
+execute if score @s zx.j_sor_t = #now manacore.meta run scoreboard players set @s zx.j_hd_sor 1
+
 # ⑦ 落点伤害不在这里结算
 #   突进要分 12 刻才走完, 此刻人还在起点 —— 在这儿打伤害等于打"起点周围 2 格"。
 #   所以伤害、粒子、命中音效全都放到"走完那一刻"调用的

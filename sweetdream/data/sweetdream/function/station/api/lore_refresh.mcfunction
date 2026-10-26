@@ -116,3 +116,5 @@ data modify entity @e[tag=zx.st_tmp,limit=1] equipment.mainhand.components."mine
 #      "第一次刷"那一版: 万一以后源表漏收某件(新装备还没重跑生成器), 回落
 #      拿到的就是上古文本 —— 又变成"刷新了没用"。
 execute if data storage zx:work base_new run data modify entity @e[tag=zx.st_tmp,limit=1] equipment.mainhand.components."minecraft:custom_data".lore_base set from storage zx:work base_new
+
+function sweetdream:profession/item_presentation

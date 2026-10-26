@@ -105,3 +105,14 @@ attribute @s minecraft:armor_toughness modifier remove sweetdream:upg_tough
 attribute @s minecraft:attack_damage modifier remove sweetdream:eqp_bl_atk
 attribute @s minecraft:attack_damage modifier remove sweetdream:eqp_ls_atk
 attribute @s minecraft:attack_damage modifier remove sweetdream:eqp_mr_set_atk
+
+# 职业基数与职业临时修饰符也属于本包的重置范围。
+attribute @s minecraft:attack_damage modifier remove sweetdream:profession_berserker
+attribute @s minecraft:max_absorption modifier remove sweetdream:prophecy_absorption
+attribute @s minecraft:attack_damage base set 1
+attribute @s minecraft:max_health base set 20
+execute if score @s zx.job matches 1 if score @s zx.j_reborn matches 1.. run effect clear @s minecraft:absorption
+tag @s remove zx.j_twin_live
+
+attribute @s minecraft:attack_damage modifier remove sweetdream:profession_weapon_lock
+tag @s remove zx.j_weapon_locked

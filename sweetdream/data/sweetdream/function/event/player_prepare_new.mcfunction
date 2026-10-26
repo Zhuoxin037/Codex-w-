@@ -8,3 +8,5 @@
 # 普通重连走 join/existing, 不触发本事件。被标签直接调用, 必须保持无宏。
 # ============================================================
 function sweetdream:internal/attr/cleanup
+
+tag @s add zx.j_new_record

@@ -2962,3 +2962,266 @@ scoreboard players reset @a zx.ld_t3
 execute in minecraft:overworld as @e[type=minecraft:item_display,tag=zx.water_visual,distance=0..] run function sweetdream:equipment/visual/water/end
 execute in minecraft:the_nether as @e[type=minecraft:item_display,tag=zx.water_visual,distance=0..] run function sweetdream:equipment/visual/water/end
 execute in minecraft:the_end as @e[type=minecraft:item_display,tag=zx.water_visual,distance=0..] run function sweetdream:equipment/visual/water/end
+
+
+# 职业系统：状态、账本、独立时钟。
+execute unless data storage zx:config obj_job run scoreboard objectives add zx.job dummy
+execute unless data storage zx:config obj_job run data modify storage zx:config obj_job set value 1b
+execute unless data storage zx:config obj_j_init run scoreboard objectives add zx.j_init dummy
+execute unless data storage zx:config obj_j_init run data modify storage zx:config obj_j_init set value 1b
+execute unless data storage zx:config obj_j_aw run scoreboard objectives add zx.j_aw dummy
+execute unless data storage zx:config obj_j_aw run data modify storage zx:config obj_j_aw set value 1b
+execute unless data storage zx:config obj_j_aw_m run scoreboard objectives add zx.j_aw_m dummy
+execute unless data storage zx:config obj_j_aw_m run data modify storage zx:config obj_j_aw_m set value 1b
+execute unless data storage zx:config obj_j_aw_b run scoreboard objectives add zx.j_aw_b dummy
+execute unless data storage zx:config obj_j_aw_b run data modify storage zx:config obj_j_aw_b set value 1b
+execute unless data storage zx:config obj_j_aw_s run scoreboard objectives add zx.j_aw_s dummy
+execute unless data storage zx:config obj_j_aw_s run data modify storage zx:config obj_j_aw_s set value 1b
+execute unless data storage zx:config obj_j_aw_t run scoreboard objectives add zx.j_aw_t dummy
+execute unless data storage zx:config obj_j_aw_t run data modify storage zx:config obj_j_aw_t set value 1b
+execute unless data storage zx:config obj_j_mm run scoreboard objectives add zx.j_mm dummy
+execute unless data storage zx:config obj_j_mm run data modify storage zx:config obj_j_mm set value 1b
+execute unless data storage zx:config obj_j_at run scoreboard objectives add zx.j_at dummy
+execute unless data storage zx:config obj_j_at run data modify storage zx:config obj_j_at set value 1b
+execute unless data storage zx:config obj_j_hp run scoreboard objectives add zx.j_hp dummy
+execute unless data storage zx:config obj_j_hp run data modify storage zx:config obj_j_hp set value 1b
+execute unless data storage zx:config obj_j_rg run scoreboard objectives add zx.j_rg dummy
+execute unless data storage zx:config obj_j_rg run data modify storage zx:config obj_j_rg set value 1b
+execute unless data storage zx:config obj_j_orb run scoreboard objectives add zx.j_orb dummy
+execute unless data storage zx:config obj_j_orb run data modify storage zx:config obj_j_orb set value 1b
+execute unless data storage zx:config obj_j_prop run scoreboard objectives add zx.j_prop dummy
+execute unless data storage zx:config obj_j_prop run data modify storage zx:config obj_j_prop set value 1b
+execute unless data storage zx:config obj_j_b_n run scoreboard objectives add zx.j_b_n dummy
+execute unless data storage zx:config obj_j_b_n run data modify storage zx:config obj_j_b_n set value 1b
+execute unless data storage zx:config obj_j_b_t1 run scoreboard objectives add zx.j_b_t1 dummy
+execute unless data storage zx:config obj_j_b_t1 run data modify storage zx:config obj_j_b_t1 set value 1b
+execute unless data storage zx:config obj_j_b_t2 run scoreboard objectives add zx.j_b_t2 dummy
+execute unless data storage zx:config obj_j_b_t2 run data modify storage zx:config obj_j_b_t2 set value 1b
+execute unless data storage zx:config obj_j_b_t3 run scoreboard objectives add zx.j_b_t3 dummy
+execute unless data storage zx:config obj_j_b_t3 run data modify storage zx:config obj_j_b_t3 set value 1b
+execute unless data storage zx:config obj_j_b_v1 run scoreboard objectives add zx.j_b_v1 dummy
+execute unless data storage zx:config obj_j_b_v1 run data modify storage zx:config obj_j_b_v1 set value 1b
+execute unless data storage zx:config obj_j_b_v2 run scoreboard objectives add zx.j_b_v2 dummy
+execute unless data storage zx:config obj_j_b_v2 run data modify storage zx:config obj_j_b_v2 set value 1b
+execute unless data storage zx:config obj_j_b_v3 run scoreboard objectives add zx.j_b_v3 dummy
+execute unless data storage zx:config obj_j_b_v3 run data modify storage zx:config obj_j_b_v3 set value 1b
+execute unless data storage zx:config obj_j_b_sum run scoreboard objectives add zx.j_b_sum dummy
+execute unless data storage zx:config obj_j_b_sum run data modify storage zx:config obj_j_b_sum set value 1b
+execute unless data storage zx:config obj_j_b_lt run scoreboard objectives add zx.j_b_lt dummy
+execute unless data storage zx:config obj_j_b_lt run data modify storage zx:config obj_j_b_lt set value 1b
+execute unless data storage zx:config obj_j_book run scoreboard objectives add zx.j_book dummy
+execute unless data storage zx:config obj_j_book run data modify storage zx:config obj_j_book set value 1b
+execute unless data storage zx:config obj_j_book_t run scoreboard objectives add zx.j_book_t dummy
+execute unless data storage zx:config obj_j_book_t run data modify storage zx:config obj_j_book_t set value 1b
+execute unless data storage zx:config obj_j_paid run scoreboard objectives add zx.j_paid dummy
+execute unless data storage zx:config obj_j_paid run data modify storage zx:config obj_j_paid set value 1b
+execute unless data storage zx:config obj_j_pay_t run scoreboard objectives add zx.j_pay_t dummy
+execute unless data storage zx:config obj_j_pay_t run data modify storage zx:config obj_j_pay_t set value 1b
+execute unless data storage zx:config obj_j_sorrow run scoreboard objectives add zx.j_sorrow dummy
+execute unless data storage zx:config obj_j_sorrow run data modify storage zx:config obj_j_sorrow set value 1b
+execute unless data storage zx:config obj_j_sor_t run scoreboard objectives add zx.j_sor_t dummy
+execute unless data storage zx:config obj_j_sor_t run data modify storage zx:config obj_j_sor_t set value 1b
+execute unless data storage zx:config obj_j_skill_t run scoreboard objectives add zx.j_skill_t dummy
+execute unless data storage zx:config obj_j_skill_t run data modify storage zx:config obj_j_skill_t set value 1b
+execute unless data storage zx:config obj_j_cr_t run scoreboard objectives add zx.j_cr_t dummy
+execute unless data storage zx:config obj_j_cr_t run data modify storage zx:config obj_j_cr_t set value 1b
+execute unless data storage zx:config obj_j_cr_n run scoreboard objectives add zx.j_cr_n dummy
+execute unless data storage zx:config obj_j_cr_n run data modify storage zx:config obj_j_cr_n set value 1b
+execute unless data storage zx:config obj_j_cr_d run scoreboard objectives add zx.j_cr_d dummy
+execute unless data storage zx:config obj_j_cr_d run data modify storage zx:config obj_j_cr_d set value 1b
+execute unless data storage zx:config obj_j_im_n run scoreboard objectives add zx.j_im_n dummy
+execute unless data storage zx:config obj_j_im_n run data modify storage zx:config obj_j_im_n set value 1b
+execute unless data storage zx:config obj_j_pain run scoreboard objectives add zx.j_pain dummy
+execute unless data storage zx:config obj_j_pain run data modify storage zx:config obj_j_pain set value 1b
+execute unless data storage zx:config obj_j_bloom run scoreboard objectives add zx.j_bloom dummy
+execute unless data storage zx:config obj_j_bloom run data modify storage zx:config obj_j_bloom set value 1b
+execute unless data storage zx:config obj_j_pick run scoreboard objectives add zx.j_pick dummy
+execute unless data storage zx:config obj_j_pick run data modify storage zx:config obj_j_pick set value 1b
+execute unless data storage zx:config obj_j_pick_t run scoreboard objectives add zx.j_pick_t dummy
+execute unless data storage zx:config obj_j_pick_t run data modify storage zx:config obj_j_pick_t set value 1b
+execute unless data storage zx:config obj_j_seen run scoreboard objectives add zx.j_seen dummy
+execute unless data storage zx:config obj_j_seen run data modify storage zx:config obj_j_seen set value 1b
+execute unless data storage zx:config obj_j_draw1 run scoreboard objectives add zx.j_draw1 dummy
+execute unless data storage zx:config obj_j_draw1 run data modify storage zx:config obj_j_draw1 set value 1b
+execute unless data storage zx:config obj_j_draw2 run scoreboard objectives add zx.j_draw2 dummy
+execute unless data storage zx:config obj_j_draw2 run data modify storage zx:config obj_j_draw2 set value 1b
+execute unless data storage zx:config obj_j_draw3 run scoreboard objectives add zx.j_draw3 dummy
+execute unless data storage zx:config obj_j_draw3 run data modify storage zx:config obj_j_draw3 set value 1b
+execute unless data storage zx:config obj_j_draws run scoreboard objectives add zx.j_draws dummy
+execute unless data storage zx:config obj_j_draws run data modify storage zx:config obj_j_draws set value 1b
+execute unless data storage zx:config obj_j_choice run scoreboard objectives add zx.j_choice dummy
+execute unless data storage zx:config obj_j_choice run data modify storage zx:config obj_j_choice set value 1b
+execute unless data storage zx:config obj_j_rng run scoreboard objectives add zx.j_rng dummy
+execute unless data storage zx:config obj_j_rng run data modify storage zx:config obj_j_rng set value 1b
+execute unless data storage zx:config obj_j_form run scoreboard objectives add zx.j_form dummy
+execute unless data storage zx:config obj_j_form run data modify storage zx:config obj_j_form set value 1b
+execute unless data storage zx:config obj_j_dead run scoreboard objectives add zx.j_dead dummy
+execute unless data storage zx:config obj_j_dead run data modify storage zx:config obj_j_dead set value 1b
+execute unless data storage zx:config obj_j_reborn run scoreboard objectives add zx.j_reborn dummy
+execute unless data storage zx:config obj_j_reborn run data modify storage zx:config obj_j_reborn set value 1b
+execute unless data storage zx:config obj_j_body_hp run scoreboard objectives add zx.j_body_hp dummy
+execute unless data storage zx:config obj_j_body_hp run data modify storage zx:config obj_j_body_hp set value 1b
+execute unless data storage zx:config obj_j_twin_hp run scoreboard objectives add zx.j_twin_hp dummy
+execute unless data storage zx:config obj_j_twin_hp run data modify storage zx:config obj_j_twin_hp set value 1b
+execute unless data storage zx:config obj_j_body_m run scoreboard objectives add zx.j_body_m dummy
+execute unless data storage zx:config obj_j_body_m run data modify storage zx:config obj_j_body_m set value 1b
+execute unless data storage zx:config obj_j_twin_m run scoreboard objectives add zx.j_twin_m dummy
+execute unless data storage zx:config obj_j_twin_m run data modify storage zx:config obj_j_twin_m set value 1b
+execute unless data storage zx:config obj_j_ess run scoreboard objectives add zx.j_ess dummy
+execute unless data storage zx:config obj_j_ess run data modify storage zx:config obj_j_ess set value 1b
+execute unless data storage zx:config obj_j_ero run scoreboard objectives add zx.j_ero dummy
+execute unless data storage zx:config obj_j_ero run data modify storage zx:config obj_j_ero set value 1b
+execute unless data storage zx:config obj_j_ero_t run scoreboard objectives add zx.j_ero_t dummy
+execute unless data storage zx:config obj_j_ero_t run data modify storage zx:config obj_j_ero_t set value 1b
+execute unless data storage zx:config obj_j_ero_pct run scoreboard objectives add zx.j_ero_pct dummy
+execute unless data storage zx:config obj_j_ero_pct run data modify storage zx:config obj_j_ero_pct set value 1b
+execute unless data storage zx:config obj_j_empath run scoreboard objectives add zx.j_empath dummy
+execute unless data storage zx:config obj_j_empath run data modify storage zx:config obj_j_empath set value 1b
+execute unless data storage zx:config obj_j_hurt_lt run scoreboard objectives add zx.j_hurt_lt dummy
+execute unless data storage zx:config obj_j_hurt_lt run data modify storage zx:config obj_j_hurt_lt set value 1b
+execute unless data storage zx:config obj_j_hurt_hp run scoreboard objectives add zx.j_hurt_hp dummy
+execute unless data storage zx:config obj_j_hurt_hp run data modify storage zx:config obj_j_hurt_hp set value 1b
+execute unless data storage zx:config obj_j_il_t run scoreboard objectives add zx.j_il_t dummy
+execute unless data storage zx:config obj_j_il_t run data modify storage zx:config obj_j_il_t set value 1b
+execute unless data storage zx:config obj_j_host_t run scoreboard objectives add zx.j_host_t dummy
+execute unless data storage zx:config obj_j_host_t run data modify storage zx:config obj_j_host_t set value 1b
+execute unless data storage zx:config obj_j_host_n run scoreboard objectives add zx.j_host_n dummy
+execute unless data storage zx:config obj_j_host_n run data modify storage zx:config obj_j_host_n set value 1b
+execute unless data storage zx:config obj_j_link run scoreboard objectives add zx.j_link dummy
+execute unless data storage zx:config obj_j_link run data modify storage zx:config obj_j_link set value 1b
+execute unless data storage zx:config obj_j_life run scoreboard objectives add zx.j_life dummy
+execute unless data storage zx:config obj_j_life run data modify storage zx:config obj_j_life set value 1b
+execute unless data storage zx:config obj_j_pulse run scoreboard objectives add zx.j_pulse dummy
+execute unless data storage zx:config obj_j_pulse run data modify storage zx:config obj_j_pulse set value 1b
+execute unless data storage zx:config obj_j_own run scoreboard objectives add zx.j_own dummy
+execute unless data storage zx:config obj_j_own run data modify storage zx:config obj_j_own set value 1b
+execute unless data storage zx:config obj_j_grace run scoreboard objectives add zx.j_grace dummy
+execute unless data storage zx:config obj_j_grace run data modify storage zx:config obj_j_grace set value 1b
+execute unless data storage zx:config obj_j_sel run scoreboard objectives add zx.j_sel dummy
+execute unless data storage zx:config obj_j_sel run data modify storage zx:config obj_j_sel set value 1b
+execute unless data storage zx:config obj_j_lastdeath run scoreboard objectives add zx.j_lastdeath dummy
+execute unless data storage zx:config obj_j_lastdeath run data modify storage zx:config obj_j_lastdeath set value 1b
+execute unless data storage zx:config obj_j_hpnow run scoreboard objectives add zx.j_hpnow dummy
+execute unless data storage zx:config obj_j_hpnow run data modify storage zx:config obj_j_hpnow set value 1b
+execute unless data storage zx:config obj_j_book_mul run scoreboard objectives add zx.j_book_mul dummy
+execute unless data storage zx:config obj_j_book_mul run data modify storage zx:config obj_j_book_mul set value 1b
+execute unless data storage zx:config obj_j_sor_mul run scoreboard objectives add zx.j_sor_mul dummy
+execute unless data storage zx:config obj_j_sor_mul run data modify storage zx:config obj_j_sor_mul set value 1b
+execute unless data storage zx:config obj_j_cast_a run scoreboard objectives add zx.j_cast_a dummy
+execute unless data storage zx:config obj_j_cast_a run data modify storage zx:config obj_j_cast_a set value 1b
+execute unless data storage zx:config obj_j_f_given run scoreboard objectives add zx.j_f_given dummy
+execute unless data storage zx:config obj_j_f_given run data modify storage zx:config obj_j_f_given set value 1b
+execute unless data storage zx:config obj_job_trigger run scoreboard objectives add zx.job_tg trigger
+execute unless data storage zx:config obj_job_trigger run data modify storage zx:config obj_job_trigger set value 1b
+execute unless data storage zx:config obj_jobpick_trigger run scoreboard objectives add zx.jobpick_tg trigger
+execute unless data storage zx:config obj_jobpick_trigger run data modify storage zx:config obj_jobpick_trigger set value 1b
+execute unless data storage zx:config obj_prophecy_trigger run scoreboard objectives add zx.prophecy_tg trigger
+execute unless data storage zx:config obj_prophecy_trigger run data modify storage zx:config obj_prophecy_trigger set value 1b
+scoreboard players set #j1000 zx.meta 1000
+scoreboard players set #j100 zx.meta 100
+scoreboard players set #j10 zx.meta 10
+scoreboard players set #j2 zx.meta 2
+scoreboard players set #j20 zx.meta 20
+scoreboard players set #j5 zx.meta 5
+
+execute unless data storage zx:config obj_j_dmg run scoreboard objectives add zx.j_dmg minecraft.custom:minecraft.damage_taken
+execute unless data storage zx:config obj_j_dmg run data modify storage zx:config obj_j_dmg set value 1b
+execute unless data storage zx:config obj_j_dlast run scoreboard objectives add zx.j_dlast dummy
+execute unless data storage zx:config obj_j_dlast run data modify storage zx:config obj_j_dlast set value 1b
+
+data modify storage zx:skills basic set value {}
+data modify storage zx:skills basic."sweetdream:ap_attack" set value 1b
+data modify storage zx:skills basic."sweetdream:bb_attack" set value 1b
+data modify storage zx:skills basic."sweetdream:bg_attack" set value 1b
+data modify storage zx:skills basic."sweetdream:br_attack" set value 1b
+data modify storage zx:skills basic."sweetdream:cgd_attack" set value 1b
+data modify storage zx:skills basic."sweetdream:chime_attack" set value 1b
+data modify storage zx:skills basic."sweetdream:dl_attack" set value 1b
+data modify storage zx:skills basic."sweetdream:fcv_attack" set value 1b
+data modify storage zx:skills basic."sweetdream:fd_attack" set value 1b
+data modify storage zx:skills basic."sweetdream:foresight_attack" set value 1b
+data modify storage zx:skills basic."sweetdream:fr_attack" set value 1b
+data modify storage zx:skills basic."sweetdream:ft_attack" set value 1b
+data modify storage zx:skills basic."sweetdream:gp_attack" set value 1b
+data modify storage zx:skills basic."sweetdream:indwell_attack" set value 1b
+data modify storage zx:skills basic."sweetdream:ln_attack" set value 1b
+data modify storage zx:skills basic."sweetdream:lt_attack" set value 1b
+data modify storage zx:skills basic."sweetdream:mana_crystal_attack" set value 1b
+data modify storage zx:skills basic."sweetdream:os_attack" set value 1b
+data modify storage zx:skills basic."sweetdream:palette_attack" set value 1b
+data modify storage zx:skills basic."sweetdream:pl_attack" set value 1b
+data modify storage zx:skills basic."sweetdream:ps_attack" set value 1b
+data modify storage zx:skills basic."sweetdream:rf_attack" set value 1b
+data modify storage zx:skills basic."sweetdream:self_mind_attack" set value 1b
+data modify storage zx:skills basic."sweetdream:sl_attack" set value 1b
+data modify storage zx:skills basic."sweetdream:sn_attack" set value 1b
+data modify storage zx:skills basic."sweetdream:tr_attack" set value 1b
+data modify storage zx:skills basic."sweetdream:tri_attack" set value 1b
+data modify storage zx:skills basic."sweetdream:tw_attack" set value 1b
+data modify storage zx:skills basic."sweetdream:wb_attack" set value 1b
+data modify storage zx:skills basic."sweetdream:wind_attack" set value 1b
+
+# 魔导士: 层数 zx.j_orb (5; 醒梦后上限5，基础3)
+# 魔导士: 层数 zx.j_prop (5; 预言占用法球容量)
+# 同生: 层数 zx.j_ess (8; 醒梦后上限8，基础5)
+
+execute unless data storage zx:config obj_j_guard_slot run scoreboard objectives add zx.j_guard_slot dummy
+execute unless data storage zx:config obj_j_guard_slot run data modify storage zx:config obj_j_guard_slot set value 1b
+
+execute unless data storage zx:config obj_j_sor_due run scoreboard objectives add zx.j_sor_due dummy
+execute unless data storage zx:config obj_j_sor_due run data modify storage zx:config obj_j_sor_due set value 1b
+execute unless data storage zx:config obj_j_sor_need run scoreboard objectives add zx.j_sor_need dummy
+execute unless data storage zx:config obj_j_sor_need run data modify storage zx:config obj_j_sor_need set value 1b
+
+execute unless data storage zx:config obj_j_cr_book run scoreboard objectives add zx.j_cr_book dummy
+execute unless data storage zx:config obj_j_cr_book run data modify storage zx:config obj_j_cr_book set value 1b
+execute unless data storage zx:config obj_j_cr_sor run scoreboard objectives add zx.j_cr_sor dummy
+execute unless data storage zx:config obj_j_cr_sor run data modify storage zx:config obj_j_cr_sor set value 1b
+execute unless data storage zx:config obj_j_fs_book run scoreboard objectives add zx.j_fs_book dummy
+execute unless data storage zx:config obj_j_fs_book run data modify storage zx:config obj_j_fs_book set value 1b
+execute unless data storage zx:config obj_j_fs_sor run scoreboard objectives add zx.j_fs_sor dummy
+execute unless data storage zx:config obj_j_fs_sor run data modify storage zx:config obj_j_fs_sor set value 1b
+execute unless data storage zx:config obj_j_pain_book run scoreboard objectives add zx.j_pain_book dummy
+execute unless data storage zx:config obj_j_pain_book run data modify storage zx:config obj_j_pain_book set value 1b
+execute unless data storage zx:config obj_j_pain_sor run scoreboard objectives add zx.j_pain_sor dummy
+execute unless data storage zx:config obj_j_pain_sor run data modify storage zx:config obj_j_pain_sor set value 1b
+execute unless data storage zx:config obj_j_il_book run scoreboard objectives add zx.j_il_book dummy
+execute unless data storage zx:config obj_j_il_book run data modify storage zx:config obj_j_il_book set value 1b
+execute unless data storage zx:config obj_j_il_sor run scoreboard objectives add zx.j_il_sor dummy
+execute unless data storage zx:config obj_j_il_sor run data modify storage zx:config obj_j_il_sor set value 1b
+
+execute unless data storage zx:config obj_j_cr_end run scoreboard objectives add zx.j_cr_end dummy
+execute unless data storage zx:config obj_j_cr_end run data modify storage zx:config obj_j_cr_end set value 1b
+execute unless data storage zx:config obj_j_il_end run scoreboard objectives add zx.j_il_end dummy
+execute unless data storage zx:config obj_j_il_end run data modify storage zx:config obj_j_il_end set value 1b
+execute unless data storage zx:config obj_j_em_end run scoreboard objectives add zx.j_em_end dummy
+execute unless data storage zx:config obj_j_em_end run data modify storage zx:config obj_j_em_end set value 1b
+execute unless data storage zx:config obj_j_bloom_end run scoreboard objectives add zx.j_bloom_end dummy
+execute unless data storage zx:config obj_j_bloom_end run data modify storage zx:config obj_j_bloom_end set value 1b
+execute unless data storage zx:config obj_j_pick_end run scoreboard objectives add zx.j_pick_end dummy
+execute unless data storage zx:config obj_j_pick_end run data modify storage zx:config obj_j_pick_end set value 1b
+execute unless data storage zx:config obj_j_pain_end run scoreboard objectives add zx.j_pain_end dummy
+execute unless data storage zx:config obj_j_pain_end run data modify storage zx:config obj_j_pain_end set value 1b
+execute unless data storage zx:config obj_j_abs_end run scoreboard objectives add zx.j_abs_end dummy
+execute unless data storage zx:config obj_j_abs_end run data modify storage zx:config obj_j_abs_end set value 1b
+execute unless data storage zx:config obj_j_rb_end run scoreboard objectives add zx.j_rb_end dummy
+execute unless data storage zx:config obj_j_rb_end run data modify storage zx:config obj_j_rb_end set value 1b
+
+execute unless data storage zx:config obj_j_taunt_wait run scoreboard objectives add zx.j_taunt_wait dummy
+execute unless data storage zx:config obj_j_taunt_wait run data modify storage zx:config obj_j_taunt_wait set value 1b
+
+execute unless data storage zx:config obj_j_res_active run scoreboard objectives add zx.j_res_active dummy
+execute unless data storage zx:config obj_j_res_active run data modify storage zx:config obj_j_res_active set value 1b
+execute unless data storage zx:config obj_j_res_start run scoreboard objectives add zx.j_res_start dummy
+execute unless data storage zx:config obj_j_res_start run data modify storage zx:config obj_j_res_start set value 1b
+
+execute unless data storage zx:config obj_j_pain_n run scoreboard objectives add zx.j_pain_n dummy
+execute unless data storage zx:config obj_j_pain_n run data modify storage zx:config obj_j_pain_n set value 1b
+execute unless data storage zx:config obj_j_pain_gate run scoreboard objectives add zx.j_pain_gate dummy
+execute unless data storage zx:config obj_j_pain_gate run data modify storage zx:config obj_j_pain_gate set value 1b
+
+execute unless data storage zx:config obj_j_hd_book run scoreboard objectives add zx.j_hd_book dummy
+execute unless data storage zx:config obj_j_hd_book run data modify storage zx:config obj_j_hd_book set value 1b
+
+execute unless data storage zx:config obj_j_hd_sor run scoreboard objectives add zx.j_hd_sor dummy
+execute unless data storage zx:config obj_j_hd_sor run data modify storage zx:config obj_j_hd_sor set value 1b

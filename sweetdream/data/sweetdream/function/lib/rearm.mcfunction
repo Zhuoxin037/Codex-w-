@@ -388,3 +388,16 @@ advancement revoke @a only sweetdream:equipment/armor/borrow_fire_hit
 advancement revoke @a only sweetdream:equipment/armor/profile_hit
 
 advancement revoke @a only sweetdream:internal/native_hit
+
+advancement revoke @a only sweetdream:equipment/staff/foresight
+advancement revoke @a only sweetdream:equipment/staff/indwell
+advancement revoke @a only sweetdream:equipment/staff/mana_crystal
+advancement revoke @a only sweetdream:equipment/staff/self_mind
+advancement revoke @a only sweetdream:equipment/sword/empathy
+advancement revoke @a only sweetdream:equipment/sword/illusion
+advancement revoke @a only sweetdream:equipment/sword/mana_imbue
+advancement revoke @a only sweetdream:equipment/tool/dream_waker
+advancement revoke @a only sweetdream:profession/hurt
+advancement revoke @a only sweetdream:profession/melee
+advancement revoke @a only sweetdream:profession/shot
+advancement revoke @a only sweetdream:profession/twin_saved

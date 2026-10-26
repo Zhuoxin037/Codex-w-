@@ -75,3 +75,8 @@ execute unless score #dev zx.meta matches 1 as @a[scores={zx.dbg_yuanhai=1..},ta
 
 execute if score #dev zx.meta matches 1 as @a[scores={zx.dbg_dream=1..}] at @s run function sweetdream:debug/tg_dream
 execute unless score #dev zx.meta matches 1 as @a[scores={zx.dbg_dream=1..},tag=zx.admin] at @s run function sweetdream:debug/tg_dream
+
+execute as @a[scores={zx.job_tg=1..}] at @s run function sweetdream:debug/tg_job
+execute if score #dev zx.meta matches 1 as @a[scores={zx.jobpick_tg=1..}] at @s run function sweetdream:profession/select
+execute unless score #dev zx.meta matches 1 as @a[tag=zx.admin,scores={zx.jobpick_tg=1..}] at @s run function sweetdream:profession/select
+execute as @a[scores={zx.prophecy_tg=1..}] at @s run function sweetdream:profession/mage/choose

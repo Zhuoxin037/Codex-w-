@@ -1,5 +1,6 @@
 {
   "values": [
-    "sweetdream:equipment/tool/nullify/on_create"
+    "sweetdream:equipment/tool/nullify/on_create",
+    "sweetdream:profession/singer/create"
   ]
 }

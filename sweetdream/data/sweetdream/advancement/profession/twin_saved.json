@@ -1,0 +1,17 @@
+{
+  "criteria": {
+    "use": {
+      "trigger": "minecraft:used_totem",
+      "conditions": {
+        "item": {
+          "predicates": {
+            "minecraft:custom_data": "{j_protect:1b}"
+          }
+        }
+      }
+    }
+  },
+  "rewards": {
+    "function": "sweetdream:profession/twin/saved"
+  }
+}

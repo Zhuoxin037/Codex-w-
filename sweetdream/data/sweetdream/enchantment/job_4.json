@@ -1,0 +1,40 @@
+{
+  "description": {
+    "text": "职业专属"
+  },
+  "supported_items": "#minecraft:enchantable/weapon",
+  "weight": 1,
+  "max_level": 1,
+  "min_cost": {
+    "base": 1,
+    "per_level_above_first": 0
+  },
+  "max_cost": {
+    "base": 1,
+    "per_level_above_first": 0
+  },
+  "anvil_cost": 0,
+  "slots": [
+    "mainhand"
+  ],
+  "effects": {
+    "minecraft:damage": [
+      {
+        "effect": {
+          "type": "minecraft:set",
+          "value": -1000000.0
+        },
+        "requirements": {
+          "condition": "minecraft:inverted",
+          "term": {
+            "condition": "minecraft:entity_scores",
+            "entity": "attacker",
+            "scores": {
+              "zx.job": 4
+            }
+          }
+        }
+      }
+    ]
+  }
+}

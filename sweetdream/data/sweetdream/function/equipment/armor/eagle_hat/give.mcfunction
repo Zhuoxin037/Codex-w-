@@ -1,0 +1,2 @@
+# 鹰羽帽 — 魔导士专属
+give @s diamond_helmet[item_model="sweetdream:job_eagle_hat",item_name={text:"鹰羽帽",bold:true,color:"aqua"},lore=[{"text":"魔导士专属","color":"red","italic":false},{"text":" ","italic":false},{"text":"✦ 被动技能","color":"gold","bold":true,"italic":false},{"text":"自身魔力值上限 +200。关于最大魔力值技","color":"gray","italic":false},{"text":"能的伤害提升 10+5X%（X 为法球数量）。","color":"gray","italic":false}],custom_data={zx:["eagle_hat","helmet","armor"],profession:1,tags:["max_mana"]},unbreakable={},tooltip_display={hidden_components:["minecraft:unbreakable","minecraft:enchantments"]}]

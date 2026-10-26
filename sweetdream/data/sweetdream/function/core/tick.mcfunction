@@ -74,6 +74,7 @@ execute in minecraft:the_end as @e[tag=zx.bd_note,distance=0..] at @s run functi
 # 【备份公共输入口】下面三套每刻逻辑都会写 manacore:in arg(观测镜要查术阵数量),
 #   不还回去的话你在聊天栏手填的参数每刻都被冲掉 —— 见 lib/in_bak。
 function sweetdream:lib/in_bak
+function sweetdream:profession/tick
 
 # ★ 位移检测（批 14 补技能：踏灰 / 雨迹）★
 #   只有"刚放过技能、脚穿这两件之一"的玩家带 zx.sm_chk（窗口 8 刻）⇒ 平时零开销。

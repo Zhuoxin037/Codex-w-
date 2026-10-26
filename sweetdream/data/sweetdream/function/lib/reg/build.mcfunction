@@ -557,7 +557,7 @@ data modify storage zx:reg menu append value {k:"menu",n:"重新打印这个菜�
 data modify storage zx:reg menu append value {k:"give",n:"发潜影盒: 装备 28 件 + 强化材料 7 块(分两盒)"}
 
 # ---------- 记录本版本的表位上限(给 gen_reg_unroll.py / check.py 数用) ----------
-data modify storage zx:reg cap set value {b:60,a:8,menu:18,layer:27}
+data modify storage zx:reg cap set value {b:61,a:8,menu:19,layer:30}
 
 # Shared armor ledgers were not exposed in self-stats (58 -> 60 rows, existing cap 60).
 data modify storage zx:reg b append value {l:"通用盔甲魔力上限合计",o:"zx.am_mana",c:"aqua",n:"含浮光·迟暮套装",e:"all"}
@@ -580,3 +580,33 @@ data modify storage zx:reg menu append value {k:"yuanhai",n:"给32格内准星�
 
 data modify storage zx:reg tg.dream set value {obj:"zx.dbg_dream",name:"准星目标：白昼梦",fn:"sweetdream:debug/mark_dream"}
 data modify storage zx:reg menu append value {k:"dream",n:"给32格内准星瞄准的首个生物附加「白昼梦」，墙壁阻挡"}
+
+data modify storage zx:reg tg.job set value {obj:"zx.job_tg",name:"切换职业",fn:"sweetdream:profession/menu"}
+data modify storage zx:reg menu append value {k:"job",n:"选择我、魔导士、狂徒、歌者或“同生”；显示属性与专属机制"}
+data modify storage zx:reg names.profession_mage set value "魔导士"
+data modify storage zx:reg names.profession_twin set value "“同生”"
+data modify storage zx:reg layer append value {o:"zx.j_orb",l:"法球",c:"aqua",e:"profession_mage",n:"个",max:0}
+data modify storage zx:reg layer append value {o:"zx.j_prop",l:"预言",c:"light_purple",e:"profession_mage",n:"个",max:0}
+data modify storage zx:reg layer append value {o:"zx.j_ess",l:"本质",c:"aqua",e:"profession_twin",n:"层",max:0}
+
+data modify storage zx:reg names.dream_waker set value "醒梦仪"
+
+data modify storage zx:reg names.grimoire set value "魔导书"
+
+data modify storage zx:reg names.eagle_hat set value "鹰羽帽"
+
+data modify storage zx:reg names.mana_crystal set value "魔晶石"
+
+data modify storage zx:reg names.mana_imbue set value "注魔"
+
+data modify storage zx:reg names.foresight set value "预见"
+
+data modify storage zx:reg names.self_mind set value "意识与本我"
+
+data modify storage zx:reg names.illusion set value "幻象"
+
+data modify storage zx:reg names.empathy set value "共感"
+
+data modify storage zx:reg names.indwell set value "寄宿"
+
+data modify storage zx:reg b append value {l:"魔力上限",o:"zx.j_sel",c:"aqua",n:"",e:"eagle_hat"}

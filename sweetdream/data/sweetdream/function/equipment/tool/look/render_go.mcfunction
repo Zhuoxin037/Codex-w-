@@ -91,6 +91,8 @@ scoreboard players set #ly_first zx.meta 1
 execute if data storage zx:work eq.furnace_core run function sweetdream:equipment/armor/furnace_core/look_seg
 
 # ---- 层数段 ----
+execute if score @s zx.job matches 1 run data modify storage zx:work eq.profession_mage set value 1b
+execute if score @s zx.job matches 4 run data modify storage zx:work eq.profession_twin set value 1b
 function sweetdream:lib/look/layer_unroll
 function sweetdream:lib/look/new_equipment
 
@@ -108,4 +110,5 @@ execute if data storage zx:work eq.palette run function sweetdream:equipment/sta
 #   加 "interpret":true 后, 服务器会**把读到的值直接解释成文本组件**;
 #   而「列表」本身就是合法的文本组件写法(["A","B"] ≡ {text:"A",extra:["B"]}),
 #   所以 xline 会被正确拼出来, 而不是被转成字符串。
-title @s actionbar [{"text":"⚔ ","color":"gray"},{"score":{"name":"#v_atk","objective":"zx.meta"},"color":"white"},{"text":"   ❤ ","color":"red"},{"score":{"name":"#v_hp","objective":"zx.meta"},"color":"red"},{"text":"/","color":"dark_red"},{"score":{"name":"#v_hpmax","objective":"zx.meta"},"color":"dark_red"},{"text":"   ✦ ","color":"aqua"},{"score":{"name":"#v_mana","objective":"zx.meta"},"color":"aqua"},{"text":"/","color":"dark_aqua"},{"score":{"name":"#v_manamax","objective":"zx.meta"},"color":"dark_aqua"},{"text":"   ✡ ","color":"light_purple"},{"score":{"name":"#v_fcnt","objective":"zx.meta"},"color":"light_purple"},{"text":"/","color":"dark_purple"},{"score":{"name":"#v_flim","objective":"zx.meta"},"color":"dark_purple"},{"text":"   ⏳ ","color":"yellow"},{"score":{"name":"#v_cdi","objective":"zx.meta"},"color":"gold"},{"text":".","color":"gold"},{"score":{"name":"#v_cdd","objective":"zx.meta"},"color":"gold"},{"text":"s","color":"gold"},{"nbt":"xline","storage":"zx:look","interpret":true}]
+function sweetdream:profession/display_name
+title @s actionbar [{"text":"职业 ","color":"gray"},{"nbt":"profession_name","storage":"zx:work","color":"white"},{"text":"   ⚔ ","color":"gray"},{"score":{"name":"#v_atk","objective":"zx.meta"},"color":"white"},{"text":"   ❤ ","color":"red"},{"score":{"name":"#v_hp","objective":"zx.meta"},"color":"red"},{"text":"/","color":"dark_red"},{"score":{"name":"#v_hpmax","objective":"zx.meta"},"color":"dark_red"},{"text":"   ✦ ","color":"aqua"},{"score":{"name":"#v_mana","objective":"zx.meta"},"color":"aqua"},{"text":"/","color":"dark_aqua"},{"score":{"name":"#v_manamax","objective":"zx.meta"},"color":"dark_aqua"},{"text":"   ✡ ","color":"light_purple"},{"score":{"name":"#v_fcnt","objective":"zx.meta"},"color":"light_purple"},{"text":"/","color":"dark_purple"},{"score":{"name":"#v_flim","objective":"zx.meta"},"color":"dark_purple"},{"text":"   ⏳ ","color":"yellow"},{"score":{"name":"#v_cdi","objective":"zx.meta"},"color":"gold"},{"text":".","color":"gold"},{"score":{"name":"#v_cdd","objective":"zx.meta"},"color":"gold"},{"text":"s","color":"gold"},{"nbt":"xline","storage":"zx:look","interpret":true}]

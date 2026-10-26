@@ -1,3 +1,5 @@
+scoreboard players set @s sdh.bigcd 240
+scoreboard players set @s sdh.speed 0
 scoreboard players set @s sdh.state 20
 scoreboard players set @s sdh.age 0
 scoreboard players set @s sdh.energy 0

@@ -5,8 +5,8 @@
 #     python .workbuddy/_gen_give_all.py
 # 【用法】/function sweetdream:debug/give_all   或   /trigger zx.dbg_give
 #
-# 【为什么是 10 个盒子】潜影盒只有 27 格, 而东西一共 261 件
-#   (173 件装备 + 88 块强化石) —— 按每盒 27 件自动分包。
+# 【为什么是 11 个盒子】潜影盒只有 27 格, 而东西一共 271 件
+#   (183 件装备 + 88 块强化石) —— 按每盒 27 件自动分包。
 #
 # 【怎么做到的】走一个方块当中转站:
 #   ① 在下面这些坐标放空潜影盒方块(和强化台 0,-59,2 错开、同一个区块)
@@ -33,6 +33,7 @@ setblock 0 -60 13 minecraft:orange_shulker_box replace
 setblock 0 -60 15 minecraft:pink_shulker_box replace
 setblock 2 -60 1 minecraft:light_gray_shulker_box replace
 setblock 2 -60 3 minecraft:magenta_shulker_box replace
+setblock 2 -60 5 minecraft:brown_shulker_box replace
 setblock 0 -60 2 minecraft:chest replace
 data modify block 0 -60 1 Items set value []
 data modify block 0 -60 3 Items set value []
@@ -44,6 +45,7 @@ data modify block 0 -60 13 Items set value []
 data modify block 0 -60 15 Items set value []
 data modify block 2 -60 1 Items set value []
 data modify block 2 -60 3 Items set value []
+data modify block 2 -60 5 Items set value []
 data modify block 0 -60 2 Items set value []
 data modify block 0 -60 1 CustomName set value {"text":"sweetdream · 盒1 (27 件)","color":"yellow","italic":false}
 data modify block 0 -60 3 CustomName set value {"text":"sweetdream · 盒2 (27 件)","color":"light_purple","italic":false}
@@ -55,6 +57,7 @@ data modify block 0 -60 13 CustomName set value {"text":"sweetdream · 盒7 (27 
 data modify block 0 -60 15 CustomName set value {"text":"sweetdream · 盒8 (27 件)","color":"light_purple","italic":false}
 data modify block 2 -60 1 CustomName set value {"text":"sweetdream · 盒9 (27 件)","color":"gray","italic":false}
 data modify block 2 -60 3 CustomName set value {"text":"sweetdream · 盒10 (18 件)","color":"light_purple","italic":false}
+data modify block 2 -60 5 CustomName set value {"text":"sweetdream · 职业装备（10 件）","color":"light_purple","italic":false}
 #   【兜底提示】要是中转站没建成(区块没加载 / 你不在主世界), 后面全都会
 #   静默失败 —— 与其让你以为发了但没给, 不如直接说出来。
 execute unless block 0 -60 1 #minecraft:shulker_boxes run tellraw @s [{"text":"[调试] 中转站没建成: 盒子都没发出去。这条只支持主世界, 且那个坐标的区块得是加载的。","color":"red"}]
@@ -866,6 +869,38 @@ function sweetdream:overlimit/item/yebu
 item replace block 2 -60 3 container.17 from entity @s hotbar.0
 item replace entity @s hotbar.0 with minecraft:air
 
+# ---- ③ 盒 11: 10 件 ----
+function sweetdream:equipment/armor/eagle_hat/give
+item replace block 2 -60 5 container.0 from entity @s hotbar.0
+item replace entity @s hotbar.0 with minecraft:air
+function sweetdream:equipment/sword/empathy/give
+item replace block 2 -60 5 container.1 from entity @s hotbar.0
+item replace entity @s hotbar.0 with minecraft:air
+function sweetdream:equipment/sword/illusion/give
+item replace block 2 -60 5 container.2 from entity @s hotbar.0
+item replace entity @s hotbar.0 with minecraft:air
+function sweetdream:equipment/sword/mana_imbue/give
+item replace block 2 -60 5 container.3 from entity @s hotbar.0
+item replace entity @s hotbar.0 with minecraft:air
+function sweetdream:equipment/staff/foresight/give
+item replace block 2 -60 5 container.4 from entity @s hotbar.0
+item replace entity @s hotbar.0 with minecraft:air
+function sweetdream:equipment/staff/indwell/give
+item replace block 2 -60 5 container.5 from entity @s hotbar.0
+item replace entity @s hotbar.0 with minecraft:air
+function sweetdream:equipment/staff/mana_crystal/give
+item replace block 2 -60 5 container.6 from entity @s hotbar.0
+item replace entity @s hotbar.0 with minecraft:air
+function sweetdream:equipment/staff/self_mind/give
+item replace block 2 -60 5 container.7 from entity @s hotbar.0
+item replace entity @s hotbar.0 with minecraft:air
+function sweetdream:equipment/tool/dream_waker/give
+item replace block 2 -60 5 container.8 from entity @s hotbar.0
+item replace entity @s hotbar.0 with minecraft:air
+function sweetdream:equipment/tool/grimoire/give
+item replace block 2 -60 5 container.9 from entity @s hotbar.0
+item replace entity @s hotbar.0 with minecraft:air
+
 # ---- ④ 先把玩家原本的 hotbar.0 还回去(再发盒子, 免得被顶掉) ----
 item replace entity @s hotbar.0 from block 0 -60 2 container.0
 
@@ -880,6 +915,7 @@ loot give @s mine 0 -60 13 minecraft:diamond_pickaxe
 loot give @s mine 0 -60 15 minecraft:diamond_pickaxe
 loot give @s mine 2 -60 1 minecraft:diamond_pickaxe
 loot give @s mine 2 -60 3 minecraft:diamond_pickaxe
+loot give @s mine 2 -60 5 minecraft:diamond_pickaxe
 
 # ---- ⑥ 收尾: 拆掉中转站 ----
 setblock 0 -60 1 minecraft:air replace
@@ -892,5 +928,6 @@ setblock 0 -60 13 minecraft:air replace
 setblock 0 -60 15 minecraft:air replace
 setblock 2 -60 1 minecraft:air replace
 setblock 2 -60 3 minecraft:air replace
+setblock 2 -60 5 minecraft:air replace
 setblock 0 -60 2 minecraft:air replace
-tellraw @s [{"text":"[调试] 已发: 261 件东西, 共 10 个盒子。","color":"dark_gray"}]
+tellraw @s [{"text":"[调试] 已发: 271 件东西, 共 11 个盒子。","color":"dark_gray"}]

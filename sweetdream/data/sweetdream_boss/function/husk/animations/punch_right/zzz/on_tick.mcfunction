@@ -6,5 +6,5 @@ execute if score @s aj.tween_duration matches ..0 if entity @s[tag=aj.pause_afte
 data remove storage animated_java:temp args
 execute store result storage animated_java:temp args.frame int 1 run scoreboard players get @s sweetdream_boss.husk.punch_right.frame
 function sweetdream_boss:husk/animations/punch_right/zzz/apply_frame with storage animated_java:temp args
-execute if score @s sweetdream_boss.husk.punch_right.frame matches 20 run return run function sweetdream_boss:husk/animations/punch_right/zzz/loop_mode_stop
+execute if score @s sweetdream_boss.husk.punch_right.frame matches 16 run return run function sweetdream_boss:husk/animations/punch_right/zzz/loop_mode_stop
 scoreboard players add @s sweetdream_boss.husk.punch_right.frame 1

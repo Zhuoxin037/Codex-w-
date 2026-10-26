@@ -37,3 +37,6 @@ execute if data storage zx:reg layer[23] run function sweetdream:lib/look/layer_
 execute if data storage zx:reg layer[24] run function sweetdream:lib/look/layer_row with storage zx:reg layer[24]
 execute if data storage zx:reg layer[25] run function sweetdream:lib/look/layer_row with storage zx:reg layer[25]
 execute if data storage zx:reg layer[26] run function sweetdream:lib/look/layer_row with storage zx:reg layer[26]
+execute if data storage zx:reg layer[27] run function sweetdream:lib/look/layer_row with storage zx:reg layer[27]
+execute if data storage zx:reg layer[28] run function sweetdream:lib/look/layer_row with storage zx:reg layer[28]
+execute if data storage zx:reg layer[29] run function sweetdream:lib/look/layer_row with storage zx:reg layer[29]

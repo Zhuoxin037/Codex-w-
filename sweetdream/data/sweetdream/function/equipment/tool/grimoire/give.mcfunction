@@ -1,0 +1,3 @@
+# 魔导书 — 魔导士专属
+# 用户确认：沿用追溯指针原版外观，未制作独立模型前不覆盖 item_model。
+give @s recovery_compass[item_name={text:"魔导书",bold:true,color:"aqua"},lore=[{"text":"魔导士专属","color":"red","italic":false},{"text":" ","italic":false},{"text":"✦ 被动技能","color":"gold","bold":true,"italic":false},{"text":"持于副手时，使用技能若有法球则消耗一","color":"gray","italic":false},{"text":"个，关于最大魔力值技能的伤害提升 10%","color":"gray","italic":false},{"text":"（独立乘区），之后返还本技能所花费的","color":"gray","italic":false},{"text":"20% 魔力值。","color":"gray","italic":false}],custom_data={zx:["grimoire","tool"],profession:1,tags:["max_mana","cur_mana","consume","indep_mul"]},max_stack_size=1,tooltip_display={hidden_components:["minecraft:enchantments"]},enchantment_glint_override=false,enchantments={"sweetdream:job_1":1}]

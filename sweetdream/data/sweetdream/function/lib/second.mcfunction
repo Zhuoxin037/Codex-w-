@@ -8,6 +8,7 @@
 #   —— 理由见那两个文件; 别在本文件里再调一次(会变成每刻 + 每秒各一次, 无意义)。
 
 function sweetdream:lib/in_bak
+function sweetdream:profession/second
 
 # 【R06 兜底】还有待归还武器的玩家: 每秒重试一次回手 —— 覆盖"消耗后立刻掉线 /
 #   当刻死亡重生 / 目标格临时被占"这三种漏网场景(原来只有 1 tick 后的一次机会)。

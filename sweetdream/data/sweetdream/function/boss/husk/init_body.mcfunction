@@ -16,3 +16,4 @@ scoreboard players set @s sdh.hit0 0
 scoreboard players set @s sdh.hit1 0
 scoreboard players set @s sdh.lastmove 0
 function sweetdream:boss/husk/ward/normal
+function sweetdream:boss/husk/resize

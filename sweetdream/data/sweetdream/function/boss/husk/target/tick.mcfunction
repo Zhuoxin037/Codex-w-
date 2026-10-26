@@ -1,3 +1,4 @@
+execute if entity @s[tag=zx.j_eroded] run return run function sweetdream:profession/twin/boss_forget
 tag @e[tag=sd.hk.target,distance=0..] remove sd.hk.target
 execute store result storage sweetdream:husk aggro.id int 1 run scoreboard players get @s sdh.id
 scoreboard players operation #aggro sdh.id = @s sdh.id

@@ -37,4 +37,7 @@ execute if data storage manacore:work a{skill:""} run return 0
 data modify storage manacore:out r.success set value 1b
 data modify storage manacore:out r.ready set value 1b
 data modify storage manacore:out r.reason set value "ok"
+execute if entity @s[type=minecraft:player,scores={zx.j_sorrow=1}] run function sweetdream:profession/mage/sorrow_check
 function manacore:internal/skill/check with storage manacore:work a
+
+execute if entity @s[type=minecraft:player,scores={zx.j_sorrow=1,zx.j_cast_a=0}] if data storage manacore:out r{success:1b} run function sweetdream:profession/mage/sorrow_checked

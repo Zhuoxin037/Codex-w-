@@ -14,4 +14,4 @@ $execute unless entity @e[type=minecraft:text_display,tag=zx.icon_fading,tag=zx.
 $execute unless entity @s[tag=sd.fb.body] unless entity @s[tag=sd.hk.body] unless entity @s[tag=sd.kn.body] at @s anchored eyes positioned ^ ^ ^ anchored feet run tp @e[type=minecraft:text_display,tag=zx.icon_fading,tag=zx.owner_$(u0)_$(u1)_$(u2)_$(u3)] ~ ~0.45 ~
 $execute if entity @s[tag=sd.fb.body] at @s anchored eyes positioned ^ ^ ^ anchored feet run tp @e[type=minecraft:text_display,tag=zx.icon_fading,tag=zx.owner_$(u0)_$(u1)_$(u2)_$(u3)] ~ ~1.45 ~
 $execute if entity @s[tag=sd.kn.body] at @s anchored eyes positioned ^ ^ ^ anchored feet run tp @e[type=minecraft:text_display,tag=zx.icon_fading,tag=zx.owner_$(u0)_$(u1)_$(u2)_$(u3)] ~ ~1.45 ~
-$execute if entity @s[tag=sd.hk.body] at @s anchored eyes positioned ^ ^ ^ anchored feet run tp @e[type=minecraft:text_display,tag=zx.icon_fading,tag=zx.owner_$(u0)_$(u1)_$(u2)_$(u3)] ~ ~0.80 ~
+$execute if entity @s[tag=sd.hk.body] at @s anchored eyes positioned ^ ^ ^ anchored feet run tp @e[type=minecraft:text_display,tag=zx.icon_fading,tag=zx.owner_$(u0)_$(u1)_$(u2)_$(u3)] ~ ~1.20 ~

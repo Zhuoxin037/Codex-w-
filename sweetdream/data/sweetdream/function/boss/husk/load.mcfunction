@@ -44,3 +44,15 @@ scoreboard players set #7 sdh.tmp 7
 scoreboard players set #13 sdh.tmp 13
 scoreboard players set #5 sdh.tmp 5
 scoreboard players set #1000 sdh.tmp 1000
+
+scoreboard objectives add sdh.bigcd dummy
+scoreboard objectives add sdh.smallcd dummy
+scoreboard objectives add sdh.leapmode dummy
+scoreboard objectives add sdh.air dummy
+scoreboard objectives add sdh.jumpsteps dummy
+scoreboard objectives add sdh.jx dummy
+scoreboard objectives add sdh.jy dummy
+scoreboard objectives add sdh.jz dummy
+scoreboard objectives add sdh.walktempo dummy
+scoreboard players set #16 sdh.tmp 16
+scoreboard players set #20 sdh.tmp 20

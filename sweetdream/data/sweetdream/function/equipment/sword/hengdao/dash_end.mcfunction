@@ -38,7 +38,9 @@ execute if score @s zx.hd_ol matches 1 run data modify storage manacore:in arg.m
 # 「下一次技能加成」: 风行攒的风声奖励对"所有以自身最大魔力值结算的技能"生效,
 #   横刀这一刀正好是最大魔力口径, 所以吃同一份。走 lib 统一处理
 #   (普通乘区、乘完即删), 别在这里再写一套独立乘区的定点乘法。
+function sweetdream:profession/mod_begin {book_obj:"zx.j_hd_book",sor_obj:"zx.j_hd_sor"}
 function manacore:api/damage/calc
+function sweetdream:profession/mod_end
 # 此刻 manacore:out r.damage = 最大魔力 ×0.08 / ×0.1
 
 # ④ 圈出落点范围内的生物(基础 2 格 / 超限 5 格), 再打
@@ -90,3 +92,6 @@ execute if score @s zx.hd_ol matches 1 if score #hd_k zx.meta matches 1 run play
 # ⑦ 收尾: 清范围标记 + 清掉这次的超限快照(下次施法会重新拍)
 tag @e[tag=zx.hd_hit] remove zx.hd_hit
 scoreboard players set @s zx.hd_ol 0
+
+scoreboard players set @s zx.j_hd_book 0
+scoreboard players set @s zx.j_hd_sor 0
