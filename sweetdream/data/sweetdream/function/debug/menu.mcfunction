@@ -27,6 +27,12 @@ execute if data storage zx:reg menu[8] run function sweetdream:debug/menu_item w
 execute if data storage zx:reg menu[9] run function sweetdream:debug/menu_item with storage zx:reg menu[9]
 execute if data storage zx:reg menu[10] run function sweetdream:debug/menu_item with storage zx:reg menu[10]
 execute if data storage zx:reg menu[11] run function sweetdream:debug/menu_item with storage zx:reg menu[11]
+execute if data storage zx:reg menu[12] run function sweetdream:debug/menu_item with storage zx:reg menu[12]
+execute if data storage zx:reg menu[13] run function sweetdream:debug/menu_item with storage zx:reg menu[13]
+execute if data storage zx:reg menu[14] run function sweetdream:debug/menu_item with storage zx:reg menu[14]
+execute if data storage zx:reg menu[15] run function sweetdream:debug/menu_item with storage zx:reg menu[15]
+execute if data storage zx:reg menu[16] run function sweetdream:debug/menu_item with storage zx:reg menu[16]
+execute if data storage zx:reg menu[17] run function sweetdream:debug/menu_item with storage zx:reg menu[17]
 
 tellraw @s [{"text":"── 没上菜单的其它入口 ──","color":"dark_gray"}]
 tellraw @s [{"text":"  用 /function 前缀 + sweetdream:debug/<名字>, 名字列表:","color":"gray"}]

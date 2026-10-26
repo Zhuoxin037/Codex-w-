@@ -557,8 +557,26 @@ data modify storage zx:reg menu append value {k:"menu",n:"重新打印这个菜�
 data modify storage zx:reg menu append value {k:"give",n:"发潜影盒: 装备 28 件 + 强化材料 7 块(分两盒)"}
 
 # ---------- 记录本版本的表位上限(给 gen_reg_unroll.py / check.py 数用) ----------
-data modify storage zx:reg cap set value {b:60,a:8,menu:12,layer:27}
+data modify storage zx:reg cap set value {b:60,a:8,menu:18,layer:27}
 
 # Shared armor ledgers were not exposed in self-stats (58 -> 60 rows, existing cap 60).
 data modify storage zx:reg b append value {l:"通用盔甲魔力上限合计",o:"zx.am_mana",c:"aqua",n:"含浮光·迟暮套装",e:"all"}
 data modify storage zx:reg b append value {l:"通用盔甲生命上限合计",o:"zx.ah_hp",c:"red",n:"",e:"all"}
+
+data modify storage zx:reg tg.dummy set value {obj:"zx.dbg_dummy",name:"召唤1024血村民",fn:"sweetdream:debug/dummy"}
+data modify storage zx:reg menu append value {k:"dummy",n:"在面前召唤一个可受伤、不移动的1024血测试村民"}
+
+data modify storage zx:reg tg.liuhuo set value {obj:"zx.dbg_liuhuo",name:"准星目标：流火",fn:"sweetdream:debug/mark_liuhuo"}
+data modify storage zx:reg menu append value {k:"liuhuo",n:"给32格内准星瞄准的首个生物附加「流火」，墙壁阻挡"}
+
+data modify storage zx:reg tg.yehuo set value {obj:"zx.dbg_yehuo",name:"准星目标：夜火",fn:"sweetdream:debug/mark_yehuo"}
+data modify storage zx:reg menu append value {k:"yehuo",n:"给32格内准星瞄准的首个生物附加「夜火」，墙壁阻挡"}
+
+data modify storage zx:reg tg.shixin set value {obj:"zx.dbg_shixin",name:"准星目标：噬心",fn:"sweetdream:debug/mark_shixin"}
+data modify storage zx:reg menu append value {k:"shixin",n:"给32格内准星瞄准的首个生物附加「噬心」，墙壁阻挡"}
+
+data modify storage zx:reg tg.yuanhai set value {obj:"zx.dbg_yuanhai",name:"准星目标：渊海",fn:"sweetdream:debug/mark_yuanhai"}
+data modify storage zx:reg menu append value {k:"yuanhai",n:"给32格内准星瞄准的首个生物附加「渊海」，墙壁阻挡"}
+
+data modify storage zx:reg tg.dream set value {obj:"zx.dbg_dream",name:"准星目标：白昼梦",fn:"sweetdream:debug/mark_dream"}
+data modify storage zx:reg menu append value {k:"dream",n:"给32格内准星瞄准的首个生物附加「白昼梦」，墙壁阻挡"}

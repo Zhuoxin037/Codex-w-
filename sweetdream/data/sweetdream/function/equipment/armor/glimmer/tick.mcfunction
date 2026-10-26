@@ -6,3 +6,5 @@ scoreboard players operation @s zx.gl_hp = @s zx.hp_c
 scoreboard players operation #gl_gap zx.meta = #now manacore.meta
 scoreboard players operation #gl_gap zx.meta -= @s zx.gl_lh
 execute if score #gl_gap zx.meta matches 160.. run function sweetdream:equipment/armor/glimmer/give_color
+
+execute if score @s zx.gl_wt > #now manacore.meta run function sweetdream:equipment/armor/glimmer/white_pulse

@@ -9,7 +9,7 @@ function sweetdream:equipment/armor/glimmer/maintain
 #   黄：移速 +20%，离自身最近的 3 个生物移速 -40%
 #   白：技能伤害 +30%（独立乘区）, 每秒恢复 3% 最大生命值与 0.8% 最大魔力值,
 #       移速 +30%, 离自身最近的 5 个生物移速 -45%,
-#       每 3 秒对自身 5 格内的随机 4 个生物附加「白昼梦」并使其时停 1 秒
+#       白光满 3 秒后，每秒对自身 5 格内的随机 4 个生物附加「白昼梦」并使其时停 1 秒
 # 【★ 白 = 三色齐, 不是第四种状态 ★】三色计分项都在, 白只是"全 1"的判读。
 #   白期间**用白的数值替换**三色数值, 不是叠加。
 # 【脱掉头盔怎么办】三色本身不清（原文没说脱了就掉）, 但移速 modifier 必须摘 ——
@@ -41,5 +41,5 @@ function sweetdream:equipment/armor/glimmer/self_speed
 # ④ 敌人减速（黄：最近 3 个 -40% / 白：最近 5 个 -45%）
 function sweetdream:equipment/armor/glimmer/foe_slow
 
-# ⑤ 白：每 3 秒对 5 格内随机 4 个生物附加「白昼梦」并使其时停 1 秒
-execute if score #gl_w zx.meta matches 1 run function sweetdream:equipment/armor/glimmer/white_pulse
+# ⑤ 白：白光满 3 秒后，每秒对 5 格内随机 4 个生物附加「白昼梦」并使其时停 1 秒
+# 白昼梦脉冲已移到每刻 heartbeat，按白光创建时刻计算。

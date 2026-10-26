@@ -17,3 +17,15 @@ scoreboard players enable @s zx.dbg_mana
 scoreboard players enable @s zx.dbg_fadd
 scoreboard players enable @s zx.dbg_fdel
 scoreboard players enable @s zx.dbg_give
+
+scoreboard players enable @s zx.dbg_dummy
+
+scoreboard players enable @s zx.dbg_liuhuo
+
+scoreboard players enable @s zx.dbg_yehuo
+
+scoreboard players enable @s zx.dbg_shixin
+
+scoreboard players enable @s zx.dbg_yuanhai
+
+scoreboard players enable @s zx.dbg_dream

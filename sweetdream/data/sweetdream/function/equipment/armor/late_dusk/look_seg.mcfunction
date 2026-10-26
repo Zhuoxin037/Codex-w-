@@ -1,8 +1,7 @@
 function sweetdream:lib/look/separator
-scoreboard players operation #hud_ld zx.meta = @s zx.ld_t
-scoreboard players operation #hud_ld zx.meta -= #now manacore.meta
-scoreboard players add #hud_ld zx.meta 19
-scoreboard players operation #hud_ld zx.meta /= #20 zx.meta
 data modify storage zx:look xline append value {text:"回光余时 ",color:"dark_purple"}
-data modify storage zx:look xline append value {score:{name:"#hud_ld",objective:"zx.meta"},color:"light_purple"}
-data modify storage zx:look xline append value {text:"s",color:"gray"}
+function sweetdream:equipment/armor/late_dusk/look_one {o:"zx.ld_t1"}
+execute if score @s zx.ld_s matches 2.. run data modify storage zx:look xline append value {text:"/",color:"gray"}
+execute if score @s zx.ld_s matches 2.. run function sweetdream:equipment/armor/late_dusk/look_one {o:"zx.ld_t2"}
+execute if score @s zx.ld_s matches 3 run data modify storage zx:look xline append value {text:"/",color:"gray"}
+execute if score @s zx.ld_s matches 3 run function sweetdream:equipment/armor/late_dusk/look_one {o:"zx.ld_t3"}

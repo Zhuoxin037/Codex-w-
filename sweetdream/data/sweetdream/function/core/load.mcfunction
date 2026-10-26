@@ -2701,7 +2701,7 @@ execute as @a run scoreboard players set @s zx.et_su 0
 #   zx.gl_hp   = 上一刻的生命值(zx.hp_c); 变小 ⇒ 失去全部光效
 #   zx.gl_hacc = 毫血累加器(绿 1%/白 3% 每秒只有 0.2~0.6 点, 整数除法会整个吃掉)
 #   zx.gl_spd  = 自身移速 modifier 账本(0 没挂 / 1 = 黄 +20% / 2 = 白 +30%)
-#   zx.gl_cd   = 白·群体白昼梦的下次可触发时刻(3 秒节流)
+#   zx.gl_cd   = 白光满3秒后开始每20刻附加白昼梦的下次时刻
 #   —— 记在**生物**身上(★ 永久留存档, 三维度兜底清)
 #   zx.gl_slt  = 被浮光减速的剩余刻(2 秒缓冲; 到期自己摘 modifier)
 #   zx.gl_fv   = 该生物当前挂着哪一档减速(0 / 40 / 45)
@@ -2760,8 +2760,8 @@ execute as @a run scoreboard players reset @s zx.gl_fv
 # ===== 迟暮(2026-10-25 ★按用户 16:53 原稿重写★): 「回光」+ 5 秒伤害记录 =====
 #   ★★ 上一版(暮账 / 暮痕 / 背水)是我自编的, 已全部作废 —— 别再复活。
 #   —— 记在**玩家**身上
-#   zx.ld_s  = 「回光」层数(自身被附加白昼梦时 +1, 15 秒统一到期)
-#   zx.ld_t  = 回光到期时刻(#now + 300)
+#   zx.ld_s  = 「回光」层数(自身给生物附加白昼梦时 +1，最多3层，每层独立8秒)
+#   zx.ld_t  = 最早一层回光到期时刻；ld_t1/2/3保存各层独立期限
 #   zx.ld_c  = 累计消耗**次数**(到 3 ⇒ 抗性提升Ⅴ, 随即归零重新数; 不是可攒资源)
 #   zx.ld_r5 = 抗性提升Ⅴ的到期时刻(≥1 = 这个抗性是我们给的, 受伤即清)
 #   —— 记在**生物**身上(★ 永久留存档, 三维度兜底清)
@@ -2909,3 +2909,48 @@ data modify storage zx:config obj_tf_seen set value 1b
 
 execute unless data storage zx:config obj_native_gen run scoreboard objectives add zx.native_gen dummy
 data modify storage zx:config obj_native_gen set value 1b
+
+execute unless data storage zx:config obj_ld_t1 run scoreboard objectives add zx.ld_t1 dummy
+data modify storage zx:config obj_ld_t1 set value 1b
+
+execute unless data storage zx:config obj_ld_t2 run scoreboard objectives add zx.ld_t2 dummy
+data modify storage zx:config obj_ld_t2 set value 1b
+
+execute unless data storage zx:config obj_ld_t3 run scoreboard objectives add zx.ld_t3 dummy
+data modify storage zx:config obj_ld_t3 set value 1b
+
+execute unless data storage zx:config obj_dt_hp run scoreboard objectives add zx.dt_hp dummy
+data modify storage zx:config obj_dt_hp set value 1b
+
+execute unless data storage zx:config obj_dt_ab run scoreboard objectives add zx.dt_ab dummy
+data modify storage zx:config obj_dt_ab set value 1b
+
+execute unless data storage zx:config obj_dt_end run scoreboard objectives add zx.dt_end dummy
+data modify storage zx:config obj_dt_end set value 1b
+
+execute unless data storage zx:config obj_dbg_dummy run scoreboard objectives add zx.dbg_dummy trigger
+data modify storage zx:config obj_dbg_dummy set value 1b
+
+execute unless data storage zx:config obj_dbg_liuhuo run scoreboard objectives add zx.dbg_liuhuo trigger
+data modify storage zx:config obj_dbg_liuhuo set value 1b
+
+execute unless data storage zx:config obj_dbg_yehuo run scoreboard objectives add zx.dbg_yehuo trigger
+data modify storage zx:config obj_dbg_yehuo set value 1b
+
+execute unless data storage zx:config obj_dbg_shixin run scoreboard objectives add zx.dbg_shixin trigger
+data modify storage zx:config obj_dbg_shixin set value 1b
+
+execute unless data storage zx:config obj_dbg_yuanhai run scoreboard objectives add zx.dbg_yuanhai trigger
+data modify storage zx:config obj_dbg_yuanhai set value 1b
+
+execute unless data storage zx:config obj_dbg_dream run scoreboard objectives add zx.dbg_dream trigger
+data modify storage zx:config obj_dbg_dream set value 1b
+
+execute unless data storage zx:config damage_text run data modify storage zx:config damage_text set value {enabled:1b}
+scoreboard players set #dt_count zx.meta 0
+execute in minecraft:overworld run kill @e[type=minecraft:text_display,tag=zx.damage_text,distance=0..]
+execute in minecraft:the_nether run kill @e[type=minecraft:text_display,tag=zx.damage_text,distance=0..]
+execute in minecraft:the_end run kill @e[type=minecraft:text_display,tag=zx.damage_text,distance=0..]
+scoreboard players reset @a zx.ld_t1
+scoreboard players reset @a zx.ld_t2
+scoreboard players reset @a zx.ld_t3

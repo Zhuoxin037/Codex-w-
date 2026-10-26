@@ -152,7 +152,9 @@ execute if entity @s[tag=sd.hk.body] run function sweetdream:boss/husk/hurt/befo
 # Per-invocation result stack remains valid across recursive proc damage.
 execute unless data storage zx:work hit_success_stack run data modify storage zx:work hit_success_stack set value []
 data modify storage zx:work hit_success_stack append value {result:{ok:0b}}
+execute unless data storage zx:work ob{src:"enemy"} run function sweetdream:lib/damage_text/before with storage zx:work a
 function sweetdream:internal/damage/deal with storage zx:work a
+function sweetdream:lib/damage_text/after
 execute if score #native_active zx.meta matches 1 unless entity @s[type=minecraft:player] if entity @s[type=#sweetdream:living] run function sweetdream:internal/native/stamp
 execute if entity @s[tag=zx.lr_watch] run function sweetdream:equipment/armor/late_dusk/watch
 execute if data storage zx:work hit_success_stack[-1].result{ok:1b} unless data storage zx:work ob{src:"enemy"} if entity @s[tag=zx.status.liuhuo] run function sweetdream:equipment/armor/bright_candle/on_hit with storage zx:work ob

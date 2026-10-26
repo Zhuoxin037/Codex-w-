@@ -18,7 +18,10 @@ function sweetdream:equipment/armor/late_dusk/expire
 execute unless score @s zx.ld_s matches 1.. run return 0
 
 # ② 扣一层
-scoreboard players remove @s zx.ld_s 1
+scoreboard players operation @s zx.ld_t1 = @s zx.ld_t2
+scoreboard players operation @s zx.ld_t2 = @s zx.ld_t3
+scoreboard players set @s zx.ld_t3 0
+function sweetdream:equipment/armor/late_dusk/expire
 
 # ③ 累计消耗 3 层 ⇒ 抗性提升Ⅴ（15 秒）+ 受伤即清标记
 scoreboard players add @s zx.ld_c 1

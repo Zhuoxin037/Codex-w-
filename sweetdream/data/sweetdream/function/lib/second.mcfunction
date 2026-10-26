@@ -325,3 +325,8 @@ execute in minecraft:the_nether as @e[tag=zx.lr_watch,distance=0..] run function
 execute in minecraft:the_end as @e[tag=zx.lr_watch,distance=0..] run function sweetdream:equipment/armor/late_dusk/watch_validate
 
 function sweetdream:internal/native/registry_gc
+
+scoreboard players set #dt_count zx.meta 0
+execute in minecraft:overworld as @e[type=minecraft:text_display,tag=zx.damage_text,distance=0..] run scoreboard players add #dt_count zx.meta 1
+execute in minecraft:the_nether as @e[type=minecraft:text_display,tag=zx.damage_text,distance=0..] run scoreboard players add #dt_count zx.meta 1
+execute in minecraft:the_end as @e[type=minecraft:text_display,tag=zx.damage_text,distance=0..] run scoreboard players add #dt_count zx.meta 1

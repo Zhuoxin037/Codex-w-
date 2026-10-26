@@ -1,4 +1,5 @@
 scoreboard players set #native_active zx.meta 0
+execute if data storage zx:config damage_text{enabled:1b} if entity @a run scoreboard players set #native_active zx.meta 1
 execute as @a if items entity @s armor.head *[minecraft:custom_data~{zx:["bright_candle"]}] run scoreboard players set #native_active zx.meta 1
 execute as @a if items entity @s armor.chest *[minecraft:custom_data~{zx:["borrow_fire"]}] run scoreboard players set #native_active zx.meta 1
 execute as @a if items entity @s armor.legs *[minecraft:custom_data~{zx:["late_dusk"]}] run scoreboard players set #native_active zx.meta 1

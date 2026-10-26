@@ -6,6 +6,7 @@ execute store result score #nh_hp zx.meta run data get storage zx:work nh_snapsh
 execute if data storage zx:work nh_snapshot.AbsorptionAmount store result score #nh_ab zx.meta run data get storage zx:work nh_snapshot.AbsorptionAmount 1000
 execute if data storage zx:work nh_snapshot.ticks_since_last_hurt_by_mob store result score #nh_stamp zx.meta run data get storage zx:work nh_snapshot.ticks_since_last_hurt_by_mob
 execute if score #nh_hp zx.meta >= @s zx.nh_hp if score #nh_ab zx.meta >= @s zx.nh_ab run return run function sweetdream:internal/native/update_seen
+function sweetdream:lib/damage_text/native
 # Stamp before any proc damage can recurse through an advancement.
 scoreboard players operation @s zx.nh_hp = #nh_hp zx.meta
 scoreboard players operation @s zx.nh_ab = #nh_ab zx.meta

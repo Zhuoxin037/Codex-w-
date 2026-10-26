@@ -57,3 +57,21 @@ execute if score #dev zx.meta matches 1 as @a[scores={zx.dbg_fdel=1..}] run func
 execute unless score #dev zx.meta matches 1 as @a[scores={zx.dbg_fdel=1..},tag=zx.admin] run function sweetdream:debug/tg_fdel
 execute if score #dev zx.meta matches 1 as @a[scores={zx.dbg_give=1..}] run function sweetdream:debug/tg_give
 execute unless score #dev zx.meta matches 1 as @a[scores={zx.dbg_give=1..},tag=zx.admin] run function sweetdream:debug/tg_give
+
+execute if score #dev zx.meta matches 1 as @a[scores={zx.dbg_dummy=1..}] at @s run function sweetdream:debug/tg_dummy
+execute unless score #dev zx.meta matches 1 as @a[scores={zx.dbg_dummy=1..},tag=zx.admin] at @s run function sweetdream:debug/tg_dummy
+
+execute if score #dev zx.meta matches 1 as @a[scores={zx.dbg_liuhuo=1..}] at @s run function sweetdream:debug/tg_liuhuo
+execute unless score #dev zx.meta matches 1 as @a[scores={zx.dbg_liuhuo=1..},tag=zx.admin] at @s run function sweetdream:debug/tg_liuhuo
+
+execute if score #dev zx.meta matches 1 as @a[scores={zx.dbg_yehuo=1..}] at @s run function sweetdream:debug/tg_yehuo
+execute unless score #dev zx.meta matches 1 as @a[scores={zx.dbg_yehuo=1..},tag=zx.admin] at @s run function sweetdream:debug/tg_yehuo
+
+execute if score #dev zx.meta matches 1 as @a[scores={zx.dbg_shixin=1..}] at @s run function sweetdream:debug/tg_shixin
+execute unless score #dev zx.meta matches 1 as @a[scores={zx.dbg_shixin=1..},tag=zx.admin] at @s run function sweetdream:debug/tg_shixin
+
+execute if score #dev zx.meta matches 1 as @a[scores={zx.dbg_yuanhai=1..}] at @s run function sweetdream:debug/tg_yuanhai
+execute unless score #dev zx.meta matches 1 as @a[scores={zx.dbg_yuanhai=1..},tag=zx.admin] at @s run function sweetdream:debug/tg_yuanhai
+
+execute if score #dev zx.meta matches 1 as @a[scores={zx.dbg_dream=1..}] at @s run function sweetdream:debug/tg_dream
+execute unless score #dev zx.meta matches 1 as @a[scores={zx.dbg_dream=1..},tag=zx.admin] at @s run function sweetdream:debug/tg_dream

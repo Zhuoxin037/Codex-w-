@@ -1,6 +1,6 @@
 execute if score @s zx.gl_cd > #now manacore.meta run return 0
 scoreboard players operation @s zx.gl_cd = #now manacore.meta
-scoreboard players operation @s zx.gl_cd += #60 manacore.meta
+scoreboard players add @s zx.gl_cd 20
 execute at @s run tag @e[type=!#sweetdream:no_damage, type=!minecraft:player, distance=..5, sort=random, limit=4] add zx.gl_p4
 execute store result storage zx:work gl_owner.u0 int 1 run scoreboard players get @s manacore.u0
 execute store result storage zx:work gl_owner.u1 int 1 run scoreboard players get @s manacore.u1
