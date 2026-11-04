@@ -17,7 +17,8 @@ $execute if entity @e[tag=zx.an_lock,scores={zx.an_own=$(u0)},distance=..1.8,lim
 execute if score @s zx.an_pull matches ..0 run function sweetdream:equipment/axe/anchor/pull_end
 execute if score @s zx.an_pull matches ..0 run return 0
 # ④ 朝目标脚底走 0.5 格: ★ 脚与头两格都要是可替换方块, 否则这一步不走(宁可停下, 也不钻地)
-$execute at @s facing entity @e[tag=zx.an_lock,scores={zx.an_own=$(u0)},distance=0..,limit=1] feet positioned ^ ^ ^0.5 if block ~ ~ ~ #minecraft:replaceable if block ~ ~1.6 ~ #minecraft:replaceable run tp @s ~ ~ ~
+$execute store success score #s2_moved zx.meta run execute at @s facing entity @e[tag=zx.an_lock,scores={zx.an_own=$(u0)},distance=0..,limit=1] feet positioned ^ ^ ^0.5 if block ~ ~ ~ #minecraft:replaceable if block ~ ~1.6 ~ #minecraft:replaceable run tp @s ~ ~ ~
+execute if score #s2_moved zx.meta matches 1 at @s run function sweetdream:equipment/armor/empty_cicada/moved
 particle minecraft:cloud ~ ~0.1 ~ 0.15 0.1 0.15 0.02 3 normal
 scoreboard players remove @s zx.an_pull 1
 execute if score @s zx.an_pull matches ..0 run function sweetdream:equipment/axe/anchor/pull_end

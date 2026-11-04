@@ -70,7 +70,9 @@ execute store result storage zx:work be.u0 int 1 run data get entity @s UUID[0]
 execute store result storage zx:work be.u1 int 1 run data get entity @s UUID[1]
 execute store result storage zx:work be.u2 int 1 run data get entity @s UUID[2]
 execute store result storage zx:work be.u3 int 1 run data get entity @s UUID[3]
+execute unless data storage zx:work be.s2_b_dmg run data modify storage zx:work be.s2_b_dmg set value {n:0,d:1}
 function sweetdream:equipment/bow/bone_erode/store with storage zx:work be
+execute unless data storage zx:work be.s2_b_dmg run data modify storage zx:work be.s2_b_dmg set value {n:0,d:1}
 execute at @s as @e[type=#sweetdream:cc_arrow,tag=!zx.cc_seen,distance=..4] run function sweetdream:equipment/bow/bone_erode/snapshot with storage zx:work be
 
 # ⑤ 表现: 骨屑

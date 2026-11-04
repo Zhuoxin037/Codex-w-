@@ -21,6 +21,8 @@ $execute unless entity @e[tag=zx.lgo_$(uuid),limit=1] run return 0
 data modify storage zx:work a set value {uuid:"",damage:0.0,u0:0,u1:0,u2:0,u3:0}
 $data modify storage zx:work a.uuid set value "$(uuid)"
 $data modify storage zx:work a.damage set from storage zx:data lgo."$(uuid)".damage
+data modify storage zx:work a.s2_b_damage set value {n:0,d:1}
+$data modify storage zx:work a.s2_b_damage set from storage zx:data lgo."$(uuid)".s2_b_damage
 $data modify storage zx:work a.u0 set from storage zx:data lgo."$(uuid)".u0
 $data modify storage zx:work a.u1 set from storage zx:data lgo."$(uuid)".u1
 $data modify storage zx:work a.u2 set from storage zx:data lgo."$(uuid)".u2

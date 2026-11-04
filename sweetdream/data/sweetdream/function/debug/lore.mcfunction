@@ -35,3 +35,5 @@ execute if items entity @e[tag=zx.st_tmp,limit=1] weapon.mainhand * run item rep
 kill @e[tag=zx.st_tmp]
 
 tellraw @s [{"text":"[调试] 副手物品的描述已按当前规则重建","color":"green"}]
+
+function sweetdream:equipment/tool/dream_waker/sync

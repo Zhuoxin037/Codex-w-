@@ -61,4 +61,6 @@ function manacore:api/damage/calc
 data modify storage zx:work ball set value {dmg:0.0,style:"bent_ray",hit:"sweetdream:equipment/staff/bent_ray/ball_hit",ol:0b}
 execute if score #br_ol zx.meta matches 1 run data modify storage zx:work ball.ol set value 1b
 data modify storage zx:work ball.dmg set from storage manacore:out r.damage
+data modify storage zx:work ball.s2_b_dmg set value {n:0,d:1}
+data modify storage zx:work ball.s2_b_dmg set from storage manacore:out r.s2_b_damage
 function sweetdream:equipment/staff/attack

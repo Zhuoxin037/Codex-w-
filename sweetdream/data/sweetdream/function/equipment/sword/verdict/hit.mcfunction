@@ -71,6 +71,8 @@ data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:in arg set value {target:"@e[type=!#sweetdream:no_damage,distance=..2]",damage:0.0}
 data modify storage zx:in arg.damage set from storage manacore:out r.damage
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage manacore:out r.s2_b_damage
 execute at @e[tag=zx.victim,limit=1,distance=..32] run function sweetdream:api/damage
 
 # 效果: 虚弱Ⅱ / 缓慢Ⅱ / 发光, 8 秒(施加给"受到伤害的生物")

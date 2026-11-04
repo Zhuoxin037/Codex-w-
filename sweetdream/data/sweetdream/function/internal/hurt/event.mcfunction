@@ -7,6 +7,7 @@ scoreboard players operation @s zx.hurt_seen = @s zx.hurt_total
 execute if score @s zx.hurt_evt matches ..0 run scoreboard players set @s zx.hurt_evt 0
 execute if score @s zx.hurt_evt matches 21474837.. run scoreboard players set @s zx.hurt_evt 21474836
 scoreboard players operation @s zx.hurt_evt *= #100 zx.meta
+execute if entity @s[tag=zx.nr_active] run function sweetdream:equipment/axe/no_return/on_hurt
 
 execute if score @s zx.hurt_evt matches 1.. if items entity @s armor.head *[minecraft:custom_data~{zx:["glimmer"]}] at @s run function sweetdream:equipment/armor/glimmer/clear
 execute if score @s zx.hurt_evt matches 1.. if score @s zx.ld_r5 matches 1.. run effect clear @s minecraft:resistance

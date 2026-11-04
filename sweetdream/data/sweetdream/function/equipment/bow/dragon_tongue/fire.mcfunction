@@ -77,6 +77,8 @@ data modify storage manacore:in arg.other_mul set from storage zx:work dt.mul
 function manacore:api/damage/calc
 data modify storage zx:work dt.dmg set value 0.0
 data modify storage zx:work dt.dmg set from storage manacore:out r.damage
+data modify storage zx:work dt.s2_b_dmg set value {n:0,d:1}
+data modify storage zx:work dt.s2_b_dmg set from storage manacore:out r.s2_b_damage
 
 # ③ 消除受害者身上的「夜火」(统一入口: 永恒/余烬被动在这里生效)
 #    【by 传射手】"消耗者"是射手本人 —— 余烬(回蓝+力量)与永恒(原地刷新)都认它。

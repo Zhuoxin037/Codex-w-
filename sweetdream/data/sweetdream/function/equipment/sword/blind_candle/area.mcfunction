@@ -28,6 +28,8 @@ execute rotated ~ 0 positioned ^ ^ ^3.5 run tag @e[type=!#sweetdream:no_damage,d
 #   ★ 执行者仍是**施法者本人** -> 击杀归属/结算口径都对
 data modify storage zx:in arg set value {target:"@e[type=!#sweetdream:no_damage,tag=zx.bcd_hit,distance=0..]",damage:0.0}
 data modify storage zx:in arg.damage set from storage zx:work bcd.dmg
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage zx:work bcd.s2_b_dmg
 execute at @s run function sweetdream:api/damage
 
 # 表现: 贴地扫过的火舌

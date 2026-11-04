@@ -72,6 +72,7 @@ data modify storage zx:work csf.u2 set from entity @s UUID[2]
 data modify storage zx:work csf.u3 set from entity @s UUID[3]
 
 # ⑨ 在自身位置生成领域 marker
+execute unless data storage zx:work csf.s2_b_dmg run data modify storage zx:work csf.s2_b_dmg set value {n:0,d:1}
 execute at @s run function sweetdream:equipment/armor/condensed_shell/field_one with storage zx:work csf
 
 # ⑩ 在**框架里**登记一个真术阵(这才叫"占用 1 个术阵位": 观测镜的"术阵 n/上限"、

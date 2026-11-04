@@ -17,4 +17,6 @@ data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:work ball set value {dmg:0.0,style:"foresight",hit:"sweetdream:profession/ball_hit/foresight"}
 data modify storage zx:work ball.dmg set from storage manacore:out r.damage
+data modify storage zx:work ball.s2_b_dmg set value {n:0,d:1}
+data modify storage zx:work ball.s2_b_dmg set from storage manacore:out r.s2_b_damage
 function sweetdream:equipment/staff/attack

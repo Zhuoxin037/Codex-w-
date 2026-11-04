@@ -73,6 +73,8 @@ execute if score #frc_ol zx.meta matches 1 run data modify storage manacore:in a
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:work frc.dmg5 set from storage manacore:out r.damage
+data modify storage zx:work frc.s2_b_dmg5 set value {n:0,d:1}
+data modify storage zx:work frc.s2_b_dmg5 set from storage manacore:out r.s2_b_damage
 
 # ⑦ 解冻额外伤害 = 基础攻击力 ×2 / 超限 ×3
 data modify storage manacore:in arg set value {uuid:"",attack_mul:2.0}
@@ -80,6 +82,8 @@ execute if score #frc_ol zx.meta matches 1 run data modify storage manacore:in a
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:work frc.dmg2 set from storage manacore:out r.damage
+data modify storage zx:work frc.s2_b_dmg2 set value {n:0,d:1}
+data modify storage zx:work frc.s2_b_dmg2 set from storage manacore:out r.s2_b_damage
 
 # ⑦.5 本轮的时长参数交给 apply / heal_self 读(存 storage, 不走 zw.meta 假玩家 ——
 #   中间 area 会调 api/damage, 那条链上的 hook 会动 #字头假玩家, 存不住)

@@ -86,6 +86,8 @@ function manacore:api/damage/calc
 #   【宏参数只能取键、不能取下标】(坑 129) ⇒ UUID 的四个整数先摊成 u0..u3。
 data modify storage zx:work twg set value {dmg:0.0,uu:"",u0:0,u1:0,u2:0,u3:0,ol:0,ft:8}
 data modify storage zx:work twg.dmg set from storage manacore:out r.damage
+data modify storage zx:work twg.s2_b_dmg set value {n:0,d:1}
+data modify storage zx:work twg.s2_b_dmg set from storage manacore:out r.s2_b_damage
 data modify storage zx:work twg.uu set from storage zx:data self.uuid
 execute store result storage zx:work twg.u0 int 1 run data get entity @s UUID[0]
 execute store result storage zx:work twg.u1 int 1 run data get entity @s UUID[1]
@@ -122,6 +124,7 @@ function manacore:api/formation/create
 # ⑩ 在**自身位置**召唤"雷楔"(marker 实体)
 #   【为什么用 marker】它同时是三样东西: 术阵的位置锚点、"8 格内"判定的圆心、
 #     8 秒计时的载体(zx.twg_ft)。纯 marker 不做外观(与神裁/崩裂/深池的领域一致)。
+execute unless data storage zx:work twg.s2_b_dmg run data modify storage zx:work twg.s2_b_dmg set value {n:0,d:1}
 execute at @s run function sweetdream:equipment/sword/thunder_wedge/wedge_one with storage zx:work twg
 
 # ⑪ 表现 + 提示

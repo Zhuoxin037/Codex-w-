@@ -12,7 +12,11 @@ scoreboard players add #gt_n zx.meta 1
 
 data modify storage zx:work a set value {target:"@s",type:"sweetdream:true_damage"}
 execute if score #gt_arm zx.meta matches 15.. run data modify storage zx:work a.num set from storage zx:work gt.d18
+execute if score #gt_arm zx.meta matches 15.. run data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+execute if score #gt_arm zx.meta matches 15.. run data modify storage zx:work a.s2_b_num set from storage zx:work gt.s2_b_d18
 execute if score #gt_arm zx.meta matches ..14 run data modify storage zx:work a.num set from storage zx:work gt.d4
+execute if score #gt_arm zx.meta matches ..14 run data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+execute if score #gt_arm zx.meta matches ..14 run data modify storage zx:work a.s2_b_num set from storage zx:work gt.s2_b_d4
 function sweetdream:lib/num/plain
 data modify storage zx:work a.u0 set from storage zx:work gt.u0
 data modify storage zx:work a.u1 set from storage zx:work gt.u1

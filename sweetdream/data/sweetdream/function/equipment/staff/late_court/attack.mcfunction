@@ -50,4 +50,6 @@ function manacore:api/damage/calc
 # ⑤ 装球射出去 + 命中回调(命中后给 2 秒缓慢Ⅱ)
 data modify storage zx:work ball set value {dmg:0.0,style:"late_court",hit:"sweetdream:equipment/staff/late_court/ball_hit"}
 data modify storage zx:work ball.dmg set from storage manacore:out r.damage
+data modify storage zx:work ball.s2_b_dmg set value {n:0,d:1}
+data modify storage zx:work ball.s2_b_dmg set from storage manacore:out r.s2_b_damage
 function sweetdream:equipment/staff/attack

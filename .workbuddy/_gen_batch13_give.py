@@ -23,6 +23,12 @@ ROOT = r"D:\数据包\sweetdream\data\sweetdream\function\equipment"
 #   所以 main() 里一律用 BASE, 别直接用 ROOT。
 BASE = ROOT
 
+# 盔甲穿戴组件（与 _gen_armor_visual.py 同一张表，改一处必须改两处）
+EQ_SLOT = {"helmet": "head", "chestplate": "chest", "leggings": "legs", "boots": "feet"}
+ARMOR_SOUND = {"iron": "minecraft:item.armor.equip_iron",
+               "diamond": "minecraft:item.armor.equip_diamond",
+               "netherite": "minecraft:item.armor.equip_netherite"}
+
 
 def H(t):
     return {"text": t, "color": "gold", "bold": True, "italic": False}
@@ -80,7 +86,7 @@ SUIGU_NOTE = """# ============================================================
 #      而原版 /damage 会被**无敌帧**吞掉绝大部分 ⇒ 必须改成"每 N 刻结算一次"
 #      （包内既有口径：同一目标连击错开 10 tick，见引雷针 K9），否则伤害几乎全丢。
 #   ② "跟着准星移动" ⇒ 每刻重刷 `at @s` + 朝向走 facing/^ 坐标，别读 Pos（卡顿坑 1）。
-# 【外观】未画（无 item_model），先用原版弩外观。
+# 【外观】2026-10-27 已接入：item_model="sweetdream:crossbow_bone_breaker"（6 态）。
 # ============================================================"""
 
 SUIGU_LORE = [
@@ -106,7 +112,7 @@ MINGZHU_NOTE = """# ============================================================
 #   ① 流火 → 夜火是**替换不是叠加**（余烬 burned_out 的教训：叠加会变成刷魔力漏洞）。
 #   ② 本件是"造夜火"，与**烛跬**（消费夜火/流火回蓝）天然上下游，不冲突。
 #   ③ 回魔类一律每 20 刻结算一次，别每刻跑。
-# 【外观】未画（无 item_model / equippable），先用原版下界合金头盔外观。
+# 【外观】2026-10-27 已接入：item_model + equippable -> sweetdream:armor_<id>（16×16 图标 / 64×32 穿戴层）；贴图由 build_vanilla_armor.py 生成，打包走 _sync_armor_rp.py（五份文件缺一即紫黑块，坑195）。
 # ============================================================"""
 
 MINGZHU_LORE = [
@@ -136,7 +142,7 @@ JIEHUO_NOTE = """# ============================================================
 #   转移给自己的数值同样只能按档给 —— lore 与实现对不上时以**分档**为准（已与设计稿同步）。
 # 【★ 两个顺序 ★】先附加流火 → 再结束燃烧 → 再结算真伤（反过来判定会塌）；
 #   剩余燃烧时间读目标 Fire(刻)/20，不足 1 秒按 1 秒保底。
-# 【外观】未画（无 item_model / equippable）。
+# 【外观】2026-10-27 已接入：item_model + equippable -> sweetdream:armor_<id>（16×16 图标 / 64×32 穿戴层）；贴图由 build_vanilla_armor.py 生成，打包走 _sync_armor_rp.py（五份文件缺一即紫黑块，坑195）。
 # ============================================================"""
 
 JIEHUO_LORE = [
@@ -167,7 +173,7 @@ XINMAI_NOTE = """# ============================================================
 #      否则被击退/高速冲撞的怪一秒触发十几次，按最大生命比例会直接打穿 Boss。
 #   ③ 吸血建议封顶（设计稿建议每次 6 点），Boss 高血量下不封顶等于一跳回满。
 #   ④ 泵动伤害必须有玩家归属，否则不进账本、不吃乘区、也不触发吸血。
-# 【外观】未画（无 item_model / equippable）。
+# 【外观】2026-10-27 已接入：item_model + equippable -> sweetdream:armor_<id>（16×16 图标 / 64×32 穿戴层）；贴图由 build_vanilla_armor.py 生成，打包走 _sync_armor_rp.py（五份文件缺一即紫黑块，坑195）。
 # ============================================================"""
 
 XINMAI_LORE = [
@@ -198,7 +204,7 @@ POUMIAN_NOTE = """# ============================================================
 #   ② "下一次其他技能伤害 +20%"仅写oth通道加算，触发前持续保留；其他通道不消耗。
 #   ③ "3 次伤害"按**每只生物分别计数**，全场合计会被一发 AOE 白嫖；回血要节流。
 #   ④ 与绯缝（真伤命中噬心目标回血）同触发面，靠兑现方式错开（计数流 vs 真伤流）。
-# 【外观】未画（无 item_model / equippable）。
+# 【外观】2026-10-27 已接入：item_model + equippable -> sweetdream:armor_<id>（16×16 图标 / 64×32 穿戴层）；贴图由 build_vanilla_armor.py 生成，打包走 _sync_armor_rp.py（五份文件缺一即紫黑块，坑195）。
 # ============================================================"""
 
 POUMIAN_LORE = [
@@ -227,7 +233,7 @@ ZHECHAO_NOTE = """# ============================================================
 #      同一刻同一面墙只结算一次穿越；每2秒回魔的门控独立。
 #   ③ "法术"口径要窄（本稿 = 法杖普攻法球 + 法杖主动法球），不含箭矢/斩击/光束/爆炸。
 #   ④ 水墙**不是领域**，不占术阵位；它是私有资源，不进标签词表。
-# 【外观】未画（无 item_model / equippable）。
+# 【外观】2026-10-27 已接入：item_model + equippable -> sweetdream:armor_<id>（16×16 图标 / 64×32 穿戴层）；贴图由 build_vanilla_armor.py 生成，打包走 _sync_armor_rp.py（五份文件缺一即紫黑块，坑195）。
 # ============================================================"""
 
 ZHECHAO_LORE = [
@@ -259,7 +265,7 @@ FANXI_NOTE = """# ============================================================
 #   （折径 pick_mul 少了 m7/m8 就是这个毛病）。
 # 【★ 其余 ★】海浪每 0.5 秒采样一次（位移 >0.8 格才补片），每只渊海生物各留一片、最多 6 片；
 #   衰减量化为每秒回落 10 个百分点（不是立刻清零，否则拉扯进出没手感）。
-# 【外观】未画（无 item_model / equippable）。
+# 【外观】2026-10-27 已接入：item_model + equippable -> sweetdream:armor_<id>（16×16 图标 / 64×32 穿戴层）；贴图由 build_vanilla_armor.py 生成，打包走 _sync_armor_rp.py（五份文件缺一即紫黑块，坑195）。
 # ============================================================"""
 
 FANXI_LORE = [
@@ -290,7 +296,7 @@ FUGUANG_NOTE = """# ============================================================
 # 【★ 实装必读 ★】
 #   ① 「光效」「回光」是**私有资源**，不进标签词表（状态只有五个）。
 #   ② 上上版(碎光/合光/暗期)与上版(优先补缺色)都是我自编的，已全部作废 —— 别再复活。
-# 【外观】未画（无 item_model / equippable）。
+# 【外观】2026-10-27 已接入：item_model + equippable -> sweetdream:armor_<id>（16×16 图标 / 64×32 穿戴层）；贴图由 build_vanilla_armor.py 生成，打包走 _sync_armor_rp.py（五份文件缺一即紫黑块，坑195）。
 # ============================================================"""
 
 FUGUANG_LORE = [
@@ -329,7 +335,7 @@ CHIMU_NOTE = """# ============================================================
 #   ② 上上版(暮账/暮痕/背水)与上版(同)都是我自编的，已全部作废 —— 别再复活。
 #   ③ 时停走包内既有 `zx.stop` 口径，别另造一套。
 #   ④ 生命值百分比读 criterion 的 zx.hp_c（免费），**不要** `data get entity Health`。
-# 【外观】未画（无 item_model / equippable）。
+# 【外观】2026-10-27 已接入：item_model + equippable -> sweetdream:armor_<id>（16×16 图标 / 64×32 穿戴层）；贴图由 build_vanilla_armor.py 生成，打包走 _sync_armor_rp.py（五份文件缺一即紫黑块，坑195）。
 # ============================================================"""
 
 CHIMU_LORE = [
@@ -347,7 +353,7 @@ CHIMU_LORE = [
 
 ITEMS = [
     dict(key="bow/bone_breaker", eid="bone_breaker", cn="碎骨", base="crossbow",
-         color="white", cat="bow", slot=None,
+         color="white", cat="bow", slot=None, vis="crossbow_bone_breaker",
          tags=["summon", "base_atk", "cur_mana"], note=SUIGU_NOTE, lore=SUIGU_LORE),
     dict(key="armor/bright_candle", eid="bright_candle", cn="明烛", base="netherite_helmet",
          color="gold", cat="armor", slot="helmet",
@@ -393,6 +399,10 @@ def build(it):
     else:
         zx.append('"bow"')
     comps = []
+    # 弩的 item_model 在包内惯例是**第一位**（见 bow/arc 等批 5 出品），盔甲在最后
+    #   （见 _gen_armor_visual.py），两边顺序不能互换，否则漂移守门会误报。
+    if it.get("vis"):
+        comps.append('item_model="sweetdream:%s"' % it["vis"])
     comps.append('item_name={text:"%s",bold:true,color:%s}' % (it["cn"], it["color"]))
     comps.append("lore=%s" % json_to_snbt(lore))
     comps.append("unbreakable={}")
@@ -405,6 +415,14 @@ def build(it):
         comps.append('tooltip_display={hidden_components:["unbreakable","enchantments"]}')
     else:
         comps.append('tooltip_display={hidden_components:["unbreakable"]}')
+    # ★ 外观（2026-10-27）：盔甲必须挂 item_model + equippable。
+    #   组件顺序与 _gen_armor_visual.py 的 comps() **逐字一致**，否则 _chk_gen_drift 会判漂移。
+    #   equippable 是整体替换 ⇒ slot / asset_id / equip_sound 三件必须给全（坑：少一件 = 穿不上/无音效）。
+    if it["cat"] == "armor":
+        mat = it["base"].split("_")[0]
+        comps.append('item_model="sweetdream:armor_%s"' % it["eid"])
+        comps.append('equippable={slot:"%s",asset_id:"sweetdream:armor_%s",equip_sound:"%s"}'
+                     % (EQ_SLOT[it["slot"]], it["eid"], ARMOR_SOUND[mat]))
     return "give @s %s[%s]" % (it["base"], ",".join(comps))
 
 

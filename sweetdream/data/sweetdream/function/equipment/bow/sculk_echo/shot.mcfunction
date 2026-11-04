@@ -60,6 +60,8 @@ function manacore:api/damage/calc
 data modify storage zx:work se set value {uuid:"",hit_dmg:0.0,path_dmg:0.0,cry:0,ol:0b,u0:0,u1:0,u2:0,u3:0}
 data modify storage zx:work se.uuid set from storage zx:data self.uuid
 data modify storage zx:work se.hit_dmg set from storage manacore:out r.damage
+data modify storage zx:work se.s2_b_hit_dmg set value {n:0,d:1}
+data modify storage zx:work se.s2_b_hit_dmg set from storage manacore:out r.s2_b_damage
 execute store result score #se_path zx.meta run scoreboard players get #se_n zx.meta
 execute store result storage zx:work se.path_dmg double 0.1 run scoreboard players get #se_path zx.meta
 execute store result storage zx:work se.cry int 1 run scoreboard players get #se_n zx.meta
@@ -68,7 +70,11 @@ execute store result storage zx:work se.u0 int 1 run data get entity @s UUID[0]
 execute store result storage zx:work se.u1 int 1 run data get entity @s UUID[1]
 execute store result storage zx:work se.u2 int 1 run data get entity @s UUID[2]
 execute store result storage zx:work se.u3 int 1 run data get entity @s UUID[3]
+execute unless data storage zx:work se.s2_b_hit_dmg run data modify storage zx:work se.s2_b_hit_dmg set value {n:0,d:1}
+execute unless data storage zx:work se.s2_b_path_dmg run data modify storage zx:work se.s2_b_path_dmg set value {n:0,d:1}
 function sweetdream:equipment/bow/sculk_echo/store with storage zx:work se
+execute unless data storage zx:work se.s2_b_hit_dmg run data modify storage zx:work se.s2_b_hit_dmg set value {n:0,d:1}
+execute unless data storage zx:work se.s2_b_path_dmg run data modify storage zx:work se.s2_b_path_dmg set value {n:0,d:1}
 execute at @s as @e[type=#sweetdream:cc_arrow,tag=!zx.cc_seen,distance=..4] run function sweetdream:equipment/bow/sculk_echo/snapshot with storage zx:work se
 
 # ⑥ 悲鸣 +10(上限 50) —— 放在算完之后, 这一发用的是旧值

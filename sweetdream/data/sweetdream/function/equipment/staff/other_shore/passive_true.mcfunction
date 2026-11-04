@@ -19,6 +19,8 @@ function manacore:api/damage/calc
 # ② 打(只打"同时有两种状态"的那几只)
 data modify storage zx:in arg set value {target:"@e[tag=zx.os_pass,tag=zx.os_both,distance=0..]",damage:0.0,type:"sweetdream:true_damage"}
 data modify storage zx:in arg.damage set from storage manacore:out r.damage
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage manacore:out r.s2_b_damage
 execute at @s run function sweetdream:api/damage
 
 # ③ 表现: 两界之间被撕开的一道口子

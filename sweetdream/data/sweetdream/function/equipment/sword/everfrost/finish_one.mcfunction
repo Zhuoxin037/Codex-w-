@@ -21,6 +21,8 @@ function manacore:api/damage/calc
 # ② 打给这批(距离锁当前维度: distance=0.. 不过滤、只当位置基准)
 data modify storage zx:in arg set value {target:"@e[type=!#sweetdream:no_damage,tag=zx.ef_fin,distance=0..]",damage:0.0}
 data modify storage zx:in arg.damage set from storage manacore:out r.damage
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage manacore:out r.s2_b_damage
 execute at @s run function sweetdream:api/damage
 
 # ③ 表现: 冰壳碎裂

@@ -14,6 +14,7 @@
 $data modify storage zx:data cc."$(uuid)" set value {tier:0,dmg:0.0,u0:0,u1:0,u2:0,u3:0}
 $data modify storage zx:data cc."$(uuid)".tier set value $(tier)
 $data modify storage zx:data cc."$(uuid)".dmg set value $(dmg)
+$data modify storage zx:data cc."$(uuid)".s2_b_dmg set value $(s2_b_dmg)
 $data modify storage zx:data cc."$(uuid)".u0 set value $(u0)
 $data modify storage zx:data cc."$(uuid)".u1 set value $(u1)
 $data modify storage zx:data cc."$(uuid)".u2 set value $(u2)

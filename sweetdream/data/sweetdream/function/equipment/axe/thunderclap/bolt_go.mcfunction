@@ -21,6 +21,8 @@ execute store result storage manacore:in arg.max_mana_mul double 0.1 run scorebo
 function manacore:api/damage/calc
 
 data modify storage zx:work a.num set from storage manacore:out r.damage
+data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+data modify storage zx:work a.s2_b_num set from storage manacore:out r.s2_b_damage
 function sweetdream:lib/num/plain
 data modify storage zx:work a.target set value "@e[tag=zx.victim,distance=0..]"
 data modify storage zx:work a.type set value "minecraft:player_attack"

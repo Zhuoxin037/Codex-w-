@@ -65,12 +65,16 @@ data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function sweetdream:overlimit/api/mod
 function manacore:api/damage/calc
 data modify storage zx:work ltf.dmg set from storage manacore:out r.damage
+data modify storage zx:work ltf.s2_b_dmg set value {n:0,d:1}
+data modify storage zx:work ltf.s2_b_dmg set from storage manacore:out r.s2_b_damage
 
 data modify storage manacore:in arg set value {uuid:"",attack_mul:4.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function sweetdream:overlimit/api/mod
 function manacore:api/damage/calc
 data modify storage zx:work ltf.dmg2 set from storage manacore:out r.damage
+data modify storage zx:work ltf.s2_b_dmg2 set value {n:0,d:1}
+data modify storage zx:work ltf.s2_b_dmg2 set from storage manacore:out r.s2_b_damage
 
 # ⑥ 组装 marker 宏参数(uuid 文本 + 四个整数) —— place 与 lt_end 都要用
 data modify storage zx:work ltf.uu set from storage zx:data self.uuid

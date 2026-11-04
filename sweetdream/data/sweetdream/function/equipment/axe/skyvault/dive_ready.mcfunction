@@ -23,7 +23,8 @@ scoreboard players set @s zx.sv_step 60
 effect clear @s minecraft:slow_falling
 effect clear @s minecraft:levitation
 
-execute at @s run tp @s ^ ^ ^1.5
+execute store success score #s2_moved zx.meta run execute at @s run tp @s ^ ^ ^1.5
+execute if score #s2_moved zx.meta matches 1 at @s run function sweetdream:equipment/armor/empty_cicada/moved
 execute at @s run particle minecraft:cloud ~ ~1 ~ 0.6 0.3 0.6 0.02 20 normal
 execute at @s run playsound minecraft:entity.ender_dragon.flap player @a ~ ~ ~ 0.8 1.2
 execute at @s run playsound minecraft:item.trident.riptide_2 player @a ~ ~ ~ 0.9 1.0

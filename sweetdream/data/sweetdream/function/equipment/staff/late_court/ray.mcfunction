@@ -18,10 +18,14 @@
 scoreboard players add #ltc_st zx.meta 1
 
 # ① 到射程上限 -> 就地落领域并收工
+execute unless data storage zx:work ltf.s2_b_dmg run data modify storage zx:work ltf.s2_b_dmg set value {n:0,d:1}
+execute unless data storage zx:work ltf.s2_b_dmg2 run data modify storage zx:work ltf.s2_b_dmg2 set value {n:0,d:1}
 execute if score #ltc_st zx.meta matches 31.. run function sweetdream:equipment/staff/late_court/place with storage zx:work ltf
 execute if score #ltc_st zx.meta matches 31.. run return 0
 
 # ② 这一步撞墙 -> 退 0.5 格落领域(退回去那格一定是刚才走过的空气)
+execute unless data storage zx:work ltf.s2_b_dmg run data modify storage zx:work ltf.s2_b_dmg set value {n:0,d:1}
+execute unless data storage zx:work ltf.s2_b_dmg2 run data modify storage zx:work ltf.s2_b_dmg2 set value {n:0,d:1}
 execute unless block ~ ~ ~ #minecraft:replaceable positioned ^ ^ ^-0.5 run function sweetdream:equipment/staff/late_court/place with storage zx:work ltf
 
 # ③ 这一步是空气 -> 继续往前 0.5 格

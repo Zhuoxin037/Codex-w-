@@ -27,6 +27,8 @@ data modify storage manacore:in arg.uuid set from storage zx:work ct.uuid
 function manacore:api/damage/calc
 data modify storage zx:work ct.dmg set value 0.0
 data modify storage zx:work ct.dmg set from storage manacore:out r.damage
+data modify storage zx:work ct.s2_b_dmg set value {n:0,d:1}
+data modify storage zx:work ct.s2_b_dmg set from storage manacore:out r.s2_b_damage
 
 # ③ 圈出领域范围(半径 3, 圆心 = 领域中心)
 tag @e[tag=zx.ct_aoe,distance=0..] remove zx.ct_aoe
@@ -36,11 +38,15 @@ execute at @e[tag=zx.ct_f,distance=0..,limit=1] positioned ~-3.0 ~-3.0 ~-3.0 run
 data modify storage zx:work a set value {target:"@e[tag=zx.ct_aoe]",damage:0.0,type:"minecraft:player_attack",u0:0,u1:0,u2:0,u3:0}
 execute if data storage zx:config damage_type run data modify storage zx:work a.type set from storage zx:config damage_type
 data modify storage zx:work a.damage set from storage zx:work ct.dmg
+data modify storage zx:work a.s2_b_damage set value {n:0,d:1}
+data modify storage zx:work a.s2_b_damage set from storage zx:work ct.s2_b_dmg
 execute store result storage zx:work a.u0 int 1 run data get entity @s UUID[0]
 execute store result storage zx:work a.u1 int 1 run data get entity @s UUID[1]
 execute store result storage zx:work a.u2 int 1 run data get entity @s UUID[2]
 execute store result storage zx:work a.u3 int 1 run data get entity @s UUID[3]
 data modify storage zx:work a.num set from storage zx:work a.damage
+data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+data modify storage zx:work a.s2_b_num set from storage zx:work a.s2_b_damage
 function sweetdream:lib/num/plain
 function sweetdream:internal/damage/with_from with storage zx:work a
 execute if entity @e[tag=zx.ct_aoe,distance=0..,limit=1] run function sweetdream:equipment/bow/cloudtrail/fire_fx

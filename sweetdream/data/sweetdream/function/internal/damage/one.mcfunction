@@ -1,3 +1,5 @@
+execute if entity @s[tag=zx.j_body] run return 0
+execute if entity @s[tag=zx.j_twin] run return 0
 # ============================================================
 # sweetdream:internal/damage/one —— 对"一个"目标打伤害(宏 {num_str,type,u0..u3})
 # ------------------------------------------------------------
@@ -36,6 +38,7 @@ execute if data storage zx:work ob.ay store result score #stg_ay zx.meta run dat
 #     改成**整份 set from ob**: ob 是这批伤害的不可变快照(见 with_from),
 #     每只目标开打前一律拉回它, 中途谁改过 a 都不影响, 与目标顺序无关。
 data modify storage zx:work a set from storage zx:work ob
+function sweetdream:upgrade/breach/target
 
 # ①.5c 天穹「升痕」加伤: 目标带升痕 + 这一击"来自比它更高处" -> 本次伤害 ×(1+5%×层数)
 #   【开销】平时(目标没升痕)只多一条选择器判定; 走这条的只有被天穹打过、且被居高临下
@@ -126,6 +129,10 @@ execute unless data storage zx:work a{fixed:1b} if data storage zx:work ob{type:
 # 缚烬：流火与原版缓慢必须同时成立，非固定段才乘 1.5。
 execute unless data storage zx:work a{fixed:1b} if entity @s[tag=zx.status.liuhuo] if data entity @s active_effects[{id:"minecraft:slowness"}] run function sweetdream:equipment/axe/bind_ember/multiply with storage zx:work a
 
+# 痛楚（2026-11-01）：带 zx.pn_vul 的目标，受到的伤害 ×1.1（固定伤害不吃）。
+#   与 vuln_tag / stg_mul 同一口径：以当前 a.num 为底、累积式改写。
+execute if entity @s[tag=zx.pn_vul] unless data storage zx:work a{fixed:1b} run function sweetdream:equipment/axe/throe/vuln
+
 # 倾囊超限（批 K8）：这一笔带「固定伤害追伤」窗口 → 先把 psadd 并进 a.fixed_add
 #   ★ 必须在下面 fixed_add 那行之前：fixed_add 负责把 a.fixed_add 加进 a.num 并重算
 #     num_str，之后再改 fixed_add 就没有消费者了。
@@ -154,7 +161,10 @@ execute unless data storage zx:work hit_success_stack run data modify storage zx
 data modify storage zx:work hit_success_stack append value {result:{ok:0b}}
 execute unless data storage zx:work ob{src:"enemy"} run function sweetdream:lib/damage_text/before with storage zx:work a
 execute if entity @s[tag=zx.j_eroded] unless data storage zx:work a{fixed:1b} run function sweetdream:profession/twin/vulnerability
+data modify storage zx:work hit_success_stack[-1].s2_source set from storage zx:work ob
+function sweetdream:equipment/armor/rebirth_veil/open
 function sweetdream:internal/damage/deal with storage zx:work a
+function sweetdream:equipment/armor/rebirth_veil/after
 execute if entity @s[tag=sd.hk.body] run data modify storage sweetdream:husk skill_kind set value {dot:0b}
 execute if entity @s[tag=sd.hk.body] if data storage zx:work ob{dot:1b} run data modify storage sweetdream:husk skill_kind.dot set value 1b
 execute if entity @s[tag=sd.hk.body] run function sweetdream:boss/husk/hurt/after_skill with storage zx:work ob
@@ -228,5 +238,11 @@ function sweetdream:equipment/axe/sacred_relic/skill_kill with storage zx:work o
 #   现在技能击杀也走原版 player_killed_entity 进度: 本包技能伤害都带 `by <玩家>`
 #   (见 internal/damage/deal), 击杀会正常归到玩家头上, 5 条标签进度照常触发。
 
+execute if data storage zx:work hit_success_stack[-1].result{ok:1b} if data storage zx:work ob{wound_hit:1b} run tag @s add zx.ws_landed
+execute if data storage zx:work hit_success_stack[-1].result{ok:1b} if data storage zx:work ob{chorus_final:1b} run tag @s add zx.cs_final_hit
+execute if data storage zx:work hit_success_stack[-1].result{ok:1b} if data storage zx:work ob{weave_hit:1b} run tag @s add zx.weave_landed
+execute if data storage zx:work hit_success_stack[-1].result{ok:1b} if data storage zx:work ob{burial_hit:1b} run tag @s add zx.burial_landed
+execute if data storage zx:work hit_success_stack[-1].result{ok:1b} if data storage zx:work ob{s2_echo:1b} run data modify storage zx:b21 echo_stack[-1].ok set value 1b
+execute if data storage zx:work hit_success_stack[-1].result{ok:1b} if data storage zx:work ob{s2_scene:1b} run tag @s add zx.s2_scene_landed
 # Always pop after all victim-side callbacks; nested one calls have their own entry.
 data remove storage zx:work hit_success_stack[-1]

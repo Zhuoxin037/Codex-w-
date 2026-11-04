@@ -6,4 +6,4 @@
 # 【写哪】实体 data.zx.be —— 逐箭快照, 命中时优先读它(连射不被后发覆盖)。
 # ============================================================
 
-$data modify entity @s data.zx.be set value {ok:1b,dmg:$(dmg),ol:$(ol),u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+$data modify entity @s data.zx.be set value {ok:1b,dmg:$(dmg),s2_b_dmg:$(s2_b_dmg),ol:$(ol),u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}

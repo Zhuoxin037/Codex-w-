@@ -41,7 +41,8 @@ def _body(p):
 
 # 所有"直接写 equipment/*/give.mcfunction"的生成器都要登记在这里。
 GENERATORS = ('_gen_batch5.py', '_gen_batch6.py', '_gen_batch7.py', '_gen_new42.py',
-              '_gen_batch17.py', '_gen_batch18.py', '_gen_batch13_give.py')
+              '_gen_batch17.py', '_gen_batch18.py', '_gen_batch13_give.py',
+              '_gen_batch20.py')
 
 
 def main():
@@ -54,7 +55,16 @@ def main():
         for gf in GENERATORS:
             gen = _load(os.path.join(ROOT, '.workbuddy', gf), gf[:-3] + '_chk')
             gen.BASE = base
-            gen.main()
+            # ★ 必须带 --write：部分生成器(_gen_batch13_give.py)默认 dry-run，
+            #   不传就只是 print，临时目录里根本没有文件 ⇒ 该生成器管的件会被**静默跳过**，
+            #   永久报"0 漂移"却什么也没比。（2026-10-27 实测：8 件盔甲的外观字段明明
+            #   只存在于磁盘，守门仍报 0。）
+            _argv = sys.argv[:]
+            sys.argv = [gf, '--write']
+            try:
+                gen.main()
+            finally:
+                sys.argv = _argv
         # 规范化(与真实流程一致: 生成器 -> lore_fmt --write)
         # ★ 必须**迭代到不动点**: lore_fmt 对个别文案一遍折不完(折行会改变后续行的
         #   起点 -> 第二遍才稳定; 实例 2026-10-12 缺月 crescent 需要 2 遍), 而真实流程

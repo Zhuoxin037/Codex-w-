@@ -13,10 +13,14 @@
 data modify storage zx:work a set value {target:"@e[tag=zx.bd_aoe,distance=0..]",damage:0.0,type:"minecraft:player_attack",u0:0,u1:0,u2:0,u3:0}
 execute if data storage zx:config damage_type run data modify storage zx:work a.type set from storage zx:config damage_type
 data modify storage zx:work a.damage set from storage zx:work bd.dmg
+data modify storage zx:work a.s2_b_damage set value {n:0,d:1}
+data modify storage zx:work a.s2_b_damage set from storage zx:work bd.s2_b_dmg
 execute store result storage zx:work a.u0 int 1 run data get entity @s UUID[0]
 execute store result storage zx:work a.u1 int 1 run data get entity @s UUID[1]
 execute store result storage zx:work a.u2 int 1 run data get entity @s UUID[2]
 execute store result storage zx:work a.u3 int 1 run data get entity @s UUID[3]
 data modify storage zx:work a.num set from storage zx:work a.damage
+data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+data modify storage zx:work a.s2_b_num set from storage zx:work a.s2_b_damage
 function sweetdream:lib/num/plain
 function sweetdream:internal/damage/with_from with storage zx:work a

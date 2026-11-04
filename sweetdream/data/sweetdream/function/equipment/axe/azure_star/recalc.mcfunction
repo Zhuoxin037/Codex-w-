@@ -35,3 +35,5 @@ data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 execute if score #as_x2 zx.meta matches 1.. run function sweetdream:equipment/axe/azure_star/double
 function manacore:api/damage/calc
 data modify storage zx:work asz.dmg1 set from storage manacore:out r.damage
+data modify storage zx:work asz.s2_b_dmg1 set value {n:0,d:1}
+data modify storage zx:work asz.s2_b_dmg1 set from storage manacore:out r.s2_b_damage

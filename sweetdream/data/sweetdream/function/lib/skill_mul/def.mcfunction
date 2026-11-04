@@ -347,3 +347,31 @@ data modify storage zx:config wchan.illusion set value {mm:1b,atk:1b,oth:0b}
 data modify storage zx:config wchan.empathy set value {mm:0b,atk:0b,oth:0b}
 
 data modify storage zx:config wchan.indwell set value {mm:0b,atk:0b,oth:1b}
+
+# 胜利誓约（批 20）：主动突击 = 基础攻击力 ×5（atk）；领域是纯治疗/临时生命, 不走通道
+data modify storage zx:config wchan.oath_victory set value {mm:0b,atk:1b,oth:0b}
+# 踏空（批 20）：落地 = 基础攻击力 ×1（atk）
+data modify storage zx:config wchan.air_step set value {mm:0b,atk:1b,oth:0b}
+
+# 2026-10-28 新武器：按实际使用的最大魔力、基础攻击力与当前魔力通道登记。
+data modify storage zx:config wchan.contract_rift set value {mm:0b,atk:1b,oth:0b}
+data modify storage zx:config wchan.world_parting set value {mm:1b,atk:0b,oth:1b}
+data modify storage zx:config wchan.chorus set value {mm:1b,atk:0b,oth:0b}
+data modify storage zx:config wchan.wound_stitch set value {mm:0b,atk:1b,oth:0b}
+data modify storage zx:config wchan.no_return set value {mm:0b,atk:1b,oth:0b}
+data modify storage zx:config wchan.star_weave set value {mm:1b,atk:0b,oth:0b}
+data modify storage zx:config wchan.star_burial set value {mm:1b,atk:0b,oth:0b}
+data modify storage zx:config wchan.exalted set value {mm:1b,atk:0b,oth:1b}
+data modify storage zx:config wchan.eight_tail set value {mm:1b,atk:0b,oth:1b}
+data modify storage zx:config wchan.firefly_staff set value {mm:0b,atk:0b,oth:1b}
+data modify storage zx:config wchan.magic_theory set value {mm:1b,atk:0b,oth:0b}
+data modify storage zx:config wchan.chase_deer set value {mm:0b,atk:1b,oth:0b}
+data modify storage zx:config wchan.mirrored_scene set value {mm:1b,atk:1b,oth:0b}
+data modify storage zx:config wchan.empty_cicada set value {mm:1b,atk:0b,oth:0b}
+# 痛楚（2026-11-01）：两段追加都走 最大魔力值 通道
+data modify storage zx:config wchan.throe set value {mm:1b,atk:0b,oth:0b}
+# 引声 / 潮涌，潮枯（2026-11-01）：法杖普攻的伤害都是"最大魔力值 ×N"，走 mm 通道。
+#   ★ 2026-11-01 用户实机报错后补：三件法杖原本连普攻都没有，重做时才加上 attack，
+#     新文件用了 max_mana_mul 就必须在这里登记，否则面板漏显示/归错列（静默）。
+data modify storage zx:config wchan.intone set value {mm:1b,atk:0b,oth:0b}
+data modify storage zx:config wchan.surge_ebb set value {mm:1b,atk:0b,oth:0b}

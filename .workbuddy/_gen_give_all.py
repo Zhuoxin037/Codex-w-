@@ -34,13 +34,14 @@ BOX_CAP = 27
 #     -> 9 盒(8×27+4)。不够时脚本会 assert 报错(不会静默丢件), 照提示补坐标即可。
 #     坐标都在同一区块内(x=0/2, z=1..15), 与强化台 0,-59,2 / 暂存箱 0,-60,2 错开。
 BOX_POS = ["0 -60 1", "0 -60 3", "0 -60 5", "0 -60 7", "0 -60 9", "0 -60 11",
-           "0 -60 13", "0 -60 15", "2 -60 1", "2 -60 3", "2 -60 5"]
+           "0 -60 13", "0 -60 15", "2 -60 1", "2 -60 3", "2 -60 5", "2 -60 7",
+           "2 -60 9", "2 -60 11"]
 # ★ 只能是**染料色**(白/橙/品红/淡蓝/黄/黄绿/粉/灰/淡灰/青/紫/蓝/棕/绿/红/黑)——
 #   潜影盒方块只有这 16 种染色版 + 1 个默认版。写 gold/light_purple/aqua 这种
 #   "只有文字组件才认的颜色", setblock 会失败 -> 中转站建不起来 -> 盒子全发不出去。
 #   (2026-10-04 踩过: 原来写的就是 gold/light_purple/aqua, 玩家拿到的是空的。)
 BOX_COLOR = ["yellow", "purple", "cyan", "red", "lime", "blue", "orange", "pink",
-             "light_gray", "magenta", "brown"]
+             "light_gray", "magenta", "brown", "green", "white", "black"]
 
 # ★ 名字用的**文字组件颜色**和方块色名不是一套! ★
 #   方块色名 purple / cyan / lime 在文字组件里**不合法**
@@ -50,7 +51,8 @@ BOX_COLOR = ["yellow", "purple", "cyan", "red", "lime", "blue", "orange", "pink"
 NAME_COLOR = {"yellow": "yellow", "purple": "light_purple",
               "cyan": "aqua", "red": "red", "lime": "green", "blue": "blue",
               "orange": "gold", "pink": "light_purple",
-              "light_gray": "gray", "magenta": "light_purple", "brown": "gold"}
+              "light_gray": "gray", "magenta": "light_purple", "brown": "gold", "green": "green",
+              "white": "white", "black": "dark_gray"}
 
 # 盒 A: 装备(按 盔甲 -> 剑 -> 斧 -> 弓 -> 法杖 -> 工具 排)
 A = []
@@ -61,7 +63,7 @@ B = sorted(glob.glob(BASE + "/upgrade/item/*.mcfunction")) + \
     sorted(glob.glob(BASE + "/overlimit/item/*.mcfunction"))
 
 # 用户确认：职业专属装备与通用醒梦仪独立成盒，不混入普通装备／石头。
-ROLE = [p for p in A if re.search(r'profession:[14]\b', io.open(p, encoding="utf-8").read())
+ROLE = [p for p in A if re.search(r'profession\s*:\s*[1-4]\b', io.open(p, encoding="utf-8").read())
         or p.replace("\\", "/").endswith("/dream_waker/give.mcfunction")]
 NORMAL = [p for p in A if p not in ROLE] + B
 ITEMS = NORMAL + ROLE

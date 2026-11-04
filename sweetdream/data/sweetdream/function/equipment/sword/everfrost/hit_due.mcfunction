@@ -38,6 +38,8 @@ function manacore:api/damage/calc
 # 对被冻住的那批打
 $data modify storage zx:in arg set value {target:"@e[type=!#sweetdream:no_damage,tag=zx.ef_$(uuid),distance=0..]",damage:0.0}
 data modify storage zx:in arg.damage set from storage manacore:out r.damage
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage manacore:out r.s2_b_damage
 execute at @s run function sweetdream:api/damage
 
 # 表现: 冰壳碎裂

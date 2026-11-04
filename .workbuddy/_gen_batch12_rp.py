@@ -37,6 +37,7 @@ HANDHELD = [
 CROSSBOWS = [
     ('crossbow_dragon_tongue', 'dragon_tongue'),
     ('crossbow_cloudtrail',    'cloudtrail'),
+    ('crossbow_bone_breaker',  'bone_breaker'),   # 碎骨（2026-10-27）
 ]
 
 

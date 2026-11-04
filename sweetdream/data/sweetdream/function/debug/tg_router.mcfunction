@@ -80,3 +80,11 @@ execute as @a[scores={zx.job_tg=1..}] at @s run function sweetdream:debug/tg_job
 execute if score #dev zx.meta matches 1 as @a[scores={zx.jobpick_tg=1..}] at @s run function sweetdream:profession/select
 execute unless score #dev zx.meta matches 1 as @a[tag=zx.admin,scores={zx.jobpick_tg=1..}] at @s run function sweetdream:profession/select
 execute as @a[scores={zx.prophecy_tg=1..}] at @s run function sweetdream:profession/mage/choose
+
+# Map prototype: active visitors may always exit, even if admin mode changes.
+execute as @a[tag=zx.rg_active,scores={zx.rg_tg=1..}] at @s run function sweetdream:debug/tg_rogue
+execute as @a[tag=zx.rg_wait,scores={zx.rg_tg=1..}] at @s run function sweetdream:debug/tg_rogue
+execute if score #dev zx.meta matches 1 as @a[scores={zx.rg_tg=1..}] at @s run function sweetdream:debug/tg_rogue
+execute unless score #dev zx.meta matches 1 as @a[tag=zx.admin,scores={zx.rg_tg=1..}] at @s run function sweetdream:debug/tg_rogue
+
+execute as @a[tag=zx.rg_prep,scores={zx.rg_tg=1..}] at @s run function sweetdream:debug/tg_rogue

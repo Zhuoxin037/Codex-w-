@@ -21,6 +21,8 @@ function manacore:api/damage/calc
 # ② 打(只打命中者里带「白昼梦」的)
 data modify storage zx:in arg set value {target:"@e[tag=zx.ball_hit,distance=0..,tag=zx.status.dream]",damage:0.0}
 data modify storage zx:in arg.damage set from storage manacore:out r.damage
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage manacore:out r.s2_b_damage
 execute at @s run function sweetdream:api/damage
 
 # ③ 表现: 梦被敲了一下

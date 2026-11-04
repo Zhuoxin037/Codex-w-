@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-build_vanilla_armor.py —— 「原版风 · 盔甲」贴图生成器（25 件）
+build_vanilla_armor.py —— 「原版风 · 盔甲」贴图生成器（件数见 P 表）
 
 口径（与剑/斧/弩/杖一致）：
   轮廓：alpha 掩码逐像素照抄**该件所用的原版底物**
@@ -162,7 +162,249 @@ def irid_layer(x, y, c):
     return _irid(x, y, c, 0.013)
 
 
-# ============================================================ 25 件
+# —— 明烛（白昼梦 · 烛火）——
+# 意象：蜡烛本身 + 一枚点着的烛焰。所以主体是**蜡白/奶黄**（区别于余烬的暖橙），
+#   只在焰部用金/白 —— 暗部压到焦褐，让"蜡"与"焰"在同一张图里分得开。
+FLAME_OUT = hx('#F0A93C')      # 外焰 金橙
+FLAME_EDGE = hx('#C4701C')     # 焰缘 深金（和蜡身拉开）
+FLAME_IN = hx('#FFFBD8')       # 焰心 近白
+FLAME_CORE = hx('#FFFFFF')     # 焰芯 纯白（只有 1~2 像素）
+WAX_DRIP = hx('#EBD49C')       # 熔蜡 亮奶白
+WAX_SH = hx('#B08A52')         # 蜡痕阴影
+
+
+def candle_icon(x, y, c):
+    """netherite_helmet 图标（穹顶 x3-12 / y3-11）：前额正中一支烛焰 + 蜡座。
+
+    ★ 只占 y4-8 五行、最宽 4 像素：16×16 里再宽就糊成一团。
+        y4        x8          焰尖（单像素）
+        y5      x7-8          焰身（x7 焰心）
+        y6      x7-8          焰身（x7 焰心）
+        y7    x6-9            焰根（两侧深金）
+        y8    x6-9            蜡座（两侧阴影）
+    y9 以下不画 —— 原版穹顶在 y11 中间本来就是镂空(两条腿)，往下挂蜡会被看成"嘴"。
+    """
+    if y == 4 and x == 8:
+        return FLAME_OUT
+    if y in (5, 6) and x in (7, 8):
+        return FLAME_IN if x == 7 else FLAME_OUT
+    if y == 7 and 6 <= x <= 9:
+        return FLAME_EDGE if x in (6, 9) else FLAME_OUT
+    if y == 8 and 6 <= x <= 9:
+        return WAX_SH if x in (6, 9) else WAX_DRIP
+    return None
+
+
+def candle_layer(x, y, c):
+    """layer1 头部正面 (8,8)-(15,15) —— 只有 8×8，画单列竖焰。
+
+    实心行：y8-10 满、y11-12 只有 x8/x11-12/x15。
+        y8    x11-12    焰尖
+        y9    x11-12    焰身
+        y10   x11-12    蜡座
+    """
+    if y == 8 and x in (11, 12):
+        return FLAME_IN if x == 11 else FLAME_OUT
+    if y == 9 and x in (11, 12):
+        return FLAME_CORE if x == 11 else FLAME_IN
+    if y == 10 and x in (11, 12):
+        return WAX_DRIP if x == 11 else WAX_SH
+    return None
+
+
+# —— 白昼梦 · 其余七件（2026-10-27）——
+# 口径同明烛：不做成"通体发光"，主体压在暗部，只在**技能意象那一小块**放亮色。
+#   每件的亮色位置都按原版掩码算过（图标 / 穿戴层正面各一套坐标），见各函数注释。
+
+# 借火（胸甲）：被人烧 ⇒ 借一粒火种。主体焦黑炭化，火种只在胸口正中 2×3 像素。
+BORROW_CORE = hx('#FFFFFF')
+BORROW_HOT = hx('#FFC24C')
+BORROW_MID = hx('#E06A10')
+BORROW_EMBER = hx('#7A2A06')
+
+
+def borrow_icon(x, y, c):
+    """netherite_chestplate 图标：胸板 x3-12 / y5-13，正中 (7-8, 7-9)"""
+    if (x, y) in ((7, 7), (8, 7)):
+        return BORROW_CORE
+    if (x, y) in ((7, 8), (8, 8)):
+        return BORROW_HOT
+    if (x, y) in ((7, 9), (8, 9)):
+        return BORROW_MID
+    if y in (6, 10) and 6 <= x <= 9:
+        return BORROW_EMBER
+    return None
+
+
+def borrow_layer(x, y, c):
+    """layer1 躯干正面 (20,20)-(27,31)，正中 (23-24, 23-25)"""
+    if (x, y) in ((23, 23), (24, 23)):
+        return BORROW_CORE
+    if (x, y) in ((23, 24), (24, 24)):
+        return BORROW_HOT
+    if (x, y) in ((23, 25), (24, 25)):
+        return BORROW_MID
+    if y in (22, 26) and 22 <= x <= 25:
+        return BORROW_EMBER
+    return None
+
+
+# 心脉（胸甲）：一条从心口往下的血管 + 两对分支 + 一枚搏动点。
+VEIN_HI = hx('#FFDCE4')
+VEIN = hx('#E06478')
+VEIN_D = hx('#8A2438')
+
+
+def heart_icon(x, y, c):
+    """胸板正中：主脉 x7 (y6-13)；分支 y7/y10 向左、y9/y12 向右"""
+    if x == 7 and 6 <= y <= 13:
+        return VEIN
+    if y in (7, 10) and x in (5, 6):
+        return VEIN_D
+    if y in (9, 12) and x in (9, 10):
+        return VEIN_D
+    if (x, y) == (7, 8):
+        return VEIN_HI          # 搏动点
+    return None
+
+
+def heart_layer(x, y, c):
+    """layer1 躯干正面：主脉 x22 (y21-30)"""
+    if x == 22 and 21 <= y <= 30:
+        return VEIN
+    if y in (22, 26) and x == 21:
+        return VEIN_D
+    if y in (24, 28) and x == 23:
+        return VEIN_D
+    if (x, y) == (22, 24):
+        return VEIN_HI
+    return None
+
+
+# 剖面（护腿）：一条斜切进去的剖面线 + 切面内的层理。
+PEEL_HI = hx('#7FF0E0')
+PEEL = hx('#2E9E96')
+PEEL_D = hx('#123C3E')
+
+
+def peel_icon(x, y, c):
+    """两条腿走同一条斜线 (x+y)%6 —— 16×16 里刚好一条斜向切口"""
+    if (x + y) % 6 == 0:
+        return PEEL_HI if (x + y) % 12 == 0 else PEEL
+    if y == 6 and 3 <= x <= 12:
+        return PEEL_D           # 切面下的层理
+    return None
+
+
+def peel_layer(x, y, c):
+    """穿戴层整片走斜线 (x+y)%9，另在缠腿中腰压一道纵缝"""
+    if (x + y) % 9 == 0:
+        return PEEL_HI if (x + y) % 18 == 0 else PEEL
+    if y == 25 and 16 <= x <= 27:
+        return PEEL_D
+    return None
+
+
+# 折潮（头盔）：前额竖着一道折起来的水墙 + 一道横向折痕。
+FOLD_HI = hx('#E8FFFF')
+FOLD = hx('#4FC8E8')
+FOLD_D = hx('#124E7A')
+
+
+def fold_icon(x, y, c):
+    """穹顶 x3-12 / y3-11：水墙占 x7-8 y4-10"""
+    if y == 3 and x == 7:
+        return FOLD_HI           # 浪尖
+    if x == 7 and 4 <= y <= 10:
+        return FOLD
+    if x == 8 and 4 <= y <= 10:
+        return FOLD_D
+    if y == 7 and 4 <= x <= 11:
+        return FOLD              # 折痕
+    return None
+
+
+def fold_layer(x, y, c):
+    """layer1 头部正面 (8,8)-(15,15)：水墙 x11-12 y8-13"""
+    if y == 8 and x == 11:
+        return FOLD_HI
+    if x == 11 and 9 <= y <= 13:
+        return FOLD
+    if x == 12 and 9 <= y <= 13:
+        return FOLD_D
+    if y == 11 and 9 <= x <= 14:
+        return FOLD
+    return None
+
+
+# 返汐（靴子）：脚下一道退潮浪纹。
+WAVE_HI = hx('#FFFFFF')
+WAVE = hx('#5AD8D8')
+WAVE_D = hx('#1A6470')
+
+
+def wave_icon(x, y, c):
+    """双靴：浪线压在 y10/y11（靴口以下）"""
+    if y == 10:
+        return WAVE_HI
+    if y == 11:
+        return WAVE
+    if y == 12:
+        return WAVE_D
+    return None
+
+
+def wave_layer(x, y, c):
+    """穿戴层：每 4 行一道起伏浪线（隔道加亮点），不做满铺网格"""
+    if y < 16:
+        return None
+    k = (y + x // 2) % 4
+    if k == 0:
+        return WAVE_HI if (y + x // 2) % 8 == 0 else WAVE
+    if k == 1:
+        return WAVE_D
+    return None
+
+
+# 浮光（头盔）：红/绿/黄三粒光 + 集齐后的那粒白。
+GLIM_R = hx('#FF5A4E')
+GLIM_G = hx('#6EE06A')
+GLIM_Y = hx('#FFE066')
+GLIM_W = hx('#FFFFFF')
+
+
+def glimmer_icon(x, y, c):
+    """穹顶四角各一粒：左上红 / 右上绿 / 左下黄 / 右下白"""
+    return {(5, 5): GLIM_R, (10, 5): GLIM_G,
+            (5, 9): GLIM_Y, (10, 9): GLIM_W}.get((x, y))
+
+
+def glimmer_layer(x, y, c):
+    """头部正面四角同一套顺序"""
+    return {(9, 9): GLIM_R, (14, 9): GLIM_G,
+            (9, 13): GLIM_Y, (14, 13): GLIM_W}.get((x, y))
+
+
+# 迟暮（护腿）：暮色底 + 一道道记账刻度。
+TICK_HI = hx('#FFE0A0')
+TICK = hx('#C2803A')
+
+
+def dusk_icon(x, y, c):
+    if y in (4, 7, 10, 13) and 3 <= x <= 12:
+        return TICK
+    if y in (4, 13) and 3 <= x <= 12:
+        return TICK_HI
+    return None
+
+
+def dusk_layer(x, y, c):
+    if y % 4 == 0:
+        return TICK_HI if y % 8 == 0 else TICK
+    return None
+
+
+# ============================================================ P 表（件数动态）
 # (id, 中文名, 槽位, 原版底材, 色阶, 覆盖, 技能意象)
 P = [
     # ── 头盔 6 ──────────────────────────────────────────────────────────
@@ -197,6 +439,14 @@ P = [
          motif='暗海 · 噬心',
          ramp=[hx('#05181A'), hx('#0C2E2C'), hx('#144E46'), hx('#1E7264'), hx('#309A84'), hx('#58C4AC')],
          acc=[RIM('#6FE0C4'), DARK('#03100F'), HOT('#9CFFE8')]),
+
+    # 白昼梦 · 明烛（2026-10-27 试样）：主体是"暗烛台"，亮面只留给蜡与焰 ——
+    #   与余烬（通体暖橙）区分开；暗部压焦黑，中间四阶全是褐/铜，蜡白只在最亮 1~2 像素。
+    dict(id='bright_candle', cn='明烛', slot='helmet', mat='netherite',
+         motif='烛火 · 流火熬成夜火',
+         ramp=[hx('#100A05'), hx('#221706'), hx('#3A2A10'), hx('#5E461C'), hx('#9A7228'), hx('#D8B468')],
+         acc=[RIM('#C4A058'), DARK('#0C0703'), HOT('#FFE07A')],
+         tint_icon=candle_icon, tint_layer=candle_layer),
 
     # ── 胸甲 7 ──────────────────────────────────────────────────────────
     dict(id='blaze_armor', cn='焱', slot='chestplate', mat='diamond',
@@ -298,6 +548,115 @@ P = [
          motif='暗潮 · 渊海',
          ramp=[hx('#05080F'), hx('#0C1524'), hx('#16293F'), hx('#24425E'), hx('#38648A'), hx('#5A90BC')],
          acc=[RIM('#4E88B4'), DARK('#02040A'), HOT('#2EC4D6')]),
+
+    # ── 白昼梦 · 其余七件（2026-10-27，与明烛同一套画法）────────────────
+    dict(id='borrow_fire', cn='借火', slot='chestplate', mat='netherite',
+         motif='借燃烧 · 削甲转移',
+         ramp=[hx('#080505'), hx('#16100B'), hx('#2A1C12'), hx('#4A3018'), hx('#7A4A18'), hx('#C88A30')],
+         acc=[RIM('#E8A050'), DARK('#080504'), HOT('#FFF0C0')],
+         tint_icon=borrow_icon, tint_layer=borrow_layer),
+
+    dict(id='heart_vein', cn='心脉', slot='chestplate', mat='netherite',
+         motif='噬心 · 泵动',
+         ramp=[hx('#16060A'), hx('#320E16'), hx('#5E1A28'), hx('#8E2E42'), hx('#BE5A70'), hx('#E8A6B4')],
+         acc=[RIM('#F0BCC8'), DARK('#0C0306'), HOT('#FFE8EE')],
+         tint_icon=heart_icon, tint_layer=heart_layer),
+
+    dict(id='profile', cn='剖面', slot='leggings', mat='netherite',
+         motif='耗魔换噬心 · 切面',
+         ramp=[hx('#101418'), hx('#232B33'), hx('#3B4852'), hx('#5A6C78'), hx('#8AA0AA'), hx('#C8DCE2')],
+         acc=[RIM('#E0F2F6'), DARK('#080B0E'), HOT('#7FF0E0')],
+         tint_icon=peel_icon, tint_layer=peel_layer),
+
+    dict(id='late_dusk', cn='迟暮', slot='leggings', mat='netherite',
+         motif='回光记账 · 暮色结算',
+         ramp=[hx('#140A18'), hx('#2E1628'), hx('#55243A'), hx('#8A3A40'), hx('#C26A3E'), hx('#E8A758')],
+         acc=[RIM('#FFD08A'), DARK('#0A050C'), HOT('#FFF0C8')],
+         tint_icon=dusk_icon, tint_layer=dusk_layer),
+
+    dict(id='tide_fold', cn='折潮', slot='helmet', mat='netherite',
+         motif='水墙 · 渊海',
+         ramp=[hx('#050B1C'), hx('#0C1C3A'), hx('#143562'), hx('#1E5C96'), hx('#2E92C4'), hx('#6FD2E8')],
+         acc=[RIM('#A8F0FF'), DARK('#03060F'), HOT('#E8FFFF')],
+         tint_icon=fold_icon, tint_layer=fold_layer),
+
+    dict(id='glimmer', cn='浮光', slot='helmet', mat='netherite',
+         motif='三色光效 · 集齐转白',
+         ramp=[hx('#0A0612'), hx('#171024'), hx('#241838'), hx('#352450'), hx('#4A3268'), hx('#6A4A88')],
+         acc=[RIM('#F0E0F4'), DARK('#08050C'), HOT('#FFFFFF')],
+         tint_icon=glimmer_icon, tint_layer=glimmer_layer),
+
+    dict(id='ebb_tide', cn='返汐', slot='boots', mat='netherite',
+         motif='海浪 · 速度差换伤害',
+         ramp=[hx('#04121A'), hx('#0A2836'), hx('#12485A'), hx('#1E7488'), hx('#3AA8B4'), hx('#8FE0E0')],
+         acc=[RIM('#C8FFFF'), DARK('#020A0E'), HOT('#FFFFFF')],
+         tint_icon=wave_icon, tint_layer=wave_layer),
+
+    # ── 批 20 · 终端盔甲 8 件（2026-10-27）──────────────────────────────
+    # 配色依据 = give.mcfunction 的技能原文。分两个家族，避免 8 件挤在同一色相：
+    #   术阵系（枢 / 承 / 屏息）：玄金甲壳 + **翡翠点光**（HOT 用 #5CE8B0 系）
+    #     —— "金框里嵌一枚青芯"，包内 33 件没有一件这么用（mana_helm 的 HOT 是
+    #        #3FD8E8 青蓝，这里偏绿，且 ramp 是暗玄金而非青灰，不会混）。
+    #   生存系（空营 / 独行 / 溢流 / 蓄意 / 踏空）：各按语义取冷调外壳，HOT 留给"技能
+    #     触发那一瞬"的颜色（余火 / 银 / 血光 / 金 / 雪白）。
+    # ★ 与「胜利誓约之剑」同批：剑是"香槟金白刃 + 亮金护手 + 宝石红柄"，
+    #   这里承 / 蓄意的金与红是对得上的；其余件的冷调是为了让 8 件彼此分得开。
+
+    # 枢（头盔）：`formation_limit +1` —— 术阵位上限。
+    #   玄金甲壳，点光翡翠 = 甲面上透出的阵纹。
+    dict(id='pivot', cn='枢', slot='helmet', mat='netherite',
+         motif='魔力上限 · 术阵位上限',
+         ramp=[hx('#2A1E0A'), hx('#564016'), hx('#8A6A1E'), hx('#BE9428'), hx('#E6C25C'), hx('#FFF2B8')],
+         acc=[RIM('#FCF0C0'), DARK('#140E04'), HOT('#5CE8B0')]),
+
+    # 承（护腿）：术阵每占 1 位 → 护甲/韧性；套装与枢同源。
+    #   ★ 同族但整体压暗一档：护腿在下半身，天然该比头盔沉。
+    dict(id='bearing', cn='承', slot='leggings', mat='netherite',
+         motif='术阵层数换护甲 · 与枢同族',
+         ramp=[hx('#241A08'), hx('#4C3812'), hx('#7C5E1A'), hx('#B08624'), hx('#D8B254'), hx('#F8E6A8')],
+         acc=[RIM('#F4E4B0'), DARK('#120C02'), HOT('#5CE8B0')]),
+
+    # 空营（胸甲）：8 格内每 1 敌对 → 护甲；无敌对 → 每秒回魔。
+    #   冷铁外壳（"空营"= 熄了火的营地），胸口一点余火橙。
+    dict(id='empty_camp', cn='空营', slot='chestplate', mat='netherite',
+         motif='敌对数目换护甲 · 空营',
+         ramp=[hx('#1C1C1E'), hx('#303032'), hx('#48484A'), hx('#66666C'), hx('#8E8E94'), hx('#C6C6CA')],
+         acc=[RIM('#E4F2F2'), DARK('#0C1418'), HOT('#FFA22E')]),
+
+    # 独行（靴）：移速 +8%；8 格内敌对 ≤2 时技能伤害 +8%。
+    #   暗紫灰 + 银白点光：低调、不反光 —— "一个人走"的调子。
+    dict(id='lone_walk', cn='独行', slot='boots', mat='netherite',
+         motif='移速 · 人少则增伤',
+         ramp=[hx('#1E1A28'), hx('#322C40'), hx('#4C4560'), hx('#6E6688'), hx('#9C94B4'), hx('#D2CAE0')],
+         acc=[RIM('#E4DCF0'), DARK('#100C16'), HOT('#F0E8FF')]),
+
+    # 溢流（护腿）：过量治疗 50% → 临时生命。
+    #   血色主体；这是"多出来的那部分"，所以最亮档偏粉白（不是纯白）。
+    dict(id='overflow', cn='溢流', slot='leggings', mat='netherite',
+         motif='过量治疗转临时生命',
+         ramp=[hx('#241010'), hx('#40201E'), hx('#643430'), hx('#8E4E48'), hx('#BA7870'), hx('#E4B0A8')],
+         acc=[RIM('#FFDCD6'), DARK('#140606'), HOT('#FFF0F2')]),
+
+    # 蓄意（胸甲）：每消耗 50 魔力 → +2 临时生命；清空后抗性Ⅱ/迅捷Ⅲ。
+    #   暗绛甲 + 金点光（"蓄"的是金光）；与承同为金红调，但更暗更红。
+    dict(id='intent', cn='蓄意', slot='chestplate', mat='netherite',
+         motif='耗魔积临时生命',
+         ramp=[hx('#221010'), hx('#3E1C18'), hx('#623226'), hx('#8A5038'), hx('#B07C5C'), hx('#D8B494')],
+         acc=[RIM('#F0D0A0'), DARK('#120606'), HOT('#FFC84A')]),
+
+    # 踏空（靴）：落地 → 4 格内全部生物受伤 + 击飞。
+    #   高空冷调（H≈200），点光雪白 = 落地那一瞬间的空气压缩。
+    dict(id='air_step', cn='踏空', slot='boots', mat='netherite',
+         motif='落地冲击 · 击飞',
+         ramp=[hx('#18202A'), hx('#283844'), hx('#405864'), hx('#5E7C8A'), hx('#88A8B4'), hx('#C0D8E2')],
+         acc=[RIM('#E8F8FF'), DARK('#0A1016'), HOT('#FFFFFF')]),
+
+    # 屏息（头盔）：每个空闲术阵位 → 每秒回 2 魔力。
+    #   苔玉绿（H≈140）—— 包内绿只有 75/89 两支，140 是空着的色相，专给这件。
+    dict(id='breath_hold', cn='屏息', slot='helmet', mat='netherite',
+         motif='空闲术阵位回魔',
+         ramp=[hx('#101A12'), hx('#1C2E1E'), hx('#2C4830'), hx('#426846'), hx('#668E6A'), hx('#9CBC9E')],
+         acc=[RIM('#D0E8D4'), DARK('#080F09'), HOT('#E8F8E8')]),
 ]
 
 
@@ -381,7 +740,7 @@ def main():
         sheet.save(path)
         print('sheet ->', path, sheet.size)
 
-    # ---------------- 总览（图标 25 件一排） ----------------
+    # ---------------- 总览（图标一排铺开） ----------------
     SI = 5
     cols = 9
     cw = 16 * SI + 14
@@ -390,7 +749,7 @@ def main():
     H = 16 + 40 + rows * (cw + 44)
     sheet = Image.new('RGBA', (W, H), (22, 24, 29, 255))
     d = ImageDraw.Draw(sheet)
-    txt(d, (16, 12), '原版风 · 盔甲 25 件 · 图标总览（1× 实际尺寸见每组预览）', 21, (246, 246, 250))
+    txt(d, (16, 12), '原版风 · 盔甲 %d 件 · 图标总览（1× 实际尺寸见每组预览）' % len(P), 21, (246, 246, 250))
     try:
         f = ImageFont.truetype(FONT, 15)
     except Exception:
@@ -404,7 +763,7 @@ def main():
         bg.paste(b, (7, 7), b)
         sheet.paste(bg, (x, y))
         d.text((x, y + cw + 4), p['cn'], font=f, fill=(240, 226, 168))
-    path = os.path.join(OUT, '总览_25件.png')
+    path = os.path.join(OUT, '总览_%d件.png' % len(P))
     sheet.save(path)
     print('sheet ->', path, sheet.size)
 

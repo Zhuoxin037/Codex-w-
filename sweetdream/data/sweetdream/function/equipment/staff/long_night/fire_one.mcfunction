@@ -67,6 +67,8 @@ function manacore:api/damage/calc
 
 # ⑥ 打它(带归属: 施法者 UUID 四个整数)
 data modify storage zx:work a.num set from storage manacore:out r.damage
+data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+data modify storage zx:work a.s2_b_num set from storage manacore:out r.s2_b_damage
 function sweetdream:lib/num/plain
 data modify storage zx:work a.target set value "@e[tag=zx.ln_tgt,distance=0..,limit=1]"
 data modify storage zx:work a.type set value "minecraft:player_attack"

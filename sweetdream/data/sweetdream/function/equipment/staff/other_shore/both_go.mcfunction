@@ -29,6 +29,8 @@ data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:in arg set value {target:"@e[tag=zx.os_sel,tag=zx.os_both,distance=0..]",damage:0.0,type:"sweetdream:true_damage"}
 data modify storage zx:in arg.damage set from storage manacore:out r.damage
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage manacore:out r.s2_b_damage
 execute at @s run function sweetdream:api/damage
 
 # ④ 圈"其 3 格内的其他生物"(以每个双状态者为圆心取并集; 排除同为双状态的那几只)

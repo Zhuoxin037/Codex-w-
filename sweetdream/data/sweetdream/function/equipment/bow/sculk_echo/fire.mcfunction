@@ -41,6 +41,8 @@ data modify storage zx:work a.u1 set from storage zx:work se.snap.u1
 data modify storage zx:work a.u2 set from storage zx:work se.snap.u2
 data modify storage zx:work a.u3 set from storage zx:work se.snap.u3
 data modify storage zx:work a.num set from storage zx:work a.damage
+data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+data modify storage zx:work a.s2_b_num set from storage zx:work a.s2_b_damage
 function sweetdream:lib/num/plain
 function sweetdream:internal/damage/with_from with storage zx:work a
 

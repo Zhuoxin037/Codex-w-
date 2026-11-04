@@ -21,6 +21,8 @@
 # ① 伤害 = 当前魔力(施法那刻) ×0.1, 带施法者归属
 data modify storage zx:work a.num set value 0.0
 data modify storage zx:work a.num set from entity @s data.zx.dmg
+data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+data modify storage zx:work a.s2_b_num set from entity @s data.zx.s2_b_dmg
 function sweetdream:lib/num/plain
 data modify storage zx:work a.target set value "@e[tag=zx.dr_hit,distance=..2,sort=nearest,limit=1]"
 data modify storage zx:work a.type set value "minecraft:player_attack"

@@ -72,12 +72,16 @@ execute if score @s zx.db_ol matches 1 run data modify storage manacore:in arg.m
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:work db.dmg set from storage manacore:out r.damage
+data modify storage zx:work db.s2_b_dmg set value {n:0,d:1}
+data modify storage zx:work db.s2_b_dmg set from storage manacore:out r.s2_b_damage
 
 # ⑦ 算领域段伤害(先算好写进 marker 的 NBT): 自身最大魔力值 ×0.03
 data modify storage manacore:in arg set value {uuid:"",max_mana_mul:0.03}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:work dbf.dmg set from storage manacore:out r.damage
+data modify storage zx:work dbf.s2_b_dmg set value {n:0,d:1}
+data modify storage zx:work dbf.s2_b_dmg set from storage manacore:out r.s2_b_damage
 
 # ⑦.2 领域 marker 的"击杀归属" = 施法者 UUID 四个整数
 #   (与威霆 open ④ 一致: 直接抄 @s 的 UUID, 不用绕 manacore:players 的文本路径)

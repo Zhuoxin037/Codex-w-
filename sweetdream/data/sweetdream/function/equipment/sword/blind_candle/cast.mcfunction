@@ -63,6 +63,8 @@ data modify storage manacore:in arg set value {uuid:"",max_mana_mul:0.14,indepen
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:work bcd.dmg set from storage manacore:out r.damage
+data modify storage zx:work bcd.s2_b_dmg set value {n:0,d:1}
+data modify storage zx:work bcd.s2_b_dmg set from storage manacore:out r.s2_b_damage
 
 # ⑦ 框"前方 4×5" + 打范围伤害(命中者钉成 zx.bcd_hit)
 function sweetdream:equipment/sword/blind_candle/area

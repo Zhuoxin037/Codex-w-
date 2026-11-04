@@ -55,6 +55,8 @@ data modify storage manacore:in arg.uuid set from storage zx:work rs.uuid
 function manacore:api/damage/calc
 data modify storage zx:work rs.dmg set value 0.0
 data modify storage zx:work rs.dmg set from storage manacore:out r.damage
+data modify storage zx:work rs.s2_b_dmg set value {n:0,d:1}
+data modify storage zx:work rs.s2_b_dmg set from storage manacore:out r.s2_b_damage
 # 诊断锚 #rs_dbg8 = 这一段额外伤害(×1000); #rs_ol 本身就是"是否强化(0/1)"的探针
 scoreboard players set #rs_dbg8 zx.meta 0
 execute store result score #rs_dbg8 zx.meta run data get storage zx:work rs.dmg 1000

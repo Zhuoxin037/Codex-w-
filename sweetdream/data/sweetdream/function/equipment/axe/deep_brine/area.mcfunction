@@ -27,6 +27,8 @@ execute anchored eyes positioned ^ ^ ^2.0 positioned ~-2.5 ~-1.3 ~-2.5 run tag @
 # 立即段伤害: 最大魔力 ×0.1
 data modify storage zx:in arg set value {target:"@e[type=!#sweetdream:no_damage,tag=zx.db_hit,distance=0..]",damage:0.0}
 data modify storage zx:in arg.damage set from storage zx:work db.dmg
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage zx:work db.s2_b_dmg
 execute at @s run function sweetdream:api/damage
 
 # 表现: 重溟的水压冲击

@@ -1,5 +1,6 @@
 advancement revoke @s only sweetdream:profession/hurt
 execute unless score @s zx.job matches 4 run return 0
+function sweetdream:equipment/sword/contract_rift/player_track
 scoreboard players add @s zx.j_dmg 0
 scoreboard players add @s zx.j_dlast 0
 scoreboard players operation #jem_got zx.meta = @s zx.j_dmg

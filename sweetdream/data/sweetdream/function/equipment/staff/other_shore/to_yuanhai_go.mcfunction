@@ -25,6 +25,8 @@ function manacore:api/damage/calc
 # ④ 打(真伤类型)
 data modify storage zx:in arg set value {target:"@e[tag=zx.os_sel,tag=zx.os_s,distance=0..]",damage:0.0,type:"sweetdream:true_damage"}
 data modify storage zx:in arg.damage set from storage manacore:out r.damage
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage manacore:out r.s2_b_damage
 execute at @s run function sweetdream:api/damage
 
 # ⑤ 表现: 噬心被冲回渊海

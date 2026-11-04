@@ -359,6 +359,29 @@ SPECS = [
               P(dust(0.8, 0.68, 1.0, 1.5), 0.5, 0.5, 0.5, 0.03, 18),
               P('end_rod', 0.4, 0.4, 0.4, 0.02, 8),
               SND('block.amethyst_block.chime', 0.6, 0.85)]),
+
+    # 2026-10-28 新增法杖：保持与实际游戏中的拖尾和命中表现一致。
+    dict(style='exalted', cn='崇高', theme='崇高 · 灰紫重形',
+         trail=[P(dust(0.48, 0.38, 0.6, 1.3), 0.1, 0.1, 0.1, 0, 4), P('smoke', 0.08, 0.08, 0.08, 0.003, 2)],
+         hit=[P('large_smoke', 0.25, 0.25, 0.25, 0.02, 8), SND('block.deepslate.break', 0.55, 0.7)]),
+    dict(style='eight_tail', cn='八尾', theme='八尾 · 狐火',
+         trail=[P(dust(1.0, 0.42, 0.12, 1.1), 0.1, 0.1, 0.1, 0, 4), P('flame', 0.08, 0.08, 0.08, 0.005, 2)],
+         hit=[P('flame', 0.22, 0.22, 0.22, 0.02, 12), SND('block.fire.ambient', 0.5, 1.4)]),
+    dict(style='firefly_staff', cn='萤光', theme='萤光 · 流萤',
+         trail=[P('glow', 0.08, 0.08, 0.08, 0.01, 3), P('end_rod', 0.03, 0.03, 0.03, 0.001, 1)],
+         hit=[P('glow', 0.25, 0.25, 0.25, 0.03, 12), SND('block.amethyst_block.chime', 0.5, 1.5)]),
+    dict(style='chorus', cn='众声', theme='众声 · 音符',
+         trail=[P('note', 0.1, 0.1, 0.1, 0, 2), P('end_rod', 0.05, 0.05, 0.05, 0.001, 1)],
+         hit=[P('note', 0.25, 0.25, 0.25, 0, 8), SND('block.note_block.chime', 0.6, 1.4)]),
+    dict(style='world_parting', cn='隔世', theme='隔世 · 双印',
+         trail=[P(dust(0.83, 0.3, 0.65, 1.0), 0.08, 0.08, 0.08, 0, 4), P('end_rod', 0.04, 0.04, 0.04, 0.001, 1)],
+         hit=[P('flash', 0, 0, 0, 0, 1), SND('block.amethyst_block.hit', 0.55, 1.0)]),
+    dict(style='star_weave', cn='织星', theme='织星 · 星光',
+         trail=[P(dust(0.65, 0.77, 1.0, 1.0), 0.1, 0.1, 0.1, 0, 4), P('end_rod', 0.03, 0.03, 0.03, 0, 1)],
+         hit=[P('flash', 0, 0, 0, 0, 1), SND('block.amethyst_block.chime', 0.5, 1.2)]),
+    dict(style='star_burial', cn='埋葬', theme='埋葬 · 暗紫星光',
+         trail=[P(dust(0.33, 0.2, 0.54, 1.1), 0.08, 0.08, 0.08, 0, 4), P('portal', 0.05, 0.05, 0.05, 0, 2)],
+         hit=[P('flash', 0, 0, 0, 0, 1), SND('block.amethyst_block.chime', 0.5, 0.7)]),
 ]
 
 # 兜底: 没写 style(或写了个不认识的)的新法杖, 至少别是"完全隐形"

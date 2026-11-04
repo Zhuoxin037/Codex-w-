@@ -1,0 +1,1 @@
+{"criteria":{"use":{"trigger":"minecraft:consume_item","conditions":{"item":{"predicates":{"minecraft:custom_data":"{zx:[\"aftersound\"]}"}}}}},"rewards":{"function":"sweetdream:equipment/sword/aftersound/cast"}}

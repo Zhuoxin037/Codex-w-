@@ -1,0 +1,1 @@
+{"criteria":{"hurt":{"trigger":"minecraft:entity_hurt_player","conditions":{"damage":{"taken":{"min":0.001},"type":{"source_entity":{"type":"#sweetdream:living"}}}}}},"rewards":{"function":"sweetdream:equipment/sword/contract_rift/player_guard"}}

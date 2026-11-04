@@ -30,6 +30,8 @@ function manacore:api/damage/calc
 # ③ 打出去(固定 18 走 fixed_add, 在乘区**之后**相加, 与 chain ④ 同口径)
 data modify storage zx:in arg set value {target:"@e[tag=zx.br_side,distance=0..,limit=1]",damage:0.0,fixed_add:18.0}
 data modify storage zx:in arg.damage set from storage manacore:out r.damage
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage manacore:out r.s2_b_damage
 execute at @e[tag=zx.br_side,distance=0..,limit=1] run function sweetdream:api/damage
 
 # ④ 表现 + 摘临时标签

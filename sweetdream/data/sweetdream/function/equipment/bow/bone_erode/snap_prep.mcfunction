@@ -11,6 +11,8 @@
 
 data modify storage zx:work be.snap set value {ok:0b,dmg:0.0,ol:0b,u0:0,u1:0,u2:0,u3:0}
 $data modify storage zx:work be.snap.dmg set from storage zx:data be."$(uuid)".dmg
+data modify storage zx:work be.snap.s2_b_dmg set value {n:0,d:1}
+$data modify storage zx:work be.snap.s2_b_dmg set from storage zx:data be."$(uuid)".s2_b_dmg
 $data modify storage zx:work be.snap.ol set from storage zx:data be."$(uuid)".ol
 $data modify storage zx:work be.snap.u0 set from storage zx:data be."$(uuid)".u0
 $data modify storage zx:work be.snap.u1 set from storage zx:data be."$(uuid)".u1

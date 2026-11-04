@@ -15,11 +15,15 @@
     "sweetdream:equipment/armor/profile/hook_calc",
     "sweetdream:equipment/armor/ebb_tide/hook_calc",
     "sweetdream:equipment/armor/glimmer/hook_add",
+    "sweetdream:equipment/armor/lone_walk/hook_add",
     "sweetdream:lib/dmg_add_apply",
     "sweetdream:profession/mage/book_hook",
     "sweetdream:equipment/sword/gousi/hook_calc",
     "sweetdream:equipment/tool/wrath/hook_calc",
+    "sweetdream:equipment/armor/bearing/hook_calc",
+    "sweetdream:equipment/armor/lone_walk/hook_calc",
     "sweetdream:equipment/armor/glimmer/hook_calc",
-    "sweetdream:profession/hook_independent"
+    "sweetdream:profession/hook_independent",
+    "sweetdream:equipment/sword/aftersound/hook_indep"
   ]
 }

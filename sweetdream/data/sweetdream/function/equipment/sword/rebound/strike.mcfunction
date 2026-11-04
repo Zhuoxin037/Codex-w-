@@ -16,8 +16,11 @@
 tag @e[tag=zx.rb_hit,distance=0..] remove zx.rb_hit
 
 # 3 个采样点(沿朝向, 俯仰归零避免打到脚前)
+execute unless data storage zx:work rba.s2_b_damage run data modify storage zx:work rba.s2_b_damage set value {n:0,d:1}
 execute rotated ~ 0 positioned ^ ^ ^1.0 run function sweetdream:equipment/sword/rebound/area with storage zx:work rba
+execute unless data storage zx:work rba.s2_b_damage run data modify storage zx:work rba.s2_b_damage set value {n:0,d:1}
 execute rotated ~ 0 positioned ^ ^ ^2.5 run function sweetdream:equipment/sword/rebound/area with storage zx:work rba
+execute unless data storage zx:work rba.s2_b_damage run data modify storage zx:work rba.s2_b_damage set value {n:0,d:1}
 execute rotated ~ 0 positioned ^ ^ ^4.0 run function sweetdream:equipment/sword/rebound/area with storage zx:work rba
 
 # 收尾清标记, 不留残余

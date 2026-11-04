@@ -18,4 +18,6 @@ function manacore:api/damage/calc
 # ② 打(普通伤害: 吃护甲/保护, 与"真实伤害"那两段区分)
 data modify storage zx:in arg set value {target:"@e[tag=zx.os_splash,distance=0..]",damage:0.0}
 data modify storage zx:in arg.damage set from storage manacore:out r.damage
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage manacore:out r.s2_b_damage
 execute at @s run function sweetdream:api/damage

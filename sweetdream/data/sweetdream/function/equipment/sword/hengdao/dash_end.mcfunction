@@ -50,6 +50,8 @@ execute if score @s zx.hd_ol matches 1 run tag @e[type=!#sweetdream:no_damage,di
 
 data modify storage zx:in arg set value {target:"@e[tag=zx.hd_hit]",damage:0.0}
 data modify storage zx:in arg.damage set from storage manacore:out r.damage
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage manacore:out r.s2_b_damage
 # 【★ 打之前先点一次人数 ★】"这一波有没有打死东西"要靠**前后人数差**判断
 #   (见 ⑥): 生物一死就从 @e 里消失了, 事后再去选它必然选不到, 所以必须先在
 #   它还在的时候把基准数记下来。
@@ -65,6 +67,8 @@ execute at @s run function sweetdream:api/damage
 #    不会因为无敌帧吃掉第二下(见 api/damage 的注释)。
 execute if score @s zx.hd_ol matches 1 if entity @e[tag=zx.hd_hit] run data modify storage zx:in arg set value {target:"@e[tag=zx.hd_hit]",damage:0.0}
 execute if score @s zx.hd_ol matches 1 if entity @e[tag=zx.hd_hit] run data modify storage zx:in arg.damage set from storage manacore:out r.damage
+execute if score @s zx.hd_ol matches 1 if entity @e[tag=zx.hd_hit] run data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+execute if score @s zx.hd_ol matches 1 if entity @e[tag=zx.hd_hit] run data modify storage zx:in arg.s2_b_damage set from storage manacore:out r.s2_b_damage
 execute if score @s zx.hd_ol matches 1 if entity @e[tag=zx.hd_hit] at @s run function sweetdream:api/damage
 
 # ⑥ 超限: 这一下打死了吗? 死了就重置冷却

@@ -17,6 +17,7 @@
     "sweetdream:boss/fireaxe/tick",
     "sweetdream:equipment/staff/triad/visual/tick",
     "sweetdream:boss/knight/tick",
-    "sweetdream:boss/husk/tick"
+    "sweetdream:boss/husk/tick",
+    "sweetdream:rogue/tick"
   ]
 }

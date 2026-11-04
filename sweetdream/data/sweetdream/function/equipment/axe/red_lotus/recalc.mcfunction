@@ -20,6 +20,8 @@ execute if score @s zx.rl_ol matches 1 run data modify storage manacore:in arg.a
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:work rl.dmg1 set from storage manacore:out r.damage
+data modify storage zx:work rl.s2_b_dmg1 set value {n:0,d:1}
+data modify storage zx:work rl.s2_b_dmg1 set from storage manacore:out r.s2_b_damage
 
 # 段2: 「夜火」那一段 —— 基础 ×3 / 超限 ×4
 data modify storage manacore:in arg set value {uuid:"",attack_mul:3.0,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0}
@@ -27,6 +29,8 @@ execute if score @s zx.rl_ol matches 1 run data modify storage manacore:in arg.a
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:work rl.dmg3 set from storage manacore:out r.damage
+data modify storage zx:work rl.s2_b_dmg3 set value {n:0,d:1}
+data modify storage zx:work rl.s2_b_dmg3 set from storage manacore:out r.s2_b_damage
 
 # 施法者 UUID 四整数(击杀归属)
 data modify storage zx:work rl.u0 set from entity @s UUID[0]

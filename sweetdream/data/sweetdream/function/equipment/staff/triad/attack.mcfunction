@@ -89,6 +89,8 @@ data modify storage zx:work ball set value {dmg:0.0,style:"triad",hit:"sweetdrea
 execute if score @s zx.tri_form matches 1 run data modify storage zx:work ball.style set value "triad_fire"
 execute if score @s zx.tri_form matches 2 run data modify storage zx:work ball.style set value "triad_gun"
 data modify storage zx:work ball.dmg set from storage manacore:out r.damage
+data modify storage zx:work ball.s2_b_dmg set value {n:0,d:1}
+data modify storage zx:work ball.s2_b_dmg set from storage manacore:out r.s2_b_damage
 execute if score @s zx.tri_form matches 1 run data modify storage zx:work ball.tri_form set value 1
 execute if score @s zx.tri_form matches 2 run data modify storage zx:work ball.tri_form set value 2
 execute if score @s zx.tri_strong matches 1.. run data modify storage zx:work ball.tri_strong set value 1b

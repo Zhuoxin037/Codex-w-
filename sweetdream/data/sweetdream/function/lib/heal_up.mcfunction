@@ -44,6 +44,7 @@
 #     · 万一 lib/heal 的 ⑤ 被误删，这里还能兜住"重复 add 同一 ID"的失败。
 #     **不要**因为"这里不命中"就删掉 —— check.py 对 heal_up 的摘除唯一允许的形态
 #     就是这两行带 `execute if` 门控的写法（裸 remove = 一键满血老路）。
+execute if entity @s[tag=zx.nr_active] run return 0
 execute if entity @s[tag=zx.heal_p] run attribute @s minecraft:max_health modifier remove sweetdream:heal_cap
 execute if entity @s[tag=zx.heal_on] run attribute @s minecraft:max_health modifier remove sweetdream:heal_cap
 

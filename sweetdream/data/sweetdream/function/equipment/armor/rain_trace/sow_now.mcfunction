@@ -37,4 +37,5 @@ data modify storage zx:rain dot.u2 set from entity @s UUID[2]
 data modify storage zx:rain dot.u3 set from entity @s UUID[3]
 
 # ④ 在当前执行位置生成
+execute unless data storage zx:rain dot.s2_b_dmg run data modify storage zx:rain dot.s2_b_dmg set value {n:0,d:1}
 function sweetdream:equipment/armor/rain_trace/dot_spawn with storage zx:rain dot

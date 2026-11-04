@@ -19,6 +19,8 @@ function manacore:api/damage/calc
 
 data modify storage zx:in arg set value {target:"@e[tag=zx.victim]",damage:0.0}
 data modify storage zx:in arg.damage set from storage manacore:out r.damage
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage manacore:out r.s2_b_damage
 execute at @s run function sweetdream:api/damage
 
 # ② 随机挑一条正在冷却的技能

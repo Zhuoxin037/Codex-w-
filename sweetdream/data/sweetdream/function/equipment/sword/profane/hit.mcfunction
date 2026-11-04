@@ -54,6 +54,8 @@ function manacore:api/damage/calc
 
 data modify storage zx:work a set value {target:"@e[tag=zx.victim,distance=..16,limit=1]",type:"minecraft:player_attack"}
 data modify storage zx:work a.num set from storage manacore:out r.damage
+data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+data modify storage zx:work a.s2_b_num set from storage manacore:out r.s2_b_damage
 function sweetdream:lib/num/plain
 execute if data storage zx:config damage_type run data modify storage zx:work a.type set from storage zx:config damage_type
 data modify storage zx:work a.u0 set from entity @s UUID[0]

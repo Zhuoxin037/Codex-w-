@@ -13,7 +13,7 @@
 #   冻过谁用**生物自己**的 zx.cs_fid 记"我上次是被哪个领域冻的" ⇒ 同一个领域不重复冻。
 # ============================================================
 
-$summon minecraft:marker ~ ~ ~ {Tags:["zx.cs_field","zx.cs_new"],data:{zx:{dmg:$(dmg),uu:"$(uu)",u:[I;$(u0),$(u1),$(u2),$(u3)]}}}
+$summon minecraft:marker ~ ~ ~ {Tags:["zx.cs_field","zx.cs_new"],data:{zx:{dmg:$(dmg),s2_b_dmg:$(s2_b_dmg),uu:"$(uu)",u:[I;$(u0),$(u1),$(u2),$(u3)]}}}
 
 # 给刚生成的这个 marker 设 4 秒计时(它带 zx.cs_new, 场上最多一个, 就近取)
 execute as @e[tag=zx.cs_new,distance=..2,limit=1] run scoreboard players set @s zx.cs_ft 4

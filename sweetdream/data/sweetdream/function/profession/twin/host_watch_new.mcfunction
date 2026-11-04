@@ -1,4 +1,4 @@
-$kill @e[tag=zx.j_twin,distance=0..,nbt={data:{owner:"$(uuid)"}}]
+$execute as @e[tag=zx.j_twin,distance=0..,nbt={data:{owner:"$(uuid)"}}] run function sweetdream:profession/twin/despawn
 $data modify storage zx:jobs p."$(uuid)".twin.pos set from entity @e[tag=zx.j_host_pick,limit=1] Pos
 $data modify storage zx:jobs p."$(uuid)".twin.dim set from entity @s Dimension
 data modify storage zx:work jwatch set value {owner:"",u0:0,u1:0,u2:0,u3:0,t0:0,t1:0,t2:0,t3:0}

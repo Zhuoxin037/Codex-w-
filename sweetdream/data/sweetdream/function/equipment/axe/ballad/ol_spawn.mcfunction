@@ -36,6 +36,7 @@ execute if score #bdnd zx.meta matches ..0 run scoreboard players set #bdnd zx.m
 # ③ 音符模板: 伤害(整点) + 起点坐标 + 施法者 UUID
 data modify storage zx:work nt set value {dmg:0,sx:0.0,sy:0.0,sz:0.0,u0:0,u1:0,u2:0,u3:0}
 execute store result storage zx:work nt.dmg int 1 run scoreboard players get #bdnd zx.meta
+data modify storage zx:work nt.s2_b_dmg set from storage manacore:out r.s2_b_damage
 data modify storage zx:work nt.sx set from entity @s Pos[0]
 data modify storage zx:work nt.sy set from entity @s Pos[1]
 data modify storage zx:work nt.sz set from entity @s Pos[2]
@@ -51,5 +52,6 @@ execute store result storage zx:work bdly.x int 1 run scoreboard players get #bd
 execute at @s run function sweetdream:equipment/axe/ballad/ol_pick with storage zx:work bdly
 
 # ⑤ 在每只被锁定生物的位置召唤一个音符
+execute unless data storage zx:work nt.s2_b_dmg run data modify storage zx:work nt.s2_b_dmg set value {n:0,d:1}
 execute at @e[tag=zx.bd_lock] run function sweetdream:equipment/axe/ballad/ol_note_spawn with storage zx:work nt
 tag @e[tag=zx.bd_lock] remove zx.bd_lock

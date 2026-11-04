@@ -67,6 +67,8 @@ data modify storage manacore:in arg set value {uuid:"",max_mana_mul:0.08}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:work tm.dmg set from storage manacore:out r.damage
+data modify storage zx:work tm.s2_b_dmg set value {n:0,d:1}
+data modify storage zx:work tm.s2_b_dmg set from storage manacore:out r.s2_b_damage
 
 # ⑦ 打"前方 4 长 × 2 宽"
 function sweetdream:equipment/sword/tidemark/strike with storage zx:work tm

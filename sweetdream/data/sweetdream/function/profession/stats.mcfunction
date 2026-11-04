@@ -51,3 +51,6 @@ scoreboard players operation #jdiff zx.meta = #jhat zx.meta
 scoreboard players operation #jdiff zx.meta -= @s zx.j_sel
 execute unless score #jdiff zx.meta matches 0 run function sweetdream:profession/stat_max_mana
 scoreboard players operation @s zx.j_sel = #jhat zx.meta
+
+execute if score @s zx.job matches 2 run data modify storage zx:work j_attack_migrate.uuid set from storage zx:data self.uuid
+execute if score @s zx.job matches 2 run function sweetdream:profession/attack_precision_migrate with storage zx:work j_attack_migrate

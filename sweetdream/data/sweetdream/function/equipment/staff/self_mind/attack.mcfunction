@@ -18,4 +18,6 @@ function manacore:api/damage/calc
 execute if score @s zx.j_form matches 1 run function sweetdream:profession/twin/basic_current
 data modify storage zx:work ball set value {dmg:0.0,style:"self_mind",hit:"sweetdream:profession/ball_hit/self_mind"}
 data modify storage zx:work ball.dmg set from storage manacore:out r.damage
+data modify storage zx:work ball.s2_b_dmg set value {n:0,d:1}
+data modify storage zx:work ball.s2_b_dmg set from storage manacore:out r.s2_b_damage
 function sweetdream:equipment/staff/attack

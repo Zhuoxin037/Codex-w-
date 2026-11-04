@@ -8,6 +8,6 @@ scoreboard players set @s zx.j_form 0
 tag @s remove zx.j_twin_live
 function sweetdream:profession/stats
 function sweetdream:profession/twin/restore_body with storage zx:work jt
-kill @e[tag=zx.j_anchor,distance=0..]
+execute as @e[tag=zx.j_anchor,distance=0..] run function sweetdream:profession/twin/despawn
 
 function sweetdream:profession/twin/release

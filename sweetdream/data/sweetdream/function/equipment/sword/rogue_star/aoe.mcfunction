@@ -8,7 +8,7 @@
 # 【范围】对目标 2 格内的**全部**生物(技能原文: "其 2 格内的全部生物")。
 # ============================================================
 
-$data modify storage zx:in arg set value {target:"@e[type=!#sweetdream:no_damage,distance=..2]",damage:$(damage)}
+$data modify storage zx:in arg set value {target:"@e[type=!#sweetdream:no_damage,distance=..2]",damage:$(damage),s2_b_damage:$(s2_b_damage)}
 function sweetdream:api/damage
 
 # 【超限·游星】再打**一次**同样的伤害(文案: "造成**两次**相当于自身基础攻击力

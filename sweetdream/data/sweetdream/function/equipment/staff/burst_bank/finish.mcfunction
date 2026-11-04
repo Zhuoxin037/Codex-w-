@@ -1,6 +1,7 @@
 tag @s add zx.bb_own
 # 先携带至中心附近，保留来自哪一侧，再做落点爆发与向外击退。
-$execute as @e[tag=zx.bb_path_$(uuid),distance=..64] at @s facing entity @a[tag=zx.bb_own,limit=1] feet rotated ~ 0 positioned as @a[tag=zx.bb_own,limit=1] positioned ^ ^ ^-0.1 run tp @s ~ ~ ~
+$execute store success score #s2_moved zx.meta run execute as @e[tag=zx.bb_path_$(uuid),distance=..64] at @s facing entity @a[tag=zx.bb_own,limit=1] feet rotated ~ 0 positioned as @a[tag=zx.bb_own,limit=1] positioned ^ ^ ^-0.1 run tp @s ~ ~ ~
+execute if score #s2_moved zx.meta matches 1 at @s run function sweetdream:equipment/armor/empty_cicada/moved
 execute at @s run function sweetdream:equipment/staff/burst_bank/land_dmg with storage zx:work bb
 effect give @s minecraft:speed 2 1 true
 

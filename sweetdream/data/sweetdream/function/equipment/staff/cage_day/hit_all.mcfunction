@@ -6,6 +6,8 @@
 data modify storage zx:work a set value {target:"@e[type=!#sweetdream:no_damage,distance=..5]",type:"minecraft:player_attack"}
 execute if score #cg_ol zx.meta matches 1 run data modify storage zx:work a.target set value "@e[type=!#sweetdream:no_damage,distance=..8]"
 data modify storage zx:work a.num set from storage zx:work cg.dmg
+data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+data modify storage zx:work a.s2_b_num set from storage zx:work cg.s2_b_dmg
 function sweetdream:lib/num/plain
 execute if data storage zx:config damage_type run data modify storage zx:work a.type set from storage zx:config damage_type
 data modify storage zx:work a.u0 set from storage zx:work cg.u0

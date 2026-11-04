@@ -14,6 +14,8 @@
 # ============================================================
 
 data modify storage zx:work tri.dmg set from entity @s data.dmg
+data modify storage zx:work tri.s2_b_dmg set value {n:0,d:1}
+data modify storage zx:work tri.s2_b_dmg set from entity @s data.s2_b_dmg
 data modify storage zx:work tri.u0 set from entity @s data.u0
 data modify storage zx:work tri.u1 set from entity @s data.u1
 data modify storage zx:work tri.u2 set from entity @s data.u2

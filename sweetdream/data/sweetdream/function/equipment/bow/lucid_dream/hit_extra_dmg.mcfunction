@@ -41,6 +41,8 @@ data modify storage zx:work a.u2 set from storage zx:work ldsu.u2
 data modify storage zx:work a.u3 set from storage zx:work ldsu.u3
 execute store result storage zx:work a.damage double 1 run scoreboard players get #ld_ed zx.meta
 data modify storage zx:work a.num set from storage zx:work a.damage
+data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+data modify storage zx:work a.s2_b_num set from storage zx:work a.s2_b_damage
 function sweetdream:lib/num/plain
 execute at @s as @e[distance=..2.5,type=!#sweetdream:no_damage] run function sweetdream:equipment/bow/lucid_dream/hit_extra_hit with storage zx:work a
 

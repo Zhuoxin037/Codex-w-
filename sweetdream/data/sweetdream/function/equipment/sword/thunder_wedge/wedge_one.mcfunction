@@ -18,7 +18,7 @@
 # ★ 计分项而不是 NBT: 玩家 UUID[0] 是 32 位整数, 计分项天然能比大小/相等, 选择器也好过滤。
 # ============================================================
 
-$summon minecraft:marker ~ ~ ~ {Tags:["zx.twg_wedge","zx.twg_new","zx.twg_ol"],data:{zx:{dmg:$(dmg),uu:"$(uu)",u:[I;$(u0),$(u1),$(u2),$(u3)],ol:$(ol)}}}
+$summon minecraft:marker ~ ~ ~ {Tags:["zx.twg_wedge","zx.twg_new","zx.twg_ol"],data:{zx:{dmg:$(dmg),s2_b_dmg:$(s2_b_dmg),uu:"$(uu)",u:[I;$(u0),$(u1),$(u2),$(u3)],ol:$(ol)}}}
 
 # 寿命(刚生成的那只带 zx.twg_new; 位置上就在自己脚下, distance=..2 足够保险)
 $scoreboard players set @e[tag=zx.twg_new,distance=..2,limit=1] zx.twg_ft $(ft)

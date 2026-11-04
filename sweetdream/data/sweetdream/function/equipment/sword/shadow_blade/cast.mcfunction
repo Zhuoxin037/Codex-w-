@@ -65,7 +65,8 @@ tag @e[tag=zx.sb_t] remove zx.sb_t
 execute at @s run tag @e[type=!#sweetdream:no_damage,distance=0.1..10,sort=nearest,limit=1] add zx.sb_t
 
 # ⑦ 瞬移到目标身上(执行位置 = 目标位置)
-execute at @e[tag=zx.sb_t,limit=1] run tp @s ~ ~ ~
+execute store success score #s2_moved zx.meta run execute at @e[tag=zx.sb_t,limit=1] run tp @s ~ ~ ~
+execute if score #s2_moved zx.meta matches 1 at @s run function sweetdream:equipment/armor/empty_cicada/moved
 
 # ⑧ ★ 先开"5 秒内击杀"窗口, 再打伤害 ★
 #    【为什么窗口必须在伤害之前】技能这一下若直接把目标打死, 击杀进度回调会在

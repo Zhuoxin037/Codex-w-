@@ -13,4 +13,4 @@
 #   命中时会退回去用它 —— 退化成旧行为, 而不是完全没效果。见 snap_prep。
 # ============================================================
 
-$data modify entity @s data.zx.cc set value {ok:1b,tier:$(tier),dmg:$(dmg),u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+$data modify entity @s data.zx.cc set value {ok:1b,tier:$(tier),dmg:$(dmg),s2_b_dmg:$(s2_b_dmg),u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}

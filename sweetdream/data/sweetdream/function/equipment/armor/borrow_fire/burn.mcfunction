@@ -19,6 +19,8 @@ scoreboard players operation #bf_d zx.meta *= #250 zx.meta
 $data modify storage zx:work a set value {target:"@s",damage:0.0,type:"sweetdream:true_damage",u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
 execute store result storage zx:work a.damage double 0.001 run scoreboard players get #bf_d zx.meta
 data modify storage zx:work a.num set from storage zx:work a.damage
+data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+data modify storage zx:work a.s2_b_num set from storage zx:work a.s2_b_damage
 function sweetdream:lib/num/plain
 function sweetdream:internal/damage/with_from with storage zx:work a
 

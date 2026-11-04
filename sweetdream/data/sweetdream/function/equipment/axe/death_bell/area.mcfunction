@@ -21,6 +21,8 @@ execute rotated ~ 0 positioned ^ ^ ^2 run tag @e[type=!#sweetdream:no_damage,dis
 # 重击伤害: 最大魔力值 ×0.1(值已由 cast ⑥ 算好)
 data modify storage zx:in arg set value {target:"@e[type=!#sweetdream:no_damage,tag=zx.dbl_hit,distance=0..]",damage:0.0}
 data modify storage zx:in arg.damage set from storage zx:work dbl.dmg
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage zx:work dbl.s2_b_dmg
 execute at @s run function sweetdream:api/damage
 
 # 表现

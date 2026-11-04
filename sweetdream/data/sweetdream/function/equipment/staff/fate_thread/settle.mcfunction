@@ -31,15 +31,21 @@ execute if score @s zx.ft_pol matches 1 run data modify storage manacore:in arg.
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:work ft.dmg set from storage manacore:out r.damage
+data modify storage zx:work ft.s2_b_dmg set value {n:0,d:1}
+data modify storage zx:work ft.s2_b_dmg set from storage manacore:out r.s2_b_damage
 
 # ③ 打"最初的生物"
 data modify storage zx:in arg set value {target:"@e[tag=zx.ft_src,distance=0..]",damage:0.0}
 data modify storage zx:in arg.damage set from storage zx:work ft.dmg
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage zx:work ft.s2_b_dmg
 execute at @s run function sweetdream:api/damage
 
 # ④ 打"另一个"(同一个伤害值)
 data modify storage zx:in arg set value {target:"@e[tag=zx.ft_other,distance=0..]",damage:0.0}
 data modify storage zx:in arg.damage set from storage zx:work ft.dmg
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage zx:work ft.s2_b_dmg
 execute at @s run function sweetdream:api/damage
 
 # ⑤ 最初的生物附加「噬心」

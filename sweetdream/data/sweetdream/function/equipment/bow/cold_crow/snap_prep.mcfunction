@@ -18,6 +18,8 @@
 data modify storage zx:work cc.snap set value {ok:0b,tier:0,dmg:0.0,u0:0,u1:0,u2:0,u3:0}
 $data modify storage zx:work cc.snap.tier set from storage zx:data cc."$(uuid)".tier
 $data modify storage zx:work cc.snap.dmg set from storage zx:data cc."$(uuid)".dmg
+data modify storage zx:work cc.snap.s2_b_dmg set value {n:0,d:1}
+$data modify storage zx:work cc.snap.s2_b_dmg set from storage zx:data cc."$(uuid)".s2_b_dmg
 $data modify storage zx:work cc.snap.u0 set from storage zx:data cc."$(uuid)".u0
 $data modify storage zx:work cc.snap.u1 set from storage zx:data cc."$(uuid)".u1
 $data modify storage zx:work cc.snap.u2 set from storage zx:data cc."$(uuid)".u2

@@ -8,4 +8,6 @@ scoreboard players operation #be_half zx.meta /= #2 zx.meta
 scoreboard players operation #be_d zx.meta += #be_half zx.meta
 execute store result storage zx:work a.num double 0.001 run scoreboard players get #be_d zx.meta
 data modify storage zx:work a.damage set from storage zx:work a.num
+data modify storage zx:work a.s2_b_damage set value {n:0,d:1}
+data modify storage zx:work a.s2_b_damage set from storage zx:work a.s2_b_num
 function sweetdream:lib/num/plain

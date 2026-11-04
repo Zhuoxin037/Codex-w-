@@ -18,6 +18,9 @@ execute unless data storage zx:data self{ok:1b} run return fail
 # ② 满血判定(排在一切扣费之前)
 execute store result score #rf_hp zx.meta run data get entity @s Health
 execute store result score #rf_mh zx.meta run attribute @s minecraft:max_health get
+execute if entity @s[tag=zx.nr_clamp] run function sweetdream:lib/max_health_score
+execute if entity @s[tag=zx.nr_clamp] run scoreboard players operation #rf_mh zx.meta = #max_hp zx.meta
+execute if entity @s[tag=zx.nr_clamp] run scoreboard players operation #rf_mh zx.meta /= #1000 zx.meta
 execute if score #rf_hp zx.meta >= #rf_mh zx.meta run tellraw @s [{"text":"生命值已满，无法使用续火","color":"red"}]
 execute if score #rf_hp zx.meta >= #rf_mh zx.meta run return fail
 

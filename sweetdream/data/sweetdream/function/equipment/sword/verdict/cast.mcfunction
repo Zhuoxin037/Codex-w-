@@ -60,6 +60,8 @@ data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:in arg set value {target:"@e[tag=zx.vd_mark,distance=0..]",damage:0.0}
 data modify storage zx:in arg.damage set from storage manacore:out r.damage
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage manacore:out r.s2_b_damage
 execute at @s run function sweetdream:api/damage
 
 # ⑧ 领域伤害(先算好): 基础攻击力 ×3
@@ -67,6 +69,8 @@ data modify storage manacore:in arg set value {uuid:"",attack_mul:3.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:work vdf.dmg set from storage manacore:out r.damage
+data modify storage zx:work vdf.s2_b_dmg set value {n:0,d:1}
+data modify storage zx:work vdf.s2_b_dmg set from storage manacore:out r.s2_b_damage
 
 # ⑨ 在"受到伤害的生物处"生成领域(宏层: NBT 里要拼施放者 UUID 的四个整数)
 data modify storage zx:work vdf.uuid set from storage zx:data self.uuid

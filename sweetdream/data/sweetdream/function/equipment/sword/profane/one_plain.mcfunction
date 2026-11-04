@@ -3,6 +3,8 @@
 # ============================================================
 data modify storage zx:work a set value {target:"@s",type:"minecraft:player_attack"}
 data modify storage zx:work a.num set from storage zx:work pf.d5
+data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+data modify storage zx:work a.s2_b_num set from storage zx:work pf.s2_b_d5
 function sweetdream:lib/num/plain
 execute if data storage zx:config damage_type run data modify storage zx:work a.type set from storage zx:config damage_type
 data modify storage zx:work a.u0 set from storage zx:work pf.u0

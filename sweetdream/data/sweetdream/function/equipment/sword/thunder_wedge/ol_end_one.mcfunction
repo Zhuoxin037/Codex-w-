@@ -18,6 +18,8 @@ summon minecraft:lightning_bolt ~ ~ ~ {Tags:["zx.th_own"]}
 # ② 1 格内的生物吃一次 基础攻击力 ×2
 data modify storage zx:work a set value {target:"@e[type=!#sweetdream:no_damage,distance=..1]",type:"minecraft:player_attack",num:0.0}
 data modify storage zx:work a.num set from storage zx:work twgdot.dmg
+data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+data modify storage zx:work a.s2_b_num set from storage zx:work twgdot.s2_b_dmg
 function sweetdream:lib/num/plain
 execute if data storage zx:config damage_type run data modify storage zx:work a.type set from storage zx:config damage_type
 data modify storage zx:work a.u0 set from storage zx:work twgdot.u0

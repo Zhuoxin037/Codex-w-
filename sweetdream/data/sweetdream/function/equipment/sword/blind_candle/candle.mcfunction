@@ -32,19 +32,29 @@ data modify storage manacore:in arg set value {uuid:"",max_mana_mul:0.08,indepen
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:work bcdc.dmg0 set from storage manacore:out r.damage
+data modify storage zx:work bcdc.s2_b_dmg0 set value {n:0,d:1}
+data modify storage zx:work bcdc.s2_b_dmg0 set from storage manacore:out r.s2_b_damage
 
 data modify storage manacore:in arg set value {uuid:"",max_mana_mul:0.04,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:work bcdc.dmg1 set from storage manacore:out r.damage
+data modify storage zx:work bcdc.s2_b_dmg1 set value {n:0,d:1}
+data modify storage zx:work bcdc.s2_b_dmg1 set from storage manacore:out r.s2_b_damage
 
 # ⑤ 按"有没有别人"取倍率
 data modify storage zx:work bcdc.dmg set from storage zx:work bcdc.dmg1
+data modify storage zx:work bcdc.s2_b_dmg set value {n:0,d:1}
+data modify storage zx:work bcdc.s2_b_dmg set from storage zx:work bcdc.s2_b_dmg1
 execute if entity @e[tag=zx.bcd_pick2,distance=0..,limit=1] run data modify storage zx:work bcdc.dmg set from storage zx:work bcdc.dmg0
+execute if entity @e[tag=zx.bcd_pick2,distance=0..,limit=1] run data modify storage zx:work bcdc.s2_b_dmg set value {n:0,d:1}
+execute if entity @e[tag=zx.bcd_pick2,distance=0..,limit=1] run data modify storage zx:work bcdc.s2_b_dmg set from storage zx:work bcdc.s2_b_dmg0
 
 # ⑥ 打
 data modify storage zx:in arg set value {target:"@e[tag=zx.bcd_hit2,distance=0..]",damage:0.0}
 data modify storage zx:in arg.damage set from storage zx:work bcdc.dmg
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage zx:work bcdc.s2_b_dmg
 execute at @s run function sweetdream:api/damage
 
 # ⑦ 表现: 烛火跳了一下

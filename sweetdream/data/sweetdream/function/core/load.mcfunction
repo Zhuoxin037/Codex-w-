@@ -709,6 +709,10 @@ execute unless data storage zx:config obj_bd_ft run scoreboard objectives add zx
 execute unless data storage zx:config obj_bd_ft run data modify storage zx:config obj_bd_ft set value 1b
 execute unless data storage zx:config obj_bd_cd run scoreboard objectives add zx.bd_cd dummy
 execute unless data storage zx:config obj_bd_cd run data modify storage zx:config obj_bd_cd set value 1b
+# 魂灵之影的**外观载体**(item_display)自己的寿命(2026-10-29 建模实装时加)。
+#   记在 display 身上, 不记铁傀儡: 铁傀儡一死, 它身上的账就查不到了。
+execute unless data storage zx:config obj_bd_mft run scoreboard objectives add zx.bd_mft dummy
+execute unless data storage zx:config obj_bd_mft run data modify storage zx:config obj_bd_mft set value 1b
 execute unless data storage zx:config obj_dt_paid run scoreboard objectives add zx.dt_paid dummy
 execute unless data storage zx:config obj_dt_paid run data modify storage zx:config obj_dt_paid set value 1b
 execute unless data storage zx:config obj_ct_paid run scoreboard objectives add zx.ct_paid dummy
@@ -1015,6 +1019,23 @@ kill @e[tag=zx.pal_col]
 kill @e[tag=zx.bg_vtx]
 # 同理: 清掉残留的“旋风”marker(批3 风帆)。
 kill @e[tag=zx.sl_vtx]
+# ★ 2026-11-01「崇高之形」的外观载体(item_display) ★
+#   这一条**不能无脑 kill**: 本体(zx.ex_big)和术阵一样是跨 reload 存活的, 无条件清
+#   会让正在走的石像突然只剩粒子(下个 big_tick 也追不回来, 因为载体已经没了)。
+#   判据 = "身边 2 格内还有没有本体": 有 ⇒ 活着, 别动; 没有 ⇒ 孤儿, 收掉。
+#   稳态下两者位置重合(big_tick 每刻拽), 所以 2 格足够宽。
+#   三维度都要写: load 的默认上下文只在主世界。
+execute in minecraft:overworld as @e[tag=zx.ex_model,distance=0..] at @s unless entity @e[tag=zx.ex_big,distance=..2] run kill @s
+execute in minecraft:the_nether as @e[tag=zx.ex_model,distance=0..] at @s unless entity @e[tag=zx.ex_big,distance=..2] run kill @s
+execute in minecraft:the_end as @e[tag=zx.ex_model,distance=0..] at @s unless entity @e[tag=zx.ex_big,distance=..2] run kill @s
+# 千钧之形的小石像同理。★ 不要无条件 kill：本体(marker)能跨 reload 存活，
+#   无脑清会让正在飞的那只下一秒只剩粒子。判据同 big —— 身边有没有本体。
+execute in minecraft:overworld as @e[tag=zx.ex_sm_model,distance=0..] at @s unless entity @e[tag=zx.ex_small,distance=..2] run kill @s
+execute in minecraft:the_nether as @e[tag=zx.ex_sm_model,distance=0..] at @s unless entity @e[tag=zx.ex_small,distance=..2] run kill @s
+execute in minecraft:the_end as @e[tag=zx.ex_sm_model,distance=0..] at @s unless entity @e[tag=zx.ex_small,distance=..2] run kill @s
+# debug/exalted_form 摆的展示像：纯展示用，不参与机制，每次加载一律清掉。
+kill @e[tag=zx.ex_demo]
+kill @e[tag=zx.ex_demo_sm]
 # ★ 批 D 的「陨石」(zx.mt_rock) 和「领域」(zx.tc_dom) 故意**不在这里清** ★
 #   · 陨石: 只活 4 刻, 靠 core/tick 的每刻链推进 —— /reload 后链会重跑, 它自己会落地收尾,
 #     清掉反而会在半空"凭空消失"。没有孤儿风险就不需要这个兜底。
@@ -3091,6 +3112,54 @@ execute unless data storage zx:config obj_j_link run scoreboard objectives add z
 execute unless data storage zx:config obj_j_link run data modify storage zx:config obj_j_link set value 1b
 execute unless data storage zx:config obj_j_life run scoreboard objectives add zx.j_life dummy
 execute unless data storage zx:config obj_j_life run data modify storage zx:config obj_j_life set value 1b
+execute unless data storage zx:config obj_j_duet_n run scoreboard objectives add zx.j_duet_n dummy
+execute unless data storage zx:config obj_j_duet_n run data modify storage zx:config obj_j_duet_n set value 1b
+execute unless data storage zx:config obj_j_duet_cast run scoreboard objectives add zx.j_duet_cast dummy
+execute unless data storage zx:config obj_j_duet_cast run data modify storage zx:config obj_j_duet_cast set value 1b
+execute unless data storage zx:config obj_j_duet_last run scoreboard objectives add zx.j_duet_last dummy
+execute unless data storage zx:config obj_j_duet_last run data modify storage zx:config obj_j_duet_last set value 1b
+# 颂恩：层数 zx.ga_lux（上限5；攻击积累、主动清除）；每刻去重 zx.ga_tick。
+execute unless data storage zx:config obj_ga_lux run scoreboard objectives add zx.ga_lux dummy
+execute unless data storage zx:config obj_ga_lux run data modify storage zx:config obj_ga_lux set value 1b
+execute unless data storage zx:config obj_ga_tick run scoreboard objectives add zx.ga_tick dummy
+execute unless data storage zx:config obj_ga_tick run data modify storage zx:config obj_ga_tick set value 1b
+# 八尾：层数 zx.et_fox（积累至8后触发普攻并减4）。
+execute unless data storage zx:config obj_et_fox run scoreboard objectives add zx.et_fox dummy
+execute unless data storage zx:config obj_et_fox run data modify storage zx:config obj_et_fox set value 1b
+execute unless data storage zx:config obj_ff_age run scoreboard objectives add zx.ff_age dummy
+execute unless data storage zx:config obj_ff_age run data modify storage zx:config obj_ff_age set value 1b
+execute unless data storage zx:config obj_ex_until run scoreboard objectives add zx.ex_until dummy
+execute unless data storage zx:config obj_ex_until run data modify storage zx:config obj_ex_until set value 1b
+execute unless data storage zx:config obj_ex_walk run scoreboard objectives add zx.ex_walk dummy
+execute unless data storage zx:config obj_ex_walk run data modify storage zx:config obj_ex_walk set value 1b
+# 缝命：层数 zx.ws_view（未合伤的整点显示；精确值由 zx.ws_wound 以千分之一保存）。
+execute unless data storage zx:config obj_ws_wound run scoreboard objectives add zx.ws_wound dummy
+execute unless data storage zx:config obj_ws_wound run data modify storage zx:config obj_ws_wound set value 1b
+execute unless data storage zx:config obj_ws_pre run scoreboard objectives add zx.ws_pre dummy
+execute unless data storage zx:config obj_ws_pre run data modify storage zx:config obj_ws_pre set value 1b
+execute unless data storage zx:config obj_ws_until run scoreboard objectives add zx.ws_until dummy
+execute unless data storage zx:config obj_ws_until run data modify storage zx:config obj_ws_until set value 1b
+execute unless data storage zx:config obj_ws_view run scoreboard objectives add zx.ws_view dummy
+execute unless data storage zx:config obj_ws_view run data modify storage zx:config obj_ws_view set value 1b
+execute unless data storage zx:config obj_ws_due run scoreboard objectives add zx.ws_due dummy
+execute unless data storage zx:config obj_ws_due run data modify storage zx:config obj_ws_due set value 1b
+execute unless data storage zx:config obj_cs_left run scoreboard objectives add zx.cs_left dummy
+execute unless data storage zx:config obj_cs_left run data modify storage zx:config obj_cs_left set value 1b
+execute unless data storage zx:config obj_cs_echo run scoreboard objectives add zx.cs_echo dummy
+execute unless data storage zx:config obj_cs_echo run data modify storage zx:config obj_cs_echo set value 1b
+# 隔世：层数 zx.wp_switch（本次已使用的免费换体，最多6次）。
+execute unless data storage zx:config obj_wp_switch run scoreboard objectives add zx.wp_switch dummy
+execute unless data storage zx:config obj_wp_switch run data modify storage zx:config obj_wp_switch set value 1b
+execute unless data storage zx:config obj_wp_until run scoreboard objectives add zx.wp_until dummy
+execute unless data storage zx:config obj_wp_until run data modify storage zx:config obj_wp_until set value 1b
+execute unless data storage zx:config obj_wp_red run scoreboard objectives add zx.wp_red dummy
+execute unless data storage zx:config obj_wp_red run data modify storage zx:config obj_wp_red set value 1b
+execute unless data storage zx:config obj_wp_white run scoreboard objectives add zx.wp_white dummy
+execute unless data storage zx:config obj_wp_white run data modify storage zx:config obj_wp_white set value 1b
+execute unless data storage zx:config obj_wp_gate run scoreboard objectives add zx.wp_gate dummy
+execute unless data storage zx:config obj_wp_gate run data modify storage zx:config obj_wp_gate set value 1b
+execute unless data storage zx:config obj_wp_due run scoreboard objectives add zx.wp_due dummy
+execute unless data storage zx:config obj_wp_due run data modify storage zx:config obj_wp_due set value 1b
 execute unless data storage zx:config obj_j_pulse run scoreboard objectives add zx.j_pulse dummy
 execute unless data storage zx:config obj_j_pulse run data modify storage zx:config obj_j_pulse set value 1b
 execute unless data storage zx:config obj_j_own run scoreboard objectives add zx.j_own dummy
@@ -3225,3 +3294,248 @@ execute unless data storage zx:config obj_j_hd_book run data modify storage zx:c
 
 execute unless data storage zx:config obj_j_hd_sor run scoreboard objectives add zx.j_hd_sor dummy
 execute unless data storage zx:config obj_j_hd_sor run data modify storage zx:config obj_j_hd_sor set value 1b
+
+# ===== 批 20（2026-10-27）：胜利誓约 + 8 件终端盔甲 + 临时生命/术阵位框架 =====
+#   ★ 全部打在**玩家**身上（玩家分数不参与区块存盘, 不需要三维度兜底清零）。
+#   ★ 术阵位读数 zx.fm_u / zx.fm_c 由 lib/fm/read 每秒从前置包 formation/count 取。
+#   ★ 临时生命 zx.thp 的唯一写入口是 lib/thp（吸收药水 + max_absorption 上限）。
+#   zx.ov_lt = 胜利誓约 被动同刻去重
+#   zx.ov_ft = 胜利誓约 领域剩余秒(marker)
+#   zx.ov_hp = 溢流 生命上限账本
+#   zx.pv_lim = 枢 术阵位上限差值账本
+#   zx.br_a = 承 护甲档
+#   zx.br_t = 承 韧性档
+#   zx.br_spd = 承 移速档
+#   zx.br_full = 承 阵容边沿
+#   zx.br_zc = 承 阵成到期刻
+#   zx.br_cd = 承 阵成 12 秒冷却
+#   zx.br_fm = 承 术阵基线(返还用)
+#   zx.ec_a = 空营 护甲档
+#   zx.ec_t = 空营 韧性档
+#   zx.lw_spd = 独行 移速账本
+#   zx.lw_arm = 独行 临敌护甲账本
+#   zx.lw_on = 独行 ≤2 增伤
+#   zx.lw_lc = 独行 临敌到期刻
+#   zx.lw_cd = 独行 临敌 16 秒冷却
+#   zx.lw_last = 独行 上秒敌对数量
+#   zx.it_hp = 蓄意 生命上限账本
+#   zx.it_sum = 蓄意 累计消耗魔力(毫点)
+#   zx.it_cd = 蓄意 12 秒冷却
+#   zx.as_cd = 踏空 10 秒冷却
+#   zx.thp = 临时生命值(点)
+#   zx.thp_end = 临时生命到期刻
+#   zx.fm_u = 术阵位占用
+#   zx.fm_c = 术阵位上限
+execute unless data storage zx:config obj_ov_lt run scoreboard objectives add zx.ov_lt dummy
+execute unless data storage zx:config obj_ov_lt run data modify storage zx:config obj_ov_lt set value 1b
+execute unless data storage zx:config obj_ov_ft run scoreboard objectives add zx.ov_ft dummy
+execute unless data storage zx:config obj_ov_ft run data modify storage zx:config obj_ov_ft set value 1b
+execute unless data storage zx:config obj_ov_hp run scoreboard objectives add zx.ov_hp dummy
+execute unless data storage zx:config obj_ov_hp run data modify storage zx:config obj_ov_hp set value 1b
+execute unless data storage zx:config obj_pv_lim run scoreboard objectives add zx.pv_lim dummy
+execute unless data storage zx:config obj_pv_lim run data modify storage zx:config obj_pv_lim set value 1b
+execute unless data storage zx:config obj_br_a run scoreboard objectives add zx.br_a dummy
+execute unless data storage zx:config obj_br_a run data modify storage zx:config obj_br_a set value 1b
+execute unless data storage zx:config obj_br_t run scoreboard objectives add zx.br_t dummy
+execute unless data storage zx:config obj_br_t run data modify storage zx:config obj_br_t set value 1b
+execute unless data storage zx:config obj_br_spd run scoreboard objectives add zx.br_spd dummy
+execute unless data storage zx:config obj_br_spd run data modify storage zx:config obj_br_spd set value 1b
+execute unless data storage zx:config obj_br_full run scoreboard objectives add zx.br_full dummy
+execute unless data storage zx:config obj_br_full run data modify storage zx:config obj_br_full set value 1b
+execute unless data storage zx:config obj_br_zc run scoreboard objectives add zx.br_zc dummy
+execute unless data storage zx:config obj_br_zc run data modify storage zx:config obj_br_zc set value 1b
+execute unless data storage zx:config obj_br_cd run scoreboard objectives add zx.br_cd dummy
+execute unless data storage zx:config obj_br_cd run data modify storage zx:config obj_br_cd set value 1b
+execute unless data storage zx:config obj_br_fm run scoreboard objectives add zx.br_fm dummy
+execute unless data storage zx:config obj_br_fm run data modify storage zx:config obj_br_fm set value 1b
+execute unless data storage zx:config obj_ec_a run scoreboard objectives add zx.ec_a dummy
+execute unless data storage zx:config obj_ec_a run data modify storage zx:config obj_ec_a set value 1b
+execute unless data storage zx:config obj_ec_t run scoreboard objectives add zx.ec_t dummy
+execute unless data storage zx:config obj_ec_t run data modify storage zx:config obj_ec_t set value 1b
+execute unless data storage zx:config obj_lw_spd run scoreboard objectives add zx.lw_spd dummy
+execute unless data storage zx:config obj_lw_spd run data modify storage zx:config obj_lw_spd set value 1b
+execute unless data storage zx:config obj_lw_arm run scoreboard objectives add zx.lw_arm dummy
+execute unless data storage zx:config obj_lw_arm run data modify storage zx:config obj_lw_arm set value 1b
+execute unless data storage zx:config obj_lw_on run scoreboard objectives add zx.lw_on dummy
+execute unless data storage zx:config obj_lw_on run data modify storage zx:config obj_lw_on set value 1b
+execute unless data storage zx:config obj_lw_lc run scoreboard objectives add zx.lw_lc dummy
+execute unless data storage zx:config obj_lw_lc run data modify storage zx:config obj_lw_lc set value 1b
+execute unless data storage zx:config obj_lw_cd run scoreboard objectives add zx.lw_cd dummy
+execute unless data storage zx:config obj_lw_cd run data modify storage zx:config obj_lw_cd set value 1b
+execute unless data storage zx:config obj_lw_last run scoreboard objectives add zx.lw_last dummy
+execute unless data storage zx:config obj_lw_last run data modify storage zx:config obj_lw_last set value 1b
+execute unless data storage zx:config obj_it_hp run scoreboard objectives add zx.it_hp dummy
+execute unless data storage zx:config obj_it_hp run data modify storage zx:config obj_it_hp set value 1b
+execute unless data storage zx:config obj_it_sum run scoreboard objectives add zx.it_sum dummy
+execute unless data storage zx:config obj_it_sum run data modify storage zx:config obj_it_sum set value 1b
+execute unless data storage zx:config obj_it_cd run scoreboard objectives add zx.it_cd dummy
+execute unless data storage zx:config obj_it_cd run data modify storage zx:config obj_it_cd set value 1b
+execute unless data storage zx:config obj_as_cd run scoreboard objectives add zx.as_cd dummy
+execute unless data storage zx:config obj_as_cd run data modify storage zx:config obj_as_cd set value 1b
+execute unless data storage zx:config obj_thp run scoreboard objectives add zx.thp dummy
+execute unless data storage zx:config obj_thp run data modify storage zx:config obj_thp set value 1b
+execute unless data storage zx:config obj_thp_end run scoreboard objectives add zx.thp_end dummy
+execute unless data storage zx:config obj_thp_end run data modify storage zx:config obj_thp_end set value 1b
+execute unless data storage zx:config obj_fm_u run scoreboard objectives add zx.fm_u dummy
+execute unless data storage zx:config obj_fm_u run data modify storage zx:config obj_fm_u set value 1b
+execute unless data storage zx:config obj_fm_c run scoreboard objectives add zx.fm_c dummy
+execute unless data storage zx:config obj_fm_c run data modify storage zx:config obj_fm_c set value 1b
+execute unless data storage zx:config obj_cr_layers run scoreboard objectives add zx.cr_layers dummy
+execute unless data storage zx:config obj_cr_layers run data modify storage zx:config obj_cr_layers set value 1b
+execute unless data storage zx:config obj_cr_until run scoreboard objectives add zx.cr_until dummy
+execute unless data storage zx:config obj_cr_until run data modify storage zx:config obj_cr_until set value 1b
+execute unless data storage zx:config obj_cr_due run scoreboard objectives add zx.cr_due dummy
+execute unless data storage zx:config obj_cr_due run data modify storage zx:config obj_cr_due set value 1b
+execute unless data storage zx:config obj_cr_seen run scoreboard objectives add zx.cr_seen dummy
+execute unless data storage zx:config obj_cr_seen run data modify storage zx:config obj_cr_seen set value 1b
+execute unless data storage zx:config obj_cr_total run scoreboard objectives add zx.cr_total dummy
+execute unless data storage zx:config obj_cr_total run data modify storage zx:config obj_cr_total set value 1b
+execute unless data storage zx:config obj_cr_loss run scoreboard objectives add zx.cr_loss dummy
+execute unless data storage zx:config obj_cr_loss run data modify storage zx:config obj_cr_loss set value 1b
+execute unless data storage zx:config obj_cr_hp run scoreboard objectives add zx.cr_hp dummy
+execute unless data storage zx:config obj_cr_hp run data modify storage zx:config obj_cr_hp set value 1b
+execute unless data storage zx:config obj_cr_done run scoreboard objectives add zx.cr_done dummy
+execute unless data storage zx:config obj_cr_done run data modify storage zx:config obj_cr_done set value 1b
+execute unless data storage zx:config obj_weave_until run scoreboard objectives add zx.weave_until dummy
+execute unless data storage zx:config obj_weave_until run data modify storage zx:config obj_weave_until set value 1b
+execute unless data storage zx:config obj_weave_left run scoreboard objectives add zx.weave_left dummy
+execute unless data storage zx:config obj_weave_left run data modify storage zx:config obj_weave_left set value 1b
+execute unless data storage zx:config obj_weave_clock run scoreboard objectives add zx.weave_clock dummy
+execute unless data storage zx:config obj_weave_clock run data modify storage zx:config obj_weave_clock set value 1b
+execute unless data storage zx:config obj_weave_round run scoreboard objectives add zx.weave_round dummy
+execute unless data storage zx:config obj_weave_round run data modify storage zx:config obj_weave_round set value 1b
+execute unless data storage zx:config obj_weave_n run scoreboard objectives add zx.weave_n dummy
+execute unless data storage zx:config obj_weave_n run data modify storage zx:config obj_weave_n set value 1b
+execute unless data storage zx:config obj_weave_idx run scoreboard objectives add zx.weave_idx dummy
+execute unless data storage zx:config obj_weave_idx run data modify storage zx:config obj_weave_idx set value 1b
+execute unless data storage zx:config obj_burial_cap run scoreboard objectives add zx.burial_cap dummy
+execute unless data storage zx:config obj_burial_cap run data modify storage zx:config obj_burial_cap set value 1b
+execute unless data storage zx:config obj_burial_val run scoreboard objectives add zx.burial_val dummy
+execute unless data storage zx:config obj_burial_val run data modify storage zx:config obj_burial_val set value 1b
+execute unless data storage zx:config obj_burial_end run scoreboard objectives add zx.burial_end dummy
+execute unless data storage zx:config obj_burial_end run data modify storage zx:config obj_burial_end set value 1b
+execute unless data storage zx:config obj_burial_hp run scoreboard objectives add zx.burial_hp dummy
+execute unless data storage zx:config obj_burial_hp run data modify storage zx:config obj_burial_hp set value 1b
+execute unless data storage zx:config obj_burial_abs run scoreboard objectives add zx.burial_abs dummy
+execute unless data storage zx:config obj_burial_abs run data modify storage zx:config obj_burial_abs set value 1b
+execute unless data storage zx:config obj_nr_hp run scoreboard objectives add zx.nr_hp dummy
+execute unless data storage zx:config obj_nr_hp run data modify storage zx:config obj_nr_hp set value 1b
+execute unless data storage zx:config obj_nr_end run scoreboard objectives add zx.nr_end dummy
+execute unless data storage zx:config obj_nr_end run data modify storage zx:config obj_nr_end set value 1b
+execute unless data storage zx:config obj_nr_count run scoreboard objectives add zx.nr_count dummy
+execute unless data storage zx:config obj_nr_count run data modify storage zx:config obj_nr_count set value 1b
+execute unless data storage zx:config obj_nr_reject run scoreboard objectives add zx.nr_reject dummy
+execute unless data storage zx:config obj_nr_reject run data modify storage zx:config obj_nr_reject set value 1b
+execute unless data storage zx:config obj_nr_finish run scoreboard objectives add zx.nr_finish dummy
+execute unless data storage zx:config obj_nr_finish run data modify storage zx:config obj_nr_finish set value 1b
+execute unless data storage zx:config obj_nr_extra run scoreboard objectives add zx.nr_extra dummy
+execute unless data storage zx:config obj_nr_extra run data modify storage zx:config obj_nr_extra set value 1b
+execute unless data storage zx:config obj_nr_val run scoreboard objectives add zx.nr_val dummy
+execute unless data storage zx:config obj_nr_val run data modify storage zx:config obj_nr_val set value 1b
+execute unless data storage zx:config obj_nr_due run scoreboard objectives add zx.nr_due dummy
+execute unless data storage zx:config obj_nr_due run data modify storage zx:config obj_nr_due set value 1b
+execute unless data storage zx:config obj_nr_tick run scoreboard objectives add zx.nr_tick dummy
+execute unless data storage zx:config obj_nr_tick run data modify storage zx:config obj_nr_tick set value 1b
+execute unless data storage zx:config obj_nr_clamp_end run scoreboard objectives add zx.nr_clamp_end dummy
+execute unless data storage zx:config obj_nr_clamp_end run data modify storage zx:config obj_nr_clamp_end set value 1b
+execute unless data storage zx:config obj_nr_gen run scoreboard objectives add zx.nr_gen dummy
+execute unless data storage zx:config obj_nr_gen run data modify storage zx:config obj_nr_gen set value 1b
+scoreboard objectives add zx.s2_hp dummy
+scoreboard objectives add zx.s2_atk dummy
+scoreboard objectives add zx.s2_mana dummy
+scoreboard objectives add zx.s2_sky_full dummy
+scoreboard objectives add zx.s2_sky_end dummy
+scoreboard objectives add zx.s2_cicada_cd dummy
+scoreboard objectives add zx.s2_cw_cd dummy
+scoreboard objectives add zx.s2_cw_end dummy
+scoreboard objectives add zx.s2_natural dummy
+scoreboard objectives add zx.s2_abs dummy
+scoreboard objectives add zx.s2_abs_next dummy
+scoreboard objectives add zx.s2_rail dummy
+scoreboard objectives add zx.s2_rail_end dummy
+scoreboard objectives add zx.s2_stage dummy
+scoreboard objectives add zx.s2_stage_end dummy
+scoreboard objectives add zx.s2_loss dummy
+scoreboard objectives add zx.s2_selfpre dummy
+scoreboard objectives add zx.s2_deer_max dummy
+scoreboard objectives add zx.s2_veil_rec dummy
+scoreboard objectives add zx.s2_breach dummy
+scoreboard objectives add zx.s2_step_end dummy
+scoreboard objectives add zx.s2_step_x dummy
+scoreboard objectives add zx.s2_step_y dummy
+scoreboard objectives add zx.s2_step_z dummy
+scoreboard objectives add zx.s2_end dummy
+scoreboard objectives add zx.s2_val dummy
+scoreboard objectives add zx.s2_i dummy
+scoreboard objectives add zx.s2_move_id dummy
+scoreboard objectives add zx.s2_sky_view dummy
+scoreboard objectives add zx.s2_cw_view dummy
+scoreboard objectives add zx.s2_ec_hp dummy
+scoreboard objectives add zx.s2_ec_atk dummy
+scoreboard objectives add zx.s2_ss_mana dummy
+scoreboard objectives add zx.s2_cw_hp dummy
+scoreboard objectives add zx.s2_rv_hp dummy
+scoreboard objectives add zx.s2_cw_armor dummy
+scoreboard objectives add zx.s2_cw_kb dummy
+# magic_theory: 层数 zx.s2_rail (5; 导轨)
+# still_sky: 层数 zx.s2_sky_view (1; 星帷)
+# cease_war: 层数 zx.s2_cw_view (1; 余勇)
+
+execute in minecraft:overworld as @e[tag=zx.j_body,distance=0..] run function sweetdream:profession/twin/protect_proxy
+
+execute in minecraft:overworld as @e[tag=zx.j_twin,distance=0..] run function sweetdream:profession/twin/protect_proxy
+
+execute in minecraft:the_nether as @e[tag=zx.j_body,distance=0..] run function sweetdream:profession/twin/protect_proxy
+
+execute in minecraft:the_nether as @e[tag=zx.j_twin,distance=0..] run function sweetdream:profession/twin/protect_proxy
+
+execute in minecraft:the_end as @e[tag=zx.j_body,distance=0..] run function sweetdream:profession/twin/protect_proxy
+
+execute in minecraft:the_end as @e[tag=zx.j_twin,distance=0..] run function sweetdream:profession/twin/protect_proxy
+
+scoreboard objectives add zx.rg_tg trigger
+scoreboard objectives add zx.rg_room dummy
+scoreboard objectives add zx.rg_seen dummy
+scoreboard objectives add zx.rg_prept dummy
+scoreboard objectives add zx.rg_rev dummy
+
+# ---- 2026-11-01 职业装备（肉盾 / 牺牲 / 脱离 / 痛楚 / 清醒与幻觉 / 余响 / 潮涌，潮枯）----
+# 肉盾：受击加的基础攻击力账本 / 是否生效 / 到期刻 / 上一次受击后的血量基线
+scoreboard objectives add zx.bw_atk dummy
+scoreboard objectives add zx.bw_st dummy
+scoreboard objectives add zx.bw_until dummy
+scoreboard objectives add zx.bw_hp dummy
+scoreboard objectives add zx.bw_gate dummy
+# 牺牲：流血开关 / 每秒掉血量 / 目标血线 / 结束刻 / 攻击力账本
+scoreboard objectives add zx.sc_on dummy
+scoreboard objectives add zx.sc_dps dummy
+scoreboard objectives add zx.sc_floor dummy
+scoreboard objectives add zx.sc_until dummy
+scoreboard objectives add zx.sc_atk dummy
+# 脱离：蓄力标记 / 最大生命值快照
+scoreboard objectives add zx.dt_arm dummy
+scoreboard objectives add zx.dt_hp dummy
+# 痛楚：易伤到期刻
+scoreboard objectives add zx.pn_until dummy
+
+# ---- 2026-11-01 职业装备第二批（余响 / 清醒与幻觉 / 潮涌，潮枯）----
+# 余响：主动进行中 / 5 秒判第二阵的刻 / 12 秒窗口开关 / 窗口结束刻 / 本届收回数量
+scoreboard objectives add zx.as_on dummy
+scoreboard objectives add zx.as_t2 dummy
+scoreboard objectives add zx.as_win dummy
+scoreboard objectives add zx.as_end dummy
+scoreboard objectives add zx.as_n dummy
+# 清醒与幻觉：额外法球数 / 三个额外法球的到期刻 / 主动结算刻 / 待结算开关
+scoreboard objectives add zx.li_x dummy
+scoreboard objectives add zx.li_e1 dummy
+scoreboard objectives add zx.li_e2 dummy
+scoreboard objectives add zx.li_e3 dummy
+scoreboard objectives add zx.li_pend dummy
+scoreboard objectives add zx.li_on dummy
+# 潮涌，潮枯：12 秒开关 / 结束刻 / 受伤玩家加成的到期刻与两份账本
+scoreboard objectives add zx.se_on dummy
+scoreboard objectives add zx.se_end dummy
+scoreboard objectives add zx.se_b_until dummy
+scoreboard objectives add zx.se_b_atk dummy
+scoreboard objectives add zx.se_b_mm dummy
+function sweetdream:rogue/load

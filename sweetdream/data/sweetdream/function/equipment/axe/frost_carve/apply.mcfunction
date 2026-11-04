@@ -30,6 +30,8 @@ execute as @e[tag=zx.frc_thaw,distance=0..] run function sweetdream:lib/unfreeze
 # ④ 解冻的额外伤害 = 基础攻击力 ×2(施法者身份 -> 击杀归属正确)
 data modify storage zx:in arg set value {target:"@e[tag=zx.frc_thaw,distance=0..]",damage:0.0}
 data modify storage zx:in arg.damage set from storage zx:work frc.dmg2
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage zx:work frc.s2_b_dmg2
 execute if entity @e[tag=zx.frc_thaw,distance=0..,limit=1] run function sweetdream:api/damage
 
 # ⑤ 没冻的: 冰冻 1 秒(= 20 刻) / 超限 3 秒(= 60 刻)

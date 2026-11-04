@@ -67,6 +67,8 @@ data modify storage manacore:in arg.uuid set from storage zx:work ds.uuid
 function manacore:api/damage/calc
 data modify storage zx:work ds.dmg set value 0.0
 data modify storage zx:work ds.dmg set from storage manacore:out r.damage
+data modify storage zx:work ds.s2_b_dmg set value {n:0,d:1}
+data modify storage zx:work ds.s2_b_dmg set from storage manacore:out r.s2_b_damage
 # 诊断锚: #ds_dbg8 = 主目标这一段伤害(×1000);
 #           #ds_dbg9 = 命中前状态位(1 = 带流火 / 2 = 带夜火 / 3 = 两个都带 —— 用它核对
 #           30% / 50% / 影矢 有没有按快照走)

@@ -34,7 +34,7 @@
      ★ 领域 = **范围增益 / 减益**，这是包内**固定叫法**，实现上**要占 1 个术阵位**。
   5. `formation`（术阵）**凡 lore 出现"术阵"就照打**（用户的设计意图：限流高强度持续技）。
      ★★ **术阵 = 纯数据占位符：无实体、不划范围、不打人**（2026-10-07 用户口径，10-14 重申）。
-        底层 = 玩家名下登记条目（`manacore:players.<uuid>.formations`，8 槽 / 默认上限 3）+ marker 站位。
+        底层 = 玩家名下登记条目（`manacore:players.<uuid>.formations`，8 槽 / 默认上限 3）；无实体或位置，空间效果由技能独立管理。
         ⇒ 写机制时 **"生成一个术阵，里面的生物每秒…"这种写法是错的**：范围效果一律写「领域」，
           划范围靠技能自己挂标签扫周围（先例 `wind_ontheground` 的 `zx.wg_cN` + `hit_pass`）。
   6. `summon`（召唤物）**只算独立实体**，lore 里用弯引号 `“”` 标出（入梦体/共鸣水晶/色彩/朽木/暗潮/暗海/旋风…）。
@@ -332,7 +332,9 @@ TAGS = {
                           "timestop", "dash"],
 
     # ================= 批 15 · 白昼梦系列 9 件（2026-10-25）=================
-    # ★ 只出 give，机制未实装。★ 私有资源（碎刀/烛火/泵动/水墙/海浪/光效/回光）
+    # ★ 机制已全部实装并接进 lib/second（9/9）。早期本行写的"只出 give，机制未实装"
+    #   是当时的实情，后来补齐后忘了改，2026-11-01 更正——别照旧注释推断。★ 私有资源
+    #   （碎刀/烛火/泵动/水墙/海浪/光效/回光）
     #   一律**不进词表**（口径 8：私有资源是"资源"不是"分类"）。
     # ★ 套装段写在两件上 ⇒ 两件的标签都含套装段的词（口径 11）。
     # ---- 弩 bow（1）----
@@ -351,6 +353,16 @@ TAGS = {
     "glimmer":           ["dream", "max_mana", "cur_mana", "indep_mul", "heal", "buff",
                           "debuff"],
     "late_dusk":         ["dream", "max_mana", "buff"],
+    # ---- 批 20（2026-10-27）胜利誓约 + 8 件终端盔甲 ----
+    "oath_victory": ["base_atk", "max_mana", "max_hp", "dash", "field", "heal", "buff"],
+    "pivot": ["max_mana", "formation"],
+    "bearing": ["max_mana", "formation", "buff", "indep_mul", "cd_down"],
+    "empty_camp": ["max_mana"],
+    "lone_walk": ["max_mana", "buff", "indep_mul"],
+    "overflow": ["max_mana", "max_hp", "heal", "buff"],
+    "intent": ["max_mana", "max_hp", "cur_mana", "buff", "heal"],
+    "air_step": ["max_mana", "base_atk", "dash", "debuff"],
+    "breath_hold": ["max_mana", "formation"],
 }
 
 
@@ -376,3 +388,38 @@ if __name__ == "__main__":
 
 # 职业系统（用户《职业系统.md》）。
 TAGS.update({'dream_waker': ['buff'], 'grimoire': ['max_mana', 'cur_mana', 'consume', 'indep_mul'], 'eagle_hat': ['max_mana'], 'mana_crystal': ['max_mana', 'formation'], 'mana_imbue': ['max_mana', 'consume'], 'foresight': ['max_mana', 'max_hp', 'heal', 'buff', 'debuff', 'slow', 'liuhuo', 'yehuo', 'shixin', 'yuanhai', 'dream', 'consume'], 'self_mind': ['cur_mana', 'max_mana', 'max_hp', 'heal', 'consume', 'dash'], 'illusion': ['max_mana', 'base_atk', 'formation', 'true_dmg', 'consume', 'timestop'], 'empathy': ['max_hp', 'buff'], 'indwell': ['cur_mana', 'formation', 'consume', 'debuff', 'slow']})
+
+# 2026-10-27 用户定稿：七件职业武器先制作 give，技能尚未接入。
+TAGS.update({
+    'contract_rift': ['base_atk', 'max_hp', 'heal', 'consume', 'debuff'],
+    'world_parting': ['cur_mana', 'max_mana', 'consume', 'true_dmg', 'timestop', 'debuff', 'dash'],
+    'chorus': ['dream', 'max_mana', 'summon', 'consume', 'indep_mul', 'timestop', 'apply'],
+    'wound_stitch': ['max_hp', 'base_atk', 'heal', 'consume', 'true_dmg'],
+    'no_return': ['base_atk', 'true_dmg', 'buff'],
+    'star_weave': ['max_mana', 'formation', 'consume', 'field', 'slow', 'debuff'],
+    'star_burial': ['max_mana', 'consume', 'true_dmg'],
+    'dream_waker': ['buff', 'max_mana', 'max_hp', 'heal', 'summon', 'formation', 'slow'],
+})
+
+# 2026-10-28 四件通用武器。
+TAGS.update({
+    'exalted': ['cur_mana', 'max_mana', 'summon', 'formation', 'attract'],
+    'grace_axe': ['cur_mana', 'heal', 'consume', 'apply'],
+    'eight_tail': ['cur_mana', 'max_mana', 'consume'],
+    'firefly_staff': ['cur_mana', 'summon'],
+})
+
+# 2026-10-29 用户选定的第二批装备。
+TAGS.update({'empty_cicada': ['max_hp', 'base_atk', 'max_mana', 'dash', 'debuff', 'buff'], 'still_sky': ['max_mana', 'consume', 'slow', 'buff'], 'chase_deer': ['base_atk', 'dash', 'true_dmg', 'debuff'], 'cease_war': ['max_hp', 'buff'], 'echo_harmony': ['summon', 'buff'], 'mirrored_scene': ['base_atk', 'max_mana', 'consume', 'debuff'], 'rebirth_veil': ['max_hp'], 'magic_theory': ['max_mana', 'consume', 'debuff']})
+
+# 2026-11-01 用户定稿的第三批职业装备（狂徒 2 / “同生” 1 / 魔导士 2 / 歌者 3）。
+TAGS.update({
+    'bulwark': ['max_mana', 'max_hp', 'base_atk', 'buff', 'heal'],
+    'sacrifice': ['max_hp', 'base_atk'],
+    'detach': ['max_hp', 'base_atk'],
+    'lucid_illusion': ['max_hp', 'true_dmg'],
+    'throe': ['max_mana', 'consume', 'attract', 'debuff'],
+    'intone': ['max_mana', 'summon'],
+    'aftersound': ['formation', 'summon', 'indep_mul'],
+    'surge_ebb': ['max_mana', 'true_dmg', 'formation', 'summon', 'dash', 'buff', 'heal', 'debuff'],
+})

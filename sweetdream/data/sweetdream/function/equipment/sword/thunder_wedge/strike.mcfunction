@@ -42,6 +42,8 @@ summon minecraft:lightning_bolt ~ ~ ~ {Tags:["zx.th_own"]}
 
 # ④ 对它 1 格内的生物打一次 基础攻击力 ×2(数值施放那刻已算好)
 data modify storage zx:work a.num set from entity @s data.zx.dmg
+data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+data modify storage zx:work a.s2_b_num set from entity @s data.zx.s2_b_dmg
 function sweetdream:lib/num/plain
 data modify storage zx:work a.target set value "@e[type=!#sweetdream:no_damage,distance=..1]"
 data modify storage zx:work a.type set value "minecraft:player_attack"

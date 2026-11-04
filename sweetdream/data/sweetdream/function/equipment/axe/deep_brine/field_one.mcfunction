@@ -15,7 +15,7 @@
 #   选择器里的 distance 只能写字面量 ⇒ field_tick 把 zx.db_r 读进 storage 再走宏。
 # ============================================================
 
-$summon minecraft:marker ~ ~ ~ {Tags:["zx.db_field","zx.db_new"],data:{zx:{dmg:$(dmg),u:[I;$(u0),$(u1),$(u2),$(u3)]}}}
+$summon minecraft:marker ~ ~ ~ {Tags:["zx.db_field","zx.db_new"],data:{zx:{dmg:$(dmg),s2_b_dmg:$(s2_b_dmg),u:[I;$(u0),$(u1),$(u2),$(u3)]}}}
 
 # 分档: 普通 半径 3 / 4 秒; 超限 半径 5 / 6 秒 + zx.db_olm 标记
 #   ★ 判的是**施法者**身上的 zx.db_ol, 所以先拍成假玩家再拿去筛 marker(as 之后就换人了)。

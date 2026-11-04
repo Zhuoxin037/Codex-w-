@@ -39,6 +39,8 @@ execute if data storage zx:config damage_type run data modify storage zx:work a.
 execute if score #be_ol zx.meta matches 1 run data modify storage zx:work a.type set value "sweetdream:true_damage"
 execute store result storage zx:work a.damage double 0.01 run scoreboard players get #be_dmg zx.meta
 data modify storage zx:work a.num set from storage zx:work a.damage
+data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+data modify storage zx:work a.s2_b_num set from storage zx:work a.s2_b_damage
 function sweetdream:lib/num/plain
 function sweetdream:internal/damage/with_from with storage zx:work a
 

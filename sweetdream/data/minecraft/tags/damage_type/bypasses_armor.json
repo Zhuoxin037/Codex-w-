@@ -1,5 +1,6 @@
 {
     "values": [
-        "sweetdream:true_damage"
+        "sweetdream:true_damage",
+        "sweetdream:parallel_true_damage"
     ]
 }

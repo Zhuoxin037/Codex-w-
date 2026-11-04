@@ -41,6 +41,8 @@ execute if score #bd_n zx.meta matches 0 run return 0
 
 # ② 吃掉最近的一只(走到这里 = 这一发确定是续轰)
 scoreboard players set #bd_hit zx.meta 1
+# 先收外观载体(它是这只铁傀儡的乘客, 不跟着 kill 走; 不收的话会原地悬 1 秒)
+$execute as @e[tag=zx.bd_shade,nbt={data:{zx:{bd:{uu:"$(uu)"}}}},sort=nearest,limit=1] on passengers if entity @s[type=minecraft:item_display,tag=zx.bd_model] run function sweetdream:equipment/bow/burst_dawn/shade_model_die
 $execute at @s run kill @e[tag=zx.bd_shade,nbt={data:{zx:{bd:{uu:"$(uu)"}}}},sort=nearest,limit=1]
 
 # ③ 吃掉之后再数一次(用 #bd_left, **不碰 #bd_n**): 场上没影了 -> 技能立刻收尾

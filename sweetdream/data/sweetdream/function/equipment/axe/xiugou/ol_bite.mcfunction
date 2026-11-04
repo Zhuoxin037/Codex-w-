@@ -41,6 +41,8 @@ execute if score @s zx.xg_hc matches 5.. run scoreboard players set @s zx.xg_hc 
 # ---- 宏参数: dmg(每口) / bd(×5 那一下) / burst(本口要不要补) / u0..u3 ----
 data modify storage zx:work xg set value {dmg:0,bd:0,burst:0,u0:0,u1:0,u2:0,u3:0}
 data modify storage zx:work xg.dmg set from entity @s data.zx.dmg
+data modify storage zx:work xg.s2_b_dmg set value {n:0,d:1}
+data modify storage zx:work xg.s2_b_dmg set from entity @s data.zx.s2_b_dmg
 scoreboard players set #xg_bd zx.meta 0
 execute store result score #xg_bd zx.meta run data get entity @s data.zx.dmg
 scoreboard players operation #xg_bd zx.meta *= #5 zx.meta
@@ -52,6 +54,7 @@ data modify storage zx:work xg.u1 set from entity @s data.zx.u[1]
 data modify storage zx:work xg.u2 set from entity @s data.zx.u[2]
 data modify storage zx:work xg.u3 set from entity @s data.zx.u[3]
 
+execute unless data storage zx:work xg.s2_b_dmg run data modify storage zx:work xg.s2_b_dmg set value {n:0,d:1}
 execute as @e[type=!#sweetdream:no_damage,distance=0.1..8,sort=nearest,limit=1] at @s run function sweetdream:equipment/axe/xiugou/ol_bite_one with storage zx:work xg
 
 scoreboard players add @s zx.xg_n 1

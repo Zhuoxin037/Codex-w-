@@ -39,11 +39,15 @@ data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 data modify storage manacore:in arg.independent_multiplier set from storage zx:work brm.mul
 function manacore:api/damage/calc
 data modify storage zx:work br.d1 set from storage manacore:out r.damage
+data modify storage zx:work br.s2_b_d1 set value {n:0,d:1}
+data modify storage zx:work br.s2_b_d1 set from storage manacore:out r.s2_b_damage
 
 # ④ 固定 8(超限 18)留给命中侧在乘区之后相加；主体只计算一次，避免二次吃通道加成。
 data modify storage zx:in arg set value {target:"@e[tag=zx.br_cur,distance=0..,limit=1]",damage:0.0,fixed_add:8.0}
 execute if score @s zx.br_ol matches 1 run data modify storage zx:in arg.fixed_add set value 18.0
 data modify storage zx:in arg.damage set from storage zx:work br.d1
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage zx:work br.s2_b_d1
 execute at @e[tag=zx.br_cur,distance=0..,limit=1] run function sweetdream:api/damage
 
 # ⑥ 表现: 打到的这一下

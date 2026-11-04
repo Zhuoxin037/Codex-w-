@@ -48,6 +48,8 @@ data modify storage manacore:in arg.uuid set from storage zx:work fs.uuid
 function manacore:api/damage/calc
 data modify storage zx:work fs.dmg set value 0.0
 data modify storage zx:work fs.dmg set from storage manacore:out r.damage
+data modify storage zx:work fs.s2_b_dmg set value {n:0,d:1}
+data modify storage zx:work fs.s2_b_dmg set from storage manacore:out r.s2_b_damage
 # 诊断锚 #fs_dbg8 = 每枚羽箭的伤害(×1000); 归零之后才写 —— "从没写过(空白)"和"写过但是 0"
 # 在探针里长得不一样, "算出来是 0"是最该被看到的症状。
 scoreboard players set #fs_dbg8 zx.meta 0

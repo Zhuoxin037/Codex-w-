@@ -24,6 +24,8 @@ execute rotated ~ 0 positioned ^ ^ ^3.2 run tag @e[type=!#sweetdream:no_damage,d
 # 重击伤害: 基础攻击力 ×5(值已由 cast ⑥ 算好)
 data modify storage zx:in arg set value {target:"@e[type=!#sweetdream:no_damage,tag=zx.frc_hit,distance=0..]",damage:0.0}
 data modify storage zx:in arg.damage set from storage zx:work frc.dmg5
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage zx:work frc.s2_b_dmg5
 execute at @s run function sweetdream:api/damage
 
 # 表现

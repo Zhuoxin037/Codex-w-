@@ -15,6 +15,8 @@ data modify storage manacore:in arg.uuid set from storage manacore:out r.uuid
 function manacore:api/damage/calc
 
 data modify storage zx:work aw.d2 set from storage manacore:out r.damage
+data modify storage zx:work aw.s2_b_d2 set value {n:0,d:1}
+data modify storage zx:work aw.s2_b_d2 set from storage manacore:out r.s2_b_damage
 data modify storage zx:work aw.u0 set from entity @s UUID[0]
 data modify storage zx:work aw.u1 set from entity @s UUID[1]
 data modify storage zx:work aw.u2 set from entity @s UUID[2]

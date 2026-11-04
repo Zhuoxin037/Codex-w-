@@ -21,7 +21,11 @@ function manacore:api/damage/calc
 data modify storage zx:work a set value {target:"@e[type=!#sweetdream:no_damage,distance=..3]",damage:0.0,type:"minecraft:player_attack"}
 execute if data storage zx:config damage_type run data modify storage zx:work a.type set from storage zx:config damage_type
 data modify storage zx:work a.damage set from storage manacore:out r.damage
+data modify storage zx:work a.s2_b_damage set value {n:0,d:1}
+data modify storage zx:work a.s2_b_damage set from storage manacore:out r.s2_b_damage
 data modify storage zx:work a.num set from storage manacore:out r.damage
+data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+data modify storage zx:work a.s2_b_num set from storage manacore:out r.s2_b_damage
 function sweetdream:lib/num/plain
 function sweetdream:internal/damage/with_from with storage zx:work a
 

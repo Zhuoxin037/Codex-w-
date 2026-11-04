@@ -31,6 +31,8 @@ execute if entity @s[tag=zx.sv_dive] if score @s zx.sv_step matches ..0 run func
 # ④ 落地 -> 结算
 execute if entity @s[tag=zx.sv_dive] unless block ~ ~-0.3 ~ #minecraft:replaceable run function sweetdream:equipment/axe/skyvault/impact
 # 还没结算 -> 沿视线前进(★ at @s 不能省: 下面那句要用**走完之后**的位置探脚下)
-execute if entity @s[tag=zx.sv_dive] at @s run tp @s ^ ^ ^2
+execute store success score #s2_moved zx.meta run execute if entity @s[tag=zx.sv_dive] at @s run tp @s ^ ^ ^2
+execute if score #s2_moved zx.meta matches 1 at @s run function sweetdream:equipment/armor/empty_cicada/moved
 # ⑤ 固定下坠(干脆的那一下): 脚下还有空间才坠, 不钻地
-execute if entity @s[tag=zx.sv_dive] at @s if block ~ ~-0.7 ~ #minecraft:replaceable run tp @s ~ ~-0.55 ~
+execute store success score #s2_moved zx.meta run execute if entity @s[tag=zx.sv_dive] at @s if block ~ ~-0.7 ~ #minecraft:replaceable run tp @s ~ ~-0.55 ~
+execute if score #s2_moved zx.meta matches 1 at @s run function sweetdream:equipment/armor/empty_cicada/moved

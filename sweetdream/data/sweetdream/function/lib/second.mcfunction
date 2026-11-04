@@ -106,6 +106,15 @@ execute in minecraft:the_end as @e[tag=zx.bd_shade,distance=0..] at @s run funct
 #     写三遍(三维度)的话同一个玩家会被扫三次。
 execute as @a[scores={zx.bd_on=1..}] at @s run function sweetdream:equipment/bow/burst_dawn/check
 
+# 爆裂黎明(2026-10-29): 影的**外观载体**(item_display)每秒寿命兜底。
+#   ★ 2026-11-02 起载体**不再是乘客**(改由 core/tick → shade_follow 每刻贴到
+#     载具脚底, 治"召唤后第一秒浮在天上"), 所以这里的判据也不再是"在不在载具上":
+#     载具消失由 shade_follow 每刻收尸, 本行只管载体自己的 21 秒寿命账。
+#   ★ 三维度各写一遍 + distance=0..(同上面那一整排领域/召唤物循环)。
+execute in minecraft:overworld as @e[type=minecraft:item_display,tag=zx.bd_model,distance=0..] at @s run function sweetdream:equipment/bow/burst_dawn/shade_model
+execute in minecraft:the_nether as @e[type=minecraft:item_display,tag=zx.bd_model,distance=0..] at @s run function sweetdream:equipment/bow/burst_dawn/shade_model
+execute in minecraft:the_end as @e[type=minecraft:item_display,tag=zx.bd_model,distance=0..] at @s run function sweetdream:equipment/bow/burst_dawn/shade_model
+
 # 圣骸的脉冲与遗骸寿命由 core/tick 精确计时, 不再受全局秒心跳相位影响。
 
 # 天使核心(2026-10-08): 「圣光柱」每秒 -1 秒, 归零 kill —— 纯表现实体(在受伤生物处升起的光柱)。
@@ -331,3 +340,62 @@ scoreboard players set #dt_count zx.meta 0
 execute in minecraft:overworld as @e[type=minecraft:text_display,tag=zx.damage_text,distance=0..] run scoreboard players add #dt_count zx.meta 1
 execute in minecraft:the_nether as @e[type=minecraft:text_display,tag=zx.damage_text,distance=0..] run scoreboard players add #dt_count zx.meta 1
 execute in minecraft:the_end as @e[type=minecraft:text_display,tag=zx.damage_text,distance=0..] run scoreboard players add #dt_count zx.meta 1
+
+# ===== 批 20（2026-10-27）：术阵位读数 + 新装备每秒结算 =====
+#   ★ lib/fm/read **必须排在所有用到术阵位数的装备之前**（承/屏息都读它）。
+execute as @a run function sweetdream:lib/fm/read
+execute as @a at @s run function sweetdream:equipment/armor/pivot/second
+execute as @a at @s run function sweetdream:equipment/armor/bearing/second
+execute as @a at @s run function sweetdream:equipment/armor/empty_camp/second
+execute as @a at @s run function sweetdream:equipment/armor/lone_walk/second
+execute as @a at @s run function sweetdream:equipment/armor/overflow/second
+execute as @a at @s run function sweetdream:equipment/armor/intent/second
+execute as @a at @s run function sweetdream:equipment/armor/breath_hold/second
+
+#   临时生命：只维护"身上真挂着"的人（lib/thp/tick 内部会读一次 AbsorptionAmount）
+execute as @a[scores={zx.thp=1..}] run function sweetdream:lib/thp/tick
+
+#   胜利誓约的领域（三维度各扫一遍：marker 只在被加载的区块里）
+execute in minecraft:overworld as @e[type=marker,tag=zx.ov_field,distance=0..] at @s run function sweetdream:equipment/sword/oath_victory/field_tick
+execute in minecraft:the_nether as @e[type=marker,tag=zx.ov_field,distance=0..] at @s run function sweetdream:equipment/sword/oath_victory/field_tick
+execute in minecraft:the_end as @e[type=marker,tag=zx.ov_field,distance=0..] at @s run function sweetdream:equipment/sword/oath_victory/field_tick
+execute as @a at @s run function sweetdream:batch21/second
+
+# ===== 2026-11-01 职业装备每秒结算 =====
+# 肉盾：抗性档（<50% Ⅱ / <30% Ⅳ）+ 受击攻加成到期
+execute as @a at @s run function sweetdream:equipment/armor/bulwark/second
+# 牺牲：流血每秒掉一格，到点或掉到 20% 收尾
+execute as @a[scores={zx.sc_on=1}] run function sweetdream:equipment/sword/sacrifice/second
+# 痛楚：2 秒易伤到期摘标签（三维度各一行 + distance=0..，裸 @e 会跨维度重复）
+execute in minecraft:overworld as @e[tag=zx.pn_vul,distance=0..] at @s run function sweetdream:equipment/axe/throe/sweep
+execute in minecraft:the_nether as @e[tag=zx.pn_vul,distance=0..] at @s run function sweetdream:equipment/axe/throe/sweep
+execute in minecraft:the_end as @e[tag=zx.pn_vul,distance=0..] at @s run function sweetdream:equipment/axe/throe/sweep
+
+# ===== 2026-11-01 职业装备第二批每秒结算 =====
+# 余响：5 秒判第二次召唤 / 12 秒窗口收尾
+execute as @a at @s run function sweetdream:equipment/sword/aftersound/second
+# 清醒与幻觉：重算额外法球数 → 每秒自伤 → 主动 4 秒后的结算
+execute as @a at @s run function sweetdream:equipment/staff/lucid_illusion/second
+# 潮涌，潮枯：12 秒里每秒流失生命 + 自身/追奉者的 5 格范围跳 + 到点收场
+execute as @a at @s run function sweetdream:equipment/staff/surge_ebb/second
+# 潮涌，潮枯：给别的玩家加的那份攻/蓝上限到期撤回（按 scores 筛，平时空扫）
+execute as @a[scores={zx.se_b_until=1..}] run function sweetdream:equipment/staff/surge_ebb/buff_end
+
+# ===== 2026-11-01 崇高之形：外观载体(item_display)每秒收尸 =====
+# big_die 已经把三条"正常死亡"路径(走满 12 格自毁 / 主人没了 / 坟场没了)都成对
+# 收掉了, 这条纯属兜底 —— 只在"本体以未预见的方式消失"时才动手。
+# 判据 = 这一秒里一次都没被 big_tick 打过 zx.ex_live(它每刻重打一次)。
+# ★ 顺序必须"先杀无标记、再清标记": 反过来先清标记的话, 活着的载体在同一秒里
+#   刚被清掉标记就撞上 kill 判据, 整群石像一起消失(而且没有任何日志)。
+# 三维度各写一遍: second 的默认上下文只在主世界。
+execute in minecraft:overworld run kill @e[tag=zx.ex_model,tag=!zx.ex_live,distance=0..]
+execute in minecraft:the_nether run kill @e[tag=zx.ex_model,tag=!zx.ex_live,distance=0..]
+execute in minecraft:the_end run kill @e[tag=zx.ex_model,tag=!zx.ex_live,distance=0..]
+# 千钧之形(小石像)同理 —— 它和上面共用 zx.ex_live 这一个标记: 两边各自在自己
+# 的 tick 里每刻重打, 下面那三行是全量清除, 一期一秒, 互不干扰。
+execute in minecraft:overworld run kill @e[tag=zx.ex_sm_model,tag=!zx.ex_live,distance=0..]
+execute in minecraft:the_nether run kill @e[tag=zx.ex_sm_model,tag=!zx.ex_live,distance=0..]
+execute in minecraft:the_end run kill @e[tag=zx.ex_sm_model,tag=!zx.ex_live,distance=0..]
+execute in minecraft:overworld run tag @e[tag=zx.ex_live,distance=0..] remove zx.ex_live
+execute in minecraft:the_nether run tag @e[tag=zx.ex_live,distance=0..] remove zx.ex_live
+execute in minecraft:the_end run tag @e[tag=zx.ex_live,distance=0..] remove zx.ex_live

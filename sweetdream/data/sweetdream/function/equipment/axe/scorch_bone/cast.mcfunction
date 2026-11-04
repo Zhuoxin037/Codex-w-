@@ -79,6 +79,8 @@ data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:in arg set value {target:"@e[tag=zx.sc_t,distance=0..]",damage:0.0}
 data modify storage zx:in arg.damage set from storage manacore:out r.damage
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage manacore:out r.s2_b_damage
 function sweetdream:api/damage
 
 # ⑧ 范围: 主目标 N 格内全部(普通 2 / 超限 4), 最大魔力 ×(0.05|0.1) / 超限 ×(0.08|0.12)
@@ -91,6 +93,8 @@ execute store result storage manacore:in arg.max_mana_mul double 0.001 run score
 function manacore:api/damage/calc
 data modify storage zx:in arg set value {target:"@e[tag=zx.sc_hit,distance=0..]",damage:0.0}
 data modify storage zx:in arg.damage set from storage manacore:out r.damage
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage manacore:out r.s2_b_damage
 function sweetdream:api/damage
 
 # ⑧.5 超限: 范围伤害同时「附加流火」

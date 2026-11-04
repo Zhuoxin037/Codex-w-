@@ -25,4 +25,6 @@ execute store result storage manacore:in arg.custom_damage double 1 run scoreboa
 function manacore:api/damage/calc
 data modify storage zx:work ball set value {dmg:0.0,style:"mana_crystal",hit:"sweetdream:profession/ball_hit/mana_crystal"}
 data modify storage zx:work ball.dmg set from storage manacore:out r.damage
+data modify storage zx:work ball.s2_b_dmg set value {n:0,d:1}
+data modify storage zx:work ball.s2_b_dmg set from storage manacore:out r.s2_b_damage
 function sweetdream:equipment/staff/attack

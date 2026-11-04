@@ -11,5 +11,5 @@
 #   只认带 zx.se_live 的箭(见 tick_live)。命中/落地/过期后由那边摘掉。
 # ============================================================
 
-$data modify entity @s data.zx.se set value {ok:1b,hit_dmg:$(hit_dmg),path_dmg:$(path_dmg),cry:$(cry),ol:$(ol),u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
+$data modify entity @s data.zx.se set value {ok:1b,hit_dmg:$(hit_dmg),s2_b_hit_dmg:$(s2_b_hit_dmg),path_dmg:$(path_dmg),s2_b_path_dmg:$(s2_b_path_dmg),cry:$(cry),ol:$(ol),u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}
 tag @s add zx.se_live

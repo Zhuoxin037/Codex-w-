@@ -15,7 +15,9 @@ function sweetdream:lib/u_by
 execute unless entity @a[tag=zx.ub,distance=0..,limit=1] run return run kill @s
 
 # ① 已经贴上玩家(0.8 格内) -> 停在手边那个固定姿态, 收工
-execute if entity @a[tag=zx.ub,distance=..0.8,limit=1] at @a[tag=zx.ub,distance=0..,limit=1] rotated ~ 0 positioned ^0.35 ^0.35 ^0.55 run return run tp @s ~ ~ ~ ~ 0
+execute store success score #s2_moved zx.meta run execute if entity @a[tag=zx.ub,distance=..0.8,limit=1] at @a[tag=zx.ub,distance=0..,limit=1] rotated ~ 0 positioned ^0.35 ^0.35 ^0.55 run return run tp @s ~ ~ ~ ~ 0
+execute if score #s2_moved zx.meta matches 1 at @s run function sweetdream:equipment/armor/empty_cicada/moved
 
 # ② 朝玩家飞(每刻 1.0 格) —— facing entity, 零 NBT
-execute at @s facing entity @a[tag=zx.ub,distance=0..,limit=1] feet positioned ^ ^ ^1.0 run tp @s ~ ~ ~ ~ 0
+execute store success score #s2_moved zx.meta run execute at @s facing entity @a[tag=zx.ub,distance=0..,limit=1] feet positioned ^ ^ ^1.0 run tp @s ~ ~ ~ ~ 0
+execute if score #s2_moved zx.meta matches 1 at @s run function sweetdream:equipment/armor/empty_cicada/moved

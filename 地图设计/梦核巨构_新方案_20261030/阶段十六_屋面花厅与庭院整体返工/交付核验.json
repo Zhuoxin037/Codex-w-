@@ -1,0 +1,82 @@
+{
+  "save": "D:\\PCL 正式版 2.10.0\\.minecraft\\versions\\1.21.5-Fabric 0.16.10\\saves\\梦核哥特_屋面花厅与庭院重构_20261101",
+  "zip": "D:\\数据包\\地图设计\\梦核巨构_新方案_20261030\\阶段十六_屋面花厅与庭院整体返工\\梦核哥特_屋面花厅与庭院重构_20261101_独立存档.zip",
+  "zip_crc_passed": true,
+  "native_checks": 127,
+  "reopen_checks": 28,
+  "source_unchanged_since_snapshot": true,
+  "blocks": 1125772,
+  "patch_blocks": 349766,
+  "audit": {
+    "type_checks": 1125772,
+    "state_checks": 345578,
+    "glass_points": 15631,
+    "column_points": 12224,
+    "dynamic_water_changes": 0,
+    "unplanned_water_inside_basin": 137
+  },
+  "night_probes": 14843,
+  "night_summary": {
+    "facade/gallery": {
+      "samples": 7365,
+      "min": 7,
+      "median": 12,
+      "max": 14,
+      "below_7": 0
+    },
+    "roof": {
+      "samples": 2622,
+      "min": 7,
+      "median": 12,
+      "max": 14,
+      "below_7": 0
+    },
+    "courtyard": {
+      "samples": 4012,
+      "min": 7,
+      "median": 12,
+      "max": 14,
+      "below_7": 0
+    },
+    "east wing": {
+      "samples": 844,
+      "min": 7,
+      "median": 12,
+      "max": 14,
+      "below_7": 0
+    }
+  },
+  "scope": "外形和室外景观；内饰暂停；美术效果待用户审阅",
+  "installed_files": 478,
+  "changes": {
+    "roof_surface_columns": 22703,
+    "nave_steep_lucarnes": 8,
+    "gable_rebuilt_above_rose": true,
+    "dominant_transept": true,
+    "glass_house_removed": true,
+    "replacement": "lower Gothic masonry wing with open aisles, clerestory and small rose windows; interior deferred",
+    "landscape": {
+      "broad_cascade_width": 25,
+      "cascade_drop": 21,
+      "mature_trees": 10,
+      "tree_height_range": [
+        20,
+        25
+      ],
+      "old_lateral_streams_removed": true
+    },
+    "natural_landscape": {
+      "reference": "BV1o1xC6DEAa",
+      "bower_bays": 4,
+      "layout": "asymmetric mature trees, winding linked-canopy walk, open east terrace, nine irregular meadow islands, shrubs, rock clusters and seats"
+    },
+    "outside_pier_profiles": 188,
+    "blank_foundation_walls_opened": 6,
+    "lighting": {
+      "sources": 46340,
+      "canopy_sources": 39,
+      "surface_night_probes": 14847,
+      "covered": "full building surfaces, roof slopes, courtyards, undersides, galleries and mature crowns; no interior furnishing"
+    }
+  }
+}

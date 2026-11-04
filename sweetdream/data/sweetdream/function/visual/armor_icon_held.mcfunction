@@ -33,6 +33,8 @@ execute if items entity @s armor.head *[minecraft:custom_data~{zx:["mana_helm"]}
 execute if items entity @s armor.head *[minecraft:custom_data~{zx:["spirit_sight"]}] unless items entity @s armor.head *[minecraft:item_model="sweetdream:armor_spirit_sight"] run item modify entity @s armor.head sweetdream:armor_icons/spirit_sight
 # 漫步冥河之上
 execute if items entity @s armor.head *[minecraft:custom_data~{zx:["styx_walk"]}] unless items entity @s armor.head *[minecraft:item_model="sweetdream:armor_styx_walk"] run item modify entity @s armor.head sweetdream:armor_icons/styx_walk
+# 明烛
+execute if items entity @s armor.head *[minecraft:custom_data~{zx:["bright_candle"]}] unless items entity @s armor.head *[minecraft:item_model="sweetdream:armor_bright_candle"] run item modify entity @s armor.head sweetdream:armor_icons/bright_candle
 # 焱
 execute if items entity @s armor.chest *[minecraft:custom_data~{zx:["blaze_armor"]}] unless items entity @s armor.chest *[minecraft:item_model="sweetdream:armor_blaze_armor"] run item modify entity @s armor.chest sweetdream:armor_icons/blaze_armor
 # 永恒
@@ -71,6 +73,20 @@ execute if items entity @s armor.feet *[minecraft:custom_data~{zx:["immolate"]}]
 execute if items entity @s armor.feet *[minecraft:custom_data~{zx:["lethe_shore"]}] unless items entity @s armor.feet *[minecraft:item_model="sweetdream:armor_lethe_shore"] run item modify entity @s armor.feet sweetdream:armor_icons/lethe_shore
 # 无光海
 execute if items entity @s armor.feet *[minecraft:custom_data~{zx:["lightless_sea"]}] unless items entity @s armor.feet *[minecraft:item_model="sweetdream:armor_lightless_sea"] run item modify entity @s armor.feet sweetdream:armor_icons/lightless_sea
+# 借火
+execute if items entity @s armor.chest *[minecraft:custom_data~{zx:["borrow_fire"]}] unless items entity @s armor.chest *[minecraft:item_model="sweetdream:armor_borrow_fire"] run item modify entity @s armor.chest sweetdream:armor_icons/borrow_fire
+# 心脉
+execute if items entity @s armor.chest *[minecraft:custom_data~{zx:["heart_vein"]}] unless items entity @s armor.chest *[minecraft:item_model="sweetdream:armor_heart_vein"] run item modify entity @s armor.chest sweetdream:armor_icons/heart_vein
+# 剖面
+execute if items entity @s armor.legs *[minecraft:custom_data~{zx:["profile"]}] unless items entity @s armor.legs *[minecraft:item_model="sweetdream:armor_profile"] run item modify entity @s armor.legs sweetdream:armor_icons/profile
+# 迟暮
+execute if items entity @s armor.legs *[minecraft:custom_data~{zx:["late_dusk"]}] unless items entity @s armor.legs *[minecraft:item_model="sweetdream:armor_late_dusk"] run item modify entity @s armor.legs sweetdream:armor_icons/late_dusk
+# 折潮
+execute if items entity @s armor.head *[minecraft:custom_data~{zx:["tide_fold"]}] unless items entity @s armor.head *[minecraft:item_model="sweetdream:armor_tide_fold"] run item modify entity @s armor.head sweetdream:armor_icons/tide_fold
+# 浮光
+execute if items entity @s armor.head *[minecraft:custom_data~{zx:["glimmer"]}] unless items entity @s armor.head *[minecraft:item_model="sweetdream:armor_glimmer"] run item modify entity @s armor.head sweetdream:armor_icons/glimmer
+# 返汐
+execute if items entity @s armor.feet *[minecraft:custom_data~{zx:["ebb_tide"]}] unless items entity @s armor.feet *[minecraft:item_model="sweetdream:armor_ebb_tide"] run item modify entity @s armor.feet sweetdream:armor_icons/ebb_tide
 # 返照
 execute if items entity @s armor.head *[minecraft:custom_data~{zx:["backlight"]}] unless items entity @s armor.head *[minecraft:item_model="sweetdream:armor_backlight"] run item modify entity @s armor.head sweetdream:armor_icons/backlight
 # 空枕

@@ -11,6 +11,12 @@ execute store result entity @e[tag=zx.j_f_new,limit=1] data.u2 int 1 run scorebo
 execute store result entity @e[tag=zx.j_f_new,limit=1] data.u3 int 1 run scoreboard players get @s manacore.u3
 data modify entity @e[tag=zx.j_f_new,limit=1] data.owner set from storage zx:data self.uuid
 scoreboard players set @e[tag=zx.j_f_new,limit=1] zx.j_life 200
+execute if score @s zx.j_aw matches 1 run scoreboard players set @e[tag=zx.j_f_new,limit=1] zx.j_life 300
+scoreboard players set @e[tag=zx.j_f_new,limit=1] zx.j_duet_n 0
+scoreboard players operation @e[tag=zx.j_f_new,limit=1] zx.j_duet_cast = #now manacore.meta
+scoreboard players remove @e[tag=zx.j_f_new,limit=1] zx.j_duet_cast 41
+scoreboard players operation @e[tag=zx.j_f_new,limit=1] zx.j_duet_last = #now manacore.meta
+scoreboard players remove @e[tag=zx.j_f_new,limit=1] zx.j_duet_last 60
 tag @e[tag=zx.j_f_new] remove zx.j_f_new
 data modify storage manacore:out r set from storage zx:work jf_event.out
 data modify storage manacore:in arg set from storage zx:work jf_event.in

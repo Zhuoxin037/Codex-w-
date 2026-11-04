@@ -50,7 +50,7 @@
 #   right_rotation **同时存在**。只写 translation+scale 时每条 summon 都抛
 #   `Failed to read field (transformation={...})`（实测一次冲刺刷了 20 条，
 #   每条都要走异常 + 写日志，白烧性能）。旋转部分给单位四元数 = 不旋转。
-$summon minecraft:item_display ~ ~ ~ {Tags:["zx.rt_dot","zx.rt_new"],item:{id:"minecraft:paper",count:1,components:{"minecraft:item_model":"sweetdream:rain_puddle"}},transformation:{translation:[0f,0.02f,0f],left_rotation:[0f,0f,0f,1f],scale:[1f,1f,1f],right_rotation:[0f,0f,0f,1f]},brightness:{sky:15,block:15},view_range:8.0f,shadow_radius:0f,shadow_strength:0f,data:{zx:{dmg:$(dmg),u:[I;$(u0),$(u1),$(u2),$(u3)]}}}
+$summon minecraft:item_display ~ ~ ~ {Tags:["zx.rt_dot","zx.rt_new"],item:{id:"minecraft:paper",count:1,components:{"minecraft:item_model":"sweetdream:rain_puddle"}},transformation:{translation:[0f,0.02f,0f],left_rotation:[0f,0f,0f,1f],scale:[1f,1f,1f],right_rotation:[0f,0f,0f,1f]},brightness:{sky:15,block:15},view_range:8.0f,shadow_radius:0f,shadow_strength:0f,data:{zx:{dmg:$(dmg),s2_b_dmg:$(s2_b_dmg),u:[I;$(u0),$(u1),$(u2),$(u3)]}}}
 
 # 设寿命：刚生成的那只在执行位置 1 格内（自己刚 summon 的，不会抓错）
 scoreboard players set @e[tag=zx.rt_new,distance=..1,limit=1] zx.rt_life 100

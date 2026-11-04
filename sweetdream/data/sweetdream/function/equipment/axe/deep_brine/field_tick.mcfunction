@@ -15,6 +15,8 @@
 # ① 伤害值 -> num_str
 data modify storage zx:work a.num set value 0.0
 data modify storage zx:work a.num set from entity @s data.zx.dmg
+data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+data modify storage zx:work a.s2_b_num set from entity @s data.zx.s2_b_dmg
 function sweetdream:lib/num/plain
 
 # ② 伤害类型(可被 zx:config 覆盖)

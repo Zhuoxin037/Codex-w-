@@ -13,7 +13,7 @@
 #   "每个生物整次领域最多触发一次该结束效果"就靠它比对(见 field_tick 文件头)。
 # ============================================================
 
-$summon minecraft:marker ~ ~ ~ {Tags:["zx.ltc_field","zx.ltc_new"],data:{zx:{dmg:$(dmg),dmg2:$(dmg2),uu:"$(uu)",u:[I;$(u0),$(u1),$(u2),$(u3)]}}}
+$summon minecraft:marker ~ ~ ~ {Tags:["zx.ltc_field","zx.ltc_new"],data:{zx:{dmg:$(dmg),s2_b_dmg:$(s2_b_dmg),dmg2:$(dmg2),s2_b_dmg2:$(s2_b_dmg2),uu:"$(uu)",u:[I;$(u0),$(u1),$(u2),$(u3)]}}}
 
 # 给刚生成的这个 marker 设 6 秒计时(它带 zx.ltc_new, 场上最多一个, 就近取)
 execute as @e[tag=zx.ltc_new,distance=..2,limit=1] run scoreboard players set @s zx.ltc_ft 6

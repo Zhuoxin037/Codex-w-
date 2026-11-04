@@ -12,6 +12,8 @@ data modify storage zx:work a set value {target:"@e[tag=zx.bb_hit,limit=1]",dama
 execute if data storage zx:config damage_type run data modify storage zx:work a.type set from storage zx:config damage_type
 execute store result storage zx:work a.damage double 0.001 run scoreboard players get @s zx.bb_dmg
 data modify storage zx:work a.num set from storage zx:work a.damage
+data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+data modify storage zx:work a.s2_b_num set from storage zx:work a.s2_b_damage
 data modify storage zx:work a.u0 set from entity @s data.zx.u[0]
 data modify storage zx:work a.u1 set from entity @s data.zx.u[1]
 data modify storage zx:work a.u2 set from entity @s data.zx.u[2]

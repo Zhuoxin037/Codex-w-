@@ -20,6 +20,8 @@
 
 # ⓪ 撤销自己的进度（自撤销型进度首行必须 revoke）
 advancement revoke @s only sweetdream:equipment/armor/backlight_hit
+function sweetdream:lib/atk_charge
+execute unless score @s zx.atk_ok matches 1 run return 0
 
 # ① 穿着门控（头盔）
 execute unless items entity @s armor.head *[minecraft:custom_data~{zx:["backlight"]}] run return 0

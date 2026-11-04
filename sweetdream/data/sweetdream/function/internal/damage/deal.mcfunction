@@ -47,5 +47,10 @@ execute if entity @a[tag=zx.d_by] run scoreboard players reset @s zx.ep_vic
 #   ★ 重新算一次 who: 上面 on_deal 走 tag/mark 宏, 万一将来它内部接出伤害,
 #     这里重算一遍更稳（成本 = 4 次 storage 读 + 每人 4 次整数比较, 可忽略）。
 function sweetdream:internal/damage/who
+# 同一时刻应独立结算的追加技能伤害：逻辑类型仍为 skill，只有原版投递类型绕过受伤冷却。
+$execute if data storage zx:work a{uncapped:1b,type:"sweetdream:skill"} unless entity @a[tag=zx.d_by] run return run execute store success storage zx:work hit_success_stack[-1].result.ok byte 1 run damage @s $(num_str) sweetdream:parallel_skill
+$execute if data storage zx:work a{uncapped:1b,type:"sweetdream:skill"} if entity @a[tag=zx.d_by] run return run execute store success storage zx:work hit_success_stack[-1].result.ok byte 1 run damage @s $(num_str) sweetdream:parallel_skill by @a[tag=zx.d_by,limit=1]
+$execute if data storage zx:work a{uncapped:1b,type:"sweetdream:true_damage"} unless entity @a[tag=zx.d_by] run return run execute store success storage zx:work hit_success_stack[-1].result.ok byte 1 run damage @s $(num_str) sweetdream:parallel_true_damage
+$execute if data storage zx:work a{uncapped:1b,type:"sweetdream:true_damage"} if entity @a[tag=zx.d_by] run return run execute store success storage zx:work hit_success_stack[-1].result.ok byte 1 run damage @s $(num_str) sweetdream:parallel_true_damage by @a[tag=zx.d_by,limit=1]
 $execute unless entity @a[tag=zx.d_by] run return run execute store success storage zx:work hit_success_stack[-1].result.ok byte 1 run damage @s $(num_str) $(type)
 $execute if entity @a[tag=zx.d_by] store success storage zx:work hit_success_stack[-1].result.ok byte 1 run damage @s $(num_str) $(type) by @a[tag=zx.d_by,limit=1]

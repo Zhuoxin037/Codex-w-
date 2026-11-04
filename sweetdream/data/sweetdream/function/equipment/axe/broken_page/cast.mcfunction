@@ -84,6 +84,8 @@ function manacore:api/damage/calc
 data modify storage zx:in arg set value {fixed:1b,target:"@e[tag=zx.bp_tgt,distance=0..,limit=1]",damage:0.0,type:"minecraft:player_attack"}
 execute if score #bp_true zx.meta matches 1 run data modify storage zx:in arg.type set value "sweetdream:true_damage"
 data modify storage zx:in arg.damage set from storage manacore:out r.damage
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage manacore:out r.s2_b_damage
 execute at @s run function sweetdream:api/damage
 
 # ⑨ 表现: 纸页翻飞 + 撕页声(真伤那一版用紫白, 一眼能看出打穿了)

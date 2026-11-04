@@ -5,4 +5,5 @@
 # 【★ 为什么单独拆一层 ★】wet_own 自己也要用 $(uuid) 做"我还站在水面上吗"的判定，
 #   而 execute as 之后 @s 变成 marker、@s 不再是施法者 —— 拆开就不会互相污染。
 # ============================================================
+execute unless data storage zx:work bbw.s2_b_dmg run data modify storage zx:work bbw.s2_b_dmg set value {n:0,d:1}
 $execute as @e[type=marker,tag=zx.bb_wet_$(uuid),distance=0..] at @s run function sweetdream:equipment/staff/burst_bank/wet_hit with storage zx:work bbw

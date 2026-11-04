@@ -1,0 +1,32 @@
+{
+  "save": "D:\\PCL 正式版 2.10.0\\.minecraft\\versions\\1.21.5-Fabric 0.16.10\\saves\\梦核哥特_塔群与尖饰精修_20261101",
+  "zip": "D:\\数据包\\地图设计\\梦核巨构_新方案_20261030\\阶段十五_塔群钟楼与尖饰精修\\梦核哥特_塔群与尖饰精修_20261101_独立存档.zip",
+  "native_checks": 122,
+  "reopen_checks": 33,
+  "source_unchanged_since_snapshot": true,
+  "saved_blocks": 1006478,
+  "patch_blocks": 62318,
+  "audit": {
+    "type_checks": 1068796,
+    "state_checks": 155836,
+    "glass_points": 21770,
+    "column_points": 11494,
+    "expected_air_checks": 303392
+  },
+  "night_probe_count": 19,
+  "night_block_light_range": [
+    6,
+    11
+  ],
+  "zip_crc_passed": true,
+  "installed_files": 364,
+  "source_snapshot_files": 322,
+  "major_tower_heads": 6,
+  "carved_finials": 48,
+  "reading_corner_crockets": 4,
+  "light_sources": 108,
+  "windows": 75,
+  "columns": 248,
+  "status": "塔群部分已交付，外观待用户审阅；大斜屋面、全城外墙和整体夜景仍未全部返工",
+  "previews": "读取实际保存 Anvil + 1.21.5 原版模型/纹理离线绘制；不是客户端截图，未测客户端光影或 FPS"
+}

@@ -49,4 +49,6 @@ function manacore:api/damage/calc
 # ⑤ 把伤害装进法球, 交给法杖类默认普攻射出去
 data modify storage zx:work ball set value {dmg:0.0,style:"delusion"}
 data modify storage zx:work ball.dmg set from storage manacore:out r.damage
+data modify storage zx:work ball.s2_b_dmg set value {n:0,d:1}
+data modify storage zx:work ball.s2_b_dmg set from storage manacore:out r.s2_b_damage
 function sweetdream:equipment/staff/attack

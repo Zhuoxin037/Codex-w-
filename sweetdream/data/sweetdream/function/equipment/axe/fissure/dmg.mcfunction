@@ -13,10 +13,15 @@
 # 清上一轮(或别人残留)的本轮标记
 tag @e[tag=zx.fi_hit,distance=0..] remove zx.fi_hit
 
+execute unless data storage zx:work fia.s2_b_damage run data modify storage zx:work fia.s2_b_damage set value {n:0,d:1}
 execute rotated ~ 0 positioned ^ ^ ^1.0 run function sweetdream:equipment/axe/fissure/area with storage zx:work fia
+execute unless data storage zx:work fia.s2_b_damage run data modify storage zx:work fia.s2_b_damage set value {n:0,d:1}
 execute rotated ~ 0 positioned ^ ^ ^2.5 run function sweetdream:equipment/axe/fissure/area with storage zx:work fia
+execute unless data storage zx:work fia.s2_b_damage run data modify storage zx:work fia.s2_b_damage set value {n:0,d:1}
 execute rotated ~ 0 positioned ^ ^ ^4.0 run function sweetdream:equipment/axe/fissure/area with storage zx:work fia
+execute unless data storage zx:work fia.s2_b_damage run data modify storage zx:work fia.s2_b_damage set value {n:0,d:1}
 execute if data storage zx:work fia{ol:1} rotated ~ 0 positioned ^ ^ ^5.5 run function sweetdream:equipment/axe/fissure/area with storage zx:work fia
+execute unless data storage zx:work fia.s2_b_damage run data modify storage zx:work fia.s2_b_damage set value {n:0,d:1}
 execute if data storage zx:work fia{ol:1} rotated ~ 0 positioned ^ ^ ^7.0 run function sweetdream:equipment/axe/fissure/area with storage zx:work fia
 
 tag @e[tag=zx.fi_hit,distance=0..] remove zx.fi_hit

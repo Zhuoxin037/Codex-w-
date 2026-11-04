@@ -30,7 +30,8 @@ execute unless entity @e[tag=zx.anc_ok,distance=0..,limit=1] run return 0
 # ② 传回原处(锚点所在位置就是施法那一刻脚底)
 execute at @e[tag=zx.anc_ok,distance=0..,limit=1] run particle minecraft:cloud ~ ~0.5 ~ 0.4 0.6 0.4 0.05 18 normal
 execute at @e[tag=zx.anc_ok,distance=0..,limit=1] run playsound minecraft:entity.enderman.teleport player @a ~ ~ ~ 0.9 1.1
-execute at @e[tag=zx.anc_ok,distance=0..,limit=1] run tp @s ~ ~ ~
+execute store success score #s2_moved zx.meta run execute at @e[tag=zx.anc_ok,distance=0..,limit=1] run tp @s ~ ~ ~
+execute if score #s2_moved zx.meta matches 1 at @s run function sweetdream:equipment/armor/empty_cicada/moved
 execute at @s run particle minecraft:cloud ~ ~0.5 ~ 0.4 0.6 0.4 0.05 18 normal
 execute at @s run playsound minecraft:block.beacon.deactivate player @a ~ ~ ~ 0.6 1.5
 

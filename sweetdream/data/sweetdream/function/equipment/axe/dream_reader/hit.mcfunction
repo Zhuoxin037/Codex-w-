@@ -66,6 +66,8 @@ data modify storage zx:work a set value {damage:0.0}
 execute if score #dr_ol zx.meta matches 0 store result storage zx:work a.damage double 1 run scoreboard players get #dr_dmg zx.meta
 execute if score #dr_ol zx.meta matches 1 store result storage zx:work a.damage double 0.005 run scoreboard players get #dr_dmg zx.meta
 data modify storage zx:work a.num set from storage zx:work a.damage
+data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+data modify storage zx:work a.s2_b_num set from storage zx:work a.s2_b_damage
 function sweetdream:lib/num/plain
 data modify storage zx:work a.target set value "@e[tag=zx.victim,distance=0..]"
 data modify storage zx:work a.type set value "sweetdream:true_damage"

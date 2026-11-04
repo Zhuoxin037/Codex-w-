@@ -1,3 +1,4 @@
+scoreboard players set @s zx.s2_veil_rec 0
 scoreboard players set @s zx.j_reborn 600
 execute if score @s zx.j_aw matches 1 run scoreboard players set @s zx.j_reborn 300
 execute if score @s zx.j_form matches 1 run function sweetdream:profession/twin/return

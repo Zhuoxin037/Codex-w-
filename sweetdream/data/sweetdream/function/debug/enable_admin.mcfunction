@@ -32,3 +32,5 @@ scoreboard players enable @s zx.dbg_dream
 
 scoreboard players enable @s zx.job_tg
 scoreboard players enable @s zx.jobpick_tg
+
+scoreboard players enable @s zx.rg_tg

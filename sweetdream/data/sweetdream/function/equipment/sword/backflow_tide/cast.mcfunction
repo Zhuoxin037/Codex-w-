@@ -79,6 +79,8 @@ data modify storage manacore:in arg set value {uuid:"",max_mana_mul:0.08,indepen
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:work bft.dmg set from storage manacore:out r.damage
+data modify storage zx:work bft.s2_b_dmg set value {n:0,d:1}
+data modify storage zx:work bft.s2_b_dmg set from storage manacore:out r.s2_b_damage
 
 # ⑦ 额外段伤害 = 自身最大魔力值 ×0.07(清掉渊海之后那一下) / 超限 ×0.12
 data modify storage manacore:in arg set value {uuid:"",max_mana_mul:0.07,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0}
@@ -86,6 +88,8 @@ execute if score #bft_ol zx.meta matches 1 run data modify storage manacore:in a
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:work bft.dmg2 set from storage manacore:out r.damage
+data modify storage zx:work bft.s2_b_dmg2 set value {n:0,d:1}
+data modify storage zx:work bft.s2_b_dmg2 set from storage manacore:out r.s2_b_damage
 
 # ⑧ 框"前方 4 格内" + 打基础段(顺手把命中者钉成 zx.bft_hit 给 ⑨ 用)
 function sweetdream:equipment/sword/backflow_tide/area

@@ -38,6 +38,10 @@ tag @s remove zx.mm_hold
 
 # 记下这一跳算出来的伤害(给 /function sweetdream:debug/wind 排查用)
 $data modify storage zx:data wg_dbg."$(uuid)".aura set from storage manacore:out r.damage
+$data modify storage zx:data wg_dbg."$(uuid)".s2_b_aura set value {n:0,d:1}
+$data modify storage zx:data wg_dbg."$(uuid)".s2_b_aura set from storage manacore:out r.s2_b_damage
+$data modify storage zx:data wg_dbg."$(uuid)".s2_b_aura set value {n:0,d:1}
+$data modify storage zx:data wg_dbg."$(uuid)".s2_b_aura set from storage manacore:out r.s2_b_damage
 
 # ③ 打自身 5 格内全部生物
 # 不写 type: 让 sweetdream:api/damage 用它自己的默认值(可从 zx:config damage_type 改)

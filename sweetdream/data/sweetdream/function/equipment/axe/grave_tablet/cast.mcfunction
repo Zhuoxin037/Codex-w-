@@ -55,11 +55,15 @@ data modify storage manacore:in arg set value {uuid:"",attack_mul:4.0,independen
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:work gt.d4 set from storage manacore:out r.damage
+data modify storage zx:work gt.s2_b_d4 set value {n:0,d:1}
+data modify storage zx:work gt.s2_b_d4 set from storage manacore:out r.s2_b_damage
 
 data modify storage manacore:in arg set value {uuid:"",attack_mul:4.0,independent_multiplier:1.8,custom_damage:0.0,health_ratio:0.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:work gt.d18 set from storage manacore:out r.damage
+data modify storage zx:work gt.s2_b_d18 set value {n:0,d:1}
+data modify storage zx:work gt.s2_b_d18 set from storage manacore:out r.s2_b_damage
 
 data modify storage zx:work gt.u0 set from entity @s UUID[0]
 data modify storage zx:work gt.u1 set from entity @s UUID[1]

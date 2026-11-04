@@ -17,6 +17,8 @@
 
 # ① 撤销自己的进度（自撤销型，首行必须 revoke）
 advancement revoke @s only sweetdream:equipment/armor/empty_pillow_hit
+function sweetdream:lib/atk_charge
+execute unless score @s zx.atk_ok matches 1 run return 0
 
 # ② 没戴空枕就当没这回事
 execute unless items entity @s armor.head *[minecraft:custom_data~{zx:["empty_pillow"]}] run return 0

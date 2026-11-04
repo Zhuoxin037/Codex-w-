@@ -74,7 +74,10 @@ execute if score #rs_ol zx.meta matches 1 if score #dmg zx.meta matches ..15 run
 data modify storage zx:work a set value {uuid:"",damage:0.0,ol:0b}
 data modify storage zx:work a.uuid set from storage zx:data self.uuid
 data modify storage zx:work a.damage set from storage manacore:out r.damage
+data modify storage zx:work a.s2_b_damage set value {n:0,d:1}
+data modify storage zx:work a.s2_b_damage set from storage manacore:out r.s2_b_damage
 execute if score #rs_ol zx.meta matches 1 run data modify storage zx:work a.ol set value 1b
+execute unless data storage zx:work a.s2_b_damage run data modify storage zx:work a.s2_b_damage set value {n:0,d:1}
 function sweetdream:equipment/sword/rogue_star/lock with storage zx:work a
 
 # 宏层没锁定成功(理论上不会, ③ 已经拦过一次)就到此为止

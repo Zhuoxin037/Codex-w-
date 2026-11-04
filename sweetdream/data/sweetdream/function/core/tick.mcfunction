@@ -75,6 +75,38 @@ execute in minecraft:the_end as @e[tag=zx.bd_note,distance=0..] at @s run functi
 #   不还回去的话你在聊天栏手填的参数每刻都被冲掉 —— 见 lib/in_bak。
 function sweetdream:lib/in_bak
 function sweetdream:profession/tick
+# 萤光：追随与飞行的萤火按各自归属更新。
+execute in minecraft:overworld as @e[tag=zx.ff_particle,distance=0..] at @s run function sweetdream:equipment/staff/firefly_staff/tick
+execute in minecraft:the_nether as @e[tag=zx.ff_particle,distance=0..] at @s run function sweetdream:equipment/staff/firefly_staff/tick
+execute in minecraft:the_end as @e[tag=zx.ff_particle,distance=0..] at @s run function sweetdream:equipment/staff/firefly_staff/tick
+# 崇高：坟场、千钧之形和崇高之形各自管理；术阵只登记占位。
+execute in minecraft:overworld as @e[tag=zx.ex_grave,distance=0..] at @s run function sweetdream:equipment/staff/exalted/grave_tick
+execute in minecraft:the_nether as @e[tag=zx.ex_grave,distance=0..] at @s run function sweetdream:equipment/staff/exalted/grave_tick
+execute in minecraft:the_end as @e[tag=zx.ex_grave,distance=0..] at @s run function sweetdream:equipment/staff/exalted/grave_tick
+execute in minecraft:overworld as @e[tag=zx.ex_small,distance=0..] at @s run function sweetdream:equipment/staff/exalted/small_tick
+execute in minecraft:the_nether as @e[tag=zx.ex_small,distance=0..] at @s run function sweetdream:equipment/staff/exalted/small_tick
+execute in minecraft:the_end as @e[tag=zx.ex_small,distance=0..] at @s run function sweetdream:equipment/staff/exalted/small_tick
+execute in minecraft:overworld as @e[tag=zx.ex_big,distance=0..] at @s run function sweetdream:equipment/staff/exalted/big_tick
+execute in minecraft:the_nether as @e[tag=zx.ex_big,distance=0..] at @s run function sweetdream:equipment/staff/exalted/big_tick
+execute in minecraft:the_end as @e[tag=zx.ex_big,distance=0..] at @s run function sweetdream:equipment/staff/exalted/big_tick
+# 魂灵之影的外观载体: 每刻贴到载具脚底(不骑乘, 见 shade_follow 顶部注释)。
+#   ★ 为什么每刻而不是每秒: 铁傀儡被怪打/被爆炸推时仍会位移, 每秒同步会
+#     看到模型"拖一下再追上"。没影的时候这三行遍历为空, 开销零。
+execute in minecraft:overworld as @e[type=minecraft:item_display,tag=zx.bd_model,distance=0..] at @s run function sweetdream:equipment/bow/burst_dawn/shade_follow
+execute in minecraft:the_nether as @e[type=minecraft:item_display,tag=zx.bd_model,distance=0..] at @s run function sweetdream:equipment/bow/burst_dawn/shade_follow
+execute in minecraft:the_end as @e[type=minecraft:item_display,tag=zx.bd_model,distance=0..] at @s run function sweetdream:equipment/bow/burst_dawn/shade_follow
+execute in minecraft:overworld as @e[tag=zx.ws_delay,distance=0..] at @s run function sweetdream:equipment/sword/wound_stitch/delay_tick
+execute in minecraft:the_nether as @e[tag=zx.ws_delay,distance=0..] at @s run function sweetdream:equipment/sword/wound_stitch/delay_tick
+execute in minecraft:the_end as @e[tag=zx.ws_delay,distance=0..] at @s run function sweetdream:equipment/sword/wound_stitch/delay_tick
+execute in minecraft:overworld as @e[tag=zx.cs_conductor,distance=0..] at @s run function sweetdream:equipment/staff/chorus/conductor_tick
+execute in minecraft:the_nether as @e[tag=zx.cs_conductor,distance=0..] at @s run function sweetdream:equipment/staff/chorus/conductor_tick
+execute in minecraft:the_end as @e[tag=zx.cs_conductor,distance=0..] at @s run function sweetdream:equipment/staff/chorus/conductor_tick
+execute in minecraft:overworld as @e[tag=zx.wp_mark,distance=0..] at @s run function sweetdream:equipment/staff/world_parting/mark_tick
+execute in minecraft:the_nether as @e[tag=zx.wp_mark,distance=0..] at @s run function sweetdream:equipment/staff/world_parting/mark_tick
+execute in minecraft:the_end as @e[tag=zx.wp_mark,distance=0..] at @s run function sweetdream:equipment/staff/world_parting/mark_tick
+execute in minecraft:overworld as @e[tag=zx.wp_pending,distance=0..] at @s run function sweetdream:equipment/staff/world_parting/pending_tick
+execute in minecraft:the_nether as @e[tag=zx.wp_pending,distance=0..] at @s run function sweetdream:equipment/staff/world_parting/pending_tick
+execute in minecraft:the_end as @e[tag=zx.wp_pending,distance=0..] at @s run function sweetdream:equipment/staff/world_parting/pending_tick
 
 # ★ 位移检测（批 14 补技能：踏灰 / 雨迹）★
 #   只有"刚放过技能、脚穿这两件之一"的玩家带 zx.sm_chk（窗口 8 刻）⇒ 平时零开销。
@@ -767,3 +799,34 @@ execute if data storage zx:config damage_text{enabled:1b} if entity @a in minecr
 execute in minecraft:overworld as @e[type=minecraft:item_display,tag=zx.water_visual,distance=0..] run function sweetdream:equipment/visual/water/tick
 execute in minecraft:the_nether as @e[type=minecraft:item_display,tag=zx.water_visual,distance=0..] run function sweetdream:equipment/visual/water/tick
 execute in minecraft:the_end as @e[type=minecraft:item_display,tag=zx.water_visual,distance=0..] run function sweetdream:equipment/visual/water/tick
+
+# ===== 批 20（2026-10-27）：蓄意「每使用 50 魔力 → 2 点临时生命」（每刻最多兑现一次）=====
+#   ★ 每刻而不是每秒：文案写"单次技能可重复触发"，200 魔力的技能要一次兑现 4 次。
+execute as @a at @s run function sweetdream:equipment/armor/intent/tick
+execute in minecraft:overworld as @e[tag=zx.cr_mark,distance=0..] at @s run function sweetdream:equipment/sword/contract_rift/mark_tick
+execute in minecraft:overworld as @e[tag=zx.cr_delay,distance=0..] at @s run function sweetdream:equipment/sword/contract_rift/delay_tick
+execute in minecraft:the_nether as @e[tag=zx.cr_mark,distance=0..] at @s run function sweetdream:equipment/sword/contract_rift/mark_tick
+execute in minecraft:the_nether as @e[tag=zx.cr_delay,distance=0..] at @s run function sweetdream:equipment/sword/contract_rift/delay_tick
+execute in minecraft:the_end as @e[tag=zx.cr_mark,distance=0..] at @s run function sweetdream:equipment/sword/contract_rift/mark_tick
+execute in minecraft:the_end as @e[tag=zx.cr_delay,distance=0..] at @s run function sweetdream:equipment/sword/contract_rift/delay_tick
+execute in minecraft:overworld as @e[tag=zx.weave_mark,distance=0..] at @s run function sweetdream:equipment/staff/star_weave/mark_tick
+execute in minecraft:overworld as @e[tag=zx.weave_field,distance=0..] at @s run function sweetdream:equipment/staff/star_weave/field_tick
+execute in minecraft:the_nether as @e[tag=zx.weave_mark,distance=0..] at @s run function sweetdream:equipment/staff/star_weave/mark_tick
+execute in minecraft:the_nether as @e[tag=zx.weave_field,distance=0..] at @s run function sweetdream:equipment/staff/star_weave/field_tick
+execute in minecraft:the_end as @e[tag=zx.weave_mark,distance=0..] at @s run function sweetdream:equipment/staff/star_weave/mark_tick
+execute in minecraft:the_end as @e[tag=zx.weave_field,distance=0..] at @s run function sweetdream:equipment/staff/star_weave/field_tick
+execute in minecraft:overworld as @e[tag=zx.burial_core,distance=0..] at @s run function sweetdream:equipment/staff/star_burial/core_tick
+execute in minecraft:overworld as @e[tag=zx.burial_delay,distance=0..] at @s run function sweetdream:equipment/staff/star_burial/delay_tick
+execute in minecraft:the_nether as @e[tag=zx.burial_core,distance=0..] at @s run function sweetdream:equipment/staff/star_burial/core_tick
+execute in minecraft:the_nether as @e[tag=zx.burial_delay,distance=0..] at @s run function sweetdream:equipment/staff/star_burial/delay_tick
+execute in minecraft:the_end as @e[tag=zx.burial_core,distance=0..] at @s run function sweetdream:equipment/staff/star_burial/core_tick
+execute in minecraft:the_end as @e[tag=zx.burial_delay,distance=0..] at @s run function sweetdream:equipment/staff/star_burial/delay_tick
+execute in minecraft:overworld as @e[tag=zx.nr_bonus,distance=0..] at @s run function sweetdream:equipment/axe/no_return/stack_tick
+execute in minecraft:overworld as @e[tag=zx.nr_blade,distance=0..] at @s run function sweetdream:equipment/axe/no_return/blade_tick
+execute in minecraft:the_nether as @e[tag=zx.nr_bonus,distance=0..] at @s run function sweetdream:equipment/axe/no_return/stack_tick
+execute in minecraft:the_nether as @e[tag=zx.nr_blade,distance=0..] at @s run function sweetdream:equipment/axe/no_return/blade_tick
+execute in minecraft:the_end as @e[tag=zx.nr_bonus,distance=0..] at @s run function sweetdream:equipment/axe/no_return/stack_tick
+execute in minecraft:the_end as @e[tag=zx.nr_blade,distance=0..] at @s run function sweetdream:equipment/axe/no_return/blade_tick
+function sweetdream:batch21/tick
+
+execute as @a run function sweetdream:equipment/tool/dream_waker/sync

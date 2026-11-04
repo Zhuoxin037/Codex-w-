@@ -72,9 +72,12 @@ data modify storage zx:work xg.u0 set from entity @s UUID[0]
 data modify storage zx:work xg.u1 set from entity @s UUID[1]
 data modify storage zx:work xg.u2 set from entity @s UUID[2]
 data modify storage zx:work xg.u3 set from entity @s UUID[3]
+execute unless data storage zx:work xg.s2_b_dmg run data modify storage zx:work xg.s2_b_dmg set value {n:0,d:1}
 execute at @s rotated ~ 0 positioned ^ ^ ^2 run function sweetdream:equipment/axe/xiugou/spawn with storage zx:work xg
 # 超限: 身前 2 格**三只**(左右各偏 30 度, 仍是身前 2 格 = 半径 2 的弧)
+execute unless data storage zx:work xg.s2_b_dmg run data modify storage zx:work xg.s2_b_dmg set value {n:0,d:1}
 execute if score #xg_ol zx.meta matches 1 run execute at @s rotated ~ 30 positioned ^ ^ ^2 run function sweetdream:equipment/axe/xiugou/spawn with storage zx:work xg
+execute unless data storage zx:work xg.s2_b_dmg run data modify storage zx:work xg.s2_b_dmg set value {n:0,d:1}
 execute if score #xg_ol zx.meta matches 1 run execute at @s rotated ~ -30 positioned ^ ^ ^2 run function sweetdream:equipment/axe/xiugou/spawn with storage zx:work xg
 
 playsound minecraft:entity.wolf.ambient player @a ~ ~ ~ 0.9 0.8

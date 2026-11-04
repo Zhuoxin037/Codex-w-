@@ -8,6 +8,7 @@ scoreboard players set #jem_got zx.meta 0
 execute if score @s zx.j_hurt_hp matches 1.. run scoreboard players operation #jem_got zx.meta = @s zx.j_hurt_hp
 execute if score #jem_got zx.meta matches 1.. run scoreboard players operation #jem_got zx.meta -= #jem_bodyhp zx.meta
 scoreboard players operation @s zx.j_hurt_hp = #jem_bodyhp zx.meta
+execute if score #jem_got zx.meta matches 1.. at @s run function sweetdream:equipment/sword/contract_rift/body_guard
 execute if score #jem_got zx.meta matches 1.. as @a[tag=zx.ub,limit=1] if items entity @s weapon.mainhand *[custom_data~{zx:["empathy"]}] run function sweetdream:profession/twin/reflect
 scoreboard players add @s zx.j_pulse 0
 scoreboard players remove @s zx.j_pulse 1

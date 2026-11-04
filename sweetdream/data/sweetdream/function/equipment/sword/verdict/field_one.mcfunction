@@ -11,7 +11,7 @@
 #   也不是"施法者的持续状态" —— 施法者走远了领域还在原地。
 # ============================================================
 
-$summon minecraft:marker ~ ~ ~ {Tags:["zx.vd_field","zx.vd_new"],data:{zx:{dmg:$(dmg),u:[I;$(u0),$(u1),$(u2),$(u3)]}}}
+$summon minecraft:marker ~ ~ ~ {Tags:["zx.vd_field","zx.vd_new"],data:{zx:{dmg:$(dmg),s2_b_dmg:$(s2_b_dmg),u:[I;$(u0),$(u1),$(u2),$(u3)]}}}
 
 # 给刚生成的这个 marker 设 3 秒计时(它带 zx.vd_new, 场上最多一个, 就近取)
 execute as @e[tag=zx.vd_new,distance=..2,limit=1] run scoreboard players set @s zx.vd_ft 3

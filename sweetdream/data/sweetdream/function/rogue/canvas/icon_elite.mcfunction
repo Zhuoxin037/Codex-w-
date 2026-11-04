@@ -1,0 +1,17 @@
+setblock ~-3 ~ ~-5 minecraft:white_concrete
+setblock ~3 ~ ~-5 minecraft:white_concrete
+setblock ~-2 ~ ~-4 minecraft:white_concrete
+setblock ~2 ~ ~-4 minecraft:white_concrete
+setblock ~-1 ~ ~-3 minecraft:white_concrete
+setblock ~1 ~ ~-3 minecraft:white_concrete
+setblock ~0 ~ ~-2 minecraft:white_concrete
+setblock ~-1 ~ ~-1 minecraft:white_concrete
+setblock ~1 ~ ~-1 minecraft:white_concrete
+setblock ~-2 ~ ~0 minecraft:white_concrete
+setblock ~2 ~ ~0 minecraft:white_concrete
+setblock ~-3 ~ ~1 minecraft:white_concrete
+setblock ~3 ~ ~1 minecraft:white_concrete
+setblock ~-4 ~ ~2 minecraft:white_concrete
+setblock ~-3 ~ ~2 minecraft:white_concrete
+setblock ~3 ~ ~2 minecraft:white_concrete
+setblock ~4 ~ ~2 minecraft:white_concrete

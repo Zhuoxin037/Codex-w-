@@ -55,6 +55,9 @@ execute if score #dmg zx.meta matches ..14 run data modify storage manacore:out 
 # ⑦ 锁定 + 缓慢 + 记账(宏层: 标签名里要带自己的 UUID)
 data modify storage zx:work a.uuid set from storage zx:data self.uuid
 data modify storage zx:work a.damage set from storage manacore:out r.damage
+data modify storage zx:work a.s2_b_damage set value {n:0,d:1}
+data modify storage zx:work a.s2_b_damage set from storage manacore:out r.s2_b_damage
+execute unless data storage zx:work a.s2_b_damage run data modify storage zx:work a.s2_b_damage set value {n:0,d:1}
 function sweetdream:equipment/sword/liuguang/ol_lock with storage zx:work a
 
 execute unless data storage zx:work a{locked:1b} run return fail

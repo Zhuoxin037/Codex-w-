@@ -96,10 +96,13 @@ data modify storage zx:work cc.uuid set from storage zx:data self.uuid
 execute store result storage zx:work cc.tier int 1 run scoreboard players get #tier zx.meta
 data modify storage zx:work cc.dmg set value 0.0
 data modify storage zx:work cc.dmg set from storage manacore:out r.damage
+data modify storage zx:work cc.s2_b_dmg set value {n:0,d:1}
+data modify storage zx:work cc.s2_b_dmg set from storage manacore:out r.s2_b_damage
 execute store result storage zx:work cc.u0 int 1 run data get entity @s UUID[0]
 execute store result storage zx:work cc.u1 int 1 run data get entity @s UUID[1]
 execute store result storage zx:work cc.u2 int 1 run data get entity @s UUID[2]
 execute store result storage zx:work cc.u3 int 1 run data get entity @s UUID[3]
+execute unless data storage zx:work cc.s2_b_dmg run data modify storage zx:work cc.s2_b_dmg set value {n:0,d:1}
 function sweetdream:equipment/bow/cold_crow/store with storage zx:work cc
 
 # ④.5 逐箭快照: 把同一份数据再写进**这一箭自己**身上
@@ -111,6 +114,7 @@ function sweetdream:equipment/bow/cold_crow/store with storage zx:work cc
 #   【distance=..4】再限一下范围, 免得把同一刻别的玩家射出的箭也写进去
 #     (箭出生在玩家眼睛位置, 离自己不到 2 格)。
 #   【没认到也不慌】store 写的那份还在, 命中时退回去用, 只是变回旧行为。
+execute unless data storage zx:work cc.s2_b_dmg run data modify storage zx:work cc.s2_b_dmg set value {n:0,d:1}
 execute at @s as @e[type=#sweetdream:cc_arrow,tag=!zx.cc_seen,distance=..4] run function sweetdream:equipment/bow/cold_crow/snapshot with storage zx:work cc
 
 # ⑤ 命中判定: 由弩上自带的附魔「霜矢」回调(hook_victim)完成 —— 原版判定"这支箭打中了谁"。

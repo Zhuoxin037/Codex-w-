@@ -53,6 +53,10 @@ execute unless entity @s[type=minecraft:player] run return 0
 scoreboard players set #pm_v zx.meta 0
 execute store result score #pm_v zx.meta run data get storage manacore:in arg.value 1000
 execute if score #pm_v zx.meta matches 1.. run scoreboard players operation @s zx.pm_sum += #pm_v zx.meta
+# 蓄意（批 20）用**自己的**账本：与剖面的 zx.pm_sum 各自累加、各自扣减，
+#   共用一份会互相饿死（见本文件头"为什么是三份"）。
+execute if score #pm_v zx.meta matches 1.. run scoreboard players operation @s zx.it_sum += #pm_v zx.meta
+
 # 折潮只在这笔成功的正数扣费内结算一次；不留给每刻循环批量兑现。
 execute unless items entity @s armor.head *[minecraft:custom_data~{zx:["tide_fold"]}] run scoreboard players set @s zx.tf_sum 0
 execute if score #pm_v zx.meta matches 1.. if items entity @s armor.head *[minecraft:custom_data~{zx:["tide_fold"]}] run function sweetdream:equipment/armor/tide_fold/on_mana

@@ -219,7 +219,7 @@ NEED_OPTION_PARTICLES = {
 R = {k: [] for k in ['fn', 'tag', 'macro', 'sel', 'adv', 'json', 'rp', 'sched', 'dust', 'nbtsp',
                      'comp', 'dup', 'ply', 'ply2', 'mcomma', 'swap',
                      'dollar', 'regcap', 'regobj', 'regname', 'rege',
-                     'selfmacro', 'dspace', 'storescale', 'opnum',
+                     'selfmacro', 'dspace', 'storescale', 'storpath', 'opnum',
                      'floatz', 'base', 'oldname', 'rearm', 'const',
                      'equip', 'melee', 'lorestyle', 'loresp', 'glint',
                      'chanhack', 'chandef', 'chref', 'olchan', 'olvcache',
@@ -397,6 +397,21 @@ for fnk, fp in functions.items():
         if ms:
             R['storescale'].append((str(fp), i, s[:100]
                                     + '  <- score 形式不带 scale, 把那个数字删掉'))
+
+        # 23b) `execute store result storage <id> <路径> <类型> <scale>` ——
+        #     路径是**单个 token**, 里面要写点号。写成 `storage zx:work exm ry float 1`
+        #     (把 exm 和 ry 拆成两截) 时, 解析器把 `ry` 当类型 -> 非法 ->
+        #     **整个函数加载失败**, 而 check.py 当时 0 报告(2026-11-01 崇高之形
+        #     的 big_tick 栽过: 雕像召出来不打 zx.ex_live, 被 lib/second 当孤儿秒收,
+        #     现象是"合并了但什么都没有", 只有 latest.log 的
+        #     `Failed to load function ... big_tick` 能看出来)。
+        #     ★ 同族: shade_make(bdm y / bdm ry) 两处一直坏着 —— 魂灵之影的
+        #     translation/朝向同步从未生效过, 同理完全静默。
+        msp = re.search(r'\bstore (?:result|success) storage \S+ +(\S+) +(\S+)', s)
+        if msp and msp.group(2) not in ('byte', 'short', 'int', 'long', 'float', 'double'):
+            R['storpath'].append((str(fp), i, s[:100]
+                                  + '  <- store storage 的路径是单 token, 要写成 %s.%s'
+                                    % (msp.group(1), msp.group(2))))
 
         # 24) `scoreboard players operation <目标> <计分项> <op> <数字>` ——
         #     operation 的运算数必须是"源玩家 + 源计分项", **不能是数字字面量**
@@ -5195,6 +5210,10 @@ TITLE = {'fn': 'function 引用不存在的目标', 'tag': '#tag 引用无对应
          'dspace': '参数间出现连续两个空格(会让整个函数加载失败)',
          'nbtsp': 'data 的路径与 NBT 过滤器之间多了空格(过滤器必须紧贴路径, 如 Items[{Slot:0b}] / updef."x"{req:""}; 带空格 = 整条命令解析失败, 整个函数加载失败且不报行号)',
          'storescale': 'store result score 多写了 scale(会让整个函数加载失败)',
+         'storpath': 'store result storage 的路径被空格拆成两截(写成 `zx:work exm ry` 而不是 '
+                     '`zx:work exm.ry`)—— 整个函数加载失败, 只有 latest.log 的 '
+                     '`Failed to load function` 能发现; 同族静默现象: 载体不打 live 标记被秒收 / '
+                     '朝向与 translation 不同步',
          'opnum': 'scoreboard operation 用数字当运算数 —— 字面量会整个函数加载失败, '
                   '宏展开成数字则**运行时静默失效**(加载期看不出来, 现象是"函数在跑却没效果")。'
                   '常数放假玩家(如 #k1000), 宏值改用 players add',

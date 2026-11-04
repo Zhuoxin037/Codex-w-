@@ -12,6 +12,8 @@
 # ① 伤害值 -> num_str
 data modify storage zx:work a.num set value 0.0
 data modify storage zx:work a.num set from storage zx:work dba.dmg
+data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+data modify storage zx:work a.s2_b_num set from storage zx:work dba.s2_b_dmg
 function sweetdream:lib/num/plain
 
 # ② 目标 = 被钉住的那一只(执行位置就在它身上, 所以 distance=..1 只有它)

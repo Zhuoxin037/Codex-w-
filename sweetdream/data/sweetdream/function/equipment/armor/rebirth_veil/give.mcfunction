@@ -1,0 +1,3 @@
+# 复纱 · 罕见
+# 真源 .workbuddy/second_batch_20261029/build_give.py
+give @s iron_helmet[item_name={"text":"复纱","color":"aqua","bold":true},lore=[{"text":"“同生”专属","color":"red","italic":false},{"text":" ","italic":false},{"text":"✦ 被动技能","color":"gold","bold":true,"italic":false},{"text":"最大生命值 +4。同生体进入再生阶段后，","color":"gray","italic":false},{"text":"本我者每累计实际造成相当于自身基础攻","color":"gray","italic":false},{"text":"击力 ×6 的伤害，则使本次再生剩余时间","color":"gray","italic":false},{"text":"缩短 1 秒。","color":"gray","italic":false}],custom_data={zx:["rebirth_veil","helmet","armor"],profession:4,tags:["max_hp"]},unbreakable={},tooltip_display={hidden_components:["minecraft:unbreakable","minecraft:enchantments"]},enchantment_glint_override=false]

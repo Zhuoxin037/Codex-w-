@@ -12,6 +12,8 @@ function manacore:api/damage/calc
 
 data modify storage zx:in arg set value {target:"@e[tag=zx.victim]",damage:0.0}
 data modify storage zx:in arg.damage set from storage manacore:out r.damage
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage manacore:out r.s2_b_damage
 execute at @s run function sweetdream:api/damage
 
 execute at @s run particle minecraft:enchanted_hit ~ ~1 ~ 0.4 0.5 0.4 0.04 10 normal

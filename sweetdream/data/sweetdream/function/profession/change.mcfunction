@@ -13,3 +13,5 @@ execute if score @s zx.job matches 4 run function sweetdream:profession/twin/sta
 tellraw @s {"text":"职业已切换。职业资源与持续效果已清理。","color":"green"}
 
 function sweetdream:profession/weapon_guard
+
+function sweetdream:equipment/tool/dream_waker/sync

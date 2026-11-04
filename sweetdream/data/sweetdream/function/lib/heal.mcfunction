@@ -61,6 +61,7 @@
 # ============================================================
 
 # ① 入参守卫（补 0 后再判，避免"没分数 ⇒ if 不成立 ⇒ 继续跑"）
+execute if entity @s[tag=zx.nr_active] run return 0
 scoreboard players add #heal_pt zx.meta 0
 execute if score #heal_pt zx.meta matches ..0 run return fail
 
@@ -122,3 +123,8 @@ function sweetdream:lib/heal_up with storage zx:work hp
 #   ★ 只读出参，不参与任何分支：加在最后一行，前面 ⑧ 的 return 路径一条都不影响。
 scoreboard players operation #heal_got zx.meta = #heal_new zx.meta
 scoreboard players operation #heal_got zx.meta -= #heal_base zx.meta
+
+
+# ===== 批 20（2026-10-27）：溢流「过量治疗 → 50% 转临时生命」=====
+#   必须排在 ⑩ 出参之后：#heal_pt / #heal_got 都还在（见 overflow/hook_heal 文件头）。
+function sweetdream:equipment/armor/overflow/hook_heal

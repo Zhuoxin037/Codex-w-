@@ -40,11 +40,15 @@ function sweetdream:internal/damage/calc_as_owner with storage zx:work co
 data modify storage zx:work a set value {target:"@e[tag=zx.pal_t]",damage:0.0,type:"minecraft:player_attack",u0:0,u1:0,u2:0,u3:0}
 execute if data storage zx:config damage_type run data modify storage zx:work a.type set from storage zx:config damage_type
 data modify storage zx:work a.damage set from storage manacore:out r.damage
+data modify storage zx:work a.s2_b_damage set value {n:0,d:1}
+data modify storage zx:work a.s2_b_damage set from storage manacore:out r.s2_b_damage
 data modify storage zx:work a.u0 set from entity @s data.zx.pal.u0
 data modify storage zx:work a.u1 set from entity @s data.zx.pal.u1
 data modify storage zx:work a.u2 set from entity @s data.zx.pal.u2
 data modify storage zx:work a.u3 set from entity @s data.zx.pal.u3
 data modify storage zx:work a.num set from storage zx:work a.damage
+data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+data modify storage zx:work a.s2_b_num set from storage zx:work a.s2_b_damage
 function sweetdream:lib/num/plain
 execute unless data storage zx:work a{target:""} run function sweetdream:internal/damage/with_from with storage zx:work a
 

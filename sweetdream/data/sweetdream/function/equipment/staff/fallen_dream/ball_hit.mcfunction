@@ -19,6 +19,8 @@ execute unless data entity @s data.fdmg run return 0
 # ① 带梦目标 → 真实伤害(sweetdream:true_damage, 穿甲口径见 damage_type 定义)
 data modify storage zx:work a set value {target:"@e[tag=zx.ball_hit,tag=zx.status.dream]",damage:0.0,type:"sweetdream:true_damage",u0:0,u1:0,u2:0,u3:0}
 data modify storage zx:work a.num set from entity @s data.fdmg
+data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+data modify storage zx:work a.s2_b_num set from entity @s data.s2_b_fdmg
 function sweetdream:lib/num/plain
 data modify storage zx:work a.u0 set from entity @s data.u0
 data modify storage zx:work a.u1 set from entity @s data.u1
@@ -30,6 +32,8 @@ execute unless data storage zx:work a{target:""} run function sweetdream:interna
 data modify storage zx:work a set value {target:"@e[tag=zx.ball_hit,tag=!zx.status.dream]",damage:0.0,type:"minecraft:player_attack",u0:0,u1:0,u2:0,u3:0}
 execute if data storage zx:config damage_type run data modify storage zx:work a.type set from storage zx:config damage_type
 data modify storage zx:work a.num set from entity @s data.fdmg
+data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+data modify storage zx:work a.s2_b_num set from entity @s data.s2_b_fdmg
 function sweetdream:lib/num/plain
 data modify storage zx:work a.u0 set from entity @s data.u0
 data modify storage zx:work a.u1 set from entity @s data.u1

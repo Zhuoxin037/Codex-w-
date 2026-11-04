@@ -22,3 +22,5 @@ execute store result storage manacore:in arg.attack_mul double 0.001 run scorebo
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:work rba.damage set from storage manacore:out r.damage
+data modify storage zx:work rba.s2_b_damage set value {n:0,d:1}
+data modify storage zx:work rba.s2_b_damage set from storage manacore:out r.s2_b_damage

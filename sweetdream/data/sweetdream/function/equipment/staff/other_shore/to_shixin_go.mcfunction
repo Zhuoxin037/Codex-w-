@@ -29,6 +29,8 @@ function manacore:api/damage/calc
 # ④ 打(仍在 zx.os_y 标签下 —— 这是本轮快照, 与状态本身已经换成噬心无关)
 data modify storage zx:in arg set value {target:"@e[tag=zx.os_sel,tag=zx.os_y,distance=0..]",damage:0.0}
 data modify storage zx:in arg.damage set from storage manacore:out r.damage
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage manacore:out r.s2_b_damage
 execute at @s run function sweetdream:api/damage
 
 # ⑤ 表现: 渊海被翻成噬心

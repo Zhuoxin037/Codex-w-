@@ -4,7 +4,7 @@
 # 【宏参数】sweetdream:work tj {dmg,u0,u1,u2,u3}
 # 【本体是 marker】不吃伤害、不占地表方块（不改世界，可随时撤销）
 # ============================================================
-$summon minecraft:marker ~ ~ ~ {Tags:["zx.tjl_field","zx.tjl_new"],data:{zx:{dmg:$(dmg),u:[I;$(u0),$(u1),$(u2),$(u3)]}}}
+$summon minecraft:marker ~ ~ ~ {Tags:["zx.tjl_field","zx.tjl_new"],data:{zx:{dmg:$(dmg),s2_b_dmg:$(s2_b_dmg),u:[I;$(u0),$(u1),$(u2),$(u3)]}}}
 scoreboard players operation @e[type=marker,tag=zx.tjl_new,distance=..1,limit=1] zx.tjl_end = #now manacore.meta
 scoreboard players add @e[type=marker,tag=zx.tjl_new,distance=..1,limit=1] zx.tjl_end 100
 scoreboard players operation @e[type=marker,tag=zx.tjl_new,distance=..1,limit=1] zx.tjl_next = #now manacore.meta

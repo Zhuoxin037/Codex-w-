@@ -28,5 +28,7 @@ execute if score #rb_dmg zx.meta matches ..0 run return 0
 # ③ 打伤害
 execute store result storage zx:work a.damage double 0.01 run scoreboard players get #rb_dmg zx.meta
 data modify storage zx:work a.num set from storage zx:work a.damage
+data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+data modify storage zx:work a.s2_b_num set from storage zx:work a.s2_b_damage
 function sweetdream:lib/num/plain
 function sweetdream:internal/damage/with_from with storage zx:work a

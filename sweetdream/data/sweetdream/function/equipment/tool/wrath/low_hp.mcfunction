@@ -22,6 +22,8 @@ execute store result score #wr_hp zx.meta run data get entity @s Health 100
 
 data modify storage zx:work wr set value {mh:0.0}
 execute store result storage zx:work wr.mh double 100 run attribute @s minecraft:max_health get
+execute if entity @s[tag=zx.nr_clamp] run function sweetdream:lib/max_health_score
+execute if entity @s[tag=zx.nr_clamp] store result storage zx:work wr.mh double 0.1 run scoreboard players get #max_hp zx.meta
 
 scoreboard players set #wr_mh zx.meta 0
 execute store result score #wr_mh zx.meta run data get storage zx:work wr.mh

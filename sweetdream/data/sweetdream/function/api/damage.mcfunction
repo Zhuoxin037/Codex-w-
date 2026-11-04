@@ -73,9 +73,13 @@ execute unless data storage zx:work a{fixed:1b} if entity @s[tag=zx.status.dream
 
 # 数值 -> 纯数字字符串(num_str)
 data modify storage zx:work a.num set from storage zx:work a.damage
+data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+data modify storage zx:work a.s2_b_num set from storage zx:work a.s2_b_damage
 function sweetdream:lib/num/plain
 
 data modify storage zx:out r.damage set from storage zx:work a.damage
+data modify storage zx:out r.s2_b_damage set value {n:0,d:1}
+data modify storage zx:out r.s2_b_damage set from storage zx:work a.s2_b_damage
 # 来源标记也回带一份, 方便调用方/调试确认这一下被算成了哪一边(ally / enemy)。
 data modify storage zx:out r.src set from storage zx:work a.src
 

@@ -34,8 +34,9 @@ scoreboard players operation @s zx.up_lt = #now manacore.meta
 #   用法与口径见 lib/atk_charge 的文件头。
 #   ★ 必须放在上面那条"每刻只算一次"的去重**之后** —— 一记横扫打多只时,
 #     第 2 只的 gap 会变成 0(工具自己写了记录), 排前面就会读到假的"未蓄满"。
-#   ★ 现在**没有任何武器读 #atk_full**, 所以对玩法零影响; 只是把数值算出来备用 + 供自测。
+#   本次普通命中必须完全蓄力，才触发升级的回魔/火炬/沸腾效果。
 function sweetdream:lib/atk_charge
+execute unless score @s zx.atk_ok matches 1 run return 0
 
 function sweetdream:upgrade/api/bonus_held
 

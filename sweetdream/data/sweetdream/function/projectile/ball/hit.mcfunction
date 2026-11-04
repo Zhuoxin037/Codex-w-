@@ -26,6 +26,8 @@ execute positioned ~-0.8 ~-0.8 ~-0.8 run tag @e[type=!#sweetdream:no_damage,dx=1
 data modify storage zx:work a set value {target:"@e[tag=zx.ball_hit]",damage:0.0,type:"minecraft:player_attack",u0:0,u1:0,u2:0,u3:0}
 execute if data storage zx:config damage_type run data modify storage zx:work a.type set from storage zx:config damage_type
 data modify storage zx:work a.damage set from entity @s data.dmg
+data modify storage zx:work a.s2_b_damage set value {n:0,d:1}
+data modify storage zx:work a.s2_b_damage set from entity @s data.s2_b_dmg
 execute if data entity @s data{fixed:1b} run data modify storage zx:work a.fixed set value 1b
 data modify storage zx:work a.u0 set from entity @s data.u0
 data modify storage zx:work a.u1 set from entity @s data.u1
@@ -39,6 +41,8 @@ execute if entity @s[tag=zx.tf_pass] run function sweetdream:equipment/armor/tid
 
 # ③ 伤害数字 -> 纯数字字符串
 data modify storage zx:work a.num set from storage zx:work a.damage
+data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+data modify storage zx:work a.s2_b_num set from storage zx:work a.s2_b_damage
 function sweetdream:lib/num/plain
 
 # ④ 打出去

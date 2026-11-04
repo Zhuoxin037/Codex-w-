@@ -15,7 +15,7 @@
 #   表现先用粒子(以后要给贴图模型, 照暗海 item_display 的路子另开生成器即可)。
 # ============================================================
 
-$summon minecraft:marker ~ ~1 ~ {Tags:["zx.dr_pet","zx.dr_new"],data:{zx:{dmg:$(dmg),ol:$(ol),u:[I;$(u0),$(u1),$(u2),$(u3)]}}}
+$summon minecraft:marker ~ ~1 ~ {Tags:["zx.dr_pet","zx.dr_new"],data:{zx:{dmg:$(dmg),s2_b_dmg:$(s2_b_dmg),ol:$(ol),u:[I;$(u0),$(u1),$(u2),$(u3)]}}}
 
 # 初始化(寿命 + 超限 tag) —— 抽成 pet_init 只为让"读 NBT -> 打 tag"这几行有地方写注释
 execute as @e[tag=zx.dr_new,distance=..2,limit=1] run function sweetdream:equipment/axe/dream_reader/pet_init

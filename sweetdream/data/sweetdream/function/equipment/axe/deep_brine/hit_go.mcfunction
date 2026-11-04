@@ -51,6 +51,8 @@ data modify storage manacore:in arg set value {uuid:"",max_mana_mul:0.05}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:work dba.dmg set from storage manacore:out r.damage
+data modify storage zx:work dba.s2_b_dmg set value {n:0,d:1}
+data modify storage zx:work dba.s2_b_dmg set from storage manacore:out r.s2_b_damage
 
 # ④-2 归属: 施法者 UUID 四个整数
 data modify storage zx:work dba.u0 set from entity @s UUID[0]

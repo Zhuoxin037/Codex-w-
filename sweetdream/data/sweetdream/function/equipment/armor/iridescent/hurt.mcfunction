@@ -46,6 +46,8 @@ scoreboard players operation #ir_atk zx.meta *= #2 zx.meta
 data modify storage zx:work a set value {damage:0.0}
 execute store result storage zx:work a.damage double 1 run scoreboard players get #ir_atk zx.meta
 data modify storage zx:work a.num set from storage zx:work a.damage
+data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+data modify storage zx:work a.s2_b_num set from storage zx:work a.s2_b_damage
 function sweetdream:lib/num/plain
 
 # ④ 圈出 6 格内至多 3 只

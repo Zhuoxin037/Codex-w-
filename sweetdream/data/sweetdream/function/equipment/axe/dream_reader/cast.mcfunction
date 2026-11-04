@@ -69,6 +69,8 @@ execute if score #dr_ol zx.meta matches 1 run data modify storage manacore:in ar
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:work drp.dmg set from storage manacore:out r.damage
+data modify storage zx:work drp.s2_b_dmg set value {n:0,d:1}
+data modify storage zx:work drp.s2_b_dmg set from storage manacore:out r.s2_b_damage
 execute store result storage zx:work drp.ol byte 1 run scoreboard players get #dr_ol zx.meta
 
 # ⑥ 施法者 UUID 四个整数(入梦体靠它反查施法者、判 10 格距离、带击杀归属)
@@ -84,8 +86,11 @@ data modify storage zx:work drp.u3 set from entity @s UUID[3]
 execute unless entity @e[tag=zx.dr_pet,limit=1] run tag @e remove zx.dr_done
 
 # ⑦ 召唤 3 个入梦体(分三个稍错开的位置, 免得叠在一起)
+execute unless data storage zx:work drp.s2_b_dmg run data modify storage zx:work drp.s2_b_dmg set value {n:0,d:1}
 execute positioned ~ ~ ~ run function sweetdream:equipment/axe/dream_reader/pet_spawn with storage zx:work drp
+execute unless data storage zx:work drp.s2_b_dmg run data modify storage zx:work drp.s2_b_dmg set value {n:0,d:1}
 execute positioned ~0.5 ~ ~ run function sweetdream:equipment/axe/dream_reader/pet_spawn with storage zx:work drp
+execute unless data storage zx:work drp.s2_b_dmg run data modify storage zx:work drp.s2_b_dmg set value {n:0,d:1}
 execute positioned ~-0.5 ~ ~ run function sweetdream:equipment/axe/dream_reader/pet_spawn with storage zx:work drp
 
 # ⑧ 表现

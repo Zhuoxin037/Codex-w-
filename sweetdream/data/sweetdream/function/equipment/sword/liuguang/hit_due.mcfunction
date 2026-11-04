@@ -17,6 +17,8 @@ data modify storage zx:work a set value {uuid:"",target_tag:"",damage:0.0,u0:0,u
 $data modify storage zx:work a.uuid set value "$(uuid)"
 $data modify storage zx:work a.target_tag set value "zx.lg_$(uuid)"
 $data modify storage zx:work a.damage set from storage zx:data lg."$(uuid)".damage
+data modify storage zx:work a.s2_b_damage set value {n:0,d:1}
+$data modify storage zx:work a.s2_b_damage set from storage zx:data lg."$(uuid)".s2_b_damage
 $data modify storage zx:work a.u0 set from storage zx:data lg."$(uuid)".u0
 $data modify storage zx:work a.u1 set from storage zx:data lg."$(uuid)".u1
 $data modify storage zx:work a.u2 set from storage zx:data lg."$(uuid)".u2
@@ -27,5 +29,6 @@ $execute unless entity @e[tag=zx.lg_$(uuid),limit=1] run data remove storage zx:
 $execute unless entity @e[tag=zx.lg_$(uuid),limit=1] run tag @s remove zx.lg_casting
 $execute unless entity @e[tag=zx.lg_$(uuid),limit=1] run return 0
 
+execute unless data storage zx:work a.s2_b_damage run data modify storage zx:work a.s2_b_damage set value {n:0,d:1}
 $execute as @e[tag=zx.lg_$(uuid),limit=1] run function sweetdream:equipment/sword/liuguang/hit_calc with storage zx:work a
 $data remove storage zx:data lg."$(uuid)"

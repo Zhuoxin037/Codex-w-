@@ -31,6 +31,8 @@ execute if score #bft_ol zx.meta matches 1 anchored eyes positioned ^ ^ ^3.0 pos
 #   ★ 执行者仍是**施法者本人** -> 击杀归属/结算口径都对(同 verdict / 崩裂 area)
 data modify storage zx:in arg set value {target:"@e[type=!#sweetdream:no_damage,tag=zx.bft_hit,distance=0..]",damage:0.0}
 data modify storage zx:in arg.damage set from storage zx:work bft.dmg
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage zx:work bft.s2_b_dmg
 execute at @s run function sweetdream:api/damage
 
 # 表现: 一道贴着地面扫过去的水刃(超限的另外两道在 cast ⑪)

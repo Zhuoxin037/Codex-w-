@@ -45,6 +45,8 @@ data modify storage manacore:in arg.uuid set from storage zx:work bd.uuid
 function manacore:api/damage/calc
 data modify storage zx:work bd.dmg set value 0.0
 data modify storage zx:work bd.dmg set from storage manacore:out r.damage
+data modify storage zx:work bd.s2_b_dmg set value {n:0,d:1}
+data modify storage zx:work bd.s2_b_dmg set from storage manacore:out r.s2_b_damage
 function sweetdream:equipment/bow/burst_dawn/fire_hit
 
 # ⑤ 第二段: 每只再吃 (第一段总伤害) × 50%
@@ -56,6 +58,8 @@ data modify storage manacore:in arg.independent_multiplier set from storage zx:w
 function manacore:api/damage/calc
 data modify storage zx:work bd.dmg set value 0.0
 data modify storage zx:work bd.dmg set from storage manacore:out r.damage
+data modify storage zx:work bd.s2_b_dmg set value {n:0,d:1}
+data modify storage zx:work bd.s2_b_dmg set from storage manacore:out r.s2_b_damage
 function sweetdream:equipment/bow/burst_dawn/fire_hit
 
 # ⑥ 表现 + 收尾(工作标签一定要清, 否则会污染下一箭)

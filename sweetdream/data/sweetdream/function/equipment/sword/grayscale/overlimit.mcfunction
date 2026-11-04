@@ -50,12 +50,16 @@ data modify storage manacore:in arg set value {uuid:"",max_mana_mul:0.1}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:work gso.dmg set from storage manacore:out r.damage
+data modify storage zx:work gso.s2_b_dmg set value {n:0,d:1}
+data modify storage zx:work gso.s2_b_dmg set from storage manacore:out r.s2_b_damage
 
 # ⑤.5 真伤: 最大魔力 ×0.08(独立算一次, 不继承主伤的任何乘区)
 data modify storage manacore:in arg set value {uuid:"",max_mana_mul:0.08}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:work gso.td set from storage manacore:out r.damage
+data modify storage zx:work gso.s2_b_td set value {n:0,d:1}
+data modify storage zx:work gso.s2_b_td set from storage manacore:out r.s2_b_damage
 
 # ⑥ 圈定"自身 5 格内", 并把"此刻已经在烧"的单独标出来(必须在主伤之前判)
 tag @e[tag=zx.gs_hit,distance=0..] remove zx.gs_hit
@@ -66,11 +70,15 @@ execute as @e[tag=zx.gs_hit] at @s run function sweetdream:equipment/sword/grays
 # ⑦ 主伤打出去
 data modify storage zx:in arg set value {target:"@e[tag=zx.gs_hit,distance=0..]",damage:0.0}
 data modify storage zx:in arg.damage set from storage zx:work gso.dmg
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage zx:work gso.s2_b_dmg
 execute at @s run function sweetdream:api/damage
 
 # ⑧ 已燃烧的那批: 额外一发真伤
 data modify storage zx:in arg set value {target:"@e[tag=zx.gs_burn,distance=0..]",damage:0.0,type:"sweetdream:true_damage"}
 data modify storage zx:in arg.damage set from storage zx:work gso.td
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage zx:work gso.s2_b_td
 execute at @s run function sweetdream:api/damage
 
 # ⑨ 逐只: 没在烧 -> 燃烧 3 秒; 已在烧 -> 附加「流火」

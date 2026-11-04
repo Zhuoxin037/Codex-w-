@@ -29,6 +29,8 @@ execute at @s run playsound minecraft:entity.player.attack.weak player @a ~ ~ ~ 
 #   distance=..3 在这里既给选择器一个位置基准(锁当前维度), 也是"碰到"的范围。
 data modify storage zx:in arg set value {target:"@e[type=!#sweetdream:no_damage,distance=..3]",damage:0.0}
 data modify storage zx:in arg.damage set from storage manacore:out r.damage
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage manacore:out r.s2_b_damage
 execute store result score #dbg_sel zx.meta run execute if entity @e[type=!#sweetdream:no_damage,distance=..3]
 execute at @s run function sweetdream:api/damage
 

@@ -21,6 +21,8 @@
 
 # ⓪ 撤销自己的进度
 advancement revoke @s only sweetdream:equipment/armor/gyre_hit
+function sweetdream:lib/atk_charge
+execute unless score @s zx.atk_ok matches 1 run return 0
 
 # ① 穿着门控（护腿）
 execute unless items entity @s armor.legs *[minecraft:custom_data~{zx:["gyre"]}] run return 0

@@ -60,6 +60,8 @@ execute as @e[tag=zx.ltc_slow,distance=4..] if score @s zx.ltc_fid = #ltc_iid zx
 # ⑥ 每秒伤害: 领域内**处于缓慢**的生物(就是第 ② 步那批), 打 最大魔力值 ×0.04
 data modify storage zx:work a.num set value 0.0
 data modify storage zx:work a.num set from entity @s data.zx.dmg
+data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+data modify storage zx:work a.s2_b_num set from entity @s data.zx.s2_b_dmg
 function sweetdream:lib/num/plain
 data modify storage zx:work a.target set value "@e[type=!#sweetdream:no_damage,tag=zx.ltc_now,distance=0..]"
 data modify storage zx:work a.type set value "minecraft:player_attack"

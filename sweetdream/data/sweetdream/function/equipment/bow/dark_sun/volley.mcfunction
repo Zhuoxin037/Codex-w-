@@ -42,14 +42,20 @@ data modify storage manacore:in arg.uuid set from storage zx:work ds.uuid
 function manacore:api/damage/calc
 data modify storage zx:work ds.sdmg set value 0.0
 data modify storage zx:work ds.sdmg set from storage manacore:out r.damage
+data modify storage zx:work ds.s2_b_sdmg set value {n:0,d:1}
+data modify storage zx:work ds.s2_b_sdmg set from storage manacore:out r.s2_b_damage
 data modify storage zx:work a set value {target:"@e[tag=zx.ds_t]",damage:0.0,type:"minecraft:player_attack",u0:0,u1:0,u2:0,u3:0}
 execute if data storage zx:config damage_type run data modify storage zx:work a.type set from storage zx:config damage_type
 data modify storage zx:work a.damage set from storage zx:work ds.sdmg
+data modify storage zx:work a.s2_b_damage set value {n:0,d:1}
+data modify storage zx:work a.s2_b_damage set from storage zx:work ds.s2_b_sdmg
 data modify storage zx:work a.u0 set from storage zx:work ds.u0
 data modify storage zx:work a.u1 set from storage zx:work ds.u1
 data modify storage zx:work a.u2 set from storage zx:work ds.u2
 data modify storage zx:work a.u3 set from storage zx:work ds.u3
 data modify storage zx:work a.num set from storage zx:work a.damage
+data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+data modify storage zx:work a.s2_b_num set from storage zx:work a.s2_b_damage
 function sweetdream:lib/num/plain
 function sweetdream:internal/damage/with_from with storage zx:work a
 

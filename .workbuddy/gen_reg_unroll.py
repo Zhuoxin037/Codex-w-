@@ -12,10 +12,10 @@ import re
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FN = os.path.join(ROOT, 'sweetdream', 'data', 'sweetdream', 'function')
 
-CAP_B = 61
+CAP_B = 68
 CAP_A = 8
-CAP_MENU = 19
-CAP_LAYER = 30
+CAP_MENU = 20
+CAP_LAYER = 38
 
 
 def read(p):

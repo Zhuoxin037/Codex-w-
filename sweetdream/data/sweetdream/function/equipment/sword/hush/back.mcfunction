@@ -15,5 +15,6 @@
 # 【找不到 marker】execute 选 0 个 -> 这条不执行, 玩家留在撞击点, 不会报错。
 # ============================================================
 
-$execute at @e[tag=zx.hs_org,nbt={data:{zx:{hs:{uuid:"$(uuid)"}}}},distance=0..,limit=1] run tp @s ~ ~ ~
+$execute store success score #s2_moved zx.meta run execute at @e[tag=zx.hs_org,nbt={data:{zx:{hs:{uuid:"$(uuid)"}}}},distance=0..,limit=1] run tp @s ~ ~ ~
+execute if score #s2_moved zx.meta matches 1 at @s run function sweetdream:equipment/armor/empty_cicada/moved
 $kill @e[tag=zx.hs_org,nbt={data:{zx:{hs:{uuid:"$(uuid)"}}}},distance=0..,limit=1]

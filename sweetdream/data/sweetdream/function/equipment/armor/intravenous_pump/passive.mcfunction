@@ -35,6 +35,9 @@ execute unless score #diff zx.meta matches 0 run function sweetdream:equipment/a
 #   生命值用 scale 1 取整(Health 是浮点, 直接截断会把 27.99 当成 27, 满血误判)
 execute store result score #hp zx.meta run data get entity @s Health 1
 execute store result score #hp_max zx.meta run attribute @s minecraft:max_health get
+execute if entity @s[tag=zx.nr_clamp] run function sweetdream:lib/max_health_score
+execute if entity @s[tag=zx.nr_clamp] run scoreboard players operation #hp_max zx.meta = #max_hp zx.meta
+execute if entity @s[tag=zx.nr_clamp] run scoreboard players operation #hp_max zx.meta /= #1000 zx.meta
 scoreboard players set #full_hp zx.meta 0
 execute if score #hp_max zx.meta matches 1.. if score #hp zx.meta >= #hp_max zx.meta run scoreboard players set #full_hp zx.meta 1
 execute if score #pump_on zx.meta matches 1 if score #full_hp zx.meta matches 1 run function sweetdream:equipment/armor/intravenous_pump/regen_mana

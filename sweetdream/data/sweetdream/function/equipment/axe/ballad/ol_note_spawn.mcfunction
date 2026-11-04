@@ -13,7 +13,7 @@
 #   所以不会把区块标脏(卡顿条目 1)。
 # ============================================================
 
-$summon minecraft:marker ~ ~ ~ {Tags:["zx.bd_note","zx.bd_nnew"],data:{zx:{dmg:$(dmg),sx:$(sx),sy:$(sy),sz:$(sz),u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}}}
+$summon minecraft:marker ~ ~ ~ {Tags:["zx.bd_note","zx.bd_nnew"],data:{zx:{dmg:$(dmg),s2_b_dmg:$(s2_b_dmg),sx:$(sx),sy:$(sy),sz:$(sz),u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}}}
 scoreboard players set @e[type=marker,tag=zx.bd_nnew,distance=..1,limit=1] zx.nt_t 20
 execute store result score @e[type=marker,tag=zx.bd_nnew,distance=..1,limit=1] zx.nt_d run data get storage zx:work nt.dmg
 tag @e[type=marker,tag=zx.bd_nnew,distance=..1] remove zx.bd_nnew

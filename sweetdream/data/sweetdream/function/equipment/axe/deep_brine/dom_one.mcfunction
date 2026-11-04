@@ -24,4 +24,5 @@ execute unless data storage zx:work mc{ok:1b} run return 0
 execute if data storage zx:work mc{done:1b} run return 0
 
 # ④ 在它所在处生成一个半径 3 / 持续 4 秒的领域(伤害与归属已由 cast ⑦ 备好)
+execute unless data storage zx:work dbf.s2_b_dmg run data modify storage zx:work dbf.s2_b_dmg set value {n:0,d:1}
 execute at @e[tag=zx.db_cur,distance=0..,limit=1] run function sweetdream:equipment/axe/deep_brine/field_one with storage zx:work dbf

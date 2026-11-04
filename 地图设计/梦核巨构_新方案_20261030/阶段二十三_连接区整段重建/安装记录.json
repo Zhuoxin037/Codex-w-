@@ -1,0 +1,18 @@
+{
+  "time": "2026-11-04T15:09:25.1219849+08:00",
+  "target": "D:\\PCL 正式版 2.10.0\\.minecraft\\versions\\1.21.5-Fabric 0.16.10\\saves\\梦核哥特_承接修复与照明补漏_20261102",
+  "display_name": "梦核哥特_天光与照明修复_20261102",
+  "backup": "D:\\数据包\\地图设计\\梦核巨构_新方案_20261030\\阶段二十三_连接区整段重建\\修改前完整备份.zip",
+  "archive": "D:\\数据包\\地图设计\\梦核巨构_新方案_20261030\\阶段二十三_连接区整段重建\\连接区整段重建_完整存档.zip",
+  "verified_region_files": 4,
+  "non_region_files_changed": 0,
+  "additional_game_worlds": 0,
+  "all_hashes_match": true,
+  "native_checks": 758,
+  "reopen_checks": 756,
+  "navigation_checks": 38,
+  "all_world_content_files_verified": 694,
+  "runtime_lock_excluded": true,
+  "protected_user_positions_verified": 24,
+  "client_visual_test": "未进行客户端或Photon代测"
+}

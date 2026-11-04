@@ -22,6 +22,8 @@
 # no-equip-check-ok: 每一处 item_modify 都由"武器 id + 当前 item_model"双重门控,
 #   不依赖穿着/手持判定, 漏判也不会影响别人。
 # ============================================================
+execute if items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["oath_victory"]}] unless items entity @s weapon.mainhand *[minecraft:item_model="sweetdream:oath_victory"] run item modify entity @s weapon.mainhand sweetdream:sword_icons/oath_victory
+execute if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["oath_victory"]}] unless items entity @s weapon.offhand *[minecraft:item_model="sweetdream:oath_victory"] run item modify entity @s weapon.offhand sweetdream:sword_icons/oath_victory
 execute if items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["everfrost"]}] unless items entity @s weapon.mainhand *[minecraft:item_model="sweetdream:everfrost"] run item modify entity @s weapon.mainhand sweetdream:sword_icons/everfrost
 execute if items entity @s weapon.offhand *[minecraft:custom_data~{zx:["everfrost"]}] unless items entity @s weapon.offhand *[minecraft:item_model="sweetdream:everfrost"] run item modify entity @s weapon.offhand sweetdream:sword_icons/everfrost
 execute if items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["hengdao"]}] unless items entity @s weapon.mainhand *[minecraft:item_model="sweetdream:hengdao"] run item modify entity @s weapon.mainhand sweetdream:sword_icons/hengdao

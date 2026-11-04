@@ -48,7 +48,7 @@ scoreboard players set #ax zx.meta 0
 scoreboard players operation #ax zx.meta += #a_m zx.meta
 scoreboard players operation #ax zx.meta += #a_a zx.meta
 scoreboard players operation #ax zx.meta += #a_o zx.meta
-execute unless score #ax zx.meta matches 1.. run return 0
+execute unless score #ax zx.meta matches 1.. run return run function sweetdream:upgrade/breach/snapshot
 
 # ---- ③ K_i = 100 + add_i(mul_pct 的 mul 档: 1.5 -> 150) ----
 scoreboard players set #k_m zx.meta 1000
@@ -99,3 +99,5 @@ scoreboard players operation #tot zx.meta = #mul_out zx.meta
 # ---- ⑦ 负值夹 0(与 calc 末尾同款) + 写回 r.damage(x1000 -> double) ----
 execute if score #tot zx.meta matches ..0 run scoreboard players set #tot zx.meta 0
 execute store result storage manacore:out r.damage double 0.001 run scoreboard players get #tot zx.meta
+
+function sweetdream:upgrade/breach/snapshot

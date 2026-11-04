@@ -6,7 +6,7 @@
 #     没轮到的 tick 上; 每刻跑才能真正兜住。多出来的开销可忽略(见下)。
 #
 # 【为什么要它】包里的技术类进度(打到/打死/使用物品/射箭/tick)都是**一次性**的:
-#   奖励函数第一行 `advancement revoke @s only <自己>` 撤销自己, 下次才能再触发。
+#   奖励函数第一行 `advancement revoke @a only <自己>` 撤销自己, 下次才能再触发。
 #   但这条链有个致命弱点 —— **奖励函数没跑起来, 撤销就不会发生**:
 #     · 该刻命令预算打满(日志: "Command execution stopped due to limit
 #       (executed 65536 commands)") → 奖励函数被整段跳过;
@@ -23,7 +23,7 @@
 #   · 成本: 178 条 revoke / tick, 相对预算 65536 可忽略。
 #
 # 【★ 新增自撤销型进度时, 必须同步加到这里 ★】
-#   判据 = "奖励函数的第一个非注释行是 advancement revoke @s only 自己"
+#   判据 = "奖励函数的第一个非注释行是 advancement revoke @a only 自己"
 #   (也就是 check.py 规则 5 认的那一类)。忘了加 → 那个进度迟早会卡死,
 #   而且是静默的。check.py 规则 27 专门盯这件事 + 盯 revoke 有没有排在 return 后面。
 #
@@ -88,7 +88,7 @@ advancement revoke @a only sweetdream:equipment/bow/backstring
 #   (批 14 2026-10-25: 碎骨(弩) —— 射击进度 + shot 首行自撤销, 同契约。)
 advancement revoke @a only sweetdream:equipment/bow/bone_breaker
 #   (批 15-1 2026-10-15: 眠羽/烬弦/逆弦/黯日 四把弩接上命中结算 —— 各自新增
-#    "射击进度 + shot 扣蓝", shot 首行 `advancement revoke @s only <自己>`,
+#    "射击进度 + shot 扣蓝", shot 首行 `advancement revoke @a only <自己>`,
 #    属自撤销型, 按契约登记到这里。)
 advancement revoke @a only sweetdream:equipment/bow/feather_sleep
 advancement revoke @a only sweetdream:equipment/bow/ember_string
@@ -145,7 +145,7 @@ advancement revoke @a only sweetdream:equipment/sword/tinder_hit
 advancement revoke @a only sweetdream:equipment/sword/verdict
 advancement revoke @a only sweetdream:equipment/sword/verdict_hit
 # ---- 批2 · 斧(2026-10-07) ----
-#   ★ 判据 = 奖励函数第一个非注释行是 `advancement revoke @s only 自己`。
+#   ★ 判据 = 奖励函数第一个非注释行是 `advancement revoke @a only 自己`。
 #   崩裂 / 释梦 / 饮鸩 / 葬火 / 歌谣 / 威霆 / 红莲 / 苍蓝星 —— 共 13 条。
 advancement revoke @a only sweetdream:equipment/axe/fissure
 advancement revoke @a only sweetdream:equipment/axe/dream_reader
@@ -354,7 +354,7 @@ advancement revoke @a only sweetdream:equipment/axe/xiugou
 advancement revoke @a only sweetdream:equipment/sword/gousi
 
 # ---- 批二 14 件补技能(2026-10-20): 十九个自撤销型进度 ----
-#   与批一同一契约: 奖励函数首行 `advancement revoke @s only …` 撤自己 ⇒
+#   与批一同一契约: 奖励函数首行 `advancement revoke @a only …` 撤自己 ⇒
 #   某次命令预算爆量跳过奖励函数时, 进度会永远停在"已完成", 这之后该被动
 #   永久静默(零日志)。这里在 /reload 时统一撤销一遍, 给它一次重来的机会。
 #   ★ 饮霜(sip_frost) 走的是 lib/heal 的治疗量钩子, 没有进度, 不在名单里。
@@ -401,3 +401,46 @@ advancement revoke @a only sweetdream:profession/hurt
 advancement revoke @a only sweetdream:profession/melee
 advancement revoke @a only sweetdream:profession/shot
 advancement revoke @a only sweetdream:profession/twin_saved
+
+# ---- 批 20（2026-10-27）胜利誓约 + 踏空 ----
+advancement revoke @a only sweetdream:equipment/armor/air_step_land
+advancement revoke @a only sweetdream:equipment/sword/oath_victory
+advancement revoke @a only sweetdream:equipment/sword/oath_victory_hit
+
+# 新增通用武器与职业武器：右键、命中和受击进度的每刻兜底。
+advancement revoke @a only sweetdream:equipment/axe/grace_axe
+advancement revoke @a only sweetdream:equipment/axe/grace_axe_hit
+advancement revoke @a only sweetdream:equipment/axe/no_return
+advancement revoke @a only sweetdream:equipment/axe/no_return_hit
+advancement revoke @a only sweetdream:equipment/staff/chorus
+advancement revoke @a only sweetdream:equipment/staff/eight_tail
+advancement revoke @a only sweetdream:equipment/staff/exalted
+advancement revoke @a only sweetdream:equipment/staff/firefly_staff
+advancement revoke @a only sweetdream:equipment/staff/star_burial
+advancement revoke @a only sweetdream:equipment/staff/star_burial_hit
+advancement revoke @a only sweetdream:equipment/staff/star_weave
+advancement revoke @a only sweetdream:equipment/staff/world_parting
+advancement revoke @a only sweetdream:equipment/sword/contract_rift
+advancement revoke @a only sweetdream:equipment/sword/contract_rift_hit
+advancement revoke @a only sweetdream:equipment/sword/contract_rift_hurt
+advancement revoke @a only sweetdream:equipment/sword/wound_stitch
+advancement revoke @a only sweetdream:equipment/batch21_hurt
+advancement revoke @a only sweetdream:equipment/armor/cease_war_hit
+advancement revoke @a only sweetdream:equipment/axe/chase_deer
+advancement revoke @a only sweetdream:equipment/sword/mirrored_scene
+advancement revoke @a only sweetdream:equipment/staff/magic_theory
+# ---- 2026-11-01 职业装备：右键 / 受击 / 平A 自撤销型进度 ----
+advancement revoke @a only sweetdream:equipment/armor/bulwark_hurt
+advancement revoke @a only sweetdream:equipment/sword/sacrifice
+advancement revoke @a only sweetdream:equipment/axe/detach
+advancement revoke @a only sweetdream:equipment/axe/detach_hit
+advancement revoke @a only sweetdream:equipment/axe/throe_hit
+advancement revoke @a only sweetdream:equipment/staff/intone
+# ---- 2026-11-01 第二批：余响 / 清醒与幻觉 / 潮涌，潮枯 的右键与平A进度 ----
+advancement revoke @a only sweetdream:equipment/sword/aftersound
+advancement revoke @a only sweetdream:equipment/sword/aftersound_hit
+advancement revoke @a only sweetdream:equipment/staff/lucid_illusion
+advancement revoke @a only sweetdream:equipment/staff/surge_ebb
+advancement revoke @a only sweetdream:upgrade/breach_a
+advancement revoke @a only sweetdream:upgrade/breach_b
+advancement revoke @a only sweetdream:upgrade/breach_o

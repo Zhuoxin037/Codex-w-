@@ -29,6 +29,7 @@ scoreboard players add #lg_due zx.meta 60
 
 $data modify storage zx:data lgo."$(uuid)" set value {damage:0.0,u0:0,u1:0,u2:0,u3:0,due:0}
 $data modify storage zx:data lgo."$(uuid)".damage set value $(damage)
+$data modify storage zx:data lgo."$(uuid)".s2_b_damage set value $(s2_b_damage)
 $data modify storage zx:data lgo."$(uuid)".u0 set from storage manacore:players "$(uuid)".u0
 $data modify storage zx:data lgo."$(uuid)".u1 set from storage manacore:players "$(uuid)".u1
 $data modify storage zx:data lgo."$(uuid)".u2 set from storage manacore:players "$(uuid)".u2

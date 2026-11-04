@@ -76,6 +76,8 @@ function manacore:api/damage/calc
 # ⑧ 打真伤(只打射线锁定的那一只)
 data modify storage zx:in arg set value {target:"@e[tag=zx.bld_tgt,distance=0..,limit=1]",damage:0.0,type:"sweetdream:true_damage"}
 data modify storage zx:in arg.damage set from storage manacore:out r.damage
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage manacore:out r.s2_b_damage
 execute at @s run function sweetdream:api/damage
 
 # ⑨ 回血 5%×X

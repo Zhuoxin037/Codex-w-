@@ -75,6 +75,8 @@ execute if score #cg_had zx.meta matches 1 run data modify storage manacore:in a
 execute if score #cg_ol zx.meta matches 1 if score #cg_had zx.meta matches 1 run data modify storage manacore:in arg.independent_multiplier set value 1.5
 function manacore:api/damage/calc
 data modify storage zx:work cg.dmg set from storage manacore:out r.damage
+data modify storage zx:work cg.s2_b_dmg set value {n:0,d:1}
+data modify storage zx:work cg.s2_b_dmg set from storage manacore:out r.s2_b_damage
 
 data modify storage zx:work cg.u0 set from entity @s UUID[0]
 data modify storage zx:work cg.u1 set from entity @s UUID[1]

@@ -43,6 +43,8 @@ execute at @e[tag=zx.bft_src,distance=0..,limit=1] run tag @e[tag=zx.bft_push,di
 #   ★ distance=0.. 显式写: 别的函数可能改过执行维度, 不带它 @e 会跨维度全搜
 data modify storage zx:in arg set value {target:"@e[tag=zx.bft_extra,distance=0..]",damage:0.0}
 data modify storage zx:in arg.damage set from storage zx:work bft.dmg2
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage zx:work bft.s2_b_dmg2
 execute at @s run function sweetdream:api/damage
 
 # ⑦ 向外击退最多 2 格(= 连推两次, 每次 1 格; @s 换成每个被推的生物)

@@ -12,6 +12,8 @@
 # ============================================================
 
 execute store result storage zx:work chgs.dmg double 0.0005 run attribute @s minecraft:max_health get 100
+execute if entity @s[tag=zx.nr_clamp] run function sweetdream:lib/max_health_score
+execute if entity @s[tag=zx.nr_clamp] store result storage zx:work chgs.dmg double 0.00005 run scoreboard players get #max_hp zx.meta
 
 data modify storage zx:in arg set value {target:"@s",damage:0.0,type:"sweetdream:true_damage"}
 data modify storage zx:in arg.damage set from storage zx:work chgs.dmg

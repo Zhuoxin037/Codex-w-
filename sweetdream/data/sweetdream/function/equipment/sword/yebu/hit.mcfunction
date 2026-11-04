@@ -12,6 +12,8 @@
 #   （2026-10-20 法球延迟那条坑的同一套结论）。
 # ============================================================
 advancement revoke @s only sweetdream:equipment/sword/yebu_hit
+function sweetdream:lib/atk_charge
+execute unless score @s zx.atk_ok matches 1 run return 0
 
 # 主手或副手持有曳步（铁剑）
 execute unless items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["yebu"]}] unless items entity @s weapon.offhand *[minecraft:custom_data~{zx:["yebu"]}] run return 0

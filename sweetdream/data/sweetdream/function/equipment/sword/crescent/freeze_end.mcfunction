@@ -24,6 +24,8 @@ tag @e[tag=zx.cr_hit,distance=0..] remove zx.cr_hit
 execute at @s run tag @e[type=!#sweetdream:no_damage,distance=..6] add zx.cr_hit
 data modify storage zx:in arg set value {target:"@e[tag=zx.cr_hit]",damage:0.0}
 data modify storage zx:in arg.damage set from storage manacore:out r.damage
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage manacore:out r.s2_b_damage
 execute at @s if entity @e[tag=zx.cr_hit,limit=1] run function sweetdream:api/damage
 tag @e[tag=zx.cr_hit,distance=0..] remove zx.cr_hit
 

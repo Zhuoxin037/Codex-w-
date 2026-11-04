@@ -20,6 +20,10 @@ function manacore:api/damage/calc
 
 # 记下这一轮算出来的伤害(给 /function sweetdream:debug/wind 排查用)
 $data modify storage zx:data wg_dbg."$(uuid)".burst set from storage manacore:out r.damage
+$data modify storage zx:data wg_dbg."$(uuid)".s2_b_burst set value {n:0,d:1}
+$data modify storage zx:data wg_dbg."$(uuid)".s2_b_burst set from storage manacore:out r.s2_b_damage
+$data modify storage zx:data wg_dbg."$(uuid)".s2_b_burst set value {n:0,d:1}
+$data modify storage zx:data wg_dbg."$(uuid)".s2_b_burst set from storage manacore:out r.s2_b_damage
 
 # ② 逐个中心打一圈(中心已经不在了会自动跳过)
 execute if entity @e[tag=zx.wg_c1,limit=1] at @e[tag=zx.wg_c1,limit=1] run function sweetdream:equipment/staff/wind_ontheground/hit_center

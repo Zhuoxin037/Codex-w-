@@ -76,6 +76,8 @@ scoreboard players operation #sb zx.meta *= #sb_m zx.meta
 scoreboard players operation #sb zx.meta /= #100 zx.meta
 execute store result storage zx:work a.num double 0.001 run scoreboard players get #sb zx.meta
 data modify storage zx:work a.damage set from storage zx:work a.num
+data modify storage zx:work a.s2_b_damage set value {n:0,d:1}
+data modify storage zx:work a.s2_b_damage set from storage zx:work a.s2_b_num
 
 # ⑤ 重新生成纯数字字符串（交给 internal/damage/deal 去打）
 function sweetdream:lib/num/plain

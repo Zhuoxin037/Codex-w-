@@ -13,6 +13,8 @@
 # ① marker 上的施法与伤害信息摊进 twgdot
 data modify storage zx:work twgdot set value {dmg:0.0,u0:0,u1:0,u2:0,u3:0}
 data modify storage zx:work twgdot.dmg set from entity @s data.zx.dmg
+data modify storage zx:work twgdot.s2_b_dmg set value {n:0,d:1}
+data modify storage zx:work twgdot.s2_b_dmg set from entity @s data.zx.s2_b_dmg
 data modify storage zx:work twgdot.u0 set from entity @s data.zx.u[0]
 data modify storage zx:work twgdot.u1 set from entity @s data.zx.u[1]
 data modify storage zx:work twgdot.u2 set from entity @s data.zx.u[2]

@@ -11,6 +11,9 @@ scoreboard players set @s zx.dng_on 1
 scoreboard players set @s zx.dng_l 6
 
 execute store result score #dng_mh zx.meta run attribute @s minecraft:max_health get
+execute if entity @s[tag=zx.nr_clamp] run function sweetdream:lib/max_health_score
+execute if entity @s[tag=zx.nr_clamp] run scoreboard players operation #dng_mh zx.meta = #max_hp zx.meta
+execute if entity @s[tag=zx.nr_clamp] run scoreboard players operation #dng_mh zx.meta /= #1000 zx.meta
 scoreboard players set #dng_k zx.meta 3
 scoreboard players operation #dng_h zx.meta = #dng_mh zx.meta
 scoreboard players operation #dng_h zx.meta *= #dng_k zx.meta

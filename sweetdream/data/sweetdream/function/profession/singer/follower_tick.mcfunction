@@ -1,3 +1,5 @@
+execute if entity @s[tag=zx.cs_voice] run function sweetdream:equipment/staff/chorus/voice_tick
+execute if entity @s[tag=zx.cs_voice] run return 0
 scoreboard players remove @s zx.j_life 1
 particle minecraft:note ~ ~1 ~ .2 .35 .2 0 1 force
 effect give @e[type=!#sweetdream:no_damage,distance=..3] minecraft:slowness 1 2 true

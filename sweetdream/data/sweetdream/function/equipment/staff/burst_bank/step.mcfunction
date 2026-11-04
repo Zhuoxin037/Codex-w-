@@ -1,8 +1,10 @@
 function sweetdream:equipment/staff/burst_bank/can_move
 execute if score #bb_mv zx.meta matches 0 run scoreboard players set @s zx.bb_left 0
 execute if score @s zx.bb_left matches ..0 run return 0
-execute if score #bb_mv zx.meta matches 1 positioned ^ ^ ^0.5 run tp @s ~ ~ ~
-execute if score #bb_mv zx.meta matches 2 positioned ^ ^1 ^0.5 run tp @s ~ ~ ~
+execute store success score #s2_moved zx.meta run execute if score #bb_mv zx.meta matches 1 positioned ^ ^ ^0.5 run tp @s ~ ~ ~
+execute if score #s2_moved zx.meta matches 1 at @s run function sweetdream:equipment/armor/empty_cicada/moved
+execute store success score #s2_moved zx.meta run execute if score #bb_mv zx.meta matches 2 positioned ^ ^1 ^0.5 run tp @s ~ ~ ~
+execute if score #s2_moved zx.meta matches 1 at @s run function sweetdream:equipment/armor/empty_cicada/moved
 # 名单只在这个同步子步里临时使用；持久去重按施放者UUID分开。
 tag @e[tag=zx.bb_new,distance=..4] remove zx.bb_new
 $execute at @s positioned ~-0.35 ~ ~-0.35 run tag @e[type=!#sweetdream:no_damage,distance=..0.8,tag=!zx.bb_path_$(uuid)] add zx.bb_new

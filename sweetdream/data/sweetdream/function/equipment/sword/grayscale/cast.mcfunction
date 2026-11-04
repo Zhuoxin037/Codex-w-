@@ -63,6 +63,8 @@ tag @e[tag=zx.gs_hit,distance=0..] remove zx.gs_hit
 execute at @s run tag @e[type=!#sweetdream:no_damage,distance=..2] add zx.gs_hit
 data modify storage zx:in arg set value {target:"@e[tag=zx.gs_hit]",damage:0.0}
 data modify storage zx:in arg.damage set from storage manacore:out r.damage
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage manacore:out r.s2_b_damage
 execute at @s run function sweetdream:api/damage
 
 # ⑦ 逐只: 没在烧 -> 燃烧 3 秒; 已在烧 -> 改附加「流火」

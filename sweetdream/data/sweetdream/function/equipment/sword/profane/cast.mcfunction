@@ -75,17 +75,23 @@ data modify storage manacore:in arg set value {uuid:"",attack_mul:5.0,independen
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:work pf.d5 set from storage manacore:out r.damage
+data modify storage zx:work pf.s2_b_d5 set value {n:0,d:1}
+data modify storage zx:work pf.s2_b_d5 set from storage manacore:out r.s2_b_damage
 
 data modify storage manacore:in arg set value {uuid:"",attack_mul:8.0,independent_multiplier:1.2,custom_damage:0.0,health_ratio:0.0}
 execute if score #pf_ol zx.meta matches 1 run data modify storage manacore:in arg.independent_multiplier set value 1.5
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:work pf.d8 set from storage manacore:out r.damage
+data modify storage zx:work pf.s2_b_d8 set value {n:0,d:1}
+data modify storage zx:work pf.s2_b_d8 set from storage manacore:out r.s2_b_damage
 
 data modify storage manacore:in arg set value {uuid:"",attack_mul:4.0,independent_multiplier:1.2,custom_damage:0.0,health_ratio:0.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:work pf.half set from storage manacore:out r.damage
+data modify storage zx:work pf.s2_b_half set value {n:0,d:1}
+data modify storage zx:work pf.s2_b_half set from storage manacore:out r.s2_b_damage
 
 data modify storage zx:work pf.u0 set from entity @s UUID[0]
 data modify storage zx:work pf.u1 set from entity @s UUID[1]

@@ -36,4 +36,7 @@ function sweetdream:equipment/bow/burst_dawn/taunt with storage zx:work bdt
 scoreboard players remove @s zx.bd_ft 1
 execute if score @s zx.bd_ft matches 1.. run return 0
 particle minecraft:soul ~ ~1.0 ~ 0.4 0.6 0.4 0.05 24 normal
+# 外观载体不用在这里收: 它已经不是乘客, 由 core/tick → shade_follow 每刻检查
+#   "身边 2 格内还有没有 zx.bd_shade", 载具一消失下一 tick 就自己收掉。
+#   ★ 仍然保留这一句 kill @s —— 载体是靠"载具还在不在"活的, 铁傀儡先走是对的。
 kill @s

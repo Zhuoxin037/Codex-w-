@@ -18,4 +18,5 @@
 $execute if entity @e[tag=zx.hs_org,nbt={data:{zx:{hs:{uuid:"$(uuid)"}}}},distance=..2] run function sweetdream:equipment/sword/hush/back_finish with storage zx:work hs
 
 # ② 还没到: 朝 marker 迈 2 格
-$execute unless entity @e[tag=zx.hs_org,nbt={data:{zx:{hs:{uuid:"$(uuid)"}}}},distance=..2] facing entity @e[tag=zx.hs_org,nbt={data:{zx:{hs:{uuid:"$(uuid)"}}}},distance=0..,limit=1] feet run tp @s ^ ^ ^2.0
+$execute store success score #s2_moved zx.meta run execute unless entity @e[tag=zx.hs_org,nbt={data:{zx:{hs:{uuid:"$(uuid)"}}}},distance=..2] facing entity @e[tag=zx.hs_org,nbt={data:{zx:{hs:{uuid:"$(uuid)"}}}},distance=0..,limit=1] feet run tp @s ^ ^ ^2.0
+execute if score #s2_moved zx.meta matches 1 at @s run function sweetdream:equipment/armor/empty_cicada/moved

@@ -1,0 +1,20 @@
+{
+  "native_checks": 47,
+  "reopen_checks": 11,
+  "saved_blocks": {
+    "checked_saved_blocks": 119651,
+    "block_type_errors": 0,
+    "errors": [],
+    "state_adjustments": {},
+    "chunks_read": 48
+  },
+  "installation": {
+    "installed": "D:\\PCL 正式版 2.10.0\\.minecraft\\versions\\1.21.5-Fabric 0.16.10\\saves\\梦核巨构_入口柱廊样段_20261030",
+    "files": 25,
+    "bytes": 5257072,
+    "hash_differences": [],
+    "zip_crc": "passed",
+    "replaced_existing_world": false
+  },
+  "client_visual_test": false
+}

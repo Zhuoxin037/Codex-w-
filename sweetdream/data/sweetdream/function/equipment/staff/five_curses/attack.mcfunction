@@ -71,6 +71,8 @@ function manacore:api/damage/calc
 data modify storage zx:work ball set value {dmg:0.0,style:"five_curses",hit:"sweetdream:equipment/staff/five_curses/ball_hit",ol:0b}
 execute if score #fcv_ol zx.meta matches 1 run data modify storage zx:work ball.ol set value 1b
 data modify storage zx:work ball.dmg set from storage manacore:out r.damage
+data modify storage zx:work ball.s2_b_dmg set value {n:0,d:1}
+data modify storage zx:work ball.s2_b_dmg set from storage manacore:out r.s2_b_damage
 function sweetdream:equipment/staff/attack
 
 # 用户授权的猴头模型动效；不改变上述原技能的数值与执行顺序。

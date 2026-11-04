@@ -521,6 +521,17 @@ data modify storage zx:reg names.ebb_tide set value "返汐"
 data modify storage zx:reg names.glimmer set value "浮光"
 data modify storage zx:reg names.late_dusk set value "迟暮"
 
+# ---- 批 20 · 胜利誓约 + 8 件终端盔甲(2026-10-27) ----
+data modify storage zx:reg names.oath_victory set value "胜利誓约"
+data modify storage zx:reg names.pivot set value "枢"
+data modify storage zx:reg names.bearing set value "承"
+data modify storage zx:reg names.empty_camp set value "空营"
+data modify storage zx:reg names.lone_walk set value "独行"
+data modify storage zx:reg names.overflow set value "溢流"
+data modify storage zx:reg names.intent set value "蓄意"
+data modify storage zx:reg names.air_step set value "踏空"
+data modify storage zx:reg names.breath_hold set value "屏息"
+
 # ============================================================
 # tg: 每个 /trigger 调试入口
 #   obj  = 计分项(core/load 里建的 trigger 型)
@@ -557,7 +568,7 @@ data modify storage zx:reg menu append value {k:"menu",n:"重新打印这个菜�
 data modify storage zx:reg menu append value {k:"give",n:"发潜影盒: 装备 28 件 + 强化材料 7 块(分两盒)"}
 
 # ---------- 记录本版本的表位上限(给 gen_reg_unroll.py / check.py 数用) ----------
-data modify storage zx:reg cap set value {b:61,a:8,menu:19,layer:30}
+data modify storage zx:reg cap set value {b:68,a:8,menu:20,layer:38}
 
 # Shared armor ledgers were not exposed in self-stats (58 -> 60 rows, existing cap 60).
 data modify storage zx:reg b append value {l:"通用盔甲魔力上限合计",o:"zx.am_mana",c:"aqua",n:"含浮光·迟暮套装",e:"all"}
@@ -609,4 +620,62 @@ data modify storage zx:reg names.empathy set value "共感"
 
 data modify storage zx:reg names.indwell set value "寄宿"
 
+# 2026-10-27 用户定稿的职业武器。
+data modify storage zx:reg names.contract_rift set value "裂契"
+data modify storage zx:reg names.world_parting set value "隔世"
+data modify storage zx:reg names.chorus set value "众声"
+data modify storage zx:reg names.wound_stitch set value "缝命"
+data modify storage zx:reg names.no_return set value "不归"
+data modify storage zx:reg names.star_weave set value "织星"
+data modify storage zx:reg names.star_burial set value "埋葬"
+
+# 2026-10-28 用户定稿的四件通用武器。
+data modify storage zx:reg names.exalted set value "“崇高”"
+data modify storage zx:reg names.grace_axe set value "颂恩"
+data modify storage zx:reg names.eight_tail set value "八尾"
+data modify storage zx:reg names.firefly_staff set value "萤光"
+data modify storage zx:reg layer append value {o:"zx.ga_lux",l:"光辉",c:"gold",e:"grace_axe",n:"层",max:5}
+data modify storage zx:reg layer append value {o:"zx.et_fox",l:"狐火",c:"gold",e:"eight_tail",n:"点",max:8}
+data modify storage zx:reg layer append value {o:"zx.ws_view",l:"未合伤",c:"red",e:"wound_stitch",n:"点",max:0}
+data modify storage zx:reg layer append value {o:"zx.wp_switch",l:"换体",c:"light_purple",e:"world_parting",n:"次",max:6}
+
 data modify storage zx:reg b append value {l:"魔力上限",o:"zx.j_sel",c:"aqua",n:"",e:"eagle_hat"}
+data modify storage zx:reg names.empty_cicada set value "空蝉"
+data modify storage zx:reg names.still_sky set value "静穹"
+data modify storage zx:reg names.chase_deer set value "逐鹿"
+data modify storage zx:reg names.cease_war set value "止战"
+data modify storage zx:reg names.echo_harmony set value "应和"
+data modify storage zx:reg names.mirrored_scene set value "对景"
+data modify storage zx:reg names.rebirth_veil set value "复纱"
+data modify storage zx:reg names.magic_theory set value "魔导论"
+data modify storage zx:reg names.breach_a set value "破垒·α"
+data modify storage zx:reg names.breach_b set value "破垒·β"
+data modify storage zx:reg names.breach_o set value "破垒·Ω"
+# ---- 2026-11-01 职业装备（第三批）----
+data modify storage zx:reg names.bulwark set value "肉盾"
+data modify storage zx:reg names.sacrifice set value "牺牲"
+data modify storage zx:reg names.detach set value "脱离"
+data modify storage zx:reg names.lucid_illusion set value "清醒与幻觉"
+data modify storage zx:reg names.throe set value "痛楚"
+data modify storage zx:reg names.intone set value "引声"
+data modify storage zx:reg names.aftersound set value "余响"
+data modify storage zx:reg names.surge_ebb set value "潮涌，潮枯"
+data modify storage zx:reg b append value {l:"生命上限",o:"zx.s2_ec_hp",c:"red",n:"",e:"empty_cicada"}
+data modify storage zx:reg b append value {l:"基础攻击力",o:"zx.s2_ec_atk",c:"gold",n:"",e:"empty_cicada"}
+data modify storage zx:reg b append value {l:"魔力上限",o:"zx.s2_ss_mana",c:"aqua",n:"",e:"still_sky"}
+data modify storage zx:reg b append value {l:"生命上限",o:"zx.s2_cw_hp",c:"red",n:"",e:"cease_war"}
+data modify storage zx:reg b append value {l:"生命上限",o:"zx.s2_rv_hp",c:"red",n:"",e:"rebirth_veil"}
+data modify storage zx:reg b append value {l:"护甲值",o:"zx.s2_cw_armor",c:"gray",n:"",e:"cease_war"}
+data modify storage zx:reg b append value {l:"击退抗性",o:"zx.s2_cw_kb",c:"gray",n:"%",e:"cease_war"}
+data modify storage zx:reg layer append value {o:"zx.s2_rail",l:"导轨",c:"aqua",e:"magic_theory",n:"颗",max:5}
+data modify storage zx:reg layer append value {o:"zx.s2_sky_view",l:"星帷",c:"light_purple",e:"still_sky",n:"层",max:1}
+data modify storage zx:reg layer append value {o:"zx.s2_cw_view",l:"余勇",c:"gold",e:"cease_war",n:"层",max:1}
+# 清醒与幻觉（2026-11-01）：超限法球数。★ 必须单独一行 ★
+#   上限内的球记在 zx.j_orb（"法球"那行，max:0 所以不显示分母）；
+#   超限球单独记在 zx.li_x，0 个时 layer_row 会自动跳过不占地方。
+#   没有这一行的话，"已到上限 -> 转超限球"这一步在界面上**完全不可见**，
+#   玩家只会看到"法球 3（其实已经满了）"然后莫名其妙每秒掉血。
+data modify storage zx:reg layer append value {o:"zx.li_x",l:"超限法球",c:"light_purple",e:"profession_mage",n:"个",max:3}
+
+data modify storage zx:reg tg.rogue set value {obj:"zx.rg_tg",name:"进入 / 退出首层地图样板",fn:"sweetdream:debug/tg_rogue"}
+data modify storage zx:reg menu append value {k:"rogue",n:"随机生成本层房间；原版双手地图，已探索房间变色"}

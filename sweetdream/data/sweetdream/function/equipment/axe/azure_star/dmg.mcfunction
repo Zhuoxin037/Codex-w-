@@ -30,6 +30,8 @@ function sweetdream:equipment/axe/azure_star/recalc
 
 # ② 打第 1 段: 对那一只造成 最大魔力值 ×0.5
 data modify storage zx:work a.num set from storage zx:work asz.dmg1
+data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+data modify storage zx:work a.s2_b_num set from storage zx:work asz.s2_b_dmg1
 function sweetdream:lib/num/plain
 data modify storage zx:work a.target set value "@e[tag=zx.as_t,distance=0..]"
 data modify storage zx:work a.type set value "minecraft:player_attack"

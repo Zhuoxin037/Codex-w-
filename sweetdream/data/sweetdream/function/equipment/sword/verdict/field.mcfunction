@@ -14,4 +14,5 @@ $data modify storage zx:work vdf.u2 set from storage manacore:players "$(uuid)".
 $data modify storage zx:work vdf.u3 set from storage manacore:players "$(uuid)".u3
 
 # at(不是 as): 只把坐标搬到目标处, 执行者仍是施法者 —— field_one 用 ~ ~ ~ 即可
+execute unless data storage zx:work vdf.s2_b_dmg run data modify storage zx:work vdf.s2_b_dmg set value {n:0,d:1}
 execute at @e[tag=zx.vd_mark,distance=0..] run function sweetdream:equipment/sword/verdict/field_one with storage zx:work vdf

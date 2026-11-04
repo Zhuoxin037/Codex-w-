@@ -30,6 +30,8 @@ execute as @e[type=!#sweetdream:no_damage,distance=..3] unless score @s zx.cs_fi
 # ③ 每秒伤害: 基础攻击力 ×4(施放那刻已算好, 存在 marker NBT 的 data.zx.dmg)
 data modify storage zx:work a.num set value 0.0
 data modify storage zx:work a.num set from entity @s data.zx.dmg
+data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+data modify storage zx:work a.s2_b_num set from entity @s data.zx.s2_b_dmg
 function sweetdream:lib/num/plain
 
 # 目标: 领域(3 格)内的全部生物。distance=..3 既给选择器位置基准(锁维度)也是范围。

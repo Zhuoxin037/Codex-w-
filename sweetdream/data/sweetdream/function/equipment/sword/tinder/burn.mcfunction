@@ -29,6 +29,8 @@ function manacore:api/damage/calc
 data modify storage zx:in arg set value {target:"@e[type=!#sweetdream:no_damage,distance=..2]",damage:0.0}
 execute if score #td_ol zx.meta matches 1.. run data modify storage zx:in arg.target set value "@e[type=!#sweetdream:no_damage,distance=..3]"
 data modify storage zx:in arg.damage set from storage manacore:out r.damage
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage manacore:out r.s2_b_damage
 execute at @e[tag=zx.victim,limit=1,distance=..32] run function sweetdream:api/damage
 
 # ② 点燃"未处于燃烧状态"的生物 5 秒(Fire=100 tick); 半径与 ① 同档(原版 2 / 超限 3)
@@ -47,6 +49,8 @@ execute at @s run playsound minecraft:block.fire.extinguish player @a ~ ~ ~ 0.8 
 execute if score #td_ol zx.meta matches 1.. at @e[tag=zx.victim,limit=1,distance=..32] run tag @e[type=!#sweetdream:no_damage,distance=..3,tag=zx.status.yehuo] add zx.td_nf
 execute if entity @e[tag=zx.td_nf,limit=1] run data modify storage zx:in arg set value {target:"@e[tag=zx.td_nf,distance=0..]",damage:0.0}
 execute if entity @e[tag=zx.td_nf,limit=1] run data modify storage zx:in arg.damage set from storage manacore:out r.damage
+execute if entity @e[tag=zx.td_nf,limit=1] run data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+execute if entity @e[tag=zx.td_nf,limit=1] run data modify storage zx:in arg.s2_b_damage set from storage manacore:out r.s2_b_damage
 execute if entity @e[tag=zx.td_nf,limit=1] run function sweetdream:api/damage
 tag @e[tag=zx.td_nf,distance=0..] remove zx.td_nf
 

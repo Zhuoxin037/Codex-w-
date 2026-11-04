@@ -21,6 +21,8 @@ function sweetdream:equipment/axe/azure_star/recalc2
 
 # ③ 打第 2 段: 以那一只为圆心, 2 格内全部生物 ×0.1
 data modify storage zx:work a.num set from storage zx:work asz.dmg2
+data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+data modify storage zx:work a.s2_b_num set from storage zx:work asz.s2_b_dmg2
 function sweetdream:lib/num/plain
 data modify storage zx:work a.target set value "@e[type=!#sweetdream:no_damage,distance=..2]"
 data modify storage zx:work a.type set value "minecraft:player_attack"

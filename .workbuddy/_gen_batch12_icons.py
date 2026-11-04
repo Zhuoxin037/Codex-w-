@@ -199,6 +199,20 @@ def build_all():
     # triad 已迁移至刻俄柏三形态3D母版，用户明确删除旧平面贴图。
     # 此旧批次生成器不得重新创建 staff_triad.png。
 
+    # ⑦ 碎骨（弩，2026-10-27）—— 骨架 = 弧光
+    #    弩身 → 骨白/象牙（比"蚀骨"更亮更干净：蚀骨是腐败骨 + 玫瑰灰）
+    #    弓臂金属 → 冷铁青灰（和骨白拉开，读得出"骨身 + 铁臂"）
+    warm = hexs('2e2822', '4a4238', '6e6454', '948872', 'b8ac94', 'd8ceb4', 'f2ead4')
+    cool = hexs('14171c', '242a32', '3a434e', '525e6c', '72808e', '98a6b4')
+    for st in ('standby', 'pulling_0', 'pulling_1', 'pulling_2', 'arrow', 'firework'):
+        n = 'crossbow_bone_breaker_%s.png' % st
+        src = 'crossbow_arc_%s.png' % st
+        if not os.path.exists(os.path.join(TEX, src)):
+            print('  !! 缺骨架', src)
+            continue
+        save(remap(src, warm, split=(None, warm, cool)), n)
+        made.append(n)
+
     return made
 
 

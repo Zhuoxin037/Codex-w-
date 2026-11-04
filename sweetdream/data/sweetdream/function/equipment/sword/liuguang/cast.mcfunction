@@ -77,6 +77,9 @@ execute if score #dmg zx.meta matches ..5 run data modify storage manacore:out r
 # ⑦ 锁定 + 写数据 + 表现(全在宏层, 因为标记名字里要带自己的 UUID)
 data modify storage zx:work a.uuid set from storage zx:data self.uuid
 data modify storage zx:work a.damage set from storage manacore:out r.damage
+data modify storage zx:work a.s2_b_damage set value {n:0,d:1}
+data modify storage zx:work a.s2_b_damage set from storage manacore:out r.s2_b_damage
+execute unless data storage zx:work a.s2_b_damage run data modify storage zx:work a.s2_b_damage set value {n:0,d:1}
 function sweetdream:equipment/sword/liuguang/lock_macro with storage zx:work a
 
 # 宏层没锁定成功(理论上不会, ③ 已经拦过一次)就到此为止

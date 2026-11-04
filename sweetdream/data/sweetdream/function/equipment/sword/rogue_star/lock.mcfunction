@@ -28,6 +28,7 @@ scoreboard players add #rs_due zx.meta 60
 $data modify storage zx:data rs."$(uuid)" set value {damage:0.0,u0:0,u1:0,u2:0,u3:0,due:0,ol:0b}
 $execute if data storage zx:work a{ol:1b} run data modify storage zx:data rs."$(uuid)".ol set value 1b
 $data modify storage zx:data rs."$(uuid)".damage set value $(damage)
+$data modify storage zx:data rs."$(uuid)".s2_b_damage set value $(s2_b_damage)
 $data modify storage zx:data rs."$(uuid)".u0 set from storage manacore:players "$(uuid)".u0
 $data modify storage zx:data rs."$(uuid)".u1 set from storage manacore:players "$(uuid)".u1
 $data modify storage zx:data rs."$(uuid)".u2 set from storage manacore:players "$(uuid)".u2

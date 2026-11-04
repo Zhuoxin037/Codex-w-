@@ -31,6 +31,8 @@ function manacore:api/damage/calc
 #   ★ 目标只认"本局路径"(zx.hs_path_<uuid>) —— 别人施法标的路径不会串进来。
 $data modify storage zx:in arg set value {target:"@e[type=!#sweetdream:no_damage,tag=zx.hs_path_$(uuid),distance=..12]",damage:0.0}
 data modify storage zx:in arg.damage set from storage manacore:out r.damage
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage manacore:out r.s2_b_damage
 $execute store result score #dbg_sel zx.meta run execute if entity @e[type=!#sweetdream:no_damage,tag=zx.hs_path_$(uuid),distance=..12]
 execute at @s run function sweetdream:api/damage
 

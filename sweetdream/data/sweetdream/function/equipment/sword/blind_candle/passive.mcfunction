@@ -38,19 +38,29 @@ data modify storage manacore:in arg set value {uuid:"",max_mana_mul:0.06,indepen
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:work bcdp.dmg0 set from storage manacore:out r.damage
+data modify storage zx:work bcdp.s2_b_dmg0 set value {n:0,d:1}
+data modify storage zx:work bcdp.s2_b_dmg0 set from storage manacore:out r.s2_b_damage
 
 data modify storage manacore:in arg set value {uuid:"",max_mana_mul:0.1,independent_multiplier:1.0,custom_damage:0.0,health_ratio:0.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:work bcdp.dmg1 set from storage manacore:out r.damage
+data modify storage zx:work bcdp.s2_b_dmg1 set value {n:0,d:1}
+data modify storage zx:work bcdp.s2_b_dmg1 set from storage manacore:out r.s2_b_damage
 
 # ⑤ 按条件选倍率
 data modify storage zx:work bcdp.dmg set from storage zx:work bcdp.dmg0
+data modify storage zx:work bcdp.s2_b_dmg set value {n:0,d:1}
+data modify storage zx:work bcdp.s2_b_dmg set from storage zx:work bcdp.s2_b_dmg0
 execute if score #bcd_ye2 zx.meta matches 1 run data modify storage zx:work bcdp.dmg set from storage zx:work bcdp.dmg1
+execute if score #bcd_ye2 zx.meta matches 1 run data modify storage zx:work bcdp.s2_b_dmg set value {n:0,d:1}
+execute if score #bcd_ye2 zx.meta matches 1 run data modify storage zx:work bcdp.s2_b_dmg set from storage zx:work bcdp.s2_b_dmg1
 
 # ⑥ 打它(执行者仍是玩家 -> 击杀归属正确)
 data modify storage zx:in arg set value {target:"@e[tag=zx.bcd_pick,distance=0..]",damage:0.0}
 data modify storage zx:in arg.damage set from storage zx:work bcdp.dmg
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage zx:work bcdp.s2_b_dmg
 execute at @s run function sweetdream:api/damage
 
 # ⑦ 表现

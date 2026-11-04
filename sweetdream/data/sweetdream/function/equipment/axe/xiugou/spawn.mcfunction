@@ -7,7 +7,7 @@
 # 【本体是 marker】不吃伤害、不占实体上限、不会被怪打死 ——
 #   它就是"咬人的判定点"，参考 thunder_wedge 的雷楔。
 # ============================================================
-$summon minecraft:marker ~ ~ ~ {Tags:["zx.xg_dog","zx.xg_new"],data:{zx:{dmg:$(dmg),u:[I;$(u0),$(u1),$(u2),$(u3)]}}}
+$summon minecraft:marker ~ ~ ~ {Tags:["zx.xg_dog","zx.xg_new"],data:{zx:{dmg:$(dmg),s2_b_dmg:$(s2_b_dmg),u:[I;$(u0),$(u1),$(u2),$(u3)]}}}
 scoreboard players set @e[type=marker,tag=zx.xg_new,distance=..2,limit=1] zx.xg_ft 10
 scoreboard players set @e[type=marker,tag=zx.xg_new,distance=..2,limit=1] zx.xg_n 0
 scoreboard players operation @e[type=marker,tag=zx.xg_new,distance=..2,limit=1] zx.xg_own = #xg_me zx.meta

@@ -37,7 +37,8 @@ execute if data storage zx:data self{ok:1b} run data modify storage zx:work hs.u
 execute if data storage zx:data self{ok:1b} run function sweetdream:equipment/sword/hush/dash_mark with storage zx:work hs
 
 # ④ 还能走就挪一步(0.5 格), 再把剩余步数减 1
-execute if score @s zx.hush matches 1.. rotated ~ 0 run tp @s ^ ^ ^0.5
+execute store success score #s2_moved zx.meta run execute if score @s zx.hush matches 1.. rotated ~ 0 run tp @s ^ ^ ^0.5
+execute if score #s2_moved zx.meta matches 1 at @s run function sweetdream:equipment/armor/empty_cicada/moved
 execute if score @s zx.hush matches 1.. run scoreboard players remove @s zx.hush 1
 
 # ⑤ 走完 / 停住 -> 起归位(去程伤害已在 ③ 随碰随打)

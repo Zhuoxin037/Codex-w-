@@ -37,6 +37,8 @@ data modify storage manacore:in arg set value {uuid:"",max_mana_mul:0.08,indepen
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:work dbl.dmg2 set from storage manacore:out r.damage
+data modify storage zx:work dbl.s2_b_dmg2 set value {n:0,d:1}
+data modify storage zx:work dbl.s2_b_dmg2 set from storage manacore:out r.s2_b_damage
 
 # ⑦⑧ 两次钟声(名单已钉死, 同一批人吃两次)
 #   ★ 两声之间要**重新筛名单**: 第一声可能已经把人打死、或把人震出 4 格;

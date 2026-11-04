@@ -14,6 +14,8 @@
 # ① 伤害
 data modify storage zx:in arg set value {target:"@e[tag=zx.dbl_bell,distance=0..]",damage:0.0}
 data modify storage zx:in arg.damage set from storage zx:work dbl.dmg2
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage zx:work dbl.s2_b_dmg2
 execute at @s run function sweetdream:api/damage
 
 # ② 命中计数(每个目标各 +1; 名单空则一次也不执行)

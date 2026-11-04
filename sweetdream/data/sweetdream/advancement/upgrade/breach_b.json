@@ -1,0 +1,1 @@
+{"criteria":{"breach_b":{"trigger":"consume_item","conditions":{"item":{"predicates":{"minecraft:custom_data":{"zx":["up_breach_b"]}}}}}},"rewards":{"function":"sweetdream:upgrade/apply/breach_b"}}

@@ -5,6 +5,8 @@
     "sweetdream:equipment/armor/fade/on_cast",
     "sweetdream:equipment/armor/step_observe",
     "sweetdream:equipment/armor/backlight/on_cast",
-    "sweetdream:profession/on_cast"
+    "sweetdream:profession/on_cast",
+    "sweetdream:equipment/armor/bearing/on_cast",
+    "sweetdream:equipment/armor/empty_cicada/observe"
   ]
 }

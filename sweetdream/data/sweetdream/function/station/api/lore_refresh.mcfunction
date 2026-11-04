@@ -118,3 +118,5 @@ data modify entity @e[tag=zx.st_tmp,limit=1] equipment.mainhand.components."mine
 execute if data storage zx:work base_new run data modify entity @e[tag=zx.st_tmp,limit=1] equipment.mainhand.components."minecraft:custom_data".lore_base set from storage zx:work base_new
 
 function sweetdream:profession/item_presentation
+
+execute if items entity @e[tag=zx.st_tmp,limit=1] weapon.mainhand *[custom_data~{zx:["dream_waker"]}] run item modify entity @e[tag=zx.st_tmp,limit=1] weapon.mainhand sweetdream:dream_waker/invalidate

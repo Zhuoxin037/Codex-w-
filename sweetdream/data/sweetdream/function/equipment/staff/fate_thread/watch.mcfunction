@@ -113,9 +113,13 @@ data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 data modify storage manacore:in arg.other_base set from storage zx:work ft.db
 function manacore:api/damage/calc
 data modify storage zx:work ft.dmg1 set from storage manacore:out r.damage
+data modify storage zx:work ft.s2_b_dmg1 set value {n:0,d:1}
+data modify storage zx:work ft.s2_b_dmg1 set from storage manacore:out r.s2_b_damage
 execute if score @s zx.ft2_end matches 1.. run data modify storage manacore:in arg.other_mul set value 0.8
 execute if score @s zx.ft2_end matches 1.. run function manacore:api/damage/calc
 execute if score @s zx.ft2_end matches 1.. run data modify storage zx:work ft.dmg2 set from storage manacore:out r.damage
+execute if score @s zx.ft2_end matches 1.. run data modify storage zx:work ft.s2_b_dmg2 set value {n:0,d:1}
+execute if score @s zx.ft2_end matches 1.. run data modify storage zx:work ft.s2_b_dmg2 set from storage manacore:out r.s2_b_damage
 
 # ⑨ 圈出**本实例**的相连者(选择器不能判分, 先打标签)
 #   ★ 双丝组（zx.ft_cn ≥ 2）单独一组：文案"若相连的生物有两个或以上丝线同时相连
@@ -132,10 +136,14 @@ execute unless entity @e[tag=zx.ft_hit2,limit=1] unless entity @e[tag=zx.ft_hit3
 #   甲：单丝组（基础 0.3 / 超限 0.5）
 data modify storage zx:in arg set value {target:"@e[tag=zx.ft_hit2,distance=0..]",damage:0.0,type:"sweetdream:true_damage"}
 data modify storage zx:in arg.damage set from storage zx:work ft.dmg1
+data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+data modify storage zx:in arg.s2_b_damage set from storage zx:work ft.s2_b_dmg1
 execute at @e[tag=zx.ft_wt,limit=1] run function sweetdream:api/damage
 #   乙：双丝组（超限 0.8）
 execute if entity @e[tag=zx.ft_hit3,limit=1] run data modify storage zx:in arg set value {target:"@e[tag=zx.ft_hit3,distance=0..]",damage:0.0,type:"sweetdream:true_damage"}
 execute if entity @e[tag=zx.ft_hit3,limit=1] run data modify storage zx:in arg.damage set from storage zx:work ft.dmg2
+execute if entity @e[tag=zx.ft_hit3,limit=1] run data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
+execute if entity @e[tag=zx.ft_hit3,limit=1] run data modify storage zx:in arg.s2_b_damage set from storage zx:work ft.s2_b_dmg2
 execute if entity @e[tag=zx.ft_hit3,limit=1] at @e[tag=zx.ft_wt,limit=1] run function sweetdream:api/damage
 
 # ⑪ 次数 +1(记在玩家身上 -> 整条丝共用)

@@ -1,5 +1,7 @@
 {
   "values": [
-    "minecraft:player_attack"
+    "minecraft:player_attack",
+    "sweetdream:parallel_skill",
+    "sweetdream:parallel_true_damage"
   ]
 }

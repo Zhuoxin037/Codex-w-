@@ -9,6 +9,7 @@
 $tag @s remove $(target_tag)
 data modify storage zx:work a.num set value 0.0
 $data modify storage zx:work a.num set value $(damage)
+$data modify storage zx:work a.s2_b_num set value $(s2_b_damage)
 function sweetdream:lib/num/plain
 data modify storage zx:work a.target set value "@s"
 data modify storage zx:work a.type set value "minecraft:player_attack"

@@ -10,6 +10,7 @@
 
 $data modify storage zx:data be."$(uuid)" set value {dmg:0.0,ol:0b,u0:0,u1:0,u2:0,u3:0}
 $data modify storage zx:data be."$(uuid)".dmg set value $(dmg)
+$data modify storage zx:data be."$(uuid)".s2_b_dmg set value $(s2_b_dmg)
 $data modify storage zx:data be."$(uuid)".ol set value $(ol)
 $data modify storage zx:data be."$(uuid)".u0 set value $(u0)
 $data modify storage zx:data be."$(uuid)".u1 set value $(u1)

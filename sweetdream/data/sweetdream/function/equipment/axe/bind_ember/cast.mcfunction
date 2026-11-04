@@ -51,6 +51,8 @@ function manacore:api/damage/calc
 
 data modify storage zx:work be set value {dmg:0.0,u0:0,u1:0,u2:0,u3:0}
 data modify storage zx:work be.dmg set from storage manacore:out r.damage
+data modify storage zx:work be.s2_b_dmg set value {n:0,d:1}
+data modify storage zx:work be.s2_b_dmg set from storage manacore:out r.s2_b_damage
 data modify storage zx:work be.u0 set from entity @s UUID[0]
 data modify storage zx:work be.u1 set from entity @s UUID[1]
 data modify storage zx:work be.u2 set from entity @s UUID[2]

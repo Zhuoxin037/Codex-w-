@@ -1,0 +1,1 @@
+{"criteria":{"use":{"trigger":"minecraft:consume_item","conditions":{"item":{"predicates":{"minecraft:custom_data":"{zx:[\"chase_deer\"]}"}}}}},"rewards":{"function":"sweetdream:equipment/axe/chase_deer/cast"}}

@@ -11,6 +11,8 @@
 # ============================================================
 
 data modify storage zx:work a.num set from storage zx:work rl.dmg1
+data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+data modify storage zx:work a.s2_b_num set from storage zx:work rl.s2_b_dmg1
 function sweetdream:lib/num/plain
 data modify storage zx:work a.target set value "@e[type=!#sweetdream:no_damage,distance=..5]"
 # 超限: 范围 5 格 -> 6 格

@@ -12,6 +12,8 @@ scoreboard players add #pf_clear zx.meta 1
 # ---- 主目标：×8 档 ----
 data modify storage zx:work a set value {target:"@s",type:"minecraft:player_attack"}
 data modify storage zx:work a.num set from storage zx:work pf.d8
+data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+data modify storage zx:work a.s2_b_num set from storage zx:work pf.s2_b_d8
 function sweetdream:lib/num/plain
 execute if data storage zx:config damage_type run data modify storage zx:work a.type set from storage zx:config damage_type
 data modify storage zx:work a.u0 set from storage zx:work pf.u0
@@ -27,10 +29,14 @@ execute at @s run playsound minecraft:entity.wither.hurt player @a ~ ~ ~ 0.6 0.7
 # ---- 2 格内的其他生物: 未超限吃一半(= attack_mul 4 + 独立乘区 1.2) / 超限吃**相等**的伤害 ----
 data modify storage zx:work a set value {target:"@e[type=!#sweetdream:no_damage,distance=0.1..2]",type:"minecraft:player_attack"}
 data modify storage zx:work a.num set from storage zx:work pf.half
+data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+data modify storage zx:work a.s2_b_num set from storage zx:work pf.s2_b_half
 # 超限·剖心(2026-10-23 批 K2): "受到相等的伤害" -> 直接复用 ×8 档(含 +50% 独立乘区)
 #   ★ pf.ol 是 cast ⑤ 拍下的"这一发是不是超限", 不能在这里判物品 —— 本函数执行者
 #     是**被命中的生物**, `items entity @s` 看到的是它自己的装备。
 execute if data storage zx:work pf{ol:1b} run data modify storage zx:work a.num set from storage zx:work pf.d8
+execute if data storage zx:work pf{ol:1b} run data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+execute if data storage zx:work pf{ol:1b} run data modify storage zx:work a.s2_b_num set from storage zx:work pf.s2_b_d8
 function sweetdream:lib/num/plain
 execute if data storage zx:config damage_type run data modify storage zx:work a.type set from storage zx:config damage_type
 data modify storage zx:work a.u0 set from storage zx:work pf.u0

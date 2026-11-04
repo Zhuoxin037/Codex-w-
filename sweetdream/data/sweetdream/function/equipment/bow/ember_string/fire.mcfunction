@@ -54,6 +54,8 @@ execute if entity @e[tag=zx.es_hady,distance=0..,limit=1] run data modify storag
 execute if entity @e[tag=zx.es_hady,distance=0..,limit=1] run function manacore:api/damage/calc
 data modify storage zx:work es.dmg set value 0.0
 execute if entity @e[tag=zx.es_hady,distance=0..,limit=1] run data modify storage zx:work es.dmg set from storage manacore:out r.damage
+execute if entity @e[tag=zx.es_hady,distance=0..,limit=1] run data modify storage zx:work es.s2_b_dmg set value {n:0,d:1}
+execute if entity @e[tag=zx.es_hady,distance=0..,limit=1] run data modify storage zx:work es.s2_b_dmg set from storage manacore:out r.s2_b_damage
 execute store result storage zx:work es.u0 int 1 run data get entity @s UUID[0]
 execute store result storage zx:work es.u1 int 1 run data get entity @s UUID[1]
 execute store result storage zx:work es.u2 int 1 run data get entity @s UUID[2]

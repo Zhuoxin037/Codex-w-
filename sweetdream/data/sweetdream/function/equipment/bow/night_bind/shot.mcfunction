@@ -14,6 +14,8 @@ data modify storage manacore:in arg set value {uuid:"",attack_mul:5.0,independen
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
 data modify storage zx:work shot.damage set from storage manacore:out r.damage
+data modify storage zx:work shot.s2_b_damage set value {n:0,d:1}
+data modify storage zx:work shot.s2_b_damage set from storage manacore:out r.s2_b_damage
 tag @s add zx.shot_owner
 execute as @e[type=#sweetdream:cc_arrow,tag=!zx.review_bound,distance=..16,nbt={HasBeenShot:0b}] run function sweetdream:internal/bow/bind
 tag @s remove zx.shot_owner

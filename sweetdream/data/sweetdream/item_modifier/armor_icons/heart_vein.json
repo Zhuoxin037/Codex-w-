@@ -1,0 +1,11 @@
+{
+  "function": "minecraft:set_components",
+  "components": {
+    "minecraft:item_model": "sweetdream:armor_heart_vein",
+    "minecraft:equippable": {
+      "slot": "chest",
+      "asset_id": "sweetdream:armor_heart_vein",
+      "equip_sound": "minecraft:item.armor.equip_netherite"
+    }
+  }
+}

@@ -7,7 +7,7 @@
 # 【★ 执行者保持玩家 ★】api/damage 靠 @s 是不是玩家决定击杀归属。
 # ============================================================
 
-$data modify storage zx:in arg set value {target:"@e[type=!#sweetdream:no_damage,tag=!zx.fi_hit,distance=..1.5]",damage:$(damage)}
+$data modify storage zx:in arg set value {target:"@e[type=!#sweetdream:no_damage,tag=!zx.fi_hit,distance=..1.5]",damage:$(damage),s2_b_damage:$(s2_b_damage)}
 function sweetdream:api/damage
 
 # 本轮已打: 把球内的全部生物标上(第二次采样时就不会重复打)

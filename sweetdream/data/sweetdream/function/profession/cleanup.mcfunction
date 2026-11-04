@@ -3,7 +3,11 @@ execute if score @s zx.job matches 1 if score @s zx.j_reborn matches 1.. run eff
 function sweetdream:profession/cleanup_owned
 execute if score @s zx.j_form matches 1 run function sweetdream:profession/twin/return
 function sweetdream:profession/twin/clean
+function sweetdream:equipment/axe/no_return/cancel
 function sweetdream:profession/berserker/clear
+function sweetdream:equipment/sword/wound_stitch/expire
+scoreboard players set @s zx.wp_until 0
+scoreboard players set @s zx.wp_switch 0
 scoreboard players set @s zx.j_orb 0
 scoreboard players set @s zx.j_prop 0
 scoreboard players set @s zx.j_cr_t 0
@@ -35,3 +39,4 @@ scoreboard players set @s zx.j_sor_t -1
 
 scoreboard players set @s zx.j_hd_book 0
 scoreboard players set @s zx.j_hd_sor 0
+function sweetdream:batch21/cleanup

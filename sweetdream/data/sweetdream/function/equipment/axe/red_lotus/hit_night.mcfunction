@@ -10,6 +10,8 @@
 # ============================================================
 
 data modify storage zx:work a.num set from storage zx:work rl.dmg3
+data modify storage zx:work a.s2_b_num set value {n:0,d:1}
+data modify storage zx:work a.s2_b_num set from storage zx:work rl.s2_b_dmg3
 function sweetdream:lib/num/plain
 data modify storage zx:work a.target set value "@e[type=!#sweetdream:no_damage,distance=..6]"
 data modify storage zx:work a.type set value "minecraft:player_attack"

@@ -29,7 +29,8 @@ execute rotated ~ 0 positioned ^ ^ ^0.25 unless block ~ ~1 ~ #minecraft:replacea
 execute rotated ~ 0 positioned ^ ^ ^0.25 if entity @e[type=!#sweetdream:no_damage,distance=..0.45] run scoreboard players set @s zx.dash 0
 
 # 还能走就挪一点, 然后把剩余步数减 1
-execute if score @s zx.dash matches 1.. rotated ~ 0 run tp @s ^ ^ ^0.25
+execute store success score #s2_moved zx.meta run execute if score @s zx.dash matches 1.. rotated ~ 0 run tp @s ^ ^ ^0.25
+execute if score #s2_moved zx.meta matches 1 at @s run function sweetdream:equipment/armor/empty_cicada/moved
 execute if score @s zx.dash matches 1.. run scoreboard players remove @s zx.dash 1
 
 # 走完了 / 被挡住了 -> 落点结算

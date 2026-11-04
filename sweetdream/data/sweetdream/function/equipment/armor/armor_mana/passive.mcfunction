@@ -110,6 +110,26 @@ execute if items entity @s armor.legs *[minecraft:custom_data~{zx:["late_dusk"]}
 #   ★ 两件必须**同时**穿着: 用两条 if 串起来（写成 `if ... if ...` 就是 AND）。
 execute if items entity @s armor.head *[minecraft:custom_data~{zx:["glimmer"]}] if items entity @s armor.legs *[minecraft:custom_data~{zx:["late_dusk"]}] run scoreboard players add #want zx.meta 50
 
+# ---- 批 20(2026-10-27)· 枢/承/空营/独行/溢流/蓄意/踏空/屏息 ----
+#   枢(头盔) +120 / 承(腿) +140 / 空营(胸) +140 / 独行(靴) +120
+#   溢流(腿) +80 / 蓄意(胸) +150 / 踏空(靴) +50 / 屏息(头盔) +60
+#   ★ 数字逐字取自用户 2026-10-27 的文案。套装（枢+承 / 空营+独行）**不给**魔力上限。
+execute if items entity @s armor.head *[minecraft:custom_data~{zx:["pivot"]}] run scoreboard players add #want zx.meta 120
+execute if items entity @s armor.legs *[minecraft:custom_data~{zx:["bearing"]}] run scoreboard players add #want zx.meta 140
+execute if items entity @s armor.chest *[minecraft:custom_data~{zx:["empty_camp"]}] run scoreboard players add #want zx.meta 140
+execute if items entity @s armor.feet *[minecraft:custom_data~{zx:["lone_walk"]}] run scoreboard players add #want zx.meta 120
+execute if items entity @s armor.legs *[minecraft:custom_data~{zx:["overflow"]}] run scoreboard players add #want zx.meta 80
+execute if items entity @s armor.chest *[minecraft:custom_data~{zx:["intent"]}] run scoreboard players add #want zx.meta 150
+execute if items entity @s armor.feet *[minecraft:custom_data~{zx:["air_step"]}] run scoreboard players add #want zx.meta 50
+execute if items entity @s armor.head *[minecraft:custom_data~{zx:["breath_hold"]}] run scoreboard players add #want zx.meta 60
+
+# ---- 批 21(2026-11-01)· 第三批职业装备 ----
+#   肉盾(胸) +200。★ 数字逐字取自用户原文"自身魔力值上限 +200"。
+#   ★ 2026-11-01 首轮漏登记 —— lore 写了 +200, 穿上却一分不加, 且没有任何日志。
+#     凡是盔甲件, give 里写了"魔力值上限 +N"就**必须**在这张表里再写一行, 两边是
+#     两套独立系统, 少一边就是静默失效。
+execute if items entity @s armor.chest *[minecraft:custom_data~{zx:["bulwark"]}] run scoreboard players add #want zx.meta 200
+
 # ---- ④ 差值 = 该有的 - 账本已加的; 不为 0 就补/退 ----
 scoreboard players operation #diff zx.meta = #want zx.meta
 scoreboard players operation #diff zx.meta -= @s zx.am_mana
