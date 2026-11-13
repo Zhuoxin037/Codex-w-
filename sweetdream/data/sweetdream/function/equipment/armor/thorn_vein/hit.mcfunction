@@ -40,19 +40,9 @@ execute if score #tv_hp zx.meta >= #tv_half zx.meta run return 0
 
 # ④ 定位刚才这一下平A打的是哪一只；它必须**未**带「噬心」
 function sweetdream:lib/victim
-execute unless entity @e[tag=zx.victim,distance=0..,limit=1] run return 0
-execute as @e[tag=zx.victim,distance=0..,limit=1] if entity @s[tag=zx.status.shixin] run return 0
-
-# ⑤ 给它附加「噬心」（附着 -> tag/mark）
-data modify storage zx:work ic set value {target:"@e[tag=zx.victim,limit=1]",mark:"shixin"}
-function sweetdream:tag/mark with storage zx:work ic
-
-# ⑥ 自身获得 3 秒抗性提升Ⅰ
-effect give @s minecraft:resistance 3 0 true
-
-# ⑦ 表现 + 记账 + 收尾
-execute at @e[tag=zx.victim,limit=1] run particle minecraft:item{item:{id:"minecraft:pointed_dripstone",count:1}} ~ ~1 ~ 0.3 0.4 0.3 0.02 8 normal
-execute at @s run playsound minecraft:block.amethyst_cluster.break player @a ~ ~ ~ 0.5 1.5
-scoreboard players operation @s zx.thorn_cd = #now manacore.meta
-scoreboard players operation @s zx.thorn_cd += #200 zx.meta
-tag @e[tag=zx.victim] remove zx.victim
+execute unless data storage zx:victim context.vx_uuid run return 0
+data modify storage zx:work vx_frames append value {context:{}}
+data modify storage zx:work vx_frames[-1].context set from storage zx:victim context
+function sweetdream:equipment/armor/thorn_vein/hit/victim_body with storage zx:work vx_frames[-1].context
+data modify storage zx:victim context set from storage zx:work vx_frames[-1].context
+data remove storage zx:work vx_frames[-1]

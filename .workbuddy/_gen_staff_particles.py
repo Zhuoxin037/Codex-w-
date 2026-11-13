@@ -88,6 +88,11 @@ def SND(name, vol, pitch):
 #   style = 法杖的 zx[0](与 attack 里写的 style 同名)
 #   cn    = 中文名   theme = 一句话主题(写进文件头, 以后改风格时知道当初为什么这么画)
 SPECS = [
+
+    dict(style='intone', cn='引声', theme='歌者音叉 · 青金音符', trail=[P('note',.08,.08,.08,0,1),P(dust(.85,.72,.36,.8),.1,.1,.1,0,3)],hit=[P('note',.45,.35,.45,0,5),P('enchant',.3,.4,.3,.03,8),SND('block.note_block.chime',.6,1.4)]),
+    dict(style='lucid_illusion', cn='清醒与幻觉', theme='清醒镜面与紫色幻影', trail=[P('end_rod',.07,.07,.07,0,1),P(dust(.6,.42,.85,.85),.13,.13,.13,0,3)],hit=[P('reverse_portal',.35,.4,.35,.04,12),P('end_rod',.2,.3,.2,.02,6),SND('block.amethyst_block.chime',.65,1.6)]),
+    dict(style='surge_ebb', cn='潮涌，潮枯', theme='青白潮汐 · 水纹与回卷', trail=[P(dust(.25,.78,.82,.9),.09,.09,.09,0,4),P('falling_water',.1,.12,.1,0,1)],hit=[P('splash',.4,.25,.4,.08,14),P('dolphin',.3,.2,.3,.02,5),SND('entity.player.splash',.55,1.3)]),
+
     # ── 启示录: 灾示降临。金色符文 + 蜡屑(书页感), 不抢"终末天启"的白光
     dict(style='apocalypse', cn='启示录', theme='灾示 · 金符文与书页蜡屑',
          trail=[P(dust(1.0, 0.82, 0.35, 1.2), 0.12, 0.12, 0.12, 0, 8),
@@ -382,6 +387,19 @@ SPECS = [
     dict(style='star_burial', cn='埋葬', theme='埋葬 · 暗紫星光',
          trail=[P(dust(0.33, 0.2, 0.54, 1.1), 0.08, 0.08, 0.08, 0, 4), P('portal', 0.05, 0.05, 0.05, 0, 2)],
          hit=[P('flash', 0, 0, 0, 0, 1), SND('block.amethyst_block.chime', 0.5, 0.7)]),
+    # ── 2026-11-07 批 22：两把新法杖 ──
+    dict(style='skyfire', cn='天火', theme='天火 · 坠落的橙红火种',
+         trail=[P(dust(1.0, 0.45, 0.12, 1.0), 0.1, 0.1, 0.1, 0, 4),
+                P('flame', 0.1, 0.1, 0.1, 0.01, 3)],
+         hit=[P('flame', 0.5, 0.4, 0.5, 0.05, 20),
+              P('smoke', 0.4, 0.3, 0.4, 0.02, 8),
+              SND('entity.blaze.shoot', 0.7, 1.2)]),
+    dict(style='long_wish', cn='长愿', theme='长愿 · 淡紫符文与长明星光',
+         trail=[P(dust(0.72, 0.58, 0.92, 1.0), 0.09, 0.09, 0.09, 0, 4),
+                P('enchant', 0.1, 0.1, 0.1, 0.01, 2)],
+         hit=[P('enchant', 0.5, 0.5, 0.5, 0.06, 18),
+              P('end_rod', 0.3, 0.4, 0.3, 0.02, 6),
+              SND('block.amethyst_block.chime', 0.6, 1.3)]),
 ]
 
 # 兜底: 没写 style(或写了个不认识的)的新法杖, 至少别是"完全隐形"

@@ -65,3 +65,8 @@ $execute as $(by) if data storage zx:work mc{mark:"shixin"} if items entity @s a
 #    ★ 不按 src 过滤: 设计稿 §六 明确"指本包里**任意一次**对渊海的消费成功
 #      (不限哪个装备消费的)" ⇒ 装备被动顺手消费的也算(与 ④ 杂纹同口径)。
 $execute as $(by) if data storage zx:work mc{mark:"yuanhai"} if items entity @s armor.head *[minecraft:custom_data~{zx:["tide_fold"]}] run function sweetdream:equipment/armor/tide_fold/new
+
+# [batch22] ---- 2026-11-07 批 22：长愿领域内被消耗的通用标签 ----
+#   外层只看"场上有没有领域"(纯性能门控)；"被消耗者是否真在 8 格领域内"
+#   由 on_consume 叶子自己判。转移/伤害与消耗者手上拿什么无关。
+execute if entity @e[tag=zx.lw_field,limit=1] run function sweetdream:equipment/staff/long_wish/on_consume with storage zx:work mc

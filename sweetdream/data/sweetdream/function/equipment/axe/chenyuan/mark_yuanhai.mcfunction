@@ -1,11 +1,8 @@
-# ============================================================
-# sweetdream:equipment/axe/chenyuan/mark_yuanhai —— 为刚打中的生物附加「渊海」
-# ------------------------------------------------------------
-# 【执行者】玩家   【目标】zx.victim
-# 【走通用标签接口】这样头顶会有渊海的图标, 也能被别的效果(深海回响 / 击杀进度)认出来。
-# ============================================================
 
-data modify storage zx:work ic set value {target:"@e[tag=zx.victim]",mark:"yuanhai"}
-function sweetdream:tag/mark with storage zx:work ic
-execute at @e[tag=zx.victim] run particle minecraft:bubble ~ ~1 ~ 0.4 0.4 0.4 0.03 14 normal
-execute at @s run playsound minecraft:block.conduit.ambient player @a ~ ~ ~ 0.5 1.4
+execute if data storage zx:work vx_frames[-1].context run data modify storage zx:victim context set from storage zx:work vx_frames[-1].context
+execute unless data storage zx:victim context.vx_uuid run return 0
+data modify storage zx:work vx_frames append value {context:{}}
+data modify storage zx:work vx_frames[-1].context set from storage zx:victim context
+function sweetdream:equipment/axe/chenyuan/mark_yuanhai/victim_body with storage zx:work vx_frames[-1].context
+data modify storage zx:victim context set from storage zx:work vx_frames[-1].context
+data remove storage zx:work vx_frames[-1]

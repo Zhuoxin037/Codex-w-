@@ -221,10 +221,13 @@ def _line(x0, y0, x1, y1):
 
 
 def _offhand_master(item_id):
-    """三件副手重绘的唯一画稿；只读取 PNG，不再用旧程序图案覆盖。"""
-    path = os.path.join(ROOT, 'tools', 'art', 'offhand_20261018', item_id + '.png')
-    with Image.open(path) as image:
-        return image.convert('RGBA')
+    """Use the current full-RP PNG; fallback is the approved native source."""
+    from pathlib import Path
+    root = Path(__file__).resolve().parents[1]
+    name = 'tool_' + item_id + '.png'
+    live = root / 'sweetdream_rp_完整版/assets/sweetdream/textures/item/vanilla' / name
+    source = live if live.exists() else root / 'tools/art/native_icons_20261113' / name
+    return Image.open(source).convert('RGBA')
 
 
 def art_coffin_silk():

@@ -14,5 +14,5 @@ execute unless score @s zx.job matches 1 run return 0
 function sweetdream:lib/atk_charge
 execute unless score @s zx.atk_ok matches 1 run return 0
 
-execute if items entity @s weapon.mainhand diamond_axe[custom_data~{zx:["throe"]}] run function sweetdream:equipment/axe/throe/hit_go
+execute if items entity @s weapon.mainhand diamond_axe[custom_data~{zx:["throe"]}] run return run function sweetdream:equipment/axe/throe/hit_go
 execute if items entity @s weapon.offhand diamond_axe[custom_data~{zx:["throe"]}] run function sweetdream:equipment/axe/throe/hit_go

@@ -1,19 +1,8 @@
-# ============================================================
-# sweetdream:equipment/sword/crescent/pass1 —— 1 个技能在冷却
-# ------------------------------------------------------------
-# 【原文】"只有 1 个技能正在冷却：普通攻击额外造成相当于自身基础攻击力 ×2 的伤害。"
-# 【执行者】玩家   【目标】被击中的那一只(zx.victim)
-# 【伤害口径】基础攻击力 ×2 -> attack_mul 通道。
-# ============================================================
 
-data modify storage manacore:in arg set value {uuid:"",attack_mul:2.0}
-data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function manacore:api/damage/calc
-
-data modify storage zx:in arg set value {target:"@e[tag=zx.victim]",damage:0.0}
-data modify storage zx:in arg.damage set from storage manacore:out r.damage
-data modify storage zx:in arg.s2_b_damage set value {n:0,d:1}
-data modify storage zx:in arg.s2_b_damage set from storage manacore:out r.s2_b_damage
-execute at @s run function sweetdream:api/damage
-
-execute at @s run particle minecraft:enchanted_hit ~ ~1 ~ 0.4 0.5 0.4 0.04 10 normal
+execute if data storage zx:work vx_frames[-1].context run data modify storage zx:victim context set from storage zx:work vx_frames[-1].context
+execute unless data storage zx:victim context.vx_uuid run return 0
+data modify storage zx:work vx_frames append value {context:{}}
+data modify storage zx:work vx_frames[-1].context set from storage zx:victim context
+function sweetdream:equipment/sword/crescent/pass1/victim_body with storage zx:work vx_frames[-1].context
+data modify storage zx:victim context set from storage zx:work vx_frames[-1].context
+data remove storage zx:work vx_frames[-1]

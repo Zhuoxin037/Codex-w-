@@ -2458,7 +2458,12 @@ def _dur_map(name, objpat):
     if fnk not in functions:
         return out
     pat = re.compile(r'scoreboard players set \S+ (' + objpat + r') (\d+)\b')
-    for l in ftext(fnk).split('\n'):
+    text = ftext(fnk)
+    # UUID-bound legacy entry points delegate their original body to a macro leaf.
+    leaf = fnk + '/victim_body'
+    if leaf in functions and ('function ' + leaf + ' with storage') in text:
+        text += '\n' + ftext(leaf)
+    for l in text.split('\n'):
         s = l.strip()
         if s.startswith('#'):
             continue

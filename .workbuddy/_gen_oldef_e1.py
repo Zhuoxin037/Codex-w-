@@ -63,7 +63,9 @@ def head_json(mana, cd):
 
 def lore_json(parts):
     out = []
-    for (title, mana, cd, body) in parts:
+    for section_index, (title, mana, cd, body) in enumerate(parts):
+        if section_index:
+            out.append('{"text":" ","italic":false}')
         out.append('{"text":"%s","color":"gold","bold":true,"italic":false}' % esc(title))
         if mana:
             out.append(head_json(mana, cd))

@@ -1,10 +1,10 @@
 {
-    "criteria": {
-        "hurt": {
-            "trigger": "entity_hurt_player"
-        }
-    },
-    "rewards": {
-        "function": "sweetdream:equipment/armor/bulwark/hurt"
+  "criteria": {
+    "hurt": {
+      "trigger": "minecraft:impossible"
     }
+  },
+  "rewards": {
+    "function": "sweetdream:equipment/armor/bulwark/hurt"
+  }
 }

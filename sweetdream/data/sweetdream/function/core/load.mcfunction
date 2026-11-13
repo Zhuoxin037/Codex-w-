@@ -3509,6 +3509,7 @@ scoreboard objectives add zx.bw_gate dummy
 # 牺牲：流血开关 / 每秒掉血量 / 目标血线 / 结束刻 / 攻击力账本
 scoreboard objectives add zx.sc_on dummy
 scoreboard objectives add zx.sc_dps dummy
+scoreboard objectives add zx.sc_step dummy
 scoreboard objectives add zx.sc_floor dummy
 scoreboard objectives add zx.sc_until dummy
 scoreboard objectives add zx.sc_atk dummy
@@ -3538,4 +3539,32 @@ scoreboard objectives add zx.se_end dummy
 scoreboard objectives add zx.se_b_until dummy
 scoreboard objectives add zx.se_b_atk dummy
 scoreboard objectives add zx.se_b_mm dummy
+# [batch22] ---- 2026-11-07 批 22：12 件新装备的计分项 ----
+scoreboard objectives add zx.ab_paid dummy
+scoreboard objectives add zx.pi_paid dummy
+scoreboard objectives add zx.pi_step dummy
+scoreboard objectives add zx.sf_orb dummy
+scoreboard objectives add zx.sf_end dummy
+scoreboard objectives add zx.sf_due dummy
+scoreboard objectives add zx.lw_end dummy
+scoreboard objectives add zx.lb_prev dummy
+scoreboard objectives add zx.lb_end dummy
+scoreboard objectives add zx.lb_next dummy
+scoreboard objectives add zx.lb_ext dummy
+scoreboard objectives add zx.lb_hacc dummy
+scoreboard objectives add zx.stc_on dummy
+scoreboard objectives add zx.stc_sum dummy
+scoreboard objectives add zx.stc_until dummy
+scoreboard objectives add zx.pf_cd dummy
+scoreboard objectives add zx.pf_atk dummy
+scoreboard objectives add zx.pf_until dummy
+scoreboard objectives add zx.pf_on dummy
+scoreboard objectives add zx.fs_i dummy
+scoreboard objectives add zx.fs_px dummy
+scoreboard objectives add zx.fs_pz dummy
+scoreboard objectives add zx.fs_acc dummy
+scoreboard objectives add zx.fd_prev dummy
+scoreboard objectives add zx.fd_cd dummy
+scoreboard objectives add zx.fd_end dummy
+
 function sweetdream:rogue/load

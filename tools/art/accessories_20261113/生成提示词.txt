@@ -1,0 +1,25 @@
+Use case: style-transfer / game sprite atlas editing.
+Make ONE production sprite atlas for a Minecraft Java vanilla-compatible resource pack. The attached first image is the untouched observer/spyglass STYLE reference; the second is the current accessory inventory, identifying established silhouettes. It must feel hand-pixelled like Minecraft's spyglass, nautilus shell, totem, recovery compass and enchanted book: distinctive tangible objects, rich but restrained material pixels. The last overly plain version lost all object identity; do NOT repeat that. But avoid elaborate jewel icons, ornate gold borders, tiny glitter, painted fantasy RPG assets or lots of isolated bright pixels.
+Output: transparent 1024x1024 canvas, exactly 4 equal columns x 4 equal rows, one centered sprite per 256x256 cell. Each sprite represents a STRICT 16x16-pixel item, enlarged nearest-neighbor by 16: every visible pixel is a clean flat square on that shared grid. Fill about 12-15 logical pixels of each 16px tile. No text, labels, guides, frames, shadows on the background or checkerboard. True transparent background.
+Pixel language: roughly 12-20 purposeful colors per object, dark hue-shifted local outlines, 3-5 clustered shades per main material, small directional top-left highlight, darker structural joints, 1-2 meaningful wear/texture pixels where appropriate. Volume built from broad clusters plus selective small details. Detail density like the observer spyglass reference, NOT flat generic symbols or simple recolors. Retain each item's recognizable distinctive silhouette.
+ROW 1 left to right:
+1 Bitter Cold: asymmetric six-armed icy snowflake charm, frosted blue edges, darker ice inner joins and a small clear cyan center, NOT a simple crystal shard.
+2 Blaze Plume: curved diagonal orange-red feather with dark warm quill, grouped flame-shaped barbs, amber tip, a small restrained dark binding at its base.
+3 Coffin Silk: diagonal bone-capped red thread spool with clearly wound crimson bands, a steel needle and a short loose loop of red thread; compact tangible sewing object.
+4 Dream Waker: small brass waking device / pocket alarm instrument, readable pale dial and a purple inset needle, dark iron side lever, top winding knob. Asymmetric practical construction, not a jeweled medallion.
+ROW 2:
+5 Echo Harmony: two small bronze chime bells of DIFFERENT lengths hanging from a curved blue-gray cord, visible dark bell mouths, brass clappers, connected physical construction, understated.
+6 Everlit: tiny hooded blue-gray lantern spirit, hood and glowing cyan eyes, dark short robe and small hand-held brass lamp, front-three-quarter pose, no legs, readable silhouette, no surrounding halo. NOT a lone lantern.
+7 Frost Mirror: diagonally tilted icy silver hand mirror with clearly oval blue glass, one stepped diagonal reflective streak, dark icy rim, short connected handle, restrained frost corner. NOT a flat blue circle.
+8 Grimoire: closed teal leather magic book at a diagonal, cream page block and spine thickness, dark leather corner wear, small silver latch and subtle cyan cover mark. NOT all the same blue.
+ROW 3:
+9 Extracorporeal Mana Pump: vertical dark steel pump cartridge with purple glass reservoir, upper paired intake tubes of DIFFERENT height, small brass piston/gauge, connected side hose. Clear physical mechanical construction, not a plain rectangular bottle.
+10 Nullify: heavy dark gray iron ring seal, interrupted rim and a single diagonal crossing steel bar. Distinguishable thickness, no jewel, its empty center is important.
+11 Retro Shine: warm bronze-rimmed round hand mirror at an angle, ivory glass with a white diagonal reflected streak and subtle lilac shadow, dark wooden grip. Distinct from the cool oval Frost Mirror.
+12 Seraph Wing: compact connected PAIR of ivory and pale-gold wings curving upward around a small dark gold base, individually stepped feather layers, keep large negative space between wings. NOT one feather.
+ROW 4:
+13 Sip Frost: shallow frosted-silver goblet, dark elliptical rim with cyan ice/water inside, stem and broad foot, one asymmetrical small frost edge. Recognizable cup, not a badge.
+14 Thunder: thick jagged warm gold lightning-shaped talisman, darker ochre side thickness, selective pale edge and dark metal small attachment base. NOT a flint pebble with a rune.
+15 Tide Buckle: horizontal aged-brass oval clasp, short dark blue strap ends on both sides, central blue wave-shaped engraved opening, one visible metal prong. Distinctly a belt buckle, not a square jewel pendant.
+16 Wrath: dark red angry carved mask, angular brows, recessed black-red eyes with restrained amber eye pixels, cheek planes and short pointed jaw. A shaped mask, not a flat red face circle.
+Preserve strict grid and transparent space between all sprites. This is the ACTUAL pixel sprite source, not a concept painting.

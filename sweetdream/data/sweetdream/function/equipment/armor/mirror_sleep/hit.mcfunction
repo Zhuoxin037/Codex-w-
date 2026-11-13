@@ -27,15 +27,9 @@ execute unless items entity @s armor.legs *[minecraft:custom_data~{zx:["mirror_s
 
 # ② 定位命中的那一只（定位不到就当这一发没发生 —— 宁可少算一次，也不乱计数）
 function sweetdream:lib/victim
-execute unless entity @e[tag=zx.victim,distance=0..,limit=1] run return 0
-
-# ③ 【兑现】攒满了吗 + 目标未带白昼梦吗 -> 扣 30 魔力并附加
-execute if score @s zx.ms_arm matches 1 unless entity @e[tag=zx.victim,distance=0..,limit=1,tag=zx.status.dream] run function sweetdream:equipment/armor/mirror_sleep/apply
-
-# ④ 【计数】攻击次数 +1；满 3 则归零并武装
-scoreboard players add @s zx.ms_cnt 1
-execute if score @s zx.ms_cnt matches 3.. run scoreboard players set @s zx.ms_cnt 0
-execute if score @s zx.ms_cnt matches 0 run scoreboard players set @s zx.ms_arm 1
-
-# ⑤ 收尾
-tag @e[tag=zx.victim] remove zx.victim
+execute unless data storage zx:victim context.vx_uuid run return 0
+data modify storage zx:work vx_frames append value {context:{}}
+data modify storage zx:work vx_frames[-1].context set from storage zx:victim context
+function sweetdream:equipment/armor/mirror_sleep/hit/victim_body with storage zx:work vx_frames[-1].context
+data modify storage zx:victim context set from storage zx:work vx_frames[-1].context
+data remove storage zx:work vx_frames[-1]

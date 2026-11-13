@@ -27,17 +27,9 @@ execute unless score @s zx.atk_ok matches 1 run return 0
 
 # ⑤ 钉死刚被自己打中的那只
 function sweetdream:lib/victim
-execute unless entity @e[tag=zx.victim,distance=0..,limit=1] run return 0
-
-# ⑥ 消费这次机会, 并时停它 1 秒
-tag @s remove zx.mv_ts
-data modify storage zx:work fz.target set value "@e[tag=zx.victim,distance=0..,limit=1]"
-data modify storage zx:work fz.ticks set value 20
-function sweetdream:lib/timestop with storage zx:work fz
-
-# ⑦ 表现: 纹路在它身上定住
-execute at @e[tag=zx.victim,distance=0..,limit=1] run particle minecraft:dust{color:[0.42,0.1,0.62],scale:1.4} ~ ~1 ~ 0.4 0.5 0.4 0.01 14 normal
-execute at @e[tag=zx.victim,distance=0..,limit=1] run playsound minecraft:block.amethyst_block.resonate player @a ~ ~ ~ 0.6 0.6
-
-# ⑧ 收尾
-tag @e[tag=zx.victim] remove zx.victim
+execute unless data storage zx:victim context.vx_uuid run return 0
+data modify storage zx:work vx_frames append value {context:{}}
+data modify storage zx:work vx_frames[-1].context set from storage zx:victim context
+function sweetdream:equipment/armor/mottle_vein/hit/victim_body with storage zx:work vx_frames[-1].context
+data modify storage zx:victim context set from storage zx:work vx_frames[-1].context
+data remove storage zx:work vx_frames[-1]

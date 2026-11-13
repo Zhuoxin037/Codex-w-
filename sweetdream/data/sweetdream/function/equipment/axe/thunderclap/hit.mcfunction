@@ -40,14 +40,9 @@ scoreboard players operation @s zx.tc_lt = #now manacore.meta
 
 # 定位被击的那一只
 function sweetdream:lib/victim
-execute unless entity @e[tag=zx.victim,distance=0..,limit=1] run return 0
-
-# ① 已经有术阵 -> 在术阵内落雷(见 bolt)
-execute if score @s zx.tc_on matches 1 run function sweetdream:equipment/axe/thunderclap/bolt
-execute if score @s zx.tc_on matches 1 run tag @e[tag=zx.victim,distance=0..] remove zx.victim
-execute if score @s zx.tc_on matches 1 run return 0
-
-# ② 没术阵 + 天煌 >0 -> 扣除 min(魔力,天煌) 点魔力并在被击者处开一个术阵(X 按实际消耗算)
-execute if score @s zx.tc_n matches ..0 run return 0
-function sweetdream:equipment/axe/thunderclap/open
-tag @e[tag=zx.victim,distance=0..] remove zx.victim
+execute unless data storage zx:victim context.vx_uuid run return 0
+data modify storage zx:work vx_frames append value {context:{}}
+data modify storage zx:work vx_frames[-1].context set from storage zx:victim context
+function sweetdream:equipment/axe/thunderclap/hit/victim_body with storage zx:work vx_frames[-1].context
+data modify storage zx:victim context set from storage zx:work vx_frames[-1].context
+data remove storage zx:work vx_frames[-1]

@@ -53,6 +53,7 @@ BAD_RUN = re.compile(r"\brun\s+(if|unless)\s+")
 # 需要"唯一实体"的两个位置。选择器 token = 从 @ 开始到空白/行尾（选择器里没有空格）。
 UNIQ_ENTITY = re.compile(r"\b(?:data\s+(?:get|modify|merge)|store\s+(?:result|success))"
                          r"\s+entity\s+(@[^ ]*)")
+DAMAGE_TARGET = re.compile(r"\bdamage\s+(@[^ ]*)")
 
 # ④ scoreboard players operation 必须 5 段
 OP_LINE = re.compile(r"\bscoreboard\s+players\s+operation\s+(.*)$")
@@ -86,6 +87,9 @@ def scan(path):
                     out.append((no, "data/store entity 的选择器允许多个实体"
                                     "(加 limit=1, 否则整个函数作废)",
                                 s[:90]))
+            for sel in DAMAGE_TARGET.findall(s):
+                if sel.startswith(("@e", "@a")) and "limit=1" not in sel:
+                    out.append((no, "damage 只允许唯一目标；范围伤害需逐实体执行", s[:90]))
             # ④ scoreboard players operation 必须 5 段
             m = OP_LINE.search(s)
             if m:
@@ -128,7 +132,7 @@ def main():
                     total += len(hits)
     print("---- 扫描 %d 个 .mcfunction" % files)
     print("---- 问题 %d 处" % total)
-    return 0
+    return 1 if total else 0
 
 
 if __name__ == "__main__":

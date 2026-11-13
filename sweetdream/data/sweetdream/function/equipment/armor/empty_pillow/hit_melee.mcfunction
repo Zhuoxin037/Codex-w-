@@ -25,12 +25,9 @@ execute unless items entity @s armor.head *[minecraft:custom_data~{zx:["empty_pi
 
 # ③ 钉死刚命中的那一只
 function sweetdream:lib/victim
-execute unless entity @e[tag=zx.victim,distance=0..,limit=1] run return 0
-
-# ④ 交给 on_deal（它认 zx.ep_vic：记"造成伤害时刻" + 兑现静息）
-scoreboard players set @e[tag=zx.victim] zx.ep_vic 1
-function sweetdream:equipment/armor/empty_pillow/on_deal
-scoreboard players reset @e[scores={zx.ep_vic=1}] zx.ep_vic
-
-# ⑤ 清掉受害者的临时标签（lib/victim 自己会清，这里只是兜底）
-tag @e[tag=zx.victim] remove zx.victim
+execute unless data storage zx:victim context.vx_uuid run return 0
+data modify storage zx:work vx_frames append value {context:{}}
+data modify storage zx:work vx_frames[-1].context set from storage zx:victim context
+function sweetdream:equipment/armor/empty_pillow/hit_melee/victim_body with storage zx:work vx_frames[-1].context
+data modify storage zx:victim context set from storage zx:work vx_frames[-1].context
+data remove storage zx:work vx_frames[-1]

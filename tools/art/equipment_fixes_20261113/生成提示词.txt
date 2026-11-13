@@ -1,0 +1,28 @@
+Create ONE transparent pixel sprite atlas for fixing 20 existing Minecraft equipment icons. These are ONLY the previously flagged equipment, not a redesign of the entire pack. Image 1 is the style reference observer spyglass; image 2 is the REJECTED overly plain equipment version, whose generic recolored silhouettes must be redesigned.
+Aim for vanilla Minecraft resource-pack pixel workmanship: recognizable practical silhouettes, textured materials, one useful distinctive feature per object, crisp large clusters at a 16x16 native sprite scale, about 14-22 local colors. Between plain vanilla recolors and over-ornate fantasy jeweled weapons. No busy gold borders, no repeated gems, no floating glitter, no gradients, no outlines around empty air. Do not merely recolor the same weapon. Keep objects legible in inventory.
+Layout exactly FIVE columns and FOUR rows, one full item centered per equal tile. True transparent background, no labels/text/grid/frames, clean separations. Objects are 16x16-pixel designs nearest-neighbor enlarged, each logical pixel a crisp square. Diagonal weapons lower left to upper right; no clipping.
+ROW1:
+1 Bulwark: chunky asymmetrical dark maroon steel chestplate icon, reinforced iron shoulder at one side, central dark rib panel, scuffed rose metal rim; actual wearable armor silhouette.
+2 Falling Deep: a pair of deep navy armored boots, dark layered cuffs with small steel toe caps, one muted blue current line; distinct long boots.
+3 Frost Step: a pair of pale blue-gray boots, fur-like pale cuffs and icy forward toe edges, darker leather seams; different contour from Falling Deep.
+4 Long Blessing: pale silver helmet with simple two-piece warm brass brow and one blue hanging side strip; no crown of spikes, readable helmet opening.
+5 Purge Fire: dark warm steel chestplate, subtle ember-red central vertical vent and small copper lower side plates; not flame-shaped armor.
+ROW2:
+1 Detach: single-bearded teal steel axe, a clear small notch in the outer edge and short diagonal handle, leather binding at the joint, purposeful broad edge.
+2 Throe: compact double hooked dark violet battle axe, two unequal lobes and gray sharpened edges, thick dark handle, no jewel.
+3 Ablation: pale gray crossbow, broad ivory-iron bow arms with dark layered tips, warm brown wooden stock, tiny icy blue latch; genuine crossbow including string.
+4 Pierce: narrower angular dark ocean-teal crossbow, long reinforced iron front rail, dark wooden grip, visible bow string, tiny brass joint; distinct from Ablation.
+5 Intone: warm wood tuning-fork staff, curved bronze double prongs, inner steel resonator tongue, one restrained blue cloth knot, grain pixels on substantial shaft.
+ROW3:
+1 Long Wish: pale wooden staff with small crescent brass head around a smoky lilac inner crescent, connected joint, one short linen tie.
+2 Lucid Illusion: dark slate staff, asymmetrical half-moon open ring head with cloudy pale-blue inset on one half and purple-dark hollow on the other; only one restrained visual idea.
+3 Skyfire: dark charred wooden staff ending in a sturdy small copper brazier with a compact two-tone orange flame, visible cupped rim, no huge effects.
+4 Surge Ebb: a weathered brown staff topped by curled teal fork / wave hook with a genuine negative-space curl and pale foam edge, leather wrap, connected construction.
+5 Aftersound: lean dusky violet steel sword, two small orderly cutouts near the broad root, bright silver cutting edge, understated forked dark guard, textured handle.
+ROW4:
+1 Gather Energy: silver short sword with thickened root, narrow recessed pale cyan central channel and copper collar at blade root, simple dark wood grip.
+2 Refrain: broad pale violet steel sword with an asymmetrical small bronze crossguard / tuning-fork guard, one darker curved etched pixel line near blade base; readable cutting edge.
+3 Sacrifice: deep rust red sword, darkened steel sharpened outer edge, small bone-colored crosspiece, substantial leather handle; hooked or stepped tip.
+4 Stance: broad straight slate steel sword with a squared pointed tip, angular heavier one-sided steel guard and dark grip, small warm rivet. Make its silhouette firm and weighty.
+5 Wound Stack: serrated dark red sword with THREE large readable notches along the back edge, pale steel front cutting edge, black iron guard and red-brown leather grip; not random spikes.
+Retain pixel texture on each material, not blank big single-color plates. No invented text or decoration substituting for an actual silhouette.

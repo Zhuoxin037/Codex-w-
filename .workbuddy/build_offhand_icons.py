@@ -622,10 +622,26 @@ ICONS = [
     ('blaze_plume', '炽翎',       '燃烧羽翎 · 延长点燃',        art_blaze_plume),
     ('mana_pump',   '体外魔力泵', '魔力罐 + 竖窗 · 上限 +120',  art_mana_pump),
     ('nullify',     '无效',       '禁制环符 · 技能伤害 +20%',   art_nullify),
-    ('seraph_wing', '炽天使之翼', '白金双翼 · 攻击力技能 +50%', art_seraph_wing),
+    ('seraph_wing', '炽天使之翼', '象牙白六翼 · 攻击力技能 +50%', art_seraph_wing),
     ('thunder',     '雷鸣',       '折线闪电 · 二次落雷',        art_thunder),
     ('wrath',       '愠怒',       '怒面 · 低血强化',            art_wrath),
 ]
+# 2026-11-13 approved native-pixel sources. The live RP remains authoritative.
+def _native_accessory_source(ident, previous):
+    def draw():
+        from pathlib import Path
+        root = Path(__file__).resolve().parents[1]
+        filename = 'tool_' + ident + '.png'
+        live = root / 'sweetdream_rp_完整版/assets/sweetdream/textures/item/vanilla' / filename
+        source = live if live.exists() else root / 'tools/art/native_icons_20261113' / filename
+        image = Image.open(source).convert('RGBA')
+        _old_image, colors, _old_mask = previous()
+        return image, colors, mask_from_image(image)
+    return draw
+
+ICONS = [(ident, name, motif, _native_accessory_source(ident, draw))
+         for ident, name, motif, draw in ICONS]
+
 NAMECOL = {'bitter_cold': 'aqua', 'blaze_plume': 'red', 'mana_pump': 'light_purple',
            'nullify': 'dark_gray', 'seraph_wing': 'gold', 'thunder': 'yellow',
            'wrath': 'dark_red'}

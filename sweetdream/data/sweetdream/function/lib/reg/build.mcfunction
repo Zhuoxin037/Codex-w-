@@ -660,6 +660,20 @@ data modify storage zx:reg names.throe set value "痛楚"
 data modify storage zx:reg names.intone set value "引声"
 data modify storage zx:reg names.aftersound set value "余响"
 data modify storage zx:reg names.surge_ebb set value "潮涌，潮枯"
+
+# [batch22] ---- 2026-11-07 批 22：12 件中文名 ----
+data modify storage zx:reg names.ablation set value "消融"
+data modify storage zx:reg names.long_blessing set value "绵长无尽的祝福"
+data modify storage zx:reg names.long_wish set value "长愿"
+data modify storage zx:reg names.gather_energy set value "聚能"
+data modify storage zx:reg names.skyfire set value "天火"
+data modify storage zx:reg names.pierce set value "穿孔"
+data modify storage zx:reg names.wound_stack set value "积伤"
+data modify storage zx:reg names.stance set value "架势"
+data modify storage zx:reg names.refrain set value "续唱"
+data modify storage zx:reg names.purge_fire set value "涤火"
+data modify storage zx:reg names.frost_step set value "步霜"
+data modify storage zx:reg names.falling_deep set value "落溟"
 data modify storage zx:reg b append value {l:"生命上限",o:"zx.s2_ec_hp",c:"red",n:"",e:"empty_cicada"}
 data modify storage zx:reg b append value {l:"基础攻击力",o:"zx.s2_ec_atk",c:"gold",n:"",e:"empty_cicada"}
 data modify storage zx:reg b append value {l:"魔力上限",o:"zx.s2_ss_mana",c:"aqua",n:"",e:"still_sky"}

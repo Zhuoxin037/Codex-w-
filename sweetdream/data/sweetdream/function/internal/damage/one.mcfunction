@@ -38,6 +38,7 @@ execute if data storage zx:work ob.ay store result score #stg_ay zx.meta run dat
 #     改成**整份 set from ob**: ob 是这批伤害的不可变快照(见 with_from),
 #     每只目标开打前一律拉回它, 中途谁改过 a 都不影响, 与目标顺序无关。
 data modify storage zx:work a set from storage zx:work ob
+execute if entity @s[tag=zx.pn_vul] unless data storage zx:work a{pn_extra:1b} run function sweetdream:equipment/axe/throe/settle
 function sweetdream:upgrade/breach/target
 
 # ①.5c 天穹「升痕」加伤: 目标带升痕 + 这一击"来自比它更高处" -> 本次伤害 ×(1+5%×层数)
@@ -245,4 +246,5 @@ execute if data storage zx:work hit_success_stack[-1].result{ok:1b} if data stor
 execute if data storage zx:work hit_success_stack[-1].result{ok:1b} if data storage zx:work ob{s2_echo:1b} run data modify storage zx:b21 echo_stack[-1].ok set value 1b
 execute if data storage zx:work hit_success_stack[-1].result{ok:1b} if data storage zx:work ob{s2_scene:1b} run tag @s add zx.s2_scene_landed
 # Always pop after all victim-side callbacks; nested one calls have their own entry.
+execute if entity @s[tag=zx.pn_vul] run function sweetdream:equipment/axe/throe/stamp
 data remove storage zx:work hit_success_stack[-1]

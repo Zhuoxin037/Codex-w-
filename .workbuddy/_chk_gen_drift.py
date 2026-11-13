@@ -42,7 +42,10 @@ def _body(p):
 # 所有"直接写 equipment/*/give.mcfunction"的生成器都要登记在这里。
 GENERATORS = ('_gen_batch5.py', '_gen_batch6.py', '_gen_batch7.py', '_gen_new42.py',
               '_gen_batch17.py', '_gen_batch18.py', '_gen_batch13_give.py',
-              '_gen_batch20.py')
+              '_gen_batch20.py',
+              # 2026-11-07 稀有度：后处理生成器必须排在最后，否则上面 8 个生成器
+              # 产出的 give 不含档位眉批 / custom_data.rarity，会被误判成漂移。
+              '_gen_rarity.py')
 
 
 def main():

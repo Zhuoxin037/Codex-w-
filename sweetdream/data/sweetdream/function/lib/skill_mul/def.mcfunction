@@ -375,3 +375,11 @@ data modify storage zx:config wchan.throe set value {mm:1b,atk:0b,oth:0b}
 #     新文件用了 max_mana_mul 就必须在这里登记，否则面板漏显示/归错列（静默）。
 data modify storage zx:config wchan.intone set value {mm:1b,atk:0b,oth:0b}
 data modify storage zx:config wchan.surge_ebb set value {mm:1b,atk:0b,oth:0b}
+
+# 2026-11-07 批 22：按技能文件实际使用的通道登记（面板分列显示用）。
+#   消融/穿孔 = 最大魔力值 ×N；长愿领域无附着目标时 = 最大魔力值 ×0.1；
+#   天火普通火球 = 基础攻击力 ×1、强化火球 = 最大魔力值 ×0.1（两条通道都占）。
+data modify storage zx:config wchan.ablation set value {mm:1b,atk:0b,oth:0b}
+data modify storage zx:config wchan.pierce set value {mm:1b,atk:0b,oth:0b}
+data modify storage zx:config wchan.long_wish set value {mm:1b,atk:0b,oth:0b}
+data modify storage zx:config wchan.skyfire set value {mm:1b,atk:1b,oth:0b}

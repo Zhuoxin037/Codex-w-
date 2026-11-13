@@ -365,7 +365,7 @@ execute as @a at @s run function sweetdream:batch21/second
 # 肉盾：抗性档（<50% Ⅱ / <30% Ⅳ）+ 受击攻加成到期
 execute as @a at @s run function sweetdream:equipment/armor/bulwark/second
 # 牺牲：流血每秒掉一格，到点或掉到 20% 收尾
-execute as @a[scores={zx.sc_on=1}] run function sweetdream:equipment/sword/sacrifice/second
+
 # 痛楚：2 秒易伤到期摘标签（三维度各一行 + distance=0..，裸 @e 会跨维度重复）
 execute in minecraft:overworld as @e[tag=zx.pn_vul,distance=0..] at @s run function sweetdream:equipment/axe/throe/sweep
 execute in minecraft:the_nether as @e[tag=zx.pn_vul,distance=0..] at @s run function sweetdream:equipment/axe/throe/sweep
@@ -399,3 +399,8 @@ execute in minecraft:the_end run kill @e[tag=zx.ex_sm_model,tag=!zx.ex_live,dist
 execute in minecraft:overworld run tag @e[tag=zx.ex_live,distance=0..] remove zx.ex_live
 execute in minecraft:the_nether run tag @e[tag=zx.ex_live,distance=0..] remove zx.ex_live
 execute in minecraft:the_end run tag @e[tag=zx.ex_live,distance=0..] remove zx.ex_live
+
+# [batch22] ---- 2026-11-07 批 22：落溟领域每秒一跳（三维度各一行）----
+execute in minecraft:overworld as @e[type=minecraft:marker,tag=zx.fd_field,distance=0..] at @s run function sweetdream:equipment/armor/falling_deep/field_tick
+execute in minecraft:the_nether as @e[type=minecraft:marker,tag=zx.fd_field,distance=0..] at @s run function sweetdream:equipment/armor/falling_deep/field_tick
+execute in minecraft:the_end as @e[type=minecraft:marker,tag=zx.fd_field,distance=0..] at @s run function sweetdream:equipment/armor/falling_deep/field_tick

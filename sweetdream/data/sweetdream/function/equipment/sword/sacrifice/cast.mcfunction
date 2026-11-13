@@ -41,7 +41,7 @@ function manacore:api/cooldown/start
 
 # 流血参数：4 秒线性流到最大生命值 20%
 function sweetdream:lib/max_health_score
-scoreboard players operation #sc_now zx.meta = @s zx.hp_c
+execute store result score #sc_now zx.meta run data get entity @s Health 1000
 scoreboard players set #sc_five zx.meta 5
 scoreboard players operation #sc_floor zx.meta = #max_hp zx.meta
 scoreboard players operation #sc_floor zx.meta /= #sc_five zx.meta
@@ -56,6 +56,7 @@ scoreboard players operation @s zx.sc_floor = #sc_floor zx.meta
 scoreboard players operation @s zx.sc_until = #now manacore.meta
 scoreboard players add @s zx.sc_until 80
 scoreboard players set @s zx.sc_on 1
+scoreboard players set @s zx.sc_step 0
 
 # 加成：施放时的基础攻击力 ×0.6（账本记 ×100）
 data modify storage manacore:in arg set value {uuid:"",key:"base_attack"}

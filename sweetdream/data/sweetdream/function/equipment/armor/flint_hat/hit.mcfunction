@@ -30,32 +30,9 @@ execute if score #fh_due zx.meta > #now manacore.meta run return 0
 
 # ③ 定位"刚才这一下平A打的是哪一只"（lib/victim：last_hurt_by_player + HurtTime 收窄）
 function sweetdream:lib/victim
-execute unless entity @e[tag=zx.victim,distance=0..,limit=1] run return 0
-
-# ④ 它必须**未**带「流火」（已经烧着的不用再点一次）
-execute as @e[tag=zx.victim,distance=0..,limit=1] if entity @s[tag=zx.status.liuhuo] run return 0
-
-# ⑤ 拿 uuid（下面扣魔力的公共输入口要它）
-function sweetdream:lib/uuid
-execute unless data storage zx:data self{ok:1b} run return 0
-
-# ⑥ 消耗 20 魔力（够才扣；不够就直接收工，什么都不做）
-data modify storage manacore:in arg set value {uuid:"",value:20.0}
-data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
-function sweetdream:lib/mana/pay_pas
-execute unless data storage manacore:out r{success:1b} run return 0
-
-# ⑦ 给它附加「流火」（附着 -> tag/mark；tag/mark 内部会一并挂上 15 秒计时与图标）
-data modify storage zx:work ic set value {target:"@e[tag=zx.victim,limit=1]",mark:"liuhuo"}
-function sweetdream:tag/mark with storage zx:work ic
-
-# ⑧ 表现
-execute at @e[tag=zx.victim,limit=1] run particle minecraft:flame ~ ~0.6 ~ 0.3 0.4 0.3 0.01 8 normal
-execute at @s run playsound minecraft:item.flintandsteel.use player @a ~ ~ ~ 0.6 1.2
-
-# ⑨ 记下"下次可触发刻"（现在 + 160 刻 = 8 秒）
-scoreboard players operation @s zx.fh_cd = #now manacore.meta
-scoreboard players operation @s zx.fh_cd += #160 zx.meta
-
-# ⑩ 收尾
-tag @e[tag=zx.victim] remove zx.victim
+execute unless data storage zx:victim context.vx_uuid run return 0
+data modify storage zx:work vx_frames append value {context:{}}
+data modify storage zx:work vx_frames[-1].context set from storage zx:victim context
+function sweetdream:equipment/armor/flint_hat/hit/victim_body with storage zx:work vx_frames[-1].context
+data modify storage zx:victim context set from storage zx:work vx_frames[-1].context
+data remove storage zx:work vx_frames[-1]

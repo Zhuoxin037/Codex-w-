@@ -1,4 +1,8 @@
 function sweetdream:internal/native/registry_tick
+execute in minecraft:overworld as @e[type=minecraft:marker,tag=zx.pn_watch,distance=0..] at @s run function sweetdream:equipment/axe/throe/watch with entity @s data
+execute in minecraft:the_nether as @e[type=minecraft:marker,tag=zx.pn_watch,distance=0..] at @s run function sweetdream:equipment/axe/throe/watch with entity @s data
+execute in minecraft:the_end as @e[type=minecraft:marker,tag=zx.pn_watch,distance=0..] at @s run function sweetdream:equipment/axe/throe/watch with entity @s data
+execute as @a[scores={zx.sc_on=1}] at @s run function sweetdream:equipment/sword/sacrifice/tick
 # ============================================================
 # sweetdream:core/tick —— 每游戏刻执行
 # ------------------------------------------------------------
@@ -830,3 +834,20 @@ execute in minecraft:the_end as @e[tag=zx.nr_blade,distance=0..] at @s run funct
 function sweetdream:batch21/tick
 
 execute as @a run function sweetdream:equipment/tool/dream_waker/sync
+
+# [batch22] ---- 2026-11-07 批 22：每刻驱动 ----
+# 天火：到期火球 marker（三维度各一行；marker 到期自己 kill）
+execute in minecraft:overworld as @e[type=minecraft:marker,tag=zx.sf_pend,distance=0..] at @s if score @s zx.sf_due <= #now manacore.meta run function sweetdream:equipment/staff/skyfire/meteor
+execute in minecraft:the_nether as @e[type=minecraft:marker,tag=zx.sf_pend,distance=0..] at @s if score @s zx.sf_due <= #now manacore.meta run function sweetdream:equipment/staff/skyfire/meteor
+execute in minecraft:the_end as @e[type=minecraft:marker,tag=zx.sf_pend,distance=0..] at @s if score @s zx.sf_due <= #now manacore.meta run function sweetdream:equipment/staff/skyfire/meteor
+# 长愿：领域 marker 16 秒到期（三维度各一行）
+execute in minecraft:overworld as @e[type=minecraft:marker,tag=zx.lw_field,distance=0..] at @s run function sweetdream:equipment/staff/long_wish/field_clock
+execute in minecraft:the_nether as @e[type=minecraft:marker,tag=zx.lw_field,distance=0..] at @s run function sweetdream:equipment/staff/long_wish/field_clock
+execute in minecraft:the_end as @e[type=minecraft:marker,tag=zx.lw_field,distance=0..] at @s run function sweetdream:equipment/staff/long_wish/field_clock
+# 玩家侧状态机（长祝会赋给队友，队友不穿头盔 ⇒ 这几个都不能整体判穿着）
+# no-equip-check-ok: 长祝会赋给 8 格内队友(队友不穿本头盔)，本函数必须对所有玩家跑；"穿头盔"只在 on_pay 的赋予分支里判。
+execute as @a at @s run function sweetdream:equipment/armor/long_blessing/tick
+execute as @a[scores={zx.stc_on=1}] at @s run function sweetdream:equipment/sword/stance/tick
+execute as @a[scores={zx.pf_on=1}] run function sweetdream:equipment/armor/purge_fire/tick
+execute as @a at @s run function sweetdream:equipment/armor/frost_step/tick
+execute as @a run function sweetdream:equipment/armor/falling_deep/tick

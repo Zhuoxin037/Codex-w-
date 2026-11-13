@@ -1,3 +1,4 @@
+function sweetdream:visual/b21_icons
 function sweetdream:lib/uuid
 scoreboard players set #s2_want_hp zx.meta 0
 scoreboard players set #s2_want_atk zx.meta 0

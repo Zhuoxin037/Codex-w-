@@ -28,7 +28,9 @@ execute if items entity @s weapon.offhand iron_sword[minecraft:custom_data~{zx:[
 
 # 取本次命中的生物（lib/victim 用 HurtTime 反查，不依赖进度上下文）
 function sweetdream:lib/victim
-execute unless entity @e[tag=zx.victim,distance=..16,limit=1] run return 0
-
-execute as @e[tag=zx.victim,distance=..16,limit=1] run function sweetdream:equipment/sword/yebu/slow
-tag @e[tag=zx.victim] remove zx.victim
+execute unless data storage zx:victim context.vx_uuid run return 0
+data modify storage zx:work vx_frames append value {context:{}}
+data modify storage zx:work vx_frames[-1].context set from storage zx:victim context
+function sweetdream:equipment/sword/yebu/hit/victim_body with storage zx:work vx_frames[-1].context
+data modify storage zx:victim context set from storage zx:work vx_frames[-1].context
+data remove storage zx:work vx_frames[-1]

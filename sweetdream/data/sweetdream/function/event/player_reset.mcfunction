@@ -50,6 +50,7 @@ function sweetdream:profession/reset_actors
 
 # @@GEN-SCORES-BELOW@@
 scoreboard players reset @s zx.ab_age
+scoreboard players reset @s zx.ab_paid
 scoreboard players reset @s zx.ab_t
 scoreboard players reset @s zx.ac_d
 scoreboard players reset @s zx.ac_lt
@@ -384,8 +385,11 @@ scoreboard players reset @s zx.fcvv_i
 scoreboard players reset @s zx.fcvv_m
 scoreboard players reset @s zx.fcvv_s
 scoreboard players reset @s zx.fcvv_slot
+scoreboard players reset @s zx.fd_cd
+scoreboard players reset @s zx.fd_end
 scoreboard players reset @s zx.fd_n
 scoreboard players reset @s zx.fd_ol
+scoreboard players reset @s zx.fd_prev
 scoreboard players reset @s zx.fd_t
 scoreboard players reset @s zx.ff_age
 scoreboard players reset @s zx.fh_cd
@@ -402,7 +406,11 @@ scoreboard players reset @s zx.fr_ref
 scoreboard players reset @s zx.fr_t
 scoreboard players reset @s zx.frc_fr
 scoreboard players reset @s zx.frc_ft
+scoreboard players reset @s zx.fs_acc
+scoreboard players reset @s zx.fs_i
 scoreboard players reset @s zx.fs_paid
+scoreboard players reset @s zx.fs_px
+scoreboard players reset @s zx.fs_pz
 scoreboard players reset @s zx.ft2_end
 scoreboard players reset @s zx.ft2n
 scoreboard players reset @s zx.ft_cn
@@ -593,6 +601,11 @@ scoreboard players reset @s zx.job
 scoreboard players reset @s zx.job_tg
 scoreboard players reset @s zx.jobpick_tg
 scoreboard players reset @s zx.lb_cd
+scoreboard players reset @s zx.lb_end
+scoreboard players reset @s zx.lb_ext
+scoreboard players reset @s zx.lb_hacc
+scoreboard players reset @s zx.lb_next
+scoreboard players reset @s zx.lb_prev
 scoreboard players reset @s zx.ld_c
 scoreboard players reset @s zx.ld_dream
 scoreboard players reset @s zx.ld_end
@@ -647,6 +660,7 @@ scoreboard players reset @s zx.ltc_fid
 scoreboard players reset @s zx.ltc_ft
 scoreboard players reset @s zx.lw_arm
 scoreboard players reset @s zx.lw_cd
+scoreboard players reset @s zx.lw_end
 scoreboard players reset @s zx.lw_last
 scoreboard players reset @s zx.lw_lc
 scoreboard players reset @s zx.lw_on
@@ -735,6 +749,7 @@ scoreboard players reset @s zx.pal_mul
 scoreboard players reset @s zx.pal_n
 scoreboard players reset @s zx.pal_rng
 scoreboard players reset @s zx.pal_thr
+scoreboard players reset @s zx.pf_atk
 scoreboard players reset @s zx.pf_cd
 scoreboard players reset @s zx.pf_hit
 scoreboard players reset @s zx.pf_hl
@@ -742,9 +757,13 @@ scoreboard players reset @s zx.pf_lt
 scoreboard players reset @s zx.pf_mn
 scoreboard players reset @s zx.pf_mt
 scoreboard players reset @s zx.pf_mul
+scoreboard players reset @s zx.pf_on
 scoreboard players reset @s zx.pf_poke
 scoreboard players reset @s zx.pf_scd
 scoreboard players reset @s zx.pf_slot
+scoreboard players reset @s zx.pf_until
+scoreboard players reset @s zx.pi_paid
+scoreboard players reset @s zx.pi_step
 scoreboard players reset @s zx.pl_ct
 scoreboard players reset @s zx.pl_cur
 scoreboard players reset @s zx.pl_d
@@ -861,6 +880,7 @@ scoreboard players reset @s zx.sc_atk
 scoreboard players reset @s zx.sc_dps
 scoreboard players reset @s zx.sc_floor
 scoreboard players reset @s zx.sc_on
+scoreboard players reset @s zx.sc_step
 scoreboard players reset @s zx.sc_until
 scoreboard players reset @s zx.scb_ol
 scoreboard players reset @s zx.sd_id
@@ -885,7 +905,10 @@ scoreboard players reset @s zx.set_hp
 scoreboard players reset @s zx.set_mana
 scoreboard players reset @s zx.sf_acc
 scoreboard players reset @s zx.sf_cd
+scoreboard players reset @s zx.sf_due
+scoreboard players reset @s zx.sf_end
 scoreboard players reset @s zx.sf_hp
+scoreboard players reset @s zx.sf_orb
 scoreboard players reset @s zx.sh_t
 scoreboard players reset @s zx.sid
 scoreboard players reset @s zx.sl_a
@@ -942,6 +965,9 @@ scoreboard players reset @s zx.st_n
 scoreboard players reset @s zx.st_x
 scoreboard players reset @s zx.st_z
 scoreboard players reset @s zx.staff_gcd
+scoreboard players reset @s zx.stc_on
+scoreboard players reset @s zx.stc_sum
+scoreboard players reset @s zx.stc_until
 scoreboard players reset @s zx.stg
 scoreboard players reset @s zx.stg_t
 scoreboard players reset @s zx.sv_cn

@@ -21,5 +21,5 @@ function sweetdream:lib/atk_charge
 scoreboard players add @s zx.dt_arm 0
 execute unless score @s zx.dt_arm matches 1 run return 0
 
-execute if items entity @s weapon.mainhand iron_axe[custom_data~{zx:["detach"]}] run function sweetdream:equipment/axe/detach/hit_go
+execute if items entity @s weapon.mainhand iron_axe[custom_data~{zx:["detach"]}] run return run function sweetdream:equipment/axe/detach/hit_go
 execute if items entity @s weapon.offhand iron_axe[custom_data~{zx:["detach"]}] run function sweetdream:equipment/axe/detach/hit_go

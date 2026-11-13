@@ -1,0 +1,299 @@
+{
+  "items": 35,
+  "reviewed_scope_items": 36,
+  "preserved_items": [
+    "look",
+    "everlit"
+  ],
+  "textures": 45,
+  "native_resolution": [
+    16,
+    16
+  ],
+  "deployed": true,
+  "uses_generated_atlas": false,
+  "direction_feedback": "用户以“接入啊”明确授权整批接入；长明保留原3D，炽天使之翼与饮霜采用最新修订。",
+  "authoring_sources": [
+    ".workbuddy/icon_style_repair_20261113/native_candidates.py",
+    ".workbuddy/icon_style_repair_20261113/full_candidates.py",
+    ".workbuddy/icon_style_repair_20261113/trinket_revision_draw.py",
+    ".workbuddy/build_vanilla_icons.py",
+    ".workbuddy/build_vanilla_swords.py",
+    ".workbuddy/build_vanilla_axes.py",
+    ".workbuddy/draw_crossbow_pixel_sample.py",
+    ".workbuddy/draw_crossbow_pixel_set.py",
+    ".workbuddy/draw_staff_pixel_set.py"
+  ],
+  "files": [
+    {
+      "file": "armor_bulwark.png",
+      "colors": 11,
+      "opaque_pixels": 138,
+      "sha256": "020685ad91d8757bfefd269bc964af88a76a98ac2cf811a8fad992a1c1517e58"
+    },
+    {
+      "file": "armor_falling_deep.png",
+      "colors": 8,
+      "opaque_pixels": 88,
+      "sha256": "d5d444d29255aa838eef4a8ce787b3f6068a40c1bb80943234473ef4f0d7e507"
+    },
+    {
+      "file": "armor_frost_step.png",
+      "colors": 8,
+      "opaque_pixels": 88,
+      "sha256": "510619ed47679a375ded76f50e04e2a19795e24824819350c8cf3f003d0f2e4b"
+    },
+    {
+      "file": "armor_long_blessing.png",
+      "colors": 10,
+      "opaque_pixels": 78,
+      "sha256": "9a7db500a754681c4e5180a5ce7ff6ab6f2195b77b9e536959e0d7b2a33d8e07"
+    },
+    {
+      "file": "armor_purge_fire.png",
+      "colors": 10,
+      "opaque_pixels": 138,
+      "sha256": "5d69300827694d4e9348feb468d5904767126bc943ad57b0b071e78ca8f7c540"
+    },
+    {
+      "file": "axe_detach.png",
+      "colors": 14,
+      "opaque_pixels": 60,
+      "sha256": "82c3bacfddd17769e44375753b28f5759bf1059823c122240efcfcbb9b0ed1f7"
+    },
+    {
+      "file": "axe_throe.png",
+      "colors": 15,
+      "opaque_pixels": 60,
+      "sha256": "05355a188ce28ec2624b8805765b86b83a5f492c1ff4c4a63a8b92a2791a0b05"
+    },
+    {
+      "file": "crossbow_ablation_standby.png",
+      "colors": 11,
+      "opaque_pixels": 111,
+      "sha256": "7fcf15fa78c1ba293555ad424f982ee67fcc5633e675bdee66a73943f89de45e"
+    },
+    {
+      "file": "crossbow_ablation_pulling_0.png",
+      "colors": 12,
+      "opaque_pixels": 112,
+      "sha256": "d6ab3048ecd3cd5de7c38f30e3dc39490c7632ed347ff6790c30354de6c9c5cc"
+    },
+    {
+      "file": "crossbow_ablation_pulling_1.png",
+      "colors": 12,
+      "opaque_pixels": 115,
+      "sha256": "4795ceb4150b77c7bce30960f9e6ec9966b0a9855cb680e03f6589400ec2208b"
+    },
+    {
+      "file": "crossbow_ablation_pulling_2.png",
+      "colors": 12,
+      "opaque_pixels": 116,
+      "sha256": "f084f868665d100c22970d4f1d609405eb93cb0546be793a6bb2a66483b9d07e"
+    },
+    {
+      "file": "crossbow_ablation_arrow.png",
+      "colors": 15,
+      "opaque_pixels": 118,
+      "sha256": "ebff74692f2af25e0ec56b789266e6ae8dbbe0033d07c6b88942e5f0256fbd5d"
+    },
+    {
+      "file": "crossbow_ablation_firework.png",
+      "colors": 15,
+      "opaque_pixels": 123,
+      "sha256": "1dd3b6e15793eb8e680c85eac4042e770ba9b33b546e23a7e999ae7e5df1be90"
+    },
+    {
+      "file": "crossbow_pierce_standby.png",
+      "colors": 11,
+      "opaque_pixels": 111,
+      "sha256": "baa46a326df444480d281b531f629196609acb25a6d07f8ceb31942bc8ef39cc"
+    },
+    {
+      "file": "crossbow_pierce_pulling_0.png",
+      "colors": 12,
+      "opaque_pixels": 112,
+      "sha256": "ae1db35f4f24a292aba5655123b9e7d79966c54cb82288bc877b9bf4b6bfb274"
+    },
+    {
+      "file": "crossbow_pierce_pulling_1.png",
+      "colors": 12,
+      "opaque_pixels": 115,
+      "sha256": "4fbb5c0303cff6dec41c39d0d88d95559897e02acaf5bdfe742c89ae96904356"
+    },
+    {
+      "file": "crossbow_pierce_pulling_2.png",
+      "colors": 12,
+      "opaque_pixels": 116,
+      "sha256": "f3bd3ffd1020fa9d1364cd856c667d38e9870d4dd7d08fa3d60f85187bd2638f"
+    },
+    {
+      "file": "crossbow_pierce_arrow.png",
+      "colors": 15,
+      "opaque_pixels": 118,
+      "sha256": "6d4e326ea0566d60caa613b55ba61fabafb1e051b15d0bcc263253212e938adf"
+    },
+    {
+      "file": "crossbow_pierce_firework.png",
+      "colors": 15,
+      "opaque_pixels": 123,
+      "sha256": "82287ce6aa0d8e4479fa2b29aad093887360a4a8ad13f8e282cae841c224cfae"
+    },
+    {
+      "file": "staff_intone.png",
+      "colors": 8,
+      "opaque_pixels": 58,
+      "sha256": "728929417815b016f0ed264d83dc6ff0bf43e813f0173b53a34addb52bd5ac2d"
+    },
+    {
+      "file": "staff_long_wish.png",
+      "colors": 8,
+      "opaque_pixels": 65,
+      "sha256": "ee1e4c392af621a76e4b36ab208fe77503d21d0b7025f904f9e5e02e51feb82f"
+    },
+    {
+      "file": "staff_lucid_illusion.png",
+      "colors": 12,
+      "opaque_pixels": 69,
+      "sha256": "2e012ea832e0c7441bc32faee2a78faafae7a5aceadd10e02cd52db37d8fb4fa"
+    },
+    {
+      "file": "staff_skyfire.png",
+      "colors": 12,
+      "opaque_pixels": 51,
+      "sha256": "a9df4d7652131366cc817fefd83ac09e25c12fa034a19375ad52ad63618a88e9"
+    },
+    {
+      "file": "staff_surge_ebb.png",
+      "colors": 10,
+      "opaque_pixels": 74,
+      "sha256": "c53c2097baef0971c1231366a0a0f1198f782837a589fc5acd634f4a27931f88"
+    },
+    {
+      "file": "sword_aftersound.png",
+      "colors": 19,
+      "opaque_pixels": 84,
+      "sha256": "d1680b0a883083830d5b4cd113853cdd95955ebc123553ae5ac7070f119548a2"
+    },
+    {
+      "file": "sword_gather_energy.png",
+      "colors": 22,
+      "opaque_pixels": 84,
+      "sha256": "63ceeb7263c2b60292c143d9f7225d05bc7e5dcab7441166bf5ec7bef1a4ae0f"
+    },
+    {
+      "file": "sword_refrain.png",
+      "colors": 19,
+      "opaque_pixels": 84,
+      "sha256": "df1f2b4be6d02dfe42d7035028fd64ba606b15b3224ee20e7e90fb6a44a9b6b1"
+    },
+    {
+      "file": "sword_sacrifice.png",
+      "colors": 19,
+      "opaque_pixels": 84,
+      "sha256": "ec9357e43f2b60f7536fbf3f248cf9f599368ff159d21d21119ab8316fd638c0"
+    },
+    {
+      "file": "sword_stance.png",
+      "colors": 18,
+      "opaque_pixels": 84,
+      "sha256": "51c3e4621a418434456f4e160cd0b4989eb11bbfff0016bf0f0e146060676c34"
+    },
+    {
+      "file": "sword_wound_stack.png",
+      "colors": 19,
+      "opaque_pixels": 84,
+      "sha256": "8d03603af212bf87f4e942ac259f2ea0fc6358da88a602df27847fc50b3c41e8"
+    },
+    {
+      "file": "tool_bitter_cold.png",
+      "colors": 8,
+      "opaque_pixels": 158,
+      "sha256": "1e2ef5e4515495f6f6e089236a68c2110729f63bf114103b3ff9fdb43b08d7c6"
+    },
+    {
+      "file": "tool_blaze_plume.png",
+      "colors": 13,
+      "opaque_pixels": 65,
+      "sha256": "e4c9365d1731e3dc37bb57c7093488185cd58af60b6991ae1193120f5a575fe0"
+    },
+    {
+      "file": "tool_coffin_silk.png",
+      "colors": 11,
+      "opaque_pixels": 134,
+      "sha256": "adef176c1e66131b7f3be9c1959b808283119d40f569d1294ba694d147513a28"
+    },
+    {
+      "file": "tool_dream_waker.png",
+      "colors": 9,
+      "opaque_pixels": 136,
+      "sha256": "eb44a04aebd9d2a53d5f7df0c506548f1093b5ba55a4d7e0d84378b5df5403c2"
+    },
+    {
+      "file": "tool_echo_harmony.png",
+      "colors": 6,
+      "opaque_pixels": 61,
+      "sha256": "96563aeef030d896685c0ffc03b4dd54477b8525f71ea7f98c91e41317ba96d6"
+    },
+    {
+      "file": "tool_frostmirror.png",
+      "colors": 9,
+      "opaque_pixels": 100,
+      "sha256": "d74df2c354686a2c63e42109674258877d8eaa2c5616c73a18add25f13da7ed4"
+    },
+    {
+      "file": "tool_grimoire.png",
+      "colors": 14,
+      "opaque_pixels": 152,
+      "sha256": "121ab303a66efd4064ec647026a999142cb4dc674680c69da482efc26b2fd72a"
+    },
+    {
+      "file": "tool_mana_pump.png",
+      "colors": 12,
+      "opaque_pixels": 148,
+      "sha256": "d470e1deef192e532ee57e8f39ec1c7460be5e3e0350ac4081547b2bfe99adbd"
+    },
+    {
+      "file": "tool_nullify.png",
+      "colors": 7,
+      "opaque_pixels": 132,
+      "sha256": "1d515d198cb7df19ac8a6902bc19b2e840d854be3c0e1f312002b2728b9944ad"
+    },
+    {
+      "file": "tool_retro_shine.png",
+      "colors": 7,
+      "opaque_pixels": 117,
+      "sha256": "53072b41878b158d4f9f4352a0746b768a2796510ea37704ed5f0b35771801ec"
+    },
+    {
+      "file": "tool_seraph_wing.png",
+      "colors": 8,
+      "opaque_pixels": 164,
+      "sha256": "4423afe40af3bdf8a553cdfc8c6deeb0784832cda3c3f3653ced118137d72032"
+    },
+    {
+      "file": "tool_sip_frost.png",
+      "colors": 10,
+      "opaque_pixels": 137,
+      "sha256": "4fdb2273a2d809c881a405f471cdf33581038562212b6514807e82f5aa9f8c2a"
+    },
+    {
+      "file": "tool_thunder.png",
+      "colors": 7,
+      "opaque_pixels": 80,
+      "sha256": "8c655317125954f1ad6e0391b7d6cac92b9930e1196bc2889b8f5267e8bdd5a0"
+    },
+    {
+      "file": "tool_tide_buckle.png",
+      "colors": 8,
+      "opaque_pixels": 132,
+      "sha256": "20eb1f29fd76fa55ecf5c4b697894adf3b48475691392d0b5152c0787d3130d9"
+    },
+    {
+      "file": "tool_wrath.png",
+      "colors": 8,
+      "opaque_pixels": 197,
+      "sha256": "1b7c8d925d6dad5e0d951dafed3805a502f4061548dc264b4a3d9faccace7980"
+    }
+  ]
+}

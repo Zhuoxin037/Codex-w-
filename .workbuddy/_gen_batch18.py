@@ -260,6 +260,8 @@ def build(it, cat, slot, base):
         parts.append('tooltip_display={hidden_components:["unbreakable"]}')
     if cat in ('staff', 'tool'):
         parts.append('max_stack_size=1')     # ★ 包内 22/22 法杖、12/12 副手都带
+    if cid in ('retro_shine', 'sip_frost'):
+        parts.append('minecraft:item_model="sweetdream:tool_%s"' % cid)
     if MODEL:
         parts.append('item_model="sweetdream:%s"' % model_key(cat, cid))
         if cat == 'armor':

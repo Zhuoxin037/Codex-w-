@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>坠梦 · 装备台</title>
+  <meta name="description" content="Minecraft RPG 数据包《坠梦》装备机制管理台：筛选、机制卡片、双件对比、数值模拟与复盘记录。" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="aurora" aria-hidden="true"></div>
+  <div class="app">
+    <aside class="rail">
+      <div class="brand">
+        <div class="brand-mark">坠</div>
+        <div class="brand-txt">
+          <div class="brand-name">坠梦 · 装备台</div>
+          <div class="brand-sub">sweetdream / manacore · 1.21.5</div>
+        </div>
+      </div>
+
+      <nav class="nav" id="nav">
+        <button class="nav-btn active" data-view="overview"><span class="ni">◈</span>战场总览</button>
+        <button class="nav-btn" data-view="library"><span class="ni">▦</span>装备图鉴</button>
+        <button class="nav-btn" data-view="detail"><span class="ni">✧</span>机制卡片</button>
+        <button class="nav-btn" data-view="compare"><span class="ni">⇄</span>双件对比</button>
+        <button class="nav-btn" data-view="review"><span class="ni">✓</span>复盘记录</button>
+        <button class="nav-btn" data-view="rules"><span class="ni">⌘</span>口径与说明</button>
+      </nav>
+
+      <div class="rail-div"></div>
+
+      <div class="filter-block">
+        <div class="filter-title">武器类型 <span id="catCount" class="mini"></span></div>
+        <div class="chips" id="catChips"></div>
+        <div class="filter-title">稀有度档位</div>
+        <div class="chips" id="rarChips"></div>
+        <div class="filter-title">确认状态</div>
+        <div class="chips" id="statusChips"></div>
+        <div class="filter-title">标签联动 <span class="mini">点标签筛选</span></div>
+        <div class="chips tag-chips" id="tagChips"></div>
+      </div>
+
+      <div class="search-wrap">
+        <input id="q" type="search" placeholder="搜装备名 / 机制词 / 标签…" autocomplete="off" />
+      </div>
+
+      <div class="list-head"><span>装备清单</span><span id="listCount" class="mini">231</span></div>
+      <div class="item-list" id="itemList"></div>
+
+      <div class="rail-foot">
+        <button class="ghost-btn" id="exportBtn">导出存档</button>
+        <button class="ghost-btn" id="importBtn">导入存档</button>
+        <input type="file" id="importFile" accept="application/json" hidden />
+        <div class="foot-note">改动保存在本机浏览器，导出 JSON 可备份 / 换设备继续。</div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="crumb"><span id="crumbView">战场总览</span><span class="sep">/</span><span id="crumbItem">全部装备</span></div>
+        <div class="top-actions">
+          <div class="baseline-mini" id="baselineMini"></div>
+          <button class="ghost-btn small" id="resetBtn">还原本件数值</button>
+        </div>
+      </header>
+      <div class="view" id="view"></div>
+    </main>
+  </div>
+  <div class="toast" id="toast"></div>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

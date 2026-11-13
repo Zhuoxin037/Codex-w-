@@ -1,0 +1,82 @@
+[
+  {
+    "id": "bitter_cold",
+    "colors": 23,
+    "pixels": 123
+  },
+  {
+    "id": "blaze_plume",
+    "colors": 22,
+    "pixels": 96
+  },
+  {
+    "id": "coffin_silk",
+    "colors": 23,
+    "pixels": 130
+  },
+  {
+    "id": "dream_waker",
+    "colors": 23,
+    "pixels": 149
+  },
+  {
+    "id": "echo_harmony",
+    "colors": 23,
+    "pixels": 98
+  },
+  {
+    "id": "everlit",
+    "colors": 23,
+    "pixels": 151
+  },
+  {
+    "id": "frostmirror",
+    "colors": 23,
+    "pixels": 106
+  },
+  {
+    "id": "grimoire",
+    "colors": 23,
+    "pixels": 162
+  },
+  {
+    "id": "mana_pump",
+    "colors": 21,
+    "pixels": 124
+  },
+  {
+    "id": "nullify",
+    "colors": 23,
+    "pixels": 140
+  },
+  {
+    "id": "retro_shine",
+    "colors": 21,
+    "pixels": 114
+  },
+  {
+    "id": "seraph_wing",
+    "colors": 23,
+    "pixels": 91
+  },
+  {
+    "id": "sip_frost",
+    "colors": 23,
+    "pixels": 129
+  },
+  {
+    "id": "thunder",
+    "colors": 23,
+    "pixels": 79
+  },
+  {
+    "id": "tide_buckle",
+    "colors": 23,
+    "pixels": 104
+  },
+  {
+    "id": "wrath",
+    "colors": 23,
+    "pixels": 171
+  }
+]

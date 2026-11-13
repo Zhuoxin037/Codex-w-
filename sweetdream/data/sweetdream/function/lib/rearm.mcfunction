@@ -444,3 +444,13 @@ advancement revoke @a only sweetdream:equipment/staff/surge_ebb
 advancement revoke @a only sweetdream:upgrade/breach_a
 advancement revoke @a only sweetdream:upgrade/breach_b
 advancement revoke @a only sweetdream:upgrade/breach_o
+
+# [batch22] ---- 2026-11-07 批 22：自撤销型进度 ----
+advancement revoke @a only sweetdream:equipment/bow/ablation
+advancement revoke @a only sweetdream:equipment/bow/pierce
+advancement revoke @a only sweetdream:equipment/sword/gather_energy
+advancement revoke @a only sweetdream:equipment/staff/skyfire
+advancement revoke @a only sweetdream:equipment/staff/long_wish
+advancement revoke @a only sweetdream:equipment/sword/wound_stack
+advancement revoke @a only sweetdream:equipment/sword/stance
+advancement revoke @a only sweetdream:equipment/sword/refrain

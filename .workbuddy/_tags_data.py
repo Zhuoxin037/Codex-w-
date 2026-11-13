@@ -423,3 +423,19 @@ TAGS.update({
     'aftersound': ['formation', 'summon', 'indep_mul'],
     'surge_ebb': ['max_mana', 'true_dmg', 'formation', 'summon', 'dash', 'buff', 'heal', 'debuff'],
 })
+
+# 2026-11-07 用户定稿的批 22（12 件）。全部落在 VOCAB 的 28 词内。
+TAGS.update({
+    'ablation': ['yuanhai', 'liuhuo', 'consume', 'max_mana', 'true_dmg'],
+    'pierce': ['max_mana', 'consume'],
+    'gather_energy': ['cur_mana', 'max_mana', 'consume'],
+    'wound_stack': ['max_hp', 'flat'],
+    'stance': ['buff', 'max_hp'],
+    'refrain': ['summon'],
+    'long_wish': ['formation', 'field', 'consume', 'apply', 'max_mana'],
+    'skyfire': ['base_atk', 'max_mana', 'apply', 'liuhuo'],
+    'long_blessing': ['max_mana', 'max_hp', 'heal', 'buff', 'cur_mana'],
+    'purge_fire': ['max_mana', 'max_hp', 'heal', 'consume', 'liuhuo', 'yehuo', 'base_atk', 'buff'],
+    'frost_step': ['max_mana', 'slow', 'debuff'],
+    'falling_deep': ['max_mana', 'field', 'formation', 'attract', 'slow', 'debuff'],
+})

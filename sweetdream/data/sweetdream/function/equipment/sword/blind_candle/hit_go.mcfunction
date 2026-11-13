@@ -18,21 +18,9 @@
 
 # ① 钉死刚被自己打中的那只
 function sweetdream:lib/victim
-execute unless entity @e[tag=zx.victim,distance=0..,limit=1] run return 0
-tag @e[tag=zx.bcd_v,distance=0..] remove zx.bcd_v
-tag @e[tag=zx.victim,distance=0..,limit=1] add zx.bcd_v
-tag @e[tag=zx.victim] remove zx.victim
-
-# ② 被动段: 目标带「夜火」才结算(节流在 passive 里)
-scoreboard players set #bcd_ye zx.meta 0
-execute as @e[tag=zx.bcd_v,distance=0..,limit=1] if entity @s[tag=zx.status.yehuo] run scoreboard players set #bcd_ye zx.meta 1
-execute if score #bcd_ye zx.meta matches 1 run function sweetdream:equipment/sword/blind_candle/passive
-
-# ③ 烛火段(独立于夜火)
-function sweetdream:equipment/sword/blind_candle/candle
-
-# ④ 收尾: 清本轮临时标签
-tag @e[tag=zx.bcd_v,distance=0..] remove zx.bcd_v
-tag @e[tag=zx.bcd_pick,distance=0..] remove zx.bcd_pick
-tag @e[tag=zx.bcd_pick2,distance=0..] remove zx.bcd_pick2
-tag @e[tag=zx.bcd_hit2,distance=0..] remove zx.bcd_hit2
+execute unless data storage zx:victim context.vx_uuid run return 0
+data modify storage zx:work vx_frames append value {context:{}}
+data modify storage zx:work vx_frames[-1].context set from storage zx:victim context
+function sweetdream:equipment/sword/blind_candle/hit_go/victim_body with storage zx:work vx_frames[-1].context
+data modify storage zx:victim context set from storage zx:work vx_frames[-1].context
+data remove storage zx:work vx_frames[-1]

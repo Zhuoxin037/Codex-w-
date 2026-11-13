@@ -38,8 +38,10 @@ SLOT = 'weapon.offhand'          # 副手槽（items 判定 / item modify 都用
 #   ★ 这三件不在 build_offhand_icons.ICONS 里（那份画的是原版风矢量的 7 件），
 #     贴图由 _gen_late_icons.py 生成（骨架换色，key 同样是 tool_<id>），
 #     所以只在这里补名字：modifier / held / give 三处的写法与那 7 件逐字同构。
-NEW_TOOLS = [('coffin_silk', '殓丝'), ('frostmirror', '冰鉴'), ('tide_buckle', '回潮扣')]
-TOOLS = [(pid, cn) for pid, cn, _motif, _fn in TOOL_ICONS] + NEW_TOOLS
+NEW_TOOLS = [('coffin_silk', '殓丝'), ('frostmirror', '冰鉴'), ('tide_buckle', '回潮扣'),
+             ('dream_waker', '醒梦仪'), ('echo_harmony', '应和'), ('grimoire', '魔导书'),
+             ('retro_shine', '反照'), ('sip_frost', '饮霜')]
+TOOLS = sorted([(pid, cn) for pid, cn, _motif, _fn in TOOL_ICONS] + NEW_TOOLS)
 
 
 def key(pid):
@@ -81,37 +83,15 @@ execute as @a[tag=!test_pending_return] run function sweetdream:visual/tool_icon
 
 # ---------------------------------------------------------------- ③ 逐件扫描
 def gen_held():
-    L = []
-    A = L.append
-    A('# ============================================================')
-    A('# sweetdream:visual/tool_icon_held —— 副手扫描: 给还没上外观的副手道具补 item_model')
-    A('# ------------------------------------------------------------')
-    A('# 【谁调用它】visual/tool_icon_sync(每秒一次, 挂 manacore:event/second)')
-    A('# 【执行者】每个玩家(as @a 后逐个; 与 sword/axe/staff/crossbow/armor 五个图标扫描同构)')
-    A('#')
-    A('# 【只做一件事】按 custom_data.zx[0] 认出是哪一件, 写 item_model:')
-    A('#   · item_model = sweetdream:tool_<id>   (背包/手里的 16×16 图标)')
-    A('#   lore / 技能数据 / 附魔 / 耐久 一律不碰。')
-    A('#')
-    A('# 【★ 两道门, 缺一不可】')
-    A('#   ① `if items … *[minecraft:custom_data~{zx:["<id>"]}]` —— 认人。只看 zx[0],')
-    A('#      不看底物: 这 7 件的底物**全都是 recovery_compass**(外加观测镜 look 也是),')
-    A('#      拿底物当身份必然互相误伤。')
-    A('#   ② `unless items … *[minecraft:item_model="sweetdream:tool_<id>"]` ——')
-    A('#      已经是它了就不写。item modify 只要执行就会重写组件, 哪怕值没变;')
-    A('#      客户端把"组件变了"当成"换了一件物品"⇒ 副手会一直抽搐。')
-    A('#')
-    A('# 【★ 判定槽位 = weapon.offhand】这 7 件都是"持于副手时"生效的被动道具。')
-    A('#   **背包/箱子里的存量道具这里看不到** —— 那些请重新 give')
-    A('#   (give 里已直接写了这个组件)。')
-    A('# ============================================================')
-    for pid, cn in TOOLS:
-        A('# %s' % cn)
-        A('execute if items entity @s %s *[minecraft:custom_data~{zx:["%s"]}] '
-          'unless items entity @s %s *[minecraft:item_model="sweetdream:%s"] '
-          'run item modify entity @s %s sweetdream:offhand_icons/%s'
-          % (SLOT, pid, SLOT, key(pid), SLOT, pid))
-    return '\n'.join(L) + '\n'
+    lines = ['# 每秒仅给主副手中的旧饰品补模型；已正确绑定时不重复改写。',
+             '# 只改 item_model，不改变实际技能生效槽位、强化、职业或其他组件。']
+    for pid, _cn in TOOLS:
+        for slot in ('weapon.mainhand', 'weapon.offhand'):
+            lines.append('execute if items entity @s %s *[minecraft:custom_data~{zx:["%s"]}] '
+                         'unless items entity @s %s *[minecraft:item_model="sweetdream:%s"] '
+                         'run item modify entity @s %s sweetdream:offhand_icons/%s'
+                         % (slot, pid, slot, key(pid), slot, pid))
+    return '\n'.join(lines) + '\n'
 
 
 # ---------------------------------------------------------------- ④ give 插入

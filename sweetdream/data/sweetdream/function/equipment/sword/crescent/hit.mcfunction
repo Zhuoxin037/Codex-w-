@@ -38,17 +38,9 @@ scoreboard players operation @s zx.cr_lt = #now manacore.meta
 
 # 钉死"刚才这一下打的是哪一只"
 function sweetdream:lib/victim
-execute unless entity @e[tag=zx.victim,limit=1] run return 0
-
-# uuid(读快捷栏技能 / 查冷却都要)
-function sweetdream:lib/uuid
-execute unless data storage zx:data self{ok:1b} run return 0
-
-# 数"快捷栏里正在冷却的其它主动技能"
-function sweetdream:equipment/sword/crescent/count
-
-# 分档
-execute if score #cr_n zx.meta matches 0 run return 0
-execute if score #cr_n zx.meta matches 1 run function sweetdream:equipment/sword/crescent/pass1
-execute if score #cr_n zx.meta matches 2 run function sweetdream:equipment/sword/crescent/pass2
-execute if score #cr_n zx.meta matches 3.. run function sweetdream:equipment/sword/crescent/pass3
+execute unless data storage zx:victim context.vx_uuid run return 0
+data modify storage zx:work vx_frames append value {context:{}}
+data modify storage zx:work vx_frames[-1].context set from storage zx:victim context
+function sweetdream:equipment/sword/crescent/hit/victim_body with storage zx:work vx_frames[-1].context
+data modify storage zx:victim context set from storage zx:work vx_frames[-1].context
+data remove storage zx:work vx_frames[-1]
