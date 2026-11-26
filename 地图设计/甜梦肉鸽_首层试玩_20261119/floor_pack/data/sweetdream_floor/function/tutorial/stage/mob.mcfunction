@@ -1,0 +1,1 @@
+summon minecraft:husk -89.4 90 48.5 {Tags:["sd.edu_actor","sd.edu_target"],IsBaby:0b,NoAI:1b,Silent:1b,Invulnerable:1b,NoGravity:1b,PersistenceRequired:1b,CanPickUpLoot:0b,DeathLootTable:"minecraft:empty",Rotation:[90f,0f]}

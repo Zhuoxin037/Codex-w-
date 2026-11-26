@@ -1,5 +1,5 @@
 import re, pathlib, json, collections
-root = pathlib.Path("sweetdream/data/sweetdream/function/equipment")
+root = pathlib.Path("fallendream/data/fallendream/function/equipment")
 stat = collections.defaultdict(list)
 for f in root.rglob("give.mcfunction"):
     txt = f.read_text(encoding="utf-8", errors="ignore")

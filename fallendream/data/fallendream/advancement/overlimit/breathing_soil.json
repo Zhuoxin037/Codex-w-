@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "breathing_soil": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "ol_breathing_soil"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "fallendream:overlimit/apply/breathing_soil"
+    }
+}

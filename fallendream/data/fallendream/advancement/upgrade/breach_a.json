@@ -1,0 +1,1 @@
+{"criteria":{"breach_a":{"trigger":"consume_item","conditions":{"item":{"predicates":{"minecraft:custom_data":{"zx":["up_breach_a"]}}}}}},"rewards":{"function":"fallendream:upgrade/apply/breach_a"}}

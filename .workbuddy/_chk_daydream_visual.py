@@ -3,7 +3,7 @@
 import json, os, sys
 from PIL import Image
 
-RP = r'D:/数据包/sweetdream_rp_完整版/assets/sweetdream'
+RP = r'D:/数据包/fallendream_rp_完整版/assets/fallendream'
 IDS = {'borrow_fire': 'chestplate', 'heart_vein': 'chestplate', 'profile': 'leggings',
        'late_dusk': 'leggings', 'tide_fold': 'helmet', 'glimmer': 'helmet',
        'ebb_tide': 'boots', 'bright_candle': 'helmet'}
@@ -28,9 +28,9 @@ for cid, slot in IDS.items():
     eq = json.load(open(paths['equip'], encoding='utf-8'))
     icon = Image.open(paths['icon'])
     layer = Image.open(paths['layer'])
-    ok = (it['model']['model'] == 'sweetdream:item/vanilla/armor_%s' % cid
-          and mo['textures']['layer0'] == 'sweetdream:item/vanilla/armor_%s' % cid
-          and eq['layers'][SUB[slot]][0]['texture'] == 'sweetdream:armor_%s' % cid
+    ok = (it['model']['model'] == 'fallendream:item/vanilla/armor_%s' % cid
+          and mo['textures']['layer0'] == 'fallendream:item/vanilla/armor_%s' % cid
+          and eq['layers'][SUB[slot]][0]['texture'] == 'fallendream:armor_%s' % cid
           and icon.size == (16, 16) and layer.size == (64, 32))
     if not ok:
         bad += 1

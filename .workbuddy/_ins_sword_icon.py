@@ -11,7 +11,7 @@
   那样新 give 出来的剑会先露 1 秒原版贴图再"变脸"。存量由 sync 补（那是它的活），
   新发的必须在 give 里一步到位。
 
-【做法】在物品的组件列表 `[...]` **最前面**插入 `item_model="sweetdream:<id>",`。
+【做法】在物品的组件列表 `[...]` **最前面**插入 `item_model="fallendream:<id>",`。
   放最前面是为了和 `_gen_batch5/6.py` 的产出**逐字一致**（`_chk_gen_drift.py` 逐字比）。
   插入位置只认"紧跟物品 id 的那个 `[`"，不改其余任何一个字符。
 
@@ -27,7 +27,7 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-FUNC = os.path.join(ROOT, 'sweetdream', 'data', 'sweetdream', 'function')
+FUNC = os.path.join(ROOT, 'fallendream', 'data', 'fallendream', 'function')
 
 SWORDS = ['everfrost', 'hengdao', 'hush', 'liaoyuan', 'liuguang', 'myriad',
           'qiansan', 'rebound', 'remelt', 'rogue_star', 'shadow_blade', 'verdict']
@@ -59,7 +59,7 @@ def patch(line):
     if 'item_model=' in seg:
         return line, False                      # 已经有, 幂等跳过
     sid = zx.group(1)
-    return line[:b + 1] + 'item_model="sweetdream:%s",' % sid + line[b + 1:], True
+    return line[:b + 1] + 'item_model="fallendream:%s",' % sid + line[b + 1:], True
 
 
 def main():

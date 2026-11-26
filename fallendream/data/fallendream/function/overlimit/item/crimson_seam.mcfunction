@@ -1,0 +1,9 @@
+# ============================================================
+# fallendream:overlimit/item/crimson_seam —— 给一块「超限·绯缝」
+# 【接线】custom_data zx:["ol_crimson_seam"] 供 advancement 识别；
+#   CMD=132 与 _gen_stone_icons.py 的 CMD 表、recovery_compass.json 路由三处一致。
+# 【敲入】副手持对应装备 + 主手右键本石 -> consume_item -> apply/crimson_seam。
+#   三件套(item/advancement/apply)与 oldef 均已就位，敲失败退材料。
+# ============================================================
+
+give @s recovery_compass[max_stack_size=1,item_name={text:"超限·绯缝",bold:true,color:light_purple},custom_model_data={floats:[132.0f]},lore=[{"text":"✦ 超限石","color":"gold","bold":true,"italic":false},{"text":"","italic":false,"extra":[{"text":"适用于 ","color":"gray"},{"text":"绯缝","color":"blue"},{"text":"   ·   ","color":"dark_gray"},{"text":"前置 ","color":"gray"},{"text":"尚未超限","color":"aqua"}]},{"text":" ","italic":false},{"text":"敲入后绯缝更名为「超限·绯缝」，自身魔","color":"gray","italic":false},{"text":"力值上限 +180，最大生命值 +6。自身当","color":"gray","italic":false},{"text":"前生命值高于 80% 且未准备以下效果时，","color":"gray","italic":false},{"text":"攻击命中附有「噬心」的生物后，成功消","color":"gray","italic":false},{"text":"费其「噬心」，使自身下一次普通近战命","color":"gray","italic":false},{"text":"中时额外造成一次相当于该次近战实际伤","color":"gray","italic":false},{"text":"害的真实伤害。自身真实伤害命中了附有","color":"gray","italic":false},{"text":"「噬心」的生物后，为自身恢复最大生命","color":"gray","italic":false},{"text":"值 5% 的生命。若自身未处于套装临时激","color":"gray","italic":false},{"text":"活状态，则临时激活基础套装效果，持续","color":"gray","italic":false},{"text":"30 秒；若已处于该状态，则「绯结」所提","color":"gray","italic":false},{"text":"供的真实伤害增伤倍率提高为 30%，获得","color":"gray","italic":false},{"text":"的抗性提升改为 5 秒抗性提升Ⅱ，持续","color":"gray","italic":false},{"text":"30 秒，并将套装临时激活时间重置为 30","color":"gray","italic":false},{"text":"秒。","color":"gray","italic":false}],custom_data={zx:["ol_crimson_seam"]},consumable={animation:"none",consume_seconds:0,has_consume_particles:false,sound:"block.bamboo_wood_button.click_off"}]

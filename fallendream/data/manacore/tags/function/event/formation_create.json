@@ -1,0 +1,7 @@
+{
+  "values": [
+    "fallendream:equipment/tool/nullify/on_create",
+    "fallendream:profession/singer/create",
+    "fallendream:equipment/armor/pivot/on_create"
+  ]
+}

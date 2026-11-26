@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """_gen_lore_src.py —— 从「发放函数」抽出每件物品的**最新 名字 + 描述**,
-生成 `sweetdream:lore/base_dispatch`, 让 debug/lore 能"硬刷新"。
+生成 `fallendream:lore/base_dispatch`, 让 debug/lore 能"硬刷新"。
 
 ==========================================================================
 【为什么需要它】物品的名字/描述是**物品 NBT 快照**: 改了 give 里的字面量,
@@ -38,11 +38,11 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-FUNC = os.path.join(ROOT, 'sweetdream', 'data', 'sweetdream', 'function')
+FUNC = os.path.join(ROOT, 'fallendream', 'data', 'fallendream', 'function')
 OUT = os.path.join(FUNC, 'lore', 'base_dispatch.mcfunction')
 
 HEAD = '''# ============================================================
-# sweetdream:lore/base_dispatch —— 「物品 id -> 最新 名字 + 描述」查表
+# fallendream:lore/base_dispatch —— 「物品 id -> 最新 名字 + 描述」查表
 # ------------------------------------------------------------
 # 【本文件是生成物】由 .workbuddy/_gen_lore_src.py 从 154 个发放函数里
 #   抽取 `item_name=` / `lore=` 自动编成。**不要手改** —— 改了下次重跑就没了。

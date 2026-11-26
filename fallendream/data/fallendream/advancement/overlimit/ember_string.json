@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "ember_string": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "ol_ember_string"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "fallendream:overlimit/apply/ember_string"
+    }
+}

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import glob, io, re, os
 rows = []
-for p in sorted(glob.glob(r'D:\数据包\sweetdream\data\sweetdream\function\equipment\*\*\give.mcfunction')):
+for p in sorted(glob.glob(r'D:\数据包\fallendream\data\fallendream\function\equipment\*\*\give.mcfunction')):
     s = io.open(p, encoding='utf-8').read()
     m = re.search(r'item_name=\{text:"([^"]+)"', s)
     cn = m.group(1) if m else '?'

@@ -8,7 +8,7 @@ from model_review_io import save_native,export_static,renderer,check
 ROOT=Path(__file__).resolve().parents[1]
 O=ROOT/'模型设计/深海回响_重设计_20261009/方案二_潮汐卷浪/阶段一_卷浪护手';O.mkdir(parents=True,exist_ok=True)
 T=O/'贴图';T.mkdir(exist_ok=True)
-U=lambda n:str(uuid.uuid5(uuid.NAMESPACE_URL,'sweetdream:deepsea:tidal:guard:'+n))
+U=lambda n:str(uuid.uuid5(uuid.NAMESPACE_URL,'fallendream:deepsea:tidal:guard:'+n))
 colors={'abyss':(22,38,53),'steel':(42,65,87),'steelblue':(78,109,135),'silver':(164,186,194),'edge':(208,220,218),'shade':(107,133,147),'blue0':(5,23,72),'blue1':(9,40,117),'blue2':(21,65,174),'blue3':(38,100,215),'blue4':(75,152,242),'blue5':(145,212,255),'blue6':(211,244,255)}
 atlas=Image.new('RGBA',(128,128));d=ImageDraw.Draw(atlas);uv={};rng=random.Random(1009)
 for i,(n,c) in enumerate(colors.items()):
@@ -150,7 +150,7 @@ for j in range(12):
 
 display={'gui':{'rotation':[0,180,0],'translation':[0,0,0],'scale':[1]*3},'firstperson_righthand':{'rotation':[0,180,0],'translation':[0,0,0],'scale':[.7]*3},'thirdperson_righthand':{'rotation':[0,180,0],'translation':[0,0,0],'scale':[.6]*3}}
 # If the original whole display exists, use its current pose even for the review JSON.
-masters=list((ROOT/'sweetdream_rp_完整版/assets/deepseaecho/models/item').glob('*.json'))
+masters=list((ROOT/'fallendream_rp_完整版/assets/deepseaecho/models/item').glob('*.json'))
 for p in masters:
     if p.stem in ['deepseaecho','deepsea','sword']:
         q=json.loads(p.read_text(encoding='utf-8'));display=q.get('display',display);break

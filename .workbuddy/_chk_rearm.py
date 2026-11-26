@@ -5,7 +5,7 @@ import json, re, sys, io
 from pathlib import Path
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
 ROOT = Path(r'D:/数据包')
-PACKS = ['manacore-1.0.0', 'sweetdream']
+PACKS = ['manacore-1.0.0', 'fallendream']
 
 functions = {}
 for pack in PACKS:
@@ -39,7 +39,7 @@ for pack in PACKS:
             if m and m.group(1) == key:
                 selfrevoke[key] = rw
 
-rearm = (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function' / 'lib' / 'rearm.mcfunction')
+rearm = (ROOT / 'fallendream' / 'data' / 'fallendream' / 'function' / 'lib' / 'rearm.mcfunction')
 listed = set()
 trig_rearm = []
 for i, l in enumerate(rearm.read_text(encoding='utf-8').splitlines(), 1):

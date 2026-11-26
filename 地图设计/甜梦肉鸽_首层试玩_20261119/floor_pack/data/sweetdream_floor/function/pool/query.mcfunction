@@ -1,0 +1,5 @@
+$execute if score #tier sd.floor matches 1.. run data modify storage sweetdream_floor:run pool append from storage sweetdream_floor:pool entries[{job:$(job),tier:1,tags:["$(tag)"]}]
+$execute if score #tier sd.floor matches 2.. run data modify storage sweetdream_floor:run pool append from storage sweetdream_floor:pool entries[{job:$(job),tier:2,tags:["$(tag)"]}]
+$execute if score #tier sd.floor matches 3.. run data modify storage sweetdream_floor:run pool append from storage sweetdream_floor:pool entries[{job:$(job),tier:3,tags:["$(tag)"]}]
+$execute if score #tier sd.floor matches 4.. run data modify storage sweetdream_floor:run pool append from storage sweetdream_floor:pool entries[{job:$(job),tier:4,tags:["$(tag)"]}]
+$execute if score #tier sd.floor matches 5.. run data modify storage sweetdream_floor:run pool append from storage sweetdream_floor:pool entries[{job:$(job),tier:5,tags:["$(tag)"]}]

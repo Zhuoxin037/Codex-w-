@@ -17,7 +17,7 @@ D=S/'旧版立体修形_20261022';D.mkdir(exist_ok=True)
 OLD=S/'薄层肩颈修正_20261022/改前_编辑器完整快照.ajblueprint'
 TITLE='A_旧版立体优化_完整静态'
 UNIFORM='--uniform-cube' in sys.argv
-def uid(s):return str(uuid.uuid5(uuid.NAMESPACE_URL,'sweetdream:a/full-old-volume/'+s))
+def uid(s):return str(uuid.uuid5(uuid.NAMESPACE_URL,'fallendream:a/full-old-volume/'+s))
 
 class FullSampler(Source):
     def __init__(self):

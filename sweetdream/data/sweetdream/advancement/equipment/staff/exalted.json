@@ -1,1 +1,0 @@
-{"criteria":{"use":{"trigger":"minecraft:consume_item","conditions":{"item":{"predicates":{"minecraft:custom_data":"{zx:[\"exalted\"]}"}}}}},"rewards":{"function":"sweetdream:equipment/staff/exalted/cast"}}

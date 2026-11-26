@@ -19,7 +19,7 @@ import json
 import os
 import re
 
-BASE = "D:/数据包/sweetdream/data/sweetdream"
+BASE = "D:/数据包/fallendream/data/fallendream"
 APPLY = BASE + "/function/overlimit/apply"
 ITEM = BASE + "/function/overlimit/item"
 ADV = BASE + "/advancement/overlimit"
@@ -44,7 +44,7 @@ for uid, d in META.items():
     body = [l for l in txt.split("\n") if l.strip() and not l.lstrip().startswith("#")]
     body_nospace = [l.replace(" ", "") for l in body]
     if not body_nospace or body_nospace[0] != ("advancementrevoke@sonly"
-                                               "sweetdream:overlimit/" + uid):
+                                               "fallendream:overlimit/" + uid):
         bad.append("%s: apply 第一行不是 advancement revoke(必须是第一条命令, "
                    "否则进度停在已完成 -> 第二次右键不触发)" % uid)
     m = re.search(r'of:"([^"]*)"', txt)
@@ -54,11 +54,11 @@ for uid, d in META.items():
         bad.append("%s: of=\"%s\" 与文件名不一致(必须英文 id)" % (uid, m.group(1)))
     elif m.group(1) not in defs:
         bad.append("%s: of 在 oldef 表里没有定义" % uid)
-    if "function sweetdream:station/api/apply" not in txt:
+    if "function fallendream:station/api/apply" not in txt:
         bad.append("%s: apply 没调用 station/api/apply" % uid)
     if ("✔ %s已超限" % name) not in txt:
         bad.append("%s: 成功提示里的中文名不是「%s」(文案串了)" % (uid, name))
-    if "sweetdream:overlimit/api/refuse" not in txt:
+    if "fallendream:overlimit/api/refuse" not in txt:
         bad.append("%s: 失败分支没调 refuse(敲不上时玩家不知道原因)" % uid)
 
     # ---- advancement ----
@@ -78,7 +78,7 @@ for uid, d in META.items():
                 bad.append("%s: criteria 名应为 %s, 实为 %s" % (uid, uid, list(c)))
             if zx != ["ol_" + uid]:
                 bad.append("%s: 进度认的标记是 %s, 石头写的是 ol_%s" % (uid, zx, uid))
-            if fn != "sweetdream:overlimit/apply/" + uid:
+            if fn != "fallendream:overlimit/apply/" + uid:
                 bad.append("%s: rewards.function = %s(指向不存在的函数 -> 整份进度不加载)"
                            % (uid, fn))
             elif not os.path.exists(os.path.join(

@@ -12,7 +12,7 @@ def register(n):
  for c in n['children']:
   if isinstance(c,dict):register(c)
 for n in bb['outliner']:register(n)
-def uid(s):return str(uuid.uuid5(uuid.NAMESPACE_URL,'sweetdream:sail:stage2:'+s))
+def uid(s):return str(uuid.uuid5(uuid.NAMESPACE_URL,'fallendream:sail:stage2:'+s))
 def rename(a,b):
  g=G.pop(a);g['name']=b;G[b]=g;return b
 main=rename('06_主帆_下一阶段','06_主帆_五区柔性帆面');rear=rename('07_后帆_下一阶段','07_后帆_错层柔性帆面');spars=rename('08_帆骨_下一阶段','08_帆骨与固定索')
@@ -131,17 +131,17 @@ channel(idle,'罗盘_可转动指针','rotation',[(0,[0,0,-4]),(1,[0,0,5]),(2,[0
 channel(cast,'罗盘_可转动指针','rotation',[(0,[0,0,0]),(.35,[0,0,12]),(.95,[0,0,100]),(1.55,[0,0,180]),(2.2,[0,0,270]),(3.1,[0,0,350]),(3.8,[0,0,360]),(4,[0,0,360])])
 channel(cast,'05_连接环与垂饰','rotation',[(0,[0,0,0]),(.4,[5,0,-5]),(.85,[-8,0,7]),(1.3,[7,0,-6]),(1.85,[-6,0,6]),(2.3,[6,0,-5]),(2.9,[-4,0,4]),(3.6,[0,0,0]),(4,[0,0,0])])
 bb['name']='风帆_阶段二_双帆与阵风动画';bb['animations']=[idle,cast];bb['editor_state']={'mode':'edit'}
-displaypath=O/'显示调整示例/assets/sweetdream/models/item/sail/display.json';displaypath.parent.mkdir(parents=True,exist_ok=True)
-original=S/'显示调整示例/assets/sweetdream/models/item/sail/display.json'
+displaypath=O/'显示调整示例/assets/fallendream/models/item/sail/display.json';displaypath.parent.mkdir(parents=True,exist_ok=True)
+original=S/'显示调整示例/assets/fallendream/models/item/sail/display.json'
 display=json.loads((displaypath if displaypath.exists() else original).read_text(encoding='utf-8'))
 bb['display']=display['display'];displaypath.write_text(json.dumps(display,ensure_ascii=False,indent=2),encoding='utf-8')
 (O/'风帆_阶段二_分组动画.bbmodel').write_text(json.dumps(bb,ensure_ascii=False,separators=(',',':')),encoding='utf-8')
 
 # Static Java export: no arbitrary angles, common display parent, same source cuboids.
-models=displaypath.parent;texdir=O/'显示调整示例/assets/sweetdream/textures/item/sail';texdir.mkdir(parents=True,exist_ok=True)
+models=displaypath.parent;texdir=O/'显示调整示例/assets/fallendream/textures/item/sail';texdir.mkdir(parents=True,exist_ok=True)
 textures={}
 for i,t in enumerate(bb['textures']):
- (texdir/('t%d.png'%i)).write_bytes(base64.b64decode(t['source'].split(',')[1]));textures[str(i)]='sweetdream:item/sail/t%d'%i
+ (texdir/('t%d.png'%i)).write_bytes(base64.b64decode(t['source'].split(',')[1]));textures[str(i)]='fallendream:item/sail/t%d'%i
 textures['particle']=textures['0'];out=[]
 for e in els:
  q={'from':[round(v+o,6) for v,o in zip(e['from'],[8,-12,8])],'to':[round(v+o,6) for v,o in zip(e['to'],[8,-12,8])],'faces':{f:{'uv':[round(v/8,6) for v in face['uv']],'texture':'#'+str(face['texture'])} for f,face in e['faces'].items()}}
@@ -151,7 +151,7 @@ for e in els:
   assert q['rotation']['angle'] in [-45,-22.5,0,22.5,45]
  assert all(-16<=x<=32 for x in q['from']+q['to'])
  out.append(q)
-(models/'stage2.json').write_text(json.dumps({'parent':'sweetdream:item/sail/display','textures':textures,'elements':out},ensure_ascii=False,separators=(',',':')),encoding='utf-8')
+(models/'stage2.json').write_text(json.dumps({'parent':'fallendream:item/sail/display','textures':textures,'elements':out},ensure_ascii=False,separators=(',',':')),encoding='utf-8')
 
 # Reuse the exact-model renderer; render animation keyframes from this saved bbmodel.
 source=(V/'render_apocalypse_review.py').read_text(encoding='utf-8').split('def board():')[0]

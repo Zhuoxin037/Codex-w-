@@ -32,7 +32,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PY = r'C:\Users\qq303\.workbuddy\binaries\python\versions\3.13.12\python.exe'
 CHECK = os.path.join(ROOT, '.workbuddy', 'check.py')
 
-SD = 'sweetdream/data/sweetdream/function'
+SD = 'fallendream/data/fallendream/function'
 MC = 'manacore-1.0.0/data/manacore/function'
 
 # ---- 关键整行(逐字) ----
@@ -48,10 +48,10 @@ L_REG_A = ('$execute if data storage manacore:players "$(uuid)" unless data stor
 L_REG_B = ('$execute if data storage manacore:players "$(uuid)" unless data storage manacore:players '
            '"$(uuid)".reg run data modify storage manacore:players "$(uuid)".reg set value 1b')
 
-PR = 'function sweetdream:internal/attr/cleanup'
+PR = 'function fallendream:internal/attr/cleanup'
 E1_SLOT = ('execute unless entity @s[tag=zx.ret_off] store result storage zx:work a.slot int 1 '
            'run data get entity @s SelectedItemSlot')
-E1_ENQ = 'function sweetdream:internal/itembackup/enqueue with storage zx:work a'
+E1_ENQ = 'function fallendream:internal/itembackup/enqueue with storage zx:work a'
 ENQ_MIR = ('$execute if data storage zx:ret p."$(uuid)".q[0] store result score @s zx.ret_slot '
            'run data get storage zx:ret p."$(uuid)".q[0].slot')
 ENQ_APP = ('$execute if data storage zx:ret p."$(uuid)".stage.$(src).id run data modify '
@@ -63,8 +63,8 @@ MUL_HARD = '$scoreboard players operation #q manacore.math = $(src) $(obj)'
 REST_POP = 'execute if score #ret_ok zx.meta matches 1 run data remove storage zx:ret p."probe"'
 SRC_LINE = 'data modify storage zx:work a.src set value "mainhand"'
 BG_FREEZE = ('execute unless score @s zx.ret_pend matches 1.. run function '
-             'sweetdream:internal/itembackup/backup with storage zx:work a')
-CLEAN_ADD = 'attribute @s minecraft:attack_speed modifier add sweetdream:probe 1.0 add_multiplied_base'
+             'fallendream:internal/itembackup/backup with storage zx:work a')
+CLEAN_ADD = 'attribute @s minecraft:attack_speed modifier add fallendream:probe 1.0 add_multiplied_base'
 LOAD_WAIT = ('execute unless data storage zx:config obj_ret_wait run scoreboard objectives '
              'add zx.ret_wait dummy')
 
@@ -120,9 +120,9 @@ def build_probes():
         ('player_reset cleanup 先于清分', SD + '/event/player_reset.mcfunction', 'swap',
          (PR, pr_first), '第一条 reset 排在 cleanup 之后'),
         ('cleanup 摘 meteor', SD + '/internal/attr/cleanup.mcfunction', 'del',
-         'attribute @s minecraft:attack_speed modifier remove sweetdream:meteor', '熔星的攻速倍率必须显式摘'),
+         'attribute @s minecraft:attack_speed modifier remove fallendream:meteor', '熔星的攻速倍率必须显式摘'),
         ('cleanup 摘 lethe_speed', SD + '/internal/attr/cleanup.mcfunction', 'del',
-         'attribute @s minecraft:movement_speed modifier remove sweetdream:lethe_speed',
+         'attribute @s minecraft:movement_speed modifier remove fallendream:lethe_speed',
          '残念的速度倍率必须显式摘'),
         ('cleanup 去 zx.lethe', SD + '/internal/attr/cleanup.mcfunction', 'del',
          'tag @s remove zx.lethe', '状态标签**必须一起摘'),

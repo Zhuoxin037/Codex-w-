@@ -270,7 +270,7 @@ GIF仅为状态切换示意，没有修改装填速度、技能、消耗或层�
 if BOUND_IDS:
     (OUT/'说明.md').write_text('''# 原版风像素弩 · 已接入
 
-幽匿残响、蚀骨、电弧，以及获批准重画版清醒梦和虹彩，已绑定 sweetdream_rp_完整版 与对应数据包武器。
+幽匿残响、蚀骨、电弧，以及获批准重画版清醒梦和虹彩，已绑定 fallendream_rp_完整版 与对应数据包武器。
 寒鸦 PNG 仅为审阅记录；游戏保留寒鸦原有三维模型。
 
 每把六状态：standby、pulling_0、pulling_1、pulling_2、arrow、firework。

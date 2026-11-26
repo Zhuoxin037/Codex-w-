@@ -15,7 +15,7 @@ def give_line(p):
 
 for rel in FILES:
     pa = 'C:/Users/qq303/AppData/Local/Temp/givebak/equipment/%s/give.mcfunction' % rel
-    pb = 'sweetdream/data/sweetdream/function/equipment/%s/give.mcfunction' % rel
+    pb = 'fallendream/data/fallendream/function/equipment/%s/give.mcfunction' % rel
     a, b = give_line(pa), give_line(pb)
     print('=' * 78)
     print('#### %s' % rel)

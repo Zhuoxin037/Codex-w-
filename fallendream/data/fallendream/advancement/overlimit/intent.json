@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "intent": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "ol_intent"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "fallendream:overlimit/apply/intent"
+    }
+}

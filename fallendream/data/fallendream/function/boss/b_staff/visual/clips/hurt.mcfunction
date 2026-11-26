@@ -1,0 +1,9 @@
+execute if score @s bs.vframe matches 0 run function fallendream:boss/b_staff/visual/frames/hurt/0 with storage fallendream:b_staff args
+execute if score @s bs.vframe matches 1 run function fallendream:boss/b_staff/visual/frames/hurt/1 with storage fallendream:b_staff args
+execute if score @s bs.vframe matches 2 run function fallendream:boss/b_staff/visual/frames/hurt/2 with storage fallendream:b_staff args
+execute if score @s bs.vframe matches 4 run function fallendream:boss/b_staff/visual/frames/hurt/4 with storage fallendream:b_staff args
+execute if score @s bs.vframe matches 5 run function fallendream:boss/b_staff/visual/frames/hurt/5 with storage fallendream:b_staff args
+execute if score @s bs.vframe matches 6 run function fallendream:boss/b_staff/visual/frames/hurt/6 with storage fallendream:b_staff args
+execute if score @s bs.vframe matches 7 run function fallendream:boss/b_staff/visual/frames/hurt/7 with storage fallendream:b_staff args
+execute if score @s bs.vframe matches 8 run function fallendream:boss/b_staff/visual/frames/hurt/8 with storage fallendream:b_staff args
+execute if score @s bs.vframe matches 9 run function fallendream:boss/b_staff/visual/frames/hurt/9 with storage fallendream:b_staff args

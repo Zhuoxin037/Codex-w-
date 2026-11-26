@@ -12,7 +12,7 @@
   ① item_modifier/axe_icons/<id>.json —— 给一件斧写上自己的 item_model
   ② function/visual/axe_icon_held.mcfunction —— 手持扫描，把**还没改过的**补上
   ③ function/visual/axe_icon_sync.mcfunction —— 每秒入口（挂 event/second）
-  ＋ 幂等登记 `sweetdream:visual/axe_icon_sync` 到
+  ＋ 幂等登记 `fallendream:visual/axe_icon_sync` 到
      data/manacore/tags/function/event/second.json
 
 【★ 为什么 held 里要用 `unless items … item_model="…"` 先判一次】
@@ -24,9 +24,9 @@
   铁斧/钻石斧/下界合金斧是全包几十把武器共用的底物，拿底物当身份必然误伤。
 
 【★★ 崩裂的模型键是 fissure_axe, 不是 fissure】
-  老包 sweetdream_rp_完整版 里 `sweetdream:fissure` **已经被占用** —— 那是崩裂技能的
+  老包 fallendream_rp_完整版 里 `fallendream:fissure` **已经被占用** —— 那是崩裂技能的
   「地面裂缝」平面模型（equipment/axe/fissure/field.mcfunction 用 item_display +
-  item_model="sweetdream:fissure" 召唤，横平面贴地、scale 6）。
+  item_model="fallendream:fissure" 召唤，横平面贴地、scale 6）。
   斧要是也叫 fissure，物品就会显示成一块贴地的裂缝。所以这里 item_id 仍是
   `fissure`（zx[0] 认人用），模型键单独走 `fissure_axe`。
 
@@ -37,11 +37,11 @@ import json
 import os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DP = os.path.join(ROOT, 'sweetdream', 'data')
-MOD_DIR = os.path.join(DP, 'sweetdream', 'item_modifier', 'axe_icons')
-FN_DIR = os.path.join(DP, 'sweetdream', 'function', 'visual')
+DP = os.path.join(ROOT, 'fallendream', 'data')
+MOD_DIR = os.path.join(DP, 'fallendream', 'item_modifier', 'axe_icons')
+FN_DIR = os.path.join(DP, 'fallendream', 'function', 'visual')
 TAG = os.path.join(DP, 'manacore', 'tags', 'function', 'event', 'second.json')
-RP = os.path.join(ROOT, 'sweetdream_rp_完整版', 'assets', 'sweetdream', 'items')
+RP = os.path.join(ROOT, 'fallendream_rp_完整版', 'assets', 'fallendream', 'items')
 
 # ---------------------------------------------------------------- 名单（唯一真相来源）
 # (武器 id = zx[0], 中文名, 底物, 模型键)
@@ -71,27 +71,27 @@ AXES = [
     ('deep_brine',   '重溟',     'diamond_axe',   'deep_brine'),
     ('frost_carve',  '剜霜',     'diamond_axe',   'frost_carve'),
 ]
-REG_ENTRY = 'sweetdream:visual/axe_icon_sync'
+REG_ENTRY = 'fallendream:visual/axe_icon_sync'
 
 HELD_HEADER = """# ============================================================
-# sweetdream:visual/axe_icon_held —— 手持扫描: 把还没有图标的斧补上 item_model
+# fallendream:visual/axe_icon_held —— 手持扫描: 把还没有图标的斧补上 item_model
 # ------------------------------------------------------------
 # 【谁调用它】visual/axe_icon_sync(每秒一次, 挂 event/second)
 # 【执行者】每个玩家(as @a 后逐个; 与 sword/staff/crossbow 三个图标扫描同构)
 #
 # 【只做一件事】按 custom_data.zx[0] 认出是哪一把斧, 把它的 item_model 写成
-#   sweetdream:<模型键>。lore / 升级与超限数据 / 技能数据 / 附魔 / 耐久 一律不碰。
+#   fallendream:<模型键>。lore / 升级与超限数据 / 技能数据 / 附魔 / 耐久 一律不碰。
 #
 # 【★ 两道门, 缺一不可】
 #   ① `if items … *[minecraft:custom_data~{zx:["<id>"]}]` —— 认人。只认 zx[0]，
 #      不认底物: iron_axe / diamond_axe / netherite_axe 是全包几十把武器
 #      共用的底物, 拿底物当身份必然误伤。
-#   ② `unless items … *[minecraft:item_model="sweetdream:<模型键>"]` —— 已经是它了就**不写**。
+#   ② `unless items … *[minecraft:item_model="fallendream:<模型键>"]` —— 已经是它了就**不写**。
 #      item modify 只要执行就会重写组件, 哪怕值没变; 客户端把"组件变了"当成
 #      "换了一件物品" ⇒ 每刻播一次举手动画 ⇒ **在手上一直抽搐**。
 #      (资源包 14 份定义都带 hand_animation_on_swap:false 兜底, 但先判一次才是根治。)
 #
-# 【★ 崩裂的模型键是 sweetdream:fissure_axe, 不是 sweetdream:fissure】
+# 【★ 崩裂的模型键是 fallendream:fissure_axe, 不是 fallendream:fissure】
 #   后者在老包里已经是「地面裂缝」平面模型(fissure/field 用 item_display 召唤),
 #   斧叫同一个名字会显示成一块贴地的裂缝。
 #
@@ -105,7 +105,7 @@ HELD_HEADER = """# ============================================================
 
 SYNC = """# Once per second, refresh held legacy axe icons without altering gameplay.
 # no-equip-check-ok: every mutation in axe_icon_held is guarded by item id and model.
-execute as @a[tag=!test_pending_return] run function sweetdream:visual/axe_icon_held
+execute as @a[tag=!test_pending_return] run function fallendream:visual/axe_icon_held
 """
 
 
@@ -120,7 +120,7 @@ def build_modifiers():
     for sid, cn, _base, key in AXES:
         data = {
             "function": "minecraft:set_components",
-            "components": {"minecraft:item_model": "sweetdream:%s" % key},
+            "components": {"minecraft:item_model": "fallendream:%s" % key},
         }
         w(os.path.join(MOD_DIR, sid + '.json'),
           json.dumps(data, ensure_ascii=False, indent=2) + '\n')
@@ -133,8 +133,8 @@ def build_held():
         for slot in ('mainhand', 'offhand'):
             L.append(
                 'execute if items entity @s weapon.%s *[minecraft:custom_data~{zx:["%s"]}]'
-                ' unless items entity @s weapon.%s *[minecraft:item_model="sweetdream:%s"]'
-                ' run item modify entity @s weapon.%s sweetdream:axe_icons/%s'
+                ' unless items entity @s weapon.%s *[minecraft:item_model="fallendream:%s"]'
+                ' run item modify entity @s weapon.%s fallendream:axe_icons/%s'
                 % (slot, sid, slot, key, slot, sid))
     w(os.path.join(FN_DIR, 'axe_icon_held.mcfunction'), '\n'.join(L) + '\n')
 
@@ -176,13 +176,13 @@ def verify():
             errs.append('缺 item_modifier %s.json' % sid)
         else:
             m = json.load(io.open(mp, encoding='utf-8'))
-            if m.get('components', {}).get('minecraft:item_model') != 'sweetdream:%s' % key:
-                errs.append('item_modifier %s.json 指向的 item_model 不是 sweetdream:%s' % (sid, key))
+            if m.get('components', {}).get('minecraft:item_model') != 'fallendream:%s' % key:
+                errs.append('item_modifier %s.json 指向的 item_model 不是 fallendream:%s' % (sid, key))
     # 3) held 里每件斧都有主手+副手两行, 且都带 unless 守卫
     held = io.open(os.path.join(FN_DIR, 'axe_icon_held.mcfunction'), encoding='utf-8').read()
     for sid, cn, base, key in AXES:
         for slot in ('mainhand', 'offhand'):
-            line = ('unless items entity @s weapon.%s *[minecraft:item_model="sweetdream:%s"]'
+            line = ('unless items entity @s weapon.%s *[minecraft:item_model="fallendream:%s"]'
                     % (slot, key))
             if line not in held:
                 errs.append('held 缺 %s 的 %s 守卫' % (sid, slot))

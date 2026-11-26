@@ -17,9 +17,9 @@ import io
 import os
 import re
 
-BASE = "D:/数据包/sweetdream/data/sweetdream"
+BASE = "D:/数据包/fallendream/data/fallendream"
 FN = BASE + "/function"
-JSON = "D:/数据包/sweetdream/data/manacore/tags/function/event/damage_calc.json"
+JSON = "D:/数据包/fallendream/data/manacore/tags/function/event/damage_calc.json"
 
 NEW = [
     "equipment/sword/way_back/ol_back.mcfunction",
@@ -106,7 +106,7 @@ for rel, oid in [
 # ---- ② 所有 function 引用都存在 ----
 referenced = set()
 for rel, t in texts.items():
-    for m in re.finditer(r'function (sweetdream:[a-z0-9_/]+)', body(t)):
+    for m in re.finditer(r'function (fallendream:[a-z0-9_/]+)', body(t)):
         referenced.add(m.group(1))
 for fq in sorted(referenced):
     p = os.path.join(FN, fq.split(":", 1)[1].replace("/", os.sep) + ".mcfunction")
@@ -149,7 +149,7 @@ for macro_file, marker in [
 # ================= 归途 way_back =================
 WB = "equipment/sword/way_back/ol_back_go.mcfunction"
 # ⑤ heal 必须排在 teleport 之前
-i_heal = where(WB, "sweetdream:lib/heal")
+i_heal = where(WB, "fallendream:lib/heal")
 i_tp = where(WB, "way_back/teleport with storage")
 if i_heal < 0:
     bad.append("ol_back_go: 没有调 lib/heal —— 返还整段没实现")
@@ -164,7 +164,7 @@ if "/= #2 zx.meta" in body(texts.get(WB, "")):
 if "#wb_cap" in body(texts.get(WB, "")):
     bad.append("ol_back_go: 还留着 40% 上限(#wb_cap) —— 超限文案没有上限")
 # 真伤
-if 'type:"sweetdream:true_damage"' not in body(texts.get(WB, "")):
+if 'type:"fallendream:true_damage"' not in body(texts.get(WB, "")):
     bad.append("ol_back_go: 连线伤害不是真伤")
 if "#heal_got" not in body(texts.get(WB, "")):
     bad.append("ol_back_go: 没有用 #heal_got(实际回复量)当真伤基数")
@@ -186,7 +186,7 @@ LINE = body(texts.get("equipment/sword/way_back/ol_line.mcfunction", ""))
 if "#wb_step zx.meta matches 28.." not in LINE:
     bad.append("ol_line: 没有 28 步上限 —— 朝向退化时会无限递归")
 for l in LINE.split("\n"):
-    if "run function sweetdream:equipment/sword/way_back/ol_line" in l:
+    if "run function fallendream:equipment/sword/way_back/ol_line" in l:
         if "at @s" in l:
             bad.append("ol_line: 递归行带了 `at @s` —— 采样点会永远停在玩家脚下")
         if "positioned ^ ^ ^2.5" not in l:
@@ -261,7 +261,7 @@ except Exception as e:
     bad.append("读 damage_calc.json 失败: %s" % e)
 
 # pull_go 分流 + cast 清标记
-if "zx.gs3 matches 1 run return run function sweetdream:equipment/sword/gousi/ol_pull_go" \
+if "zx.gs3 matches 1 run return run function fallendream:equipment/sword/gousi/ol_pull_go" \
         not in body(texts.get("equipment/sword/gousi/pull_go.mcfunction", "")):
     bad.append("gousi/pull_go: 没有按 zx.gs3 分流到 ol_pull_go")
 if "execute if score #gs3_ol zx.meta matches 0 run scoreboard players set @s zx.gs3 0" \
@@ -339,7 +339,7 @@ if "zx.twg_dotk 0" not in DD:
 SEC = body(texts.get("lib/second.mcfunction", ""))
 for dim in ["minecraft:overworld", "minecraft:the_nether", "minecraft:the_end"]:
     if "execute in %s as @e[scores={zx.twg_dot=1..},distance=0..] run function " \
-            "sweetdream:equipment/sword/thunder_wedge/ol_dot_down" % dim not in SEC:
+            "fallendream:equipment/sword/thunder_wedge/ol_dot_down" % dim not in SEC:
         bad.append("lib/second: %s 维度没有 DoT 倒计时 —— DoT 会永久残留" % dim)
 
 OE = body(texts.get("equipment/sword/thunder_wedge/ol_end.mcfunction", ""))

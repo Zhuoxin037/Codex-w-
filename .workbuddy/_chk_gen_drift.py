@@ -23,7 +23,7 @@ import sys
 import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DISK = os.path.join(ROOT, 'sweetdream', 'data', 'sweetdream', 'function', 'equipment')
+DISK = os.path.join(ROOT, 'fallendream', 'data', 'fallendream', 'function', 'equipment')
 
 
 def _load(path, name):

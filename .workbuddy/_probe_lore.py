@@ -67,7 +67,7 @@ def esc(s):
 
 
 def main(cat, only=None):
-    d = os.path.join(ROOT, 'sweetdream', 'data', 'sweetdream', 'function', 'equipment', cat)
+    d = os.path.join(ROOT, 'fallendream', 'data', 'fallendream', 'function', 'equipment', cat)
     if not os.path.isdir(d):
         print('无此分类:', cat)
         return

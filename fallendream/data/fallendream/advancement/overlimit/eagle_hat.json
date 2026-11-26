@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "eagle_hat": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "ol_eagle_hat"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "fallendream:overlimit/apply/eagle_hat"
+    }
+}

@@ -7,7 +7,7 @@
 import io
 import os
 
-BASE = "D:/数据包/sweetdream/data/sweetdream"
+BASE = "D:/数据包/fallendream/data/fallendream"
 APPLY = BASE + "/function/upgrade/apply"
 ADV = BASE + "/advancement/upgrade"
 
@@ -24,9 +24,9 @@ ITEMS = [
 
 def apply_txt(uid, name):
     return f"""# ============================================================
-# sweetdream:upgrade/apply/{uid} —— 右键用掉这块「{name}」去敲副手的装备
+# fallendream:upgrade/apply/{uid} —— 右键用掉这块「{name}」去敲副手的装备
 # ------------------------------------------------------------
-# 【谁调用它】进度 sweetdream:upgrade/{uid}(consume_item), 以玩家身份
+# 【谁调用它】进度 fallendream:upgrade/{uid}(consume_item), 以玩家身份
 # 【流程】①撤销进度(不撤的话这个进度一辈子只触发一次)
 #         ②把 kind/id/cat~cat4 交给 station/api/apply 统一处理
 #         ③成功 = 这次消耗成立; 失败 = 把材料还回去 + 说明原因
@@ -34,18 +34,18 @@ def apply_txt(uid, name):
 #   所以在这里从定义表读出来一起传进去(cat3/cat4 缺失时由 apply 补空串)。
 # ============================================================
 
-advancement revoke @s only sweetdream:upgrade/{uid}
+advancement revoke @s only fallendream:upgrade/{uid}
 
 data modify storage zx:work st set value {{kind:"upgrade",id:"{uid}",cat:"",cat2:"",of:""}}
 data modify storage zx:work st.cat set from storage zx:config updef."{uid}".cat
 data modify storage zx:work st.cat2 set from storage zx:config updef."{uid}".cat2
 data modify storage zx:work st.cat3 set from storage zx:config updef."{uid}".cat3
 data modify storage zx:work st.cat4 set from storage zx:config updef."{uid}".cat4
-function sweetdream:station/api/apply
+function fallendream:station/api/apply
 
-execute if data storage zx:out r{{ok:1b}} run function sweetdream:upgrade/api/done with storage zx:work st
-execute if data storage zx:out r{{ok:0b}} run function sweetdream:upgrade/item/{uid}
-execute if data storage zx:out r{{ok:0b}} run function sweetdream:upgrade/api/refuse with storage zx:work st
+execute if data storage zx:out r{{ok:1b}} run function fallendream:upgrade/api/done with storage zx:work st
+execute if data storage zx:out r{{ok:0b}} run function fallendream:upgrade/item/{uid}
+execute if data storage zx:out r{{ok:0b}} run function fallendream:upgrade/api/refuse with storage zx:work st
 """
 
 
@@ -68,7 +68,7 @@ def adv_txt(uid):
         }
     },
     "rewards": {
-        "function": "sweetdream:upgrade/apply/%s"
+        "function": "fallendream:upgrade/apply/%s"
     }
 }
 """ % (uid, uid, uid)

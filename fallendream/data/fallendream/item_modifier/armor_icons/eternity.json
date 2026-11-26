@@ -1,0 +1,11 @@
+{
+  "function": "minecraft:set_components",
+  "components": {
+    "minecraft:item_model": "fallendream:armor_eternity",
+    "minecraft:equippable": {
+      "slot": "chest",
+      "asset_id": "fallendream:armor_eternity",
+      "equip_sound": "minecraft:item.armor.equip_netherite"
+    }
+  }
+}

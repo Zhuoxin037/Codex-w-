@@ -25,7 +25,7 @@ import io
 import os
 import re
 
-BASE = "D:/数据包/sweetdream/data/sweetdream"
+BASE = "D:/数据包/fallendream/data/fallendream"
 FN = BASE + "/function"
 
 NEW = [
@@ -97,13 +97,13 @@ for rel, obj, oid in [
         bad.append("%s: 没写 %s = 1" % (rel, obj))
 
 # ---- ② 所有 function 引用必须存在 ----
-ref = re.compile(r"function\s+sweetdream:([A-Za-z0-9_/]+)")
+ref = re.compile(r"function\s+fallendream:([A-Za-z0-9_/]+)")
 missing = set()
 for rel in NEW + EDIT:
     for m in ref.finditer(body(texts.get(rel, ""))):
         p = os.path.join(FN, m.group(1).replace("/", os.sep) + ".mcfunction")
         if not os.path.exists(p):
-            missing.add("%s -> sweetdream:%s" % (rel, m.group(1)))
+            missing.add("%s -> fallendream:%s" % (rel, m.group(1)))
 for x in sorted(missing):
     bad.append("引用了不存在的函数: " + x)
 
@@ -141,7 +141,7 @@ if i_bite < 0 or i_clr < 0 or i_bite > i_clr:
 
 OB = body(texts["equipment/bow/backstring/ol_bite.mcfunction"])
 for s, msg in [
-    ("sweetdream:true_damage", "8 点不是真实伤害(true_damage)"),
+    ("fallendream:true_damage", "8 点不是真实伤害(true_damage)"),
     ("zx.bsb_n 0", "没给目标补「没分数≠0」"),
     ("scoreboard players set #bsb_d zx.meta 8", "基础 8 点没落地"),
     ("scoreboard players set #bsb_d zx.meta 16", "第 1 次翻倍(16)没落地"),
@@ -177,7 +177,7 @@ for s, msg in [
 
 TICK = body(texts["core/tick.mcfunction"])
 for dim in ["overworld", "the_nether", "the_end"]:
-    if "execute in minecraft:%s as @e[distance=0..,tag=zx.bsb] at @s run function sweetdream:equipment/bow/backstring/ol_tick" % dim not in TICK:
+    if "execute in minecraft:%s as @e[distance=0..,tag=zx.bsb] at @s run function fallendream:equipment/bow/backstring/ol_tick" % dim not in TICK:
         bad.append("core/tick: %s 维度没有退弦层计时驱动" % dim)
 
 # ============ 逆弦 ============
@@ -228,7 +228,7 @@ if "arg.other_mul set value 0.156" not in DF:
 DV = body(texts["equipment/bow/dark_sun/volley.mcfunction"])
 if "matches 0 at @e[tag=zx.ds_pos,limit=1]" not in DV or "sort=nearest,limit=4" not in DV:
     bad.append("dark_sun/volley: 普通的「最近 4 个」没了")
-if "matches 1 at @e[tag=zx.ds_pos,limit=1] run tag @e[type=!#sweetdream:no_damage,distance=..6,tag=!zx.ds_v] add zx.ds_t" not in DV:
+if "matches 1 at @e[tag=zx.ds_pos,limit=1] run tag @e[type=!#fallendream:no_damage,distance=..6,tag=!zx.ds_v] add zx.ds_t" not in DV:
     bad.append("dark_sun/volley: 超限的「范围内全部」没落地(还带 limit 就是没改)")
 if "arg.other_base set from storage zx:work ds.mm" not in DV:
     bad.append("dark_sun/volley: 影矢伤害没跟着换成最大魔力")

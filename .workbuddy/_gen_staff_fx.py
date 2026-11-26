@@ -32,8 +32,8 @@
 import json, math, struct, sys, zlib
 from pathlib import Path
 
-ROOT = Path(r'D:/数据包/sweetdream_rp_完整版')
-NS = ROOT / 'assets' / 'sweetdream'
+ROOT = Path(r'D:/数据包/fallendream_rp_完整版')
+NS = ROOT / 'assets' / 'fallendream'
 TEX = NS / 'textures' / 'item'
 MDL = NS / 'models' / 'item'
 ITM = NS / 'items'
@@ -259,7 +259,7 @@ def preview():
 def main():
     made = []
     for k, (cn, base, bright) in ORBS.items():
-        tex = 'sweetdream:item/pal_orb_%s' % k
+        tex = 'fallendream:item/pal_orb_%s' % k
         (TEX / ('pal_orb_%s.png' % k)).write_bytes(gen_orb(base, bright))
         write_model('pal_orb_%s' % k,
                     model_billboard('色彩光点%s' % cn,
@@ -270,8 +270,8 @@ def main():
     (TEX / 'vortex.png').write_bytes(gen_vortex())
     (TEX / 'vortex.png.mcmeta').write_text(
         '{"animation":{"width":64,"height":64,"frametime":2}}\n', encoding='utf-8')
-    write_model('vortex', model_flat_h('海棠漩涡', '海棠·漩涡(24 帧旋转蓝色螺旋)', 'sweetdream:item/vortex'))
-    write_item_def('vortex', 'sweetdream:item/vortex')
+    write_model('vortex', model_flat_h('海棠漩涡', '海棠·漩涡(24 帧旋转蓝色螺旋)', 'fallendream:item/vortex'))
+    write_item_def('vortex', 'fallendream:item/vortex')
 
     print('--- 产出 ---')
     for p in sorted(list(TEX.glob('pal_orb_*.png')) + list(TEX.glob('vortex.png*'))

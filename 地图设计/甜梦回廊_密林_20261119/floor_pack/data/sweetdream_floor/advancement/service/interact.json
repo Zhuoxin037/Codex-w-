@@ -1,0 +1,14 @@
+{
+  "criteria": {
+    "speak": {
+      "trigger": "minecraft:player_interacted_with_entity",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:interaction",
+          "nbt": "{Tags:[\"sd.floor_vendor_hitbox\"]}"
+        }
+      }
+    }
+  },
+  "rewards": {"function": "sweetdream_floor:room/vendor/interact"}
+}

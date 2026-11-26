@@ -4,7 +4,7 @@ import os
 import re
 import sys
 
-ROOT = r'D:\数据包\sweetdream\data\sweetdream\function\equipment'
+ROOT = r'D:\数据包\fallendream\data\fallendream\function\equipment'
 
 TEXT_RE = re.compile(r'"text":"([^"]*)"')
 NAME_RE = re.compile(r'item_name=\{text:"([^"]*)"')

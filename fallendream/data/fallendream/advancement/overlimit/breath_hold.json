@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "breath_hold": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "ol_breath_hold"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "fallendream:overlimit/apply/breath_hold"
+    }
+}

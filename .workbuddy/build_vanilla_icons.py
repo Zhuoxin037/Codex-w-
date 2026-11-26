@@ -8,7 +8,7 @@ build_vanilla_icons.py —— 「原版风」16x16 物品图标生成器（10 �
      => 原版的描边、受光面、暗面结构原样保留，只换色相/材质。
 
 模板 = 本机 1.21.5 客户端 jar 官方贴图（.workbuddy/_vanilla_ref/）
-色阶 = 从 sweetdream_rp_完整版 该武器自己的 3D 贴图里采的（见各 RAMP_* 注释）
+色阶 = 从 fallendream_rp_完整版 该武器自己的 3D 贴图里采的（见各 RAMP_* 注释）
 
 输出：模型设计/原版风_资源包_20261010/icons/<ns>_<name>.png  (16x16)
 """
@@ -322,9 +322,9 @@ SPECS = [
     ('naturewind_staff',     'blaze_rod',      region_rod,      RAMP_WIND,    ACC_WIND,    '风行于大地之上', 'blaze_rod', None),
     ('palette_palette',      'blaze_rod',      region_rod,      RAMP_PALETTE, ACC_PALETTE, '调色盘',         'blaze_rod', None),
     ('sail_staff',           'blaze_rod',      region_rod,      RAMP_SAIL,    ACC_SAIL,    '风帆',           'blaze_rod', None),
-    ('sweetdream_apocalypse', 'book',          region_book,     RAMP_APOC,    ACC_APOC,    '启示录',         'book', None),
-    ('sweetdream_aurora',    'netherite_sword', region_sword_neth, RAMP_AURORA, ACC_AURORA, '极光与幻梦',    'netherite_sword', None),
-    ('sweetdream_look',      'spyglass',       region_glass,    RAMP_LOOK,    ACC_LOOK,    '观测镜',         'spyglass', None),
+    ('fallendream_apocalypse', 'book',          region_book,     RAMP_APOC,    ACC_APOC,    '启示录',         'book', None),
+    ('fallendream_aurora',    'netherite_sword', region_sword_neth, RAMP_AURORA, ACC_AURORA, '极光与幻梦',    'netherite_sword', None),
+    ('fallendream_look',      'spyglass',       region_glass,    RAMP_LOOK,    ACC_LOOK,    '观测镜',         'spyglass', None),
 ]
 
 
@@ -343,8 +343,8 @@ def txt(d, xy, s, size=20, fill=(232, 232, 238)):
 SHORT = {
     'angelcore_axe': '斧', 'coldcrow_crossbow': '弩', 'deepseaecho_sword': '剑',
     'dreamscythe_sickle': '剑', 'flameremnant_sword': '剑', 'naturewind_staff': '杖',
-    'palette_palette': '杖', 'sail_staff': '杖', 'sweetdream_apocalypse': '书',
-    'sweetdream_aurora': '剑', 'sweetdream_look': '镜',
+    'palette_palette': '杖', 'sail_staff': '杖', 'fallendream_apocalypse': '书',
+    'fallendream_aurora': '剑', 'fallendream_look': '镜',
 }
 
 

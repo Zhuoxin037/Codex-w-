@@ -1,1 +1,0 @@
-{"criteria":{"use":{"trigger":"minecraft:consume_item","conditions":{"item":{"predicates":{"minecraft:custom_data":"{zx:[\"contract_rift\"]}"}}}}},"rewards":{"function":"sweetdream:equipment/sword/contract_rift/cast"}}

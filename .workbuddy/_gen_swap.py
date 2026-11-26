@@ -40,7 +40,7 @@ def txt(src, dst, d, fn, item):
     b = BY_ID[dst]['name']
     return '\n'.join([
         '# ============================================================',
-        '# sweetdream:equipment/%s/%s —— 把手里的「%s」换成「%s」' % (d, fn, a, b),
+        '# fallendream:equipment/%s/%s —— 把手里的「%s」换成「%s」' % (d, fn, a, b),
         '# ------------------------------------------------------------',
         '# 【这个文件是生成的】改数值/描述请改 .workbuddy/_gen_batch5.py,',
         '#   然后重跑 `python .workbuddy/_gen_swap.py`(组件串必须和 give 一致,',

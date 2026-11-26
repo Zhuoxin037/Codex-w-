@@ -9,7 +9,7 @@ from PIL import Image, ImageDraw, ImageFont
 sys.path.insert(0, 'D:/数据包/.workbuddy')
 from _gen_ol_stones_j2 import NEW  # noqa: E402
 
-TEX = 'D:/数据包/sweetdream_rp_完整版/assets/sweetdream/textures/item/stone/ol_%s.png'
+TEX = 'D:/数据包/fallendream_rp_完整版/assets/fallendream/textures/item/stone/ol_%s.png'
 OUT = 'D:/数据包/.workbuddy/超限石_批J2_32颗_总览.png'
 FONT = 'C:/Windows/Fonts/msyh.ttc'
 

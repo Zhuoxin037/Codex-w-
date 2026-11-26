@@ -5,7 +5,7 @@
 import os, re, json, collections, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PACKS = ["manacore-1.0.0", "sweetdream"]
+PACKS = ["manacore-1.0.0", "fallendream"]
 
 CALL = re.compile(r'(?:^|\s)(?:function|schedule\s+function)\s+([#a-z0-9_\-\.]+:[a-z0-9_\-/\.]+)')
 FUNC_CALL = re.compile(r'(?<![\w/])function\s+([#a-z0-9_\-\.]+:[a-z0-9_\-/\.]+)')
@@ -120,7 +120,7 @@ def analyse(name, roots):
     return order
 
 tick_roots = []
-for t in ["sweetdream:core/tick", "manacore:core/tick"]:
+for t in ["fallendream:core/tick", "manacore:core/tick"]:
     tick_roots.append(t)
 # also the extra entries in the tick tag json
 for pack in PACKS:
@@ -141,13 +141,13 @@ for pack in PACKS:
                 load_roots.append(v)
 analyse("PER-LOAD (once per /reload)", sorted(set(load_roots)))
 
-sec = ["sweetdream:lib/second", "sweetdream:debug/second"]
-analyse("PER-SECOND (sweetdream side)", sorted(set(sec)))
+sec = ["fallendream:lib/second", "fallendream:debug/second"]
+analyse("PER-SECOND (fallendream side)", sorted(set(sec)))
 
 # how many of the tick-reachable functions are called with 3-dimension triplication
 print("\n" + "=" * 70)
 print("3x-dimension duplication check inside core/tick:")
-ct = fns.get("sweetdream:core/tick", [])
+ct = fns.get("fallendream:core/tick", [])
 dims = collections.Counter()
 for ln in ct:
     m = re.match(r'execute in (minecraft:[a-z_]+)\s', ln)

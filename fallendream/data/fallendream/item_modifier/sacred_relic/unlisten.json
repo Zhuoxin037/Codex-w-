@@ -1,0 +1,7 @@
+{
+  "function": "minecraft:set_enchantments",
+  "enchantments": {
+    "fallendream:sacred_relic": 0
+  },
+  "add": false
+}

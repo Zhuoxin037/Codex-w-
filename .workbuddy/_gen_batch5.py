@@ -12,7 +12,7 @@
 
 【三处约定(照既有 28 件)]】
   · custom_data.zx = [<装备 id>, <分类标记>, <"itemreplace"(右键触发的才有)>]
-  · 带 冷却 的才有 skill:"sweetdream:<id>"(观测镜靠它显示冷却)
+  · 带 冷却 的才有 skill:"fallendream:<id>"(观测镜靠它显示冷却)
   · 剑/斧/弩/甲 都有 max_damage -> **不能加 max_stack_size**(1.21.5 两者互斥);
     法杖底座是 recovery_compass(能堆) -> 要加
 """
@@ -20,7 +20,7 @@ import io, os, json, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from _tags_data import TAGS        # noqa: E402  标签单一真源(批 A)
 
-BASE = r'D:\数据包\sweetdream\data\sweetdream\function\equipment'
+BASE = r'D:\数据包\fallendream\data\fallendream\function\equipment'
 
 # ---------------------------------------------------------------- lore 构件
 def H(t):
@@ -77,7 +77,7 @@ def B(t):
 ITEMS = [
     # ---------------- 剑 ----------------
     dict(cat='sword', id='myriad', name='万念', base='iron_sword', color='white',
-         item_model='sweetdream:myriad',
+         item_model='fallendream:myriad',
          note='【切换】使用后把自己换成「千散」(qiansan); 千散用完再换回万念。\n'
               '#   两把是同一把武器的一体两面, 所以冷却/魔力都要一致。\n'
               '# 【数值要和 cast 对上】魔力 80 / 冷却 20 秒。',
@@ -87,7 +87,7 @@ ITEMS = [
                P('使用后切换为「千散」并对自身 3 格内的全部生物造成一次相当于自身当前魔力值 ×0.1 的伤害。')]),
 
     dict(cat='sword', id='qiansan', name='千散', base='iron_sword', color='dark_red',
-         item_model='sweetdream:qiansan',
+         item_model='fallendream:qiansan',
          note='【衍生物】由「万念」使用后切换而来, 也可以直接 give 出来测。\n'
               '#   通道和万念相反: 万念吃当前魔力, 千散吃基础攻击力。\n'
               '# 【数值要和 cast 对上】魔力 80 / 冷却 20 秒。',
@@ -97,7 +97,7 @@ ITEMS = [
                P('使用后切换为「万念」并对自身 3 格内的全部生物造成一次相当于自身基础攻击力 ×2 的伤害。')]),
 
     # ---------------- 斧 ----------------
-    dict(cat='axe', id='agony', item_model='sweetdream:agony', name='苦痛', base='netherite_axe', color='dark_purple',
+    dict(cat='axe', id='agony', item_model='fallendream:agony', name='苦痛', base='netherite_axe', color='dark_purple',
          note='【数值要和 cast 对上】魔力 600 / 冷却 100 秒 / 持续 15 秒。\n'
               '# 【要处理"传递"】目标中途死亡要把效果转给离它最近的那一只,\n'
               '#   所以每秒都要重新找一次目标, 不能只在施法时记一次 uuid。',
@@ -110,7 +110,7 @@ ITEMS = [
 
     # ---------------- 法杖 ----------------
     dict(cat='staff', id='polarized_light', name='偏振光', base='recovery_compass', color='white',
-         item_model='sweetdream:polarized_light',
+         item_model='fallendream:polarized_light',
          note='【数值要和 cast 对上】普攻 魔力 10 / 伤害 6; 技能 魔力 80 / 冷却 20 秒 / 持续 5 秒。\n'
               '# 【"持续发射一道光线"】是表现层(粒子/端点连线), 伤害走每秒一次的检测。\n'
               '# 【模型】2026-10-10 用户批准独立16×16法杖贴图，绑定完整版资源包。',
@@ -124,7 +124,7 @@ ITEMS = [
                  '造成一次相当于自身当前魔力值 ×0.05 的伤害, 且被锁定的生物获得缓慢Ⅱ效果。该效果持续 5 秒。')]),
 
     dict(cat='staff', id='delusion', name='惑梦', base='recovery_compass', color='light_purple',
-         item_model='sweetdream:delusion',
+         item_model='fallendream:delusion',
          note='【数值要和 cast 对上】普攻 魔力 20; 技能 魔力 300 / 冷却 60 秒。\n'
               '# 【两段分支】先看锁定的那只"在不在时停里"再决定走哪一段,\n'
               '#   注意别写成"先时停 2 秒再看"(那样第二段的判定永远成立)。\n'
@@ -140,7 +140,7 @@ ITEMS = [
                  '并时停 3 秒。')]),
 
     dict(cat='staff', id='fallen_dream', name='堕梦', base='recovery_compass', color='dark_gray',
-         item_model='sweetdream:fallen_dream',
+         item_model='fallendream:fallen_dream',
          note='【数值要和 cast 对上】普攻 魔力 50; 技能 魔力 500 / 冷却 100 秒。\n'
               '# 【真伤】普攻命中带「白昼梦」的目标时本次改真实伤害 —— 和「幻昼」\n'
               '#   那套「白昼梦」联动, 别自己另起一个效果名。\n'
@@ -158,14 +158,14 @@ ITEMS = [
                  '每秒受到一次相当于使用者当前魔力值 ×0.04 的伤害。')]),
 
     dict(cat='staff', id='apocalypse', name='启示录', base='recovery_compass', color='gold',
-         item_model='sweetdream:apocalypse',
+         item_model='fallendream:apocalypse',
          note='【数值要和 cast 对上】普攻 魔力 60; 技能 魔力 450 / 冷却 90 秒。\n'
               '# 【"启示"是页, 不是层数】最多 3 页, 每页各记一次魔力值 —— 所以存的是\n'
               '#   一个最多 3 项的列表, 不是"层数 +1"。\n'
               '# 【两个计时器】"每 4 秒依次消耗一层"和"每 3 秒一次灾示"是两条,\n'
               '#   别合成一个(描述里是两个独立的节奏)。\n'
               '# 【模型】2026-10-07: 用户已画好模型, 所以本条目带 `item_model` 字段\n'
-              '#   (其余三根法杖仍不写)。模型见 sweetdream_rp_完整版/assets/sweetdream/\n'
+              '#   (其余三根法杖仍不写)。模型见 fallendream_rp_完整版/assets/fallendream/\n'
               '#   items/apocalypse.json —— 按 custom_model_data 分发的完整树。\n'
               '#   ★ 生成器会给它自动配 custom_model_data={floats:[0.0f]}(成对写)。\n'
               '#   ★ 历史坑: 2026-10-05 那版 note 写着"故意不写 item_model", 后来模型\n'
@@ -188,11 +188,11 @@ ITEMS = [
                  '与虚弱Ⅱ。若三页启示全部被消耗, 则最后一次「灾示」伤害提高 50%。')]),
 
     # ---------------- 弩 ----------------
-    dict(cat='bow', id='sculk_echo', item_model='sweetdream:crossbow_sculk_echo', name='幽匿残响', base='crossbow', color='dark_aqua',
+    dict(cat='bow', id='sculk_echo', item_model='fallendream:crossbow_sculk_echo', name='幽匿残响', base='crossbow', color='dark_aqua',
          note='【为什么底材是弩】弩有 minecraft:shot_crossbow 进度触发器, 天然对应"每次射击";\n'
               '#   弓的右键是拉弓蓄力, 做不了这个事件(和「寒鸦」同一个道理)。\n'
               '# 【所以没有 consumable / itemreplace】触发靠 shot_crossbow 进度。\n'
-              '# 【弩上的附魔】sweetdream:sculk_echo(见 enchantment/sculk_echo.json),\n'
+              '# 【弩上的附魔】fallendream:sculk_echo(见 enchantment/sculk_echo.json),\n'
               '#   只在"这把弩射出的箭打中生物"时回调 hook_victim 结算 —— 命中判定交给原版。\n'
               '#   ⚠️ 附魔是注册表内容: 装好后要**退出世界重进**(光 /reload 不补)。\n'
               '# 【"每刻"的伤害】发射路径周围 2 格那条是 along-ray 的每刻检测, 别用\n'
@@ -210,11 +210,11 @@ ITEMS = [
                  '同时对发射路径周围 2 格的敌人每刻造成相当于「悲鸣」值 ×0.1 的伤害。每 1 点「悲鸣」会使该'
                  '伤害有 1% 概率造成三倍伤害, 触发后清除全部「悲鸣」。')]),
 
-    dict(cat='bow', id='bone_erode', item_model='sweetdream:crossbow_bone_erode', name='蚀骨', base='crossbow', color='gray',
+    dict(cat='bow', id='bone_erode', item_model='fallendream:crossbow_bone_erode', name='蚀骨', base='crossbow', color='gray',
          note='【衍生物】幽匿残响那条线的副产物, 也能直接 give 出来测。\n'
               '# 【百分比消耗】消耗的是"本次射击所消耗的魔力值"的 20% —— 注意这是\n'
               '#   **按比例**扣, 不是固定 20 点, 别写成常数。\n'
-              '# 【弩上的附魔】sweetdream:bone_erode(见 enchantment/bone_erode.json),\n'
+              '# 【弩上的附魔】fallendream:bone_erode(见 enchantment/bone_erode.json),\n'
               '#   命中生物时回调 hook_victim 结算。⚠️ 装好后要**退出世界重进**。\n'
               '# 【主动技能 = 射击本身】不是右键释放 —— 触发走 minecraft:shot_crossbow,\n'
               '#   所以**不加 consumable / itemreplace**; 也没有冷却 => **不加 skill 字段**。\n'
@@ -224,14 +224,14 @@ ITEMS = [
                S(),
                P('每次射击都会对被射击的生物的 2 格内的全部生物造成相当于本次射击所消耗的魔力值 ×0.4 的伤害。')]),
 
-    dict(cat='bow', id='lucid_dream', item_model='sweetdream:crossbow_lucid_dream', name='清醒梦', base='crossbow', color='aqua',
+    dict(cat='bow', id='lucid_dream', item_model='fallendream:crossbow_lucid_dream', name='清醒梦', base='crossbow', color='aqua',
          note='【X = 「梦回」层数】描述里那几个 X 不是笔误, 就是层数本身 —— 实现时\n'
               '#   把层数读出来直接当代入值用, 别在描述里烘死成某个数字。\n'
               '# 【和「幻昼」的「白昼梦」联动】判的是同一个效果名(zx.status.dream)。\n'
               '# 【★ 漫彩期内的白昼梦处理 ★】文案是"消耗「白昼梦」且持续时间延长 X 秒"\n'
               '#   —— 所以漫彩期间一旦发现该生物带白昼梦, 就**摘掉它**(tag/unmark dream)\n'
               '#   并把 ld_end 往后推 X 秒(不是每格续命到白昼梦自然结束)。见 hit_extra。\n'
-              '# 【弩上的附魔】sweetdream:lucid_dream(见 enchantment/lucid_dream.json),\n'
+              '# 【弩上的附魔】fallendream:lucid_dream(见 enchantment/lucid_dream.json),\n'
               '#   命中生物时回调 hook_victim 结算。⚠️ 装好后要**退出世界重进**。\n'
               '# 【主动技能 = 射击本身】不是右键释放 —— 触发走 minecraft:shot_crossbow,\n'
               '#   所以**不加 consumable / itemreplace**; 也没有冷却 => **不加 skill 字段**。\n'
@@ -248,7 +248,7 @@ ITEMS = [
                  '真实伤害, 持续 X 秒。若持续时间内该生物被附加了「白昼梦」效果, 则消耗「白昼梦」效果且'
                  '技能持续时间延长 X 秒（X 为「梦回」层数）。')]),
 
-    dict(cat='bow', id='rainbow', item_model='sweetdream:crossbow_rainbow', name='虹彩', base='crossbow',
+    dict(cat='bow', id='rainbow', item_model='fallendream:crossbow_rainbow', name='虹彩', base='crossbow',
          color='light_purple', color2='aqua', split=1,
          note='【名字是两色】"虹"(light_purple) + "彩"(aqua) —— 用户 2026-10-06 要"两种不同颜色搭配"。\n'
               '#   生成器里由 color2 / split 两个字段控制(见 build 的 item_name 段):\n'
@@ -256,7 +256,7 @@ ITEMS = [
               '# 【底材为什么是弩】和「寒鸦 / 幽匿残响」同理: 靠 minecraft:shot_crossbow\n'
               '#   拿到"每次射击"这个事件; 弓做不到。\n'
               '# 【注意别和「异彩」(iridescent, 头盔)搞混】两件是不同的东西, id 也不同。\n'
-              '# 【弩上的附魔】sweetdream:rainbow(见 enchantment/rainbow.json),\n'
+              '# 【弩上的附魔】fallendream:rainbow(见 enchantment/rainbow.json),\n'
               '#   命中生物时回调 hook_victim 结算。⚠️ 装好后要**退出世界重进**。\n'
               '# 【主动技能 = 射击本身】不是右键释放 —— 触发走 minecraft:shot_crossbow,\n'
               '#   所以**不加 consumable / itemreplace**; 也没有冷却 => **不加 skill 字段**。\n'
@@ -359,7 +359,7 @@ ARMOR_SOUND = {'iron': 'minecraft:item.armor.equip_iron',
 RIGHT_CLICK = ('sword', 'axe', 'staff')
 
 # 弩类各带一个 post_attack 附魔(命中生物时回调自己的 hook_victim)。
-#   ★ 这就是"第二批(4 把弩)"的核心: 每把弩一个附魔, 见 sweetdream/enchantment/<id>.json。
+#   ★ 这就是"第二批(4 把弩)"的核心: 每把弩一个附魔, 见 fallendream/enchantment/<id>.json。
 #   附魔是**注册表**内容: 装好/改动后要退出世界重进(光 /reload 不补)。
 BOW_ENCH = {'sculk_echo', 'bone_erode', 'lucid_dream', 'rainbow'}
 
@@ -387,7 +387,7 @@ def build(it):
     #   整条 give 在加载期就作废(日志 Failed to load function), 而文件看不出异常。
     zx_txt = json.dumps(zx, ensure_ascii=False, separators=(',', ':'))
     if need_skill:
-        zx_txt = zx_txt + ',skill:"sweetdream:%s"' % cid
+        zx_txt = zx_txt + ',skill:"fallendream:%s"' % cid
 
     # item_name: 默认单色; 给了 color2 就拆成"两段不同颜色"的名字
     #   (用户 2026-10-06: 「虹彩」要两种不同颜色搭配)
@@ -408,7 +408,7 @@ def build(it):
     #     1.21.5 里这个组件是 **boolean**: false = 有附魔也不发光。
     #     (user: "我希望弩的附魔不显示光效")
     if cid in BOW_ENCH:
-        parts.append('enchantments={"sweetdream:%s":1}' % cid)
+        parts.append('enchantments={"fallendream:%s":1}' % cid)
         parts.append('enchantment_glint_override=false')
     # ★ 标签(批 A, 2026-10-10): custom_data.tags = 语义关键词(见 _tags_data.py)。
     #   和 zx 并列 —— 类别走 zx[1], 语义走 tags; 一条谓词可同时查两处:
@@ -425,13 +425,13 @@ def build(it):
     else:
         parts.append('tooltip_display={hidden_components:["unbreakable"]}')
     # ★ 盔甲外观两件套（2026-10-10）：图标(item_model) + 穿戴层(equippable)。
-    #   配对资源在 sweetdream_rp_原版风 / _完整版：
+    #   配对资源在 fallendream_rp_原版风 / _完整版：
     #     items/armor_<id>.json → models/item/vanilla/armor_<id>.json → 16×16 图标
     #     equipment/armor_<id>.json → textures/entity/equipment/humanoid[_leggings]/armor_<id>.png
-    #   存量装备由 sweetdream:visual/armor_icon_sync（每秒）补课。
+    #   存量装备由 fallendream:visual/armor_icon_sync（每秒）补课。
     if cat == 'armor':
-        parts.append('item_model="sweetdream:armor_%s"' % cid)
-        parts.append('equippable={slot:"%s",asset_id:"sweetdream:armor_%s",equip_sound:"%s"}'
+        parts.append('item_model="fallendream:armor_%s"' % cid)
+        parts.append('equippable={slot:"%s",asset_id:"fallendream:armor_%s",equip_sound:"%s"}'
                      % (EQ_SLOT[SLOT[cid]], cid, ARMOR_SOUND[it['base'].split('_')[0]]))
 
     # 底座前缀: 法杖是 recovery_compass(能堆 -> 要 max_stack_size)
@@ -451,7 +451,7 @@ def header(it):
     L = []
     A = L.append
     A('# ============================================================')
-    A('# sweetdream:equipment/%s/%s/give —— 给一件「%s」（%s）'
+    A('# fallendream:equipment/%s/%s/give —— 给一件「%s」（%s）'
       % (it['cat'], it['id'], it['name'], cat_cn))
     A('# ------------------------------------------------------------')
     A('# 【custom_data】')

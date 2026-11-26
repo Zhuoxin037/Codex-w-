@@ -249,9 +249,9 @@ def display_export(src,slug,name,offset):
   for k in ['from','to','origin']:e[k]=[round(v+offset[i],6) for i,v in enumerate(e[k])]
  for g in bb['groups']:g['origin']=[round(v+offset[i],6) for i,v in enumerate(g['origin'])]
  save(bb,O/(name+'.bbmodel'))
- texdir=O/'审阅资源/assets/sweetdream/textures/item/burst_dawn_vfx';texdir.mkdir(parents=True,exist_ok=True)
+ texdir=O/'审阅资源/assets/fallendream/textures/item/burst_dawn_vfx';texdir.mkdir(parents=True,exist_ok=True)
  (texdir/'redblack.png').write_bytes(bio.getvalue())
- out=O/'审阅资源/assets/sweetdream/models/item/burst_dawn_vfx'/f'{slug}.json';out.parent.mkdir(parents=True,exist_ok=True)
+ out=O/'审阅资源/assets/fallendream/models/item/burst_dawn_vfx'/f'{slug}.json';out.parent.mkdir(parents=True,exist_ok=True)
  elements=[]
  for e in bb['elements']:
   el={'from':e['from'],'to':e['to'],'light_emission':e.get('light_emission',0),'faces':{}}
@@ -265,7 +265,7 @@ def display_export(src,slug,name,offset):
    if f.get('rotation'):v['rotation']=f['rotation']
    el['faces'][s]=v
   elements.append(el)
- out.write_text(json.dumps({'credit':'阶段四独立审阅资产，未部署','ambientocclusion':False,'textures':{'0':'sweetdream:item/burst_dawn_vfx/redblack','particle':'sweetdream:item/burst_dawn_vfx/redblack'},'elements':elements,'display':bb['display']},ensure_ascii=False,separators=(',',':')),encoding='utf8')
+ out.write_text(json.dumps({'credit':'阶段四独立审阅资产，未部署','ambientocclusion':False,'textures':{'0':'fallendream:item/burst_dawn_vfx/redblack','particle':'fallendream:item/burst_dawn_vfx/redblack'},'elements':elements,'display':bb['display']},ensure_ascii=False,separators=(',',':')),encoding='utf8')
  return str(out)
 exports=[display_export(b,'skill_back','爆裂黎明_技能背效_整体Display调整',[8,8,8]),display_export(p,'redblack_arrow','爆裂黎明_红黑箭矢_整体Display调整',[8,8,8]),display_export(m,'muzzle','爆裂黎明_枪口轰焰_整体Display调整',[8,8,8])]
 assert assembly['elements'][:len(original['elements'])]==original['elements']

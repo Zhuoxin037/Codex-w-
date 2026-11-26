@@ -1,0 +1,10 @@
+{
+    "criteria": {
+        "kill": {
+            "trigger": "player_killed_entity"
+        }
+    },
+    "rewards": {
+        "function": "fallendream:equipment/axe/ballad/kill"
+    }
+}

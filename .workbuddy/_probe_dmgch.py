@@ -9,8 +9,8 @@ import io, json, subprocess, sys, os
 
 ROOT = r'D:\数据包'
 PY = r'C:\Users\qq303\.workbuddy\binaries\python\versions\3.13.12\python.exe'
-TAG = os.path.join(ROOT, 'sweetdream', 'data', 'manacore', 'tags', 'function', 'event', 'damage_calc.json')
-HOOK = os.path.join(ROOT, 'sweetdream', 'data', 'sweetdream', 'function', 'equipment', 'tool', 'seraph_wing', 'hook_calc.mcfunction')
+TAG = os.path.join(ROOT, 'fallendream', 'data', 'manacore', 'tags', 'function', 'event', 'damage_calc.json')
+HOOK = os.path.join(ROOT, 'fallendream', 'data', 'fallendream', 'function', 'equipment', 'tool', 'seraph_wing', 'hook_calc.mcfunction')
 
 
 def run():

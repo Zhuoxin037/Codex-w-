@@ -1,0 +1,22 @@
+{
+  "values": [
+    "fallendream:core/load",
+    "naturewind:load",
+    "fallendream:equipment/sword/sickle_dreams/sweep/load",
+    "fallendream:equipment/bow/cold_crow/model/load",
+    "fallendream:equipment/staff/apocalypse/visual/load",
+    "fallendream:equipment/staff/sail/visual/load",
+    "fallendream:equipment/staff/palette/visual/load",
+    "fallendream:equipment/axe/angel_core/visual/load",
+    "fallendream:visual/load",
+    "fallendream:equipment/axe/sacred_relic/visual/load",
+    "fallendream:equipment/axe/sacred_relic/visual/remnant/load",
+    "fallendream:equipment/staff/five_curses/visual/load",
+    "animated_java:global/on_load",
+    "fallendream:boss/fireaxe/load",
+    "fallendream:equipment/staff/triad/visual/load",
+    "fallendream:boss/knight/load",
+    "fallendream:boss/husk/load",
+    "fallendream:boss/b_staff/load"
+  ]
+}

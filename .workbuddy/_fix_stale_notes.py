@@ -14,7 +14,7 @@ import os
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-FN = os.path.join(ROOT, 'sweetdream', 'data', 'sweetdream', 'function')
+FN = os.path.join(ROOT, 'fallendream', 'data', 'fallendream', 'function')
 
 UP_IDS = ['coolant_a', 'coolant_b', 'coolant_o',
           'harden_a', 'harden_b', 'harden_o',

@@ -43,7 +43,7 @@ w = L.append
 w("# 坠梦 · Fall Into the Dream —— 武器及装备总表")
 w("")
 w("> Minecraft Java 1.21.5 原版数据包 · V0.1.0")
-w("> 生成时间：2026-10-21 ｜ 数据源：`sweetdream/data/sweetdream/function/equipment/**/give.mcfunction`（实机 give 真源，逐件解析）")
+w("> 生成时间：2026-10-21 ｜ 数据源：`fallendream/data/fallendream/function/equipment/**/give.mcfunction`（实机 give 真源，逐件解析）")
 w("")
 w("**本表共 184 条** = 已实装 **164 件** ＋ 批十九设计稿 **20 件**（未实装，附录单列）。")
 w("")

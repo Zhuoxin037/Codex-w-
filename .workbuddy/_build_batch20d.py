@@ -3,8 +3,8 @@
 import io, json, os, sys
 sys.stdout.reconfigure(encoding='utf-8')
 
-FN = r'D:/数据包/sweetdream/data/sweetdream/function'
-AD = r'D:/数据包/sweetdream/data/sweetdream/advancement'
+FN = r'D:/数据包/fallendream/data/fallendream/function'
+AD = r'D:/数据包/fallendream/data/fallendream/advancement'
 MK = '批 20（2026-10-27）'
 
 
@@ -74,22 +74,22 @@ append(os.path.join(FN, 'core/load.mcfunction'), '\n'.join(lines) + '\n')
 # ============================================================
 SEC = '''# ===== ''' + MK + '''：术阵位读数 + 新装备每秒结算 =====
 #   ★ lib/fm/read **必须排在所有用到术阵位数的装备之前**（承/屏息都读它）。
-execute as @a run function sweetdream:lib/fm/read
-execute as @a run function sweetdream:equipment/armor/pivot/second
-execute as @a run function sweetdream:equipment/armor/bearing/second
-execute as @a run function sweetdream:equipment/armor/empty_camp/second
-execute as @a run function sweetdream:equipment/armor/lone_walk/second
-execute as @a run function sweetdream:equipment/armor/overflow/second
-execute as @a run function sweetdream:equipment/armor/intent/second
-execute as @a run function sweetdream:equipment/armor/breath_hold/second
+execute as @a run function fallendream:lib/fm/read
+execute as @a run function fallendream:equipment/armor/pivot/second
+execute as @a run function fallendream:equipment/armor/bearing/second
+execute as @a run function fallendream:equipment/armor/empty_camp/second
+execute as @a run function fallendream:equipment/armor/lone_walk/second
+execute as @a run function fallendream:equipment/armor/overflow/second
+execute as @a run function fallendream:equipment/armor/intent/second
+execute as @a run function fallendream:equipment/armor/breath_hold/second
 
 #   临时生命：只维护"身上真挂着"的人（lib/thp/tick 内部会读一次 AbsorptionAmount）
-execute as @a[scores={zx.thp=1..}] run function sweetdream:lib/thp/tick
+execute as @a[scores={zx.thp=1..}] run function fallendream:lib/thp/tick
 
 #   胜利誓约的领域（三维度各扫一遍：marker 只在被加载的区块里）
-execute in minecraft:overworld as @e[type=marker,tag=zx.ov_field,distance=0..] at @s run function sweetdream:equipment/sword/oath_victory/field_tick
-execute in minecraft:the_nether as @e[type=marker,tag=zx.ov_field,distance=0..] at @s run function sweetdream:equipment/sword/oath_victory/field_tick
-execute in minecraft:the_end as @e[type=marker,tag=zx.ov_field,distance=0..] at @s run function sweetdream:equipment/sword/oath_victory/field_tick
+execute in minecraft:overworld as @e[type=marker,tag=zx.ov_field,distance=0..] at @s run function fallendream:equipment/sword/oath_victory/field_tick
+execute in minecraft:the_nether as @e[type=marker,tag=zx.ov_field,distance=0..] at @s run function fallendream:equipment/sword/oath_victory/field_tick
+execute in minecraft:the_end as @e[type=marker,tag=zx.ov_field,distance=0..] at @s run function fallendream:equipment/sword/oath_victory/field_tick
 '''
 append(os.path.join(FN, 'lib/second.mcfunction'), SEC)
 
@@ -98,7 +98,7 @@ append(os.path.join(FN, 'lib/second.mcfunction'), SEC)
 # ============================================================
 TICK = '''# ===== ''' + MK + '''：蓄意「每使用 50 魔力 → 2 点临时生命」（每刻最多兑现一次）=====
 #   ★ 每刻而不是每秒：文案写"单次技能可重复触发"，200 魔力的技能要一次兑现 4 次。
-execute as @a run function sweetdream:equipment/armor/intent/tick
+execute as @a run function fallendream:equipment/armor/intent/tick
 '''
 append(os.path.join(FN, 'core/tick.mcfunction'), TICK)
 
@@ -128,15 +128,15 @@ p = os.path.join(AD, '../../manacore/tags/function/event/damage_calc.json')
 p = os.path.normpath(p)
 d = json.loads(read(p))
 v = d['values']
-if 'sweetdream:equipment/armor/bearing/hook_calc' not in v:
+if 'fallendream:equipment/armor/bearing/hook_calc' not in v:
     # 独立乘区类：排在 glimmer/hook_calc（同为最终伤害乘区）旁边
-    i = v.index('sweetdream:equipment/armor/glimmer/hook_calc')
-    v.insert(i, 'sweetdream:equipment/armor/bearing/hook_calc')
-    v.insert(i + 1, 'sweetdream:equipment/armor/lone_walk/hook_calc')
-if 'sweetdream:equipment/armor/lone_walk/hook_add' not in v:
+    i = v.index('fallendream:equipment/armor/glimmer/hook_calc')
+    v.insert(i, 'fallendream:equipment/armor/bearing/hook_calc')
+    v.insert(i + 1, 'fallendream:equipment/armor/lone_walk/hook_calc')
+if 'fallendream:equipment/armor/lone_walk/hook_add' not in v:
     # 加算类：必须排在 lib/dmg_add_apply **之前**
-    j = v.index('sweetdream:lib/dmg_add_apply')
-    v.insert(j, 'sweetdream:equipment/armor/lone_walk/hook_add')
+    j = v.index('fallendream:lib/dmg_add_apply')
+    v.insert(j, 'fallendream:equipment/armor/lone_walk/hook_add')
 write(p, json.dumps(d, ensure_ascii=False, indent=2) + '\n')
 print('damage_calc ok', len(v))
 
@@ -145,8 +145,8 @@ print('damage_calc ok', len(v))
 # ============================================================
 p = os.path.normpath(os.path.join(AD, '../../manacore/tags/function/event/cooldown_start.json'))
 d = json.loads(read(p))
-if 'sweetdream:equipment/armor/bearing/on_cast' not in d['values']:
-    d['values'].append('sweetdream:equipment/armor/bearing/on_cast')
+if 'fallendream:equipment/armor/bearing/on_cast' not in d['values']:
+    d['values'].append('fallendream:equipment/armor/bearing/on_cast')
 write(p, json.dumps(d, ensure_ascii=False, indent=2) + '\n')
 print('cooldown_start ok')
 
@@ -165,7 +165,7 @@ insert_before(os.path.join(FN, 'lib/mana/pay.mcfunction'),
 HEAL = '''
 # ===== ''' + MK + '''：溢流「过量治疗 → 50% 转临时生命」=====
 #   必须排在 ⑩ 出参之后：#heal_pt / #heal_got 都还在（见 overflow/hook_heal 文件头）。
-function sweetdream:equipment/armor/overflow/hook_heal
+function fallendream:equipment/armor/overflow/hook_heal
 '''
 append(os.path.join(FN, 'lib/heal.mcfunction'), HEAL)
 
@@ -175,7 +175,7 @@ append(os.path.join(FN, 'lib/heal.mcfunction'), HEAL)
 CLR = '''
 # ===== ''' + MK + '''：临时生命清空的回调（蓄意：抗性提升Ⅱ + 迅捷Ⅲ）=====
 #   ★ 执行者仍是玩家；没穿「蓄意」时 on_empty 第一行就会返回。
-function sweetdream:equipment/armor/intent/on_empty
+function fallendream:equipment/armor/intent/on_empty
 '''
 append(os.path.join(FN, 'lib/thp/clear.mcfunction'), CLR)
 

@@ -18,7 +18,7 @@
   结算伤害"。
 
 【正解】
-  · 反查**玩家**: `sweetdream:lib/u_by`(灌 zx:work ub{u0..u3} -> 认 @a[tag=zx.ub]),
+  · 反查**玩家**: `fallendream:lib/u_by`(灌 zx:work ub{u0..u3} -> 认 @a[tag=zx.ub]),
     走 manacore.u0..u3 四个整数比较, 零 NBT。
   · 反查**生物**: 生成/锁定时打标签(如沉锚的 zx.an_lock + scores={zx.an_own=$(u0)})。
   · 读坐标: 用 `facing entity …` / `at @e[…]`, 别 `data get entity <玩家> Pos[n]`。
@@ -35,7 +35,7 @@ import re
 import sys
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
-                    'sweetdream', 'data', 'sweetdream', 'function')
+                    'fallendream', 'data', 'fallendream', 'function')
 
 PLAYER_NBT_SEL = re.compile(r'@a\[[^\]]*nbt=\{UUID')
 PLAYER_DATA = re.compile(r'data (?:get|modify) (?:entity @a\[|[^ ]* from entity @a\[)')

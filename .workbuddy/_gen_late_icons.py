@@ -41,7 +41,7 @@ import sys
 from PIL import Image
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-RP = os.path.join(ROOT, 'sweetdream_rp_完整版', 'assets', 'sweetdream')
+RP = os.path.join(ROOT, 'fallendream_rp_完整版', 'assets', 'fallendream')
 TEX_ITEM = os.path.join(RP, 'textures', 'item', 'vanilla')
 TEX_WORN = os.path.join(RP, 'textures', 'entity', 'equipment')
 CB_STATES = ('standby', 'pulling_0', 'pulling_1', 'pulling_2', 'arrow', 'firework')
@@ -225,7 +225,7 @@ def _offhand_master(item_id):
     from pathlib import Path
     root = Path(__file__).resolve().parents[1]
     name = 'tool_' + item_id + '.png'
-    live = root / 'sweetdream_rp_完整版/assets/sweetdream/textures/item/vanilla' / name
+    live = root / 'fallendream_rp_完整版/assets/fallendream/textures/item/vanilla' / name
     source = live if live.exists() else root / 'tools/art/native_icons_20261113' / name
     return Image.open(source).convert('RGBA')
 

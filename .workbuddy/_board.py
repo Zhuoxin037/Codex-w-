@@ -4,7 +4,7 @@ import os, re, glob, sys, json
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import _tags_data as D
 
-ROOT = 'D:/数据包/sweetdream/data/sweetdream/function/equipment'
+ROOT = 'D:/数据包/fallendream/data/fallendream/function/equipment'
 TYPES = ['sword', 'axe', 'bow', 'staff', 'armor', 'tool']
 CN = {v[0]: v[2] for v in D.VOCAB}
 GROUP = {v[0]: v[1] for v in D.VOCAB}

@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "mana_imbue": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "ol_mana_imbue"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "fallendream:overlimit/apply/mana_imbue"
+    }
+}

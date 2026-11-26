@@ -20,7 +20,7 @@ import sys
 import zipfile
 
 ROOT = r'D:\数据包'
-DP = os.path.join(ROOT, 'sweetdream', 'data', 'sweetdream', 'function')
+DP = os.path.join(ROOT, 'fallendream', 'data', 'fallendream', 'function')
 BALL = os.path.join(DP, 'projectile', 'ball')
 STAFF = os.path.join(DP, 'equipment', 'staff')
 JAR = r'D:\PCL 正式版 2.10.0\.minecraft\versions\1.21.5-Fabric 0.16.10\1.21.5-Fabric 0.16.10.jar'
@@ -92,9 +92,9 @@ hit = open(os.path.join(BALL, 'hit.mcfunction'), encoding='utf-8').read()
 #      · 宏形态  —— 只要那一行在, 所有 style 都被覆盖(函数名由 $(style) 拼);
 #      · 字面量形态(旧版/回退) —— 仍然逐个 style 找。
 #    ★ 宏形态下"fx_<style> 文件是否存在"由 ③ 保证, 不会漏。
-MACRO_TRAIL = re.search(r'\$function\s+sweetdream:projectile/ball/fx_\$\(style\)\s*$',
+MACRO_TRAIL = re.search(r'\$function\s+fallendream:projectile/ball/fx_\$\(style\)\s*$',
                         tick, re.M) is not None
-MACRO_HIT = re.search(r'\$function\s+sweetdream:projectile/ball/fx_\$\(style\)_hit\s*$',
+MACRO_HIT = re.search(r'\$function\s+fallendream:projectile/ball/fx_\$\(style\)_hit\s*$',
                       hit, re.M) is not None
 if not MACRO_TRAIL and not MACRO_HIT:
     pass

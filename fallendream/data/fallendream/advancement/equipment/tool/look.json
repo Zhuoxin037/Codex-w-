@@ -1,0 +1,19 @@
+{
+    "criteria": {
+        "look": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": ["look"]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "fallendream:equipment/tool/look/toggle"
+    }
+}

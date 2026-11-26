@@ -13,7 +13,7 @@ _chk_ol_k9.py —— 批 K9（法杖 5 件：五世恶咒 / 倾囊 / 决堤 / �
 import io, os, sys
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
-FUNC = os.path.join(ROOT, "sweetdream", "data", "sweetdream", "function")
+FUNC = os.path.join(ROOT, "fallendream", "data", "fallendream", "function")
 
 bad = []
 
@@ -71,7 +71,7 @@ if i_mul < 0 or i_calc < 0 or i_mul > i_calc:
 exist("equipment/staff/five_curses/ol_tier.mcfunction",
       ["#fcv_t1", "#fcv_sl2", "#fcv_v3", "#fcv_apct", "#fcv_t5", "#fcv_fin"], "五世·ol_tier")
 exist("equipment/staff/five_curses/curse_step.mcfunction",
-      ["function sweetdream:equipment/staff/five_curses/ol_tier",
+      ["function fallendream:equipment/staff/five_curses/ol_tier",
        "scoreboard players operation @s zx.fcv_pct = #fcv_fin zx.meta"], "五世·curse_step")
 # 终世百分比必须由 final 自己从目标身上读，调用方不再 set 全局假名
 exist("equipment/staff/five_curses/final.mcfunction",

@@ -19,7 +19,7 @@ import io
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DEF = os.path.join(ROOT, "sweetdream", "data", "sweetdream", "function", "upgrade", "def", "load.mcfunction")
+DEF = os.path.join(ROOT, "fallendream", "data", "fallendream", "function", "upgrade", "def", "load.mcfunction")
 
 NUM = ("dmg", "mana", "cd", "mm", "mr", "mh", "mhp", "ar", "at", "hp", "aspd")
 FLAG = ("cdex", "tc", "boil", "nv", "rg")

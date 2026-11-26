@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-sweetdream 法杖法球粒子 —— 生成器（2026-10-11）
+fallendream 法杖法球粒子 —— 生成器（2026-10-11）
 ================================================================
 【为什么要有它】
     法杖的普攻都走同一颗法球(projectile/ball), 外观只靠一个 style 字符串区分。
@@ -41,7 +41,7 @@ import sys
 import zipfile
 
 ROOT = r'D:\数据包'
-DP = os.path.join(ROOT, 'sweetdream', 'data', 'sweetdream', 'function')
+DP = os.path.join(ROOT, 'fallendream', 'data', 'fallendream', 'function')
 BALL = os.path.join(DP, 'projectile', 'ball')
 STAFF = os.path.join(DP, 'equipment', 'staff')
 JAR = r'D:\PCL 正式版 2.10.0\.minecraft\versions\1.21.5-Fabric 0.16.10\1.21.5-Fabric 0.16.10.jar'
@@ -195,7 +195,7 @@ SPECS = [
     dict(style='twilight', cn='暮光', theme='黄昏 · 紫与橙的双色',
          note='【命中音在哪】本文件**故意不播音效**。暮光普攻命中本身是静音的,\n'
               '   只有 20% 触发「噬心」时才出声 —— 那一下在\n'
-              '   sweetdream:equipment/staff/twilight/tw_proc.mcfunction 第 ③ 步。',
+              '   fallendream:equipment/staff/twilight/tw_proc.mcfunction 第 ③ 步。',
          trail=[P(dust(0.62, 0.26, 0.78, 1.3), 0.12, 0.12, 0.12, 0, 6),
                 P(dust(1.0, 0.55, 0.2, 1.1), 0.16, 0.16, 0.16, 0, 4)],
          hit=[P(dust(0.62, 0.26, 0.78, 1.6), 0.55, 0.5, 0.55, 0.05, 18),
@@ -422,7 +422,7 @@ def header(sp, kind):
         note = ''.join('# %s\n' % ln for ln in sp['note'].split('\n'))
     return (
         '# ============================================================\n'
-        '# sweetdream:projectile/ball/fx_%s%s —— 《%s》%s\n'
+        '# fallendream:projectile/ball/fx_%s%s —— 《%s》%s\n'
         '# ------------------------------------------------------------\n'
         '# 【谁调用它】%s\n'
         '# 【主题】%s\n'
@@ -447,9 +447,9 @@ def emit():
             # Ceobe triad: keep native 3D shells alongside these existing effects.
             # Updating particles must not silently disconnect the ball visuals.
             if sp['style'] in ('triad', 'triad_fire', 'triad_gun'):
-                hook = ('execute at @s run function sweetdream:equipment/staff/triad/visual/ball_tick'
+                hook = ('execute at @s run function fallendream:equipment/staff/triad/visual/ball_tick'
                         if kind == 'trail' else
-                        'function sweetdream:equipment/staff/triad/visual/ball_end')
+                        'function fallendream:equipment/staff/triad/visual/ball_end')
                 body += '\n# 三形态实际三维弹体；保留原有粒子和命中表现。\n' + hook + '\n'
             old = open(p, encoding='utf-8').read() if os.path.isfile(p) else None
             if old != body:
@@ -480,7 +480,7 @@ def dispatch_trail():
         '#     那 24 行意味着法球飞行期间**每刻**对同一个实体做 24 次 NBT 序列化',
         '#     (2 秒 ≈ 960 次/球, 多球同飞是乘法)。改成宏分派后每刻 0 次。',
         '#     ★ 本函数是 tick 用 `with entity @s data` 调起来的, $(style) 直接可用。',
-        '$function sweetdream:projectile/ball/fx_$(style)',
+        '$function fallendream:projectile/ball/fx_$(style)',
     ]
 
 def dispatch_hit():
@@ -491,7 +491,7 @@ def dispatch_hit():
         '#     命中是"打到生物"那一下, 属性伤害投递叠加时更容易看出卡顿 ⇒ 一并改掉。',
         '#   ★ 兜底不需要: fire 已保证每个球都带 style(缺了就补 "plain", 见 fire ①),',
         '#     而 plain 自己有 fx_plain / fx_plain_hit 两份文件, 宏分派照样能走。',
-        '$function sweetdream:projectile/ball/fx_$(style)_hit',
+        '$function fallendream:projectile/ball/fx_$(style)_hit',
     ]
 
 def patch_dispatch(path, start_marker, end_marker, new_lines, tag):
@@ -518,7 +518,7 @@ def patch_pop():
     p = os.path.join(BALL, 'pop.mcfunction')
     body = (
         '# ============================================================\n'
-        '# sweetdream:projectile/ball/pop —— 撞墙 / 飞满 30 格\n'
+        '# fallendream:projectile/ball/pop —— 撞墙 / 飞满 30 格\n'
         '# ------------------------------------------------------------\n'
         '# 【和 hit 的区别】这一份**不造成伤害**: 只是球没了, 按自己的风格散一下。\n'
         '#   (撞到方块时, 判定顺序是"先看 1 格里有没有生物再看方块", 所以\n'
@@ -528,7 +528,7 @@ def patch_pop():
         '#   调用方必须带 with: `function ...pop with entity @s data`(见 ball/tick)。\n'
         '# 【本文件由 .workbuddy/_gen_staff_particles.py 生成】\n'
         '# ============================================================\n\n'
-        '$function sweetdream:projectile/ball/fx_$(style)\n'
+        '$function fallendream:projectile/ball/fx_$(style)\n'
         'kill @s\n')
     old = open(p, encoding='utf-8').read() if os.path.isfile(p) else None
     if old == body:
@@ -543,8 +543,8 @@ def patch_tick_pop_calls():
     #   否则每次跑生成器都会报"找不到派发块 marker / pop 调用"并 exit 1。
     p = os.path.join(BALL, 'tick_target.mcfunction')
     txt = open(p, encoding='utf-8').read()
-    old = 'function sweetdream:projectile/ball/pop'
-    new = 'function sweetdream:projectile/ball/pop with entity @s data'
+    old = 'function fallendream:projectile/ball/pop'
+    new = 'function fallendream:projectile/ball/pop with entity @s data'
     if new in txt:
         return 'tick 里 pop 调用已带 with'
     n = txt.count(old)

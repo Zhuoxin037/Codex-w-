@@ -4,7 +4,7 @@ import hashlib
 import os
 import re
 
-SRC_ROOT = r'D:/数据包/sweetdream'
+SRC_ROOT = r'D:/数据包/fallendream'
 DST_ROOT = r'D:/PCL 正式版 2.10.0/.minecraft/versions/1.21.5-Fabric 0.16.10/saves/测试包体/datapacks'
 
 log = open(r'D:/数据包/.workbuddy/_deploy_k10.txt', encoding='utf-8').read()
@@ -14,14 +14,14 @@ for line in log.split('\n'):
     if m and m.group(1) != '删除':
         paths.append(m.group(2).replace('\\', '/'))
 
-# 定位存档里的 sweetdream 包
+# 定位存档里的 fallendream 包
 pack = None
 for name in os.listdir(DST_ROOT):
-    if name.startswith('sweetdream'):
+    if name.startswith('fallendream'):
         pack = os.path.join(DST_ROOT, name)
         break
 if pack is None:
-    print('找不到存档里的 sweetdream 包; DST_ROOT =', DST_ROOT)
+    print('找不到存档里的 fallendream 包; DST_ROOT =', DST_ROOT)
     raise SystemExit(1)
 
 bad = 0

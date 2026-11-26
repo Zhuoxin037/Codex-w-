@@ -7,7 +7,7 @@ STAGE=Path('D:/数据包/模型设计/五世恶咒_建模_20261015/阶段一_猴
 OUT=STAGE/'过程记录'/a.draft
 if OUT.exists():raise SystemExit('Preserve existing draft; choose a new name.')
 OUT.mkdir(parents=True);step=.5;elements=[];groups=[]
-uid=lambda s:str(uuid.uuid5(uuid.NAMESPACE_URL,'sweetdream/monkey_skull/'+s))
+uid=lambda s:str(uuid.uuid5(uuid.NAMESPACE_URL,'fallendream/monkey_skull/'+s))
 def group(n,p='猴头骨_整体',origin=(8,13,8)):
     groups.append({'name':n,'parent':p,'origin':list(origin),'rotation':[0,0,0],'uuid':uid('g/'+n),'export':True,'visibility':True})
 group('猴头骨_整体',None)
@@ -144,13 +144,13 @@ bb={'meta':{'format_version':'5.0','model_format':'free','box_uv':False},'name':
 (OUT/'猴头骨_基础形体_分组模型.bbmodel').write_text(json.dumps(bb,ensure_ascii=False,separators=(',',':')),encoding='utf8')
 db=copy.deepcopy(bb);db['meta']['model_format']='java_block';db['name']='猴头骨_整件Display调整'
 (OUT/'猴头骨_整件Display调整.bbmodel').write_text(json.dumps(db,ensure_ascii=False,separators=(',',':')),encoding='utf8')
-rp=OUT/'审阅资源';mp=rp/'assets/sweetdream/models/item/monkey_skull_base.json';mp.parent.mkdir(parents=True)
-tp=rp/'assets/sweetdream/textures/item/monkey_skull_bone.png';tp.parent.mkdir(parents=True);atlas.save(tp)
-model={'textures':{'0':'sweetdream:item/monkey_skull_bone','particle':'sweetdream:item/monkey_skull_bone'},
+rp=OUT/'审阅资源';mp=rp/'assets/fallendream/models/item/monkey_skull_base.json';mp.parent.mkdir(parents=True)
+tp=rp/'assets/fallendream/textures/item/monkey_skull_bone.png';tp.parent.mkdir(parents=True);atlas.save(tp)
+model={'textures':{'0':'fallendream:item/monkey_skull_bone','particle':'fallendream:item/monkey_skull_bone'},
  'elements':[{'from':e['from'],'to':e['to'],'faces':{f:{'uv':[v/8 for v in ff['uv']],'texture':'#0'} for f,ff in e['faces'].items() if ff['texture'] is not None}} for e in elements],
  'display':display,'gui_light':'front'}
 mp.write_text(json.dumps(model,separators=(',',':')),encoding='utf8')
-ip=rp/'assets/sweetdream/items/monkey_skull_base.json';ip.parent.mkdir(parents=True);ip.write_text(json.dumps({'model':{'type':'minecraft:model','model':'sweetdream:item/monkey_skull_base'}}),encoding='utf8')
+ip=rp/'assets/fallendream/items/monkey_skull_base.json';ip.parent.mkdir(parents=True);ip.write_text(json.dumps({'model':{'type':'minecraft:model','model':'fallendream:item/monkey_skull_base'}}),encoding='utf8')
 (rp/'pack.mcmeta').write_text(json.dumps({'pack':{'pack_format':55,'description':'猴头骨基础形体审阅（未接入）'}},ensure_ascii=False),encoding='utf8')
 stats={'elements':len(elements),'groups':len(groups),'textures':1,'texture_size':[128,128],'hidden_faces_removed':removed,
  'group_counts':dict(collections.Counter(e['_group'] for e in elements)),
@@ -162,7 +162,7 @@ print(json.dumps({'output':str(OUT),**stats},ensure_ascii=False),flush=True)
 sys.path.insert(0,'C:/Users/qq303/.workbuddy/skills/mc-model-preview/scripts');import render3d as R
 def nearest(self,u,v):return self._px(max(0,min(self.w-1,int(u*self.w/16))),max(0,min(self.h-1,int(v*self.h/16))))
 R.Tex.sample=nearest
-faces=R.bake(model,R.Repo(str(rp)),ns_hint='sweetdream');images=[]
+faces=R.bake(model,R.Repo(str(rp)),ns_hint='fallendream');images=[]
 views=[('斜前',145,15),('正面',180,0),('侧面',90,0),('背面',0,10)]
 for name,yaw,pitch in views:
     rows,_=R.render([(faces,1.0)],600,540,yaw=yaw,pitch=pitch,bg=(224,222,215),ambient=.63,pad=.90)

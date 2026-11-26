@@ -15,7 +15,7 @@ _gen_offhand_visual.py —— 7 件「副手 · 被动」道具的「数据包�
   （与这 7 件自己的 second 函数、以及全包 137 处 `if items entity @s weapon.offhand` 同款）。
 ★ **观测镜 look 不在本脚本范围** —— 它 2026-10-05 就有独立平面图标了（走 ① 覆盖组）。
 ★ 资源包侧（图标定义/模型/贴图）由 build_vanilla_pack.py 的 ⑤ 副手组负责：
-  `item_model` → assets/sweetdream/items/tool_<id>.json
+  `item_model` → assets/fallendream/items/tool_<id>.json
                → models/item/vanilla/tool_<id>.json（minecraft:item/generated）
                → textures/item/vanilla/tool_<id>.png（16×16）
 """
@@ -27,11 +27,11 @@ import sys
 sys.path.insert(0, r'D:\数据包\.workbuddy')
 from build_offhand_icons import ICONS as TOOL_ICONS              # noqa: E402
 
-DATA = r'D:\数据包\sweetdream\data\sweetdream'
+DATA = r'D:\数据包\fallendream\data\fallendream'
 MOD_DIR = os.path.join(DATA, 'item_modifier', 'offhand_icons')
 FUNC_DIR = os.path.join(DATA, 'function', 'visual')
 GIVE_ROOT = os.path.join(DATA, 'function', 'equipment', 'tool')
-SECOND = r'D:\数据包\sweetdream\data\manacore\tags\function\event\second.json'
+SECOND = r'D:\数据包\fallendream\data\manacore\tags\function\event\second.json'
 
 SLOT = 'weapon.offhand'          # 副手槽（items 判定 / item modify 都用这个名）
 # 批 16 外观（2026-10-18）：批 14 那批"只做了 give"的副手，补齐平面图标。
@@ -50,7 +50,7 @@ def key(pid):
 
 def comp(pid):
     """give / item_modifier 里那份 item_model 组件片段（两处逐字一致）。"""
-    return 'minecraft:item_model="sweetdream:%s"' % key(pid)
+    return 'minecraft:item_model="fallendream:%s"' % key(pid)
 
 
 def write(path, text):
@@ -64,7 +64,7 @@ def gen_modifiers():
     for pid, _cn in TOOLS:
         data = {
             "function": "minecraft:set_components",
-            "components": {"minecraft:item_model": "sweetdream:" + key(pid)},
+            "components": {"minecraft:item_model": "fallendream:" + key(pid)},
         }
         write(os.path.join(MOD_DIR, pid + '.json'),
               json.dumps(data, ensure_ascii=False, indent=2) + '\n')
@@ -77,7 +77,7 @@ SYNC = """# Once per second, refresh legacy offhand-tool visuals (16x16 icon).
 # 这 7 件底物都是原版 recovery_compass, 判定槽位 = weapon.offhand。
 # no-equip-check-ok: 每次改写都由"道具 id + 当前 item_model"双重门控, 不依赖手持判定;
 #   漏判只会白写一次组件, 不会影响别的装备。
-execute as @a[tag=!test_pending_return] run function sweetdream:visual/tool_icon_held
+execute as @a[tag=!test_pending_return] run function fallendream:visual/tool_icon_held
 """
 
 
@@ -88,8 +88,8 @@ def gen_held():
     for pid, _cn in TOOLS:
         for slot in ('weapon.mainhand', 'weapon.offhand'):
             lines.append('execute if items entity @s %s *[minecraft:custom_data~{zx:["%s"]}] '
-                         'unless items entity @s %s *[minecraft:item_model="sweetdream:%s"] '
-                         'run item modify entity @s %s sweetdream:offhand_icons/%s'
+                         'unless items entity @s %s *[minecraft:item_model="fallendream:%s"] '
+                         'run item modify entity @s %s fallendream:offhand_icons/%s'
                          % (slot, pid, slot, key(pid), slot, pid))
     return '\n'.join(lines) + '\n'
 
@@ -107,7 +107,7 @@ def patch_give():
         for i, ln in enumerate(lines):
             if not ln.startswith('give @s '):
                 continue
-            if '"sweetdream:' + key(pid) + '"' in ln:
+            if '"fallendream:' + key(pid) + '"' in ln:
                 hit = True
                 break
             if not ln.rstrip().endswith(']'):
@@ -130,11 +130,11 @@ def patch_give():
 def register_second():
     data = json.loads(io.open(SECOND, encoding='utf-8').read())
     vals = data['values']
-    want = 'sweetdream:visual/tool_icon_sync'
+    want = 'fallendream:visual/tool_icon_sync'
     if want in vals:
         print('event/second 已登记(跳过)')
         return
-    anchor = 'sweetdream:visual/armor_icon_sync'
+    anchor = 'fallendream:visual/armor_icon_sync'
     if anchor not in vals:
         raise SystemExit('✗ event/second 里找不到 armor_icon_sync, 结构变了, 请人工确认')
     vals.insert(vals.index(anchor) + 1, want)

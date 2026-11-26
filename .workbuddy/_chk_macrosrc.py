@@ -31,7 +31,7 @@ import os
 import re
 import sys
 
-ROOT = r'D:\数据包\sweetdream\data\sweetdream\function'
+ROOT = r'D:\数据包\fallendream\data\fallendream\function'
 
 LOAD_RE = re.compile(r'data modify storage zx:work ([A-Za-z_][\w]*)\s+set from entity \S+ data\.zx\b')
 LAYER_RE = re.compile(r'function ([a-z0-9_]+:[\w/:]+) with storage zx:work ([A-Za-z_][\w]*)')
@@ -121,7 +121,7 @@ def main():
                 continue
             p = os.path.join(dirpath, f)
             rel = os.path.relpath(p, ROOT).replace('\\', '/')[:-len('.mcfunction')]
-            files['sweetdream:' + rel] = io.open(p, encoding='utf-8').read()
+            files['fallendream:' + rel] = io.open(p, encoding='utf-8').read()
 
     problems = []
     for lfq, ltxt in sorted(files.items()):

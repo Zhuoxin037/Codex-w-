@@ -1,0 +1,2 @@
+execute if entity @s[tag=zx.ex_moving] as @e[type=!#fallendream:no_damage,distance=..0.8] at @s rotated as @e[tag=zx.ex_self,distance=0..,limit=1] rotated ~ 0 positioned ^ ^ ^0.1 if block ~ ~ ~ #minecraft:replaceable if block ~ ~1 ~ #minecraft:replaceable run tp @s ~ ~ ~
+$execute if entity @e[tag=zx.ex_small,tag=!zx.ex_self,distance=..0.35,sort=nearest,limit=1,nbt={data:{owner:"$(owner)"}}] run function fallendream:equipment/staff/exalted/collide with entity @s data

@@ -24,7 +24,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from lore_fmt import nfmt, wrap, patch_text  # noqa: E402
 
 DOC = "C:/Users/qq303/Downloads/NEW_超限➕武器.txt"
-BASE = "D:/数据包/sweetdream/data/sweetdream"
+BASE = "D:/数据包/fallendream/data/fallendream"
 ITEM = BASE + "/function/overlimit/item"
 OUT_JSON = "D:/数据包/.workbuddy/_ol_j2.json"
 
@@ -173,7 +173,7 @@ def item_txt(uid, name, cmd, body):
               "# 【状态】2026-10-23 批 J2 第一步: 只出 give + 图标。")
     return (
         "# ============================================================\n"
-        "# sweetdream:overlimit/item/%s —— 给一块「超限·%s」\n"
+        "# fallendream:overlimit/item/%s —— 给一块「超限·%s」\n"
         "# ------------------------------------------------------------\n"
         "# 【custom_data】只写一个标记 ol_%s :\n"
         "#   进度 advancement/overlimit/%s 靠它认\"右键用掉了哪块超限石\"。\n"

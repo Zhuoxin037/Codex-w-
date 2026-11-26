@@ -1,0 +1,9 @@
+# ============================================================
+# fallendream:overlimit/item/mana_imbue —— 给一块「超限·注魔」
+# 【接线】custom_data zx:["ol_mana_imbue"] 供 advancement 识别；
+#   CMD=118 与 _gen_stone_icons.py 的 CMD 表、recovery_compass.json 路由三处一致。
+# 【敲入】副手持对应装备 + 主手右键本石 -> consume_item -> apply/mana_imbue。
+#   三件套(item/advancement/apply)与 oldef 均已就位，敲失败退材料。
+# ============================================================
+
+give @s recovery_compass[max_stack_size=1,item_name={text:"超限·注魔",bold:true,color:light_purple},custom_model_data={floats:[118.0f]},lore=[{"text":"✦ 超限石","color":"gold","bold":true,"italic":false},{"text":"","italic":false,"extra":[{"text":"适用于 ","color":"gray"},{"text":"注魔","color":"blue"},{"text":"   ·   ","color":"dark_gray"},{"text":"前置 ","color":"gray"},{"text":"尚未超限","color":"aqua"}]},{"text":" ","italic":false},{"text":"敲入后注魔更名为「超限·注魔」，被动技","color":"gray","italic":false},{"text":"能变为：每次攻击命中生物后，若自身魔","color":"gray","italic":false},{"text":"力值大于 100，则消耗 45 魔力值并获得","color":"gray","italic":false},{"text":"一个法球。自身当前每有一个法球则本次","color":"gray","italic":false},{"text":"消耗的魔力 -6（最多 -30）。主动技能变","color":"gray","italic":false},{"text":"为：魔力 240 · 冷却 30 秒 消耗全部法","color":"gray","italic":false},{"text":"球。下一次攻击命中生物后，对被攻击的","color":"gray","italic":false},{"text":"生物额外附加 X 次最大魔力值 ×0.08 的","color":"gray","italic":false},{"text":"伤害（X 为消耗的法球数量）。上述伤害","color":"gray","italic":false},{"text":"结束后，对其 2 格内的其他生物造成相当","color":"gray","italic":false},{"text":"于本次攻击对其造成的全部实际伤害的","color":"gray","italic":false},{"text":"80% 伤害。全部结算结束后，自身恢复本","color":"gray","italic":false},{"text":"次攻击及其附伤、扩散和连锁造成的实际","color":"gray","italic":false},{"text":"总伤害 ×10% 的魔力值，并获得两个法球。","color":"gray","italic":false}],custom_data={zx:["ol_mana_imbue"]},consumable={animation:"none",consume_seconds:0,has_consume_particles:false,sound:"block.bamboo_wood_button.click_off"}]

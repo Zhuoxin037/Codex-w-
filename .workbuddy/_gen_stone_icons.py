@@ -23,7 +23,7 @@
 import io, os, json, math, struct, zlib
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-RP = "D:/数据包/sweetdream_rp_完整版/assets"
+RP = "D:/数据包/fallendream_rp_完整版/assets"
 # 原版定义已固化进项目(.workbuddy/vanilla/), 免得每次重跑都要去翻 jar。
 # 来源: 1.21.5 jar 的 assets/minecraft/items/recovery_compass.json
 ORIG = HERE + "/vanilla/recovery_compass.json"
@@ -593,15 +593,15 @@ def build(shape, glyph, main, dark, lite, dots):
 
 def model_json(uid):
     return ('{\n  "parent": "minecraft:item/generated",\n'
-            '  "textures": {\n    "layer0": "sweetdream:item/stone/%s"\n  }\n}\n' % uid)
+            '  "textures": {\n    "layer0": "fallendream:item/stone/%s"\n  }\n}\n' % uid)
 
 
 # ---------------------------------------------------------------- 输出
 out_px = []
 for (uid, glyph, shape, main, dark, lite, dots) in SPEC:
     px = build(shape, glyph, main, dark, lite, dots)
-    write_png("%s/sweetdream/textures/item/stone/%s.png" % (RP, uid), 16, 16, px)
-    mp = "%s/sweetdream/models/item/stone/%s.json" % (RP, uid)
+    write_png("%s/fallendream/textures/item/stone/%s.png" % (RP, uid), 16, 16, px)
+    mp = "%s/fallendream/models/item/stone/%s.json" % (RP, uid)
     os.makedirs(os.path.dirname(mp), exist_ok=True)
     io.open(mp, "w", encoding="utf-8").write(model_json(uid))
     out_px.append((uid, px))
@@ -611,7 +611,7 @@ for (uid, glyph, shape, main, dark, lite, dots) in SPEC:
 #   这里只写模型 JSON 与 recovery_compass 路由（CMD 映射不变）。
 for (uid, main, dark, lite) in OL_SPEC:
     px = build("star", "", main, dark, lite, 0)
-    mp = "%s/sweetdream/models/item/stone/ol_%s.json" % (RP, uid)
+    mp = "%s/fallendream/models/item/stone/ol_%s.json" % (RP, uid)
     os.makedirs(os.path.dirname(mp), exist_ok=True)
     io.open(mp, "w", encoding="utf-8").write(model_json("ol_" + uid))
     out_px.append(("ol_" + uid, px))
@@ -622,7 +622,7 @@ entries = []
 for name, _ in out_px:
     entries.append({"threshold": float(CMD[name]),
                     "model": {"type": "minecraft:model",
-                              "model": "sweetdream:item/stone/%s" % name}})
+                              "model": "fallendream:item/stone/%s" % name}})
 entries.sort(key=lambda e: e["threshold"])
 doc = {"hand_animation_on_swap": False,   # 见文件头: 免得将来有人把它改成动态时要重新排查
        "model": {"type": "minecraft:range_dispatch",

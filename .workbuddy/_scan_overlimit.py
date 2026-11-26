@@ -49,8 +49,8 @@ def parse_lore(body):
     return [x.strip() for x in out]
 
 
-SRC = r"D:/数据包/sweetdream/data/sweetdream/function/overlimit/def/load.mcfunction"
-STONE_DIR = r"D:/数据包/sweetdream/data/sweetdream/function/overlimit/item"
+SRC = r"D:/数据包/fallendream/data/fallendream/function/overlimit/def/load.mcfunction"
+STONE_DIR = r"D:/数据包/fallendream/data/fallendream/function/overlimit/item"
 import os
 stones = {f[:-11] for f in os.listdir(STONE_DIR) if f.endswith(".mcfunction")}
 txt = open(SRC, encoding="utf-8", errors="replace").read()

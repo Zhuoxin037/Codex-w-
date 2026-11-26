@@ -15,7 +15,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from lore_fmt import rebuild, json_to_snbt  # noqa: E402
 
-ROOT = r"D:\数据包\sweetdream\data\sweetdream\function\equipment"
+ROOT = r"D:\数据包\fallendream\data\fallendream\function\equipment"
 BASE = ROOT
 
 EQ_SLOT = {"helmet": "head", "chestplate": "chest", "leggings": "legs", "boots": "feet"}
@@ -67,7 +67,7 @@ def pad_sections(lore):
 # 胜利誓约｜传说｜剑
 # ============================================================
 SWORD_NOTE = """# ============================================================
-# sweetdream:equipment/sword/oath_victory/give —— 给一件「胜利誓约」（传说 · 剑）
+# fallendream:equipment/sword/oath_victory/give —— 给一件「胜利誓约」（传说 · 剑）
 # ------------------------------------------------------------
 # 【custom_data】"oath_victory" -> 装备 id; 判定一律写 custom_data~{zx:["oath_victory"]}
 # 【被动】每次普攻命中生物后 20% 概率 +5 点临时生命值（走 lib/thp，硬上限 最大生命×2）。
@@ -99,7 +99,7 @@ SWORD_LORE = [
 # 枢｜史诗｜头盔
 # ============================================================
 PIVOT_NOTE = """# ============================================================
-# sweetdream:equipment/armor/pivot/give —— 给一件「枢」（史诗 · 头盔）
+# fallendream:equipment/armor/pivot/give —— 给一件「枢」（史诗 · 头盔）
 # ------------------------------------------------------------
 # 【custom_data】"pivot" -> 装备 id; 判定写 custom_data~{zx:["pivot"]}
 # 【机制】魔力值上限 +120；术阵位上限 +1。
@@ -119,7 +119,7 @@ PIVOT_LORE = [
 # 承｜史诗｜护腿
 # ============================================================
 BEARING_NOTE = """# ============================================================
-# sweetdream:equipment/armor/bearing/give —— 给一件「承」（史诗 · 护腿）
+# fallendream:equipment/armor/bearing/give —— 给一件「承」（史诗 · 护腿）
 # ------------------------------------------------------------
 # 【custom_data】"bearing" -> 装备 id; 判定写 custom_data~{zx:["bearing"]}
 # 【机制】魔力 +140；每占 1 术阵位 → 护甲 +2 / 韧性 +1（最多 3 层）；术阵为空时移速 +6%。
@@ -150,12 +150,12 @@ BEARING_LORE = [
 # 空营｜史诗｜胸甲
 # ============================================================
 CAMP_NOTE = """# ============================================================
-# sweetdream:equipment/armor/empty_camp/give —— 给一件「空营」（史诗 · 胸甲）
+# fallendream:equipment/armor/empty_camp/give —— 给一件「空营」（史诗 · 胸甲）
 # ------------------------------------------------------------
 # 【custom_data】"empty_camp" -> 装备 id; 判定写 custom_data~{zx:["empty_camp"]}
 # 【机制】魔力 +140；8 格内每 1 个敌对生物 → 护甲 +1 / 韧性 +0.5（最多 6 层）；
 #   8 格内没有敌对生物 → 每秒回 3 魔力。
-# 【★ 敌对生物口径 ★】`@e[type=!#sweetdream:no_damage,distance=..8]`，与包内其余
+# 【★ 敌对生物口径 ★】`@e[type=!#fallendream:no_damage,distance=..8]`，与包内其余
 #   AOE 选择器一致（排除 marker/法球/领域等无伤害实体）。每秒数一次，别每刻数。
 # 【外观】尚未画。
 # ============================================================"""
@@ -169,7 +169,7 @@ CAMP_LORE = [
 # 独行｜史诗｜靴子
 # ============================================================
 LONE_NOTE = """# ============================================================
-# sweetdream:equipment/armor/lone_walk/give —— 给一件「独行」（史诗 · 靴子）
+# fallendream:equipment/armor/lone_walk/give —— 给一件「独行」（史诗 · 靴子）
 # ------------------------------------------------------------
 # 【custom_data】"lone_walk" -> 装备 id; 判定写 custom_data~{zx:["lone_walk"]}
 # 【机制】魔力 +120 / 移速 +8%；8 格内敌对 ≤2 → 技能伤害 +8%；
@@ -197,7 +197,7 @@ LONE_LORE = [
 # 溢流｜罕见｜护腿
 # ============================================================
 OVERFLOW_NOTE = """# ============================================================
-# sweetdream:equipment/armor/overflow/give —— 给一件「溢流」（罕见 · 护腿）
+# fallendream:equipment/armor/overflow/give —— 给一件「溢流」（罕见 · 护腿）
 # ------------------------------------------------------------
 # 【custom_data】"overflow" -> 装备 id; 判定写 custom_data~{zx:["overflow"]}
 # 【机制】魔力 +80 / 最大生命 +4；被过量治疗后 50% 溢出量转临时生命（上限 最大生命×2）。
@@ -215,7 +215,7 @@ OVERFLOW_LORE = [
 # 蓄意｜史诗｜胸甲
 # ============================================================
 INTENT_NOTE = """# ============================================================
-# sweetdream:equipment/armor/intent/give —— 给一件「蓄意」（史诗 · 胸甲）
+# fallendream:equipment/armor/intent/give —— 给一件「蓄意」（史诗 · 胸甲）
 # ------------------------------------------------------------
 # 【custom_data】"intent" -> 装备 id; 判定写 custom_data~{zx:["intent"]}
 # 【机制】魔力 +150 / 最大生命 +20%；每使用 50 魔力 → +2 临时生命（单技能可重复触发）；
@@ -236,7 +236,7 @@ INTENT_LORE = [
 # 踏空｜罕见｜靴子
 # ============================================================
 AIR_NOTE = """# ============================================================
-# sweetdream:equipment/armor/air_step/give —— 给一件「踏空」（罕见 · 靴子）
+# fallendream:equipment/armor/air_step/give —— 给一件「踏空」（罕见 · 靴子）
 # ------------------------------------------------------------
 # 【custom_data】"air_step" -> 装备 id; 判定写 custom_data~{zx:["air_step"]}
 # 【机制】魔力 +50；从空中落地 → 4 格内全部生物受 基础攻击力 伤害 + 击飞 1 格，
@@ -256,7 +256,7 @@ AIR_LORE = [
 # 屏息｜罕见｜头盔
 # ============================================================
 BREATH_NOTE = """# ============================================================
-# sweetdream:equipment/armor/breath_hold/give —— 给一件「屏息」（罕见 · 头盔）
+# fallendream:equipment/armor/breath_hold/give —— 给一件「屏息」（罕见 · 头盔）
 # ------------------------------------------------------------
 # 【custom_data】"breath_hold" -> 装备 id; 判定写 custom_data~{zx:["breath_hold"]}
 # 【机制】魔力 +60；每 1 个空闲术阵位 → 每秒回 2 魔力；全满时改为每秒回 1 魔力。
@@ -326,7 +326,7 @@ def build(it):
     comps.append("lore=%s" % json_to_snbt(lore))
     comps.append("unbreakable={}")
     if it.get("skill"):
-        comps.append('custom_data={zx:[%s],skill:"sweetdream:%s",tags:%s}'
+        comps.append('custom_data={zx:[%s],skill:"fallendream:%s",tags:%s}'
                      % (",".join(zx), it["skill"], json_to_snbt(it["tags"])))
     else:
         comps.append("custom_data={zx:[%s],tags:%s}" % (",".join(zx), json_to_snbt(it["tags"])))
@@ -339,17 +339,17 @@ def build(it):
     # ★ 两条链路的 key 不一样，别图省事合并：
     #     武器 → items/<id>.json            （模型 models/item/vanilla/<id>.json）
     #     盔甲 → items/armor_<id>.json      （模型 …/armor_<id>.json，equipment/armor_<id>.json）
-    #   2026-10-27 真实事故：把两者写成同一个 'sweetdream:%s'，8 件盔甲全部指向
+    #   2026-10-27 真实事故：把两者写成同一个 'fallendream:%s'，8 件盔甲全部指向
     #   items/pivot.json 这类不存在的文件 —— 游戏里就是紫黑块，零日志；靠
     #   _chk_item_visual 才抓出来。
     if it.get("vis"):
         if it["cat"] == "armor":
-            comps.append('item_model="sweetdream:armor_%s"' % it["eid"])
+            comps.append('item_model="fallendream:armor_%s"' % it["eid"])
             mat = it["base"].split("_")[0]
-            comps.append('equippable={slot:"%s",asset_id:"sweetdream:armor_%s",equip_sound:"%s"}'
+            comps.append('equippable={slot:"%s",asset_id:"fallendream:armor_%s",equip_sound:"%s"}'
                          % (EQ_SLOT[it["slot"]], it["eid"], ARMOR_SOUND[mat]))
         else:
-            comps.append('item_model="sweetdream:%s"' % it["eid"])
+            comps.append('item_model="fallendream:%s"' % it["eid"])
     return "give @s %s[%s]" % (it["base"], ",".join(comps))
 
 

@@ -9,7 +9,7 @@ import os
 import re
 import sys
 
-ROOT = r'D:/数据包/sweetdream/data/sweetdream/function'
+ROOT = r'D:/数据包/fallendream/data/fallendream/function'
 VAR = re.compile(r'\$\([A-Za-z0-9_.]+\)')
 
 write = '--write' in sys.argv

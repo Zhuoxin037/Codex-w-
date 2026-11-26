@@ -1,0 +1,1 @@
+summon minecraft:armor_stand -94.8 90 48.5 {Tags:["sd.edu_actor","sd.edu_hero"],ShowArms:1b,NoBasePlate:1b,NoGravity:1b,Invulnerable:1b,DisabledSlots:4144959,Rotation:[-90f,0f],equipment:{chest:{id:"minecraft:chainmail_chestplate",count:1},legs:{id:"minecraft:chainmail_leggings",count:1},feet:{id:"minecraft:chainmail_boots",count:1}}}

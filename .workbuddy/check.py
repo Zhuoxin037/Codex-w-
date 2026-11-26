@@ -64,7 +64,7 @@
         **任何覆盖层资源包**整份替换 `items/<id>.json` 时, 只要那个 id 被数据包的
         `item_modifier/*.json`(`set_components` 写 `item_model`)驱动, 就必须照带这个字段。
         覆盖层内部通常是纯 `minecraft:model`、且不在主资源包目录下 ⇒ 旧判据漏检。
-        真实案例: 旧覆盖层 `sweetdream_rp_原版风`(2026-10-13 已删) 的 4 件(天使核心 / 风帆 / 极光与幻梦 / 观测镜)
+        真实案例: 旧覆盖层 `fallendream_rp_原版风`(2026-10-13 已删) 的 4 件(天使核心 / 风帆 / 极光与幻梦 / 观测镜)
         第一次生成时只写了 `model`, 表现为"换上去之后在手上一直抽搐"; 用户连报两次
         (先极光与幻梦、后天使核心), 因为改好的版本一直没被游戏重载 ⇒ 看的一直是旧表现。
  16) 行首有 $ 但不含 $(变量) —— 3) 反过来那一条, 一样会让**整个函数作废**
@@ -88,7 +88,7 @@
      —— "没穿也生效"。真实事故: 黄昏黎明之交界脱掉后, 魔力低于一半照样每秒 +20。
         确实不需要判装备的, 在调用行上方写 `# no-equip-check-ok: 理由` 豁免。
  30) "只平A"契约: 攻击回魔的进度没限定 `damage.type.tags = minecraft:is_player_attack`
-     —— 不写就会把技能伤害也算进去(技能伤害是 sweetdream:skill 类型)。
+     —— 不写就会把技能伤害也算进去(技能伤害是 fallendream:skill 类型)。
 """
 import json, re, sys, io, struct
 from collections import defaultdict
@@ -96,20 +96,20 @@ from pathlib import Path
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
 ROOT = Path(r'D:\数据包')
-PACKS = ['manacore-1.0.0', 'sweetdream']
-# ★ 2026-10-13 起: 资源包**只留一份** = sweetdream_rp_完整版/(老包 sweetdream_rp/
-#   与覆盖层 sweetdream_rp_原版风/ 已按用户要求删除, 见当日记录)。
+PACKS = ['manacore-1.0.0', 'fallendream']
+# ★ 2026-10-13 起: 资源包**只留一份** = fallendream_rp_完整版/(老包 fallendream_rp/
+#   与覆盖层 fallendream_rp_原版风/ 已按用户要求删除, 见当日记录)。
 #   它既是构建产物也是唯一真源 —— 改贴图/模型只改这一处。
 #   一个都找不到时 RP 为 None, 下面所有跟资源包有关的检查会**跳过并明确报告**
 #   (绝不静默丢检查)。
 RP = None
-for _cand in ('sweetdream_rp_完整版',):
+for _cand in ('fallendream_rp_完整版',):
     _p2 = ROOT / _cand
     if (_p2 / 'assets').exists():
         RP = _p2
         break
 if RP is None:
-    print('[WARN] 找不到资源包目录 sweetdream_rp_完整版 —— 资源包相关检查被跳过')
+    print('[WARN] 找不到资源包目录 fallendream_rp_完整版 —— 资源包相关检查被跳过')
 
 functions, nsdirs = {}, []
 for pack in PACKS:
@@ -280,7 +280,7 @@ old_dust = re.compile(r'particle\s+(?:minecraft:)?dust\s')
 json_cmd = re.compile(r'^\$?\s*(?:tellraw\s+\S+|title\s+\S+\s+(?:title|subtitle|actionbar))\s+(.*)$')
 # 说明文字清理: tellraw/title 后面那一大坨 JSON 里, 经常写着"用 /function foo:bar 这样打"
 # 之类的**帮助文本** —— 那是字符串, 不是真调用, 但 fn_call 正则会把它当成引用,
-# 报一条并不存在的 "sweetdream:前缀"。所以扫函数/标签引用之前, 先把这段砍掉。
+# 报一条并不存在的 "fallendream:前缀"。所以扫函数/标签引用之前, 先把这段砍掉。
 # (只影响"引用检查"这一项; tellraw 的 JSON 解析本身另有 comp 那一项在管。)
 _text_tail = re.compile(r'(?:^|\brun\s+)(?:tellraw\s+\S+|title\s+\S+\s+(?:title|subtitle|actionbar))\s+.*$')
 # 命令里的文本组件其实是 SNBT: {text:"x",color:"red"} 这种"键名不带引号"是合法的。
@@ -407,8 +407,12 @@ for fnk, fp in functions.items():
         #     `Failed to load function ... big_tick` 能看出来)。
         #     ★ 同族: shade_make(bdm y / bdm ry) 两处一直坏着 —— 魂灵之影的
         #     translation/朝向同步从未生效过, 同理完全静默。
+        #     2026-11-22 补: 1.21.5 的 store result storage 类型还合法支持
+        #     `string` / `nbt` / `boolean` —— 超限·空蝉要把坐标存成**纯数字字符串**
+        #     才能塞进 /summon 的宏参数(double 会渲染成 `1.5d` 导致整条语法错)。
+        #     误报会逼着人改用 int 丢小数, 所以这里把合法类型补齐。
         msp = re.search(r'\bstore (?:result|success) storage \S+ +(\S+) +(\S+)', s)
-        if msp and msp.group(2) not in ('byte', 'short', 'int', 'long', 'float', 'double'):
+        if msp and msp.group(2) not in ('byte', 'short', 'int', 'long', 'float', 'double', 'string', 'nbt', 'boolean'):
             R['storpath'].append((str(fp), i, s[:100]
                                   + '  <- store storage 的路径是单 token, 要写成 %s.%s'
                                     % (msp.group(1), msp.group(2))))
@@ -500,7 +504,7 @@ for fnk, fp in functions.items():
         #     `$store result storage manacore:players "$(uuid)".slot int 1 run …`(少 execute)
         #     ⇒ `store` 不是命令 ⇒ 宏函数在这一行中断 ⇒ 索引写不进去、manacore.gen 不写
         #     ⇒ tick_self 每秒判定"未注册" ⇒ 每秒重走 join(每秒弹走一格槽位: 实测 64→55)
-        #     ⇒ self_uuid 恒空 ⇒ sweetdream 整包静默失效, **日志零报错**。
+        #     ⇒ self_uuid 恒空 ⇒ fallendream 整包静默失效, **日志零报错**。
         #     判定: 行首(可带 $ 与缩进)命中子命令关键字, 且整行不含 execute。
         mne = re.match(r'\s*\$?\s*(store|if|unless|as|at|positioned|aligned|anchored|'
                        r'rotated|facing|on|run)\s', s)
@@ -669,7 +673,7 @@ for fnk, fp in functions.items():
             tgt = m.group(1)
             if tgt.startswith('#') or macro_var.search(tgt):
                 continue
-            # 动态函数名(宏拼路径, 如 $function sweetdream:upgrade/item/$(id)):
+            # 动态函数名(宏拼路径, 如 $function fallendream:upgrade/item/$(id)):
             # fn_call 的字符类吃不到 '$', 目标会被截成 "…/item/" —— 静态解析不了, 豁免。
             if cmd_part[m.end():m.end() + 2] == '$(':
                 continue
@@ -680,7 +684,7 @@ for fnk, fp in functions.items():
                 R['fn'].append((str(fp), i, tgt))
             elif tgt == fnk and s.lstrip().startswith('function ') and not seen_return:
                 # 2026-10-25 真实事故: 批量把 145 处 `manacore:api/mana/consume` 换成
-                # sweetdream:lib/mana/pay 的脚本**把 pay 自己也换掉了** ⇒ 它第 ① 步
+                # fallendream:lib/mana/pay 的脚本**把 pay 自己也换掉了** ⇒ 它第 ① 步
                 # 变成自己调自己, /reload 后每次施法栈溢出。加这条守门堵死这一类
                 # "批量替换脚本污染被新建文件" 的事故。
                 # ★ 只报**无条件**自调用(整行就是 `function <自己>`):
@@ -892,7 +896,7 @@ if _macro_fns:
 #       (由它对应的 hook_arrow 判断"这一击是不是箭打的", hook_victim 再据此拦近战)。
 #     真实事故 2026-10-05: 5 把弩(含寒鸦)近战敲人也触发, 花/层数全错。
 _crossbow_post = False
-for f in (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'enchantment').glob('*.json'):
+for f in (ROOT / 'fallendream' / 'data' / 'fallendream' / 'enchantment').glob('*.json'):
     try:
         j = json.loads(f.read_text(encoding='utf-8'))
     except Exception:
@@ -918,9 +922,9 @@ for f in (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'enchantment').glob('*.j
 #   电弧 lore 上写着「魔力 30」却从来没扣过, 属"整整漏掉一环"的实现遗漏, 加载期零日志。
 #   判据(以弩附魔 <id>.json 为锚, supported_items 含 crossbow):
 #     ① advancement/equipment/bow/<id>.json 存在, 且 trigger = shot_crossbow;
-#     ② 它的 rewards.function = sweetdream:equipment/bow/<id>/shot;
+#     ② 它的 rewards.function = fallendream:equipment/bow/<id>/shot;
 #     ③ 那个 shot 里调了 manacore:api/mana/consume(真的扣蓝)。
-for f in (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'enchantment').glob('*.json'):
+for f in (ROOT / 'fallendream' / 'data' / 'fallendream' / 'enchantment').glob('*.json'):
     try:
         j = json.loads(f.read_text(encoding='utf-8'))
     except Exception:
@@ -933,9 +937,9 @@ for f in (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'enchantment').glob('*.j
         continue
     cid = f.stem
     rel = f.relative_to(ROOT).as_posix()
-    advf = (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'advancement' / 'equipment' / 'bow'
+    advf = (ROOT / 'fallendream' / 'data' / 'fallendream' / 'advancement' / 'equipment' / 'bow'
             / (cid + '.json'))
-    shotf = (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function' / 'equipment' / 'bow'
+    shotf = (ROOT / 'fallendream' / 'data' / 'fallendream' / 'function' / 'equipment' / 'bow'
              / cid / 'shot.mcfunction')
     if not advf.exists():
         R['crossshot'].append((rel,
@@ -949,7 +953,7 @@ for f in (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'enchantment').glob('*.j
         continue
     trig = {c.get('trigger') for c in (aj.get('criteria') or {}).values() if isinstance(c, dict)}
     rw = (aj.get('rewards') or {}).get('function')
-    want_rw = 'sweetdream:equipment/bow/%s/shot' % cid
+    want_rw = 'fallendream:equipment/bow/%s/shot' % cid
     if 'shot_crossbow' not in trig:
         R['crossshot'].append((str(advf.relative_to(ROOT).as_posix()),
                                '射击进度的触发器必须是 shot_crossbow(现在: %s)' % (sorted(trig) or '无')))
@@ -964,31 +968,31 @@ for f in (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'enchantment').glob('*.j
         # (行首加 #)时, 子串仍在, 规则会被"假满足"放过去。
         body = [l for l in shotf.read_text(encoding='utf-8').splitlines()
                 if l.strip() and not l.strip().startswith('#')]
-        # ★ 2026-10-25 批 14: 全包扣费已统一改走 sweetdream:lib/mana/pay(它内部
+        # ★ 2026-10-25 批 14: 全包扣费已统一改走 fallendream:lib/mana/pay(它内部
         #   第一步就是 manacore:api/mana/consume, 另加"实际花费"记账)。两个入口
         #   都算"有扣费", 否则新入口会让这 17 把弩全部误报。
-        if not any(('manacore:api/mana/consume' in l or 'sweetdream:lib/mana/pay' in l)
+        if not any(('manacore:api/mana/consume' in l or 'fallendream:lib/mana/pay' in l)
                    for l in body):
             R['crossshot'].append((str(shotf.relative_to(ROOT).as_posix()),
                                    'shot 里没有调用 manacore:api/mana/consume / '
-                                   'sweetdream:lib/mana/pay -> 射击不消耗魔力'
+                                   'fallendream:lib/mana/pay -> 射击不消耗魔力'
                                    '(2026-10-12 电弧事故)'))
 
 # 42bb) give 里引用的本包附魔 id 必须在 enchantment/ 目录下有定义 ——
 #   背景(2026-10-13 退弦事故): 新弩「退弦」的 give 写了
-#   enchantments={"sweetdream:backstring":1}, 玩家直接(没退世界重进)拿装备时,
+#   enchantments={"fallendream:backstring":1}, 玩家直接(没退世界重进)拿装备时,
 #   注册表里还没有这个附魔 ⇒ **整条 give 命令在解析阶段就挂掉**:
 #     [Server thread/ERROR] Failed to load function …/backstring/give
 #     … 错误的"minecraft:enchantments"组件: "Failed to get element
-#        sweetdream:backstring missed input …"
+#        fallendream:backstring missed input …"
 #   现象 = 「别的装备都拿到了, 就这一件凭空消失」(日志只有一行 ERROR, 物品栏无痕)。
 #   守门能拦的是**拼写/漏建定义**这一半(那种是 100% 必挂); 另一半"定义存在、
 #   但当前世界没重进所以注册表里没有"守门拦不了 —— 只能靠交付时明说
 #   (附魔/伤害类型/进度都是注册表, 新增后必须**退出世界重进**, /reload 不补)。
-#   判据: 所有 give.mcfunction 的非注释行里 `"sweetdream:<id>"` 出现在
+#   判据: 所有 give.mcfunction 的非注释行里 `"fallendream:<id>"` 出现在
 #   enchantments={…} 内 ⇒ 必须有 enchantment/<id>.json。
-_ENCH_DIR = ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'enchantment'
-for _gf in (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function' / 'equipment').rglob(
+_ENCH_DIR = ROOT / 'fallendream' / 'data' / 'fallendream' / 'enchantment'
+for _gf in (ROOT / 'fallendream' / 'data' / 'fallendream' / 'function' / 'equipment').rglob(
         'give.mcfunction'):
     _grel = _gf.relative_to(ROOT).as_posix()
     for _i, _l in enumerate(_gf.read_text(encoding='utf-8').splitlines(), 1):
@@ -997,10 +1001,10 @@ for _gf in (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function' / 'equipmen
             continue
         if 'enchantments=' not in _s:
             continue
-        for _id in re.findall(r'"(?:sweetdream|minecraft):([a-z0-9_]+)"\s*:', _s):
+        for _id in re.findall(r'"(?:fallendream|minecraft):([a-z0-9_]+)"\s*:', _s):
             if not (_ENCH_DIR / (_id + '.json')).exists():
                 R['enchref'].append((_grel, _i,
-                                     'give 里挂了附魔 sweetdream:%s, 但 enchantment/%s.json '
+                                     'give 里挂了附魔 fallendream:%s, 但 enchantment/%s.json '
                                      '不存在 ⇒ **整条 give 命令解析失败**(物品凭空消失, 日志只有一行 '
                                      '"Failed to load function"): %s' % (_id, _id, _s[:80])))
 
@@ -1014,7 +1018,7 @@ for _gf in (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function' / 'equipmen
 #   这两类加载期都**零日志**。真源 = bonus_take 里 `data get storage zx:work
 #   up_val."$(series)".<field>` 这一句(字段是它说了算, 不是注释/文档), 累加器取紧随
 #   其后那行的 `scoreboard players operation #up_<acc> …`。
-_bt = functions.get('sweetdream:upgrade/api/bonus_take')
+_bt = functions.get('fallendream:upgrade/api/bonus_take')
 if _bt is not None:
     # 只看**非注释行** —— 否则把某段(比如 ① 的 -= )注释掉时子串仍在, 规则会被"假满足"。
     _bt_lines = [l for l in _bt.read_text(encoding='utf-8').splitlines()
@@ -1046,7 +1050,7 @@ if _bt is not None:
                                  '升级字段 "%s" 的"减旧/加回"不成对(现在 -=%d / +=%d, 各要 1) '
                                  '-> 同系换高阶时账本算错(静默, 无日志)'
                                  % (_fd, _c['-='], _c['+='])))
-    _bh = functions.get('sweetdream:upgrade/api/bonus_held')
+    _bh = functions.get('fallendream:upgrade/api/bonus_held')
     if _bh is not None:
         _t = '\n'.join(l for l in _bh.read_text(encoding='utf-8').splitlines()
                        if l.strip() and not l.lstrip().startswith('#'))
@@ -1057,7 +1061,7 @@ if _bt is not None:
                                      'bonus_take 会累加 #up_%s(字段 %s), 但 bonus_held 没把它归零 '
                                      '-> 每调用一次攒一次, 数值无限增长(静默)'
                                      % (_acc, _acc_of[_acc])))
-    _ba = functions.get('sweetdream:upgrade/api/bonus_armor')
+    _ba = functions.get('fallendream:upgrade/api/bonus_armor')
     if _ba is not None:
         _t = '\n'.join(l for l in _ba.read_text(encoding='utf-8').splitlines()
                        if l.strip() and not l.lstrip().startswith('#'))
@@ -1099,9 +1103,9 @@ for pack in PACKS:
 #   魔力增殖 α/β/Ω 的攻击回魔全死, 玩家只看到"升级突然没用了"。
 #   (a) 所有自撤销型进度都必须被 lib/rearm 覆盖(每刻兜底撤销一遍);
 #   (b) 任何函数里 advancement revoke 都不能排在 return 之后(那个分支永远走不到)。
-rearm_f = functions.get('sweetdream:lib/rearm')
+rearm_f = functions.get('fallendream:lib/rearm')
 if rearm_f is None:
-    R['rearm'].append(('(缺少 sweetdream:lib/rearm)',
+    R['rearm'].append(('(缺少 fallendream:lib/rearm)',
                        '安全网函数不存在 -> 任何一次性进度一旦被预算截断就永久卡死'))
 else:
     listed = {}
@@ -1122,10 +1126,10 @@ else:
         R['rearm'].append((str(rearm_f),
                            '%s 列在 rearm 里, 但它不是自撤销型进度(多半写错了, 确认后可删)' % k))
     # 光有清单没人调用也没用 —— 必须挂在 core/tick 上(每刻)
-    if not re.search(r'function\s+sweetdream:lib/rearm\b',
-                     (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function'
+    if not re.search(r'function\s+fallendream:lib/rearm\b',
+                     (ROOT / 'fallendream' / 'data' / 'fallendream' / 'function'
                       / 'core' / 'tick.mcfunction').read_text(encoding='utf-8')
-                     if (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function'
+                     if (ROOT / 'fallendream' / 'data' / 'fallendream' / 'function'
                          / 'core' / 'tick.mcfunction').exists() else ''):
         R['rearm'].append((str(rearm_f), '没有任何地方调用它 -> 必须挂到 core/tick(每刻)'))
 
@@ -1160,7 +1164,7 @@ for fp, i, c, s in const_used:
 #   真实事故 2026-10-04: dusk_dawn/second 第 14 行 `execute as @a at @s run function
 #   .../low_mana`, 而 low_mana 直接读魔力就回 20 -> 脱掉「黄昏黎明之交界」,
 #   魔力低于一半照样每秒涨 20(玩家: "不论有没有穿上都会触发被动效果")。
-#   判据刻意收窄: 只查"调用点完全没有任何过滤 + 目标是 sweetdream:equipment/*"。
+#   判据刻意收窄: 只查"调用点完全没有任何过滤 + 目标是 fallendream:equipment/*"。
 #   (liaoyuan/second_one 那种由 `@a[scores={zx.ly_aura=1..}]` 门控的不会被误伤。)
 #   确实不需要判装备的(比如把手部动画帧号复位), 在调用行上方写
 #   `# no-equip-check-ok: 理由` 豁免。
@@ -1182,7 +1186,7 @@ for fnk in functions:
             tgt = m.group(1)
             if ':' not in tgt:
                 tgt = fnk.split(':')[0] + ':' + tgt
-            if tgt.startswith('sweetdream:equipment/') and tgt in functions:
+            if tgt.startswith('fallendream:equipment/') and tgt in functions:
                 # 判"穿没穿"用 if 或 unless 都算(unless ... run return 0 是常见写法)
                 if not pend and 'items entity @s' not in ftext(tgt):
                     R['equip'].append((
@@ -1199,7 +1203,7 @@ for fnk in functions:
 #   魔力 > 50 的玩家消耗标签都被扣 50 蓝并把标签刷回 / 白拿 50·100 魔力 + 力量。
 #   判据: mark_take 里 `run function <X>` 的每个 X, 函数体必须含 "items entity @s";
 #   确实不需要的(公共件如 tag/unmark) 在调用行**正上方**写 `# no-equip-check-ok: 理由` 豁免。
-_MT = 'sweetdream:lib/mark_take'
+_MT = 'fallendream:lib/mark_take'
 if _MT in functions:
     _mtcall = re.compile(r'run\s+function\s+([\w:.\-/]+)')
     _mtpend = False
@@ -1216,7 +1220,7 @@ if _MT in functions:
         if _m:
             _t = _m.group(1)
             if ':' not in _t:
-                _t = 'sweetdream:' + _t
+                _t = 'fallendream:' + _t
             if _t in functions and not _mtpend and 'items entity @s' not in ftext(_t):
                 R['equipgate'].append((
                     str(functions[_MT]),
@@ -1233,7 +1237,7 @@ if _MT in functions:
 #   判据: 路径含 /equipment/armor/ 或 /equipment/tool/ 的文件里, 每个 mark_consume
 #   调用点**正上方最近的一条** `data modify storage zx:work a set value {…}` 必须含 src:。
 #   (技能在 bow/sword/axe/staff 下, 不受本规则约束 —— 它们本来就该按默认 skill 算。)
-_consrc = re.compile(r'function\s+sweetdream:lib/mark_consume')
+_consrc = re.compile(r'function\s+fallendream:lib/mark_consume')
 _aset = re.compile(r'data\s+modify\s+storage\s+zx:work\s+a\s+set\s+value\s*\{(.*)\}\s*$')
 for _ck, _cp in functions.items():
     _crp = _cp.as_posix()
@@ -1296,18 +1300,18 @@ for _nk, _np in functions.items():
 # ---- 30) "只平A"契约 ----
 #   攻击回魔的进度 upgrade/attack 必须把伤害类型限定成玩家近战
 #   (原版标签 minecraft:is_player_attack = [player_attack, mace_smash])。
-#   不写这条条件时, **技能伤害也算数** —— 本包所有技能伤害都是 sweetdream:skill 类型
+#   不写这条条件时, **技能伤害也算数** —— 本包所有技能伤害都是 fallendream:skill 类型
 #   (api/damage 的默认 type, 见 zx:config damage_type), 于是"放个技能顺手把魔力回满"
 #   (2026-10-04 玩家反馈, 已修)。写条件用的是原版 damage 谓词, 格式取自原版
 #   adventure/overoverkill.json: conditions.damage.type.tags=[{id,expected}]。
 #   想让别的"攻击命中"效果也只认平A, 往这张表里加一条即可。
 MELEE_ONLY = {
-    'sweetdream:upgrade/attack': 'minecraft:is_player_attack',        # 魔力增殖: 攻击回魔
-    'sweetdream:equipment/armor/mirage_attack': 'minecraft:is_player_attack',    # 幻昼: 铺白昼梦
-    'sweetdream:equipment/armor/immolate_hurt': 'minecraft:is_player_attack',    # 焚舟: 攒/泄烈空
-    'sweetdream:equipment/axe/charge_hit': 'minecraft:is_player_attack',         # 超载: 命中追加闪电
-    'sweetdream:equipment/armor/brain_leech_attack': 'minecraft:is_player_attack',  # 超限·脑髓蛭: 攻击叠「蛊虫」
-    'sweetdream:equipment/armor/mirage_hit_dream': 'minecraft:is_player_attack',    # 幻昼: 攻击带「白昼梦」生物 +2
+    'fallendream:upgrade/attack': 'minecraft:is_player_attack',        # 魔力增殖: 攻击回魔
+    'fallendream:equipment/armor/mirage_attack': 'minecraft:is_player_attack',    # 幻昼: 铺白昼梦
+    'fallendream:equipment/armor/immolate_hurt': 'minecraft:is_player_attack',    # 焚舟: 攒/泄烈空
+    'fallendream:equipment/axe/charge_hit': 'minecraft:is_player_attack',         # 超载: 命中追加闪电
+    'fallendream:equipment/armor/brain_leech_attack': 'minecraft:is_player_attack',  # 超限·脑髓蛭: 攻击叠「蛊虫」
+    'fallendream:equipment/armor/mirage_hit_dream': 'minecraft:is_player_attack',    # 幻昼: 攻击带「白昼梦」生物 +2
 }
 for pack in PACKS:
     for nsdir in (ROOT / pack / 'data').iterdir():
@@ -1325,6 +1329,16 @@ for pack in PACKS:
                 j = json.loads(f.read_text(encoding='utf-8'))
             except Exception:
                 continue
+            # 2026-11-24: legacy resource IDs are intentionally inert after migration.
+            # They are valid only when the unified dispatcher explicitly references the reward
+            # and its native entry rejects synthetic damage re-entry.
+            criteria = list((j.get('criteria') or {}).values())
+            if criteria and all(c.get('trigger') == 'minecraft:impossible' for c in criteria):
+                dispatcher = ROOT / 'fallendream/data/fallendream/function/internal/attack/dispatch.mcfunction'
+                native = ROOT / 'fallendream/data/fallendream/function/internal/attack/native_melee.mcfunction'
+                reward = (j.get('rewards') or {}).get('function', '')
+                if dispatcher.exists() and native.exists() and reward and ('function ' + reward) in dispatcher.read_text(encoding='utf-8') and 'hit_success_stack[-1] run return 0' in native.read_text(encoding='utf-8'):
+                    continue
             got = []
             for crit in (j.get('criteria') or {}).values():
                 dmg = ((crit.get('conditions') or {}).get('damage') or {})
@@ -1333,7 +1347,7 @@ for pack in PACKS:
                         got.append((t.get('id'), t.get('expected')))
             if (want, True) not in got:
                 R['melee'].append((
-                    str(f), '没有限定 damage 条件 %s=true -> 技能伤害(sweetdream:skill)也会'
+                    str(f), '没有限定 damage 条件 %s=true -> 技能伤害(fallendream:skill)也会'
                             '触发, 变成"放技能就回魔"。当前 tags=%s' % (want, got)))
 
 # ---- 31) 物品描述的版式契约 ----
@@ -1457,7 +1471,7 @@ for fnk, fp in functions.items():
                                % (i, first_ret)))
 
 # 完整版可独立增加物品；覆盖层可以引用基底，索引应涵盖所有本项目资源包。
-RP_DIRS = sorted(p for p in ROOT.glob('sweetdream_rp_完整版*') if (p / 'assets').is_dir())
+RP_DIRS = sorted(p for p in ROOT.glob('fallendream_rp_完整版*') if (p / 'assets').is_dir())
 for base in [ROOT / p for p in PACKS] + RP_DIRS:
     if not base.exists():
         continue
@@ -1487,10 +1501,10 @@ for pack, f in [(pack, f) for pack in RP_DIRS for f in (pack / 'assets').rglob('
             continue
         if f"{pre}:{ref.split(':')[-1]}" not in rp_models:
             R['rp'].append(('RP ' + str(f), ref))
-for f in (ROOT / 'sweetdream' / 'data').rglob('*.mcfunction'):
+for f in (ROOT / 'fallendream' / 'data').rglob('*.mcfunction'):
     # ★ 只看**正文**: 注释行里的 `item_model="ns:<id>"` 是**占位说明**, 不是真引用。
     #   2026-10-10 假阳性事故: visual/sword_icon_held 的头注释写了
-    #   `item_model="sweetdream:<id>"` 当占位符, 被这条规则读成 id = "sweetdream:" ⇒
+    #   `item_model="fallendream:<id>"` 当占位符, 被这条规则读成 id = "fallendream:" ⇒
     #   报一条"模型引用缺失", 全量自检从 0 变 1。注释不参与加载, 一律跳过。
     _txt = '\n'.join(l for l in f.read_text(encoding='utf-8', errors='ignore').split('\n')
                      if not l.lstrip().startswith('#'))
@@ -1587,13 +1601,13 @@ for ns in ((RP / 'assets').iterdir() if RP else []):
 
 # 15) 物品定义按 custom_model_data 逐帧切换 / 被数据包 item_modify 驱动,
 #     却没关 hand_animation_on_swap (见文件头)
-# ★ 2026-10-10 补漏: 覆盖层资源包(sweetdream_rp_原版风)同样是**整份替换** items/<id>.json。
+# ★ 2026-10-10 补漏: 覆盖层资源包(fallendream_rp_原版风)同样是**整份替换** items/<id>.json。
 #   它内部是纯 minecraft:model、又不在 RP 目录下 ⇒ 旧版规则两条都沾不上, 连漏两次
 #   (极光与幻梦、天使核心 都是"覆盖定义漏了字段 -> 在手上一直抽搐", 用户报了两回)。
 #   改法: 先由数据包 item_modifier 反推出"被驱动的模型 id"集合, 再扫**每个**
-#   sweetdream_rp_完整版* 资源包 —— 命中(id 被驱动, 或自己写了 custom_model_data)就必须带
+#   fallendream_rp_完整版* 资源包 —— 命中(id 被驱动, 或自己写了 custom_model_data)就必须带
 #   "hand_animation_on_swap": false。且必须是 false, 只写字段名(或写 true)不算数。
-RP_DIRS = sorted(p for p in ROOT.glob('sweetdream_rp_完整版*') if (p / 'assets').is_dir())
+RP_DIRS = sorted(p for p in ROOT.glob('fallendream_rp_完整版*') if (p / 'assets').is_dir())
 DRIVEN_MODELS = set()
 _IM_MODEL = re.compile(r'"minecraft:item_model"\s*:\s*"([^"]+)"')
 for _pk in PACKS:
@@ -1641,7 +1655,7 @@ for k, v in seen.items():
 # ---- 17) ~ 19) 通用数值注册表(lib/reg/build) ----
 #   这三条都是"表驱动"体系特有的坑: 表是**数据**, 写错了不报错, 只会静默少一行,
 #   或者引用了根本没建过的计分项。所以只能静态比对。
-regbuild = (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function'
+regbuild = (ROOT / 'fallendream' / 'data' / 'fallendream' / 'function'
             / 'lib' / 'reg' / 'build.mcfunction')
 if regbuild.exists():
     rtxt = regbuild.read_text(encoding='utf-8')
@@ -1679,7 +1693,7 @@ if regbuild.exists():
 
     # 18) 表里引用的计分项必须真的被建出来过
     objs = set()
-    for f in (ROOT / 'sweetdream' / 'data').rglob('*.mcfunction'):
+    for f in (ROOT / 'fallendream' / 'data').rglob('*.mcfunction'):
         for m in re.finditer(r'objectives add (\S+)', f.read_text(encoding='utf-8', errors='ignore')):
             objs.add(m.group(1))
     for l in rlines:
@@ -1694,7 +1708,7 @@ if regbuild.exists():
 
     # 19) give 出去的装备 id 都该登记中文名(debug/worn 要用)
     names = set(re.findall(r'storage zx:reg names\.([A-Za-z_0-9]+) set value', rtxt))
-    for f in (ROOT / 'sweetdream' / 'data').rglob('give.mcfunction'):
+    for f in (ROOT / 'fallendream' / 'data').rglob('give.mcfunction'):
         for m in re.finditer(r'zx:\["([a-z_0-9]+)"', f.read_text(encoding='utf-8', errors='ignore')):
             if m.group(1) not in names:
                 R['regname'].append((str(f), 'id "%s" 没登记 zx:reg names -> debug/worn 只会显示英文 id'
@@ -1740,7 +1754,7 @@ if regbuild.exists():
     #     ① 该行含 生物 / marker / 目标 / 敌人 —— 层数记在别人身上, 观测镜本就不显示别人;
     #     ② 该行写 `# layer-skip: 理由` —— 确实是环境计数或不值得占行, 由人工解释。
     layobjs = set(re.findall(r'storage zx:reg layer append value \{o:"([^"]*)"', rtxt))
-    loadp = (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function'
+    loadp = (ROOT / 'fallendream' / 'data' / 'fallendream' / 'function'
              / 'core' / 'load.mcfunction')
     if loadp.exists():
         for i, line in enumerate(loadp.read_text(encoding='utf-8', errors='ignore').split('\n'), 1):
@@ -1813,7 +1827,7 @@ if regbuild.exists():
                                  ' "(没登记中文名!)"(e 写错了, 或该进 gsent 的全局行漏了)'
                                  % (lab, me.group(1))))
     for fn in ('stat_row', 'stat_row_a'):
-        fp = (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function' / 'debug'
+        fp = (ROOT / 'fallendream' / 'data' / 'fallendream' / 'function' / 'debug'
               / (fn + '.mcfunction'))
         if not fp.exists():
             R['regsent'].append((str(fp), '找不到 %s.mcfunction' % fn))
@@ -1827,7 +1841,7 @@ if regbuild.exists():
     # 24) 造型类组件的 NBT 必须带类型后缀: custom_model_data={floats:[2]} 是**整型列表**,
     #     而 component 的 floats 是 Float 列表 -> codec 拒收, 物品直接 missing texture。
     #     必须写 {floats:[2.0f]} / {floats:2f}。
-    for f in (ROOT / 'sweetdream' / 'data').rglob('*.mcfunction'):
+    for f in (ROOT / 'fallendream' / 'data').rglob('*.mcfunction'):
         for i, l in enumerate(f.read_text(encoding='utf-8', errors='ignore').splitlines(), 1):
             if l.lstrip().startswith('#'):
                 continue
@@ -1854,7 +1868,7 @@ if regbuild.exists():
         'iron_ingot': '铁锭系列', 'lapis_lazuli': '青金石块',
     }
     for d in ('upgrade/item', 'overlimit/item'):
-        for f in (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function' / d).rglob('*.mcfunction'):
+        for f in (ROOT / 'fallendream' / 'data' / 'fallendream' / 'function' / d).rglob('*.mcfunction'):
             t = f.read_text(encoding='utf-8', errors='ignore')
             for m in re.finditer(r'^\s*give @s ([a-z_]+)', t, re.M):
                 base = m.group(1)
@@ -1869,7 +1883,7 @@ if regbuild.exists():
 #     · 漏 name  -> 敲完超限物品**名字不变**(还叫「流光」), 玩家根本看不出这是超限版;
 #     · 漏 lore  -> lore_seed 把它清成一个空列表, 物品变成"没有描述"的东西(比不改还糟);
 #     · name.text 与 label 不一致 -> 名字和文档 / 提示对不上。
-overdef = (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function'
+overdef = (ROOT / 'fallendream' / 'data' / 'fallendream' / 'function'
            / 'overlimit' / 'def' / 'load.mcfunction')
 if overdef.exists():
     for i, l in enumerate(overdef.read_text(encoding='utf-8', errors='ignore').splitlines(), 1):
@@ -1897,7 +1911,7 @@ if overdef.exists():
                         + ',' + Q + 'bold' + Q + ':true,' + Q + 'color' + Q + ':'
                         + Q + '?([a-z_]+)' + Q + '?\}', l)
         if nmc:
-            _eqroot = (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function'
+            _eqroot = (ROOT / 'fallendream' / 'data' / 'fallendream' / 'function'
                        / 'equipment')
             _gives = sorted(_eqroot.glob('**/%s/give.mcfunction' % who))
             if not _gives:
@@ -1906,8 +1920,12 @@ if overdef.exists():
                                      '没法核对本名颜色' % (i, who, who)))
             else:
                 _gtxt = _gives[0].read_text(encoding='utf-8', errors='ignore')
-                _gm = re.search(r'item_name=\{text:' + Q + '[^' + Q + ']*' + Q
-                                + ',bold:true,color:' + Q + '?([a-z_]+)' + Q + '?\}', _gtxt)
+                # 2026-11-19: 兼容两种合法写法 —— 旧简写 item_name={text:"x",bold:true,color:xxx}
+                # 与 lore_fmt/rebuild 产出的 JSON 风格 item_name={"text":"x","color":"xxx","bold":true}
+                # 键/值引号有无、color 与 bold 先后都可能不同；两步：先切 item_name 块，再取 color。
+                _ib = re.search(r'item_name=\{(.*?)\}', _gtxt)
+                _gm = (re.search(r'"?color"?\s*:\s*"?(?:\\"?)?([a-z_]+)', _ib.group(1))
+                       if _ib else None)
                 if not _gm:
                     R['oldname'].append((str(overdef),
                                          '第 %d 行 超限 "%s": %s 里找不到 item_name 的颜色'
@@ -1958,7 +1976,7 @@ for k in sorted(functions):
 #   结算以技能文件里写的通道为准 —— 所以一旦技能换了通道而表没跟着改,
 #   面板就会把那件装备的超限伤害**归错列或干脆不显示**(静默)。
 #   这里用"反向校验": 扫技能文件实际用到的通道, 要求表里对得上。
-smdef = (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function'
+smdef = (ROOT / 'fallendream' / 'data' / 'fallendream' / 'function'
          / 'lib' / 'skill_mul' / 'def.mcfunction')
 wchan = {}
 if smdef.exists():
@@ -1980,7 +1998,7 @@ if smdef.exists():
                 got.add(f)
         wchan[eid] = got
     # 表里的 id 都要在 names 里登记(否则面板只会显示英文 id)
-    nbuild = (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function'
+    nbuild = (ROOT / 'fallendream' / 'data' / 'fallendream' / 'function'
               / 'lib' / 'reg' / 'build.mcfunction')
     ntext = nbuild.read_text(encoding='utf-8', errors='ignore') if nbuild.exists() else ''
     for eid in sorted(wchan):
@@ -1989,7 +2007,7 @@ if smdef.exists():
 else:
     R['chandef'].append((str(ROOT), '找不到 lib/skill_mul/def.mcfunction(面板会少三条倍率显示)'))
 
-eqdir = ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function' / 'equipment'
+eqdir = ROOT / 'fallendream' / 'data' / 'fallendream' / 'function' / 'equipment'
 for f in eqdir.rglob('*.mcfunction'):
     rel = f.relative_to(eqdir).parts
     if len(rel) < 3:
@@ -2034,7 +2052,7 @@ for f in eqdir.rglob('*.mcfunction'):
 #     下游读 zx:work a.<fld>(one 复原后就在 a 上)。本规则盯"冻"与"读"成对 ——
 #     哪天有人把 with_from 那行删了, 这里立刻报警, 而不是让效果悄悄归零。
 _CHF = ('attack_mul', 'max_mana_mul', 'other_mul')
-_wf = functions.get('sweetdream:internal/damage/with_from')
+_wf = functions.get('fallendream:internal/damage/with_from')
 _wf_text = _wf.read_text(encoding='utf-8', errors='ignore') if _wf else ''
 _chf_frozen = set()
 for _f in _CHF:
@@ -2058,12 +2076,12 @@ for fnk, fp in functions.items():
 # ---- 29) 超限伤害必须三条通道都派发 ----
 #   overlimit/api/mod 是"哪个通道字段存在就乘哪个"。漏一条 -> 走那条通道的技能
 #   静默少吃超限伤害(数值对不上 lore, 还不报错)。
-olmod = (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function'
+olmod = (ROOT / 'fallendream' / 'data' / 'fallendream' / 'function'
          / 'overlimit' / 'api' / 'mod.mcfunction')
 if olmod.exists():
     otext = olmod.read_text(encoding='utf-8', errors='ignore')
     for fld, sub in (('max_mana_mul', 'mm'), ('attack_mul', 'sm'), ('other_mul', 'om')):
-        if 'in arg.%s run function sweetdream:overlimit/api/mod/%s' % (fld, sub) not in otext:
+        if 'in arg.%s run function fallendream:overlimit/api/mod/%s' % (fld, sub) not in otext:
             R['olchan'].append((str(olmod), '没有派发 %s -> mod/%s(走这条通道的技能会静默少吃超限伤害)'
                                  % (fld, sub)))
 
@@ -2098,14 +2116,14 @@ for k in sorted(functions):
 #   (hook_calc 在事件里的位置与 `# @calc:` 角色由规则 67 dmgord 单独盯。)
 #   真实反馈 2026-10-04: 用户放完风行技能, 面板"最大魔力值技能倍率"仍显示 ×1。
 #   真实反馈 2026-10-07: 用户要求"把风声加成并进最大魔力值技能倍率, 去掉重复的那套"。
-SMSCAN = (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function'
+SMSCAN = (ROOT / 'fallendream' / 'data' / 'fallendream' / 'function'
           / 'lib' / 'skill_mul' / 'scan.mcfunction')
 if SMSCAN.exists():
     sscan = SMSCAN.read_text(encoding='utf-8', errors='ignore')
     # ★ 必须在**非注释行**上真的调它 ★ —— 只查子串的话, 把调用注释掉
     #   (行首加 #) 仍然含那串文本, 探针会假绿。
     _has_call = any(
-        'sweetdream:lib/mm_add/scan_mul' in l and not l.lstrip().startswith('#')
+        'fallendream:lib/mm_add/scan_mul' in l and not l.lstrip().startswith('#')
         for l in sscan.splitlines())
     if not _has_call:
         R['smwind'].append((str(SMSCAN),
@@ -2147,13 +2165,13 @@ if _mmhc.exists():
         R['smwind'].append((str(_mmhc), 'hook_calc 没调 lib/mm_add/take —— '
                                         '加成永远不会被消费掉(变成永久 buff, 且会越叠越高)'))
 # hook_calc 必须在事件里登记 + 计分项必须在 core/load 建出来(没建 = 整段静默失效)
-_DCEV = (ROOT / 'sweetdream' / 'data' / 'manacore' / 'tags' / 'function'
+_DCEV = (ROOT / 'fallendream' / 'data' / 'manacore' / 'tags' / 'function'
          / 'event' / 'damage_calc.json')
-if _DCEV.exists() and 'sweetdream:lib/mm_add/hook_calc' not in _DCEV.read_text(
+if _DCEV.exists() and 'fallendream:lib/mm_add/hook_calc' not in _DCEV.read_text(
         encoding='utf-8', errors='ignore'):
-    R['smwind'].append((str(_DCEV), '没登记 sweetdream:lib/mm_add/hook_calc —— '
+    R['smwind'].append((str(_DCEV), '没登记 fallendream:lib/mm_add/hook_calc —— '
                                     '那份加成在结算侧完全不生效(且不报错)'))
-_CORELOAD = (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function'
+_CORELOAD = (ROOT / 'fallendream' / 'data' / 'fallendream' / 'function'
              / 'core' / 'load.mcfunction')
 if _CORELOAD.exists():
     _cl = [l for l in _CORELOAD.read_text(encoding='utf-8', errors='ignore').splitlines()
@@ -2176,7 +2194,7 @@ if _CORELOAD.exists():
 #   另外盯: 威霆"每刻劈一道"的驱动 bolt_fx 必须挂在 core/tick、且三维度各一行
 #   (core/tick 只在主世界每刻跑 -> 少了维度, 在别的维度打威霆就永远不落雷)。
 _BOLT_EXEMPT = set()
-_DPFUN = ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function'
+_DPFUN = ROOT / 'fallendream' / 'data' / 'fallendream' / 'function'
 if _DPFUN.exists():
     for _fp in sorted(_DPFUN.rglob('*.mcfunction')):
         _rel = _fp.relative_to(_DPFUN).as_posix()
@@ -2223,7 +2241,7 @@ if _DPFUN.exists():
         if not any('lib/on_lightning' in l for l in _live):
             R['onlight'].append((str(_fp), 0,
                                  '这里 `summon minecraft:lightning_bolt` 之后没有调 '
-                                 'sweetdream:lib/on_lightning ⇒ 跨武器的"自身召唤闪电时…"效果'
+                                 'fallendream:lib/on_lightning ⇒ 跨武器的"自身召唤闪电时…"效果'
                                  '(超限·负离子 8 秒落点伤害 / 超限·超•负•荷 第二形态落点追加)'
                                  '在这道雷上**永远不触发**(静默、零日志; 2026-10-13 引雷针事故)。'
                                  '补一行即可(位置 = 落点、@s = 召唤者); 若**有意**不接, 把路径加进 '
@@ -2261,18 +2279,18 @@ if _DPFUN.exists():
                                  '2026-10-13 修)。圈人与放粒子都直接用当前位置'
                                  '(调用方已 at 到落点)。'))
 
-_TCTICK = (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function'
+_TCTICK = (ROOT / 'fallendream' / 'data' / 'fallendream' / 'function'
            / 'core' / 'tick.mcfunction')
 if _TCTICK.exists():
     _tt = _TCTICK.read_text(encoding='utf-8', errors='ignore')
     for _d in ('minecraft:overworld', 'minecraft:the_nether', 'minecraft:the_end'):
         if not any(('execute in ' + _d) in l
-                   and 'sweetdream:equipment/axe/thunderclap/bolt_fx' in l
+                   and 'fallendream:equipment/axe/thunderclap/bolt_fx' in l
                    and not l.lstrip().startswith('#')
                    for l in _tt.splitlines()):
             R['boltseen'].append((str(_TCTICK), 0,
                                   'core/tick 缺 "execute in %s ... run function '
-                                  'sweetdream:equipment/axe/thunderclap/bolt_fx" —— '
+                                  'fallendream:equipment/axe/thunderclap/bolt_fx" —— '
                                   '少了这个维度, 在该维度打威霆就永远不落雷' % _d))
 
 
@@ -2316,7 +2334,7 @@ if _DPFUN.exists():
 #   作为**命令结果只会给整数部分** —— 1.5 变 1、2.44 变 2, 于是面板上所有带小数的
 #   倍率被悄悄抹平(2026-10-04 用户反馈"下次技能加成 1", 存档里的真值其实是 1.5)。
 #   宏渲染本来就会把 DoubleTag 渲染成 "1.5"/"1.5d", 这句纯属多余 —— 禁掉。
-NMPLAIN = (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function'
+NMPLAIN = (ROOT / 'fallendream' / 'data' / 'fallendream' / 'function'
            / 'lib' / 'num' / 'plain.mcfunction')
 if NMPLAIN.exists():
     for n, l in enumerate(NMPLAIN.read_text(encoding='utf-8', errors='ignore').splitlines(), 1):
@@ -2384,9 +2402,9 @@ for fnk, fp in functions.items():
 #   升级结算 / 流光回调…)都可能往 a 里写东西 —— 于是"就地改 a 再还原"的写法
 #   迟早失手, 表现就是"升痕加伤有时漏给没升痕的目标"(随机、难复现)。
 #   修法是把"这一批的完整入参快照"抄进 zx:work ob, 别的函数一律不许碰它。
-OB_OK = {'sweetdream:internal/damage/with_from',
-         'sweetdream:internal/damage/one',
-         'sweetdream:internal/damage/stg_mul'}
+OB_OK = {'fallendream:internal/damage/with_from',
+         'fallendream:internal/damage/one',
+         'fallendream:internal/damage/stg_mul'}
 for fnk, fp in functions.items():
     if fnk in OB_OK:
         continue
@@ -2454,7 +2472,7 @@ for mid, (fp, i) in _add_mod.items():
 #   往 _DUR_PAIRS 加一行即可。
 def _dur_map(name, objpat):
     out = {}
-    fnk = 'sweetdream:' + name
+    fnk = 'fallendream:' + name
     if fnk not in functions:
         return out
     pat = re.compile(r'scoreboard players set \S+ (' + objpat + r') (\d+)\b')
@@ -2485,7 +2503,7 @@ for _lab, _fa, _fb, _op in _DUR_PAIRS:
     _A, _B = _dur_map(_fa, _op), _dur_map(_fb, _op)
     for _o in sorted(set(_A) | set(_B)):
         if _A.get(_o) != _B.get(_o):
-            R['ttl'].append((str(ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function'
+            R['ttl'].append((str(ROOT / 'fallendream' / 'data' / 'fallendream' / 'function'
                                 / (_fa + '.mcfunction')),
                 '%s[%s]: 施加处(%s)=%s / 兜底处(%s)=%s —— 两处时长不一致(会出现"刚贴上就剩几秒", '
                 '或旧标签倒数被重置)' % (_lab, _o, _fa, _dur_fmt(_A.get(_o)), _fb, _dur_fmt(_B.get(_o)))))
@@ -2504,11 +2522,11 @@ def _has_call(text, fname):
             return True
     return False
 
-_CP = ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function' / 'lib' / 'ctrl_mul' / 'pct.mcfunction'
+_CP = ROOT / 'fallendream' / 'data' / 'fallendream' / 'function' / 'lib' / 'ctrl_mul' / 'pct.mcfunction'
 if not _CP.exists():
     R['ctrlmul'].append((str(ROOT), '缺少 lib/ctrl_mul/pct.mcfunction(控制时长倍率的单一真源)'))
 else:
-    _cpt = ftext('sweetdream:lib/ctrl_mul/pct') if 'sweetdream:lib/ctrl_mul/pct' in functions else ''
+    _cpt = ftext('fallendream:lib/ctrl_mul/pct') if 'fallendream:lib/ctrl_mul/pct' in functions else ''
     if 'scoreboard players set #cm_add zx.meta 0' not in _cpt:
         R['ctrlmul'].append((str(_CP), '没有把 #cm_add 置 0 -> 每次调用会残留上一次的加成'))
     if '#cm_pct zx.meta 100' not in _cpt:
@@ -2522,26 +2540,26 @@ else:
             R['ctrlmul'].append((str(_CP), '来源直接 add 到 #cm_add —— $(target) 是范围选择器时'
                                            '会按匹配只数叠加(3 只 = +60%); 要用"set 临时量再并入"'))
 for _n in ('lib/timestop', 'lib/freeze'):
-    _fnk = 'sweetdream:' + _n
+    _fnk = 'fallendream:' + _n
     if _fnk not in functions:
         R['ctrlmul'].append((str(ROOT), '缺少 %s.mcfunction' % _n)); continue
     _t = ftext(_fnk)
     # ★ 判据只看"非注释行里有没有真调用" —— 注释里提到文件名不算(否则探针一改就漏报)
-    if not _has_call(_t, 'sweetdream:lib/ctrl_mul/pct'):
+    if not _has_call(_t, 'fallendream:lib/ctrl_mul/pct'):
         R['ctrlmul'].append((str(functions[_fnk]),
             '没有真正调用 lib/ctrl_mul/pct —— 控制时长倍率又变成写死的了(面板与实际会走散)'))
     if re.search(r'operation\s+#\w+ zx\.meta \*= #20 zx\.meta', _t):
         R['ctrlmul'].append((str(functions[_fnk]),
             '还在用 #20 硬编码"控制时长 +20%" —— 应改成读 lib/ctrl_mul/pct'))
-if 'sweetdream:debug/stats' in functions and not _has_call(
-        ftext('sweetdream:debug/stats'), 'sweetdream:lib/ctrl_mul/pct'):
-    R['ctrlmul'].append((str(functions['sweetdream:debug/stats']),
+if 'fallendream:debug/stats' in functions and not _has_call(
+        ftext('fallendream:debug/stats'), 'fallendream:lib/ctrl_mul/pct'):
+    R['ctrlmul'].append((str(functions['fallendream:debug/stats']),
         'debug/stats 没读 lib/ctrl_mul/pct -> 面板上"控制时长"那行不会出现(用户要求能读到)'))
 
 # ---- 52) 标签图标"剩余<=3秒变淡": 位掩码 / 阈值 / 字形三处必须对得上 ----
 #   淡出位: 渊海32 流火64 夜火128 噬心256 白昼梦512(位 5..9, 与位 0..4 的"在不在"配套)
 DIM_BITS = [('yuanhai', 32), ('liuhuo', 64), ('yehuo', 128), ('shixin', 256), ('dream', 512)]
-_irdfnk, _irffnk = 'sweetdream:tag/icon_render', 'sweetdream:tag/icon_refresh'
+_irdfnk, _irffnk = 'fallendream:tag/icon_render', 'fallendream:tag/icon_refresh'
 if _irffnk not in functions:
     R['dimflag'].append((str(ROOT), '缺少 tag/icon_refresh.mcfunction'))
 else:
@@ -2555,7 +2573,7 @@ else:
 #   ★ 只取 "if score ..."(= 变淡那一侧)的阈值: 普通侧写的是 unless, 不参与比较。
 TH_RE = re.compile(r'\bif score @s zx\.tt\.(\w+) matches \.\.(\d+)')
 def _thrs(name):
-    fnk = 'sweetdream:' + name
+    fnk = 'fallendream:' + name
     if fnk not in functions:
         return {}
     return {m.group(1): int(m.group(2)) for m in TH_RE.finditer(ftext(fnk))}
@@ -2565,9 +2583,9 @@ if _irdfnk not in functions:
 else:
     _t = ftext(_irdfnk)
     for _m, _bit in DIM_BITS:
-        if 'sweetdream.icon.dim.%s' % _m not in _t:
+        if 'fallendream.icon.dim.%s' % _m not in _t:
             R['dimflag'].append((str(functions[_irdfnk]),
-                '没有 %s 的淡色字形分支(应引 sweetdream.icon.dim.%s)' % (_m, _m)))
+                '没有 %s 的淡色字形分支(应引 fallendream.icon.dim.%s)' % (_m, _m)))
         if 'unless score @s zx.tt.%s matches ..' % _m not in _t:
             R['dimflag'].append((str(functions[_irdfnk]),
                 '没有 %s 的"普通字形"分支(unless score ... matches ..N)' % _m))
@@ -2576,8 +2594,8 @@ else:
             'icon_refresh 与 icon_render 的"剩余秒数阈值"不一致: %s vs %s -> '
             '掩码说该变淡、字形却没换(或反过来)' % (_ref_th, _ren_th)))
 # 资源包: 图集必须是"普通 + 淡色"两份, 且 icon_render 用的回退字符都在图集里
-_ICON_JSON = RP / 'assets' / 'sweetdream' / 'font' / 'icons.json'
-_ICON_PNG = RP / 'assets' / 'sweetdream' / 'textures' / 'font' / 'icons.png'
+_ICON_JSON = RP / 'assets' / 'fallendream' / 'font' / 'icons.json'
+_ICON_PNG = RP / 'assets' / 'fallendream' / 'textures' / 'font' / 'icons.png'
 try:
     _font = json.loads(_ICON_JSON.read_text(encoding='utf-8'))
     _chars = ''.join(p.get('chars', ['']) [0] for p in _font.get('providers', [])
@@ -2600,11 +2618,11 @@ try:
                 R['dimflag'].append((str(functions[_irdfnk]),
                     '回退字符 U+%04X 不在字体图集里(会渲染成缺字方块)' % ord(_c[0])))
     for _lang in ('zh_cn', 'en_us'):
-        _lp = RP / 'assets' / 'sweetdream' / 'lang' / (_lang + '.json')
+        _lp = RP / 'assets' / 'fallendream' / 'lang' / (_lang + '.json')
         _tab = json.loads(_lp.read_text(encoding='utf-8')) if _lp.exists() else {}
         for _m, _ in DIM_BITS:
-            if ('sweetdream.icon.dim.' + _m) not in _tab:
-                R['dimflag'].append((str(_lp), 'lang 缺 sweetdream.icon.dim.%s(淡色字形不认)' % _m))
+            if ('fallendream.icon.dim.' + _m) not in _tab:
+                R['dimflag'].append((str(_lp), 'lang 缺 fallendream.icon.dim.%s(淡色字形不认)' % _m))
 except Exception as _e:
     R['dimflag'].append((str(_ICON_JSON), '读取字体资源失败: %s' % _e))
 
@@ -2612,7 +2630,7 @@ except Exception as _e:
 #   "敌人放的技能"要与"玩家放的技能"区分开, 靠 zx:work a.src("ally" / "enemy")。
 #   三处必须对得上: ① api/damage 复位+兜底; ② api/enemy_damage 写 "enemy";
 #   ③ internal/damage/one 的夜火按来源分流, 且与"本包技能类型"那条**互斥**。
-_dmgk, _edk, _onek = 'sweetdream:api/damage', 'sweetdream:api/enemy_damage', 'sweetdream:internal/damage/one'
+_dmgk, _edk, _onek = 'fallendream:api/damage', 'fallendream:api/enemy_damage', 'fallendream:internal/damage/one'
 if _dmgk not in functions:
     R['enemysrc'].append((str(ROOT), '缺少 api/damage.mcfunction'))
 else:
@@ -2628,7 +2646,7 @@ if _edk not in functions:
     R['enemysrc'].append((str(ROOT), '缺少 api/enemy_damage.mcfunction(敌方技能入口)'))
 else:
     _t = ftext(_edk)
-    if 'set value "enemy"' not in _t or 'sweetdream:api/damage' not in _t:
+    if 'set value "enemy"' not in _t or 'fallendream:api/damage' not in _t:
         R['enemysrc'].append((str(functions[_edk]),
             'api/enemy_damage 必须写 src="enemy" 并转调 api/damage'))
 if _onek not in functions:
@@ -2638,7 +2656,7 @@ else:
     if 'src:"enemy"' not in _t:
         R['enemysrc'].append((str(functions[_onek]),
             '夜火没有按"敌方技能"(src:"enemy")分流 -> 敌方技能打不进去, 标签静默少生效'))
-    elif not any('type:"sweetdream:skill"' in l and 'unless data storage zx:work a{src:"enemy"}' in l
+    elif not any('type:"fallendream:skill"' in l and 'unless data storage zx:work a{src:"enemy"}' in l
                  for l in _t.split('\n')):
         R['enemysrc'].append((str(functions[_onek]),
             '夜火的"本包技能类型"分支没带 unless src:"enemy" -> 敌方技能同时满足两条判据, '
@@ -2651,7 +2669,7 @@ else:
 #   调试期频繁 /reload 时表现就是"标签莫名其妙短命、明显不到预设的十几秒", 一个字都不报。
 #   图标不需要在这里重建: text_display 随存档持久化, 每秒校验(最多 1 秒后)会校好租约/掩码;
 #   所以 load 只负责"建两个缓存计分项 + 把节拍清零"。注释里提到不算 —— 只看非注释行。
-for _lk, _lname in ((('sweetdream:tag/load'), 'tag/load'),):
+for _lk, _lname in ((('fallendream:tag/load'), 'tag/load'),):
     if _lk not in functions:
         continue
     for _ln, _ls in enumerate(ftext(_lk).split('\n'), 1):
@@ -2788,7 +2806,7 @@ for _fk in sorted(_dim_seen):
 #   正解: 0 专用于"未激活", 过程状态从 1 起编号, tick 写 `1..`。存档里的历史脏值
 #   由状态机函数首行"非 1..7/99 一律静默归零"兜掉。
 _TS0 = re.compile(r'scores=\{[^{}]*\bzx\.([A-Za-z0-9_]+)=0(?:\.\.\d*)?\s*[,\}]')
-_TICKFK = 'sweetdream:core/tick'
+_TICKFK = 'fallendream:core/tick'
 if _TICKFK in functions:
     for _ln, _ls in enumerate(ftext(_TICKFK).split('\n'), 1):
         _s = _ls.strip()
@@ -2880,7 +2898,7 @@ for _fk in sorted(functions):
 #   `data modify storage manacore:work a set value {uuid:""}` —— 三条通道当场清零。
 #   ⇒ 必须在事件**第一条**把 a 快照成 zx:work ch, 后面一律读快照。
 #   顺序一被改动, 那些加成会**一次都不生效, 而且一个字都不报**(2026-10-06 差点埋雷)。
-_dc = (ROOT / 'sweetdream' / 'data' / 'manacore' / 'tags' / 'function' / 'event'
+_dc = (ROOT / 'fallendream' / 'data' / 'manacore' / 'tags' / 'function' / 'event'
        / 'damage_calc.json')
 if _dc.exists():
     try:
@@ -2890,14 +2908,14 @@ if _dc.exists():
         _vals = []
     if not _vals:
         R['dmgch'].append((_dc, 'values 为空 —— 通道快照(lib/dmg_ch)没挂上'))
-    elif _vals[0] != 'sweetdream:lib/dmg_ch':
-        R['dmgch'].append((_dc, '第一条必须是 "sweetdream:lib/dmg_ch"(通道快照), '
+    elif _vals[0] != 'fallendream:lib/dmg_ch':
+        R['dmgch'].append((_dc, '第一条必须是 "fallendream:lib/dmg_ch"(通道快照), '
                                 '现在第一条是 "%s" —— 顺序一变, "按通道区分"的装备加成'
                                 '(seraph_wing / wrath)会永远读到 0(静默不生效)' % _vals[0]))
     for _v in _vals:
-        if _v == 'sweetdream:lib/dmg_ch' or ':' not in _v:
+        if _v == 'fallendream:lib/dmg_ch' or ':' not in _v:
             continue
-        _p = (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function'
+        _p = (ROOT / 'fallendream' / 'data' / 'fallendream' / 'function'
               / (_v.split(':', 1)[1] + '.mcfunction'))
         if not _p.exists():
             continue
@@ -2910,7 +2928,7 @@ if _dc.exists():
                                        '会把它整份重置, 这里读到的**永远是 0**; '
                                        '改读 lib/dmg_ch 拍的快照 zx:work ch' % _i))
 else:
-    R['dmgch'].append((str(ROOT), '找不到 sweetdream 侧的 event/damage_calc.json'))
+    R['dmgch'].append((str(ROOT), '找不到 fallendream 侧的 event/damage_calc.json'))
 
 # ---- 67) damage_calc 事件的顺序 + 每个 hook 的"加算/独立乘区"角色 ----
 #   事件是一串**有先后语义**的回调, 顺序错了不会报错, 只会算错:
@@ -2925,8 +2943,8 @@ else:
 #     · 独立乘区排在 ④ 之前 -> 乘在没合并的值上, 数值和面板对不上。
 #   2026-10-06 用户定稿: 文案没写"独立乘区"的一律加算 -> 必须走 ③/④ 这条路。
 #   ★ 约定: 每个 equipment/**/hook_calc.mcfunction 头部写 `# @calc: add|indep`。
-_CALC_ADD = 'sweetdream:lib/dmg_add_clear'
-_CALC_APPLY = 'sweetdream:lib/dmg_add_apply'
+_CALC_ADD = 'fallendream:lib/dmg_add_clear'
+_CALC_APPLY = 'fallendream:lib/dmg_add_apply'
 if _dc.exists():
     _vals2 = []
     try:
@@ -2945,7 +2963,7 @@ if _dc.exists():
                                 % (_CALC_APPLY, len(_ai))))
         else:
             _ai = _ai[0]
-            _eq = (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function' / 'equipment')
+            _eq = (ROOT / 'fallendream' / 'data' / 'fallendream' / 'function' / 'equipment')
             _seen = set()
             for _i, _v in enumerate(_vals2):
                 if ':' not in _v:
@@ -2953,7 +2971,7 @@ if _dc.exists():
                 _rel = _v.split(':', 1)[1]
                 if not _rel.endswith('/hook_calc'):
                     continue
-                _p = (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function'
+                _p = (ROOT / 'fallendream' / 'data' / 'fallendream' / 'function'
                       / (_rel + '.mcfunction'))
                 _seen.add(str(_p))
                 if not _p.exists():
@@ -2993,7 +3011,7 @@ if _dc.exists():
 #   "愠怒是独立乘区", 而当时它被折进了 smul_mm)。
 #   约定: 每个 scan_mul 头部写一行 `# @panel: <键>[,<键>...]` 声明自己折哪一行。
 _PANEL_ROWS = {'smul_mm', 'smul_atk', 'smul_oth', 'independent_multiplier'}
-_scan_root = ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function' / 'equipment'
+_scan_root = ROOT / 'fallendream' / 'data' / 'fallendream' / 'function' / 'equipment'
 for _p in sorted(_scan_root.rglob('scan_mul.mcfunction')):
     _lines = _p.read_text(encoding='utf-8', errors='ignore').splitlines()
     _decl = None
@@ -3039,7 +3057,7 @@ for _p in sorted(_scan_root.rglob('scan_mul.mcfunction')):
 #   偏移为 0、又没用 rotated 改朝向 ⇒ 就是一条沿视线的光束, 必然隐形。
 _beam_axis = re.compile(r'positioned\s+\^([-0-9.]*)\s+\^([-0-9.]*)\s+\^([-0-9.]+)')
 _ZERO = {'', '0', '0.0', '-0', '-0.0', '+0', '+0.0'}
-_beam_root = ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function'
+_beam_root = ROOT / 'fallendream' / 'data' / 'fallendream' / 'function'
 for _p in sorted(_beam_root.rglob('*.mcfunction')):
     _bx = []
     for _i, _l in enumerate(_p.read_text(encoding='utf-8', errors='ignore').splitlines(), 1):
@@ -3286,23 +3304,23 @@ for _fk in sorted(functions):
 #   ★ 每件各用一个计分项, 不共用(同一次平A可能同时命中多个入口, 共用会互相吞)。
 #   ★ 名单要在 check 与 core/load 双向一致: 新增"每次攻击"型入口时, 两处都要加。
 _PER_ATTACK = {
-    'sweetdream:equipment/armor/brain_leech/attack': 'zx.bl_lt',
-    'sweetdream:equipment/axe/angel_core/hit': 'zx.ac_lt',
-    'sweetdream:equipment/axe/meteor/hit': 'zx.mt_lt',
-    'sweetdream:upgrade/api/on_hit': 'zx.up_lt',
+    'fallendream:equipment/armor/brain_leech/attack': 'zx.bl_lt',
+    'fallendream:equipment/axe/angel_core/hit': 'zx.ac_lt',
+    'fallendream:equipment/axe/meteor/hit': 'zx.mt_lt',
+    'fallendream:upgrade/api/on_hit': 'zx.up_lt',
     # 热熔: 只有①「熔解」状态那半是"每攻击一次"(②是"攻击到生物"、按命中数, 故意不去重)。
     #   ★ 同一个入口里两种口径 = 两件事的顺序有意义: ①的 return 会中断整个函数,
     #     所以②必须排在①之前(见 hit 头部注释)。
-    'sweetdream:equipment/sword/remelt/hit': 'zx.rm_lt',
+    'fallendream:equipment/sword/remelt/hit': 'zx.rm_lt',
     # 第三批(2026-10-07 批1·剑): 文案都是"每次攻击(后)" -> 各用一个刻戳去重
-    'sweetdream:equipment/sword/verdict/hit': 'zx.vd_lt',
-    'sweetdream:equipment/sword/tinder/hit': 'zx.td_lt',
-    'sweetdream:equipment/sword/rebound/hit': 'zx.rb_lt',
+    'fallendream:equipment/sword/verdict/hit': 'zx.vd_lt',
+    'fallendream:equipment/sword/tinder/hit': 'zx.td_lt',
+    'fallendream:equipment/sword/rebound/hit': 'zx.rb_lt',
     # 第三批(2026-10-07 批2·斧): 文案都是"每次攻击" -> 各用一个刻戳去重
-    'sweetdream:equipment/axe/pyre/hit': 'zx.py_lt',
-    'sweetdream:equipment/axe/ballad/hit': 'zx.bd_lt',
-    'sweetdream:equipment/axe/thunderclap/hit': 'zx.tc_lt',
-    'sweetdream:equipment/axe/azure_star/hit': 'zx.as_lt',
+    'fallendream:equipment/axe/pyre/hit': 'zx.py_lt',
+    'fallendream:equipment/axe/ballad/hit': 'zx.bd_lt',
+    'fallendream:equipment/axe/thunderclap/hit': 'zx.tc_lt',
+    'fallendream:equipment/axe/azure_star/hit': 'zx.as_lt',
 }
 for _fn, _obj in sorted(_PER_ATTACK.items()):
     if _fn not in functions:
@@ -3325,7 +3343,7 @@ for _fn, _obj in sorted(_PER_ATTACK.items()):
 #     · 跨 series / 跳级  -> 链条意义不明(定义里 α/β/Ω 必须同 series 且 tier 差 1)。
 #   顺带查同一 series 里 tier 不能重复 —— 覆盖制按 tier 取最高, 重复就说不清算哪条。
 _urq_def = {}
-_urq_path = ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function' / 'upgrade' / 'def' / 'load.mcfunction'
+_urq_path = ROOT / 'fallendream' / 'data' / 'fallendream' / 'function' / 'upgrade' / 'def' / 'load.mcfunction'
 if _urq_path.exists():
     for _urq_ln, _urq_ls in enumerate(_urq_path.read_text(encoding='utf-8', errors='ignore').split('\n'), 1):
         if _urq_ls.lstrip().startswith('#') or 'updef.' not in _urq_ls:
@@ -3462,7 +3480,7 @@ for _fk in sorted(functions):
 #   这里只做**存在性/形状**断言(和 smwind 一样只认非注释行, 免得把调用注释掉还假绿)。
 #   真实反馈 2026-10-08: 用户"为什么我使用万念后剑魂也会清除" —— 老实现只判
 #   zx.mq_ol, 于是主动放万念(它自己又不攒剑魂)把攒的全清光, 一声不响。
-_MQSW = ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function' / 'equipment' / 'sword'
+_MQSW = ROOT / 'fallendream' / 'data' / 'fallendream' / 'function' / 'equipment' / 'sword'
 _MQ_GQ = '#mq_qs zx.meta matches 1'
 _MQ_GP = '#mq_pas zx.meta matches 1'
 
@@ -3613,7 +3631,7 @@ for _fk in sorted(functions):
 #     (用户原话: "在第一阶段是不冻结的" / "超载阶段才会冻结")
 #   ★ 这条和 78(`cdstop`)是两码事: 78 管 freeze_cd **内部**"先查后冻"的顺序, 79 管
 #     它的**调用点**该由谁触发。
-_FREEZE_FN = 'sweetdream:equipment/axe/charge/freeze_cd'
+_FREEZE_FN = 'fallendream:equipment/axe/charge/freeze_cd'
 for _fk in sorted(functions):
     for _ln, _ls in enumerate(ftext(_fk).split('\n'), 1):
         _s = _ls.strip()
@@ -3635,8 +3653,8 @@ for _fk in sorted(functions):
 #     `of:"偏振光"`(中文名) ⇒ 全部 no_def, 敲上去只回"这把武器没有超限定义(定义表缺
 #     条目)", 一件都敲不上(玩家: "为什么我敲偏振光显示没有超限条目")。中文名只该出现在
 #     给玩家看的文案里。这条同时守"超限石三件套(item/advancement/apply)齐全"。
-_olf_apply_dir = ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function' / 'overlimit' / 'apply'
-_olf_def_path = ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function' / 'overlimit' / 'def' / 'load.mcfunction'
+_olf_apply_dir = ROOT / 'fallendream' / 'data' / 'fallendream' / 'function' / 'overlimit' / 'apply'
+_olf_def_path = ROOT / 'fallendream' / 'data' / 'fallendream' / 'function' / 'overlimit' / 'def' / 'load.mcfunction'
 _olf_defs = set()
 if _olf_def_path.exists():
     for _ln in _olf_def_path.read_text(encoding='utf-8', errors='ignore').split('\n'):
@@ -3669,10 +3687,10 @@ if _olf_apply_dir.exists():
             R['olfit'].append((_p, _ln,
                 'apply 的 of="%s" 在 overlimit/def/load 里没有 oldef."%s" 定义 ⇒ '
                 'fit 第一行就判 no_def, 这件永远敲不上。' % (_of, _of)))
-        if not (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function' / 'overlimit'
+        if not (ROOT / 'fallendream' / 'data' / 'fallendream' / 'function' / 'overlimit'
                 / 'item' / (_uid + '.mcfunction')).exists():
             R['olfit'].append((_p, 1, '超限石三件套不齐: 缺 overlimit/item/%s.mcfunction(石头本体给不出来)。' % _uid))
-        if not (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'advancement' / 'overlimit'
+        if not (ROOT / 'fallendream' / 'data' / 'fallendream' / 'advancement' / 'overlimit'
                 / (_uid + '.json')).exists():
             R['olfit'].append((_p, 1, '超限石三件套不齐: 缺 advancement/overlimit/%s.json(右键石头不会触发 apply)。' % _uid))
 
@@ -3737,13 +3755,13 @@ for _ed_fn in sorted(functions):
 #   写错一个词 = 该装备**静默地**查不到(谓词恒不命中), 文件本身看不出任何异常 ——
 #   这条就是防拼错、防手滑塞进"没登记的私有资源名"(熔浆/燃灰/酒浆…本来就不该进标签)。
 _tg_vocab = set()
-_tg_load = ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function' / 'tg' / 'def' / 'load.mcfunction'
+_tg_load = ROOT / 'fallendream' / 'data' / 'fallendream' / 'function' / 'tg' / 'def' / 'load.mcfunction'
 if _tg_load.exists():
     for _ln in _tg_load.read_text(encoding='utf-8', errors='ignore').split('\n'):
         _m = re.search(r'tgdef\."([^"]+)"\s*set\s*value', _ln)
         if _m:
             _tg_vocab.add(_m.group(1))
-_tg_give_root = ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function' / 'equipment'
+_tg_give_root = ROOT / 'fallendream' / 'data' / 'fallendream' / 'function' / 'equipment'
 if _tg_give_root.exists():
     for _p in sorted(_tg_give_root.glob('*/*/give.mcfunction')):
         for _ln, _ls in enumerate(_p.read_text(encoding='utf-8', errors='ignore').split('\n'), 1):
@@ -3768,14 +3786,14 @@ if _tg_give_root.exists():
 #     · 源码声明了 zx.X 却不在清单 -> "漏清"(账本残留, 装备被动"应加的不加回", 静默)
 #     · 清单里有 zx.Y 但源码没声明 -> 拼错 / 已删(白清, 且掩盖真实问题)
 #     · 又写回"不带 objective"的全清 -> 直接报(跨包误伤回来)
-_reset_fp = (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function' / 'event'
+_reset_fp = (ROOT / 'fallendream' / 'data' / 'fallendream' / 'function' / 'event'
              / 'player_reset.mcfunction')
 if not _reset_fp.exists():
     R['resetset'].append((str(_reset_fp), 0,
                           'N06: 清账清单文件不见了(player_first_join 也依赖它)'))
 else:
     _declared_zx = set()
-    for _pack in ('manacore-1.0.0', 'sweetdream'):
+    for _pack in ('manacore-1.0.0', 'fallendream'):
         for _p in (ROOT / _pack / 'data').rglob('*.mcfunction'):
             try:
                 _t = _p.read_text(encoding='utf-8', errors='ignore')
@@ -3836,8 +3854,8 @@ if _reset_fp.exists():
 #        (旧 F14 的"只写一条"只在**汇总式**下成立; 分段式下只写一条 = 其余段吃不到)。
 #   报告验收例: 100mm + 10atk + 炽天使(+50%→atk) = 100 + 15 = **115**。
 _segc_fn = functions.get('manacore:internal/damage/calc')
-_sega_fn = functions.get('sweetdream:lib/dmg_add_apply')
-_segp_fn = functions.get('sweetdream:lib/dmg_add_put_any')
+_sega_fn = functions.get('fallendream:lib/dmg_add_apply')
+_segp_fn = functions.get('fallendream:lib/dmg_add_put_any')
 if _segc_fn is None:
     R['dmgseg'].append((str(ROOT), 0, 'D01: 找不到 manacore:internal/damage/calc'))
 else:
@@ -3848,7 +3866,7 @@ else:
                 'D01 口径 B: calc 没有把 %s 落进 manacore:out —— dmg_add_apply 读不到'
                 '分量就会按 0/旧值算(静默)。' % _k))
 if _sega_fn is None:
-    R['dmgseg'].append((str(ROOT), 0, 'D01: 找不到 sweetdream:lib/dmg_add_apply'))
+    R['dmgseg'].append((str(ROOT), 0, 'D01: 找不到 fallendream:lib/dmg_add_apply'))
 else:
     _at_all = _sega_fn.read_text(encoding='utf-8', errors='ignore')
     _at = '\n'.join(l for l in _at_all.split('\n') if not l.strip().startswith('#'))
@@ -3865,7 +3883,7 @@ else:
             'D01 回归: dmg_add_apply 又读快照 zx:work ch 判通道 —— 口径 B 靠分量自动筛选'
             '(seg=0), 读 ch 会把落点退回"整段"(旧口径 A: 100mm+10atk+炽天使 = 165 而非 115)。'))
 if _segp_fn is None:
-    R['dmgseg'].append((str(ROOT), 0, 'D01: 找不到 sweetdream:lib/dmg_add_put_any'))
+    R['dmgseg'].append((str(ROOT), 0, 'D01: 找不到 fallendream:lib/dmg_add_put_any'))
 else:
     _pt_all = _segp_fn.read_text(encoding='utf-8', errors='ignore')
     _pt = '\n'.join(l for l in _pt_all.split('\n') if not l.strip().startswith('#'))
@@ -3881,7 +3899,7 @@ else:
 
 # ---- 86) creative: 创造模式下"使用武器会凭空多一把"(2026-10-11 用户实测) ----
 #   所有带 zx:["itemreplace"] 的武器(剑 20 + 斧 15 + 法杖 12)都靠 consumable 触发技能,
-#   同时也会触发 sweetdream:itembackup/consume —— 那是一套"消耗 → 备份 → 下一 tick 回手"。
+#   同时也会触发 fallendream:itembackup/consume —— 那是一套"消耗 → 备份 → 下一 tick 回手"。
 #   这套系统是为**生存/冒险**写的: 那里 consumable 走完后原版会把那一格设成消耗
 #   结果(空), 武器真的没了, 必须补回来。
 #   但**创造模式下原版根本不消耗物品**, 手上那把还在 —— 于是 effect_2 的回手
@@ -3890,10 +3908,10 @@ else:
 #   ⇒ 修法 = effect_1 里创造模式直接 return(物品没丢就不用还)。两条都要盯:
 #     ① 门禁本身还在吗?  ② revoke 必须排在门禁**之前** —— 否则进度停在"已完成",
 #        玩家切回生存模式后整个返还链就再也不触发了(静默: 武器用完直接消失)。
-_cr_fn = functions.get('sweetdream:internal/itembackup/effect_1')
+_cr_fn = functions.get('fallendream:internal/itembackup/effect_1')
 if _cr_fn is None:
     R['creative'].append((str(ROOT), 0,
-        '创造模式幽灵物品: 找不到 sweetdream:internal/itembackup/effect_1 —— '
+        '创造模式幽灵物品: 找不到 fallendream:internal/itembackup/effect_1 —— '
         '返还链的入口没了(武器用完不回手)。'))
 else:
     _cr = '\n'.join(l for l in _cr_fn.read_text(encoding='utf-8', errors='ignore').split('\n')
@@ -3930,9 +3948,9 @@ def _pl_code(_fnk):
                      if not l.strip().startswith('#'))
 
 
-_pl_files = {'tick': 'sweetdream:equipment/staff/polarized_light/tick',
-             'second': 'sweetdream:equipment/staff/polarized_light/second',
-             'half': 'sweetdream:equipment/staff/polarized_light/half'}
+_pl_files = {'tick': 'fallendream:equipment/staff/polarized_light/tick',
+             'second': 'fallendream:equipment/staff/polarized_light/second',
+             'half': 'fallendream:equipment/staff/polarized_light/half'}
 _pl = {k: _pl_code(v) for k, v in _pl_files.items()}
 for _k, _v in _pl.items():
     if _v is None:
@@ -3969,10 +3987,10 @@ for _k in ('second', 'half'):
 #   ★ 通用形态: **"按当前状态选人"的选择器, 不能在改了同一状态之后再求值**
 #     —— 必须先把分类抄成快照标签, 后面一律按快照取值(和 selfclr/cdstop 同族:
 #     "改"排在"判"前面 ⇒ 后面的判永远不成立)。
-_fd_fn = functions.get('sweetdream:equipment/staff/fallen_dream/skill')
+_fd_fn = functions.get('fallendream:equipment/staff/fallen_dream/skill')
 if _fd_fn is None:
     R['fdsnap'].append((str(ROOT), 0,
-        '堕梦分流快照: 找不到 sweetdream:equipment/staff/fallen_dream/skill。'))
+        '堕梦分流快照: 找不到 fallendream:equipment/staff/fallen_dream/skill。'))
 else:
     _fd = _fd_fn.read_text(encoding='utf-8', errors='ignore')
     _fd_code = '\n'.join(l for l in _fd.split('\n') if not l.strip().startswith('#'))
@@ -3998,7 +4016,7 @@ else:
             '普攻打上去转不了真伤(用户 2026-10-12 拍板: 一律全体)。'))
 
 # ---- 89) ddpair: 黄昏黎明「100×X」必须由 5 条标签进度各自独立触发 ----
-#   ★ 2026-10-12 坑 138 重写。旧版这条路是"新增附魔 sweetdream:dusk_dawn
+#   ★ 2026-10-12 坑 138 重写。旧版这条路是"新增附魔 fallendream:dusk_dawn
 #     (post_attack, affected:victim), 让回调函数就地数死者的标签数" ——
 #     但**原版 post_attack 只读攻击者的主手物品**上的附魔, 附在靴子(slots:feet)上
 #     永远不触发 ⇒ 回调零调用 ⇒ X 恒用兜底值 1 ⇒ 超限版"额外 100×X"永远只给 100
@@ -4015,11 +4033,11 @@ else:
 #   ★ 通用: 依附魔回调的机制, **先确认那个附魔挂在会被遍历到的位置** ——
 #     post_attack 只遍历攻击者的主手物品, 挂到护甲/背包槽位是静默失效(不报错、零日志)。
 _DD_TAGS = ('yuanhai', 'liuhuo', 'yehuo', 'shixin', 'dream')
-_dd_root = ROOT / 'sweetdream' / 'data' / 'sweetdream'
+_dd_root = ROOT / 'fallendream' / 'data' / 'fallendream'
 _dd_adv_dir = _dd_root / 'advancement' / 'equipment' / 'armor'
 _dd_fn_dir = _dd_root / 'function' / 'equipment' / 'armor' / 'dusk_dawn'
-_dd_km = functions.get('sweetdream:equipment/armor/dusk_dawn/kill_mark')
-_dd_ki = functions.get('sweetdream:equipment/armor/dusk_dawn/kill_init')
+_dd_km = functions.get('fallendream:equipment/armor/dusk_dawn/kill_mark')
+_dd_ki = functions.get('fallendream:equipment/armor/dusk_dawn/kill_init')
 
 
 def _dd_code(_f):
@@ -4045,13 +4063,13 @@ else:
             '黄昏黎明 100×X(坑 138): kill_mark 还在引用已废弃的 zx.dd_xk / zx.dd_px —— 那是'
             '"附魔 post_attack 回调"时代的产物, 而原版 post_attack 只读攻击者主手物品, '
             '附魔挂在靴子上永不触发, 整套已删。'))
-    if re.search(r'advancement revoke @s only sweetdream:equipment/armor/dusk_dawn_kill_mark', _ddc):
+    if re.search(r'advancement revoke @s only fallendream:equipment/armor/dusk_dawn_kill_mark', _ddc):
         R['ddpair'].append((str(_dd_km), 0,
             '黄昏黎明 100×X(坑 138): kill_mark 自己又 revoke 了进度 —— revoke 必须留在各自的 '
             'wrapper 首行(自撤销型契约), 在共享函数里重复一份只会掩盖"某个 wrapper 漏 revoke"。'))
 
 for _t in _DD_TAGS:
-    _rev = 'advancement revoke @s only sweetdream:equipment/armor/dusk_dawn_kill_mark_%s' % _t
+    _rev = 'advancement revoke @s only fallendream:equipment/armor/dusk_dawn_kill_mark_%s' % _t
     _w = _dd_fn_dir / ('kill_mark_%s.mcfunction' % _t)
     if not _w.exists():
         R['ddpair'].append((str(_w), 0,
@@ -4063,7 +4081,7 @@ for _t in _DD_TAGS:
             R['ddpair'].append((str(_w), 0,
                 '黄昏黎明 100×X(坑 138): wrapper kill_mark_%s 的首行必须是 `%s` —— '
                 '自撤销型进度不 revoke 自己, 第二次触发就永远不再发生(X 少算)。' % (_t, _rev)))
-        if 'function sweetdream:equipment/armor/dusk_dawn/kill_mark' not in _dd_code(_w):
+        if 'function fallendream:equipment/armor/dusk_dawn/kill_mark' not in _dd_code(_w):
             R['ddpair'].append((str(_w), 0,
                 '黄昏黎明 100×X(坑 138): wrapper kill_mark_%s 没有转发到共享的 '
                 'dusk_dawn/kill_mark —— 这次击杀就白触发了。' % _t))
@@ -4072,7 +4090,7 @@ for _t in _DD_TAGS:
         R['ddpair'].append((str(_p), 0,
             '黄昏黎明 100×X(坑 138): 少了标签进度 dusk_dawn_kill_mark_%s.json —— 死者的 '
             '`zx.status.%s` 就数不进 X。' % (_t, _t)))
-    elif ('"sweetdream:equipment/armor/dusk_dawn/kill_mark_%s"' % _t) not in _p.read_text(encoding='utf-8', errors='ignore'):
+    elif ('"fallendream:equipment/armor/dusk_dawn/kill_mark_%s"' % _t) not in _p.read_text(encoding='utf-8', errors='ignore'):
         R['ddpair'].append((str(_p), 0,
             '黄昏黎明 100×X(坑 138): 进度 %s 的 rewards.function 没指向它**自己**的 wrapper '
             'kill_mark_%s —— 指向共享函数的话就没人 revoke 它了。' % (_p.name, _t)))
@@ -4100,8 +4118,8 @@ elif not re.search(r'scoreboard players set @s zx\.dd_n 0', _dd_code(_dd_ki)):
 #   补流火正是该循环**唯一**能自我重新武装的来源, 不限速就是刷魔力漏洞。
 #   ★ 通用形态: 凡是"能凭空重新产生某个可被消耗资源"的被动, 都要先问一句
 #     "它能不能自己给自己续杯" —— 能, 就必须挂节流(时刻闸 / 次数闸)。
-_em_bo = functions.get('sweetdream:equipment/armor/ember/burned_out')
-_em_tu = functions.get('sweetdream:equipment/armor/ember/top_up')
+_em_bo = functions.get('fallendream:equipment/armor/ember/burned_out')
+_em_tu = functions.get('fallendream:equipment/armor/ember/top_up')
 if _em_bo is None:
     R['embertop'].append((str(ROOT), 0,
         '余烬补流火(坑 137): 找不到 ember/burned_out。'))
@@ -4117,7 +4135,7 @@ def _em_code(_f):
 
 if _em_bo is not None:
     _emb = _em_code(_em_bo)
-    _m_call = re.search(r'function\s+sweetdream:equipment/armor/ember/top_up', _emb)
+    _m_call = re.search(r'function\s+fallendream:equipment/armor/ember/top_up', _emb)
     if not _m_call:
         R['embertop'].append((str(_em_bo), 0,
             '余烬补流火(坑 137): burned_out 没有调用 ember/top_up —— 夜火怪熄灭又变成'
@@ -4142,7 +4160,7 @@ if _em_tu is not None:
 #   静态扫描验证不了运行时行为, 能做的是把**修复后的代码形态**锁死: 谁改回去
 #   (或新写一个同款) 立刻报出来, 不必等玩家反馈再回头查。
 #   每条 = (相对路径, 必须含的片段 or None, 禁止匹配的正则 or None, 顺序对 or None, 说明)
-_SD = 'sweetdream/data/sweetdream/function'
+_SD = 'fallendream/data/fallendream/function'
 _MC = 'manacore-1.0.0/data/manacore/function'
 
 # ---- R05(2026-10-10): 定点乘法跨 Scale 的 int32 上界保护 ----
@@ -4196,12 +4214,12 @@ for _fnk, _fp in functions.items():
 #   直接引用的函数必须是**普通函数**。含 `$(变量)` 的行拿不到参数: 整条宏行
 #   (以及它之后的一切)在运行期被跳过, 严重时整个宏函数不实例化 —— **零日志**,
 #   游戏里只表现为"这个功能不存在"。
-#   真实事故 2026-10-11(N09): sweetdream:equipment/staff/begonia/hook_calc 里写着
+#   真实事故 2026-10-11(N09): fallendream:equipment/staff/begonia/hook_calc 里写着
 #   `$execute if entity @e[…u0:$(u0)…]`, 而它是 #manacore:event/damage_calc 的值之一
 #   ⇒ 海棠「漩涡增强 mm +20%」整段不执行(玩家只会觉得"这装备没增强")。
 #   正解: 标签指**普通 wrapper**, wrapper 再用 `with storage` 调**宏叶子**。
 #   ★ 只扫**非注释行** —— 头注释里讲"本文件不能写 $(变量)"不该被算进来。
-for _pk in ('manacore-1.0.0', 'sweetdream'):
+for _pk in ('manacore-1.0.0', 'fallendream'):
     _tbase = ROOT / _pk / 'data'
     if not _tbase.exists():
         continue
@@ -4248,29 +4266,29 @@ _REGRESS = [
      'S02: 槽位耗尽时不得清属性, 必须先退出'),
     ('manacore-1.0.0/data/manacore/tags/function/event/player_prepare_new.json',
      'manacore:event/noop', None, None, 'S02: 前置包必须定义建档前事件标签'),
-    ('sweetdream/data/manacore/tags/function/event/player_prepare_new.json',
-     'sweetdream:event/player_prepare_new', None, None, 'S02: sweetdream 必须挂载建档前清理'),
+    ('fallendream/data/manacore/tags/function/event/player_prepare_new.json',
+     'fallendream:event/player_prepare_new', None, None, 'S02: fallendream 必须挂载建档前清理'),
     (_SD + '/event/player_prepare_new.mcfunction',
-     'function sweetdream:internal/attr/cleanup',
-     r'function (?:sweetdream:lib/uuid|manacore:api/)|scoreboard players (?:reset|set) @s', None,
+     'function fallendream:internal/attr/cleanup',
+     r'function (?:fallendream:lib/uuid|manacore:api/)|scoreboard players (?:reset|set) @s', None,
      'S02: 未登记时只摘属性, 不调用登记 API/UUID 查找或提前清掉迁移判据'),
     (_SD + '/lib/ledger_resync_go.mcfunction',
-     'function sweetdream:equipment/armor/lightless_sea/atk_add with storage zx:work x',
+     'function fallendream:equipment/armor/lightless_sea/atk_add with storage zx:work x',
      r'scoreboard players (?:set @s zx\.ls_buf 0|reset @s zx\.ls_buf)|#lr_sum zx\.meta \+= @s zx\.ls_buf',
-     ('function sweetdream:equipment/armor/lightless_sea/atk_add',
-      'attribute @s minecraft:attack_damage modifier remove sweetdream:eqp_ls_atk'),
+     ('function fallendream:equipment/armor/lightless_sea/atk_add',
+      'attribute @s minecraft:attack_damage modifier remove fallendream:eqp_ls_atk'),
      'S03: 无光之海账本兼作三秒宽限缓存, 保留账本/面板且只重挂原版属性'),
     (_SD + '/lib/ledger_resync_go.mcfunction',
-     'attribute @s minecraft:attack_damage modifier remove sweetdream:eqp_ls_atk', None, None,
+     'attribute @s minecraft:attack_damage modifier remove fallendream:eqp_ls_atk', None, None,
      'S03: 无光之海重挂必须先摘同 id, 兼容修饰符未丢的世界'),
     (_SD + '/lib/ledger_resync_go.mcfunction',
-     'function sweetdream:equipment/armor/mirage/set_atk_add with storage zx:work x',
+     'function fallendream:equipment/armor/mirage/set_atk_add with storage zx:work x',
      r'scoreboard players (?:set @s zx\.mr_atk 0|reset @s zx\.mr_atk)|#lr_sum zx\.meta \+= @s zx\.mr_atk',
-     ('function sweetdream:equipment/armor/mirage/set_atk_add',
-      'attribute @s minecraft:attack_damage modifier remove sweetdream:eqp_mr_set_atk'),
+     ('function fallendream:equipment/armor/mirage/set_atk_add',
+      'attribute @s minecraft:attack_damage modifier remove fallendream:eqp_mr_set_atk'),
      'S03: 蜃楼保留面板与旧账只重挂属性, 到期/卸装仍可按差值正常减回'),
     (_SD + '/lib/ledger_resync_go.mcfunction',
-     'attribute @s minecraft:attack_damage modifier remove sweetdream:eqp_mr_set_atk', None, None,
+     'attribute @s minecraft:attack_damage modifier remove fallendream:eqp_mr_set_atk', None, None,
      'S03: 蜃楼重挂必须先摘同 id, 兼容修饰符未丢的世界'),
     (_MC + '/internal/skill/stage_mana.mcfunction',
      'manacore:work a.value set from storage manacore:work a.mana', None, None,
@@ -4390,15 +4408,15 @@ _REGRESS = [
      '⇒ 建出空条目。★ `_order` = (应更晚, 应更早)。'
      '★ 另: `append` 要求目标是**已存在的 list** ⇒ 必须先 `q set value []` 建空壳。'),
     (_SD + '/internal/itembackup/migrate_legacy.mcfunction',
-     'function sweetdream:internal/itembackup/resync_go', None, None,
+     'function fallendream:internal/itembackup/resync_go', None, None,
      '★ Q01: 迁移完**立刻重建镜像**(pend/slot/wait) —— 否则下一秒 recover 的选择器'
      ' `@a[scores={zx.ret_pend=1..}]` 还是选不到人, 等于白迁。'),
     (_SD + '/event/player_join.mcfunction',
-     'function sweetdream:internal/itembackup/migrate_legacy with storage zx:work a', None, None,
+     'function fallendream:internal/itembackup/migrate_legacy with storage zx:work a', None, None,
      '★ Q01: 迁移挂在 **player_join**(register 末尾, 每次上线/重注册都抛; 且它排在 '
      '`player_first_join` **之前** ⇒ 迁移早于清账, 那时 zx.ret_pend 还在 —— 它是迁移的唯一判据)。'),
-    ('sweetdream/data/manacore/tags/function/event/player_join.json',
-     'sweetdream:event/player_join', None, None,
+    ('fallendream/data/manacore/tags/function/event/player_join.json',
+     'fallendream:event/player_join', None, None,
      '★ Q01: 新的上线收尾函数必须真的挂进跨包事件标签(少这一行 = 迁移永不执行, 且完全静默)。'),
 
     # ---- 2026-10-11 四审 Q02(重置后按队列重建镜像) ----
@@ -4414,29 +4432,29 @@ _REGRESS = [
      'q 已被还净而镜像还留着 1 的玩家会被永久挂上 ret_pend=1(每秒空转 + 20 秒后吃到'
      '那句"背包已满"的误导提示)。'),
     (_SD + '/internal/itembackup/resync_go.mcfunction',
-     'function sweetdream:internal/itembackup/resync with storage zx:work a', None, None,
+     'function fallendream:internal/itembackup/resync with storage zx:work a', None, None,
      '★ Q02: 普通包装(取 uuid) -> 宏叶子; 宏函数不能裸调(整函数作废、零日志)。'),
     (_SD + '/event/player_reset.mcfunction',
-     'function sweetdream:internal/itembackup/resync_go', None,
-     ('function sweetdream:internal/itembackup/resync_go',
+     'function fallendream:internal/itembackup/resync_go', None,
+     ('function fallendream:internal/itembackup/resync_go',
       'scoreboard players reset @s zx.ret_pend'),
      '★ Q02(四审): 镜像重建必须排在**清账清单之后** —— 放前面的话刚建的镜像会被清单'
      '立刻 reset 掉, 等于没做。★ `_order` = (应更晚, 应更早)。'),
     (_SD + '/event/player_reset.mcfunction',
-     'function sweetdream:internal/itembackup/resync_go', None, None,
+     'function fallendream:internal/itembackup/resync_go', None, None,
      '★ Q02(四审): 清账之后必须真的调用镜像重建(存在性)。'
      '★ 该行位于尾标记 `@@GEN-SCORES-ABOVE@@` 之下的**手写区**; 尾标记本身是注释, '
      '本锁看不到 —— 它的存在性由 resetset 规则单独守(见那里)。'),
 
     # ---- 2026-10-11 四审 Q04(装备型修饰符一并摘净) ----
     (_SD + '/internal/attr/cleanup.mcfunction',
-     'minecraft:max_health modifier remove sweetdream:eqp_power_hp', None, None,
+     'minecraft:max_health modifier remove fallendream:eqp_power_hp', None, None,
      '★ Q04(四审): 装备型修饰符也必须摘 —— 报告例。清账清单会把装备账本(zx.power_hp 等)'
      '一起清零, 而"重置那一刻没穿这件"时 want=0/账本=0 ⇒ 差额 0 ⇒ 跳过 apply_hp '
      '⇒ 这份 +8 永久留在身上, 而且 apply_hp 自己的"先按旧账摘"门(账本 matches 1..)也随'
      '账本归零失效 ⇒ **以后再也摘不掉**。★ 别再写回"装备型不摘"。'),
     (_SD + '/internal/attr/cleanup.mcfunction',
-     'minecraft:attack_damage modifier remove sweetdream:eqp_mr_set_atk', None, None,
+     'minecraft:attack_damage modifier remove fallendream:eqp_mr_set_atk', None, None,
      '★ Q04: 装备型清单的**末位**一条(蜃楼套装攻击力) —— 钉住"这一批真的整段摘完了", '
      '而不是只加了两条应付差事。'),
     (_SD + '/internal/attr/cleanup.mcfunction',
@@ -4472,17 +4490,17 @@ _REGRESS = [
 
     # ---- 2026-10-11 三审 A04(重置时清理"状态型"原版属性修饰符) ----
     (_SD + '/event/player_reset.mcfunction',
-     'function sweetdream:internal/attr/cleanup', None,
-     ('scoreboard players reset @s zx.', 'function sweetdream:internal/attr/cleanup'),
+     'function fallendream:internal/attr/cleanup', None,
+     ('scoreboard players reset @s zx.', 'function fallendream:internal/attr/cleanup'),
      '★ A04: player_reset **必须先摘"状态型"修饰符, 再清分数**。'
      '修饰符的到期回收全靠"计时分数驱动的每秒心跳"; 分数一清, 心跳选择器不再命中 ⇒ '
      '收尾永不执行 ⇒ 修饰符永久残留(熔星攻速永久变大 / 残念速度永久翻倍 + 每秒白回 20 魔力)。'
      '★ `_order` 约定 = (应更晚出现者, 应更早出现者): 本条断言**第一条 reset 排在 cleanup 之后**。'),
     (_SD + '/internal/attr/cleanup.mcfunction',
-     'minecraft:attack_speed modifier remove sweetdream:meteor', None, None,
+     'minecraft:attack_speed modifier remove fallendream:meteor', None, None,
      '★ A04: 熔星的攻速倍率必须显式摘(`modifier remove` 对不存在的 id 是空操作, 不必先判存在)。'),
     (_SD + '/internal/attr/cleanup.mcfunction',
-     'minecraft:movement_speed modifier remove sweetdream:lethe_speed', None, None,
+     'minecraft:movement_speed modifier remove fallendream:lethe_speed', None, None,
      '★ A04: 残念的速度倍率必须显式摘。'),
     (_SD + '/internal/attr/cleanup.mcfunction',
      'tag @s remove zx.lethe', None, None,
@@ -4495,7 +4513,7 @@ _REGRESS = [
 
     (_SD + '/internal/itembackup/backup.mcfunction',
      'execute if items entity @s weapon.mainhand *[minecraft:custom_data~{zx:["itemreplace"]}] '
-     'run function sweetdream:internal/itembackup/snap_main with storage zx:work a',
+     'run function fallendream:internal/itembackup/snap_main with storage zx:work a',
      r'from entity @s equipment\.|\$execute if items entity @s weapon\.(mainhand|offhand)', None,
      '★ 坑 95(2026-10-11 二次事故): 玩家 NBT 的 equipment 复合只存**穿戴的盔甲**'
      '(playerdata 实测 equipment={feet,legs}, 主手在 Inventory 列表) —— '
@@ -4531,7 +4549,7 @@ _REGRESS = [
      'if score #ret_ok zx.meta matches 0 '
      'unless items entity @s hotbar.$(slot) * '
      'if data storage zx:ret p."$(uuid)".q[0].item.id '
-     'run function sweetdream:internal/itembackup/restore '
+     'run function fallendream:internal/itembackup/restore '
      '{uuid:"$(uuid)",dst:"hotbar.$(slot)"}',
      r'items\s+entity\s+@s\s+\S+\s+air', None,
      '★ R01 的正写形态 ②-a(A02 后): 目标格**是空的** -> 还回 **hotbar.$(slot)**(消耗时'
@@ -4555,7 +4573,7 @@ _REGRESS = [
      '$execute if score @s zx.ret_pend matches 1.. if score #ret_ok zx.meta matches 0 '
      'unless items entity @s hotbar.8 * '
      'if data storage zx:ret p."$(uuid)".q[0].item.id '
-     'run function sweetdream:internal/itembackup/restore '
+     'run function fallendream:internal/itembackup/restore '
      '{uuid:"$(uuid)",dst:"hotbar.8"}',
      None, None,
      '★ A02(2026-10-11 三审) ④ 兜底扫描(快捷栏 0..8): 首选槽(原格/副手)被占或镜像非法时, '
@@ -4567,7 +4585,7 @@ _REGRESS = [
      '$execute if score @s zx.ret_pend matches 1.. if score #ret_ok zx.meta matches 0 '
      'unless items entity @s inventory.26 * '
      'if data storage zx:ret p."$(uuid)".q[0].item.id '
-     'run function sweetdream:internal/itembackup/restore '
+     'run function fallendream:internal/itembackup/restore '
      '{uuid:"$(uuid)",dst:"inventory.26"}',
      None, None,
      '★ A02(2026-10-11 三审) ⑤ 兜底扫描(主背包 inventory.0..26 = 索引 9-35, 27 格): '
@@ -4611,12 +4629,12 @@ _REGRESS = [
      '会被自己刚清掉的 0 挡掉 ⇒ ret_slot 永远停在旧值 ⇒ 下一件写错槽位。'),
     (_SD + '/internal/itembackup/backup_go.mcfunction', None,
      r'unless\s+score\s+@s\s+zx\.ret_pend\s+matches\s+1\.\.\s+run\s+function\s+'
-     r'sweetdream:internal/itembackup/backup', None,
+     r'fallendream:internal/itembackup/backup', None,
      '★ A02(2026-10-11 三审): 暂存区(stage.*)不再需要"待归还期间冻结"。'
      '待还武器已经搬进**队列** q, 与暂存区彻底解耦 —— 冻结逻辑(N08 续修那版)已删除。'
      '写回来只会让暂存区发霉(消耗当刻 effect_1 还会再拍一次最新), 没有任何好处。'),
     (_SD + '/internal/itembackup/backup_go.mcfunction',
-     'function sweetdream:internal/itembackup/backup with storage zx:work a', None, None,
+     'function fallendream:internal/itembackup/backup with storage zx:work a', None, None,
      '★ 每秒安全网仍要转调宏本体(宏函数不能裸调: 整函数作废、零日志)。'),
 
     (_SD + '/equipment/sword/rebound/cast.mcfunction', None, None,
@@ -4656,7 +4674,7 @@ _REGRESS = [
     (_SD + '/equipment/axe/thunderclap/field_end.mcfunction', 'thunderclap/domain_kill', None, None,
      'F17 术阵归属: 按 distance 通杀 ⇒ 两座术阵 <=2 格时, 先结束的那座会删掉邻居的域显示'),
 
-    ('sweetdream/data/sweetdream/tags/entity_type/no_damage.json', 'minecraft:oak_boat', None, None,
+    ('fallendream/data/fallendream/tags/entity_type/no_damage.json', 'minecraft:oak_boat', None, None,
      'F18 目标黑名单: 漏掉船/矿车等非生物 ⇒ "锁最近一只"被船抢走, 技能打空'),
 
     # ---- 2026-10-10 整包静默失效(槽位耗尽死锁) ----
@@ -4709,7 +4727,7 @@ _REGRESS = [
 
     # ---- 2026-10-10 审查报告 R01 / R06(消耗型武器回手) ----
     (_SD + '/lib/second.mcfunction',
-     'function sweetdream:internal/itembackup/recover', None, None,
+     'function fallendream:internal/itembackup/recover', None, None,
      '★ R06 的兜底必须挂在每秒链上。原来只有 effect_1 schedule 出来的 1 tick 一次机会, '
      '且只找 @a[tag=test_pending_return] ⇒ 消耗后立刻掉线/当刻死亡/目标格被占时武器永久消失'),
     (_SD + '/internal/itembackup/return_go.mcfunction',
@@ -4737,7 +4755,7 @@ _REGRESS = [
      '写成 SelectedSlot ⇒ data get 抛错 ⇒ 本函数从这一行起中断 ⇒ 快照没做、入队没做、'
      'schedule 没排 ⇒ 武器消耗后再也没人还(2026-10-10 实测)。'),
     (_SD + '/internal/itembackup/effect_1.mcfunction',
-     'function sweetdream:internal/itembackup/enqueue with storage zx:work a', None, None,
+     'function fallendream:internal/itembackup/enqueue with storage zx:work a', None, None,
      '★ A02(2026-10-11 三审): 消耗当刻必须**入队** —— 少了它, 连消耗两件会互相顶掉、'
      '且 20 秒后放弃(报告 A02 ①②)。zx.ret_slot / zx.ret_pend 的写入都随它一起走'
      '(别在 effect_1 里另写一遍: 那会把"队首镜像"写成本次那一格, 队列非空时就写错了)。'),
@@ -4861,7 +4879,7 @@ _REGRESS = [
      '不能再回到"不带 objective 的全清"(那会连 naturewind 的 nw.* 一起清)。'
      '本锁只保证"清单非空且指向 zx.*"; 集合的完整对账由 resetset 规则负责。'),
     (_SD + '/event/player_first_join.mcfunction',
-     'function sweetdream:event/player_reset', None, None,
+     'function fallendream:event/player_reset', None, None,
      '★ N05(2026-10-11): 首次加入事件必须复用同一份清账清单(player_reset)—— '
      'reset_all 清不到的离线玩家靠它上线时补清; 少这行 = N05 没修。'),
     (_MC + '/internal/join/new.mcfunction',
@@ -4875,9 +4893,9 @@ _REGRESS = [
      'manacore:event/noop', None, None,
      '★ N05(2026-10-11): 新事件标签的默认占位 —— 空标签不是合法目标, 会让 '
      '`function #manacore:event/player_first_join` 在解析期报错(整个 join/new 加载失败)。'),
-    ('sweetdream/data/manacore/tags/function/event/player_first_join.json',
-     'sweetdream:event/player_first_join', None, None,
-     '★ N05(2026-10-11): sweetdream 侧必须往 #manacore:event/player_first_join 追加'
+    ('fallendream/data/manacore/tags/function/event/player_first_join.json',
+     'fallendream:event/player_first_join', None, None,
+     '★ N05(2026-10-11): fallendream 侧必须往 #manacore:event/player_first_join 追加'
      '自己的 handler(否则事件抛了没人听 = N05 没生效)。'),
     (_MC + '/debug/reset_all.mcfunction',
      'scoreboard players reset @a manacore.gen', None, None,
@@ -4894,7 +4912,7 @@ _REGRESS = [
     # ★ 2026-10-20: 每刻核对当前物品组件；缓存命中不序列化玩家，
     #   不同skill换手当刻回退一次SelectedItem读取。不是每秒采样缓存。
     (_SD + '/equipment/tool/look/render_go.mcfunction',
-     'function sweetdream:equipment/tool/look/skill_live with storage zx:work a',
+     'function fallendream:equipment/tool/look/skill_live with storage zx:work a',
      r'storage zx:look cache\.eq\b|storage zx:look cache\.skill\b'
      r'|cache\."\$\(uuid\)"\.skill', None,
      '★ N07: 每刻验证当前主手skill；不能退回每秒采样或全局单格。'),
@@ -4908,7 +4926,7 @@ _REGRESS = [
      'if items entity @s weapon.mainhand *[minecraft:custom_data~{skill:"$(skill)"}]', None, None,
      '★ 只有当前真实主手skill组件完全匹配，才可使用提示缓存。'),
     (_SD + '/equipment/tool/look/cache.mcfunction',
-     'sweetdream:equipment/tool/look/cache_go',
+     'fallendream:equipment/tool/look/cache_go',
      r'storage zx:look cache\.', None,
      '★ N07: cache 只做"取 uuid / 判空 / 转交"(普通命令), 宏落库全在 cache_go —— '
      '它自己不许再写全局缓存格(否则 N07 原样回归)。'),
@@ -4920,18 +4938,18 @@ _REGRESS = [
     #   不再进缓存，改由 render_go 每刻直读；这里若再写 cache.*.skill 会被上一条
     #   的禁止正则和本条 cache_go 的 `cache\.[a-z]` 正则共同抓到。）
     (_SD + '/equipment/tool/look/toggle.mcfunction',
-     'execute if entity @s[tag=test_look_on] run function sweetdream:equipment/tool/look/cache',
+     'execute if entity @s[tag=test_look_on] run function fallendream:equipment/tool/look/cache',
      None, None,
      '★ N07: 开启面板那一刻必须**立即**刷一次缓存 —— 否则头一秒 render 读到的还是'
      '上一次留下的旧缓存(旧版是别人的, 新版是自己上一轮的)。'),
     # ---- N09(2026-10-11): 海棠 hook 必须"普通 wrapper + 宏叶子" ----
     (_SD + '/equipment/staff/begonia/hook_calc.mcfunction',
-     'sweetdream:equipment/staff/begonia/emp_find',
+     'fallendream:equipment/staff/begonia/emp_find',
      r'\$\(u[0-3]\)', None,
      '★ N09: 本文件被 #manacore:event/damage_calc **无参派发**, 绝不能含 $(u0..u3) '
      '(宏行拿不到参数 ⇒ 整段不执行、零日志)。宏行必须住在 emp_find, 由本文件 with storage 调。'),
     (_SD + '/equipment/staff/begonia/hook_calc.mcfunction',
-     'execute at @s run function sweetdream:equipment/staff/begonia/emp_find', None, None,
+     'execute at @s run function fallendream:equipment/staff/begonia/emp_find', None, None,
      '★ N09: 查漩涡前必须先 `at @s` 把**位置**定到施法者本人 —— calc_as_owner 只换了'
      '执行者、没换位置, 否则 `distance=..6` 会按召唤物残留坐标量, 判成"不在漩涡旁"。'),
     (_SD + '/equipment/staff/begonia/emp_find.mcfunction',
@@ -4957,7 +4975,7 @@ _REGRESS = [
      r'scoreboard\s+players\s+operation\s+#(?:q|r|lo|mul_out)\s+manacore\.math\b'
      r'|store\s+result\s+score\s+#mul_out\s+manacore\.math\b', None,
      '★ A01(2026-10-11 三审)禁止回归: mul_pct 里出现**硬编码** manacore.math 的输入/出参。'
-     '调用方 sweetdream:lib/dmg_add_apply 的分数写在 zx.meta —— "持有者名对、objective 错" '
+     '调用方 fallendream:lib/dmg_add_apply 的分数写在 zx.meta —— "持有者名对、objective 错" '
      '会让输入一律读不到(0) ⇒ 只要本轮有增伤, 重算结果就是 0(报告例: 该给 115 实得 0), '
      '而且**零日志、仿真也看不见**(数值仿真按值建模, 没建 (持有者,objective) 键)。'
      'objective 只能由 $(obj) 显式传入。'),
@@ -5039,8 +5057,8 @@ _REGRESS = [
     #   = 药水生效时已无天花板 ⇒ 4·2^20 顶到真实上限 = **一键满血**
     #   (用户报"归息直接回了 19 血")。撤上限现在由 lib/heal_off + core/tick 跨拍执行。
     (_SD + '/lib/heal_up.mcfunction',
-     'modifier add sweetdream:heal_cap', None,
-     ('instant_health', 'modifier add sweetdream:heal_cap'),
+     'modifier add fallendream:heal_cap', None,
+     ('instant_health', 'modifier add fallendream:heal_cap'),
      'heal_up 顺序: 先挂修饰符压上限, 再发 instant_health 顶满(否则没有天花板 ⇒ 一口气满血)。'),
     (_SD + '/lib/heal_up.mcfunction',
      None, r'^(?!\s*execute\b)[^\n]*\battribute\b[^\n]*modifier\s+remove\b',
@@ -5052,12 +5070,12 @@ _REGRESS = [
      'tag @s add zx.heal_p', None, None,
      'heal_up 结尾必须挂 zx.heal_p(待撤标签) —— core/tick 靠它把任务升格给 lib/heal_off。'),
     (_SD + '/lib/heal_off.mcfunction',
-     'modifier remove sweetdream:heal_cap', None,
-     ('modifier remove sweetdream:heal_cap', 'tag @s remove zx.heal_on'),
+     'modifier remove fallendream:heal_cap', None,
+     ('modifier remove fallendream:heal_cap', 'tag @s remove zx.heal_on'),
      'heal_off 必须**先摘标签、再摘修饰符**: 万一摘修饰符失败, 标签已清 ⇒ 不会每刻重复失败(死循环)。'),
     (_SD + '/core/tick.mcfunction',
-     'sweetdream:lib/heal_off', None,
-     ('tag @s add zx.heal_on', 'sweetdream:lib/heal_off'),
+     'fallendream:lib/heal_off', None,
+     ('tag @s add zx.heal_on', 'fallendream:lib/heal_off'),
      'core/tick 的两行回血收尾不能反: 必须"先撤(判 heal_on)、再把 heal_p 升格成 heal_on";'
      '反过来会在**同一刻**完成"设置→撤", 等于没延迟(又回到一键满血)。'),
     # ---- 沸痕: "熄灭自身身上的火焰"落地成**临时细雪**(2026-10-16 三次收敛) ----
@@ -5115,8 +5133,9 @@ for _hk, _hp in functions.items():
         if _hl.strip().startswith('#'):
             continue
         if _HEALTH_W.search(_hl):
-            # NPCs can be initialized directly. Keep rejecting player-capable targets.
-            _npc = re.search(r'entity\s+@e\[([^]]+)\]', _hl)
+            # NPCs can be initialized directly, including a type-constrained
+            # @s from execute summon. Keep rejecting player-capable targets.
+            _npc = re.search(r'entity\s+@(?:e|s)\[([^]]+)\]', _hl)
             _typed = re.search(r'(?:^|,)type=(?:minecraft:)?([a-z_]+)(?:,|$)', _npc.group(1)) if _npc else None
             if _typed and _typed.group(1) != 'player':
                 continue
@@ -5127,7 +5146,7 @@ for _hk, _hp in functions.items():
 
 # F10 无息的跨 tick 标记: 必须带施法者 uuid 后缀(全局同名会让"多人同时施放"互相清标记 /
 #     漏命中), 且清理只能按自己的 uuid(见 hush/tag_clear)。
-_hush_dir = ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function' / 'equipment' / 'sword' / 'hush'
+_hush_dir = ROOT / 'fallendream' / 'data' / 'fallendream' / 'function' / 'equipment' / 'sword' / 'hush'
 if _hush_dir.exists():
     for _p in sorted(_hush_dir.glob('*.mcfunction')):
         for _i, _l in enumerate(_p.read_text(encoding='utf-8', errors='ignore').split('\n'), 1):
@@ -5199,7 +5218,7 @@ TITLE = {'fn': 'function 引用不存在的目标', 'tag': '#tag 引用无对应
          'ply2': '被 as 非玩家调用却用 tellraw @s (运行时静默失效, 需人工确认)',
          'mcomma': 'matches 用了逗号列表(会让整个函数加载失败)',
          'swap': '逐帧切换 / 被数据包驱动的物品模型没关 hand_animation_on_swap'
-                 '(第一人称手上一直抽搐; 含覆盖层资源包, 不限于 sweetdream_rp_完整版)',
+                 '(第一人称手上一直抽搐; 含覆盖层资源包, 不限于 fallendream_rp_完整版)',
          'dollar': '行首有 $ 但不含 $(变量)(会让整个函数作废)',
          'regcap': '通用数值注册表: 表行数超 cap / cap 与生成器不一致',
          'regobj': '通用数值注册表: 引用了没建过的计分项(静默显示不出来)',
@@ -5547,7 +5566,7 @@ TITLE = {'fn': 'function 引用不存在的目标', 'tag': '#tag 引用无对应
                       '而且函数内命令报错默认不进 latest.log ⇒ **现场表现为"整包静默失效、'
                       '日志零报错"**。2026-10-10 实测: internal/join/register 第 14 行漏写 '
                       'execute ⇒ 索引与 manacore.gen 都写不进去 ⇒ tick_self 每秒重注册 '
-                      '⇒ 每秒弹走一格槽位(64→55)⇒ self_uuid 恒空 ⇒ sweetdream 全死。',
+                      '⇒ 每秒弹走一格槽位(64→55)⇒ self_uuid 恒空 ⇒ fallendream 全死。',
          'norun': '`execute if score A obj matches <范围>` 的**范围后面漏了 `run`**。'
                   '范围(如 `1..`)本身不是命令, 后面必须接 execute 的子命令 —— '
                   '写成 `… matches 1.. scoreboard players operation …` 会在加载期就炸, '
@@ -5597,7 +5616,7 @@ TITLE = {'fn': 'function 引用不存在的目标', 'tag': '#tag 引用无对应
                       '只有**裸名** health/food/air/armor/level/xp/deathCount(1.13 起从来没有命名空间); '
                       '点号/冒号只属于统计类准则(minecraft.custom:minecraft.deaths)。★ 与 itempath/'
                       'selfield 同族: 命令参数没有"编译期"检查, 靠本规则 + latest.log 兜底',
-         'resetset': '重置清账清单(N06): sweetdream:event/player_reset 的逐项 `reset @s zx.*` '
+         'resetset': '重置清账清单(N06): fallendream:event/player_reset 的逐项 `reset @s zx.*` '
                      '必须 == 全仓 `scoreboard objectives add zx.*` 的集合(双向)。清单由 '
                      '.workbuddy/_gen_reset_scores.py 生成 —— 新增账本要重跑它。'
                      '★ 少了 -> "漏清"(账本残留, 装备被动应加的不加回); 多了 -> 拼错/已删。'

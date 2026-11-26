@@ -1,0 +1,7 @@
+{
+  "parent": "fallendream_boss:blueprint/reconstruction/arm_upper_left",
+  "textures": {
+    "0": "fallendream_boss:blueprint/reconstruction/ash/boss_basecolor_1024_0",
+    "particle": "minecraft:item/pufferfish"
+  }
+}

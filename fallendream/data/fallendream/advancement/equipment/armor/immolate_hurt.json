@@ -1,0 +1,10 @@
+{
+  "criteria": {
+    "hurt": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "rewards": {
+    "function": "fallendream:equipment/armor/immolate/hurt"
+  }
+}

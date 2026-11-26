@@ -12,7 +12,7 @@ from PIL import Image
 from collections import defaultdict,Counter
 import numpy as np,math,json,base64,io,uuid,itertools,time,copy
 
-def uid(s):return str(uuid.uuid5(uuid.NAMESPACE_URL,'sweetdream:a_ghost/upper-static/'+s))
+def uid(s):return str(uuid.uuid5(uuid.NAMESPACE_URL,'fallendream:a_ghost/upper-static/'+s))
 
 class ASampler(Source):
     def __init__(self):
@@ -61,7 +61,7 @@ def main():
     for e in aj['elements']:
         for f in e['faces'].values():
             if f.get('texture') is not None:f['texture']=texture['uuid']
-    aj['meta'].update(uuid=uid('project'),save_location=str(S/'A_头胸与悬架_第一批静态.ajblueprint'),last_used_blueprint_id='sweetdream_boss:a_ghost');aj['blueprint_settings'].update(blueprint_id='sweetdream_boss:a_ghost',resource_pack_export_mode='none',data_pack_export_mode='none',target_minecraft_version='1.21.5');aj['variants']['default'].update(uuid=uid('variant'),slot_textures={},excluded_nodes=[]);aj['variants']['list']=[];aj.pop('animations',None)
+    aj['meta'].update(uuid=uid('project'),save_location=str(S/'A_头胸与悬架_第一批静态.ajblueprint'),last_used_blueprint_id='fallendream_boss:a_ghost');aj['blueprint_settings'].update(blueprint_id='fallendream_boss:a_ghost',resource_pack_export_mode='none',data_pack_export_mode='none',target_minecraft_version='1.21.5');aj['variants']['default'].update(uuid=uid('variant'),slot_textures={},excluded_nodes=[]);aj['variants']['list']=[];aj.pop('animations',None)
     (S/'A_头胸与悬架_第一批静态.ajblueprint').write_text(json.dumps(aj,ensure_ascii=False,indent=2),encoding='utf8')
     report={'stage':'Static section 1: actual upper source y>=28. Lower robe and hands not yet built; this is not the complete character.','cubes':len(elements),'groups':len(groups),'faces':len(faces),'culled_internal_faces':culled,'texture':[512,512],'source_triangles':len(source()[3]),'fit_pitch':step,'counts_by_part':dict(Counter(parts[b[2]-1] for b in boxes)),'texture_transfer_distance_percentiles':np.percentile(sampler.distances,[50,95,100]).tolist(),'animations':0,'game_exported':False,'game_tested':False};(S/'第一批静态结构统计.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf8');print(report,flush=True)
     p,n,u,f,t=collect_scene(bb);sheet=Image.new('RGB',(2560,900),'#171c23')

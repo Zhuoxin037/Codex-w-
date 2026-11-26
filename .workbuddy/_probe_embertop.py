@@ -10,7 +10,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-BASE = Path(r'D:/数据包/sweetdream/data/sweetdream/function/equipment/armor/ember')
+BASE = Path(r'D:/数据包/fallendream/data/fallendream/function/equipment/armor/ember')
 BO = BASE / 'burned_out.mcfunction'
 TU = BASE / 'top_up.mcfunction'
 
@@ -66,7 +66,7 @@ def _scenario(name, path, old, new, expect, count=1):
 
 
 CALL = ('execute if entity @s[tag=zx.status.yehuo] '
-        'run function sweetdream:equipment/armor/ember/top_up')
+        'run function fallendream:equipment/armor/ember/top_up')
 BACK = 'execute if entity @s[tag=zx.status.yehuo] run return 0'
 
 # 幕 1: burned_out 不再调 top_up —— 应报"没有调用 ember/top_up"(=又变回静默吞掉这一支)

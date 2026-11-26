@@ -8,14 +8,14 @@
 
 【★ 为什么这批**不挂 item_model**】
   批 16（10-18）之前，包内 140 件已经全都有 item_model（指向
-  `assets/sweetdream/items/<key>.json`）。新 10 件还没有画图标，
+  `assets/fallendream/items/<key>.json`）。新 10 件还没有画图标，
   一旦挂上就指向不存在的 items 定义 ⇒ 游戏里是**紫黑方块**，且零日志（坑 195）。
   ⇒ 现在不挂：游戏里显示底材原版贴图（铁剑/钻靴/下界合金胸甲…）。
   ★ 补外观的顺序固定：`_gen_late_icons.py` 出贴图 -> `_gen_late_rp.py` 接线
     （items/models/equipment）-> 再回到本文件打开 MODEL=True 重跑。
 
 【★ 弩在本批**不挂 enchantments**】
-  弩没有右键/consumable，命中结算全靠 `sweetdream:<id>` 附魔的 post_attack
+  弩没有右键/consumable，命中结算全靠 `fallendream:<id>` 附魔的 post_attack
   三回调（坑 138）。本批不建 enchantment/*.json 与 advancement，所以**不能挂** ——
   挂一个不存在的附魔 id 会让整条 give 解析失败。
   等技能批次建好附魔文件再回来补 `enchantments` + `enchantment_glint_override=false`。
@@ -35,7 +35,7 @@
 【zx 约定（照 batch5/6/7/new42）】
   剑/斧 = [<id>,<cat>,"itemreplace"]；弩 = [<id>,"bow"]；
   盔甲 = [<id>,<slot>,"armor"]（无 skill、无 consumable）。
-  带冷却的剑/斧才写 skill:"sweetdream:<id>"（观测镜靠它显示 CD）。
+  带冷却的剑/斧才写 skill:"fallendream:<id>"（观测镜靠它显示 CD）。
 
 【用法】
   python .workbuddy/_gen_batch17.py
@@ -53,7 +53,7 @@ import lore_fmt                              # noqa: E402
 from _new42_lore import HEAD, INFO, S, build_lore   # noqa: E402
 from _tags_data import TAGS                  # noqa: E402
 
-BASE = r'D:\数据包\sweetdream\data\sweetdream\function\equipment'
+BASE = r'D:\数据包\fallendream\data\fallendream\function\equipment'
 
 # ★ 外观未做 -> 先不挂 item_model（挂了 = 紫黑方块，见文件头）
 MODEL = False
@@ -176,7 +176,7 @@ def build(it, cat, slot, base):
         zx += [cat, 'itemreplace']
     zx_txt = json.dumps(zx, ensure_ascii=False, separators=(',', ':'))
     if cat in RIGHT_CLICK and has_cooldown(it['segs']):
-        zx_txt += ',skill:"sweetdream:%s"' % cid
+        zx_txt += ',skill:"fallendream:%s"' % cid
 
     _tags = TAGS.get(cid) or []
     if not _tags:
@@ -192,15 +192,15 @@ def build(it, cat, slot, base):
         parts.append(CONSUMABLE)
     mechanisms = {'lianshi', 'tiejili', 'night_bind', 'retro_shine', 'bind_ember'}
     if cid in mechanisms:
-        parts.append('enchantments={"sweetdream:%s":1}' % cid)
+        parts.append('enchantments={"fallendream:%s":1}' % cid)
         parts.append('enchantment_glint_override=false')
         parts.append('tooltip_display={hidden_components:["unbreakable","enchantments"]}')
     else:
         parts.append('tooltip_display={hidden_components:["unbreakable"]}')
     if MODEL:
-        parts.append('item_model="sweetdream:%s"' % model_key(cat, cid))
+        parts.append('item_model="fallendream:%s"' % model_key(cat, cid))
         if cat == 'armor':
-            parts.append('equippable={slot:"%s",asset_id:"sweetdream:armor_%s"}' % (slot, cid))
+            parts.append('equippable={slot:"%s",asset_id:"fallendream:armor_%s"}' % (slot, cid))
     return 'give @s %s[%s]' % (base, ','.join(parts))
 
 
@@ -210,7 +210,7 @@ def header(it, cat, slot, base):
     heads = [p for k, p in it['segs'] if k == 'head']
     A = []
     A.append('# ============================================================')
-    A.append('# sweetdream:equipment/%s/%s/give —— 给一件「%s」（%s · %s）'
+    A.append('# fallendream:equipment/%s/%s/give —— 给一件「%s」（%s · %s）'
              % (cat, it['id'], it['name'], it['rarity'], cat_cn))
     A.append('# ------------------------------------------------------------')
     A.append('# 【custom_data】')
@@ -224,10 +224,10 @@ def header(it, cat, slot, base):
     A.append('#   .workbuddy/_tags_data.py，然后重跑本生成器 + `python .workbuddy/lore_fmt.py --write`。')
     if not MODEL:
         A.append('# 【外观】★ 尚未做 —— 所以**故意不挂 item_model**。挂上会指向不存在的')
-        A.append('#   assets/sweetdream/items/%s.json ⇒ 紫黑方块且零日志（坑 195）。' % model_key(cat, it['id']))
+        A.append('#   assets/fallendream/items/%s.json ⇒ 紫黑方块且零日志（坑 195）。' % model_key(cat, it['id']))
         A.append('#   补外观的顺序：_gen_late_icons.py 出贴图 -> _gen_late_rp.py 接线 -> 本文件 MODEL=True。')
     if cat == 'bow' and it['id'] not in {'lianshi', 'tiejili', 'night_bind'}:
-        A.append('# ★ 弩的命中结算要靠 sweetdream:%s 附魔的 post_attack 回调（坑 138）。' % it['id'])
+        A.append('# ★ 弩的命中结算要靠 fallendream:%s 附魔的 post_attack 回调（坑 138）。' % it['id'])
         A.append('#   本批**只做 give、没建 enchantment/*.json** ⇒ 现在**不能挂 enchantments**')
         A.append('#   （挂不存在的附魔 id 会让整条 give 解析失败）。等技能批次建好附魔再补，')
         A.append('#   那时还要 `enchantment_glint_override=false` 并在 tooltip 里藏掉 enchantments。')

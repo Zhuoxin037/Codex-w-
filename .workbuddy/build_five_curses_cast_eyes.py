@@ -10,7 +10,7 @@ d=json.loads(SOURCE.read_text(encoding='utf-8-sig'));assert len(d['elements'])==
 eyes=[e for e in d['elements'] if e['name'].startswith(('柔光内嵌座_','无瞳柔紫咒光_'))];assert len(eyes)==12
 eyeids={e['uuid'] for e in eyes};body=[e for e in d['elements'] if e['uuid'] not in eyeids];assert len(body)==622
 eye_group=next(g['uuid'] for g in d['groups'] if g['name']=='13_世咒刻纹与魂炭')
-def uid(s):return str(uuid.uuid5(uuid.NAMESPACE_URL,'sweetdream:five_curses:cast_eyes:'+s))
+def uid(s):return str(uuid.uuid5(uuid.NAMESPACE_URL,'fallendream:five_curses:cast_eyes:'+s))
 def prune(nodes,ids,remove_group=False):
     out=[]
     for n in nodes:
@@ -97,29 +97,29 @@ helper=Path('D:/数据包/.workbuddy/finalize_monkey_skull_review.py')
 subprocess.run([sys.executable,str(helper),'--stage',str(S),'--native',IDLE.name,'--model-id','five_curses_visual','--prefix','五世恶咒'],check=True)
 subprocess.run([sys.executable,str(helper),'--stage',str(castdir),'--native',castpath.name,'--model-id','five_curses_visual','--prefix','五世恶咒_施法亮眼'],check=True)
 # State export reuses one skull model, rather than duplicating all 622 static cubes per light level.
-rp=S/'状态导出';models=rp/'assets/sweetdream/models/item';items=rp/'assets/sweetdream/items';textures=rp/'assets/sweetdream/textures/item'
+rp=S/'状态导出';models=rp/'assets/fallendream/models/item';items=rp/'assets/fallendream/items';textures=rp/'assets/fallendream/textures/item'
 for p in (models,items,textures):p.mkdir(parents=True,exist_ok=True)
-full_idle=json.loads((S/'审阅资源/assets/sweetdream/models/item/five_curses_visual.json').read_text(encoding='utf8'))
-full_peak=json.loads((castdir/'审阅资源/assets/sweetdream/models/item/five_curses_visual.json').read_text(encoding='utf8'))
+full_idle=json.loads((S/'审阅资源/assets/fallendream/models/item/five_curses_visual.json').read_text(encoding='utf8'))
+full_peak=json.loads((castdir/'审阅资源/assets/fallendream/models/item/five_curses_visual.json').read_text(encoding='utf8'))
 for t in d['textures']:(textures/t['name']).write_bytes(base64.b64decode(t['source'].split(',',1)[1]))
 (models/'five_curses_skull_static.json').write_text(json.dumps(full_idle,separators=(',',':')),encoding='utf8')
-(items/'five_curses_idle.json').write_text(json.dumps({'model':{'type':'minecraft:model','model':'sweetdream:item/five_curses_skull_static'}}),encoding='utf8')
+(items/'five_curses_idle.json').write_text(json.dumps({'model':{'type':'minecraft:model','model':'fallendream:item/five_curses_skull_static'}}),encoding='utf8')
 for i,(label,_,_) in enumerate(levels):
     overlay=copy.deepcopy(full_peak);overlay['elements']=[]
     for e in states[i]['elements'][len(body):]:
         overlay['elements'].append({'from':e['from'],'to':e['to'],'faces':{f:{'uv':[v/16 for v in ff['uv']],'texture':'#1'} for f,ff in e['faces'].items()}})
     mid=('dim','soft','peak')[i];(models/f'five_curses_eye_{mid}.json').write_text(json.dumps(overlay,separators=(',',':')),encoding='utf8')
-    entry={'model':{'type':'minecraft:composite','models':[{'type':'minecraft:model','model':'sweetdream:item/five_curses_skull_static'},{'type':'minecraft:model','model':f'sweetdream:item/five_curses_eye_{mid}'}]}}
+    entry={'model':{'type':'minecraft:composite','models':[{'type':'minecraft:model','model':'fallendream:item/five_curses_skull_static'},{'type':'minecraft:model','model':f'fallendream:item/five_curses_eye_{mid}'}]}}
     (items/f'five_curses_cast_{mid}.json').write_text(json.dumps(entry,separators=(',',':')),encoding='utf8')
 (rp/'pack.mcmeta').write_text(json.dumps({'pack':{'pack_format':55,'description':'五世恶咒：空眼常态与施法眼光状态审阅，未接入'}}),encoding='utf8')
 # Actual pose renders use these exact exported models, textures and native step keyframes.
 sys.path.insert(0,'C:/Users/qq303/.workbuddy/skills/mc-model-preview/scripts');import render3d as V
 def nearest(self,u,v):return self._px(max(0,min(self.w-1,int(u*self.w/16))),max(0,min(self.h-1,int(v*self.h/16))))
-V.Tex.sample=nearest;repo=V.Repo(str(rp));basefaces=V.bake(full_idle,repo,ns_hint='sweetdream');rendered={}
+V.Tex.sample=nearest;repo=V.Repo(str(rp));basefaces=V.bake(full_idle,repo,ns_hint='fallendream');rendered={}
 for phase in [None,0,1,2]:
     faces=basefaces[:]
     if phase is not None:
-        mid=('dim','soft','peak')[phase];m=json.loads((models/f'five_curses_eye_{mid}.json').read_text(encoding='utf8'));faces+=V.bake(m,repo,ns_hint='sweetdream')
+        mid=('dim','soft','peak')[phase];m=json.loads((models/f'five_curses_eye_{mid}.json').read_text(encoding='utf8'));faces+=V.bake(m,repo,ns_hint='fallendream')
     rows,_=V.render([(faces,1.0)],640,570,yaw=180,pitch=0,bg=(224,222,215),ambient=.66,pad=.90)
     rendered[phase]=Image.open(io.BytesIO(V.encode_png(640,570,rows))).convert('RGB')
 font=ImageFont.truetype('C:/Windows/Fonts/msyh.ttc',24);title=ImageFont.truetype('C:/Windows/Fonts/msyh.ttc',28)

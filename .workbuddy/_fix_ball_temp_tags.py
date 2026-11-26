@@ -14,8 +14,8 @@
 import re, sys
 
 FILES = [
-    r"D:\数据包\sweetdream\data\sweetdream\function\projectile\ball\tick_target.mcfunction",
-    r"D:\数据包\sweetdream\data\sweetdream\function\projectile\ball\fire.mcfunction",
+    r"D:\数据包\fallendream\data\fallendream\function\projectile\ball\tick_target.mcfunction",
+    r"D:\数据包\fallendream\data\fallendream\function\projectile\ball\fire.mcfunction",
 ]
 
 ADD_RE = re.compile(r'tag (\S*@[ea]\[[^\]]*\]) add (zx\.(?:ball_touch|bt))(?![\w.])')

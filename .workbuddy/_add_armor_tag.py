@@ -2,7 +2,7 @@
 """给所有盔甲 give 的 custom_data.zx 追加通用类别词 armor"""
 import glob, io, os
 
-BASE = "D:/数据包/sweetdream/data/sweetdream/function/equipment/armor"
+BASE = "D:/数据包/fallendream/data/fallendream/function/equipment/armor"
 n = 0
 for p in sorted(glob.glob(BASE + "/*/give.mcfunction")):
     s = io.open(p, encoding="utf-8").read()

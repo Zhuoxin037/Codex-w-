@@ -216,7 +216,7 @@ a['animations'].append(demo);save(a,O/AP)
 
 # Preserve accepted back sources byte-for-byte, including its Display entry.
 for name in ['爆裂黎明_悬片流动背效_分组可编辑动画.bbmodel','爆裂黎明_悬片背效_整体Display调整.bbmodel','爆裂黎明_上下两段残焰_动态材质.png']:shutil.copy2(S/name,O/name)
-oldassets=S/'审阅资源/assets/sweetdream';newassets=O/'审阅资源/assets/sweetdream'
+oldassets=S/'审阅资源/assets/fallendream';newassets=O/'审阅资源/assets/fallendream'
 for rel in ['models/item/burst_dawn_vfx_v4/back.json','textures/item/burst_dawn_vfx_v4/flow.png','textures/item/burst_dawn_vfx_v4/flow.png.mcmeta']:
  p=newassets/rel;p.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(oldassets/rel,p)
 
@@ -250,7 +250,7 @@ def export(b,slug,title,phase):
     z['faces'][side]={'texture':'#0','uv':[v/32 for v in f['uv']]}
     if f.get('rotation'):z['faces'][side]['rotation']=f['rotation']
    out.append(z)
-  return {'credit':'阶段八未部署审阅资产','ambientocclusion':False,'textures':{'0':'sweetdream:item/burst_dawn_ballistics_v1/fx','particle':'sweetdream:item/burst_dawn_ballistics_v1/fx'},'elements':out,'display':q['display']}
+  return {'credit':'阶段八未部署审阅资产','ambientocclusion':False,'textures':{'0':'fallendream:item/burst_dawn_ballistics_v1/fx','particle':'fallendream:item/burst_dawn_ballistics_v1/fx'},'elements':out,'display':q['display']}
  md=newassets/'models/item/burst_dawn_ballistics_v1';md.mkdir(parents=True,exist_ok=True)
  for i in range(8):
   ids={e['uuid'] for e,v,m in r['scene'](i*.05+.001,0)};save(model([e for e in b['elements'] if e['uuid'] in ids]),md/f'{slug}_{i:02}.json')

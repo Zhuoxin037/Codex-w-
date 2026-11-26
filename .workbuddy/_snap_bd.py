@@ -1,7 +1,7 @@
 import hashlib, json, sys
 from pathlib import Path
 
-R = Path('D:/数据包/sweetdream_rp_完整版/assets/sweetdream')
+R = Path('D:/数据包/fallendream_rp_完整版/assets/fallendream')
 pats = ['models/item/burst_dawn', 'models/item/burst_dawn_ballistics_v1',
         'textures/item/burst_dawn', 'textures/item/burst_dawn_ballistics_v1']
 files = []

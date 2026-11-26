@@ -1,1 +1,0 @@
-$execute as @e[tag=zx.j_follower,tag=!zx.j_return,tag=!zx.cs_voice,distance=..12,sort=nearest,limit=3,nbt={data:{owner:"$(uuid)"}}] run function sweetdream:equipment/staff/chorus/to_voice {c0:$(c0),c1:$(c1),c2:$(c2),c3:$(c3)}

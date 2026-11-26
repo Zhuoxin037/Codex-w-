@@ -3,18 +3,18 @@ sys.stdout.reconfigure(encoding='utf-8')
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).parent))
 from rework_husk_motion_20261026 import D,TITLE
-R=Path('D:/数据包');DP=R/'sweetdream';RP=R/'sweetdream_rp_完整版'
+R=Path('D:/数据包');DP=R/'fallendream';RP=R/'fallendream_rp_完整版'
 def main():
  manifest=json.loads((D/'原生安装清单.json').read_text(encoding='utf8'));files=set(manifest['datapack'])
- for root in ['data/sweetdream/function/boss/husk','data/sweetdream_boss/function/husk']:
+ for root in ['data/fallendream/function/boss/husk','data/fallendream_boss/function/husk']:
   files.update(p.relative_to(DP).as_posix()for p in (DP/root).rglob('*')if p.is_file())
- vals=dict(amount='10',cap='2.5',step='.21',detour='.16',bonus='1',id='1',animation='combat_idle',args='{}',command='return 0',duration='1',frame='0',to_frame='0',export_namespace='sweetdream_boss',name='test',x='0',y='0',z='0',u0='0',u1='0',u2='0',u3='1');rows=[]
+ vals=dict(amount='10',cap='2.5',step='.21',detour='.16',bonus='1',id='1',animation='combat_idle',args='{}',command='return 0',duration='1',frame='0',to_frame='0',export_namespace='fallendream_boss',name='test',x='0',y='0',z='0',u0='0',u1='0',u2='0',u3='1');rows=[]
  for rel in sorted(files):
   p=DP/rel
   if p.suffix!='.mcfunction':continue
   for n,line in enumerate(p.read_text(encoding='utf8').splitlines(),1):
    if not line.strip()or line.lstrip().startswith('#'):continue
-   line=line.removeprefix('$');line=re.sub(r'\$\(([^)]+)\)',lambda m:vals.get(m[1],'00000000-0000-0000-0000-000000000001'),line);line=line.replace('sweetdream:husk_ward','minecraft:protection');rows.append(f'{rel}\t{n}\t{line}')
+   line=line.removeprefix('$');line=re.sub(r'\$\(([^)]+)\)',lambda m:vals.get(m[1],'00000000-0000-0000-0000-000000000001'),line);line=line.replace('fallendream:husk_ward','minecraft:protection');rows.append(f'{rel}\t{n}\t{line}')
  path=D/'原版命令样本.tsv';path.write_text('\n'.join(rows)+'\n',encoding='utf8');cp=(R/'.workbuddy/boss_server_check/classpath.txt').read_text(encoding='utf8').strip()+';'+str(R/'.workbuddy/boss_server_check/compiled')
  with (D/'原版解析.log').open('w',encoding='utf8')as log:r=subprocess.run(['C:/Users/qq303/AppData/Roaming/.minecraft/runtime/java-runtime-delta/bin/java.exe','-cp',cp,'bosscheck.ParseBoss',str(path)],stdout=log,stderr=subprocess.STDOUT)
  print({'commands':len(rows),'parser_exit':r.returncode},flush=True)

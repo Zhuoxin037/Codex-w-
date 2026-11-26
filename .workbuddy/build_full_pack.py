@@ -3,11 +3,11 @@
 合并老包、原版风覆盖层、8 张法杖与5把六状态像素弩，产出自包含完整版。
 
 合并规则（唯一真相来源）：
-  - 基底 = sweetdream_rp 全量逐字节复制
-  - 覆盖 = sweetdream_rp_原版风 的 39 件 items 定义 + 它们引用的 models/textures
+  - 基底 = fallendream_rp 全量逐字节复制
+  - 覆盖 = fallendream_rp_原版风 的 39 件 items 定义 + 它们引用的 models/textures
            （4 件替换已有 3D 模型 + 35 件新增：12 件剑 + 火种两态 + 14 件斧
             + 25 件盔甲图标 + 7 件副手道具）
-           ★ 崩裂的模型键是 fissure_axe（sweetdream:fissure 已被地面裂缝模型占用）
+           ★ 崩裂的模型键是 fissure_axe（fallendream:fissure 已被地面裂缝模型占用）
   - 法杖 = 共鸣等 8 件新绑定；风行/启示录/调色盘/风帆保留
   - 弩 = 幽匿残响/蚀骨/清醒梦/虹彩/电弧；寒鸦保留
   - pack.mcmeta / pack.png 用合并版自己的
@@ -22,8 +22,8 @@
     ★ A06(2026-10-11 三审): 对照**覆盖生成资源(89 个)与 pack.mcmeta** ——
       以前 diff 跳过它们, 直接改完整版里的法杖/弩模型或贴图不会报警, 重建时被静默覆盖。
       --update-crossbows 增量入口同样走护栏。
-★ 完整版是**构建产物**: 资源改动请改来源(sweetdream_rp / sweetdream_rp_原版风 / 对应生成器),
-  不要直接改 sweetdream_rp_完整版/ —— 否则下次重建会被覆盖(护栏会先备份, 但仍会丢)。
+★ 完整版是**构建产物**: 资源改动请改来源(fallendream_rp / fallendream_rp_原版风 / 对应生成器),
+  不要直接改 fallendream_rp_完整版/ —— 否则下次重建会被覆盖(护栏会先备份, 但仍会丢)。
 不变量（verify 里逐条断言，失败即 sys.exit）：
   1. OUT 文件集 = 基底 + 覆盖层 + 8 件法杖各3文件 + 5把弩各13文件
   2. OVERLAY_ITEMS 里每条 items 定义 == 覆盖层版本（字节一致）
@@ -32,21 +32,21 @@
 """
 # ============================================================================
 # ★ 2026-10-13 起本脚本**暂停使用**（不是坏了，是工作流变了）:
-#     用户拍板"资源包只留一份" ⇒ 老包 sweetdream_rp/ 与覆盖层
-#     sweetdream_rp_原版风/ 已删除，完整版 sweetdream_rp_完整版/ 升为唯一真源。
+#     用户拍板"资源包只留一份" ⇒ 老包 fallendream_rp/ 与覆盖层
+#     fallendream_rp_原版风/ 已删除，完整版 fallendream_rp_完整版/ 升为唯一真源。
 #     ⇒ 没有构建源了，也就不需要"合并构建"这一步: 改模型/贴图直接改完整版。
 #   ★ 附带修掉一个老毛病: 以前三个 sync_*_display 同步的是**老包**, 而游戏
 #     加载的是完整版 ⇒ "改了外观没效果"(F20 同款)。现在两边是同一份, 不会再犯。
 #   ★ 想恢复"源 + 产物"双份工作流: git 里有完整历史, 把两个目录 checkout 回来即可。
 # ============================================================================
 import os as _os
-if not _os.path.isdir(r'D:\数据包\sweetdream_rp') \
-        or not _os.path.isdir(r'D:\数据包\sweetdream_rp_原版风'):
+if not _os.path.isdir(r'D:\数据包\fallendream_rp') \
+        or not _os.path.isdir(r'D:\数据包\fallendream_rp_原版风'):
     raise SystemExit(
-        '[build_full_pack] 构建源 sweetdream_rp/ 与 sweetdream_rp_原版风/ 已删除 '
-        '(2026-10-13 起资源包只留 sweetdream_rp_完整版/ 这一份)。\n'
-        '  现在请直接改 sweetdream_rp_完整版/，不再需要合并构建。\n'
-        '  确需重建旧工作流: git checkout <本次之前的提交> -- sweetdream_rp sweetdream_rp_原版风')
+        '[build_full_pack] 构建源 fallendream_rp/ 与 fallendream_rp_原版风/ 已删除 '
+        '(2026-10-13 起资源包只留 fallendream_rp_完整版/ 这一份)。\n'
+        '  现在请直接改 fallendream_rp_完整版/，不再需要合并构建。\n'
+        '  确需重建旧工作流: git checkout <本次之前的提交> -- fallendream_rp fallendream_rp_原版风')
 
 import os, sys, json, shutil, hashlib
 from pathlib import Path
@@ -58,10 +58,10 @@ from build_offhand_icons import ICONS as TOOL_ICONS             # 副手 7 件�
 TOOL_IDS = [pid for pid, _cn, _motif, _fn in TOOL_ICONS]
 
 ROOT    = r'D:\数据包'
-BASE    = os.path.join(ROOT, 'sweetdream_rp')            # 老包（7 件保留 3D）
-OVERLAY = os.path.join(ROOT, 'sweetdream_rp_原版风')      # 覆盖层（4 件原版风）
-OUT     = os.path.join(ROOT, 'sweetdream_rp_完整版')       # 合并产物
-DEPLOY  = r'D:\PCL 正式版 2.10.0\.minecraft\versions\1.21.5-Fabric 0.16.10\resourcepacks\sweetdream_rp_完整版'
+BASE    = os.path.join(ROOT, 'fallendream_rp')            # 老包（7 件保留 3D）
+OVERLAY = os.path.join(ROOT, 'fallendream_rp_原版风')      # 覆盖层（4 件原版风）
+OUT     = os.path.join(ROOT, 'fallendream_rp_完整版')       # 合并产物
+DEPLOY  = r'D:\PCL 正式版 2.10.0\.minecraft\versions\1.21.5-Fabric 0.16.10\resourcepacks\fallendream_rp_完整版'
 
 # 覆盖层接管的那些 items 定义（相对 assets/ 的路径）
 # ★ 这里**必须列全**：不变量 2（定义 == 覆盖层）与不变量 4（字段 + model→贴图可达）
@@ -69,18 +69,18 @@ DEPLOY  = r'D:\PCL 正式版 2.10.0\.minecraft\versions\1.21.5-Fabric 0.16.10\re
 OVERLAY_ITEMS = [
     'angelcore/items/axe.json',
     'sail/items/staff.json',
-    'sweetdream/items/aurora_dream.json',
-    'sweetdream/items/look.json',
-] + ['sweetdream/items/%s.json' % n for n in (
+    'fallendream/items/aurora_dream.json',
+    'fallendream/items/look.json',
+] + ['fallendream/items/%s.json' % n for n in (
     'everfrost', 'hengdao', 'hush', 'liaoyuan', 'liuguang', 'myriad',
     'qiansan', 'rebound', 'remelt', 'rogue_star', 'shadow_blade', 'verdict',
     'tinder_off', 'tinder_on',
-)] + ['sweetdream/items/%s.json' % n for n in (
+)] + ['fallendream/items/%s.json' % n for n in (
     'agony', 'anion', 'azure_star', 'ballad', 'charge', 'chenyuan', 'draught',
     'dream_reader', 'fissure_axe', 'meteor', 'pyre', 'red_lotus', 'skyvault',
     'thunderclap',
-)] + ['sweetdream/items/armor_%s.json' % n for n in ARMOR_IDS
-] + ['sweetdream/items/tool_%s.json' % n for n in TOOL_IDS]
+)] + ['fallendream/items/armor_%s.json' % n for n in ARMOR_IDS
+] + ['fallendream/items/tool_%s.json' % n for n in TOOL_IDS]
 # 合并时允许与老包不同的文件（其余必须逐字节一致）
 ALLOW_DIFF = set('assets/' + p for p in OVERLAY_ITEMS) | {'pack.mcmeta'}
 
@@ -91,7 +91,7 @@ STAFF_ICONS = {
     'twilight': '暮光', 'final_revelation': '终末天启',
 }
 
-DESC = ('sweetdream 武器模型 · 完整版（原版风物品 + 13 件剑图标（含火种两态）'
+DESC = ('fallendream 武器模型 · 完整版（原版风物品 + 13 件剑图标（含火种两态）'
         ' + 14 件斧图标 + 8 张手绘法杖 + 5 把六状态像素弩 + 盔甲 25 件（图标 + 穿戴层）'
         ' + 副手 7 件图标，保留独立 3D 模型，自包含）')
 
@@ -107,8 +107,8 @@ _PRUNED = set()
 
 
 def crossbow_paths(cid):
-    return ['assets/sweetdream/items/crossbow_' + cid + '.json'] + [
-        'assets/sweetdream/' + folder + '/item/vanilla/crossbow_' + cid + '_' + state + ext
+    return ['assets/fallendream/items/crossbow_' + cid + '.json'] + [
+        'assets/fallendream/' + folder + '/item/vanilla/crossbow_' + cid + '_' + state + ext
         for state in CROSSBOW_STATES
         for folder, ext in (('models', '.json'), ('textures', '.png'))
     ]
@@ -118,7 +118,7 @@ def crossbow_definition(cid):
     # Minecraft 1.21.5's native state tree: charge type, using_item, normalized pull.
     data = json.loads((CROSSBOW_ART / '原版参考/crossbow_item_1.21.5.json').read_text(encoding='utf-8'))
     refs = {'minecraft:item/crossbow' + ('' if state == 'standby' else '_' + state):
-            'sweetdream:item/vanilla/crossbow_' + cid + '_' + state for state in CROSSBOW_STATES}
+            'fallendream:item/vanilla/crossbow_' + cid + '_' + state for state in CROSSBOW_STATES}
 
     def replace(node):
         if isinstance(node, dict):
@@ -138,11 +138,11 @@ def build_crossbow_icons(out_root=OUT, quiet=False):
     for cid, name in CROSSBOW_ICONS.items():
         write_json(root / crossbow_paths(cid)[0], crossbow_definition(cid))
         for state in CROSSBOW_STATES:
-            model = 'sweetdream:item/vanilla/crossbow_' + cid + '_' + state
-            write_json(root / ('assets/sweetdream/models/item/vanilla/crossbow_' + cid + '_' + state + '.json'),
+            model = 'fallendream:item/vanilla/crossbow_' + cid + '_' + state
+            write_json(root / ('assets/fallendream/models/item/vanilla/crossbow_' + cid + '_' + state + '.json'),
                        {'parent': 'minecraft:item/crossbow', 'textures': {'layer0': model}})
             source = CROSSBOW_ART / '贴图' / name / (state + '.png')
-            target = root / ('assets/sweetdream/textures/item/vanilla/crossbow_' + cid + '_' + state + '.png')
+            target = root / ('assets/fallendream/textures/item/vanilla/crossbow_' + cid + '_' + state + '.png')
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(source, target)
     if not quiet:
@@ -157,9 +157,9 @@ def verify_crossbows():
         assert json.loads((Path(OUT) / crossbow_paths(cid)[0]).read_text(encoding='utf-8')) == crossbow_definition(cid), cid
         for state in CROSSBOW_STATES:
             suffix = 'item/vanilla/crossbow_' + cid + '_' + state
-            model = json.loads((Path(OUT) / ('assets/sweetdream/models/' + suffix + '.json')).read_text(encoding='utf-8'))
-            texture = Path(OUT) / ('assets/sweetdream/textures/' + suffix + '.png')
-            assert model == {'parent': 'minecraft:item/crossbow', 'textures': {'layer0': 'sweetdream:' + suffix}}
+            model = json.loads((Path(OUT) / ('assets/fallendream/models/' + suffix + '.json')).read_text(encoding='utf-8'))
+            texture = Path(OUT) / ('assets/fallendream/textures/' + suffix + '.png')
+            assert model == {'parent': 'minecraft:item/crossbow', 'textures': {'layer0': 'fallendream:' + suffix}}
             assert sha(texture) == approved[cid][state] == sha(CROSSBOW_ART / '贴图' / name / (state + '.png'))
             im = Image.open(texture).convert('RGBA')
             alpha = im.getchannel('A').histogram()
@@ -168,9 +168,9 @@ def verify_crossbows():
 
 
 def staff_paths(cid):
-    return ('sweetdream:' + cid, 'assets/sweetdream/items/' + cid + '.json',
-            'assets/sweetdream/models/item/vanilla/staff_' + cid + '.json',
-            'assets/sweetdream/textures/item/vanilla/staff_' + cid + '.png')
+    return ('fallendream:' + cid, 'assets/fallendream/items/' + cid + '.json',
+            'assets/fallendream/models/item/vanilla/staff_' + cid + '.json',
+            'assets/fallendream/textures/item/vanilla/staff_' + cid + '.png')
 
 
 def write_json(path, data):
@@ -191,7 +191,7 @@ def build_staff_icons(out_root=OUT, quiet=False):
         source = STAFF_ART / (name + '_16x16.png')
         if not source.is_file():
             sys.exit('✗ 缺少已批准的贴图: ' + str(source))
-        model = 'sweetdream:item/vanilla/staff_' + cid
+        model = 'fallendream:item/vanilla/staff_' + cid
         write_json(root / ip, {'hand_animation_on_swap': False,
                    'model': {'type': 'minecraft:model', 'model': model}})
         write_json(root / mp, {'parent': 'minecraft:item/handheld',
@@ -238,7 +238,7 @@ def sha(p):
 
 # ============================================================
 # D02(2026-10-11) 护栏: 完整版是**构建产物**, 默认"整目录删了重建"。
-#   若有人直接在 sweetdream_rp_完整版/ 里改/加文件而没同步回来源,
+#   若有人直接在 fallendream_rp_完整版/ 里改/加文件而没同步回来源,
 #   下次重建会静默丢。这里加三道保护(都在 build() 删目录**之前**):
 #     ① --diff  : 只读对照, 随时可查"完整版有没有直接改动"
 #     ② 重建前 : 有直接改动 -> 自动打包备份 + 打印清单 + **中止**(加 --force 才继续)
@@ -341,7 +341,7 @@ def backup_out():
     """把当前完整版整体打包备份, 返回 zip 路径。"""
     import zipfile, time
     ts = time.strftime('%Y%m%d-%H%M%S')
-    z = os.path.join(ROOT, 'sweetdream_rp_完整版.改动备份-%s.zip' % ts)
+    z = os.path.join(ROOT, 'fallendream_rp_完整版.改动备份-%s.zip' % ts)
     n = 0
     with zipfile.ZipFile(z, 'w', zipfile.ZIP_DEFLATED) as zf:
         for dp, _, fns in os.walk(OUT):
@@ -480,7 +480,7 @@ def build():
         if not (STAFF_ART / (name + '_16x16.png')).is_file():
             sys.exit('✗ 缺少已批准的法杖贴图: ' + name)
     if os.path.isdir(OUT):
-        require_target(OUT, Path(ROOT) / 'sweetdream_rp_完整版')
+        require_target(OUT, Path(ROOT) / 'fallendream_rp_完整版')
         guard_before_rebuild()          # D02: 有"来源之外"的改动就备份+中止
         shutil.rmtree(OUT)
 
@@ -697,14 +697,14 @@ def verify():
     for p in ARMOR_P:
         key = 'armor_' + p['id']
         ldir = 'humanoid_leggings' if p['slot'] == 'leggings' else 'humanoid'
-        ep = Path(OUT) / 'assets/sweetdream/equipment' / (key + '.json')
-        lp = Path(OUT) / 'assets/sweetdream/textures/entity/equipment' / ldir / (key + '.png')
+        ep = Path(OUT) / 'assets/fallendream/equipment' / (key + '.json')
+        lp = Path(OUT) / 'assets/fallendream/textures/entity/equipment' / ldir / (key + '.png')
         if not ep.is_file():
             print('  ✗ 缺装备定义 equipment/%s.json' % key); ok = False; continue
         if not lp.is_file():
             print('  ✗ 缺穿戴层贴图 %s/%s.png' % (ldir, key)); ok = False; continue
         ej = json.loads(ep.read_text(encoding='utf-8'))
-        if ej.get('layers', {}).get(ldir) != [{'texture': 'sweetdream:' + key}]:
+        if ej.get('layers', {}).get(ldir) != [{'texture': 'fallendream:' + key}]:
             print('  ✗ %s: layers.%s 指向不对' % (key, ldir)); ok = False
         if _Im.open(lp).size != (64, 32):
             print('  ✗ %s: 穿戴层尺寸应为 64×32' % key); ok = False
@@ -755,7 +755,7 @@ def main():
         return
     if '--update-crossbows' in sys.argv:
         # Add just this approved set; keep existing user edits and other assets in place.
-        require_target(OUT, Path(ROOT) / 'sweetdream_rp_完整版')
+        require_target(OUT, Path(ROOT) / 'fallendream_rp_完整版')
         if not Path(OUT).is_dir():
             sys.exit('✗ 增量接入需要已有完整版')
         guard_before_update_crossbows()      # ★ A06: 增量入口也要护栏
@@ -770,7 +770,7 @@ def main():
         sys.exit('✗ 自检未通过')
     if '--deploy' in sys.argv:
         if os.path.isdir(DEPLOY):
-            require_target(DEPLOY, r'D:\PCL 正式版 2.10.0\.minecraft\versions\1.21.5-Fabric 0.16.10\resourcepacks\sweetdream_rp_完整版')
+            require_target(DEPLOY, r'D:\PCL 正式版 2.10.0\.minecraft\versions\1.21.5-Fabric 0.16.10\resourcepacks\fallendream_rp_完整版')
             shutil.rmtree(DEPLOY)
         shutil.copytree(OUT, DEPLOY)
         a, b = rel_files(OUT), rel_files(DEPLOY)
@@ -780,7 +780,7 @@ def main():
             sys.exit('✗ 部署不一致')
     if '--zip' in sys.argv:
         import zipfile
-        z = os.path.join(ROOT, 'sweetdream_rp_完整版.zip')
+        z = os.path.join(ROOT, 'fallendream_rp_完整版.zip')
         temporary_zip = z + '.tmp'
         n = 0
         with zipfile.ZipFile(temporary_zip, 'w', zipfile.ZIP_DEFLATED) as zf:

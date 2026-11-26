@@ -7,7 +7,7 @@
        "算出来一样"，0 改动（等于再校验一遍）；
      · 另外 40 件**手写** give 由本脚本插入。
      · 幂等：先把旧的 `,tags:[...]` 段整段摘掉，再按表重写；连跑两遍第二遍 0 改动。
-  ② 生成 `sweetdream/data/sweetdream/function/tg/def/load.mcfunction`：
+  ② 生成 `fallendream/data/fallendream/function/tg/def/load.mcfunction`：
      · `zx:config tgdef."<词>"` = {cat,label,desc}  —— 词汇表（人读 / 校验）
      · `zx:config tge."<装备id>"` = [标签…]        —— 装备→标签（地图直读）
      · `zx:config tgidx."<词>"` = [装备id…]        —— 标签→装备（反查索引，`tg/api/ids` 用）
@@ -26,8 +26,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, '.workbuddy'))
 from _tags_data import VOCAB, VOCAB_KEYS, TAGS        # noqa: E402
 
-GIVE_ROOT = os.path.join(ROOT, 'sweetdream', 'data', 'sweetdream', 'function', 'equipment')
-LOAD_PATH = os.path.join(ROOT, 'sweetdream', 'data', 'sweetdream', 'function',
+GIVE_ROOT = os.path.join(ROOT, 'fallendream', 'data', 'fallendream', 'function', 'equipment')
+LOAD_PATH = os.path.join(ROOT, 'fallendream', 'data', 'fallendream', 'function',
                          'tg', 'def', 'load.mcfunction')
 
 
@@ -149,7 +149,7 @@ def build_load():
     L = []
     A = L.append
     A('# ============================================================')
-    A('# sweetdream:tg/def/load —— 标签体系的运行时反查表(批 A)')
+    A('# fallendream:tg/def/load —— 标签体系的运行时反查表(批 A)')
     A('# ------------------------------------------------------------')
     A('# 【这个文件是生成的】改词表/逐件标签请改 .workbuddy/_tags_data.py')
     A('#   再跑 `python .workbuddy/_gen_tags.py --write`。守门: _chk_tags.py')

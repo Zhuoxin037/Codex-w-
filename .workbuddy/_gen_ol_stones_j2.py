@@ -8,7 +8,7 @@
 【刻纹口径】沿用原规范: 9×9 网格, 只允许 '.#+'(# 主刻痕, + 高光), 每颗至少 15 格;
   任意两颗(含已有 28 颗)刻纹差异 >= 8 格, 保证缩到物品栏也分得开。
 
-【输出】sweetdream_rp_完整版/assets/sweetdream/textures/item/stone/ol_<id>.png
+【输出】fallendream_rp_完整版/assets/fallendream/textures/item/stone/ol_<id>.png
         + models/item/stone/ol_<id>.json
   路由(assets/minecraft/items/recovery_compass.json)由 _gen_stone_icons.py 统一重写,
   所以必须紧接着跑那支脚本。
@@ -23,9 +23,9 @@ from PIL import Image
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from draw_overlimit_stone_redraw import DESIGNS as OLD28, MASKS, render  # noqa: E402
 
-RP = 'D:/数据包/sweetdream_rp_完整版'
-TEX = RP + '/assets/sweetdream/textures/item/stone'
-MOD = RP + '/assets/sweetdream/models/item/stone'
+RP = 'D:/数据包/fallendream_rp_完整版'
+TEX = RP + '/assets/fallendream/textures/item/stone'
+MOD = RP + '/assets/fallendream/models/item/stone'
 
 #  id,            类别,    刻纹名,        hex,      9×9 刻纹
 NEW = [
@@ -179,7 +179,7 @@ def main():
         im.save(os.path.join(TEX, 'ol_%s.png' % cid))
         io.open(os.path.join(MOD, 'ol_%s.json' % cid), 'w', encoding='utf-8').write(
             '{\n  "parent": "minecraft:item/generated",\n'
-            '  "textures": {\n    "layer0": "sweetdream:item/stone/ol_%s"\n  }\n}\n' % cid)
+            '  "textures": {\n    "layer0": "fallendream:item/stone/ol_%s"\n  }\n}\n' % cid)
         print('png %-16s %-8s %-6s 刻痕=%2d' % (cid, cat, colour, sum(mine[cid])))
     print('done', len(NEW), '颗 | 与旧 28 颗两两差异 >= 8 格')
     return 0

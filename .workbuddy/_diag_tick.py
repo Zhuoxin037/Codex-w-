@@ -12,7 +12,7 @@
 import os, re, json, collections, sys
 
 ROOT = r"D:\数据包"
-PACKS = [("sweetdream", os.path.join(ROOT, "sweetdream", "data")),
+PACKS = [("fallendream", os.path.join(ROOT, "fallendream", "data")),
          ("manacore-1.0.0", os.path.join(ROOT, "manacore-1.0.0", "data"))]
 
 FUNC = {}

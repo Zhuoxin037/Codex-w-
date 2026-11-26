@@ -27,7 +27,7 @@ for i,n in enumerate(['sea','fire','dream','heart']):
     else:d.line([(x+3,y+5),(x+5,y+4),(x+8,y+6),(x+11,y+4),(x+12,y+6),(x+8,y+12),(x+4,y+8),(x+3,y+5)],fill=ink)
 atlas.save(T/'风帆_材质.png')
 groups={};elements=[]
-def uid(n):return str(uuid.uuid5(uuid.NAMESPACE_URL,'sweetdream:sail:stage1:'+n))
+def uid(n):return str(uuid.uuid5(uuid.NAMESPACE_URL,'fallendream:sail:stage1:'+n))
 def group(n,p=None,origin=(0,0,0)):
     g={'name':n,'uuid':uid(n),'origin':list(origin),'rotation':[0,0,0],'children':[],'visibility':True,'export':True,'isOpen':p is None,'color':len(groups)%8};groups[n]=g
     if p:groups[p]['children'].append(g)
@@ -113,7 +113,7 @@ display={'gui':{'rotation':[0,0,-22.5],'translation':[0,0,0],'scale':[.39]*3},'f
 def outline(g):return {'uuid':g['uuid'],'isOpen':g['isOpen'],'children':[outline(c) if isinstance(c,dict) else c for c in g['children']]}
 bb={'meta':{'format_version':'5.0','model_format':'free','box_uv':False},'name':'风帆_阶段一_桅杆罗盘握柄','resolution':{'width':128,'height':128},'elements':elements,'groups':[{k:v for k,v in g.items() if k!='children'} for g in groups.values()],'outliner':[outline(groups[root])],'textures':[{'name':'风帆_材质.png','id':'0','uuid':uid('tex'),'width':128,'height':128,'uv_width':128,'uv_height':128,'internal':True,'source':'data:image/png;base64,'+base64.b64encode((T/'风帆_材质.png').read_bytes()).decode()}],'animations':[],'display':display}
 (O/'风帆_阶段一_分组.bbmodel').write_text(json.dumps(bb,ensure_ascii=False,separators=(',',':')),encoding='utf-8')
-modeldir=O/'显示调整示例/assets/sweetdream/models/item/sail';modeldir.mkdir(parents=True,exist_ok=True)
+modeldir=O/'显示调整示例/assets/fallendream/models/item/sail';modeldir.mkdir(parents=True,exist_ok=True)
 (modeldir/'display.json').write_text(json.dumps({'display':display},ensure_ascii=False,indent=2),encoding='utf-8')
 out=[]
 for e in elements:
@@ -123,8 +123,8 @@ for e in elements:
     assert angle in [-45,-22.5,0,22.5,45],angle
     assert all(-16<=v<=32 for v in q['from']+q['to'])
     out.append(q)
-(modeldir/'stage1.json').write_text(json.dumps({'parent':'sweetdream:item/sail/display','textures':{'0':'sweetdream:item/sail/materials','particle':'sweetdream:item/sail/materials'},'elements':out},ensure_ascii=False,separators=(',',':')),encoding='utf-8')
-texdir=O/'显示调整示例/assets/sweetdream/textures/item/sail';texdir.mkdir(parents=True,exist_ok=True);shutil.copy2(T/'风帆_材质.png',texdir/'materials.png')
+(modeldir/'stage1.json').write_text(json.dumps({'parent':'fallendream:item/sail/display','textures':{'0':'fallendream:item/sail/materials','particle':'fallendream:item/sail/materials'},'elements':out},ensure_ascii=False,separators=(',',':')),encoding='utf-8')
+texdir=O/'显示调整示例/assets/fallendream/textures/item/sail';texdir.mkdir(parents=True,exist_ok=True);shutil.copy2(T/'风帆_材质.png',texdir/'materials.png')
 stats={'cuboids':len(elements),'faces':6*len(elements),'groups':len(groups),'textures':1,'animations':0,'stage':'仅桅杆、握柄、罗盘、四象槽与垂饰；帆体和动画等待下一阶段','deployed':False}
 (O/'模型统计.json').write_text(json.dumps(stats,ensure_ascii=False,indent=2),encoding='utf-8')
 # Render the exact saved geometry/texture, using the established z-buffer renderer.

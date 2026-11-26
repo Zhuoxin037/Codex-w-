@@ -9,8 +9,8 @@ import subprocess
 import sys
 from pathlib import Path
 
-BASE = Path(r'D:/数据包/sweetdream/data/sweetdream/function/equipment/armor/dusk_dawn')
-ADV = Path(r'D:/数据包/sweetdream/data/sweetdream/advancement/equipment/armor')
+BASE = Path(r'D:/数据包/fallendream/data/fallendream/function/equipment/armor/dusk_dawn')
+ADV = Path(r'D:/数据包/fallendream/data/fallendream/advancement/equipment/armor')
 WRAP = BASE / 'kill_mark_yuanhai.mcfunction'
 KI = BASE / 'kill_init.mcfunction'
 MERGED = ADV / 'dusk_dawn_kill_mark.json'
@@ -77,8 +77,8 @@ def _scenario(name, path, old, new, expect):
 
 # 幕 1: wrapper 首行 revoke 换成了别人的进度 —— 应报"首行必须是 ...自己那条"
 _scenario('A wrapper 首行 revoke 错进度', WRAP,
-          'advancement revoke @s only sweetdream:equipment/armor/dusk_dawn_kill_mark_yuanhai',
-          'advancement revoke @s only sweetdream:equipment/armor/dusk_dawn_kill_mark_liuhuo',
+          'advancement revoke @s only fallendream:equipment/armor/dusk_dawn_kill_mark_yuanhai',
+          'advancement revoke @s only fallendream:equipment/armor/dusk_dawn_kill_mark_liuhuo',
           '黄昏黎明 100×X(坑 138)')
 
 # 幕 2: kill_init 不归零 dd_n —— 应报"第二次击杀接着上次涨"

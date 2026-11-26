@@ -5,7 +5,7 @@ from pathlib import Path
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
 
-ROOT = Path(r'D:/数据包/sweetdream/data/sweetdream/function/equipment/armor/mirage')
+ROOT = Path(r'D:/数据包/fallendream/data/fallendream/function/equipment/armor/mirage')
 
 A_N, A_TOTAL, A_IDX = 6, 'zx.mr_atk1', '#mr_ra'
 B_N, B_TOTAL, B_IDX = 9, 'zx.mr_atk2', '#mr_rb'
@@ -27,7 +27,7 @@ def add_block(n, pref, idx):
 # ---------- expire.mcfunction ----------
 exp = []
 exp.append('# ============================================================')
-exp.append('# sweetdream:equipment/armor/mirage/expire —— 每秒收掉"到寿"的那一格')
+exp.append('# fallendream:equipment/armor/mirage/expire —— 每秒收掉"到寿"的那一格')
 exp.append('# ------------------------------------------------------------')
 exp.append('# 【执行者】玩家(由 passive 在算加成**之前**调进来)')
 exp.append('# 【为什么要有"格子"】套装的两条加成都是"每次触发 +1 层, 每层各活 5 / 8 秒",')
@@ -56,7 +56,7 @@ exp.append(f'execute if score @s {B_TOTAL} matches ..-1 run scoreboard players s
 # ---------- add_a.mcfunction ----------
 a = []
 a.append('# ============================================================')
-a.append('# sweetdream:equipment/armor/mirage/add_a —— 受伤一次: +1 层(不设上限)')
+a.append('# fallendream:equipment/armor/mirage/add_a —— 受伤一次: +1 层(不设上限)')
 a.append('# ------------------------------------------------------------')
 a.append('# 【执行者】玩家(由 hurt 调进来; 套装判定在调用方做完了)')
 a.append('# 【为什么要写两处】总层数 zx.mr_atk1 用来算加成, 环形格子用来记"这层什么时候')
@@ -73,7 +73,7 @@ a += add_block(A_N, 'zx.mr_a', A_IDX)
 # ---------- add_b.mcfunction ----------
 b = []
 b.append('# ============================================================')
-b.append('# sweetdream:equipment/armor/mirage/add_b —— 打到带白昼梦的生物: +1 层(上限 10 层 = +20)')
+b.append('# fallendream:equipment/armor/mirage/add_b —— 打到带白昼梦的生物: +1 层(上限 10 层 = +20)')
 b.append('# ------------------------------------------------------------')
 b.append('# 【执行者】玩家(由 hit_dream 调进来)')
 b.append('# 【上限 10 层】文案写的是"+2(最多叠加 10 次)", 也就是最多 +20 攻击力。')

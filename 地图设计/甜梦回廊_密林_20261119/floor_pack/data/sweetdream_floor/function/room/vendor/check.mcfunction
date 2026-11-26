@@ -1,0 +1,4 @@
+$execute positioned $(x) 81 $(z) if data storage zx:rogue floor.cells[{cell:$(cell),kind:"forge"}] run return run function sweetdream_floor:room/vendor/spawn {x:-4.5,z:-4.5,profession:"toolsmith",name:"铸匠"}
+$execute positioned $(x) 81 $(z) if data storage zx:rogue floor.cells[{cell:$(cell),kind:"merchant"}] run return run function sweetdream_floor:room/vendor/spawn {x:-3.5,z:-3.5,profession:"mason",name:"林地行商"}
+$execute positioned $(x) 81 $(z) if data storage zx:rogue floor.cells[{cell:$(cell),kind:"rental"}] run return run function sweetdream_floor:room/vendor/spawn {x:-3.5,z:-3.5,profession:"fletcher",name:"租借商"}
+$execute positioned $(x) 81 $(z) if data storage zx:rogue floor.cells[{cell:$(cell),kind:"blackmarket"}] run function sweetdream_floor:room/vendor/spawn {x:-3.5,z:-3.5,profession:"cleric",name:"黑市商人"}

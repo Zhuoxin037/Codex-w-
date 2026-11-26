@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "use": {
+            "trigger": "minecraft:consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "skyfire"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "fallendream:equipment/staff/skyfire/cast"
+    }
+}

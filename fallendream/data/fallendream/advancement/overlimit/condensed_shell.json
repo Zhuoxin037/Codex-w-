@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "condensed_shell": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "ol_condensed_shell"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "fallendream:overlimit/apply/condensed_shell"
+    }
+}

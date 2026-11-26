@@ -26,7 +26,7 @@ import os
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-BASE = "D:/数据包/sweetdream/data/sweetdream"
+BASE = "D:/数据包/fallendream/data/fallendream"
 APPLY = BASE + "/function/overlimit/apply"
 ADV = BASE + "/advancement/overlimit"
 J2 = HERE + "/_ol_j2.json"
@@ -36,9 +36,9 @@ DRY = "--dry" in sys.argv
 
 def apply_txt(uid, name, cat):
     return """# ============================================================
-# sweetdream:overlimit/apply/{uid} —— 右键用掉超限石去敲副手那件「{name}」
+# fallendream:overlimit/apply/{uid} —— 右键用掉超限石去敲副手那件「{name}」
 # ------------------------------------------------------------
-# 【谁调用它】进度 sweetdream:overlimit/{uid}(consume_item), 以玩家身份
+# 【谁调用它】进度 fallendream:overlimit/{uid}(consume_item), 以玩家身份
 # 【流程】①撤销进度 ②交给 station/api/apply(kind=overlimit, of={uid})
 #         ③成功 = 消耗成立; 失败 = 退材料 + 说明原因
 # 【of 是什么】这块石头"属于哪件装备" —— overlimit/api/fit 会拿它去比对
@@ -48,15 +48,15 @@ def apply_txt(uid, name, cat):
 #   数值不从这里加。机制本体(各件自己的 ol 钩子)另起一批。
 # ============================================================
 
-advancement revoke @s only sweetdream:overlimit/{uid}
+advancement revoke @s only fallendream:overlimit/{uid}
 
 data modify storage zx:work st set value {{kind:"overlimit",id:"",cat:"",cat2:"",of:"{uid}"}}
-function sweetdream:station/api/apply
+function fallendream:station/api/apply
 
 execute if data storage zx:out r{{ok:1b}} run tellraw @s [{{"text":"✔ {name}已超限","color":"green"}}]
 execute if data storage zx:out r{{ok:1b}} run playsound minecraft:block.smithing_table.use player @s ~ ~ ~ 0.8 1.2
-execute if data storage zx:out r{{ok:0b}} run function sweetdream:overlimit/item/{uid}
-execute if data storage zx:out r{{ok:0b}} run function sweetdream:overlimit/api/refuse
+execute if data storage zx:out r{{ok:0b}} run function fallendream:overlimit/item/{uid}
+execute if data storage zx:out r{{ok:0b}} run function fallendream:overlimit/api/refuse
 """.format(uid=uid, name=name, cat=cat)
 
 
@@ -76,7 +76,7 @@ def adv_json(uid):
                 }
             }
         },
-        "rewards": {"function": "sweetdream:overlimit/apply/" + uid}
+        "rewards": {"function": "fallendream:overlimit/apply/" + uid}
     }
     return json.dumps(j, ensure_ascii=False, indent=4) + "\n"
 

@@ -363,6 +363,8 @@ TAGS = {
     "intent": ["max_mana", "max_hp", "cur_mana", "buff", "heal"],
     "air_step": ["max_mana", "base_atk", "dash", "debuff"],
     "breath_hold": ["max_mana", "formation"],
+    "spindle": ["shixin", "base_atk", "attract"],
+    "symphony": ["max_mana", "flat", "buff"],
 }
 
 

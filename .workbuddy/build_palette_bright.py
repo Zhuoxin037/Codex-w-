@@ -8,7 +8,7 @@ ROOT=Path(__file__).resolve().parents[1]
 O=ROOT/'模型设计/调色盘_明亮木盘_20261009/阶段一_实际模型';O.mkdir(parents=True,exist_ok=True)
 s=(ROOT/'.workbuddy/build_palette_stage1.py').read_text(encoding='utf-8').split('# All review model states')[0]
 s=s.replace("O=Path('D:/数据包/模型设计/调色盘_阶段一')",'O=Path('+repr(str(O))+')')
-s=s.replace('sweetdream:palette:stage1:','sweetdream:palette:maple:')
+s=s.replace('fallendream:palette:stage1:','fallendream:palette:maple:')
 recolors={'(131,77,48)':'(162,99,47)','(178,115,70)':'(207,144,70)','(91,55,36)':'(139,79,35)','(226,211,178)':'(246,216,156)','(203,180,139)':'(226,181,111)','(139,117,91)':'(190,137,72)','(104,83,59)':'(143,87,38)','(159,120,59)':'(192,148,64)','(186,45,40)':'(218,43,43)','(223,166,40)':'(242,181,32)','(45,94,157)':'(38,81,191)','(238,220,181)':'(255,236,184)'}
 for a,b in recolors.items():s=s.replace(a,b)
 s=s.replace("'highlight':(255,236,184)","'highlight':(255,236,184),'redlight':(255,114,97),'yellowlight':(255,225,106),'bluelight':(103,164,255)")
@@ -55,7 +55,7 @@ ell=((X-ns['HOLE_X'])/2.10)**2+((Y-ns['HOLE_Y'])/1.92)**2
 patches(ns['shape']&(ell<1.18),ns['thumb'],'薄黄铜孔内沿',-.80,-.59,'bronze')
 # Default is RGB; each well also has independent hidden color alternatives.
 for (i,c),n in pigments.items():groups[n]['visibility']=c==['red','yellow','blue'][i]
-display=json.loads((ROOT/'sweetdream_rp_完整版/assets/palette/models/item/palette.json').read_text(encoding='utf-8'))['display']
+display=json.loads((ROOT/'fallendream_rp_完整版/assets/palette/models/item/palette.json').read_text(encoding='utf-8'))['display']
 key_number=0
 def key(channel,t,v):
     global key_number

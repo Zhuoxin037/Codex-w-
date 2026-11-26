@@ -12,11 +12,11 @@ import io, re, shutil, subprocess, sys, os
 ROOT = r'D:\数据包'
 PY = r'C:\Users\qq303\.workbuddy\binaries\python\versions\3.13.12\python.exe'
 CHECK = os.path.join(ROOT, '.workbuddy', 'check.py')
-DC = os.path.join(ROOT, 'sweetdream', 'data', 'manacore', 'tags', 'function', 'event',
+DC = os.path.join(ROOT, 'fallendream', 'data', 'manacore', 'tags', 'function', 'event',
                   'damage_calc.json')
-RES = os.path.join(ROOT, 'sweetdream', 'data', 'sweetdream', 'function', 'equipment',
+RES = os.path.join(ROOT, 'fallendream', 'data', 'fallendream', 'function', 'equipment',
                    'armor', 'resonance', 'scan_mul.mcfunction')
-SER = os.path.join(ROOT, 'sweetdream', 'data', 'sweetdream', 'function', 'equipment',
+SER = os.path.join(ROOT, 'fallendream', 'data', 'fallendream', 'function', 'equipment',
                    'tool', 'seraph_wing', 'hook_calc.mcfunction')
 
 FILES = (DC, RES, SER)
@@ -56,15 +56,15 @@ def edit(path, old, new):
 def a():
     """把 lib/dmg_add_apply 挪到最前面(加算 hook 就排到它后面了)"""
     t = io.open(DC, encoding='utf-8').read()
-    t = t.replace('    "sweetdream:lib/dmg_add_apply",\n', '')
-    t = t.replace('    "sweetdream:lib/dmg_ch",\n',
-                  '    "sweetdream:lib/dmg_ch",\n    "sweetdream:lib/dmg_add_apply",\n')
+    t = t.replace('    "fallendream:lib/dmg_add_apply",\n', '')
+    t = t.replace('    "fallendream:lib/dmg_ch",\n',
+                  '    "fallendream:lib/dmg_ch",\n    "fallendream:lib/dmg_add_apply",\n')
     io.open(DC, 'w', encoding='utf-8', newline='\n').write(t)
 
 
 def b():
     """删掉清池那一条"""
-    edit(DC, '    "sweetdream:lib/dmg_add_clear",\n', '')
+    edit(DC, '    "fallendream:lib/dmg_add_clear",\n', '')
 
 
 def c():
@@ -74,7 +74,7 @@ def c():
 
 def d():
     """把一个 hook 从事件里摘掉(完整性)"""
-    edit(DC, '    "sweetdream:equipment/armor/styx_walk/hook_calc",\n', '')
+    edit(DC, '    "fallendream:equipment/armor/styx_walk/hook_calc",\n', '')
 
 
 # ---- panelrow 探针(加算型走 put.ch 那条路) ----

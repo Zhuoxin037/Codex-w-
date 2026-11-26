@@ -29,7 +29,7 @@ ROOT = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
 from lore_fmt import nfmt, patch_text, wrap  # noqa: E402
 
-LOAD = os.path.join(ROOT, 'sweetdream', 'data', 'sweetdream', 'function',
+LOAD = os.path.join(ROOT, 'fallendream', 'data', 'fallendream', 'function',
                     'overlimit', 'def', 'load.mcfunction')
 META_PATH = os.path.join(HERE, '_ol_j2.json')
 DOC = os.path.join(HERE, '超限设计整理_20261023.md')
@@ -57,7 +57,7 @@ META = json.load(io.open(META_PATH, encoding='utf-8'))
 # ------------------------------------------------------------------ 基础数据
 
 def give_path(uid):
-    g = glob.glob(os.path.join(ROOT, 'sweetdream', 'data', 'sweetdream', 'function',
+    g = glob.glob(os.path.join(ROOT, 'fallendream', 'data', 'fallendream', 'function',
                                'equipment', '*', uid, 'give.mcfunction'))
     if not g:
         raise SystemExit('找不到 give: %s' % uid)
@@ -223,6 +223,7 @@ def lore_json(parts):
 
 
 def line(uid, label, note, parts):
+    from _ol_cost_policy import rewrite_definition
     raw = ('data modify storage zx:config oldef."%s" set value {label:"%s",'
            'name:{"text":"%s","bold":true,"color":"%s"},note:"%s",'
            'dmg:0.0,mana:0.0,cd:0.0,lore:%s}\n'
@@ -231,7 +232,7 @@ def line(uid, label, note, parts):
     # ★ 最后必须过一遍 lore_fmt.patch_text: 它是 check.py 规则 31 的口径。
     #   典型差异: 法杖的「魔力 当前魔力值的 50%   ·   冷却 20 秒」宽 52 > ROW_CAP(40),
     #   rebuild 会拆成两行 —— 自己拼的字符串过不了这条硬判据。
-    return patch_text(raw)[0]
+    return rewrite_definition(uid, patch_text(raw)[0])
 
 
 def build_defs(ids):

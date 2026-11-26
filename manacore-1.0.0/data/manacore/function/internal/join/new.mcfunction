@@ -49,6 +49,6 @@ function manacore:internal/join/register with storage manacore:work a
 #   与 player_join 不同: player_join **每次注册都抛**(含老玩家重连), 本事件只在
 #   "走 join/new"这条路上抛 = 新玩家首次注册, 或 debug/reset_all 删掉记录后的
 #   首次上线(老玩家正常重连走 join/existing, 不抛) ⇒ 应用层可据此区分并补清
-#   "离线时没清掉的账本"(见 sweetdream:event/player_first_join)。
+#   "离线时没清掉的账本"(见 fallendream:event/player_first_join)。
 #   路由依据见 internal/join/route: `unless data … players "$(uuid)"` -> new。
 function #manacore:event/player_first_join

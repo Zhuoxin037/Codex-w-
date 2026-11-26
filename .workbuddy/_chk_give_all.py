@@ -15,7 +15,7 @@
 """
 import glob, io, os, re, sys
 
-BASE = r'D:\数据包\sweetdream\data\sweetdream\function'
+BASE = r'D:\数据包\fallendream\data\fallendream\function'
 GIVE_ALL = BASE + r'\debug\give_all.mcfunction'
 BOX_CAP = 27
 
@@ -26,7 +26,7 @@ def fn_of(path):
     p = path.replace('\\', '/')
     rel = p[len(BASE) + 1:]
     rel = rel[:-len('.mcfunction')] if rel.endswith('.mcfunction') else rel
-    return 'sweetdream:' + rel
+    return 'fallendream:' + rel
 
 
 # ---- 期望清单 ----
@@ -42,7 +42,7 @@ if not os.path.isfile(GIVE_ALL):
     sys.exit(1)
 
 txt = io.open(GIVE_ALL, encoding='utf-8').read()
-called = re.findall(r'^function (sweetdream:\S+)$', txt, re.M)
+called = re.findall(r'^function (fallendream:\S+)$', txt, re.M)
 
 # ① 漏件
 for f, p in sorted(want_fns.items()):
@@ -51,7 +51,7 @@ for f, p in sorted(want_fns.items()):
 
 # ③ 幽灵
 for f in sorted(set(called)):
-    if f not in want_fns and f.startswith('sweetdream:'):
+    if f not in want_fns and f.startswith('fallendream:'):
         # 只管"物品清单类"的调用(equipment/*/give + 两类石头), 别的工具函数跳过
         if '/give' in f or '/upgrade/item/' in f or '/overlimit/item/' in f:
             problems.append('幽灵: give_all 调了 %s, 但磁盘上没这个文件' % f)

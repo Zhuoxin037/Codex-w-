@@ -3,7 +3,7 @@ import os
 import re
 
 ROOT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                    'sweetdream', 'data', 'sweetdream', 'function', 'equipment')
+                    'fallendream', 'data', 'fallendream', 'function', 'equipment')
 
 rows = []
 for dp, dn, fn in os.walk(ROOT):

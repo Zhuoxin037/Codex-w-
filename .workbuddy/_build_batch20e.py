@@ -2,11 +2,11 @@
 """批 20-D：独行 hook 拆分（加算 / 独立），承的 hook 已就位"""
 import io, os, sys
 sys.stdout.reconfigure(encoding='utf-8')
-FN = r'D:/数据包/sweetdream/data/sweetdream/function/equipment/armor/lone_walk'
+FN = r'D:/数据包/fallendream/data/fallendream/function/equipment/armor/lone_walk'
 
 F = {}
 F['hook_add.mcfunction'] = r'''# ============================================================
-# sweetdream:equipment/armor/lone_walk/hook_add —— 「独行」被动 +8%（加算池）
+# fallendream:equipment/armor/lone_walk/hook_add —— 「独行」被动 +8%（加算池）
 # ------------------------------------------------------------
 # 【谁调用它】#manacore:event/damage_calc，排在 lib/dmg_add_apply **之前**
 #   （加算池必须先填好，apply 才有东西可并）。
@@ -21,18 +21,18 @@ execute unless score @s zx.lw_on matches 1 run return 0
 scoreboard players set #lw_8 zx.meta 8
 data modify storage zx:work put set value {ch:"mm",pct:0}
 execute store result storage zx:work put.pct int 1 run scoreboard players get #lw_8 zx.meta
-function sweetdream:lib/dmg_add_put with storage zx:work put
+function fallendream:lib/dmg_add_put with storage zx:work put
 
 data modify storage zx:work put.ch set value "atk"
-function sweetdream:lib/dmg_add_put with storage zx:work put
+function fallendream:lib/dmg_add_put with storage zx:work put
 
 data modify storage zx:work put.ch set value "oth"
-function sweetdream:lib/dmg_add_put with storage zx:work put
+function fallendream:lib/dmg_add_put with storage zx:work put
 '''
 
 F['hook_calc.mcfunction'] = r'''# @calc: indep — 套装「临敌」+10% 独立乘区
 # ============================================================
-# sweetdream:equipment/armor/lone_walk/hook_calc —— 「临敌」的 10% 独立乘区
+# fallendream:equipment/armor/lone_walk/hook_calc —— 「临敌」的 10% 独立乘区
 # ------------------------------------------------------------
 # 【谁调用它】#manacore:event/damage_calc（排在 lib/dmg_add_apply 之后）
 # 【执行者】施法者（玩家）

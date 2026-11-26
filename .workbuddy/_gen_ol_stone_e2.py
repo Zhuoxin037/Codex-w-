@@ -12,7 +12,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from lore_fmt import nfmt, wrap  # 折行用统一那套(半角宽 37 ≈ 18.5 汉字)
 
-BASE = "D:/数据包/sweetdream/data/sweetdream"
+BASE = "D:/数据包/fallendream/data/fallendream"
 ITEM = BASE + "/function/overlimit/item"
 ADV = BASE + "/advancement/overlimit"
 APPLY = BASE + "/function/overlimit/apply"
@@ -63,7 +63,7 @@ def lore_json(name, body):
 def item_txt(uid, full, cmd, target, body):
     return (
         "# ============================================================\n"
-        "# sweetdream:overlimit/item/%s —— 给一块「%s」\n"
+        "# fallendream:overlimit/item/%s —— 给一块「%s」\n"
         "# ------------------------------------------------------------\n"
         "# 【custom_data】只写一个标记 ol_%s :\n"
         "#   进度 advancement/overlimit/%s 靠它认\"右键用掉了哪块超限石\"。\n"
@@ -99,7 +99,7 @@ def adv_txt(uid):
         }
     },
     "rewards": {
-        "function": "sweetdream:overlimit/apply/%s"
+        "function": "fallendream:overlimit/apply/%s"
     }
 }
 """ % (uid, uid, uid)
@@ -108,24 +108,24 @@ def adv_txt(uid):
 def apply_txt(uid, target, full):
     return (
         "# ============================================================\n"
-        "# sweetdream:overlimit/apply/%s —— 右键用掉超限石去敲副手那件「%s」\n"
+        "# fallendream:overlimit/apply/%s —— 右键用掉超限石去敲副手那件「%s」\n"
         "# ------------------------------------------------------------\n"
-        "# 【谁调用它】进度 sweetdream:overlimit/%s(consume_item), 以玩家身份\n"
+        "# 【谁调用它】进度 fallendream:overlimit/%s(consume_item), 以玩家身份\n"
         "# 【流程】①撤销进度 ②交给 station/api/apply(kind=overlimit, of=%s)\n"
         "#         ③成功 = 消耗成立; 失败 = 退材料 + 说明原因\n"
         "# 【of 是什么】这块石头\"属于哪件装备\" —— overlimit/api/fit 会拿它去比对\n"
         "#   副手的 zx(必须含 %s), 并且确认这件还没敲过 ol。\n"
         "# ============================================================\n"
         "\n"
-        "advancement revoke @s only sweetdream:overlimit/%s\n"
+        "advancement revoke @s only fallendream:overlimit/%s\n"
         "\n"
         "data modify storage zx:work st set value {kind:\"overlimit\",id:\"\",cat:\"\",cat2:\"\",of:\"%s\"}\n"
-        "function sweetdream:station/api/apply\n"
+        "function fallendream:station/api/apply\n"
         "\n"
         "execute if data storage zx:out r{ok:1b} run tellraw @s [{\"text\":\"✔ %s已超限\",\"color\":\"green\"}]\n"
         "execute if data storage zx:out r{ok:1b} run playsound minecraft:block.smithing_table.use player @s ~ ~ ~ 0.8 1.2\n"
-        "execute if data storage zx:out r{ok:0b} run function sweetdream:overlimit/item/%s\n"
-        "execute if data storage zx:out r{ok:0b} run function sweetdream:overlimit/api/refuse\n"
+        "execute if data storage zx:out r{ok:0b} run function fallendream:overlimit/item/%s\n"
+        "execute if data storage zx:out r{ok:0b} run function fallendream:overlimit/api/refuse\n"
     ) % (uid, target, uid, uid, uid, uid, uid, target, uid)
 
 

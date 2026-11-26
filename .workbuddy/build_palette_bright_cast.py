@@ -9,7 +9,7 @@ ROOT=Path(__file__).resolve().parents[1];S=ROOT/'模型设计/调色盘_明亮�
 bb=json.loads((S/'调色盘_明亮木盘_分组动画.bbmodel').read_text(encoding='utf-8'));original=copy.deepcopy(bb);byid={g['uuid']:g for g in bb['groups']};groups={}
 def expand(n):
     g={**byid[n['uuid']],**n,'children':[expand(c) if isinstance(c,dict) else c for c in n['children']]};groups[g['name']]=g;return g
-tree=expand(bb['outliner'][0]);root=tree['name'];tree['origin']=[7.05,-3.15,-.10];elements=bb['elements'];textures=bb['textures'];U=lambda n:str(uuid.uuid5(uuid.NAMESPACE_URL,'sweetdream:palette:maple:cast:'+n))
+tree=expand(bb['outliner'][0]);root=tree['name'];tree['origin']=[7.05,-3.15,-.10];elements=bb['elements'];textures=bb['textures'];U=lambda n:str(uuid.uuid5(uuid.NAMESPACE_URL,'fallendream:palette:maple:cast:'+n))
 def group(n,p=root,origin=(0,0,0),visible=True):
     g={'name':n,'uuid':U(n),'origin':list(origin),'rotation':[0,0,0],'visibility':visible,'export':True,'isOpen':False,'color':len(groups)%8,'children':[]};groups[n]=g;groups[p]['children'].append(g);return n
 fx=group('07_施法_提色与汇聚');ribbon=group('08_独立槽色流',fx);orb=group('09_单枚色彩_沿用现有颜料球',fx,(0,-.45,-3.05));sparks=group('10_汇聚湿亮碎屑',fx,(0,-.45,-3.05))
@@ -39,8 +39,8 @@ for i,(x,y) in enumerate(centers):
             gloss=c.copy();gloss[2]-=size[2]/2+.015;sz=np.array(size)*[.42,.42,1];sz[2]=.037
             q=cube(v,'湿颜料流高光_'+roman[i]+col+str(k),gloss,sz,col+'light',angle);q['origin']=e['origin'].copy()
 # Import actual current projectile geometry and texture instead of inventing another orb.
-src=ROOT/'sweetdream_rp_完整版/assets/palette/models/item/color/crystal_14.json';source_orb=json.loads(src.read_text(encoding='utf-8'))
-tex=ROOT/'sweetdream_rp_完整版/assets/palette/textures/item/t0.png';im=Image.open(tex);oti=len(textures);textures.append({'name':'现有颜料球_沿用贴图.png','id':str(oti),'uuid':U('orbtex'),'width':im.width,'height':im.height,'uv_width':im.width,'uv_height':im.height,'internal':True,'source':'data:image/png;base64,'+base64.b64encode(tex.read_bytes()).decode()})
+src=ROOT/'fallendream_rp_完整版/assets/palette/models/item/color/crystal_14.json';source_orb=json.loads(src.read_text(encoding='utf-8'))
+tex=ROOT/'fallendream_rp_完整版/assets/palette/textures/item/t0.png';im=Image.open(tex);oti=len(textures);textures.append({'name':'现有颜料球_沿用贴图.png','id':str(oti),'uuid':U('orbtex'),'width':im.width,'height':im.height,'uv_width':im.width,'uv_height':im.height,'internal':True,'source':'data:image/png;base64,'+base64.b64encode(tex.read_bytes()).decode()})
 orb1=group('色彩_第一槽颜料',orb,(0,-.45,-3.05));orb2=group('色彩_第二槽颜料',orb,(0,-.45,-3.05));white=group('色彩_沿用湿亮面',orb,(0,-.45,-3.05));orb_parts={0:[],1:[]}
 for i,e in enumerate(source_orb['elements']):
     face=next(iter(e['faces'].values()));u,v=face['uv'][:2];tile=(int(u*8)//16,int(v*8)//16)
@@ -93,7 +93,7 @@ def state(colors):
 state(['yellow','blue'])
 check(elements,groups,root,textures);assert all(next(e for e in elements if e['uuid']==old['uuid'])==old for old in original['elements'])
 keys=[k['uuid'] for a in [idle,cast] for g in a['animators'].values() for k in g['keyframes']];assert len(keys)==len(set(keys))
-display=json.loads((ROOT/'sweetdream_rp_完整版/assets/palette/models/item/palette.json').read_text(encoding='utf-8'))['display']
+display=json.loads((ROOT/'fallendream_rp_完整版/assets/palette/models/item/palette.json').read_text(encoding='utf-8'))['display']
 native=save_native(O,'调色盘_明亮木盘_提色施法_分组动画',elements,groups,root,textures,display,[idle,cast]);groups[fx]['visibility']=False
 master,count=export_static(O,'palette','palette',elements,groups,root,textures,display);groups[fx]['visibility']=True
 T=O/'贴图';T.mkdir(exist_ok=True)

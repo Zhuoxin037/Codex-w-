@@ -1,0 +1,2 @@
+tellraw @s [{"text":"剩余探索 ","color":"aqua"},{"score":{"name":"#budget","objective":"sd.floor"}},{"text":"/8   梦屑 ","color":"gray"},{"score":{"name":"#lumen","objective":"sd.floor"},"color":"gold"},{"text":"    [退场]","color":"red","click_event":{"action":"run_command","command":"/trigger sd.floor_cmd set 3"}}]
+execute if score #budget sd.floor matches 0 run tellraw @s {"text":"[前往层主]","color":"gold","click_event":{"action":"run_command","command":"/trigger sd.floor_cmd set 24"}}

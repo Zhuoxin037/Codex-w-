@@ -19,9 +19,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 PY = sys.executable
 CHECK = ROOT / '.workbuddy' / 'check.py'
-BEAM = (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function' / 'equipment'
+BEAM = (ROOT / 'fallendream' / 'data' / 'fallendream' / 'function' / 'equipment'
         / 'staff' / 'final_revelation' / 'beam.mcfunction')
-IMMO = (ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function' / 'equipment'
+IMMO = (ROOT / 'fallendream' / 'data' / 'fallendream' / 'function' / 'equipment'
         / 'armor' / 'immolate' / 'hurt.mcfunction')
 
 

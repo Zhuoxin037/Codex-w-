@@ -19,7 +19,7 @@ import os
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-D = os.path.join(ROOT, 'sweetdream', 'data', 'sweetdream')
+D = os.path.join(ROOT, 'fallendream', 'data', 'fallendream')
 
 # (id, 中文名)
 UPGRADE = [
@@ -35,9 +35,9 @@ OVERLIMIT = [
 ]
 
 APPLY_TPL = u"""# ============================================================
-# sweetdream:upgrade/apply/%(id)s —— 右键用掉这块「%(label)s」去敲副手的装备
+# fallendream:upgrade/apply/%(id)s —— 右键用掉这块「%(label)s」去敲副手的装备
 # ------------------------------------------------------------
-# 【谁调用它】进度 sweetdream:upgrade/%(id)s(consume_item), 以玩家身份
+# 【谁调用它】进度 fallendream:upgrade/%(id)s(consume_item), 以玩家身份
 # 【流程】①撤销进度(不撤的话这个进度一辈子只触发一次)
 #         ②把 kind/id/cat~cat4 交给 station/api/apply 统一处理
 #         ③成功 = 这次消耗成立; 失败 = 把材料还回去 + 说明原因
@@ -45,18 +45,18 @@ APPLY_TPL = u"""# ============================================================
 #   所以在这里从定义表读出来一起传进去(cat3/cat4 缺失时由 apply 补空串)。
 # ============================================================
 
-advancement revoke @s only sweetdream:upgrade/%(id)s
+advancement revoke @s only fallendream:upgrade/%(id)s
 
 data modify storage zx:work st set value {kind:"upgrade",id:"%(id)s",cat:"",cat2:"",of:""}
 data modify storage zx:work st.cat set from storage zx:config updef."%(id)s".cat
 data modify storage zx:work st.cat2 set from storage zx:config updef."%(id)s".cat2
 data modify storage zx:work st.cat3 set from storage zx:config updef."%(id)s".cat3
 data modify storage zx:work st.cat4 set from storage zx:config updef."%(id)s".cat4
-function sweetdream:station/api/apply
+function fallendream:station/api/apply
 
-execute if data storage zx:out r{ok:1b} run function sweetdream:upgrade/api/done with storage zx:work st
-execute if data storage zx:out r{ok:0b} run function sweetdream:upgrade/item/%(id)s
-execute if data storage zx:out r{ok:0b} run function sweetdream:upgrade/api/refuse with storage zx:work st
+execute if data storage zx:out r{ok:1b} run function fallendream:upgrade/api/done with storage zx:work st
+execute if data storage zx:out r{ok:0b} run function fallendream:upgrade/item/%(id)s
+execute if data storage zx:out r{ok:0b} run function fallendream:upgrade/api/refuse with storage zx:work st
 """
 
 ADV_TPL = u"""{
@@ -77,15 +77,15 @@ ADV_TPL = u"""{
         }
     },
     "rewards": {
-        "function": "sweetdream:upgrade/apply/%(id)s"
+        "function": "fallendream:upgrade/apply/%(id)s"
     }
 }
 """
 
 OL_APPLY_TPL = u"""# ============================================================
-# sweetdream:overlimit/apply/%(id)s —— 右键用掉超限石去敲副手的「%(label)s」
+# fallendream:overlimit/apply/%(id)s —— 右键用掉超限石去敲副手的「%(label)s」
 # ------------------------------------------------------------
-# 【谁调用它】进度 sweetdream:overlimit/%(id)s(consume_item), 以玩家身份
+# 【谁调用它】进度 fallendream:overlimit/%(id)s(consume_item), 以玩家身份
 # 【流程】①撤销进度 ②交给 station/api/apply(kind=overlimit, of=%(id)s)
 #         ③成功 = 消耗成立; 失败 = 退材料 + 说明原因
 # 【of 是什么】这块石头"属于哪件装备" —— overlimit/api/fit 会拿它去比对
@@ -94,15 +94,15 @@ OL_APPLY_TPL = u"""# ===========================================================
 #   换名字 + 整段换描述 + 效果由装备自己的 second/kill/attack 读 ol 分流。
 # ============================================================
 
-advancement revoke @s only sweetdream:overlimit/%(id)s
+advancement revoke @s only fallendream:overlimit/%(id)s
 
 data modify storage zx:work st set value {kind:"overlimit",id:"",cat:"",cat2:"",of:"%(id)s"}
-function sweetdream:station/api/apply
+function fallendream:station/api/apply
 
 execute if data storage zx:out r{ok:1b} run tellraw @s [{"text":"✔ %(label)s已超限","color":"green"}]
 execute if data storage zx:out r{ok:1b} run playsound minecraft:block.smithing_table.use player @s ~ ~ ~ 0.8 1.2
-execute if data storage zx:out r{ok:0b} run function sweetdream:overlimit/item/%(id)s
-execute if data storage zx:out r{ok:0b} run function sweetdream:overlimit/api/refuse
+execute if data storage zx:out r{ok:0b} run function fallendream:overlimit/item/%(id)s
+execute if data storage zx:out r{ok:0b} run function fallendream:overlimit/api/refuse
 """
 
 OL_ADV_TPL = u"""{
@@ -123,7 +123,7 @@ OL_ADV_TPL = u"""{
         }
     },
     "rewards": {
-        "function": "sweetdream:overlimit/apply/%(id)s"
+        "function": "fallendream:overlimit/apply/%(id)s"
     }
 }
 """

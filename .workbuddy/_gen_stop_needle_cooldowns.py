@@ -9,14 +9,14 @@ import re
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
-OUTPUT = ROOT / 'sweetdream/data/sweetdream/function/equipment/staff/stop_needle/cd_all.mcfunction'
+OUTPUT = ROOT / 'fallendream/data/fallendream/function/equipment/staff/stop_needle/cd_all.mcfunction'
 SKILL = re.compile(r'\bskill\s*:\s*"([a-z0-9_.:/-]+)"')
 SET_SKILL = re.compile(r'\barg\.skill set value "([a-z0-9_.:/-]+)"')
 
 
 def catalog():
     skills = set()
-    for pack in ('sweetdream', 'manacore-1.0.0'):
+    for pack in ('fallendream', 'manacore-1.0.0'):
         for path in (ROOT / pack / 'data').rglob('*.mcfunction'):
             if path == OUTPUT:
                 continue

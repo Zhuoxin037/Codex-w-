@@ -1,0 +1,8 @@
+{
+  "values": [
+    "minecraft:mob_attack", "minecraft:mob_attack_no_aggro", "minecraft:mob_projectile",
+    "minecraft:arrow", "minecraft:trident", "minecraft:sting", "minecraft:sonic_boom",
+    "minecraft:fireball", "minecraft:unattributed_fireball", "minecraft:wither_skull", "minecraft:indirect_magic",
+    "fallendream:knight_blade", "fallendream:b_staff_magic", {"id":"sweetdream_floor:forest_impact","required":false}
+  ]
+}

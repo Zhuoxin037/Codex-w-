@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "fallendream:item/vanilla/axe_detach"
+  }
+}

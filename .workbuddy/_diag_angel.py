@@ -9,8 +9,8 @@ sys.path.insert(0, r'C:/Users/qq303/.workbuddy/skills/mc-model-preview/scripts')
 import render3d as R  # noqa: E402
 import texlab  # noqa: E402
 
-RP = Path(r'D:/数据包/sweetdream_rp_完整版')
-A = RP / 'assets/sweetdream/textures/item/angel_glow.png'
+RP = Path(r'D:/数据包/fallendream_rp_完整版')
+A = RP / 'assets/fallendream/textures/item/angel_glow.png'
 
 w, h, px = texlab.decode(str(A))
 print('贴图 %dx%d' % (w, h))
@@ -49,7 +49,7 @@ def pngbytes(w, h, rows):
             + chunk(b'IDAT', zlib.compress(bytes(raw), 9)) + chunk(b'IEND', b''))
 
 
-model = R.load_model(str(RP / 'assets/sweetdream/models/item/angel_beam.json'))
+model = R.load_model(str(RP / 'assets/fallendream/models/item/angel_beam.json'))
 
 
 class FakeRepo:
@@ -71,7 +71,7 @@ class FakeRepo:
         return self._t[ref]
 
 
-faces = R.bake(model, FakeRepo(), ns_hint='sweetdream')
+faces = R.bake(model, FakeRepo(), ns_hint='fallendream')
 fit = R.fit_all([[(faces, 1.0)]], 120, 400, yaw=0, pitch=0, zoom=0.98)
 rows, _ = R.render([[(faces, 1.0)]], 120, 400, yaw=0, pitch=0, fit=fit,
                    bg=(0, 0, 0))

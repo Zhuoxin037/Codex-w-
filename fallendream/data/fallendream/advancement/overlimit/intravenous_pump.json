@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "intravenous_pump": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "ol_intravenous_pump"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "fallendream:overlimit/apply/intravenous_pump"
+    }
+}

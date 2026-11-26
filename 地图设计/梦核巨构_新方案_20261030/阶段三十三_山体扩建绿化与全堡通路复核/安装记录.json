@@ -1,0 +1,22 @@
+{
+  "time": "2026-11-15T22:35:04.5927126+08:00",
+  "target": "D:\\PCL 正式版 2.10.0\\.minecraft\\versions\\1.21.5-Fabric 0.16.10\\saves\\梦核哥特_承接修复与照明补漏_20261102",
+  "display_name": "梦核哥特_天光与照明修复_20261102",
+  "backup": "D:\\数据包\\地图设计\\梦核巨构_新方案_20261030\\阶段三十三_山体扩建绿化与全堡通路复核\\修改前完整备份.zip",
+  "archive": "D:\\数据包\\地图设计\\梦核巨构_新方案_20261030\\阶段三十三_山体扩建绿化与全堡通路复核\\山体绿化与通路清理_完整存档.zip",
+  "verified_region_files": 24,
+  "non_region_files_changed": 0,
+  "additional_game_worlds": 0,
+  "all_hashes_match": true,
+  "native_checks": 58,
+  "reopen_checks": 58,
+  "navigation_checks": 103,
+  "verified_content_files": 702,
+  "all_content_files_match_saved_copy": true,
+  "protected_user_positions_verified": 24,
+  "terrain_sha256": "f4ad6dc1bfaac570d87f94990621076c5d411e28f96821557a525c5732685a13",
+  "road_and_tree_sha256": "9468a96eb59cb4cdf1c005df5acc43a0a66b2675b94c635b74623ebb32266659",
+  "full_native_checks": 1732,
+  "full_reopen_checks": 1734,
+  "connected_major_destinations": 17
+}

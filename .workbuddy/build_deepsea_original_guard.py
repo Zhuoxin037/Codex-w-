@@ -8,7 +8,7 @@ from model_review_io import save_native,export_static,renderer,check
 ROOT=Path(__file__).resolve().parents[1]
 BASE=ROOT/'模型设计/深海回响_旧稿重建_20261009/阶段一_厚环护手与剑根'
 O=BASE.parent/'阶段一_宽剑根连接修订';O.mkdir(parents=True,exist_ok=True)
-U=lambda n:str(uuid.uuid5(uuid.NAMESPACE_URL,'sweetdream:deepsea:oldreference:'+n))
+U=lambda n:str(uuid.uuid5(uuid.NAMESPACE_URL,'fallendream:deepsea:oldreference:'+n))
 groups={};elements=[]
 def group(n,p=None,origin=(0,0,0)):
     g={'name':n,'uuid':U(n),'origin':list(origin),'rotation':[0,0,0],'visibility':True,'export':True,'isOpen':True,'color':len(groups)%8,'children':[]};groups[n]=g
@@ -185,7 +185,7 @@ def fixed_geometry(els):
     def fixed(e):return not e['name'].startswith(('剑根','柄座','握柄'))
     return sorted(json.dumps({k:v for k,v in e.items() if k!='uuid'},ensure_ascii=False,sort_keys=True) for e in els if fixed(e))
 assert fixed_geometry(before['elements'])==fixed_geometry(elements)
-display=json.loads((ROOT/'sweetdream_rp_完整版/assets/deepseaecho/models/item/sword.json').read_text(encoding='utf-8'))['display']
+display=json.loads((ROOT/'fallendream_rp_完整版/assets/deepseaecho/models/item/sword.json').read_text(encoding='utf-8'))['display']
 native=save_native(O,'深海回响_宽剑根连接_分组',elements,groups,root,textures,display)
 master,count=export_static(O,'sword','deepseaecho',elements,groups,root,textures,display,offset=(7.775,2,7.895))
 (O/'贴图').mkdir(exist_ok=True);atlas.save(O/'贴图'/textures[0]['name'])

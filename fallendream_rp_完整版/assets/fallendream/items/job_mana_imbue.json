@@ -1,0 +1,7 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "fallendream:item/profession/mana_imbue"
+  },
+  "hand_animation_on_swap": false
+}

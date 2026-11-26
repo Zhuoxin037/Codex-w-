@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-_deploy.py —— 把 manacore-1.0.0 / sweetdream / sweetdream_rp_完整版 镜像到存档
+_deploy.py —— 把 manacore-1.0.0 / fallendream / fallendream_rp_完整版 镜像到存档
 --------------------------------------------------------------------------
 为什么不用 deploy.ps1 / robocopy:
   · deploy.ps1 结尾有 Read-Host, 非交互会话会挂住;
@@ -8,10 +8,10 @@ _deploy.py —— 把 manacore-1.0.0 / sweetdream / sweetdream_rp_完整版 镜�
   所以用 Python 走一条等价于 robocopy /MIR 的镜像: 内容不同就覆盖, 目标里
   多出来的文件就删除(这样源里删过的函数不会在目标里残留)。
 
-★ 2026-10-10(F20 修): 资源包改镜像"游戏实际加载的那一份" = `sweetdream_rp_完整版`
-  (options.txt 里 resourcePacks 一直是它)。原来这里镜像的是老包 `sweetdream_rp`
+★ 2026-10-10(F20 修): 资源包改镜像"游戏实际加载的那一份" = `fallendream_rp_完整版`
+  (options.txt 里 resourcePacks 一直是它)。原来这里镜像的是老包 `fallendream_rp`
   —— 那份根本没被加载 ⇒ 改老包再一键部署, 游戏外观毫无变化。
-★ 2026-10-13: 老包 / 覆盖层已删除, `sweetdream_rp_完整版` 升为**唯一真源**
+★ 2026-10-13: 老包 / 覆盖层已删除, `fallendream_rp_完整版` 升为**唯一真源**
   (不再有"合并产物"和 build 这一步)。改模型/贴图直接改它, 再一键部署 + F3+T。
 
 用法:
@@ -74,8 +74,8 @@ def mirror(src, dst, apply):
 # 数据包 registry(1.21.5 实测: /reload **不会**重新读取 datapack registry) ——
 #   必须【退出世界再进】才生效。真实事故 2026-10-07: 新加的 enchantment/arc.json
 #   一直只做 /reload ⇒ 附魔没注册 ⇒ bow/arc/give 里的
-#   `enchantments={"sweetdream:arc":1}` 每次 reload 都报
-#   "Failed to get element sweetdream:arc", 玩家看到的是"天芒给不出来"。
+#   `enchantments={"fallendream:arc":1}` 每次 reload 都报
+#   "Failed to get element fallendream:arc", 玩家看到的是"天芒给不出来"。
 REGISTRY_DIRS = {
     'enchantment', 'enchantment_provider', 'damage_type', 'jukebox_song',
     'painting_variant', 'wolf_variant', 'wolf_sound_variant', 'cat_variant',
@@ -107,13 +107,13 @@ def main():
     pairs = [
         ('manacore-1.0.0', os.path.join(ROOT, 'manacore-1.0.0'),
          os.path.join(save, 'datapacks', 'manacore-1.0.0')),
-        ('sweetdream', os.path.join(ROOT, 'sweetdream'),
-         os.path.join(save, 'datapacks', 'sweetdream')),
+        ('fallendream', os.path.join(ROOT, 'fallendream'),
+         os.path.join(save, 'datapacks', 'fallendream')),
     ]
     # 资源包镜像到"版本目录\resourcepacks"(版本隔离: 从存档往上两层是版本目录)
-    # ★ F20 修: 目标 = 游戏 options.txt 里真正加载的那一份 = sweetdream_rp_完整版
+    # ★ F20 修: 目标 = 游戏 options.txt 里真正加载的那一份 = fallendream_rp_完整版
     gamedir = os.path.dirname(os.path.dirname(save))
-    rp_name = 'sweetdream_rp_完整版'
+    rp_name = 'fallendream_rp_完整版'
     rp_src = os.path.join(ROOT, rp_name)
     if os.path.isdir(rp_src):
         pairs.append((rp_name, rp_src,

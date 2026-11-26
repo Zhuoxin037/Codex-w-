@@ -9,7 +9,7 @@ ap=argparse.ArgumentParser(); ap.add_argument('--draft', default='draft01'); arg
 OUT=STAGE/'过程记录'/args.draft
 if OUT.exists(): raise SystemExit('Draft already exists. Use a new draft name; preserve saved projects.')
 OUT.mkdir(parents=True)
-UID=lambda s: str(uuid.uuid5(uuid.NAMESPACE_URL,'sweetdream/five_curses/'+s))
+UID=lambda s: str(uuid.uuid5(uuid.NAMESPACE_URL,'fallendream/five_curses/'+s))
 groups=[]; elems=[]; material={}; STEP=.5
 
 def group(name, parent='五世恶咒_整体', origin=(8,13,8)):
@@ -205,7 +205,7 @@ atlas.save(OUT/'five_curses_atlas.png')
 buffer=io.BytesIO();atlas.save(buffer,format='PNG');dataurl='data:image/png;base64,'+base64.b64encode(buffer.getvalue()).decode()
 texture={'name':'five_curses_atlas.png','path':str(OUT/'five_curses_atlas.png'),'relative_path':'five_curses_atlas.png',
  'id':'0','uuid':UID('texture'),'width':SIZE,'height':SIZE,'uv_width':SIZE,'uv_height':SIZE,'source':dataurl,
- 'internal':True,'saved':True,'render_mode':'default','namespace':'sweetdream','folder':'item'}
+ 'internal':True,'saved':True,'render_mode':'default','namespace':'fallendream','folder':'item'}
 byname={g['name']:g for g in groups}
 def node(g):
     return {'uuid':g['uuid'],'isOpen':False,'children':[e['uuid'] for e in elems if e['_group']==g['name']]+[node(h) for h in groups if h['parent']==g['name']]}
@@ -225,8 +225,8 @@ bb={'meta':{'format_version':'5.0','model_format':'free','box_uv':False},'name':
 bbd=copy.deepcopy(bb);bbd['meta']['model_format']='java_block';bbd['name']='五世恶咒_整件Display调整'
 (OUT/'五世恶咒_整件Display调整.bbmodel').write_text(json.dumps(bbd,ensure_ascii=False,separators=(',',':')),encoding='utf8')
 
-rp=OUT/'审阅资源';mp=rp/'assets/sweetdream/models/item/five_curses_review.json';mp.parent.mkdir(parents=True)
-tp=rp/'assets/sweetdream/textures/item/five_curses_atlas.png';tp.parent.mkdir(parents=True);atlas.save(tp)
+rp=OUT/'审阅资源';mp=rp/'assets/fallendream/models/item/five_curses_review.json';mp.parent.mkdir(parents=True)
+tp=rp/'assets/fallendream/textures/item/five_curses_atlas.png';tp.parent.mkdir(parents=True);atlas.save(tp)
 je=[]
 for e in elems:
     f={k:{'uv':[round(v*16/SIZE,7) for v in ff['uv']],'texture':'#0'} for k,ff in e['faces'].items() if ff['texture'] is not None}
@@ -234,9 +234,9 @@ for e in elems:
     if e.get('rotation'):
         axis=next(i for i,v in enumerate(e['rotation']) if v);q['rotation']={'origin':e['origin'],'axis':'xyz'[axis],'angle':e['rotation'][axis]}
     je.append(q)
-model={'credit':'Sweetdream original Five Curses; static review only','texture_size':[SIZE,SIZE],'textures':{'0':'sweetdream:item/five_curses_atlas','particle':'sweetdream:item/five_curses_atlas'},'elements':je,'display':display,'gui_light':'front'}
+model={'credit':'Fallendream original Five Curses; static review only','texture_size':[SIZE,SIZE],'textures':{'0':'fallendream:item/five_curses_atlas','particle':'fallendream:item/five_curses_atlas'},'elements':je,'display':display,'gui_light':'front'}
 mp.write_text(json.dumps(model,ensure_ascii=False,separators=(',',':')),encoding='utf8')
-ip=rp/'assets/sweetdream/items/five_curses_review.json';ip.parent.mkdir(parents=True);ip.write_text(json.dumps({'model':{'type':'minecraft:model','model':'sweetdream:item/five_curses_review'}}),encoding='utf8')
+ip=rp/'assets/fallendream/items/five_curses_review.json';ip.parent.mkdir(parents=True);ip.write_text(json.dumps({'model':{'type':'minecraft:model','model':'fallendream:item/five_curses_review'}}),encoding='utf8')
 (rp/'pack.mcmeta').write_text(json.dumps({'pack':{'pack_format':55,'description':'五世恶咒静态审阅资产（未接入）'}},ensure_ascii=False),encoding='utf8')
 stats={'elements':len(elems),'groups':len(groups),'textures':1,'texture_size':[SIZE,SIZE],'hidden_internal_faces_removed':removed,
  'materials':dict(collections.Counter(e['_mat'] for e in elems)),'group_counts':dict(collections.Counter(e['_group'] for e in elems)),
@@ -251,7 +251,7 @@ def nearest_sample(self,u,v):
     x=max(0,min(self.w-1,int(u*self.w/16)));y=max(0,min(self.h-1,int(v*self.fh/16)+self.cur*self.fh))
     return self._px(x,y)
 R.Tex.sample=nearest_sample
-faces=R.bake(model,R.Repo(str(rp)),ns_hint='sweetdream')
+faces=R.bake(model,R.Repo(str(rp)),ns_hint='fallendream')
 viewdefs=[('正面',180,0),('斜前',148,12),('侧面',90,0),('背面',0,8)]
 images=[]
 for label,yaw,pitch in viewdefs:

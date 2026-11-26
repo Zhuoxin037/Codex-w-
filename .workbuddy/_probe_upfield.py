@@ -7,8 +7,8 @@ import subprocess, sys
 from pathlib import Path
 
 ROOT = Path(r'D:/数据包')
-BT = ROOT / 'sweetdream/data/sweetdream/function/upgrade/api/bonus_take.mcfunction'
-BH = ROOT / 'sweetdream/data/sweetdream/function/upgrade/api/bonus_held.mcfunction'
+BT = ROOT / 'fallendream/data/fallendream/function/upgrade/api/bonus_take.mcfunction'
+BH = ROOT / 'fallendream/data/fallendream/function/upgrade/api/bonus_held.mcfunction'
 
 
 def run_check():

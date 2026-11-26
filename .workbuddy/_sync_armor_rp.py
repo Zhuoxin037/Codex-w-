@@ -11,7 +11,7 @@ _sync_armor_rp.py —— 把「原版风 · 盔甲」生成物**打包进完整�
 
 ★ 为什么必须有这个脚本：五份文件里只有 ① ② 是画出来的，③④⑤ 是纯模板；
   上次明烛是手写的，很容易漏一份 ⇒ 游戏里就是紫黑块且**一条日志都没有**（坑195）。
-★ 目录口径：真源只有 `sweetdream_rp_完整版/`（另两个 rp 目录已删，别再往那儿写）。
+★ 目录口径：真源只有 `fallendream_rp_完整版/`（另两个 rp 目录已删，别再往那儿写）。
 """
 import io
 import json
@@ -22,7 +22,7 @@ import sys
 sys.path.insert(0, r'D:\数据包\.workbuddy')
 from build_vanilla_armor import P, ICON_DIR, LAYER_DIR                  # noqa: E402
 
-RP = r'D:\数据包\sweetdream_rp_完整版\assets\sweetdream'
+RP = r'D:\数据包\fallendream_rp_完整版\assets\fallendream'
 TEX_ITEM = os.path.join(RP, 'textures', 'item', 'vanilla')
 TEX_LAYER = os.path.join(RP, 'textures', 'entity', 'equipment')
 ITEMS = os.path.join(RP, 'items')
@@ -63,18 +63,18 @@ def main(only=None):
         write_json(os.path.join(ITEMS, 'armor_%s.json' % cid), {
             'hand_animation_on_swap': False,
             'model': {'type': 'minecraft:model',
-                      'model': 'sweetdream:item/vanilla/armor_%s' % cid},
+                      'model': 'fallendream:item/vanilla/armor_%s' % cid},
         })
         n['items'] += 1
 
         write_json(os.path.join(MODELS, 'armor_%s.json' % cid), {
             'parent': 'minecraft:item/generated',
-            'textures': {'layer0': 'sweetdream:item/vanilla/armor_%s' % cid},
+            'textures': {'layer0': 'fallendream:item/vanilla/armor_%s' % cid},
         })
         n['model'] += 1
 
         write_json(os.path.join(EQUIP, 'armor_%s.json' % cid), {
-            'layers': {sub: [{'texture': 'sweetdream:armor_%s' % cid}]},
+            'layers': {sub: [{'texture': 'fallendream:armor_%s' % cid}]},
         })
         n['equip'] += 1
 

@@ -2,7 +2,7 @@
 """按阶段看强度：每件的主动魔力/冷却/最大倍率 + 被动数值"""
 import os, re, glob, json
 
-ROOT = 'D:/数据包/sweetdream/data/sweetdream/function/equipment'
+ROOT = 'D:/数据包/fallendream/data/fallendream/function/equipment'
 MAT_TIER = {'iron': 1, 'diamond': 2, 'netherite': 3}
 TN = {1: '铁', 2: '钻', 3: '下界', 0: '未分档'}
 

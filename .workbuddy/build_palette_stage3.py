@@ -6,7 +6,7 @@ from PIL import Image,ImageDraw
 B=Path('D:/数据包');S=B/'模型设计/调色盘_阶段二';O=B/'模型设计/调色盘_阶段三';O.mkdir(parents=True,exist_ok=True)
 V=Path('C:/Users/qq303/.codex/visualizations/2026/09/30/01a0f228-3178-7672-a739-8812e448354c')
 bb=json.loads((S/'调色盘_阶段二_分组.bbmodel').read_text(encoding='utf-8'));props=bb['groups'];elements=bb['elements'];textures=bb['textures']
-U=lambda n:str(uuid.uuid5(uuid.NAMESPACE_URL,'sweetdream:palette:stage3:'+n))
+U=lambda n:str(uuid.uuid5(uuid.NAMESPACE_URL,'fallendream:palette:stage3:'+n))
 byid={g['uuid']:g for g in props};nodes={}
 def expand(n):
  g={**copy.deepcopy(byid[n['uuid']]),'children':[expand(c) if isinstance(c,dict) else c for c in n['children']]};nodes[g['uuid']]=g;return g

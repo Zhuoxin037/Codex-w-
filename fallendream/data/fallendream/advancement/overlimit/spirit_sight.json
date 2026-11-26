@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "spirit_sight": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "ol_spirit_sight"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "fallendream:overlimit/apply/spirit_sight"
+    }
+}

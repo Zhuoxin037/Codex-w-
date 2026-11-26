@@ -17,7 +17,7 @@
 # ============================================================
 
 # --- 默认配置 (已存在则不覆盖, 可直接在游戏内修改) ---
-execute unless data storage manacore:config defaults run data modify storage manacore:config defaults set value {stats:{current_mana:100.0,max_mana:100.0,base_attack:5.0,max_health:20.0,custom_damage:0.0,skill_multiplier:1.0,independent_multiplier:1.0,cooldown:0.0,mana_regen:1.0,mana_regen_multiplier:1.0,cooldown_reduction:0.0,formation_limit:3},flags:{no_regen:0b,regen_ban_end:0},session:0b,debug:0b,cooldowns:{},regen_mods:{"0":{},"1":{},"2":{},"3":{},"4":{},"5":{},"6":{},"7":{}},formations:{"0":{},"1":{},"2":{},"3":{},"4":{},"5":{},"6":{},"7":{}},slot:0,u0:0,u1:0,u2:0,u3:0,uuid:""}
+execute unless data storage manacore:config defaults run data modify storage manacore:config defaults set value {stats:{current_mana:100.0,max_mana:100.0,base_attack:5.0,max_health:20.0,custom_damage:0.0,skill_multiplier:1.0,independent_multiplier:1.0,cooldown:0.0,mana_regen:1.0,mana_regen_multiplier:1.0,cooldown_reduction:0.0,mana_cost_multiplier:1.0,formation_limit:3},flags:{no_regen:0b,regen_ban_end:0},session:0b,debug:0b,cooldowns:{},regen_mods:{"0":{},"1":{},"2":{},"3":{},"4":{},"5":{},"6":{},"7":{}},formations:{"0":{},"1":{},"2":{},"3":{},"4":{},"5":{},"6":{},"7":{}},slot:0,u0:0,u1:0,u2:0,u3:0,uuid:""}
 execute unless data storage manacore:config settings run data modify storage manacore:config settings set value {regen_interval:20,max_slots:64,max_regen_mods:8,max_formations:8,debug_default:0b}
 
 # --- 常量 ---

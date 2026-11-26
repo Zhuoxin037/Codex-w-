@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""_make_zip.py —— 只把 sweetdream_rp_完整版 打成可分发 zip（不做任何删除，绕开沙箱的批量删除确认）
+"""_make_zip.py —— 只把 fallendream_rp_完整版 打成可分发 zip（不做任何删除，绕开沙箱的批量删除确认）
 
 build_full_pack.py --zip 里的 `shutil.rmtree(OUT)` 一次性删 7314 个文件，会被
 沙箱 safe-delete 的"批量删除需确认"拦下（SAFE_DELETE_BULK_CONFIRM_REQUIRED）。
@@ -10,8 +10,8 @@ import zipfile
 import hashlib
 
 ROOT = r'D:\数据包'
-OUT = os.path.join(ROOT, 'sweetdream_rp_完整版')
-ZIP = os.path.join(ROOT, 'sweetdream_rp_完整版.zip')
+OUT = os.path.join(ROOT, 'fallendream_rp_完整版')
+ZIP = os.path.join(ROOT, 'fallendream_rp_完整版.zip')
 
 
 def rel_files(root):
@@ -42,6 +42,6 @@ with zipfile.ZipFile(ZIP) as z:
 print('zip ->', ZIP)
 print('  文件数:', n, '| 体积: %.1f MB' % (os.path.getsize(ZIP) / 1048576))
 print('  pack.mcmeta 在根:', 'pack.mcmeta' in names)
-print('  含火种两态:', 'assets/sweetdream/items/tinder_off.json' in names,
-      '|', 'assets/sweetdream/items/tinder_on.json' in names)
+print('  含火种两态:', 'assets/fallendream/items/tinder_off.json' in names,
+      '|', 'assets/fallendream/items/tinder_on.json' in names)
 print('  文件集一致:', ok_set, '| 逐字节一致:', ok_hash)

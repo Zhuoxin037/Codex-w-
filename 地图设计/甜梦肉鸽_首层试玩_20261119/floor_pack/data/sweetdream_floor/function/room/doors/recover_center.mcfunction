@@ -1,0 +1,2 @@
+$execute positioned $(x).5 81 $(z).5 if entity @s[distance=..0.75] at @s unless block ~ ~ ~ minecraft:air run return run function sweetdream_floor:room/teleport_cell with storage zx:rogue floor.cells[$(cell)]
+$execute positioned $(x).5 81 $(z).5 if entity @s[distance=..0.75] at @s unless block ~ ~1 ~ minecraft:air run function sweetdream_floor:room/teleport_cell with storage zx:rogue floor.cells[$(cell)]

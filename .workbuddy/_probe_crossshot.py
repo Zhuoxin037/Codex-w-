@@ -4,7 +4,7 @@
 import subprocess, sys
 from pathlib import Path
 
-P = Path(r'D:/数据包/sweetdream/data/sweetdream/function/equipment/bow/arc/shot.mcfunction')
+P = Path(r'D:/数据包/fallendream/data/fallendream/function/equipment/bow/arc/shot.mcfunction')
 ORIG = P.read_text(encoding='utf-8')
 NEEDLE = 'function manacore:api/mana/consume'
 assert NEEDLE in ORIG, '找不到扣蓝调用, 探针前提不成立'

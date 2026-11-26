@@ -24,7 +24,7 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DP = os.path.join(ROOT, 'sweetdream', 'data', 'sweetdream', 'function')
+DP = os.path.join(ROOT, 'fallendream', 'data', 'fallendream', 'function')
 P = os.path.join(DP, 'overlimit', 'def', 'load.mcfunction')
 EQ = os.path.join(DP, 'equipment')
 

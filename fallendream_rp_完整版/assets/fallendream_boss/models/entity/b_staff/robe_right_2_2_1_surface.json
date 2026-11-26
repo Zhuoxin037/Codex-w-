@@ -1,0 +1,1 @@
+{"textures":{"t0":"fallendream_boss:item/b_staff/t0","t1":"fallendream_boss:item/b_staff/t1","t2":"fallendream_boss:item/b_staff/t2"},"elements":[{"from":[5.72995,3.723975,7.965],"to":[10.27005,12.276025,8.035],"faces":{"north":{"uv":[7.09375,0.03125,8.09375,1.90625],"texture":"#t2"},"south":{"uv":[8.15625,0.03125,9.15625,1.90625],"texture":"#t2"}}}],"gui_light":"front"}

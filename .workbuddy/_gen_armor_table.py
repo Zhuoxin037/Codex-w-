@@ -36,7 +36,7 @@ lines.append('')
 lines.append('| 件名 | 装备 id | `item_model` | `equippable.asset_id` | 穿戴层目录 |')
 lines.append('|---|---|---|---|---|')
 for p in P:
-    lines.append('| %s | `%s` | `sweetdream:armor_%s` | `sweetdream:armor_%s` | `%s` |'
+    lines.append('| %s | `%s` | `fallendream:armor_%s` | `fallendream:armor_%s` | `%s` |'
                  % (p['cn'], p['id'], p['id'], p['id'],
                     'humanoid_leggings' if p['slot'] == 'leggings' else 'humanoid'))
 lines.append('')

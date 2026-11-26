@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "empty_cicada": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "ol_empty_cicada"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "fallendream:overlimit/apply/empty_cicada"
+    }
+}

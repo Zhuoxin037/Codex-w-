@@ -13,7 +13,7 @@ check.py 管**语法层**(写法的坑), 本脚本管**接线层**(寿命):
   4) equipment/<类>/<件>/give · debug/* —— 玩家手动 /function
   5) **enchantment/*.json 的 run_function** —— 附魔 effects 事件(弩系全靠它, 2026-10-07 补)
   6) **回调字符串**: 把路径写进 NBT/storage 再由宏 $(x) 动态调用 ——
-     例如普攻法球 `Hit:"sweetdream:…/ball_hit"` -> `function $(hit)`。
+     例如普攻法球 `Hit:"fallendream:…/ball_hit"` -> `function $(hit)`。
      这种路径先在边上着，**软可达**(见 sorrow 分级)。
 
 【分级】
@@ -32,7 +32,7 @@ import json
 import collections
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA = os.path.join(ROOT, "sweetdream", "data")
+DATA = os.path.join(ROOT, "fallendream", "data")
 
 fn_call = re.compile(r'function\s+(?:#)?([a-z0-9_]+):([a-z0-9_./]+)')
 schedule = re.compile(r'schedule\s+(?:function\s+)?([a-z0-9_]+):([a-z0-9_./]+)')
@@ -167,7 +167,7 @@ def main():
             bad_adv.append((aid, rf, info["file"]))
     roots.update(f for f in ench if f in funcs)
     for fid in funcs:
-        if fid.endswith("/give") or fid.startswith("sweetdream:debug/"):
+        if fid.endswith("/give") or fid.startswith("fallendream:debug/"):
             roots.add(fid)
 
     # BFS
@@ -184,7 +184,7 @@ def main():
 
     # 全仓文本(含 json / mcmeta)出现过的 ns:path 字符串 -> 软可达
     mention = collections.defaultdict(list)
-    for base in (os.path.join(DATA), os.path.join(ROOT, "sweetdream_rp_完整版")):
+    for base in (os.path.join(DATA), os.path.join(ROOT, "fallendream_rp_完整版")):
         for r, _d, fs in os.walk(base):
             for f in fs:
                 if not f.endswith((".mcfunction", ".json", ".mcmeta", ".txt", ".md")):

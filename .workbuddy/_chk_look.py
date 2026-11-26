@@ -3,8 +3,8 @@
 
 为什么需要: 2026-10-05 实测两个 bug 都是"改了一处、漏了另一处":
   ① give 加了 item_model, 但右键消耗后还回来的那个(return_item)没加 -> 用一次就没模型
-  ② 资源包改了源(D:/数据包/sweetdream_rp_完整版), 版本隔离目录(.minecraft/versions/*/
-     resourcepacks/sweetdream_rp_完整版)是**另一份拷贝**, 不同步 -> 游戏里紫黑方块
+  ② 资源包改了源(D:/数据包/fallendream_rp_完整版), 版本隔离目录(.minecraft/versions/*/
+     resourcepacks/fallendream_rp_完整版)是**另一份拷贝**, 不同步 -> 游戏里紫黑方块
 
 本脚本离线抓这六类:
   1. give / return_item 三处 recovery_compass[...] 的组件列表必须逐字一致
@@ -17,10 +17,10 @@
 import io, os, re, sys, json, struct
 
 ROOT = r'D:\数据包'
-RP_SRC = os.path.join(ROOT, 'sweetdream_rp_完整版')
+RP_SRC = os.path.join(ROOT, 'fallendream_rp_完整版')
 RP_DST = (r'D:\PCL 正式版 2.10.0\.minecraft\versions\1.21.5-Fabric 0.16.10'
-          r'\resourcepacks\sweetdream_rp_完整版')
-LOOK = os.path.join(ROOT, 'sweetdream', 'data', 'sweetdream', 'function',
+          r'\resourcepacks\fallendream_rp_完整版')
+LOOK = os.path.join(ROOT, 'fallendream', 'data', 'fallendream', 'function',
                     'equipment', 'tool', 'look')
 
 bad = []
@@ -86,7 +86,7 @@ else:
 #       ① 模型文件在 `models/item/vanilla/` 下（不是旧的 `models/item/`）
 #       ② 有 layer0，且它指向的贴图真的存在（断链 = 紫黑块）
 #       ③ items/look.json 的 model 指向**就是**这个模型（三层连通，最容易错位的地方）
-MODEL_REL = 'assets/sweetdream/models/item/vanilla/look.json'
+MODEL_REL = 'assets/fallendream/models/item/vanilla/look.json'
 for tag, rp in (('源', RP_SRC), ('版本隔离', RP_DST)):
     f = os.path.join(rp, *MODEL_REL.split('/'))
     if not os.path.exists(f):
@@ -105,18 +105,18 @@ for tag, rp in (('源', RP_SRC), ('版本隔离', RP_DST)):
         else:
             ok('%s模型 layer0 -> %s' % (tag, l0))
     # items/look.json 必须指向这个模型
-    ij = os.path.join(rp, 'assets', 'sweetdream', 'items', 'look.json')
+    ij = os.path.join(rp, 'assets', 'fallendream', 'items', 'look.json')
     if os.path.exists(ij):
         ref = ((json.load(io.open(ij, encoding='utf-8')).get('model') or {})
                .get('model') or '')
-        want = 'sweetdream:item/vanilla/look'
+        want = 'fallendream:item/vanilla/look'
         if ref != want:
             err('%s items/look.json 指向 %r，应为 %r（模型/定义错位 = 紫黑块）'
                 % (tag, ref, want))
 
 # ---------------------------------------------------- 4) 贴图
 for tag, rp in (('源', RP_SRC), ('版本隔离', RP_DST)):
-    f = os.path.join(rp, 'assets', 'sweetdream', 'textures', 'item', 'vanilla', 'look.png')
+    f = os.path.join(rp, 'assets', 'fallendream', 'textures', 'item', 'vanilla', 'look.png')
     if not os.path.exists(f):
         err('%s资源包缺贴图: %s' % (tag, f))
         continue
@@ -131,21 +131,21 @@ for tag, rp in (('源', RP_SRC), ('版本隔离', RP_DST)):
         ok('%s贴图 %dx%d colortype=%d' % (tag, w, h, ct))
 
 # ---------------------------------------------------- 5) 源 / 目标 字节一致
-#   ★ 2026-10-12 补两行: O06 之后 items/look.json 指向的是 `sweetdream:item/vanilla/look`,
+#   ★ 2026-10-12 补两行: O06 之后 items/look.json 指向的是 `fallendream:item/vanilla/look`,
 #     真正渲染用的模型/贴图挪进了 `models|textures/item/vanilla/` —— 只守 items/look.json
 #     会漏掉"模型/贴图没同步过去"这一半(2026-10-11 实测: 版本隔离副本缺整个 vanilla/ 目录,
 #     items/look.json 也还指着旧的 item/look, 而这条规则当时只报了 items/look.json)。
 #   ★ 2026-10-18: 旧路径 `models/item/look.json` / `textures/item/look.png` **已经不存在**
 #     (全包平面图标统一到 `item/vanilla/`, 只剩这两条旧路径还挂着) ⇒ 它们报的是
 #     "源资源包缺模型/贴图", 是**假警报**, 会掩盖真问题。删掉旧路径, 只守真正在用的两处。
-LOOK_FILES = ['assets/sweetdream/items/look.json',
-              'assets/sweetdream/models/item/vanilla/look.json',
-              'assets/sweetdream/textures/item/vanilla/look.png',
+LOOK_FILES = ['assets/fallendream/items/look.json',
+              'assets/fallendream/models/item/vanilla/look.json',
+              'assets/fallendream/textures/item/vanilla/look.png',
               # 标签字体（2026-10-06 加：图标"剩余<=3秒变淡"要用新的淡色字形）
-              'assets/sweetdream/font/icons.json',
-              'assets/sweetdream/textures/font/icons.png',
-              'assets/sweetdream/lang/zh_cn.json',
-              'assets/sweetdream/lang/en_us.json']
+              'assets/fallendream/font/icons.json',
+              'assets/fallendream/textures/font/icons.png',
+              'assets/fallendream/lang/zh_cn.json',
+              'assets/fallendream/lang/en_us.json']
 diff = 0
 for rel in LOOK_FILES:
     a = os.path.join(RP_SRC, *rel.split('/'))
@@ -160,8 +160,8 @@ if not diff:
 
 # ---------------------------------------------------- 6) 标签字体图集（普通 + 淡色）
 ORDER = ['yuanhai', 'liuhuo', 'yehuo', 'shixin', 'dream']
-fj = os.path.join(RP_SRC, 'assets', 'sweetdream', 'font', 'icons.json')
-fpng = os.path.join(RP_SRC, 'assets', 'sweetdream', 'textures', 'font', 'icons.png')
+fj = os.path.join(RP_SRC, 'assets', 'fallendream', 'font', 'icons.json')
+fpng = os.path.join(RP_SRC, 'assets', 'fallendream', 'textures', 'font', 'icons.png')
 try:
     font = json.load(io.open(fj, encoding='utf-8'))
     chars = ''.join(p.get('chars', [''])[0] for p in font.get('providers', [])
@@ -188,9 +188,9 @@ else:
             ok('字体图集 %dx%d colortype=%d' % (w, h, ct))
 # 淡色字形必须在 lang 里有键（缺了会退化成 fallback 字符，字形可能不对）
 for lang in ('zh_cn', 'en_us'):
-    lp = os.path.join(RP_SRC, 'assets', 'sweetdream', 'lang', lang + '.json')
+    lp = os.path.join(RP_SRC, 'assets', 'fallendream', 'lang', lang + '.json')
     tab = json.load(io.open(lp, encoding='utf-8'))
-    missing = [m for m in ORDER if ('sweetdream.icon.dim.' + m) not in tab]
+    missing = [m for m in ORDER if ('fallendream.icon.dim.' + m) not in tab]
     if missing:
         err('%s.json 缺淡色字形键: %s' % (lang, ', '.join(missing)))
     else:

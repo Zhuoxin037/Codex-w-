@@ -1,0 +1,4 @@
+data merge block -100 90 46 {Page:0,Book:{id:"minecraft:written_book",count:1,components:{"minecraft:written_book_content":{title:"4. 术阵 领域 召唤物",author:"甜梦演示室",resolved:1b,pages:[{"text":"4 / 7   术阵 领域 召唤物\n\n","color":"dark_aqua","bold":true,"extra":[{"text":"术阵是一些武器或者装备需要使用的占位符，上限通常为3（可以提升）。\n领域是技能实际作用的一片范围。\n召唤会生成独立单位，例如追随者。","color":"black","bold":false}]}]}}}}
+function sweetdream_floor:tutorial/stage/actor
+item replace entity @e[type=minecraft:armor_stand,tag=sd.edu_hero,distance=..25,limit=1] weapon.mainhand with minecraft:recovery_compass[minecraft:item_model="sweetdream:job_mana_crystal"]
+summon minecraft:allay -90.4 91.05 49.6 {Tags:["sd.edu_actor","sd.edu_familiar"],NoGravity:1b,NoAI:1b,Silent:1b,Invulnerable:1b,PersistenceRequired:1b,active_effects:[{id:"minecraft:invisibility",duration:-1,show_particles:0b}]}

@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "mottle_vein": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "ol_mottle_vein"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "fallendream:overlimit/apply/mottle_vein"
+    }
+}

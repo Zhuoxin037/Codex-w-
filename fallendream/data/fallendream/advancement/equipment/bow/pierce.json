@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "use": {
+            "trigger": "shot_crossbow",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "pierce"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "fallendream:equipment/bow/pierce/shot"
+    }
+}

@@ -12,7 +12,7 @@ import os
 import re
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SCAN = os.path.join(ROOT, 'sweetdream', 'data')
+SCAN = os.path.join(ROOT, 'fallendream', 'data')
 IDS = ['everfrost', 'hengdao', 'hush', 'liaoyuan', 'liuguang', 'myriad',
        'qiansan', 'rebound', 'remelt', 'rogue_star', 'shadow_blade', 'verdict']
 
@@ -47,7 +47,7 @@ for r, _, fns in os.walk(SCAN):
                 kind = '判据/其它'
             found.setdefault(m.group(1), []).append(
                 (kind, os.path.relpath(p, SCAN).replace('\\', '/'), ln,
-                 'item_model="sweetdream:%s"' % m.group(1) in s))
+                 'item_model="fallendream:%s"' % m.group(1) in s))
 
 for i in IDS:
     rows = found.get(i, [])

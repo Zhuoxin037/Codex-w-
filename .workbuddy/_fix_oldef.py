@@ -12,7 +12,7 @@ import os
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-P = os.path.join(ROOT, 'sweetdream', 'data', 'sweetdream', 'function',
+P = os.path.join(ROOT, 'fallendream', 'data', 'fallendream', 'function',
                  'overlimit', 'def', 'load.mcfunction')
 
 HEAD = '{"text":"%s","color":"gold","bold":true,"italic":false}'
@@ -96,6 +96,9 @@ def main():
         io.open(P, 'w', encoding='utf-8', newline='\n').write('\n'.join(out))
         print('已写回')
 
+
+from _ol_cost_policy import rewrite_definition
+NEW = {uid: rewrite_definition(uid, line) for uid, line in NEW.items()}
 
 if __name__ == '__main__':
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')

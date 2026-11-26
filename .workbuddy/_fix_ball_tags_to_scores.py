@@ -12,7 +12,7 @@
 """
 import os, re, sys, io
 
-ROOT = r"D:\数据包\sweetdream\data"
+ROOT = r"D:\数据包\fallendream\data"
 TARGETS = ["zx.ball_touch", "zx.ball_hit", "zx.bt"]
 
 ADD_RE = re.compile(r'tag (\S*@[ea]\[[^\]]*\]) add (zx\.(?:ball_touch|ball_hit|bt))(?![\w.])')

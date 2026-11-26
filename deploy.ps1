@@ -1,5 +1,5 @@
 ﻿# ============================================================
-#  一键把 manacore-1.0.0 和 sweetdream 部署到存档的 datapacks
+#  一键把 manacore-1.0.0 和 fallendream 部署到存档的 datapacks
 # ------------------------------------------------------------
 #  用法:
 #    1) 双击「部署到存档.bat」                      -> 默认存档 测试包体
@@ -33,7 +33,7 @@ if (-not (Test-Path -LiteralPath (Join-Path $Save 'level.dat'))) {
 
 $pairs = @(
 	@{ Name = 'manacore-1.0.0'; Src = (Join-Path $Src 'manacore-1.0.0') },
-	@{ Name = 'sweetdream';     Src = (Join-Path $Src 'sweetdream') }
+	@{ Name = 'fallendream';     Src = (Join-Path $Src 'fallendream') }
 )
 
 # --- 部署前的"显示同步"(O09: 必需, 不许静默跳过) ---
@@ -89,16 +89,16 @@ foreach ($p in $pairs) {
 #   注意: 这个整合包开了版本隔离, 所以游戏目录是「版本文件夹」而不是 .minecraft;
 #   从存档路径往上两层正好是版本文件夹。
 #   ★ 2026-10-10(F20 修): 目标改成本实例 options.txt 里**实际加载**的那一份 ——
-#     `sweetdream_rp_完整版`。原来固定抄老包 `sweetdream_rp`, 而游戏根本没启用它
+#     `fallendream_rp_完整版`。原来固定抄老包 `fallendream_rp`, 而游戏根本没启用它
 #     ⇒ 只改老包再一键部署, 游戏外观毫无变化(工作区与游戏不一致)。
-#   ★ 2026-10-13 起资源包**只留一份** = sweetdream_rp_完整版(老包 sweetdream_rp 与
-#     覆盖层 sweetdream_rp_原版风 已删除), 它不再是"合并产物", 也没有 build 这一步。
+#   ★ 2026-10-13 起资源包**只留一份** = fallendream_rp_完整版(老包 fallendream_rp 与
+#     覆盖层 fallendream_rp_原版风 已删除), 它不再是"合并产物", 也没有 build 这一步。
 #     改模型/贴图直接改它, 然后一键部署 + 游戏内 F3+T。
 #     (顺带修掉一个老毛病: 以前三个 sync_*_display 同步的是老包, 而游戏加载的是完整版
 #      ⇒ "改了外观没效果"; 现在两边同一份, 不会再犯。)
-#     想恢复旧工作流: git checkout <本次之前的提交> -- sweetdream_rp sweetdream_rp_原版风
-$RpSrc = Join-Path $Src 'sweetdream_rp_完整版'
-$RpName = 'sweetdream_rp_完整版'
+#     想恢复旧工作流: git checkout <本次之前的提交> -- fallendream_rp fallendream_rp_原版风
+$RpSrc = Join-Path $Src 'fallendream_rp_完整版'
+$RpName = 'fallendream_rp_完整版'
 if (Test-Path -LiteralPath $RpSrc) {
 	try {
 		$GameDir = Split-Path (Split-Path $Save)
@@ -119,7 +119,7 @@ Write-Host ''
 Write-Host '  下一步:'
 Write-Host '    1) 保存并退出世界后重新进入；服务器则重启（新增/修改附魔、伤害类型等注册表时，/reload 不会更新它们）'
 Write-Host '       如果只修改了函数，可以在游戏内执行 /reload。'
-Write-Host '    2) 第一次装的话, 去「选项 -> 资源包」把 sweetdream_rp_完整版 启用(否则生物头顶只显示翻译键原文)'
+Write-Host '    2) 第一次装的话, 去「选项 -> 资源包」把 fallendream_rp_完整版 启用(否则生物头顶只显示翻译键原文)'
 Write-Host '    3) 改过资源包的话按 F3+T 重载资源包(/reload 不重载资源包)'
 Write-Host ''
 Read-Host '按回车关闭'

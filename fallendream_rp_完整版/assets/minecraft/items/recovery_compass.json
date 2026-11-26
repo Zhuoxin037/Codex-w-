@@ -1,0 +1,1243 @@
+{
+  "hand_animation_on_swap": false,
+  "model": {
+    "type": "minecraft:range_dispatch",
+    "property": "minecraft:custom_model_data",
+    "index": 0,
+    "fallback": {
+      "type": "minecraft:range_dispatch",
+      "entries": [
+        {
+          "model": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/recovery_compass_16"
+          },
+          "threshold": 0.0
+        },
+        {
+          "model": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/recovery_compass_17"
+          },
+          "threshold": 0.5
+        },
+        {
+          "model": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/recovery_compass_18"
+          },
+          "threshold": 1.5
+        },
+        {
+          "model": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/recovery_compass_19"
+          },
+          "threshold": 2.5
+        },
+        {
+          "model": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/recovery_compass_20"
+          },
+          "threshold": 3.5
+        },
+        {
+          "model": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/recovery_compass_21"
+          },
+          "threshold": 4.5
+        },
+        {
+          "model": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/recovery_compass_22"
+          },
+          "threshold": 5.5
+        },
+        {
+          "model": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/recovery_compass_23"
+          },
+          "threshold": 6.5
+        },
+        {
+          "model": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/recovery_compass_24"
+          },
+          "threshold": 7.5
+        },
+        {
+          "model": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/recovery_compass_25"
+          },
+          "threshold": 8.5
+        },
+        {
+          "model": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/recovery_compass_26"
+          },
+          "threshold": 9.5
+        },
+        {
+          "model": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/recovery_compass_27"
+          },
+          "threshold": 10.5
+        },
+        {
+          "model": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/recovery_compass_28"
+          },
+          "threshold": 11.5
+        },
+        {
+          "model": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/recovery_compass_29"
+          },
+          "threshold": 12.5
+        },
+        {
+          "model": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/recovery_compass_30"
+          },
+          "threshold": 13.5
+        },
+        {
+          "model": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/recovery_compass_31"
+          },
+          "threshold": 14.5
+        },
+        {
+          "model": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/recovery_compass_00"
+          },
+          "threshold": 15.5
+        },
+        {
+          "model": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/recovery_compass_01"
+          },
+          "threshold": 16.5
+        },
+        {
+          "model": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/recovery_compass_02"
+          },
+          "threshold": 17.5
+        },
+        {
+          "model": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/recovery_compass_03"
+          },
+          "threshold": 18.5
+        },
+        {
+          "model": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/recovery_compass_04"
+          },
+          "threshold": 19.5
+        },
+        {
+          "model": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/recovery_compass_05"
+          },
+          "threshold": 20.5
+        },
+        {
+          "model": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/recovery_compass_06"
+          },
+          "threshold": 21.5
+        },
+        {
+          "model": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/recovery_compass_07"
+          },
+          "threshold": 22.5
+        },
+        {
+          "model": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/recovery_compass_08"
+          },
+          "threshold": 23.5
+        },
+        {
+          "model": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/recovery_compass_09"
+          },
+          "threshold": 24.5
+        },
+        {
+          "model": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/recovery_compass_10"
+          },
+          "threshold": 25.5
+        },
+        {
+          "model": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/recovery_compass_11"
+          },
+          "threshold": 26.5
+        },
+        {
+          "model": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/recovery_compass_12"
+          },
+          "threshold": 27.5
+        },
+        {
+          "model": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/recovery_compass_13"
+          },
+          "threshold": 28.5
+        },
+        {
+          "model": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/recovery_compass_14"
+          },
+          "threshold": 29.5
+        },
+        {
+          "model": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/recovery_compass_15"
+          },
+          "threshold": 30.5
+        },
+        {
+          "model": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/recovery_compass_16"
+          },
+          "threshold": 31.5
+        }
+      ],
+      "property": "minecraft:compass",
+      "scale": 32.0,
+      "target": "recovery"
+    },
+    "entries": [
+      {
+        "threshold": 1.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/mana_up_a"
+        }
+      },
+      {
+        "threshold": 2.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/mana_up_b"
+        }
+      },
+      {
+        "threshold": 3.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/mana_up_o"
+        }
+      },
+      {
+        "threshold": 4.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/mana_gain_a"
+        }
+      },
+      {
+        "threshold": 5.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/mana_gain_b"
+        }
+      },
+      {
+        "threshold": 6.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/mana_gain_o"
+        }
+      },
+      {
+        "threshold": 7.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_liuguang"
+        }
+      },
+      {
+        "threshold": 8.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/coolant_a"
+        }
+      },
+      {
+        "threshold": 9.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/coolant_b"
+        }
+      },
+      {
+        "threshold": 10.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/coolant_o"
+        }
+      },
+      {
+        "threshold": 11.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/harden_a"
+        }
+      },
+      {
+        "threshold": 12.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/harden_b"
+        }
+      },
+      {
+        "threshold": 13.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/harden_o"
+        }
+      },
+      {
+        "threshold": 14.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/mana_surge_a"
+        }
+      },
+      {
+        "threshold": 15.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/mana_surge_b"
+        }
+      },
+      {
+        "threshold": 16.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/mana_surge_o"
+        }
+      },
+      {
+        "threshold": 17.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/vision_a"
+        }
+      },
+      {
+        "threshold": 18.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/vision_b"
+        }
+      },
+      {
+        "threshold": 19.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/vision_o"
+        }
+      },
+      {
+        "threshold": 20.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_brain_leech"
+        }
+      },
+      {
+        "threshold": 21.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_spine_symbiote"
+        }
+      },
+      {
+        "threshold": 22.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/uncolor"
+        }
+      },
+      {
+        "threshold": 23.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/torch"
+        }
+      },
+      {
+        "threshold": 24.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/boil"
+        }
+      },
+      {
+        "threshold": 25.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/night_vision"
+        }
+      },
+      {
+        "threshold": 26.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/life_up_a"
+        }
+      },
+      {
+        "threshold": 27.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/life_up_b"
+        }
+      },
+      {
+        "threshold": 28.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/life_up_o"
+        }
+      },
+      {
+        "threshold": 29.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_myriad"
+        }
+      },
+      {
+        "threshold": 30.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_stellar_elegy"
+        }
+      },
+      {
+        "threshold": 31.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_dusk_dawn"
+        }
+      },
+      {
+        "threshold": 32.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_rogue_star"
+        }
+      },
+      {
+        "threshold": 33.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_shadow_blade"
+        }
+      },
+      {
+        "threshold": 34.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_deepsea_echo"
+        }
+      },
+      {
+        "threshold": 35.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_everfrost"
+        }
+      },
+      {
+        "threshold": 36.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_flame_brokenbody"
+        }
+      },
+      {
+        "threshold": 37.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_sickle_dreams"
+        }
+      },
+      {
+        "threshold": 38.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_hengdao"
+        }
+      },
+      {
+        "threshold": 39.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_red_lotus"
+        }
+      },
+      {
+        "threshold": 40.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_charge"
+        }
+      },
+      {
+        "threshold": 41.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_anion"
+        }
+      },
+      {
+        "threshold": 42.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_cold_crow"
+        }
+      },
+      {
+        "threshold": 43.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_bone_erode"
+        }
+      },
+      {
+        "threshold": 44.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_sculk_echo"
+        }
+      },
+      {
+        "threshold": 45.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_dream_reader"
+        }
+      },
+      {
+        "threshold": 46.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_begonia"
+        }
+      },
+      {
+        "threshold": 47.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_polarized_light"
+        }
+      },
+      {
+        "threshold": 48.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_dionysus_helmet"
+        }
+      },
+      {
+        "threshold": 49.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_furnace_core"
+        }
+      },
+      {
+        "threshold": 50.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/neuro_a"
+        }
+      },
+      {
+        "threshold": 51.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/neuro_b"
+        }
+      },
+      {
+        "threshold": 52.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/neuro_o"
+        }
+      },
+      {
+        "threshold": 53.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_arc"
+        }
+      },
+      {
+        "threshold": 54.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_tinder"
+        }
+      },
+      {
+        "threshold": 55.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_fissure"
+        }
+      },
+      {
+        "threshold": 56.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_chime"
+        }
+      },
+      {
+        "threshold": 57.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_yebu"
+        }
+      },
+      {
+        "threshold": 58.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_rebound"
+        }
+      },
+      {
+        "threshold": 59.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_tidemark"
+        }
+      },
+      {
+        "threshold": 60.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_grayscale"
+        }
+      },
+      {
+        "threshold": 61.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_backflow_tide"
+        }
+      },
+      {
+        "threshold": 62.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_profane"
+        }
+      },
+      {
+        "threshold": 63.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_way_back"
+        }
+      },
+      {
+        "threshold": 64.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_gousi"
+        }
+      },
+      {
+        "threshold": 65.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_thunder_wedge"
+        }
+      },
+      {
+        "threshold": 66.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_xiugou"
+        }
+      },
+      {
+        "threshold": 67.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_draught"
+        }
+      },
+      {
+        "threshold": 68.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_skyvault"
+        }
+      },
+      {
+        "threshold": 69.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_frost_carve"
+        }
+      },
+      {
+        "threshold": 70.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_ballad"
+        }
+      },
+      {
+        "threshold": 71.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_chenyuan"
+        }
+      },
+      {
+        "threshold": 72.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_anchor"
+        }
+      },
+      {
+        "threshold": 73.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_scorch_bone"
+        }
+      },
+      {
+        "threshold": 74.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_deep_brine"
+        }
+      },
+      {
+        "threshold": 75.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_meteor"
+        }
+      },
+      {
+        "threshold": 76.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_backstring"
+        }
+      },
+      {
+        "threshold": 77.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_reverse_string"
+        }
+      },
+      {
+        "threshold": 78.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_dark_sun"
+        }
+      },
+      {
+        "threshold": 79.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_dragon_tongue"
+        }
+      },
+      {
+        "threshold": 80.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_five_curses"
+        }
+      },
+      {
+        "threshold": 81.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_pour_sack"
+        }
+      },
+      {
+        "threshold": 82.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_burst_bank"
+        }
+      },
+      {
+        "threshold": 83.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_apocalypse"
+        }
+      },
+      {
+        "threshold": 84.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_fate_thread"
+        }
+      },
+      {
+        "threshold": 85.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_cage_day"
+        }
+      },
+      {
+        "threshold": 86.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_fallen_dream"
+        }
+      },
+      {
+        "threshold": 87.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_thunderrod"
+        }
+      },
+      {
+        "threshold": 88.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_bent_ray"
+        }
+      },
+      {
+        "threshold": 89.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_overflow"
+        }
+      },
+      {
+        "threshold": 90.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_intent"
+        }
+      },
+      {
+        "threshold": 91.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_air_step"
+        }
+      },
+      {
+        "threshold": 92.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_breath_hold"
+        }
+      },
+      {
+        "threshold": 93.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_spirit_sight"
+        }
+      },
+      {
+        "threshold": 94.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_fade"
+        }
+      },
+      {
+        "threshold": 95.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_resonance"
+        }
+      },
+      {
+        "threshold": 96.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_beach_vein"
+        }
+      },
+      {
+        "threshold": 97.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_bind_ember"
+        }
+      },
+      {
+        "threshold": 98.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_ember_string"
+        }
+      },
+      {
+        "threshold": 99.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_flint_hat"
+        }
+      },
+      {
+        "threshold": 100.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_light_pillow"
+        }
+      },
+      {
+        "threshold": 101.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_mirror_sleep"
+        }
+      },
+      {
+        "threshold": 102.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_smoke_step"
+        }
+      },
+      {
+        "threshold": 103.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_tide_watch"
+        }
+      },
+      {
+        "threshold": 104.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_tread_ash"
+        }
+      },
+      {
+        "threshold": 105.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_boil_trace"
+        }
+      },
+      {
+        "threshold": 106.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_bone_breaker"
+        }
+      },
+      {
+        "threshold": 107.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_cross_dream"
+        }
+      },
+      {
+        "threshold": 108.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_death_bell"
+        }
+      },
+      {
+        "threshold": 109.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_detach"
+        }
+      },
+      {
+        "threshold": 110.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_external_power"
+        }
+      },
+      {
+        "threshold": 111.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_feather_sleep"
+        }
+      },
+      {
+        "threshold": 112.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_firefly_staff"
+        }
+      },
+      {
+        "threshold": 113.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_flesh_mill"
+        }
+      },
+      {
+        "threshold": 114.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_gather_energy"
+        }
+      },
+      {
+        "threshold": 115.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_intone"
+        }
+      },
+      {
+        "threshold": 116.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_last_breath"
+        }
+      },
+      {
+        "threshold": 117.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_magic_theory"
+        }
+      },
+      {
+        "threshold": 118.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_mana_imbue"
+        }
+      },
+      {
+        "threshold": 119.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_pierce"
+        }
+      },
+      {
+        "threshold": 120.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_rain_trace"
+        }
+      },
+      {
+        "threshold": 121.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_rebirth_veil"
+        }
+      },
+      {
+        "threshold": 122.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_still_sky"
+        }
+      },
+      {
+        "threshold": 123.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_thorn_vein"
+        }
+      },
+      {
+        "threshold": 124.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_bearing"
+        }
+      },
+      {
+        "threshold": 125.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_pivot"
+        }
+      },
+      {
+        "threshold": 126.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_purge_fire"
+        }
+      },
+      {
+        "threshold": 127.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_blaze_armor"
+        }
+      },
+      {
+        "threshold": 128.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_breathing_soil"
+        }
+      },
+      {
+        "threshold": 129.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_cease_war"
+        }
+      },
+      {
+        "threshold": 130.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_char_coat"
+        }
+      },
+      {
+        "threshold": 131.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_condensed_shell"
+        }
+      },
+      {
+        "threshold": 132.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_crimson_seam"
+        }
+      },
+      {
+        "threshold": 133.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_needle_sleep"
+        }
+      },
+      {
+        "threshold": 134.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_eagle_hat"
+        }
+      },
+      {
+        "threshold": 135.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_empty_camp"
+        }
+      },
+      {
+        "threshold": 136.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_empty_cicada"
+        }
+      },
+      {
+        "threshold": 137.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_intravenous_pump"
+        }
+      },
+      {
+        "threshold": 138.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_lvshuang"
+        }
+      },
+      {
+        "threshold": 139.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_mottle_vein"
+        }
+      },
+      {
+        "threshold": 140.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_agony"
+        }
+      },
+      {
+        "threshold": 141.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_angel_core"
+        }
+      },
+      {
+        "threshold": 142.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "fallendream:item/stone/ol_chengxing"
+        }
+      }
+    ]
+  }
+}

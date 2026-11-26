@@ -18,7 +18,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from lore_fmt import rebuild, json_to_snbt  # noqa: E402
 
-ROOT = r"D:\数据包\sweetdream\data\sweetdream\function\equipment"
+ROOT = r"D:\数据包\fallendream\data\fallendream\function\equipment"
 # ★ _chk_gen_drift.py 会把 BASE 改到临时目录来重跑本生成器（判「生成器 ↔ 磁盘」漂移）。
 #   所以 main() 里一律用 BASE, 别直接用 ROOT。
 BASE = ROOT
@@ -76,7 +76,7 @@ def pad_sections(lore):
 # 碎骨｜罕见｜弩
 # ============================================================
 SUIGU_NOTE = """# ============================================================
-# sweetdream:equipment/bow/bone_breaker/give —— 给一件「碎骨」（罕见 · 弩）
+# fallendream:equipment/bow/bone_breaker/give —— 给一件「碎骨」（罕见 · 弩）
 # ------------------------------------------------------------
 # 【custom_data】"bone_breaker" -> 装备 id; 判定一律写 custom_data~{zx:["bone_breaker"]}
 # 【触发】"每次射击" ⇒ 走射击类进度（弩无右键主动，本包口径）。
@@ -86,7 +86,7 @@ SUIGU_NOTE = """# ============================================================
 #      而原版 /damage 会被**无敌帧**吞掉绝大部分 ⇒ 必须改成"每 N 刻结算一次"
 #      （包内既有口径：同一目标连击错开 10 tick，见引雷针 K9），否则伤害几乎全丢。
 #   ② "跟着准星移动" ⇒ 每刻重刷 `at @s` + 朝向走 facing/^ 坐标，别读 Pos（卡顿坑 1）。
-# 【外观】2026-10-27 已接入：item_model="sweetdream:crossbow_bone_breaker"（6 态）。
+# 【外观】2026-10-27 已接入：item_model="fallendream:crossbow_bone_breaker"（6 态）。
 # ============================================================"""
 
 SUIGU_LORE = [
@@ -102,7 +102,7 @@ SUIGU_LORE = [
 # 明烛｜传说｜头盔
 # ============================================================
 MINGZHU_NOTE = """# ============================================================
-# sweetdream:equipment/armor/bright_candle/give —— 给一件「明烛」（传说 · 头盔）
+# fallendream:equipment/armor/bright_candle/give —— 给一件「明烛」（传说 · 头盔）
 # ------------------------------------------------------------
 # 【custom_data】"bright_candle" -> 装备 id; 判定写 custom_data~{zx:["bright_candle"]}
 # 【机制】对带「流火」的生物造成伤害 ⇒ 在其位置留 10 秒“烛火”；烛火**内圈 3 格攒 3 秒 /
@@ -112,7 +112,7 @@ MINGZHU_NOTE = """# ============================================================
 #   ① 流火 → 夜火是**替换不是叠加**（余烬 burned_out 的教训：叠加会变成刷魔力漏洞）。
 #   ② 本件是"造夜火"，与**烛跬**（消费夜火/流火回蓝）天然上下游，不冲突。
 #   ③ 回魔类一律每 20 刻结算一次，别每刻跑。
-# 【外观】2026-10-27 已接入：item_model + equippable -> sweetdream:armor_<id>（16×16 图标 / 64×32 穿戴层）；贴图由 build_vanilla_armor.py 生成，打包走 _sync_armor_rp.py（五份文件缺一即紫黑块，坑195）。
+# 【外观】2026-10-27 已接入：item_model + equippable -> fallendream:armor_<id>（16×16 图标 / 64×32 穿戴层）；贴图由 build_vanilla_armor.py 生成，打包走 _sync_armor_rp.py（五份文件缺一即紫黑块，坑195）。
 # ============================================================"""
 
 MINGZHU_LORE = [
@@ -131,7 +131,7 @@ MINGZHU_LORE = [
 # 借火｜传说｜胸甲
 # ============================================================
 JIEHUO_NOTE = """# ============================================================
-# sweetdream:equipment/armor/borrow_fire/give —— 给一件「借火」（传说 · 胸甲）
+# fallendream:equipment/armor/borrow_fire/give —— 给一件「借火」（传说 · 胸甲）
 # ------------------------------------------------------------
 # 【custom_data】"borrow_fire" -> 装备 id; 判定写 custom_data~{zx:["borrow_fire"]}
 # 【机制】打燃烧中的生物 ⇒ 记一次"可借火"；下一次普攻命中未带流火者 ⇒ 附加流火 →
@@ -142,7 +142,7 @@ JIEHUO_NOTE = """# ============================================================
 #   转移给自己的数值同样只能按档给 —— lore 与实现对不上时以**分档**为准（已与设计稿同步）。
 # 【★ 两个顺序 ★】先附加流火 → 再结束燃烧 → 再结算真伤（反过来判定会塌）；
 #   剩余燃烧时间读目标 Fire(刻)/20，不足 1 秒按 1 秒保底。
-# 【外观】2026-10-27 已接入：item_model + equippable -> sweetdream:armor_<id>（16×16 图标 / 64×32 穿戴层）；贴图由 build_vanilla_armor.py 生成，打包走 _sync_armor_rp.py（五份文件缺一即紫黑块，坑195）。
+# 【外观】2026-10-27 已接入：item_model + equippable -> fallendream:armor_<id>（16×16 图标 / 64×32 穿戴层）；贴图由 build_vanilla_armor.py 生成，打包走 _sync_armor_rp.py（五份文件缺一即紫黑块，坑195）。
 # ============================================================"""
 
 JIEHUO_LORE = [
@@ -161,7 +161,7 @@ JIEHUO_LORE = [
 # 心脉｜传说｜胸甲
 # ============================================================
 XINMAI_NOTE = """# ============================================================
-# sweetdream:equipment/armor/heart_vein/give —— 给一件「心脉」（传说 · 胸甲）
+# fallendream:equipment/armor/heart_vein/give —— 给一件「心脉」（传说 · 胸甲）
 # ------------------------------------------------------------
 # 【custom_data】"heart_vein" -> 装备 id; 判定写 custom_data~{zx:["heart_vein"]}
 # 【机制】受生物伤害 ⇒ 来源附加「噬心」+3 秒缓慢Ⅱ；自身消耗噬心 ⇒ 给它 5 秒「泵动」（最多 12 秒）；
@@ -173,7 +173,7 @@ XINMAI_NOTE = """# ============================================================
 #      否则被击退/高速冲撞的怪一秒触发十几次，按最大生命比例会直接打穿 Boss。
 #   ③ 吸血建议封顶（设计稿建议每次 6 点），Boss 高血量下不封顶等于一跳回满。
 #   ④ 泵动伤害必须有玩家归属，否则不进账本、不吃乘区、也不触发吸血。
-# 【外观】2026-10-27 已接入：item_model + equippable -> sweetdream:armor_<id>（16×16 图标 / 64×32 穿戴层）；贴图由 build_vanilla_armor.py 生成，打包走 _sync_armor_rp.py（五份文件缺一即紫黑块，坑195）。
+# 【外观】2026-10-27 已接入：item_model + equippable -> fallendream:armor_<id>（16×16 图标 / 64×32 穿戴层）；贴图由 build_vanilla_armor.py 生成，打包走 _sync_armor_rp.py（五份文件缺一即紫黑块，坑195）。
 # ============================================================"""
 
 XINMAI_LORE = [
@@ -192,7 +192,7 @@ XINMAI_LORE = [
 # 剖面｜传说｜护腿
 # ============================================================
 POUMIAN_NOTE = """# ============================================================
-# sweetdream:equipment/armor/profile/give —— 给一件「剖面」（传说 · 护腿）
+# fallendream:equipment/armor/profile/give —— 给一件「剖面」（传说 · 护腿）
 # ------------------------------------------------------------
 # 【custom_data】"profile" -> 装备 id; 判定写 custom_data~{zx:["profile"]}
 # 【机制】累计消耗 100 魔力 ⇒ 5 格内当前生命 >50% 的生物附加「噬心」，之后下一次其他技能伤害（当前魔力、生命值等倍率）+20%；
@@ -204,7 +204,7 @@ POUMIAN_NOTE = """# ============================================================
 #   ② "下一次其他技能伤害 +20%"仅写oth通道加算，触发前持续保留；其他通道不消耗。
 #   ③ "3 次伤害"按**每只生物分别计数**，全场合计会被一发 AOE 白嫖；回血要节流。
 #   ④ 与绯缝（真伤命中噬心目标回血）同触发面，靠兑现方式错开（计数流 vs 真伤流）。
-# 【外观】2026-10-27 已接入：item_model + equippable -> sweetdream:armor_<id>（16×16 图标 / 64×32 穿戴层）；贴图由 build_vanilla_armor.py 生成，打包走 _sync_armor_rp.py（五份文件缺一即紫黑块，坑195）。
+# 【外观】2026-10-27 已接入：item_model + equippable -> fallendream:armor_<id>（16×16 图标 / 64×32 穿戴层）；贴图由 build_vanilla_armor.py 生成，打包走 _sync_armor_rp.py（五份文件缺一即紫黑块，坑195）。
 # ============================================================"""
 
 POUMIAN_LORE = [
@@ -221,7 +221,7 @@ POUMIAN_LORE = [
 # 折潮｜传说｜头盔
 # ============================================================
 ZHECHAO_NOTE = """# ============================================================
-# sweetdream:equipment/armor/tide_fold/give —— 给一件「折潮」（传说 · 头盔）
+# fallendream:equipment/armor/tide_fold/give —— 给一件「折潮」（传说 · 头盔）
 # ------------------------------------------------------------
 # 【custom_data】"tide_fold" -> 装备 id; 判定写 custom_data~{zx:["tide_fold"]}
 # 【机制】消耗「渊海」或累计消耗 150 魔力 ⇒ 在自身位置生成一面长 8 格（垂直于视线）、
@@ -233,7 +233,7 @@ ZHECHAO_NOTE = """# ============================================================
 #      同一刻同一面墙只结算一次穿越；每2秒回魔的门控独立。
 #   ③ "法术"口径要窄（本稿 = 法杖普攻法球 + 法杖主动法球），不含箭矢/斩击/光束/爆炸。
 #   ④ 水墙**不是领域**，不占术阵位；它是私有资源，不进标签词表。
-# 【外观】2026-10-27 已接入：item_model + equippable -> sweetdream:armor_<id>（16×16 图标 / 64×32 穿戴层）；贴图由 build_vanilla_armor.py 生成，打包走 _sync_armor_rp.py（五份文件缺一即紫黑块，坑195）。
+# 【外观】2026-10-27 已接入：item_model + equippable -> fallendream:armor_<id>（16×16 图标 / 64×32 穿戴层）；贴图由 build_vanilla_armor.py 生成，打包走 _sync_armor_rp.py（五份文件缺一即紫黑块，坑195）。
 # ============================================================"""
 
 ZHECHAO_LORE = [
@@ -252,7 +252,7 @@ ZHECHAO_LORE = [
 # 返汐｜传说｜靴子
 # ============================================================
 FANXI_NOTE = """# ============================================================
-# sweetdream:equipment/armor/backflow/give —— 给一件「返汐」（传说 · 靴子）
+# fallendream:equipment/armor/backflow/give —— 给一件「返汐」（传说 · 靴子）
 # ------------------------------------------------------------
 # 【custom_data】"ebb_tide" -> 装备 id; 判定写 custom_data~{zx:["ebb_tide"]}
 #   ★ 别写成 backflow —— 包里已有一把剑叫 backflow_tide（回潮），名字太近容易看串。
@@ -265,7 +265,7 @@ FANXI_NOTE = """# ============================================================
 #   （折径 pick_mul 少了 m7/m8 就是这个毛病）。
 # 【★ 其余 ★】海浪每 0.5 秒采样一次（位移 >0.8 格才补片），每只渊海生物各留一片、最多 6 片；
 #   衰减量化为每秒回落 10 个百分点（不是立刻清零，否则拉扯进出没手感）。
-# 【外观】2026-10-27 已接入：item_model + equippable -> sweetdream:armor_<id>（16×16 图标 / 64×32 穿戴层）；贴图由 build_vanilla_armor.py 生成，打包走 _sync_armor_rp.py（五份文件缺一即紫黑块，坑195）。
+# 【外观】2026-10-27 已接入：item_model + equippable -> fallendream:armor_<id>（16×16 图标 / 64×32 穿戴层）；贴图由 build_vanilla_armor.py 生成，打包走 _sync_armor_rp.py（五份文件缺一即紫黑块，坑195）。
 # ============================================================"""
 
 FANXI_LORE = [
@@ -284,7 +284,7 @@ FANXI_LORE = [
 # 浮光｜传说｜头盔
 # ============================================================
 FUGUANG_NOTE = """# ============================================================
-# sweetdream:equipment/armor/glimmer/give —— 给一件「浮光」（传说 · 头盔）
+# fallendream:equipment/armor/glimmer/give —— 给一件「浮光」（传说 · 头盔）
 # ------------------------------------------------------------
 # 【custom_data】"glimmer" -> 装备 id; 判定写 custom_data~{zx:["glimmer"]}
 # 【机制·★ 以用户 2026-10-25 16:53 原稿为准 ★】红/绿/黄三色随机 + 集齐转白:
@@ -296,7 +296,7 @@ FUGUANG_NOTE = """# ============================================================
 # 【★ 实装必读 ★】
 #   ① 「光效」「回光」是**私有资源**，不进标签词表（状态只有五个）。
 #   ② 上上版(碎光/合光/暗期)与上版(优先补缺色)都是我自编的，已全部作废 —— 别再复活。
-# 【外观】2026-10-27 已接入：item_model + equippable -> sweetdream:armor_<id>（16×16 图标 / 64×32 穿戴层）；贴图由 build_vanilla_armor.py 生成，打包走 _sync_armor_rp.py（五份文件缺一即紫黑块，坑195）。
+# 【外观】2026-10-27 已接入：item_model + equippable -> fallendream:armor_<id>（16×16 图标 / 64×32 穿戴层）；贴图由 build_vanilla_armor.py 生成，打包走 _sync_armor_rp.py（五份文件缺一即紫黑块，坑195）。
 # ============================================================"""
 
 FUGUANG_LORE = [
@@ -319,7 +319,7 @@ FUGUANG_LORE = [
 # 迟暮｜传说｜护腿
 # ============================================================
 CHIMU_NOTE = """# ============================================================
-# sweetdream:equipment/armor/late_dusk/give —— 给一件「迟暮」（传说 · 护腿）
+# fallendream:equipment/armor/late_dusk/give —— 给一件「迟暮」（传说 · 护腿）
 # ------------------------------------------------------------
 # 【custom_data】"late_dusk" -> 装备 id; 判定写 custom_data~{zx:["late_dusk"]}
 # 【机制·★ 以用户 2026-10-25 16:53 原稿为准 ★】「回光」记账 + 时停 + 伤害记录结算:
@@ -335,7 +335,7 @@ CHIMU_NOTE = """# ============================================================
 #   ② 上上版(暮账/暮痕/背水)与上版(同)都是我自编的，已全部作废 —— 别再复活。
 #   ③ 时停走包内既有 `zx.stop` 口径，别另造一套。
 #   ④ 生命值百分比读 criterion 的 zx.hp_c（免费），**不要** `data get entity Health`。
-# 【外观】2026-10-27 已接入：item_model + equippable -> sweetdream:armor_<id>（16×16 图标 / 64×32 穿戴层）；贴图由 build_vanilla_armor.py 生成，打包走 _sync_armor_rp.py（五份文件缺一即紫黑块，坑195）。
+# 【外观】2026-10-27 已接入：item_model + equippable -> fallendream:armor_<id>（16×16 图标 / 64×32 穿戴层）；贴图由 build_vanilla_armor.py 生成，打包走 _sync_armor_rp.py（五份文件缺一即紫黑块，坑195）。
 # ============================================================"""
 
 CHIMU_LORE = [
@@ -402,7 +402,7 @@ def build(it):
     # 弩的 item_model 在包内惯例是**第一位**（见 bow/arc 等批 5 出品），盔甲在最后
     #   （见 _gen_armor_visual.py），两边顺序不能互换，否则漂移守门会误报。
     if it.get("vis"):
-        comps.append('item_model="sweetdream:%s"' % it["vis"])
+        comps.append('item_model="fallendream:%s"' % it["vis"])
     comps.append('item_name={text:"%s",bold:true,color:%s}' % (it["cn"], it["color"]))
     comps.append("lore=%s" % json_to_snbt(lore))
     comps.append("unbreakable={}")
@@ -410,7 +410,7 @@ def build(it):
     if it.get("ench"):
         # 依附魔回调的装备必须带上四件套（坑 140）: enchantments + glint 关闭
         #   + tooltip 隐藏 enchantments。少任何一件都会"静默失效"或说明多一行。
-        comps.append('enchantments={"sweetdream:%s":1}' % it["ench"])
+        comps.append('enchantments={"fallendream:%s":1}' % it["ench"])
         comps.append("enchantment_glint_override=false")
         comps.append('tooltip_display={hidden_components:["unbreakable","enchantments"]}')
     else:
@@ -420,8 +420,8 @@ def build(it):
     #   equippable 是整体替换 ⇒ slot / asset_id / equip_sound 三件必须给全（坑：少一件 = 穿不上/无音效）。
     if it["cat"] == "armor":
         mat = it["base"].split("_")[0]
-        comps.append('item_model="sweetdream:armor_%s"' % it["eid"])
-        comps.append('equippable={slot:"%s",asset_id:"sweetdream:armor_%s",equip_sound:"%s"}'
+        comps.append('item_model="fallendream:armor_%s"' % it["eid"])
+        comps.append('equippable={slot:"%s",asset_id:"fallendream:armor_%s",equip_sound:"%s"}'
                      % (EQ_SLOT[it["slot"]], it["eid"], ARMOR_SOUND[mat]))
     return "give @s %s[%s]" % (it["base"], ",".join(comps))
 

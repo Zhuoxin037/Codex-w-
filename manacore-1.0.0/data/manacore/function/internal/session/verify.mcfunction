@@ -7,7 +7,7 @@
 # 【出参】命中时把 work.id.ok 置 1b(默认 0b, 由 tick_self 预置)。
 # 【注】u0..u3 是 UUID 的四个 32 位整数, 宏拼进 NBT 匹配器天然合法
 #   (同型先例: internal/damage/mk_from 的 @a[nbt={UUID:[I;$(u0),...]}]、
-#    sweetdream 的 lightless_sea/cap 的 {u0:$(u0),...})。
+#    fallendream 的 lightless_sea/cap 的 {u0:$(u0),...})。
 # 【F01 修(2026-10-10)】本函数是"每秒心跳"与"完整注册"之间的分水岭:
 #   命中 -> 只更新心跳; 未命中 -> 走完整注册。
 # ------------------------------------------------------------

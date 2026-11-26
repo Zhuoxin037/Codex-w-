@@ -25,7 +25,7 @@
 """
 import io, os, importlib.util
 
-BASE = "D:/数据包/sweetdream/data/sweetdream"
+BASE = "D:/数据包/fallendream/data/fallendream"
 
 _spec = importlib.util.spec_from_file_location(
     'lore_fmt', os.path.join(os.path.dirname(os.path.abspath(__file__)), 'lore_fmt.py'))
@@ -109,7 +109,7 @@ for uid, (item, name, color, scope, effect, req) in UP.items():
     # ---- 物品 ----
     give = (
         '# ============================================================\n'
-        '# sweetdream:upgrade/item/%s —— 给一块「%s」\n'
+        '# fallendream:upgrade/item/%s —— 给一块「%s」\n'
         '# ------------------------------------------------------------\n'
         '# 【custom_data】只写一个标记 up_%s :\n'
         '#   进度 advancement/upgrade/%s 靠它认"右键用掉了哪块石头"。\n'
@@ -131,23 +131,23 @@ for uid, (item, name, color, scope, effect, req) in UP.items():
     # ---- 敲入函数 ----
     apply_f = (
         '# ============================================================\n'
-        '# sweetdream:upgrade/apply/%s —— 右键用掉这块「%s」去敲副手的装备\n'
+        '# fallendream:upgrade/apply/%s —— 右键用掉这块「%s」去敲副手的装备\n'
         '# ------------------------------------------------------------\n'
-        '# 【谁调用它】进度 sweetdream:upgrade/%s(consume_item), 以玩家身份\n'
+        '# 【谁调用它】进度 fallendream:upgrade/%s(consume_item), 以玩家身份\n'
         '# 【流程】①撤销进度(不撤的话这个进度一辈子只触发一次)\n'
         '#         ②把 kind/id/cat/cat2 交给 station/api/apply 统一处理\n'
         '#         ③成功 = 这次消耗成立; 失败 = 把材料还回去 + 说明原因\n'
         '# 【为什么 cat/cat2 要一起来】能不能装要看类别, 而拼物品谓词只能走宏,\n'
         '#   所以在这里从定义表读出来一起传进去。\n'
         '# ============================================================\n\n'
-        'advancement revoke @s only sweetdream:upgrade/%s\n\n'
+        'advancement revoke @s only fallendream:upgrade/%s\n\n'
         'data modify storage zx:work st set value {kind:"upgrade",id:"%s",cat:"",cat2:"",of:""}\n'
         'data modify storage zx:work st.cat set from storage zx:config updef."%s".cat\n'
         'data modify storage zx:work st.cat2 set from storage zx:config updef."%s".cat2\n'
-        'function sweetdream:station/api/apply\n\n'
-        'execute if data storage zx:out r{ok:1b} run function sweetdream:upgrade/api/done with storage zx:work st\n'
-        'execute if data storage zx:out r{ok:0b} run function sweetdream:upgrade/item/%s\n'
-        'execute if data storage zx:out r{ok:0b} run function sweetdream:upgrade/api/refuse with storage zx:work st\n'
+        'function fallendream:station/api/apply\n\n'
+        'execute if data storage zx:out r{ok:1b} run function fallendream:upgrade/api/done with storage zx:work st\n'
+        'execute if data storage zx:out r{ok:0b} run function fallendream:upgrade/item/%s\n'
+        'execute if data storage zx:out r{ok:0b} run function fallendream:upgrade/api/refuse with storage zx:work st\n'
     ) % (uid, name, uid, uid, uid, uid, uid, uid)
     w(BASE + "/function/upgrade/apply/%s.mcfunction" % uid, apply_f)
 
@@ -171,7 +171,7 @@ for uid, (item, name, color, scope, effect, req) in UP.items():
         '        }\n'
         '    },\n'
         '    "rewards": {\n'
-        '        "function": "sweetdream:upgrade/apply/%s"\n'
+        '        "function": "fallendream:upgrade/apply/%s"\n'
         '    }\n'
         '}\n'
     ) % (uid, uid, uid)

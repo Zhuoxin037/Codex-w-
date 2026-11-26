@@ -10,7 +10,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / '模型设计/超限石_像素重绘_20261010'
-RP = ROOT / 'sweetdream_rp_完整版'
+RP = ROOT / 'fallendream_rp_完整版'
 SOURCE = ROOT / '.workbuddy/_gen_stone_icons.py'
 constants = {}
 for node in ast.parse(SOURCE.read_text(encoding='utf-8')).body:
@@ -184,7 +184,7 @@ def files_hash(root):
 
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
-    original_assets = files_hash(RP / 'assets/sweetdream/textures/item/stone')
+    original_assets = files_hash(RP / 'assets/fallendream/textures/item/stone')
     original_def = sha(RP / 'assets/minecraft/items/recovery_compass.json')
     expected = {row[0] for row in constants['OL_SPEC']}
     assert len(expected) == 28 and expected == {row[0] for row in DESIGNS}
@@ -195,11 +195,11 @@ def main():
         assert len(rows)==9 and all(len(r)==9 and set(r) <= set('.#+') for r in rows), cid
         masks[cid] = tuple(ch != '.' for row in rows for ch in row)
         assert sum(masks[cid]) >= 15, cid
-        give = ROOT / 'sweetdream/data/sweetdream/function/overlimit/item' / (cid+'.mcfunction')
+        give = ROOT / 'fallendream/data/fallendream/function/overlimit/item' / (cid+'.mcfunction')
         text = give.read_text(encoding='utf-8')
         cmd = int(re.search(r'custom_model_data=\{floats:\[(\d+)\.0f\]\}',text).group(1))
         assert cmd == constants['CMD']['ol_'+cid]
-        assert routing[cmd] == 'sweetdream:item/stone/ol_'+cid
+        assert routing[cmd] == 'fallendream:item/stone/ol_'+cid
         lore = json.loads(re.search(r'lore=(\[.*\]),custom_data=',text).group(1))
         skill_text = [''.join([row.get('text','')] + [v.get('text','') for v in row.get('extra',[])]) for row in lore]
         im = render(cat,colour,rows)
@@ -207,7 +207,7 @@ def main():
         path = OUT / '贴图' / ('ol_'+cid+'.png')
         path.parent.mkdir(exist_ok=True)
         im.save(path)
-        source = RP / 'assets/sweetdream/textures/item/stone' / path.name
+        source = RP / 'assets/fallendream/textures/item/stone' / path.name
         # ★ 批 I1 新增的 4 颗还没进包 -> 没有"原图"; 用重绘本身兜底(对照图上表现为"未变更")
         images[cid] = im
         originals[cid] = Image.open(source).convert('RGBA') if source.exists() else im.copy()
@@ -283,7 +283,7 @@ def main():
             p=Path(item['file']);z.write(p,p.relative_to(OUT).as_posix())
         for name in ['贴图清单.json','说明.md','超限石_24颗_重绘总览.png','超限石_橙蓝组_前后对照.png']:
             z.write(OUT/name,name)
-    assert original_assets == files_hash(RP / 'assets/sweetdream/textures/item/stone')
+    assert original_assets == files_hash(RP / 'assets/fallendream/textures/item/stone')
     assert original_def == sha(RP / 'assets/minecraft/items/recovery_compass.json')
     print(json.dumps({'textures':28,'unique_symbols':28,'minimum_symbol_difference':nearest[0],
                       'game_assets_unchanged':True,'preview':str(OUT/'超限石_28颗_重绘总览.png'),

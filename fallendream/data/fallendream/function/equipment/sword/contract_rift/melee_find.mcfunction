@@ -1,0 +1,1 @@
+$execute as @e[tag=zx.cr_mark,distance=0..,nbt={data:{owner:"$(owner)",t0:$(t0),t1:$(t1),t2:$(t2),t3:$(t3)}},scores={zx.cr_layers=1..},sort=nearest,limit=1] at @s if score @s zx.cr_until > #now manacore.meta run function fallendream:equipment/sword/contract_rift/offense

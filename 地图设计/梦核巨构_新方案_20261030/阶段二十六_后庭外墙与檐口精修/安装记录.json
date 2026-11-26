@@ -1,0 +1,18 @@
+{
+  "time": "2026-11-09T18:23:03.0334867+08:00",
+  "target": "D:\\PCL 正式版 2.10.0\\.minecraft\\versions\\1.21.5-Fabric 0.16.10\\saves\\梦核哥特_承接修复与照明补漏_20261102",
+  "display_name": "梦核哥特_天光与照明修复_20261102",
+  "backup": "D:\\数据包\\地图设计\\梦核巨构_新方案_20261030\\阶段二十六_后庭外墙与檐口精修\\修改前完整备份.zip",
+  "archive": "D:\\数据包\\地图设计\\梦核巨构_新方案_20261030\\阶段二十六_后庭外墙与檐口精修\\后庭外墙与檐口精修_完整存档.zip",
+  "verified_region_files": 2,
+  "non_region_files_changed": 0,
+  "additional_game_worlds": 0,
+  "all_hashes_match": true,
+  "native_checks": 133,
+  "reopen_checks": 86,
+  "navigation_checks": 60,
+  "verified_content_files": 694,
+  "all_content_files_match_saved_copy": true,
+  "protected_user_positions_verified": 24,
+  "patch_sha256": "d40a8337e86415b74677b3385804f81d8999e69415f3b7b1fe7a6cd2b351acac"
+}

@@ -1,0 +1,4 @@
+# 落溟 — 史诗 · 靴子 · 通用
+# 真源：.workbuddy/batch22_20261107/build_give.py；用户 2026-11-07 定稿，技能已接入。
+# 数值与文案逐字照用户原稿，仅按 fallendream-lore 做排版。
+give @s diamond_boots[item_name={"text":"落溟","bold":true,"color":"gold"},lore=[{"text":"精器 · 靴子 · 通用","color":"aqua","bold":true,"italic":false},{"text":" ","italic":false},{"text":"✦ 被动技能","color":"gold","bold":true,"italic":false},{"text":"最大魔力值 +100。自身释放技能后在自身","color":"gray","italic":false},{"text":"位置展开半径 3 格、持续 5 秒的领域，","color":"gray","italic":false},{"text":"该领域占 1 个术阵位，每 12 秒最多一次。","color":"gray","italic":false},{"text":"领域内的生物每秒被小力拉向领域中心，","color":"gray","italic":false},{"text":"并获得 1 秒缓慢Ⅱ。","color":"gray","italic":false}],unbreakable={},custom_data={zx:["falling_deep","boots","armor"],rarity:"t3",tags:["max_mana","field","formation","attract","slow","debuff"]},tooltip_display={"hidden_components":["minecraft:unbreakable"]},enchantment_glint_override=false,item_model="fallendream:armor_falling_deep"]

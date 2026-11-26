@@ -1,6 +1,6 @@
 import io, os, sys
 sys.stdout.reconfigure(encoding='utf-8')
-ROOT = r'D:/数据包/sweetdream/data/sweetdream/function/equipment'
+ROOT = r'D:/数据包/fallendream/data/fallendream/function/equipment'
 
 names = ['退汐', '命缕', '彼岸', '眠羽', '盲烛', '丧铃', '重溟',
          '断页', '归息', '续火', '醒梦钟', '长夜', '渡梦', '回潮扣']

@@ -1,0 +1,2 @@
+data merge block -100 90 46 {Page:0,Book:{id:"minecraft:written_book",count:1,components:{"minecraft:written_book_content":{title:"6. 升级与超限",author:"甜梦演示室",resolved:1b,pages:[{"text":"6 / 7   升级与超限\n\n","color":"dark_aqua","bold":true,"extra":[{"text":"要强化的装备放副手，升级石或超限石放主手，右键即可。\n升级石有装备类别和阶位要求。每个装备通常最多只能装备两个升级。\n超限石按装备配对，超限通常会大幅度提高装备的机制和伤害等。","color":"black","bold":false}]}]}}}}
+function sweetdream_floor:tutorial/stage/actor

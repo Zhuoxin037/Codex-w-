@@ -4,7 +4,7 @@ import os, re, glob, json, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import _tags_data as D
 
-ROOT = 'D:/数据包/sweetdream/data/sweetdream/function/equipment'
+ROOT = 'D:/数据包/fallendream/data/fallendream/function/equipment'
 CN = {v[0]: v[2] for v in D.VOCAB}
 rows = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '_board.json'), encoding='utf-8'))
 

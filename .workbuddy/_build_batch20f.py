@@ -2,7 +2,7 @@
 """批 20-F：修 check 报出的 7 条（rearm / skill_mul 通道表 / second 的 at @s）"""
 import io, os, sys
 sys.stdout.reconfigure(encoding='utf-8')
-FN = r'D:/数据包/sweetdream/data/sweetdream/function'
+FN = r'D:/数据包/fallendream/data/fallendream/function'
 
 
 def read(p):
@@ -18,7 +18,7 @@ p = os.path.join(FN, 'lib/rearm.mcfunction')
 t = read(p)
 add = ''
 for adv in ['equipment/armor/air_step_land', 'equipment/sword/oath_victory', 'equipment/sword/oath_victory_hit']:
-    line = 'advancement revoke @a only sweetdream:%s\n' % adv
+    line = 'advancement revoke @a only fallendream:%s\n' % adv
     if line not in t:
         add += line
 if add:
@@ -48,28 +48,28 @@ if blk:
 # ③ lib/second：给用到 distance 的装备补 at @s
 p = os.path.join(FN, 'lib/second.mcfunction')
 t = read(p)
-t = t.replace('execute as @a run function sweetdream:equipment/armor/empty_camp/second',
-              'execute as @a at @s run function sweetdream:equipment/armor/empty_camp/second')
-t = t.replace('execute as @a run function sweetdream:equipment/armor/lone_walk/second',
-              'execute as @a at @s run function sweetdream:equipment/armor/lone_walk/second')
-t = t.replace('execute as @a run function sweetdream:equipment/armor/overflow/second',
-              'execute as @a at @s run function sweetdream:equipment/armor/overflow/second')
-t = t.replace('execute as @a run function sweetdream:equipment/armor/intent/second',
-              'execute as @a at @s run function sweetdream:equipment/armor/intent/second')
-t = t.replace('execute as @a run function sweetdream:equipment/armor/breath_hold/second',
-              'execute as @a at @s run function sweetdream:equipment/armor/breath_hold/second')
-t = t.replace('execute as @a run function sweetdream:equipment/armor/pivot/second',
-              'execute as @a at @s run function sweetdream:equipment/armor/pivot/second')
-t = t.replace('execute as @a run function sweetdream:equipment/armor/bearing/second',
-              'execute as @a at @s run function sweetdream:equipment/armor/bearing/second')
+t = t.replace('execute as @a run function fallendream:equipment/armor/empty_camp/second',
+              'execute as @a at @s run function fallendream:equipment/armor/empty_camp/second')
+t = t.replace('execute as @a run function fallendream:equipment/armor/lone_walk/second',
+              'execute as @a at @s run function fallendream:equipment/armor/lone_walk/second')
+t = t.replace('execute as @a run function fallendream:equipment/armor/overflow/second',
+              'execute as @a at @s run function fallendream:equipment/armor/overflow/second')
+t = t.replace('execute as @a run function fallendream:equipment/armor/intent/second',
+              'execute as @a at @s run function fallendream:equipment/armor/intent/second')
+t = t.replace('execute as @a run function fallendream:equipment/armor/breath_hold/second',
+              'execute as @a at @s run function fallendream:equipment/armor/breath_hold/second')
+t = t.replace('execute as @a run function fallendream:equipment/armor/pivot/second',
+              'execute as @a at @s run function fallendream:equipment/armor/pivot/second')
+t = t.replace('execute as @a run function fallendream:equipment/armor/bearing/second',
+              'execute as @a at @s run function fallendream:equipment/armor/bearing/second')
 write(p, t)
 print('second at @s ok')
 
 # ④ core/tick 里的蓄意也补 at @s（虽然它不用 distance，统一口径）
 p = os.path.join(FN, 'core/tick.mcfunction')
 t = read(p)
-t = t.replace('execute as @a run function sweetdream:equipment/armor/intent/tick',
-              'execute as @a at @s run function sweetdream:equipment/armor/intent/tick')
+t = t.replace('execute as @a run function fallendream:equipment/armor/intent/tick',
+              'execute as @a at @s run function fallendream:equipment/armor/intent/tick')
 write(p, t)
 print('tick at @s ok')
 print('done')

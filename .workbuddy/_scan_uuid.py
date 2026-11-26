@@ -1,6 +1,6 @@
 import re, os, collections
 
-root = r'D:/数据包/sweetdream/data/sweetdream/function'
+root = r'D:/数据包/fallendream/data/fallendream/function'
 pat = re.compile(r'@[ae]\[[^\]]*nbt=\{UUID:\[I;([^\]]*)\]')
 variants = collections.Counter()
 files = collections.Counter()

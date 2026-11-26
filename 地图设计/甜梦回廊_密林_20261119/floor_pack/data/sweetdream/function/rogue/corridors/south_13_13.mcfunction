@@ -1,0 +1,31 @@
+fill ~-4 ~-1 ~13 ~4 ~ ~23 minecraft:rooted_dirt
+fill ~-3 ~ ~13 ~3 ~ ~23 minecraft:mossy_stone_bricks
+fill ~-3 ~1 ~13 ~3 ~5 ~23 minecraft:air
+fill ~-4 ~1 ~14 ~-4 ~2 ~22 minecraft:mossy_cobblestone
+fill ~-4 ~3 ~14 ~-4 ~6 ~22 minecraft:dark_oak_leaves[persistent=true]
+fill ~4 ~1 ~14 ~4 ~2 ~22 minecraft:mossy_cobblestone
+fill ~4 ~3 ~14 ~4 ~6 ~22 minecraft:dark_oak_leaves[persistent=true]
+fill ~-4 ~6 ~14 ~4 ~6 ~22 minecraft:dark_oak_leaves[persistent=true]
+fill ~-1 ~ ~14 ~1 ~ ~22 minecraft:spruce_planks
+fill ~-4 ~1 ~13 ~-4 ~5 ~13 minecraft:stripped_dark_oak_log
+fill ~4 ~1 ~13 ~4 ~5 ~13 minecraft:stripped_dark_oak_log
+fill ~-4 ~6 ~13 ~4 ~6 ~13 minecraft:dark_oak_log[axis=x]
+setblock ~ ~6 ~13 minecraft:shroomlight
+setblock ~-2 ~7 ~13 minecraft:moss_block
+setblock ~-3 ~7 ~13 minecraft:mangrove_roots
+setblock ~-4 ~6 ~13 minecraft:mossy_cobblestone
+setblock ~2 ~7 ~13 minecraft:moss_block
+setblock ~3 ~7 ~13 minecraft:mangrove_roots
+setblock ~4 ~6 ~13 minecraft:mossy_cobblestone
+fill ~-3 ~8 ~13 ~3 ~8 ~13 minecraft:azalea_leaves[persistent=true]
+fill ~-4 ~1 ~23 ~-4 ~5 ~23 minecraft:stripped_dark_oak_log
+fill ~4 ~1 ~23 ~4 ~5 ~23 minecraft:stripped_dark_oak_log
+fill ~-4 ~6 ~23 ~4 ~6 ~23 minecraft:dark_oak_log[axis=x]
+setblock ~ ~6 ~23 minecraft:shroomlight
+setblock ~-2 ~7 ~23 minecraft:moss_block
+setblock ~-3 ~7 ~23 minecraft:mangrove_roots
+setblock ~-4 ~6 ~23 minecraft:mossy_cobblestone
+setblock ~2 ~7 ~23 minecraft:moss_block
+setblock ~3 ~7 ~23 minecraft:mangrove_roots
+setblock ~4 ~6 ~23 minecraft:mossy_cobblestone
+fill ~-3 ~8 ~23 ~3 ~8 ~23 minecraft:azalea_leaves[persistent=true]

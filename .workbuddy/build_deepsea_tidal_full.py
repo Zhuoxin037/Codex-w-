@@ -13,7 +13,7 @@ byid={g['uuid']:g for g in bb['groups']};groups={}
 def expand(n):
     g={**byid[n['uuid']],**n,'children':[expand(c) if isinstance(c,dict) else c for c in n['children']]};groups[g['name']]=g;return g
 tree=expand(bb['outliner'][0]);root=tree['name'];elements=bb['elements'];textures=bb['textures']
-U=lambda n:str(uuid.uuid5(uuid.NAMESPACE_URL,'sweetdream:deepsea:tidal:full:'+n))
+U=lambda n:str(uuid.uuid5(uuid.NAMESPACE_URL,'fallendream:deepsea:tidal:full:'+n))
 mats=['abyss','steel','steelblue','silver','edge','shade','blue0','blue1','blue2','blue3','blue4','blue5','blue6','leather','leatheredge','leathershadow']
 uv={n:[i%4*32,i//4*32,i%4*32+32,i//4*32+32] for i,n in enumerate(mats)}
 atlas=Image.open(io.BytesIO(base64.b64decode(textures[0]['source'].split(',')[1]))).convert('RGBA')
@@ -114,7 +114,7 @@ check(elements,groups,root,textures)
 # No edits to the approved guard/core elements; animation is on their groups only.
 now={e['uuid']:e for e in elements};assert all(now[e['uuid']]==e for e in original['elements'])
 keys=[k['uuid'] for a in [idle,cast] for g in a['animators'].values() for k in g['keyframes']];assert len(keys)==len(set(keys))
-display=json.loads((ROOT/'sweetdream_rp_完整版/assets/deepseaecho/models/item/sword.json').read_text(encoding='utf-8'))['display']
+display=json.loads((ROOT/'fallendream_rp_完整版/assets/deepseaecho/models/item/sword.json').read_text(encoding='utf-8'))['display']
 native=save_native(O,'深海回响_潮汐整剑_分组动画',elements,groups,root,textures,display,[idle,cast])
 master,count=export_static(O,'sword','deepseaecho',elements,groups,root,textures,display,offset=(7.775,2,7.895))
 T=O/'贴图';T.mkdir(exist_ok=True)

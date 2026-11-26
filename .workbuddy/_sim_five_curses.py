@@ -29,7 +29,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-FN = ROOT / 'sweetdream/data/sweetdream/function/equipment/staff/five_curses/curse_step.mcfunction'
+FN = ROOT / 'fallendream/data/fallendream/function/equipment/staff/five_curses/curse_step.mcfunction'
 
 
 def in_range(val, spec):
@@ -90,9 +90,9 @@ RE_ADD = re.compile(r'^scoreboard players add @s (\S+) (-?\d+)$')
 RE_SET = re.compile(r'^scoreboard players set @s (\S+) (-?\d+)$')
 RE_META = re.compile(r'^scoreboard players set #(\S+) zx\.meta (-?\d+)$')
 RE_CALL_FINAL = re.compile(r'^execute if entity @s\[tag=(\S+)\] run function '
-                           r'sweetdream:equipment/staff/five_curses/final$')
+                           r'fallendream:equipment/staff/five_curses/final$')
 RE_CALL_CUT = re.compile(r'^execute if score @s (\S+) matches (\S+) run function '
-                         r'sweetdream:equipment/staff/five_curses/armor_cut$')
+                         r'fallendream:equipment/staff/five_curses/armor_cut$')
 RE_EFFECT = re.compile(r'^execute if score @s (\S+) matches (\S+) run effect give @s (\S+) (\d+) (\d+) (\w+)$')
 IGNORE = [
     re.compile(r'^execute if data storage .* run execute store result score .*$'),   # uuid 抄写

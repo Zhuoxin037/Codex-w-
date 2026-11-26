@@ -2,11 +2,11 @@
 """
 生成「天使核心·圣光柱」的资源包素材(幂等, 改数字重跑即可)。
 
-产出(都在 sweetdream_rp_完整版/assets/sweetdream/ 下):
+产出(都在 fallendream_rp_完整版/assets/fallendream/ 下):
   textures/item/angel_glow.png   16x16  外辉: 暖白, 横向中间亮两侧渐隐 + 纵向下实上散
   textures/item/angel_core.png   16x16  亮核: 纯白, 同曲线但更硬更亮
   models/item/angel_beam.json    十字交叉薄片(竖直) —— 外辉 2 片 + 亮核 2 片
-  items/angel_beam.json          item_model 分发(让 item_display 认得出 sweetdream:angel_beam)
+  items/angel_beam.json          item_model 分发(让 item_display 认得出 fallendream:angel_beam)
 
 ------------------------------------------------------------
 ★ 为什么本版推翻了第一版(v1 = 12x16x12 方柱, 用户: "特别丑, 像一个很短的水管")
@@ -35,8 +35,8 @@ import struct
 import zlib
 from pathlib import Path
 
-ROOT = Path(r'D:/数据包/sweetdream_rp_完整版')
-NS = ROOT / 'assets' / 'sweetdream'
+ROOT = Path(r'D:/数据包/fallendream_rp_完整版')
+NS = ROOT / 'assets' / 'fallendream'
 TEX = NS / 'textures' / 'item'
 MDL = NS / 'models' / 'item'
 ITM = NS / 'items'
@@ -131,9 +131,9 @@ MODEL = {
     ),
     "ambientocclusion": False,
     "gui_light": "front",
-    "textures": {"glow": "sweetdream:item/angel_glow",
-                 "core": "sweetdream:item/angel_core",
-                 "particle": "sweetdream:item/angel_glow"},
+    "textures": {"glow": "fallendream:item/angel_glow",
+                 "core": "fallendream:item/angel_core",
+                 "particle": "fallendream:item/angel_glow"},
     "elements": [
         x_plane("#glow", "外辉_A(法线±X)", 8),
         z_plane("#glow", "外辉_B(法线±Z)", 8),
@@ -150,7 +150,7 @@ MODEL = {
 
 ITEMS = {
     "hand_animation_on_swap": False,
-    "model": {"type": "minecraft:model", "model": "sweetdream:item/angel_beam"},
+    "model": {"type": "minecraft:model", "model": "fallendream:item/angel_beam"},
 }
 
 

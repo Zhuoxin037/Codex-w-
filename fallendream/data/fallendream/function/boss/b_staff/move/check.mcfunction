@@ -1,0 +1,21 @@
+execute unless block ~-1.05 ~0.05 ~-1.05 #fallendream:b_staff_clear run return 0
+execute unless block ~-1.05 ~1.1 ~-1.05 #fallendream:b_staff_clear run return 0
+execute unless block ~-1.05 ~2.1 ~-1.05 #fallendream:b_staff_clear run return 0
+execute unless block ~-1.05 ~3.3 ~-1.05 #fallendream:b_staff_clear run return 0
+execute if block ~-1.05 ~-0.05 ~-1.05 #fallendream:b_staff_unsafe_floor run return 0
+execute unless block ~-1.05 ~0.05 ~1.05 #fallendream:b_staff_clear run return 0
+execute unless block ~-1.05 ~1.1 ~1.05 #fallendream:b_staff_clear run return 0
+execute unless block ~-1.05 ~2.1 ~1.05 #fallendream:b_staff_clear run return 0
+execute unless block ~-1.05 ~3.3 ~1.05 #fallendream:b_staff_clear run return 0
+execute if block ~-1.05 ~-0.05 ~1.05 #fallendream:b_staff_unsafe_floor run return 0
+execute unless block ~1.05 ~0.05 ~-1.05 #fallendream:b_staff_clear run return 0
+execute unless block ~1.05 ~1.1 ~-1.05 #fallendream:b_staff_clear run return 0
+execute unless block ~1.05 ~2.1 ~-1.05 #fallendream:b_staff_clear run return 0
+execute unless block ~1.05 ~3.3 ~-1.05 #fallendream:b_staff_clear run return 0
+execute if block ~1.05 ~-0.05 ~-1.05 #fallendream:b_staff_unsafe_floor run return 0
+execute unless block ~1.05 ~0.05 ~1.05 #fallendream:b_staff_clear run return 0
+execute unless block ~1.05 ~1.1 ~1.05 #fallendream:b_staff_clear run return 0
+execute unless block ~1.05 ~2.1 ~1.05 #fallendream:b_staff_clear run return 0
+execute unless block ~1.05 ~3.3 ~1.05 #fallendream:b_staff_clear run return 0
+execute if block ~1.05 ~-0.05 ~1.05 #fallendream:b_staff_unsafe_floor run return 0
+scoreboard players set #safe bs.ok 1

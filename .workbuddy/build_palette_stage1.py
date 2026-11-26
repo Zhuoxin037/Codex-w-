@@ -6,7 +6,7 @@ from PIL import Image,ImageDraw
 O=Path('D:/数据包/模型设计/调色盘_阶段一');O.mkdir(parents=True,exist_ok=True)
 T=O/'贴图';T.mkdir(exist_ok=True)
 V=Path('C:/Users/qq303/.codex/visualizations/2026/09/30/01a0f228-3178-7672-a739-8812e448354c')
-U=lambda n:str(uuid.uuid5(uuid.NAMESPACE_URL,'sweetdream:palette:stage1:'+n))
+U=lambda n:str(uuid.uuid5(uuid.NAMESPACE_URL,'fallendream:palette:stage1:'+n))
 materials={'terracotta':(131,77,48),'edge':(178,115,70),'shadow':(91,55,36),'ivory':(226,211,178),'bevel':(203,180,139),'well':(139,117,91),'wellshadow':(104,83,59),'bronze':(159,120,59),'red':(186,45,40),'yellow':(223,166,40),'blue':(45,94,157),'highlight':(238,220,181)}
 atlas=Image.new('RGBA',(128,128));d=ImageDraw.Draw(atlas);uv={};rng=random.Random(1008)
 for i,(n,c) in enumerate(materials.items()):
@@ -113,7 +113,7 @@ for i,(x,y) in enumerate(centers):
   patches(crest,g,'颜料厚涂尖峰',-.69,-.61,color)
 
 # All review model states reuse one display parent; no game binding at this stage.
-display_path=O/'显示调整示例/assets/sweetdream/models/item/palette/display.json';display_path.parent.mkdir(parents=True,exist_ok=True)
+display_path=O/'显示调整示例/assets/fallendream/models/item/palette/display.json';display_path.parent.mkdir(parents=True,exist_ok=True)
 initial={'gui':{'rotation':[0,180,-8],'translation':[0,0,0],'scale':[.58]*3},'firstperson_righthand':{'rotation':[12,165,-18],'translation':[-1,1,-2],'scale':[.55]*3},'firstperson_lefthand':{'rotation':[12,-165,18],'translation':[-1,1,-2],'scale':[.55]*3},'thirdperson_righthand':{'rotation':[10,180,-12],'translation':[0,2,0],'scale':[.45]*3},'thirdperson_lefthand':{'rotation':[10,-180,12],'translation':[0,2,0],'scale':[.45]*3},'ground':{'rotation':[90,0,0],'translation':[0,2,0],'scale':[.45]*3},'fixed':{'rotation':[0,180,0],'translation':[0,0,0],'scale':[.55]*3}}
 display=json.loads(display_path.read_text(encoding='utf-8')) if display_path.exists() else {'display':initial};display_path.write_text(json.dumps(display,ensure_ascii=False,indent=2),encoding='utf-8')
 def outliner(g):return {'uuid':g['uuid'],'isOpen':g['isOpen'],'children':[outliner(c) if isinstance(c,dict) else c for c in g['children']]}
@@ -136,10 +136,10 @@ for e in elements:
   if p['texture'] is None:continue
   t=textures[int(p['texture'])];q['faces'][f]={'texture':'#'+str(p['texture']),'uv':[round(v*16/(t['uv_width'] if j%2==0 else t['uv_height']),6) for j,v in enumerate(p['uv'])]}
  assert all(-16<=v<=32 for v in q['from']+q['to']);example.append(q)
-texdir=O/'显示调整示例/assets/sweetdream/textures/item/palette';texdir.mkdir(parents=True,exist_ok=True)
+texdir=O/'显示调整示例/assets/fallendream/textures/item/palette';texdir.mkdir(parents=True,exist_ok=True)
 for i,t in enumerate(textures):(texdir/('t%d.png'%i)).write_bytes(base64.b64decode(t['source'].split(',')[1]))
-texmap={str(i):'sweetdream:item/palette/t%d'%i for i in range(len(textures))};texmap['particle']=texmap['0']
-(display_path.parent/'stage1.json').write_text(json.dumps({'parent':'sweetdream:item/palette/display','textures':texmap,'elements':example},ensure_ascii=False,separators=(',',':')),encoding='utf-8')
+texmap={str(i):'fallendream:item/palette/t%d'%i for i in range(len(textures))};texmap['particle']=texmap['0']
+(display_path.parent/'stage1.json').write_text(json.dumps({'parent':'fallendream:item/palette/display','textures':texmap,'elements':example},ensure_ascii=False,separators=(',',':')),encoding='utf-8')
 
 # Renderer respects the source's group visibility and disabled faces.
 source=(V/'render_apocalypse_review.py').read_text(encoding='utf-8').split('def board():')[0]

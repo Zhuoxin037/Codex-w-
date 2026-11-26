@@ -19,7 +19,7 @@ GROUP = {k: g for k, g, _, _ in VOCAB}
 CN = {k: c for k, _, c, _ in VOCAB}
 
 # ---------------- 类别（从 give 里的 zx[1]） ----------------
-ROOT = r'D:\数据包\sweetdream\data\sweetdream\function'
+ROOT = r'D:\数据包\fallendream\data\fallendream\function'
 pat = re.compile(r'zx:\s*\[\s*"([a-z0-9_]+)"\s*,\s*"([a-z0-9_]+)"')
 cat_of = {}
 for dirpath, _, files in os.walk(ROOT):

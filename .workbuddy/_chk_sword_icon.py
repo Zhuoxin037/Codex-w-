@@ -12,9 +12,9 @@
      每条带 hand_animation_on_swap:false、model 可达、贴图 16×16 且与设计源**逐字节一致**
   2) 完整版里同样这 14 份，且与覆盖层**逐字节一致**（合并没漏、没走样）
   3) 数据包侧：12 份 item_modifier/sword_icons/<id>.json 存在且 item_model 指向自己
-  4) give / put_* 里**每一处**产出这些剑的物品串都带 item_model="sweetdream:<id>"
+  4) give / put_* 里**每一处**产出这些剑的物品串都带 item_model="fallendream:<id>"
      （万念↔千散互换会把组件串复制进 put_qian/put_my，最容易漏）
-  5) event/second.json 登记了 sweetdream:visual/sword_icon_sync
+  5) event/second.json 登记了 fallendream:visual/sword_icon_sync
   6) held 函数里每把剑主手 + 副手各一行，且都带 unless item_model 守卫
      （漏守卫 = 每秒重写组件 = 在手上一直抽搐）
 
@@ -26,12 +26,12 @@ import os
 import re
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DP = os.path.join(ROOT, 'sweetdream', 'data')
-FUNC = os.path.join(DP, 'sweetdream', 'function')
-MOD_DIR = os.path.join(DP, 'sweetdream', 'item_modifier', 'sword_icons')
+DP = os.path.join(ROOT, 'fallendream', 'data')
+FUNC = os.path.join(DP, 'fallendream', 'function')
+MOD_DIR = os.path.join(DP, 'fallendream', 'item_modifier', 'sword_icons')
 TAG = os.path.join(DP, 'manacore', 'tags', 'function', 'event', 'second.json')
-OVERLAY = os.path.join(ROOT, 'sweetdream_rp_原版风')
-FULL = os.path.join(ROOT, 'sweetdream_rp_完整版')
+OVERLAY = os.path.join(ROOT, 'fallendream_rp_原版风')
+FULL = os.path.join(ROOT, 'fallendream_rp_完整版')
 ART = os.path.join(ROOT, '模型设计', '原版风_资源包_20261010', '剑_预览')
 
 # 12 件剑：id -> (设计源文件名, 应有底物模板)
@@ -60,7 +60,7 @@ SWORDS = {
 }
 # 火种两态：资源包里要有定义，但**不写进 give**（由 tinder/visual/sync 按状态切）
 TINDER = {'tinder_off': 'tinder_off', 'tinder_on': 'tinder_on'}
-REG_ENTRY = 'sweetdream:visual/sword_icon_sync'
+REG_ENTRY = 'fallendream:visual/sword_icon_sync'
 
 errs = []
 
@@ -70,7 +70,7 @@ def E(msg):
 
 
 def items_defs(root):
-    return os.path.join(root, 'assets', 'sweetdream', 'items')
+    return os.path.join(root, 'assets', 'fallendream', 'items')
 
 
 def check_pack(root, tag, want_src_bytes=True):
@@ -78,20 +78,20 @@ def check_pack(root, tag, want_src_bytes=True):
     for key in list(SWORDS) + list(TINDER):
         dp = os.path.join(items_defs(root), key + '.json')
         if not os.path.isfile(dp):
-            E('[%s] 缺 items 定义 assets/sweetdream/items/%s.json' % (tag, key))
+            E('[%s] 缺 items 定义 assets/fallendream/items/%s.json' % (tag, key))
             continue
         d = json.load(io.open(dp, encoding='utf-8'))
         if d.get('hand_animation_on_swap') is not False:
             E('[%s] %s.json 缺 hand_animation_on_swap:false -> 会在手上一直抽搐' % (tag, key))
         if d.get('model', {}).get('type') != 'minecraft:model':
             E('[%s] %s.json 的 model.type 应为 minecraft:model' % (tag, key))
-        mp = os.path.join(root, 'assets', 'sweetdream', 'models', 'item', 'vanilla', key + '.json')
+        mp = os.path.join(root, 'assets', 'fallendream', 'models', 'item', 'vanilla', key + '.json')
         if not os.path.isfile(mp):
-            E('[%s] 缺模型 assets/sweetdream/models/item/vanilla/%s.json' % (tag, key))
+            E('[%s] 缺模型 assets/fallendream/models/item/vanilla/%s.json' % (tag, key))
             continue
-        tp = os.path.join(root, 'assets', 'sweetdream', 'textures', 'item', 'vanilla', key + '.png')
+        tp = os.path.join(root, 'assets', 'fallendream', 'textures', 'item', 'vanilla', key + '.png')
         if not os.path.isfile(tp):
-            E('[%s] 缺贴图 assets/sweetdream/textures/item/vanilla/%s.png' % (tag, key))
+            E('[%s] 缺贴图 assets/fallendream/textures/item/vanilla/%s.png' % (tag, key))
             continue
         if os.path.getsize(tp) == 0:
             E('[%s] 贴图是空文件 %s' % (tag, key))
@@ -113,7 +113,7 @@ def check_pack(root, tag, want_src_bytes=True):
 
 
 def main():
-    # ---- 1) 完整版（覆盖层 `sweetdream_rp_原版风` 已于 2026-10 合并进完整版并删除,
+    # ---- 1) 完整版（覆盖层 `fallendream_rp_原版风` 已于 2026-10 合并进完整版并删除,
     #      再按旧路径遍历只会报"找不到资源包"这条假警报 —— 只守真源）----
     if not os.path.isdir(FULL):
         E('找不到资源包 %s' % FULL)
@@ -127,8 +127,8 @@ def main():
             E('缺 item_modifier sword_icons/%s.json' % key)
             continue
         m = json.load(io.open(mp, encoding='utf-8'))
-        if m.get('components', {}).get('minecraft:item_model') != 'sweetdream:%s' % key:
-            E('item_modifier sword_icons/%s.json 的 item_model 不是 sweetdream:%s' % (key, key))
+        if m.get('components', {}).get('minecraft:item_model') != 'fallendream:%s' % key:
+            E('item_modifier sword_icons/%s.json 的 item_model 不是 fallendream:%s' % (key, key))
 
     # ---- 4) 每一处产出这些剑的物品串都要带 item_model ----
     pat = re.compile(r'custom_data=\{zx:\["(\w+)"')
@@ -145,7 +145,7 @@ def main():
                 if not (s.strip().startswith('give @s') or 'item replace entity @s' in s):
                     continue
                 n_str += 1
-                if 'item_model="sweetdream:%s"' % m.group(1) not in s:
+                if 'item_model="fallendream:%s"' % m.group(1) not in s:
                     E('%s L%d 产出的「%s」没带 item_model -> 会显示成原版剑'
                       % (os.path.relpath(p, ROOT), ln, m.group(1)))
 
@@ -163,7 +163,7 @@ def main():
         held = io.open(hp, encoding='utf-8').read()
         for key in SWORDS:
             for slot in ('mainhand', 'offhand'):
-                if ('unless items entity @s weapon.%s *[minecraft:item_model="sweetdream:%s"]'
+                if ('unless items entity @s weapon.%s *[minecraft:item_model="fallendream:%s"]'
                         % (slot, key)) not in held:
                     E('held 缺 %s 的 %s 守卫(漏了会每秒重写组件 -> 抽搐)' % (key, slot))
     if not os.path.isfile(os.path.join(FUNC, 'visual', 'sword_icon_sync.mcfunction')):

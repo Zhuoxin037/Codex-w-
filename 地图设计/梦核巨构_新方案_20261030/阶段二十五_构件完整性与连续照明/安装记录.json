@@ -1,0 +1,141 @@
+{
+  "time": "2026-11-06T14:22:48.0222590+08:00",
+  "target": "D:\\PCL 正式版 2.10.0\\.minecraft\\versions\\1.21.5-Fabric 0.16.10\\saves\\梦核哥特_承接修复与照明补漏_20261102",
+  "display_name": "梦核哥特_天光与照明修复_20261102",
+  "backup": "D:\\数据包\\.workbuddy\\gothic_front_finish_20261106\\前庭补修前备份.zip",
+  "archive": "D:\\数据包\\地图设计\\梦核巨构_新方案_20261030\\阶段二十五_构件完整性与连续照明\\构件完整性与连续照明_完整存档.zip",
+  "verified_region_files": 2,
+  "non_region_files_changed": 0,
+  "additional_game_worlds": 0,
+  "all_hashes_match": true,
+  "native_checks": 18,
+  "reopen_checks": 14,
+  "navigation_checks": 59,
+  "verified_content_files": 694,
+  "all_content_files_match_saved_copy": true,
+  "protected_user_positions_verified": 24,
+  "patch_sha256": "834ac3d4f027f358f91e994be95aa934890e242bd36e06335e38b3b98315b882",
+  "main_repair_receipt": "D:\\数据包\\.workbuddy\\gothic_integrity_20261105\\installed.json",
+  "whole_survey": {
+    "checks": [
+      {
+        "name": "whole castle and entire front court form one component",
+        "passed": true,
+        "issues": []
+      },
+      {
+        "name": "front stair rail stringers -1",
+        "passed": true,
+        "issues": []
+      },
+      {
+        "name": "benches seated on paving -1",
+        "passed": true,
+        "issues": []
+      },
+      {
+        "name": "front stair rail stringers 1",
+        "passed": true,
+        "issues": []
+      },
+      {
+        "name": "benches seated on paving 1",
+        "passed": true,
+        "issues": []
+      },
+      {
+        "name": "physical front circulation",
+        "passed": true,
+        "issues": []
+      },
+      {
+        "name": "known vanilla shapes",
+        "passed": true,
+        "issues": []
+      },
+      {
+        "name": "front stair complete flight -1",
+        "passed": true,
+        "start": [
+          -55,
+          35,
+          93
+        ],
+        "end": [
+          -55,
+          57,
+          118
+        ],
+        "visited": 146,
+        "half_cell_steps": 51
+      },
+      {
+        "name": "garden gate walking clearance -1",
+        "passed": true,
+        "start": [
+          -65,
+          57,
+          81
+        ],
+        "end": [
+          -71,
+          57,
+          81
+        ],
+        "visited": 38,
+        "half_cell_steps": 13
+      },
+      {
+        "name": "front stair complete flight 1",
+        "passed": true,
+        "start": [
+          55,
+          35,
+          93
+        ],
+        "end": [
+          55,
+          57,
+          118
+        ],
+        "visited": 152,
+        "half_cell_steps": 51
+      },
+      {
+        "name": "garden gate walking clearance 1",
+        "passed": true,
+        "start": [
+          65,
+          57,
+          81
+        ],
+        "end": [
+          71,
+          57,
+          81
+        ],
+        "visited": 38,
+        "half_cell_steps": 13
+      }
+    ],
+    "whole_survey_bounds": [
+      -190,
+      190,
+      -290,
+      180,
+      0,
+      319
+    ],
+    "component_count": 1,
+    "connected_solid_blocks": 1348454,
+    "note": "Six-face block connectivity and actual collision checks; no client or Photon visual acceptance."
+  },
+  "client_photon_test": "not performed",
+  "original_pre_repair_backup": "D:\\数据包\\地图设计\\梦核巨构_新方案_20261030\\阶段二十五_构件完整性与连续照明\\修改前完整备份.zip",
+  "main_repair_patch_sha256": "aadd138a0ced7a02ee4c5b361c411a80546ae1909f3e239a3b95b7ecd1a1a56d",
+  "main_repair_region_files": 4,
+  "final_front_region_files": 2,
+  "unique_regions_changed_from_original": 4,
+  "complete_final_archive": "D:\\数据包\\地图设计\\梦核巨构_新方案_20261030\\阶段二十五_构件完整性与连续照明\\构件完整性与连续照明_完整存档.zip",
+  "initial_complete_backup": "D:\\数据包\\地图设计\\梦核巨构_新方案_20261030\\阶段二十五_构件完整性与连续照明\\修改前完整备份.zip"
+}

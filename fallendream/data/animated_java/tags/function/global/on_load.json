@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "fallendream_boss:reconstruction/on_load",
+    "fallendream_boss:dream_knight/on_load",
+    "fallendream_boss:husk/on_load"
+  ]
+}

@@ -13,7 +13,7 @@
 【检查项】
   ① 每个 give 行里的 item_model 值 -> items/<key>.json 必须存在
   ② 该 items 定义最终能走到至少一个**存在**的模型文件
-  ③ 该模型链上引用的贴图必须存在（sweetdream 命名空间）
+  ③ 该模型链上引用的贴图必须存在（fallendream 命名空间）
   ④ 盔甲额外：equippable.asset_id -> equipment/<key>.json 必须存在，
      且它的 layers 贴图文件必须存在（头/胸/靴 humanoid，护腿 humanoid_leggings）
   ⑤ 反向：给了 item_model 却没 accompany 的 items 定义不算错，但
@@ -35,8 +35,8 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-ASSETS = os.path.join(ROOT, 'sweetdream_rp_完整版', 'assets')
-GIVE_GLOB = os.path.join(ROOT, 'sweetdream', 'data', 'sweetdream', 'function',
+ASSETS = os.path.join(ROOT, 'fallendream_rp_完整版', 'assets')
+GIVE_GLOB = os.path.join(ROOT, 'fallendream', 'data', 'fallendream', 'function',
                          'equipment', '**', 'give.mcfunction')
 
 errs = []
@@ -105,6 +105,9 @@ KNOWN_EXEMPT = {
     'sip_frost':      '批二 give 先行：外观未做（_gen_batch18.py MODEL=False）',
     'retro_shine':    '批二 give 先行：外观未做（_gen_batch18.py MODEL=False）',
     'pour_sack':      '批二 give 先行：外观未做（_gen_batch18.py MODEL=False）',
+    # ---- 用户 11-18 定稿新装备：只做 give，外观未做 ----
+    'spindle':        '11-18 只做 give，专用外观尚未制作；当前为原版钻石斧',
+    'symphony':       '11-18 只做 give，专用外观尚未制作；当前为原版追溯指针',
 }
 
 
@@ -307,10 +310,10 @@ def main():
             walk([item.get('model')], t2, b2, set(), key, set())
             for t in t2:
                 tns, _, tk = t.partition(':')
-                if tns == 'sweetdream':
+                if tns == 'fallendream':
                     ref_tex.add(tk)
     orphans = []
-    for f in sorted(os.listdir(os.path.join(ASSETS, 'sweetdream', 'textures', 'item', 'vanilla'))):
+    for f in sorted(os.listdir(os.path.join(ASSETS, 'fallendream', 'textures', 'item', 'vanilla'))):
         if not f.endswith('.png'):
             continue
         key = f[:-4]

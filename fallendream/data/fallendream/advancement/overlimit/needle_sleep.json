@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "needle_sleep": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "ol_needle_sleep"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "fallendream:overlimit/apply/needle_sleep"
+    }
+}

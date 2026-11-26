@@ -1,0 +1,3 @@
+data merge entity @s {"Tags":["sd.bs.bone","sd.bs.part.robe_left_0_1_1_surface","sd.bs.unbound"],"item":{"id":"minecraft:stick","count":1,"components":{"minecraft:item_model":"fallendream_boss:b_staff/robe_left_0_1_1_surface"}},"item_display":"none","billboard":"fixed","view_range":1f,"width":3f,"height":4f,"shadow_radius":0f,"interpolation_duration":1,"teleport_duration":0,"transformation":{"translation":[0.3809113f,1.728719f,-0.184712f],"scale":[0f,0f,0f],"left_rotation":[-0.0706454f,0.9141581f,0.1817183f,0.3553908f],"right_rotation":[0f,0f,0f,1f]}}
+scoreboard players operation @s bs.id = #serial bs.id
+function fallendream:boss/b_staff/part/bind

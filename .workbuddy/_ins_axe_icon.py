@@ -5,20 +5,20 @@
 
   14 件斧里只有 9 件是生成器产出的（`_gen_batch5/6.py`），另外 5 件
   （负离子 / 超•负•荷 / 沉渊 / 陨星 / 天穹）的 give 是**手写**的。
-  生成器的那份已经在 spec 里写了 `item_model='sweetdream:<id>'`，
+  生成器的那份已经在 spec 里写了 `item_model='fallendream:<id>'`，
   这 5 件只能机械地补 —— 本脚本就是干这个的（对已经有的一律跳过，幂等）。
 
 【为什么不干脆不写 item_model, 全靠每秒的 axe_icon_sync】
   那样新 give 出来的斧会先露 1 秒原版贴图再"变脸"。存量由 sync 补（那是它的活），
   新发的必须在 give 里一步到位。
 
-【做法】在物品的组件列表 `[...]` **最前面**插入 `item_model="sweetdream:<模型键>",`。
+【做法】在物品的组件列表 `[...]` **最前面**插入 `item_model="fallendream:<模型键>",`。
   放最前面是为了和 `_gen_batch5/6.py` 的产出**逐字一致**（`_chk_gen_drift.py` 逐字比）。
   插入位置只认"紧跟物品 id 的那个 `[`"，不改其余任何一个字符。
 
-【★★ 崩裂写 sweetdream:fissure_axe, 不是 sweetdream:fissure】
+【★★ 崩裂写 fallendream:fissure_axe, 不是 fallendream:fissure】
   后者在资源包里已经是崩裂技能的「地面裂缝」平面模型（fissure/field.mcfunction 用
-  item_display + item_model="sweetdream:fissure" 召唤）。斧叫同一个名字会显示成
+  item_display + item_model="fallendream:fissure" 召唤）。斧叫同一个名字会显示成
   一块贴地的裂缝。
 
 【幂等】已经有 item_model= 的行直接跳过；连跑两遍第二遍 0 改动。
@@ -33,7 +33,7 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-FUNC = os.path.join(ROOT, 'sweetdream', 'data', 'sweetdream', 'function')
+FUNC = os.path.join(ROOT, 'fallendream', 'data', 'fallendream', 'function')
 
 # 武器 id(zx[0]) -> 模型键。默认相同；崩裂例外（见上面 ★★）
 AXES = {
@@ -71,7 +71,7 @@ def patch(line):
     if 'item_model=' in seg:
         return line, False                      # 已经有, 幂等跳过
     key = AXES[zx.group(1)]
-    return line[:b + 1] + 'item_model="sweetdream:%s",' % key + line[b + 1:], True
+    return line[:b + 1] + 'item_model="fallendream:%s",' % key + line[b + 1:], True
 
 
 def main():

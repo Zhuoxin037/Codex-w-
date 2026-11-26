@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-"""从 sweetdream 真源生成《坠梦装备台》静态数据 data.js（只读抽取，不改数据包）。
+"""从 fallendream 真源生成《坠梦装备台》静态数据 data.js（只读抽取，不改数据包）。
 
 真源：
-  - sweetdream/data/sweetdream/function/equipment/**/give.mcfunction  （231 件，含 lore / custom_data）
+  - fallendream/data/fallendream/function/equipment/**/give.mcfunction  （231 件，含 lore / custom_data）
   - .workbuddy/equipment_overview_20261107/equipment.json            （索引：类别/槽位/标签/结构）
   - .workbuddy/rarity_20261107/rarity_truth.csv                      （稀有度定档真值）
   - .workbuddy/_tags_data.py                                          （28 词标签口径）
@@ -11,8 +11,8 @@ import json, re, sys, csv
 from pathlib import Path
 
 ROOT = Path(r'D:\数据包')
-OUT = ROOT / 'sweetdream-arsenal' / 'data.js'
-EQUIP = ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function' / 'equipment'
+OUT = ROOT / 'fallendream-arsenal' / 'data.js'
+EQUIP = ROOT / 'fallendream' / 'data' / 'fallendream' / 'function' / 'equipment'
 sys.path.insert(0, str(ROOT / '.workbuddy'))
 import lore_fmt as fmt
 
@@ -350,7 +350,7 @@ def main():
     ]
 
     meta = {
-        'pack': '坠梦 sweetdream',
+        'pack': '坠梦 fallendream',
         'version': 'Minecraft Java 1.21.5 · 前置 manacore',
         'count': len(items),
         'cats': [{'k': k, 'label': CAT_LABEL[k], 'n': len([i for i in items if i['cat'] == k])}
@@ -365,7 +365,7 @@ def main():
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
     with open(OUT, 'w', encoding='utf-8') as f:
-        f.write('/* 由 sweetdream 真源抽取生成，只读；请勿手改。 */\n')
+        f.write('/* 由 fallendream 真源抽取生成，只读；请勿手改。 */\n')
         f.write('window.SD_DATA = ')
         json.dump(data, f, ensure_ascii=False, separators=(',', ':'))
         f.write(';\n')

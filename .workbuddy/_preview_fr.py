@@ -10,14 +10,14 @@ from pathlib import Path
 sys.path.insert(0, r'C:/Users/qq303/.workbuddy/skills/mc-model-preview/scripts')
 import render3d as R
 
-RP = Path(r'D:/数据包/sweetdream_rp_完整版'); OUT = Path(r'D:/数据包/logs')
+RP = Path(r'D:/数据包/fallendream_rp_完整版'); OUT = Path(r'D:/数据包/logs')
 repo = R.Repo(str(RP))
-mod = R.load_model(str(RP / 'assets/sweetdream/models/item/fr_beam.json'))
+mod = R.load_model(str(RP / 'assets/fallendream/models/item/fr_beam.json'))
 
 
 def scaled_faces(zscale=16.0):
     out = []
-    for quad, quv, tex, n in R.bake(mod, repo, ns_hint='sweetdream'):
+    for quad, quv, tex, n in R.bake(mod, repo, ns_hint='fallendream'):
         q = [(p[0], p[1], 8 + (p[2] - 8) * zscale) for p in quad]
         out.append((q, quv, tex, n))
     return out

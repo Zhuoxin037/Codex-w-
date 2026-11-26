@@ -5,7 +5,7 @@
 import os, re, collections
 
 FP = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                  "sweetdream", "data", "sweetdream", "function")
+                  "fallendream", "data", "fallendream", "function")
 
 # 账本命名习惯: zx.<x> 且语义是"已经加了多少"
 LEDGER = re.compile(r'\bzx\.(am_mana|[a-z]{1,3}_mana|up_mana|up_armor|up_at|up_hp|floor_mana|'

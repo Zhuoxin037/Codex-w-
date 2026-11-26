@@ -10,12 +10,12 @@ import os
 import re
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-FN = os.path.join(ROOT, 'sweetdream', 'data', 'sweetdream', 'function')
+FN = os.path.join(ROOT, 'fallendream', 'data', 'fallendream', 'function')
 
 CAP_B = 68
 CAP_A = 8
 CAP_MENU = 20
-CAP_LAYER = 38
+CAP_LAYER = 39
 
 
 def read(p):
@@ -54,7 +54,7 @@ def main():
 
     # ---- 写 reg_unroll ----
     head = u'''# ============================================================
-# sweetdream:debug/reg_unroll —— 把「通用数值注册表」逐行渲染出来
+# fallendream:debug/reg_unroll —— 把「通用数值注册表」逐行渲染出来
 # ------------------------------------------------------------
 # 【这个文件是生成的】改动请看 lib/reg/build.mcfunction, 然后跑
 #   python .workbuddy/gen_reg_unroll.py
@@ -65,12 +65,12 @@ def main():
 
 # ---------- b 表: 数值为 0 就不显示 ----------
 '''
-    body_b = '\n'.join(unroll_rows('b', 'sweetdream:debug/stat_row', CAP_B))
+    body_b = '\n'.join(unroll_rows('b', 'fallendream:debug/stat_row', CAP_B))
     mid = u'''
 
 # ---------- a 表: 永远显示 ----------
 '''
-    body_a = '\n'.join(unroll_rows('a', 'sweetdream:debug/stat_row_a', CAP_A))
+    body_a = '\n'.join(unroll_rows('a', 'fallendream:debug/stat_row_a', CAP_A))
     with io.open(os.path.join(FN, 'debug', 'reg_unroll.mcfunction'), 'w', encoding='utf-8', newline='\n') as f:
         f.write(head + body_b + mid + body_a + '\n')
     print('写出 debug/reg_unroll.mcfunction  (%d + %d 行)' % (CAP_B, CAP_A))
@@ -79,7 +79,7 @@ def main():
     #   它把 layer 表逐槽交给 lib/look/layer_row 处理(那支负责过滤 + 往
     #   zx:look.xline 追加组件, 接在动作栏冷却后面同一行)。
     lhead = u'''# ============================================================
-# sweetdream:lib/look/layer_unroll —— 把「层数机制」表逐行喂给渲染器
+# fallendream:lib/look/layer_unroll —— 把「层数机制」表逐行喂给渲染器
 # ------------------------------------------------------------
 # 【这个文件是生成的】改动请看 lib/reg/build.mcfunction 的 layer 表, 然后跑
 #   python .workbuddy/gen_reg_unroll.py
@@ -91,14 +91,14 @@ def main():
 
 # ---------- layer 表: 只显示在身 / 在手上的层数机制 ----------
 '''
-    body_l = '\n'.join(unroll_rows('layer', 'sweetdream:lib/look/layer_row', CAP_LAYER))
+    body_l = '\n'.join(unroll_rows('layer', 'fallendream:lib/look/layer_row', CAP_LAYER))
     with io.open(os.path.join(FN, 'lib', 'look', 'layer_unroll.mcfunction'), 'w', encoding='utf-8', newline='\n') as f:
         f.write(lhead + body_l + '\n')
     print('写出 lib/look/layer_unroll.mcfunction  (%d 行)' % CAP_LAYER)
 
     # ---- 写 menu 的解卷行(单独一个片段, 由 menu.mcfunction 引用不现实, 直接生成整支) ----
     menu_head = u'''# ============================================================
-# sweetdream:debug/menu —— 可点击的调试菜单
+# fallendream:debug/menu —— 可点击的调试菜单
 # ------------------------------------------------------------
 # 【用法】/trigger zx.dbg_menu
 # 【这个文件是生成的】条目表在 lib/reg/build.mcfunction 的 menu 里,
@@ -116,22 +116,23 @@ tellraw @s [{"text":"========== 调试菜单 ==========","color":"gold"}]
 tellraw @s [{"text":"点下面的蓝色条目即可; 鼠标停上去有说明。","color":"dark_gray"}]
 '''
     body_m = '\n'.join(
-        'execute if data storage zx:reg menu[%d] run function sweetdream:debug/menu_item with storage zx:reg menu[%d]'
+        'execute if data storage zx:reg menu[%d] run function fallendream:debug/menu_item with storage zx:reg menu[%d]'
         % (i, i) for i in range(CAP_MENU))
     menu_tail = u'''
 
 tellraw @s [{"text":"── 没上菜单的其它入口 ──","color":"dark_gray"}]
-tellraw @s [{"text":"  用 /function 前缀 + sweetdream:debug/<名字>, 名字列表:","color":"gray"}]
+tellraw @s [{"text":"  用 /function 前缀 + fallendream:debug/<名字>, 名字列表:","color":"gray"}]
 tellraw @s [{"text":"    freeze / fix_noai / deepsea / deepsea_go / damage / true_damage / iframe","color":"gray"}]
 tellraw @s [{"text":"    offhand / offhand_go / cold_crow / ember_immolate / leech_spine","color":"gray"}]
 tellraw @s [{"text":"    iridescent_mirage / sickle / wind / num_probe","color":"gray"}]
 tellraw @s [{"text":"    lore (重刷副手物品的描述, 老装备改规则后用)","color":"gray"}]
+tellraw @s [{"text":"  白蓝持杖 Boss：","color":"aqua"},{"text":"[召唤]","color":"green","click_event":{"action":"suggest_command","command":"/function fallendream:boss/b_staff/summon"}},{"text":"  [清理]","color":"gray","click_event":{"action":"suggest_command","command":"/function fallendream:boss/b_staff/remove_all"}}]
 '''
 # 注意: 这几行是**告诉玩家怎么手打命令**的纯文本, 里面不能出现
-# "function sweetdream:debug/..." 这种"看起来像命令"的连写 ——
+# "function fallendream:debug/..." 这种"看起来像命令"的连写 ——
 # check.py 第 1 项(函数引用检查)是靠正则扫全文的, 会把说明文字当成真调用,
-# 报一条"引用了不存在的函数 sweetdream:debug/"。所以这里用的是
-# "/function 前缀 + sweetdream:debug/<名字>" 这种拆开的写法。
+# 报一条"引用了不存在的函数 fallendream:debug/"。所以这里用的是
+# "/function 前缀 + fallendream:debug/<名字>" 这种拆开的写法。
     with io.open(os.path.join(FN, 'debug', 'menu.mcfunction'), 'w', encoding='utf-8', newline='\n') as f:
         f.write(menu_head + body_m + menu_tail)
     print('写出 debug/menu.mcfunction  (%d 行解卷)' % CAP_MENU)

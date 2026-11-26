@@ -7,7 +7,7 @@ FILES = ["armor/furnace_core", "armor/lightless_sea", "armor/withered_garden",
 
 for rel in FILES:
     pa = 'C:/Users/qq303/AppData/Local/Temp/givebak/equipment/%s/give.mcfunction' % rel
-    pb = 'sweetdream/data/sweetdream/function/equipment/%s/give.mcfunction' % rel
+    pb = 'fallendream/data/fallendream/function/equipment/%s/give.mcfunction' % rel
     a = open(pa, 'rb').read()
     b = open(pb, 'rb').read()
     print('#### %s   旧 %d 字节 / 新 %d 字节' % (rel, len(a), len(b)))

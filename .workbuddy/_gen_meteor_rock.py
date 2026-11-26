@@ -2,7 +2,7 @@
 """
 生成「陨星·陨石」的资源包素材(幂等, 改数字重跑即可)。
 
-产出(都在 sweetdream_rp_完整版/assets/sweetdream/ 下):
+产出(都在 fallendream_rp_完整版/assets/fallendream/ 下):
   textures/item/meteor_rock.png  16x16  燃烧的岩石(深褐底 + 橙红裂纹)
   models/item/meteor_rock.json   9 块不规则碎石拼成的陨石
   items/meteor_rock.json         item_model 分发
@@ -29,8 +29,8 @@ import struct
 import zlib
 from pathlib import Path
 
-ROOT = Path(r'D:/数据包/sweetdream_rp_完整版')
-NS = ROOT / 'assets' / 'sweetdream'
+ROOT = Path(r'D:/数据包/fallendream_rp_完整版')
+NS = ROOT / 'assets' / 'fallendream'
 TEX = NS / 'textures' / 'item'
 MDL = NS / 'models' / 'item'
 ITM = NS / 'items'
@@ -160,8 +160,8 @@ MODEL = {
     ),
     "ambientocclusion": False,
     "gui_light": "front",
-    "textures": {"rock": "sweetdream:item/meteor_rock",
-                 "particle": "sweetdream:item/meteor_rock"},
+    "textures": {"rock": "fallendream:item/meteor_rock",
+                 "particle": "fallendream:item/meteor_rock"},
     "elements": [
         chunk("核",       [3.5, 3, 3.5],     [12.5, 12, 12.5],   'y', 22.5),
         chunk("左突块",   [0, 4.5, 4],       [5, 10, 10],        'x', 22.5),
@@ -183,7 +183,7 @@ MODEL = {
 
 ITEMS = {
     "hand_animation_on_swap": False,
-    "model": {"type": "minecraft:model", "model": "sweetdream:item/meteor_rock"},
+    "model": {"type": "minecraft:model", "model": "fallendream:item/meteor_rock"},
 }
 
 (MDL / 'meteor_rock.json').write_text(

@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "flesh_mill": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "ol_flesh_mill"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "fallendream:overlimit/apply/flesh_mill"
+    }
+}

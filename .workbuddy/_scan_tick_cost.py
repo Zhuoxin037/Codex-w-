@@ -19,7 +19,7 @@ from collections import defaultdict, deque
 
 ROOT = r'D:\数据包'
 PACKS = {
-    'sweetdream': os.path.join(ROOT, 'sweetdream', 'data'),
+    'fallendream': os.path.join(ROOT, 'fallendream', 'data'),
     'manacore': os.path.join(ROOT, 'manacore-1.0.0', 'data'),
 }
 CALL = re.compile(r'(?:^|\s)(?:run\s+)?function\s+([a-z0-9_.\-]+:[a-z0-9_./\-]+)')
@@ -123,8 +123,8 @@ def report(label, roots):
               ' '.join('%s=%d' % (k, c[k]) for k in ('nbt_sel', 'data_get', 'items_ent', 'raw_sel', 'particle') if c[k])))
 
 
-report('每刻入口 core/tick', ['sweetdream:core/tick', 'manacore:core/tick'])
-report('一次伤害投递', ['sweetdream:api/damage'])
-report('法球命中', ['sweetdream:projectile/ball/hit'])
-report('偏振光每秒结算', ['sweetdream:equipment/staff/polarized_light/tick'])
-report('偏振光一次铺线', ['sweetdream:equipment/staff/polarized_light/beam'])
+report('每刻入口 core/tick', ['fallendream:core/tick', 'manacore:core/tick'])
+report('一次伤害投递', ['fallendream:api/damage'])
+report('法球命中', ['fallendream:projectile/ball/hit'])
+report('偏振光每秒结算', ['fallendream:equipment/staff/polarized_light/tick'])
+report('偏振光一次铺线', ['fallendream:equipment/staff/polarized_light/beam'])

@@ -2,7 +2,7 @@ import re, sys, os
 sys.stdout.reconfigure(encoding='utf-8')
 os.chdir(r'D:/数据包')
 for f in ['equipment/sword/verdict/give.mcfunction', 'equipment/sword/hush/give.mcfunction']:
-    t = open('sweetdream/data/sweetdream/function/' + f, encoding='utf-8').read()
+    t = open('fallendream/data/fallendream/function/' + f, encoding='utf-8').read()
     i = t.find('give @s ')
     body = t[i:]
     m = re.search(r'custom_data=\{.*?\}', body)

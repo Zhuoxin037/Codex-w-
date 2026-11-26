@@ -25,7 +25,7 @@ def desc(e):
 
 
 A = comps('C:/Users/qq303/AppData/Local/Temp/givebak2/equipment/staff/apocalypse/give.mcfunction')
-B = comps('sweetdream/data/sweetdream/function/equipment/staff/apocalypse/give.mcfunction')
+B = comps('fallendream/data/fallendream/function/equipment/staff/apocalypse/give.mcfunction')
 print('运行前 %d 段 / 运行后 %d 段' % (len(A), len(B)))
 for i in range(max(len(A), len(B))):
     x = desc(A[i]) if i < len(A) else '<无>'

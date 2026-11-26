@@ -2,7 +2,7 @@
 """武器专属状态 · 头顶图标绘制（预览 / 图集两用）。
 
 【为什么要有这个脚本】
-  老资源包里的 sweetdream_rp/tools/make_icons.py 随"资源包只留完整版"一起没了,
+  老资源包里的 fallendream_rp/tools/make_icons.py 随"资源包只留完整版"一起没了,
   而图标字形是**不可见私有区字符**, 手改必丢。所以重写一份: 定义像素图 -> 出预览
   -> (通过后) 追加进 完整版 的 icons.png, 并把 icons.json 的 chars 补齐。
 
@@ -30,9 +30,9 @@ except ImportError:  # 构建类脚本走 default venv
     raise SystemExit('需要 PIL: 用 ...\\python\\envs\\default\\Scripts\\python.exe 跑')
 
 ROOT = Path(r'D:\数据包')
-RP = ROOT / 'sweetdream_rp_完整版'
-ATLAS = RP / 'assets' / 'sweetdream' / 'textures' / 'font' / 'icons.png'
-FONT_JSON = RP / 'assets' / 'sweetdream' / 'font' / 'icons.json'
+RP = ROOT / 'fallendream_rp_完整版'
+ATLAS = RP / 'assets' / 'fallendream' / 'textures' / 'font' / 'icons.png'
+FONT_JSON = RP / 'assets' / 'fallendream' / 'font' / 'icons.json'
 
 DIM_ALPHA = 102          # 实测现有 dim 字形的 alpha
 DIM_DESAT = 0.35         # 实测现有 dim 的轻微去饱和

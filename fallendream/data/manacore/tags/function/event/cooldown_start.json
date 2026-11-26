@@ -1,0 +1,15 @@
+{
+  "values": [
+    "fallendream:equipment/staff/apocalypse/observe",
+    "fallendream:equipment/armor/garden_sea/observe",
+    "fallendream:equipment/armor/fade/on_cast",
+    "fallendream:equipment/armor/step_observe",
+    "fallendream:equipment/armor/lvshuang/on_cast",
+    "fallendream:equipment/armor/backlight/on_cast",
+    "fallendream:profession/on_cast",
+    "fallendream:equipment/armor/bearing/on_cast",
+    "fallendream:equipment/armor/empty_cicada/observe",
+    "fallendream:equipment/armor/resonance/on_cast",
+    "fallendream:equipment/armor/external_power/on_cast"
+  ]
+}

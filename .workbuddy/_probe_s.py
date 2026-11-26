@@ -27,14 +27,14 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PY = r'C:\Users\qq303\.workbuddy\binaries\python\versions\3.13.12\python.exe'
 CHECK = os.path.join(ROOT, '.workbuddy', 'check.py')
 
-SD = 'sweetdream/data/sweetdream/function'
+SD = 'fallendream/data/fallendream/function'
 MC = 'manacore-1.0.0/data/manacore/function'
 LS = SD + '/equipment/armor/lightless_sea/passive.mcfunction'
 WT = SD + '/equipment/armor/withered_garden/wood_tick.mcfunction'
 JN = MC + '/internal/join/new.mcfunction'
 PPN = SD + '/event/player_prepare_new.mcfunction'
 T1 = 'manacore-1.0.0/data/manacore/tags/function/event/player_prepare_new.json'
-T2 = 'sweetdream/data/manacore/tags/function/event/player_prepare_new.json'
+T2 = 'fallendream/data/manacore/tags/function/event/player_prepare_new.json'
 LR = SD + '/lib/ledger_resync_go.mcfunction'
 
 
@@ -62,13 +62,13 @@ def build_probes():
 
     t1_line = find_line(T1, 'manacore:event/noop')
     t1_bad = t1_line.replace('manacore:event/noop', 'manacore:event/nope')
-    t2_line = find_line(T2, 'sweetdream:event/player_prepare_new')
-    t2_bad = t2_line.replace('sweetdream:event/player_prepare_new', 'sweetdream:event/nope')
+    t2_line = find_line(T2, 'fallendream:event/player_prepare_new')
+    t2_bad = t2_line.replace('fallendream:event/player_prepare_new', 'fallendream:event/nope')
 
     ls_add = find_line(LR, 'lightless_sea/atk_add with storage zx:work x')
-    ls_rm = find_line(LR, 'modifier remove sweetdream:eqp_ls_atk')
+    ls_rm = find_line(LR, 'modifier remove fallendream:eqp_ls_atk')
     mr_add = find_line(LR, 'mirage/set_atk_add with storage zx:work x')
-    mr_rm = find_line(LR, 'modifier remove sweetdream:eqp_mr_set_atk')
+    mr_rm = find_line(LR, 'modifier remove fallendream:eqp_mr_set_atk')
 
     return [
         # ---- S01 ----
@@ -85,9 +85,9 @@ def build_probes():
          'S02: 槽位耗尽时不得清属性'),
         ('S02 前置包标签丢失', T1, 'repl', (t1_line, t1_bad),
          'S02: 前置包必须定义建档前事件标签'),
-        ('S02 sweetdream 未挂钩子', T2, 'repl', (t2_line, t2_bad),
-         'S02: sweetdream 必须挂载建档前清理'),
-        ('S02 建档前清理调了 uuid/API', PPN, 'ins', 'function sweetdream:lib/uuid',
+        ('S02 fallendream 未挂钩子', T2, 'repl', (t2_line, t2_bad),
+         'S02: fallendream 必须挂载建档前清理'),
+        ('S02 建档前清理调了 uuid/API', PPN, 'ins', 'function fallendream:lib/uuid',
          'S02: 未登记时只摘属性'),
         # ---- S03 ----
         ('S03 无光之海 漏重挂', LR, 'del', ls_add,

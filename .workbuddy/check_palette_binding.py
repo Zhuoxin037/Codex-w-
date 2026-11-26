@@ -1,6 +1,6 @@
 from pathlib import Path
 import json,copy,hashlib
-B=Path('D:/数据包');RP=B/'sweetdream_rp_完整版';M=RP/'assets/palette/models/item';O=B/'模型设计/调色盘_阶段三';BACK=B/'.workbuddy/backup/palette-binding-2026-10-09'
+B=Path('D:/数据包');RP=B/'fallendream_rp_完整版';M=RP/'assets/palette/models/item';O=B/'模型设计/调色盘_阶段三';BACK=B/'.workbuddy/backup/palette-binding-2026-10-09'
 load=lambda p:json.loads(p.read_text(encoding='utf-8-sig'))
 manifest=load(B/'.workbuddy/palette_deploy_manifest.json');whole=load(M/'palette.json');edited=load(O/'显示调整示例/assets/palette/models/item/palette.json')
 assert whole['display']==edited['display'],'Do not replace the user pose with the concept pose'
@@ -59,20 +59,20 @@ for c1 in range(4):
 
 # Prove the new hooks do not alter the existing costs, damage, movement or lifespan.
 def commands(p):return [s.strip() for s in p.read_text(encoding='utf-8').splitlines() if s.strip() and not s.lstrip().startswith('#')]
-original=commands(BACK/'sweetdream/data/sweetdream/function/equipment/staff/palette/skill.mcfunction')
-current=commands(B/'sweetdream/data/sweetdream/function/equipment/staff/palette/skill.mcfunction')
-original=[s for s in original if not ('item.components."minecraft:item_model" set value "sweetdream:pal_orb_' in s)]
+original=commands(BACK/'fallendream/data/fallendream/function/equipment/staff/palette/skill.mcfunction')
+current=commands(B/'fallendream/data/fallendream/function/equipment/staff/palette/skill.mcfunction')
+original=[s for s in original if not ('item.components."minecraft:item_model" set value "fallendream:pal_orb_' in s)]
 current=[s.replace('billboard:"fixed"','billboard:"center"') for s in current if '/palette/visual/' not in s]
 assert current==original,'Gameplay commands changed beyond the intended visual hooks'
-original=commands(BACK/'sweetdream/data/sweetdream/function/equipment/staff/palette/color_tick.mcfunction')
-current=[s for s in commands(B/'sweetdream/data/sweetdream/function/equipment/staff/palette/color_tick.mcfunction') if '/palette/visual/' not in s]
+original=commands(BACK/'fallendream/data/fallendream/function/equipment/staff/palette/color_tick.mcfunction')
+current=[s for s in commands(B/'fallendream/data/fallendream/function/equipment/staff/palette/color_tick.mcfunction') if '/palette/visual/' not in s]
 assert current==original
-original=commands(BACK/'sweetdream/data/sweetdream/function/equipment/staff/palette/color_body.mcfunction')
-current=[s for s in commands(B/'sweetdream/data/sweetdream/function/equipment/staff/palette/color_body.mcfunction') if '/palette/visual/' not in s]
+original=commands(BACK/'fallendream/data/fallendream/function/equipment/staff/palette/color_body.mcfunction')
+current=[s for s in commands(B/'fallendream/data/fallendream/function/equipment/staff/palette/color_body.mcfunction') if '/palette/visual/' not in s]
 assert current==original,'Tail orientation must not alter movement, targets or damage'
-assert commands(B/'sweetdream/data/sweetdream/function/equipment/staff/palette/visual/color_face.mcfunction')==['tp @s ~ ~ ~ ~ ~']
+assert commands(B/'fallendream/data/fallendream/function/equipment/staff/palette/visual/color_face.mcfunction')==['tp @s ~ ~ ~ ~ ~']
 for tag in ['load','tick']:
- values=load(B/'sweetdream/data/minecraft/tags/function'/(tag+'.json'))['values'];assert values.count('sweetdream:equipment/staff/palette/visual/'+tag)==1
-modifier=load(B/'sweetdream/data/sweetdream/item_modifier/palette_visual.json');assert modifier[1]['floats']['values'][3]==0
+ values=load(B/'fallendream/data/minecraft/tags/function'/(tag+'.json'))['values'];assert values.count('fallendream:equipment/staff/palette/visual/'+tag)==1
+modifier=load(B/'fallendream/data/fallendream/item_modifier/palette_visual.json');assert modifier[1]['floats']['values'][3]==0
 for file in manifest['files']:assert (B/file).is_file(),file
 print(json.dumps({'evaluated_color_frame_context_combinations':tested,'hand_cubes_peak':maxcubes,'display_preserved':True,'no_duplicate_palette_on_empty_layers':True,'paired_crystal_color_combinations':16,'gameplay_commands_unchanged':True,'all_references_valid':True,'deploy_files':len(manifest['files'])}))

@@ -15,7 +15,7 @@ import io
 import os
 import re
 
-BASE = "D:/数据包/sweetdream/data/sweetdream"
+BASE = "D:/数据包/fallendream/data/fallendream"
 FN = BASE + "/function"
 
 # 本批新增/改动涉及的文件(相对 function/ 的路径)
@@ -77,10 +77,10 @@ for rel, t in texts.items():
         s = ln.strip()
         if s.startswith("#"):
             continue
-        for m in re.finditer(r'function (sweetdream:[A-Za-z0-9_/]+)', s):
+        for m in re.finditer(r'function (fallendream:[A-Za-z0-9_/]+)', s):
             path = m.group(1).split(":", 1)[1]
             if not os.path.exists(os.path.join(FN, path.replace("/", os.sep) + ".mcfunction")):
-                bad.append("%s: 引用了不存在的函数 sweetdream:%s" % (rel, path))
+                bad.append("%s: 引用了不存在的函数 fallendream:%s" % (rel, path))
 
 # ---- ① 分流判据 ----
 for wid in ("yebu", "tidemark", "grayscale"):

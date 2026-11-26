@@ -19,14 +19,14 @@
 
 【三处约定(照既有)]】
   · custom_data.zx = [<id>, <分类标记>, <"itemreplace"(右键触发的才有)>]
-  · 带 冷却 的才有 skill:"sweetdream:<id>"(观测镜靠它显示冷却)
+  · 带 冷却 的才有 skill:"fallendream:<id>"(观测镜靠它显示冷却)
   · 剑/斧/弩/甲 有 max_damage -> 不能加 max_stack_size; 法杖底座 recovery_compass 能堆 -> 要加
 """
 import io, os, json, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from _tags_data import TAGS        # noqa: E402  标签单一真源(批 A)
 
-BASE = r'D:\数据包\sweetdream\data\sweetdream\function\equipment'
+BASE = r'D:\数据包\fallendream\data\fallendream\function\equipment'
 
 
 # ---------------------------------------------------------------- lore 构件
@@ -74,7 +74,7 @@ def B(t):
 ITEMS = [
     # ============================================================ 剑 ============
     dict(cat='sword', id='hush', name='无息', base='diamond_sword', color='gray',
-         item_model='sweetdream:hush',
+         item_model='fallendream:hush',
          note='【数值要和 cast 对上】魔力 200 / 冷却 30 秒 / 突击最多 8 格(16 步 × 0.5) /\n'
               '#   撞生物不停、只被终点/障碍物拦下; 途中碰到生物 -> 对身边 3 格内全部生物 ×0.1\n'
               '#   (同一只每次施法至多一次); 归位约 0.2 秒(每刻 2 格, 见 back_move), 落地再对路径生物 ×0.2。',
@@ -87,7 +87,7 @@ ITEMS = [
                  '生物造成一次相当于自身最大魔力值 ×0.2 的伤害。')]),
 
     dict(cat='sword', id='rogue_star', name='游星', base='diamond_sword', color='white',
-         item_model='sweetdream:rogue_star',
+         item_model='fallendream:rogue_star',
          note='【数值要和 cast 对上】魔力 200 / 冷却 30 秒 / 锁定 3 个 / 半径 10 / 延迟 3 秒 /\n'
               '#   爆炸半径 2 / 倍率 基础攻击力 ×4 / 保底 12。',
          lore=[H('✦ 主动技能'),
@@ -97,7 +97,7 @@ ITEMS = [
                  '伤害。（保底 12 点伤害）')]),
 
     dict(cat='sword', id='everfrost', name='永霜', base='diamond_sword', color='aqua',
-         item_model='sweetdream:everfrost',
+         item_model='fallendream:everfrost',
          note='【数值要和 cast 对上】魔力 200 / 冷却 30 秒 / 冰冻半径 5 / 最多 8 个 / 3 秒 /\n'
               '#   结束伤害 ×0.1（吃**当前剩余魔力值**, 不是上限）。',
          lore=[H('✦ 主动技能'),
@@ -107,7 +107,7 @@ ITEMS = [
                  '×0.1 的伤害。')]),
 
     dict(cat='sword', id='verdict', name='神裁', base='netherite_sword', color='gold',
-         item_model='sweetdream:verdict',
+         item_model='fallendream:verdict',
          note='【被动 + 主动两段】被动: 魔力≥50 时 25% 消耗 50 -> 被击者 2 格内 ×2 + 虚弱Ⅱ/缓慢Ⅱ/发光 8 秒。\n'
               '#   主动: 380 / 10 秒 -> 自身 6 格内至多 2 个 ×0.1, 落点生成半径 2 的领域 3 秒, 每秒 ×3。\n'
               '# 【★ 该被动是"每次攻击后"口径】平A一下算一次(命中几只都一样), 实装要按刻去重(check `atkonce`)。',
@@ -134,7 +134,7 @@ ITEMS = [
                  '相当于自身最大生命值 ×0.3 的伤害并使「火种」变为燃烧状态。')]),
 
     dict(cat='sword', id='rebound', name='回锋', base='iron_sword', color='white',
-         item_model='sweetdream:rebound',
+         item_model='fallendream:rebound',
          note='【专属层数「断刃」】被动攒层(攻击时魔力≥50 -> 扣 30 -> +1 层, 上限 3),\n'
               '#   主动(80 / 12 秒)前方 3×5; 有「断刃」则消耗全部, 之后**每 0.35 秒(7 刻)重复一次**、\n'
               '#   每层重复一次(2026-10-07 用户口径: 不再同刻一次性打完) -> 见 cast 的 ⑦/⑦\' + tick_step。\n'
@@ -149,9 +149,9 @@ ITEMS = [
                  '且每有一层则重复一次以上效果。')]),
 
     # ============================================================ 斧 ============
-    # ★★ item_model 是 fissure_axe 不是 fissure：sweetdream:fissure 在资源包里
+    # ★★ item_model 是 fissure_axe 不是 fissure：fallendream:fissure 在资源包里
     #    已经是崩裂技能的「地面裂缝」平面模型（field.mcfunction 用 item_display 召唤）。
-    dict(cat='axe', id='fissure', item_model='sweetdream:fissure_axe', name='崩裂', base='iron_axe', color='gray',
+    dict(cat='axe', id='fissure', item_model='fallendream:fissure_axe', name='崩裂', base='iron_axe', color='gray',
          note='【数值要和 cast 对上】魔力 150 / 冷却 40 秒 / 前方 5 格 ×5 倍, 落点裂缝 5 秒,\n'
               '#   裂缝内每秒一次 1 倍基础攻击力。',
          lore=[H('✦ 主动技能'),
@@ -160,7 +160,7 @@ ITEMS = [
                P('立即对自身前方 5 格的生物造成一次相当于自身基础攻击力 ×5 的伤害并形成一个持续 5 秒的裂缝。'
                  '之后在裂缝处的生物将每秒受到一次相当于释放者基础攻击力的伤害。')]),
 
-    dict(cat='axe', id='dream_reader', item_model='sweetdream:dream_reader', name='释梦', base='diamond_axe', color='light_purple',
+    dict(cat='axe', id='dream_reader', item_model='fallendream:dream_reader', name='释梦', base='diamond_axe', color='light_purple',
          note='【被动 + 主动】被动: 打时停目标额外 5×剩余时停秒数的真伤, 之后解除其停。\n'
               '#   主动: 200 / 40 秒 -> 召唤 3 个“入梦体”。\n'
               '#   “入梦体”10 格或造成伤害后自毁, 自动追最近生物 -> 当前魔力 ×0.1 + 时停 2 秒 + 白昼梦。\n'
@@ -178,7 +178,7 @@ ITEMS = [
                  '造成相当于释放者当前魔力值 ×0.1 的伤害，之后使其时停 2 秒并附加「白昼梦」效果。（不同入梦体'
                  '不会追踪同一个目标）')]),
 
-    dict(cat='axe', id='draught', item_model='sweetdream:draught', name='饮鸩', base='iron_axe', color='dark_red',
+    dict(cat='axe', id='draught', item_model='fallendream:draught', name='饮鸩', base='iron_axe', color='dark_red',
          note='【数值要和 cast 对上】魔力 160 / 冷却 80 秒 / 自伤 = 最大生命 ×0.8 /\n'
               '#   换来的基础攻击力加成 = 实际受到的自伤值, 持续 10 秒。',
          lore=[H('✦ 主动技能'),
@@ -187,7 +187,7 @@ ITEMS = [
                P('使用后对自身造成相当于自身最大生命值 ×0.8 的伤害，之后获得相当于自身受到的伤害的基础攻击力'
                  '加成，持续 10 秒。')]),
 
-    dict(cat='axe', id='pyre', item_model='sweetdream:pyre', name='葬火', base='netherite_axe', color='dark_red',
+    dict(cat='axe', id='pyre', item_model='fallendream:pyre', name='葬火', base='netherite_axe', color='dark_red',
          note='【魔力量纲特殊】消耗的是"100%"(放空前魔力), X = 本次消耗的魔力总量。\n'
               '#   落下: 2 格内 X 点 + 燃烧 X×0.05 秒; 2 秒后 5 格内 X×0.5 点。\n'
               '# 【X 是变量】实装时把"放掉的魔力"记下来当代入值, 别烘死。',
@@ -197,7 +197,7 @@ ITEMS = [
                P('使用后下一次攻击额外对自身 2 格内的全部生物造成 X 点伤害并使其燃烧 X×0.05 秒。2 秒后再对'
                  '自身 5 格范围内的全部生物造成 X×0.5 点伤害。X 为使用技能所消耗的魔力。')]),
 
-    dict(cat='axe', id='ballad', item_model='sweetdream:ballad', name='歌谣', base='diamond_axe', color='yellow',
+    dict(cat='axe', id='ballad', item_model='fallendream:ballad', name='歌谣', base='diamond_axe', color='yellow',
          note='【专属层数「曲调」】每击杀一个生物 +1（最高 8 层）。\n'
               '#   主动 240 / 30 秒: 下次攻击对 X 格内 X 个生物造成基础攻击力 ×（9-X）真伤 + 时停 X 秒, 之后清「曲调」。\n'
               '# 【X = 曲调层数】代入值直接读层数; 用户稿里"X 格内的 X 生物"按"X 个生物"理解。',
@@ -210,7 +210,7 @@ ITEMS = [
                P('使用后自身下一次攻击额外对自身 X 格内的 X 个生物造成一次相当于自身基础攻击力 ×（9-X）的'
                  '真实伤害并时停 X 秒。之后清除全部「曲调」。（X 为「曲调」层数）')]),
 
-    dict(cat='axe', id='thunderclap', item_model='sweetdream:thunderclap', name='威霆', base='netherite_axe', color='aqua',
+    dict(cat='axe', id='thunderclap', item_model='fallendream:thunderclap', name='威霆', base='netherite_axe', color='aqua',
          note='【没有主动技能】全被动, 不开右键 -> 不加 consumable/skill。\n'
               '# 【专属点数「天煌」】手持未攻击时每刻 +1（上限 2000）。攻击后全清并等量扣魔, 落点开半径 6 术阵\n'
               '#   + 半径 6 格领域（真闪电实体, 带 zx.th_seen 防雷鸣连锁）。\n'
@@ -225,7 +225,7 @@ ITEMS = [
                  '的伤害为自身最大魔力值 ×0.1。生物每受到 10 次雷击则损失自身 10% 最大生命值，共持续 X×2 秒'
                  '（X 为「天煌」×0.005）。若魔力值不足则本次攻击视消耗的魔力总数为「天煌」点数。')]),
 
-    dict(cat='axe', id='red_lotus', item_model='sweetdream:red_lotus', name='红莲', base='iron_axe', color='red',
+    dict(cat='axe', id='red_lotus', item_model='fallendream:red_lotus', name='红莲', base='iron_axe', color='red',
          note='【数值要和 cast 对上】魔力 80 / 冷却 30 秒。消耗自身 5 格内生物的「流火」/「夜火」。\n'
               '#   每层「流火」-> 5 格内 1 倍基础攻击力一次; 每层「夜火」-> 6 格内 ×3 一次。',
          lore=[H('✦ 主动技能'),
@@ -235,7 +235,7 @@ ITEMS = [
                  '的生物造成一次相当于自身基础攻击力的伤害，每消耗一层「夜火」则对自身 6 格内的生物造成一次'
                  '相当于自身基础攻击力 ×3 的伤害。')]),
 
-    dict(cat='axe', id='azure_star', item_model='sweetdream:azure_star', name='苍蓝星', base='netherite_axe', color='blue',
+    dict(cat='axe', id='azure_star', item_model='fallendream:azure_star', name='苍蓝星', base='netherite_axe', color='blue',
          note='【被动 + 主动】被动: 当前魔力 >800 时每次攻击 20% 让本武器伤害倍率翻倍（不可叠加）。\n'
               '#   主动: 500 / 80 秒 -> 最近生物 ×0.5, 之后其 2 格内 ×0.1。',
          lore=[H('✦ 被动技能'),
@@ -249,7 +249,7 @@ ITEMS = [
 
     # ============================================================ 法杖 ==========
     dict(cat='staff', id='chime', name='共鸣', base='recovery_compass', color='aqua',
-         item_model='sweetdream:chime',
+         item_model='fallendream:chime',
          note='【普攻 + 主动】普攻 12 / 伤害 7。主动 140 / 40 秒 -> 术阵 + 原地“共鸣水晶”。\n'
               '#   “共鸣水晶”每 2 秒打 6 格内一个生物 ×0.03; 法术穿过时 3 格内全体 ×0.05; 8 秒自毁。\n'
               '# 【模型】2026-10-10 用户批准独立16×16法杖贴图，绑定完整版资源包。',
@@ -292,7 +292,7 @@ ITEMS = [
                B('蓝：每有一个蓝色则在“色彩”对生物造成伤害后回复自身 150 点魔力值并使技能冷却时间 -5 秒。')]),
 
     dict(cat='staff', id='begonia', name='海棠', base='recovery_compass', color='dark_blue',
-         item_model='sweetdream:begonia',
+         item_model='fallendream:begonia',
          note='【普攻 + 主动】普攻 30 / 伤害 当前魔力 ×0.02; 命中后轻微吸引其 1 格内至多 3 个生物。\n'
               '#   主动 450 / 120 秒 -> 术阵; 把 16 格内最多 5 个附「渊海」的生物做成漩涡。\n'
               '#   漩涡 8 秒每秒拉 4 格内生物回中心; 结束时中心生物吃 ×0.15; 之后清「渊海」。',
@@ -309,7 +309,7 @@ ITEMS = [
                  '造成相当于释放者最大魔力值 ×0.15 的伤害。之后清除「渊海」。')]),
 
     dict(cat='staff', id='gu_poison', name='蛊毒', base='recovery_compass', color='green',
-         item_model='sweetdream:gu_poison',
+         item_model='fallendream:gu_poison',
          note='【普攻 + 主动】普攻 80 / 伤害 当前魔力 ×0.04; 命中后给目标「噬心」+ 3 秒缓慢Ⅱ。\n'
               '#   主动 500 / 120 秒 -> 术阵; 8 格内最多 2 个带「噬心」的每秒吃 最大生命 ×0.1, 之后移除「噬心」, 持续 6 秒。\n'
               '#   ★ 若目标的「噬心」提前掉了, 该目标本轮也提前失效。',
@@ -326,7 +326,7 @@ ITEMS = [
                  '也提前失效）')]),
 
     dict(cat='staff', id='twilight', name='暮光', base='recovery_compass', color='dark_purple',
-         item_model='sweetdream:twilight',
+         item_model='fallendream:twilight',
          note='【普攻 + 主动】普攻 50 / 伤害 最大魔力值 ×0.03; 命中后 20% 附加「噬心」, 成功则再补一次伤害。\n'
               '#   主动 350 / 100 秒 -> 术阵; 12 格内最多 3 个带「噬心」的目标护甲/韧性减半 + 抗性提升失效, 8 秒。',
          lore=[H('✦ 普攻'),
@@ -358,9 +358,9 @@ ITEMS = [
                  '若自身召唤了该“旋风”则技能缩短 3 秒。')]),
 
     # ============================================================ 弩 ============
-    dict(cat='bow', id='arc', item_model='sweetdream:crossbow_arc', name='电弧', base='crossbow', color='aqua',
+    dict(cat='bow', id='arc', item_model='fallendream:crossbow_arc', name='电弧', base='crossbow', color='aqua',
          note='【弩 = 射击触发】不加 consumable/itemreplace, 也没有冷却 -> 不加 skill。\n'
-              '# 【附魔】sweetdream:arc(见 enchantment/arc.json), 命中生物时回调 hook_victim。\n'
+              '# 【附魔】fallendream:arc(见 enchantment/arc.json), 命中生物时回调 hook_victim。\n'
               '#   ⚠️ 附魔是注册表内容: 装好后要**退出世界重进**(光 /reload 不补)。\n'
               '# 【机制】每次射击给目标「电刺」; 两个带电刺的生物 6 格内 -> 拉一道 1 格宽电线, 沿途 + 双方\n'
               '#   吃 基础攻击力 ×2 + 当前魔力 ×0.03, 之后移除「电刺」。',
@@ -487,7 +487,7 @@ def build(it):
     need_skill = cat in RIGHT_CLICK and cid not in NO_ACTIVE
     zx_txt = json.dumps(zx, ensure_ascii=False, separators=(',', ':'))
     if need_skill:
-        zx_txt = zx_txt + ',skill:"sweetdream:%s"' % cid
+        zx_txt = zx_txt + ',skill:"fallendream:%s"' % cid
 
     # 【组件顺序】palette / sail 的 item_model + custom_model_data 要排在 item_name
     #   **前面** —— 和磁盘上那两份 give 一致(2026-10-09 对齐; 组件顺序不影响功能,
@@ -505,7 +505,7 @@ def build(it):
     # 弩: 附魔 + ★ 关掉附魔光效(2026-10-10 用户要求: "我希望弩的附魔不显示光效")。
     #   1.21.5 的 enchantment_glint_override 是 **boolean**: false = 有附魔也不发光。
     if cid in BOW_ENCH:
-        parts.append('enchantments={"sweetdream:%s":1}' % cid)
+        parts.append('enchantments={"fallendream:%s":1}' % cid)
         parts.append('enchantment_glint_override=false')
     # ★ 标签(批 A, 2026-10-10): custom_data.tags = 语义关键词(见 _tags_data.py)。
     #   和 zx 并列 —— 类别走 zx[1], 语义走 tags; 一条谓词可同时查两处。
@@ -521,13 +521,13 @@ def build(it):
     else:
         parts.append('tooltip_display={hidden_components:["unbreakable"]}')
     # ★ 盔甲外观两件套（2026-10-10）：图标(item_model) + 穿戴层(equippable)。
-    #   配对资源在 sweetdream_rp_原版风 / _完整版：
+    #   配对资源在 fallendream_rp_原版风 / _完整版：
     #     items/armor_<id>.json → models/item/vanilla/armor_<id>.json → 16×16 图标
     #     equipment/armor_<id>.json → textures/entity/equipment/humanoid[_leggings]/armor_<id>.png
-    #   存量装备由 sweetdream:visual/armor_icon_sync（每秒）补课。
+    #   存量装备由 fallendream:visual/armor_icon_sync（每秒）补课。
     if cat == 'armor':
-        parts.append('item_model="sweetdream:armor_%s"' % cid)
-        parts.append('equippable={slot:"%s",asset_id:"sweetdream:armor_%s",equip_sound:"%s"}'
+        parts.append('item_model="fallendream:armor_%s"' % cid)
+        parts.append('equippable={slot:"%s",asset_id:"fallendream:armor_%s",equip_sound:"%s"}'
                      % (EQ_SLOT[SLOT[cid]], cid, ARMOR_SOUND[it['base'].split('_')[0]]))
 
     pre = ''
@@ -541,7 +541,7 @@ def header(it):
     L = []
     A = L.append
     A('# ============================================================')
-    A('# sweetdream:equipment/%s/%s/give —— 给一件「%s」（%s）'
+    A('# fallendream:equipment/%s/%s/give —— 给一件「%s」（%s）'
       % (it['cat'], it['id'], it['name'], cat_cn))
     A('# ------------------------------------------------------------')
     A('# 【custom_data】')

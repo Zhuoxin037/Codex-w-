@@ -1,0 +1,10 @@
+{
+  "criteria": {
+    "attack": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "rewards": {
+    "function": "fallendream:equipment/armor/thorn_vein/hit"
+  }
+}

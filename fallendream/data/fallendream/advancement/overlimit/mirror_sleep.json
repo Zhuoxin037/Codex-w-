@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "mirror_sleep": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "ol_mirror_sleep"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "fallendream:overlimit/apply/mirror_sleep"
+    }
+}

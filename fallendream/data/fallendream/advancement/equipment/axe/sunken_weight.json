@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "cast": {
+            "trigger": "minecraft:consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "sunken_weight"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "fallendream:equipment/axe/sunken_weight/cast"
+    }
+}

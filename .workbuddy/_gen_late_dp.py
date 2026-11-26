@@ -8,8 +8,8 @@
   照抄一遍容易漏（尤其 held 是"主手 + 副手"两行，漏一行就是只有一只手能修好）。
   所以这里补一份，只负责这两类：
 
-    ① item_modifier/crossbow_icons/<id>.json    item_model = sweetdream:crossbow_<id>
-    ② item_modifier/staff_icons/<id>.json       item_model = sweetdream:<id>（法杖不带前缀）
+    ① item_modifier/crossbow_icons/<id>.json    item_model = fallendream:crossbow_<id>
+    ② item_modifier/staff_icons/<id>.json       item_model = fallendream:<id>（法杖不带前缀）
     ③ visual/crossbow_icon_held.mcfunction      追加 2 行/件
     ④ visual/staff_icon_held.mcfunction         追加 2 行/件
 
@@ -31,12 +31,12 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from _gen_late_icons import CROSSBOWS, STAFFS  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA = os.path.join(ROOT, 'sweetdream', 'data', 'sweetdream')
+DATA = os.path.join(ROOT, 'fallendream', 'data', 'fallendream')
 MOD = os.path.join(DATA, 'item_modifier')
 FUNC = os.path.join(DATA, 'function', 'visual')
 
 # 弩：items 名 / item_model 名都带 crossbow_ 前缀；法杖只有模型/贴图带前缀，
-# item_model 与 items 文件名就是裸 id（先例：staff/begonia -> sweetdream:begonia）
+# item_model 与 items 文件名就是裸 id（先例：staff/begonia -> fallendream:begonia）
 CB_KEY = lambda cid: 'crossbow_' + cid      # noqa: E731
 SF_KEY = lambda cid: cid                    # noqa: E731
 
@@ -49,7 +49,7 @@ def write(path, text):
 def modifier(kind, fname, model):
     data = {
         'function': 'minecraft:set_components',
-        'components': {'minecraft:item_model': 'sweetdream:' + model},
+        'components': {'minecraft:item_model': 'fallendream:' + model},
     }
     p = os.path.join(MOD, kind, fname + '.json')
     if os.path.exists(p):
@@ -74,8 +74,8 @@ def append_held(path, kind, cid, model):
     for slot in ('mainhand', 'offhand'):
         add.append(
             'execute if items entity @s weapon.%s *[minecraft:custom_data~{zx:["%s"]}]'
-            ' unless items entity @s weapon.%s *[minecraft:item_model="sweetdream:%s"]'
-            ' run item modify entity @s weapon.%s sweetdream:%s/%s'
+            ' unless items entity @s weapon.%s *[minecraft:item_model="fallendream:%s"]'
+            ' run item modify entity @s weapon.%s fallendream:%s/%s'
             % (slot, cid, slot, model, slot, kind, cid))
     write(path, src + '\n'.join(add) + '\n')
     print('  + held %-18s %s' % (cid, kind))

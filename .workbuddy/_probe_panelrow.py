@@ -14,7 +14,7 @@ import io, os, subprocess
 
 ROOT = r'D:\数据包'
 PY = r'C:\Users\qq303\.workbuddy\binaries\python\versions\3.13.12\python.exe'
-FN = os.path.join(ROOT, 'sweetdream', 'data', 'sweetdream', 'function', 'equipment')
+FN = os.path.join(ROOT, 'fallendream', 'data', 'fallendream', 'function', 'equipment')
 WRATH = os.path.join(FN, 'tool', 'wrath', 'scan_mul.mcfunction')
 STYX = os.path.join(FN, 'armor', 'styx_walk', 'scan_mul.mcfunction')
 

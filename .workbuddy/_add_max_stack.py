@@ -16,7 +16,7 @@
 """
 import io, os, re
 
-BASE = "D:/数据包/sweetdream/data/sweetdream/function"
+BASE = "D:/数据包/fallendream/data/fallendream/function"
 
 TARGETS = [
     "equipment/staff/wind_ontheground/give.mcfunction",

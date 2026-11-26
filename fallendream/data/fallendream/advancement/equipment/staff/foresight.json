@@ -1,0 +1,17 @@
+{
+  "criteria": {
+    "use": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "predicates": {
+            "minecraft:custom_data": "{zx:[\"foresight\"]}"
+          }
+        }
+      }
+    }
+  },
+  "rewards": {
+    "function": "fallendream:equipment/staff/foresight/cast"
+  }
+}

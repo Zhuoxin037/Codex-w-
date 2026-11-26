@@ -5,27 +5,27 @@
 ② 模型的 element 里多了个 "name" 字段(包里既有模型都没有, 我生成时加的)
    -> 有触发模型加载失败显示紫黑方块的风险, 去掉。
 
-改完会把 sweetdream_rp_完整版 同步到版本隔离的 resourcepacks 目录。
+改完会把 fallendream_rp_完整版 同步到版本隔离的 resourcepacks 目录。
 """
 import io, os, json
 
-DATA = r'D:\数据包\sweetdream\data\sweetdream\function\equipment\tool\look'
-RP_SRC = r'D:\数据包\sweetdream_rp_完整版'
-RP_DST = r'D:\PCL 正式版 2.10.0\.minecraft\versions\1.21.5-Fabric 0.16.10\resourcepacks\sweetdream_rp_完整版'
+DATA = r'D:\数据包\fallendream\data\fallendream\function\equipment\tool\look'
+RP_SRC = r'D:\数据包\fallendream_rp_完整版'
+RP_DST = r'D:\PCL 正式版 2.10.0\.minecraft\versions\1.21.5-Fabric 0.16.10\resourcepacks\fallendream_rp_完整版'
 
 # ---------------------------------------------------------- ① return_item
 p = os.path.join(DATA, 'return_item.mcfunction')
 t = io.open(p, encoding='utf-8').read()
 OLD = 'with recovery_compass[minecraft:item_name='
 NEW = ('with recovery_compass[max_stack_size=1,'
-       'minecraft:item_model="sweetdream:look",minecraft:item_name=')
+       'minecraft:item_model="fallendream:look",minecraft:item_name=')
 n = t.count(OLD)
 t = t.replace(OLD, NEW)
 io.open(p, 'w', encoding='utf-8', newline='\n').write(t)
 print('return_item: 补齐 %d 处' % n)
 
 # ---------------------------------------------------------- ② 模型去掉 name
-mp = os.path.join(RP_SRC, 'assets', 'sweetdream', 'models', 'item', 'look.json')
+mp = os.path.join(RP_SRC, 'assets', 'fallendream', 'models', 'item', 'look.json')
 m = json.load(io.open(mp, encoding='utf-8'))
 k = 0
 for el in m['elements']:

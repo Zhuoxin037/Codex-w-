@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """批 20-B2：空营 / 独行 / 溢流 / 蓄意 / 踏空 / 屏息 的机制文件 + 进度"""
 import os, json
-ROOT = r'D:/数据包/sweetdream/data/sweetdream'
+ROOT = r'D:/数据包/fallendream/data/fallendream'
 FN = os.path.join(ROOT, 'function')
 AD = os.path.join(ROOT, 'advancement')
 
@@ -11,12 +11,12 @@ F = {}
 # 空营
 # ============================================================
 F['equipment/armor/empty_camp/second.mcfunction'] = r'''# ============================================================
-# sweetdream:equipment/armor/empty_camp/second —— 「空营」每秒结算
+# fallendream:equipment/armor/empty_camp/second —— 「空营」每秒结算
 # ------------------------------------------------------------
 # 【执行者】玩家
 # 【文案】魔力 +140（armor_mana 登记）。自身 8 格内每有 1 个敌对生物，护甲值 +1、
 #   护甲韧性 +0.5（最多 6 层）。8 格内没有敌对生物时，每秒恢复 3 点魔力值。
-# 【★ 敌对 = type=!#sweetdream:no_damage 且不是玩家 ★】包内 `no_damage` 排除 marker /
+# 【★ 敌对 = type=!#fallendream:no_damage 且不是玩家 ★】包内 `no_damage` 排除 marker /
 #   法球 / 领域；再排除玩家 —— "敌对生物"不含队友（多人同场时否则会互相顶层数）。
 #   ★ 与"全部生物"类技能（神裁/踏空）**相反**：那些按包内口径包含玩家。
 # 【★ 数数量 ★】`as @e[...] run scoreboard players add` —— 每只加 1，这是 mcfunctions
@@ -24,24 +24,24 @@ F['equipment/armor/empty_camp/second.mcfunction'] = r'''# ======================
 # 【★ 换档先摘后挂 ★】同 id modifier 重复 add 会失败；档位没变就一条都不发。
 # ============================================================
 
-execute unless items entity @s armor.chest *[minecraft:custom_data~{zx:["empty_camp"]}] run function sweetdream:equipment/armor/empty_camp/off
+execute unless items entity @s armor.chest *[minecraft:custom_data~{zx:["empty_camp"]}] run function fallendream:equipment/armor/empty_camp/off
 execute unless items entity @s armor.chest *[minecraft:custom_data~{zx:["empty_camp"]}] run return 0
 
 # ① 数 8 格内敌对，夹到 6
 scoreboard players set #ec_n zx.meta 0
-execute as @e[type=!#sweetdream:no_damage,type=!minecraft:player,distance=..8] run scoreboard players add #ec_n zx.meta 1
+execute as @e[type=!#fallendream:no_damage,type=!minecraft:player,distance=..8] run scoreboard players add #ec_n zx.meta 1
 scoreboard players set #ec_6 zx.meta 6
 execute if score #ec_n zx.meta > #ec_6 zx.meta run scoreboard players set #ec_n zx.meta 6
 
 # ② 换档（护甲 = n / 韧性 = 0.5n）
-execute unless score #ec_n zx.meta = @s zx.ec_a run function sweetdream:equipment/armor/empty_camp/attr_arm
-execute unless score #ec_n zx.meta = @s zx.ec_t run function sweetdream:equipment/armor/empty_camp/attr_tou
+execute unless score #ec_n zx.meta = @s zx.ec_a run function fallendream:equipment/armor/empty_camp/attr_arm
+execute unless score #ec_n zx.meta = @s zx.ec_t run function fallendream:equipment/armor/empty_camp/attr_tou
 
 # ③ 有敌对就不回魔
 execute if score #ec_n zx.meta matches 1.. run return 0
 
 # ④ 每秒回 3 魔力
-function sweetdream:lib/uuid
+function fallendream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return 0
 data modify storage manacore:in arg set value {uuid:"",value:3.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
@@ -49,45 +49,45 @@ function manacore:api/mana/add
 '''
 
 F['equipment/armor/empty_camp/attr_arm.mcfunction'] = r'''# ============================================================
-# sweetdream:equipment/armor/empty_camp/attr_arm —— 换护甲档（#ec_n = 层数 0..6）
+# fallendream:equipment/armor/empty_camp/attr_arm —— 换护甲档（#ec_n = 层数 0..6）
 # ------------------------------------------------------------
 # 【★ 字面量禁区 ★】modifier 数值只能是字面量 ⇒ 1..6 六条分支各写一条。
 # ============================================================
 
-execute if score @s zx.ec_a matches 1.. run attribute @s minecraft:armor modifier remove sweetdream:ec_arm
+execute if score @s zx.ec_a matches 1.. run attribute @s minecraft:armor modifier remove fallendream:ec_arm
 scoreboard players set @s zx.ec_a 0
-execute if score #ec_n zx.meta matches 1 run attribute @s minecraft:armor modifier add sweetdream:ec_arm 1 add_value
-execute if score #ec_n zx.meta matches 2 run attribute @s minecraft:armor modifier add sweetdream:ec_arm 2 add_value
-execute if score #ec_n zx.meta matches 3 run attribute @s minecraft:armor modifier add sweetdream:ec_arm 3 add_value
-execute if score #ec_n zx.meta matches 4 run attribute @s minecraft:armor modifier add sweetdream:ec_arm 4 add_value
-execute if score #ec_n zx.meta matches 5 run attribute @s minecraft:armor modifier add sweetdream:ec_arm 5 add_value
-execute if score #ec_n zx.meta matches 6 run attribute @s minecraft:armor modifier add sweetdream:ec_arm 6 add_value
+execute if score #ec_n zx.meta matches 1 run attribute @s minecraft:armor modifier add fallendream:ec_arm 1 add_value
+execute if score #ec_n zx.meta matches 2 run attribute @s minecraft:armor modifier add fallendream:ec_arm 2 add_value
+execute if score #ec_n zx.meta matches 3 run attribute @s minecraft:armor modifier add fallendream:ec_arm 3 add_value
+execute if score #ec_n zx.meta matches 4 run attribute @s minecraft:armor modifier add fallendream:ec_arm 4 add_value
+execute if score #ec_n zx.meta matches 5 run attribute @s minecraft:armor modifier add fallendream:ec_arm 5 add_value
+execute if score #ec_n zx.meta matches 6 run attribute @s minecraft:armor modifier add fallendream:ec_arm 6 add_value
 scoreboard players operation @s zx.ec_a = #ec_n zx.meta
 '''
 
 F['equipment/armor/empty_camp/attr_tou.mcfunction'] = r'''# ============================================================
-# sweetdream:equipment/armor/empty_camp/attr_tou —— 换韧性档（0.5 / 1.0 / … / 3.0）
+# fallendream:equipment/armor/empty_camp/attr_tou —— 换韧性档（0.5 / 1.0 / … / 3.0）
 # ------------------------------------------------------------
 # 【★ 字面量禁区 ★】六条分支各写一条；0 层不挂。
 # ============================================================
 
-execute if score @s zx.ec_t matches 1.. run attribute @s minecraft:armor_toughness modifier remove sweetdream:ec_tou
+execute if score @s zx.ec_t matches 1.. run attribute @s minecraft:armor_toughness modifier remove fallendream:ec_tou
 scoreboard players set @s zx.ec_t 0
-execute if score #ec_n zx.meta matches 1 run attribute @s minecraft:armor_toughness modifier add sweetdream:ec_tou 0.5 add_value
-execute if score #ec_n zx.meta matches 2 run attribute @s minecraft:armor_toughness modifier add sweetdream:ec_tou 1.0 add_value
-execute if score #ec_n zx.meta matches 3 run attribute @s minecraft:armor_toughness modifier add sweetdream:ec_tou 1.5 add_value
-execute if score #ec_n zx.meta matches 4 run attribute @s minecraft:armor_toughness modifier add sweetdream:ec_tou 2.0 add_value
-execute if score #ec_n zx.meta matches 5 run attribute @s minecraft:armor_toughness modifier add sweetdream:ec_tou 2.5 add_value
-execute if score #ec_n zx.meta matches 6 run attribute @s minecraft:armor_toughness modifier add sweetdream:ec_tou 3.0 add_value
+execute if score #ec_n zx.meta matches 1 run attribute @s minecraft:armor_toughness modifier add fallendream:ec_tou 0.5 add_value
+execute if score #ec_n zx.meta matches 2 run attribute @s minecraft:armor_toughness modifier add fallendream:ec_tou 1.0 add_value
+execute if score #ec_n zx.meta matches 3 run attribute @s minecraft:armor_toughness modifier add fallendream:ec_tou 1.5 add_value
+execute if score #ec_n zx.meta matches 4 run attribute @s minecraft:armor_toughness modifier add fallendream:ec_tou 2.0 add_value
+execute if score #ec_n zx.meta matches 5 run attribute @s minecraft:armor_toughness modifier add fallendream:ec_tou 2.5 add_value
+execute if score #ec_n zx.meta matches 6 run attribute @s minecraft:armor_toughness modifier add fallendream:ec_tou 3.0 add_value
 scoreboard players operation @s zx.ec_t = #ec_n zx.meta
 '''
 
 F['equipment/armor/empty_camp/off.mcfunction'] = r'''# ============================================================
-# sweetdream:equipment/armor/empty_camp/off —— 摘下「空营」：撤属性
+# fallendream:equipment/armor/empty_camp/off —— 摘下「空营」：撤属性
 # ============================================================
 
-execute if score @s zx.ec_a matches 1.. run attribute @s minecraft:armor modifier remove sweetdream:ec_arm
-execute if score @s zx.ec_t matches 1.. run attribute @s minecraft:armor_toughness modifier remove sweetdream:ec_tou
+execute if score @s zx.ec_a matches 1.. run attribute @s minecraft:armor modifier remove fallendream:ec_arm
+execute if score @s zx.ec_t matches 1.. run attribute @s minecraft:armor_toughness modifier remove fallendream:ec_tou
 scoreboard players set @s zx.ec_a 0
 scoreboard players set @s zx.ec_t 0
 '''
@@ -96,7 +96,7 @@ scoreboard players set @s zx.ec_t 0
 # 独行
 # ============================================================
 F['equipment/armor/lone_walk/second.mcfunction'] = r'''# ============================================================
-# sweetdream:equipment/armor/lone_walk/second —— 「独行」每秒结算
+# fallendream:equipment/armor/lone_walk/second —— 「独行」每秒结算
 # ------------------------------------------------------------
 # 【执行者】玩家
 # 【文案】魔力 +120（armor_mana 登记）/ 移速 +8%；8 格内敌对 ≤2 → 技能伤害 +8%；
@@ -106,33 +106,33 @@ F['equipment/armor/lone_walk/second.mcfunction'] = r'''# =======================
 # 【★ 「临敌」是"变化"触发 ★】zx.lw_last 记上秒数量；第一次跑只记基线不触发。
 # ============================================================
 
-execute unless items entity @s armor.feet *[minecraft:custom_data~{zx:["lone_walk"]}] run function sweetdream:equipment/armor/lone_walk/off
+execute unless items entity @s armor.feet *[minecraft:custom_data~{zx:["lone_walk"]}] run function fallendream:equipment/armor/lone_walk/off
 execute unless items entity @s armor.feet *[minecraft:custom_data~{zx:["lone_walk"]}] run return 0
 
 # ① 移速 +8%（只挂一次）
-execute unless score @s zx.lw_spd matches 1 run attribute @s minecraft:movement_speed modifier add sweetdream:lw_spd 0.08 add_multiplied_total
+execute unless score @s zx.lw_spd matches 1 run attribute @s minecraft:movement_speed modifier add fallendream:lw_spd 0.08 add_multiplied_total
 execute unless score @s zx.lw_spd matches 1 run scoreboard players set @s zx.lw_spd 1
 
 # ② 数 8 格内敌对
 scoreboard players set #lw_n zx.meta 0
-execute as @e[type=!#sweetdream:no_damage,type=!minecraft:player,distance=..8] run scoreboard players add #lw_n zx.meta 1
+execute as @e[type=!#fallendream:no_damage,type=!minecraft:player,distance=..8] run scoreboard players add #lw_n zx.meta 1
 
 # ③ ≤2 → 技能伤害 +8%（hook_calc 读 zx.lw_on）
 scoreboard players set @s zx.lw_on 0
 execute if score #lw_n zx.meta matches ..2 run scoreboard players set @s zx.lw_on 1
 
 # ④ 套装「临敌」：数量变化 → 4 秒，16 秒冷却
-function sweetdream:equipment/armor/lone_walk/set_lc
+function fallendream:equipment/armor/lone_walk/set_lc
 
 # ⑤ 临敌期间的护甲 +4（挂/摘）
-execute if score @s zx.lw_lc > #now manacore.meta unless score @s zx.lw_arm matches 1 run attribute @s minecraft:armor modifier add sweetdream:lw_arm 4 add_value
+execute if score @s zx.lw_lc > #now manacore.meta unless score @s zx.lw_arm matches 1 run attribute @s minecraft:armor modifier add fallendream:lw_arm 4 add_value
 execute if score @s zx.lw_lc > #now manacore.meta unless score @s zx.lw_arm matches 1 run scoreboard players set @s zx.lw_arm 1
-execute if score @s zx.lw_lc <= #now manacore.meta if score @s zx.lw_arm matches 1 run attribute @s minecraft:armor modifier remove sweetdream:lw_arm
+execute if score @s zx.lw_lc <= #now manacore.meta if score @s zx.lw_arm matches 1 run attribute @s minecraft:armor modifier remove fallendream:lw_arm
 execute if score @s zx.lw_lc <= #now manacore.meta if score @s zx.lw_arm matches 1 run scoreboard players set @s zx.lw_arm 0
 '''
 
 F['equipment/armor/lone_walk/set_lc.mcfunction'] = r'''# ============================================================
-# sweetdream:equipment/armor/lone_walk/set_lc —— 套装「临敌」的触发（每秒）
+# fallendream:equipment/armor/lone_walk/set_lc —— 套装「临敌」的触发（每秒）
 # ------------------------------------------------------------
 # 【执行者】玩家（已确认穿着「独行」）
 # 【★ 套装还要求胸甲是「空营」★】没穿就只更新基线，不触发。
@@ -165,11 +165,11 @@ particle minecraft:crit ~ ~1 ~ 0.6 0.4 0.6 0.05 12 normal
 '''
 
 F['equipment/armor/lone_walk/off.mcfunction'] = r'''# ============================================================
-# sweetdream:equipment/armor/lone_walk/off —— 摘下「独行」：撤移速 / 护甲 / 状态
+# fallendream:equipment/armor/lone_walk/off —— 摘下「独行」：撤移速 / 护甲 / 状态
 # ============================================================
 
-execute if score @s zx.lw_spd matches 1 run attribute @s minecraft:movement_speed modifier remove sweetdream:lw_spd
-execute if score @s zx.lw_arm matches 1 run attribute @s minecraft:armor modifier remove sweetdream:lw_arm
+execute if score @s zx.lw_spd matches 1 run attribute @s minecraft:movement_speed modifier remove fallendream:lw_spd
+execute if score @s zx.lw_arm matches 1 run attribute @s minecraft:armor modifier remove fallendream:lw_arm
 scoreboard players set @s zx.lw_spd 0
 scoreboard players set @s zx.lw_arm 0
 scoreboard players set @s zx.lw_on 0
@@ -177,7 +177,7 @@ scoreboard players set @s zx.lw_lc 0
 '''
 
 F['equipment/armor/lone_walk/hook_add.mcfunction'] = r'''# ============================================================
-# sweetdream:equipment/armor/lone_walk/hook_add —— 「独行」被动 +8%（加算池）
+# fallendream:equipment/armor/lone_walk/hook_add —— 「独行」被动 +8%（加算池）
 # ------------------------------------------------------------
 # 【谁调用它】#manacore:event/damage_calc，排在 lib/dmg_add_apply **之前**
 #   （加算池必须先填好，apply 才有东西可并）。
@@ -196,18 +196,18 @@ execute unless score @s zx.lw_on matches 1 run return 0
 scoreboard players set #lw_8 zx.meta 8
 data modify storage zx:work put set value {ch:"mm",pct:0}
 execute store result storage zx:work put.pct int 1 run scoreboard players get #lw_8 zx.meta
-function sweetdream:lib/dmg_add_put with storage zx:work put
+function fallendream:lib/dmg_add_put with storage zx:work put
 
 data modify storage zx:work put.ch set value "atk"
-function sweetdream:lib/dmg_add_put with storage zx:work put
+function fallendream:lib/dmg_add_put with storage zx:work put
 
 data modify storage zx:work put.ch set value "oth"
-function sweetdream:lib/dmg_add_put with storage zx:work put
+function fallendream:lib/dmg_add_put with storage zx:work put
 '''
 
 F['equipment/armor/lone_walk/hook_calc.mcfunction'] = r'''# @calc: indep — 套装「临敌」期间技能伤害 +10%（独立乘区）
 # ============================================================
-# sweetdream:equipment/armor/lone_walk/hook_calc —— 「临敌」的 10% 独立乘区
+# fallendream:equipment/armor/lone_walk/hook_calc —— 「临敌」的 10% 独立乘区
 # ------------------------------------------------------------
 # 【谁调用它】#manacore:event/damage_calc（排在 lib/dmg_add_apply **之后**）
 # 【执行者】施法者（玩家）
@@ -232,7 +232,7 @@ execute store result storage manacore:out r.damage double 0.001 run scoreboard p
 # 溢流
 # ============================================================
 F['equipment/armor/overflow/second.mcfunction'] = r'''# ============================================================
-# sweetdream:equipment/armor/overflow/second —— 「溢流」常驻生命上限 +4
+# fallendream:equipment/armor/overflow/second —— 「溢流」常驻生命上限 +4
 # ------------------------------------------------------------
 # 【执行者】玩家
 # 【文案】魔力 +80（armor_mana 登记），最大生命值 +4。
@@ -240,23 +240,23 @@ F['equipment/armor/overflow/second.mcfunction'] = r'''# ========================
 # 【★ 生命上限用 add_value 4 ★】不是百分比（"+20%" 那种才用 add_multiplied_total）。
 # ============================================================
 
-execute unless items entity @s armor.legs *[minecraft:custom_data~{zx:["overflow"]}] run function sweetdream:equipment/armor/overflow/off
+execute unless items entity @s armor.legs *[minecraft:custom_data~{zx:["overflow"]}] run function fallendream:equipment/armor/overflow/off
 execute unless items entity @s armor.legs *[minecraft:custom_data~{zx:["overflow"]}] run return 0
 
-execute unless score @s zx.ov_hp matches 1 run attribute @s minecraft:max_health modifier add sweetdream:ov_hp 4 add_value
+execute unless score @s zx.ov_hp matches 1 run attribute @s minecraft:max_health modifier add fallendream:ov_hp 4 add_value
 execute unless score @s zx.ov_hp matches 1 run scoreboard players set @s zx.ov_hp 1
 '''
 
 F['equipment/armor/overflow/off.mcfunction'] = r'''# ============================================================
-# sweetdream:equipment/armor/overflow/off —— 摘下「溢流」：撤生命上限
+# fallendream:equipment/armor/overflow/off —— 摘下「溢流」：撤生命上限
 # ============================================================
 
-execute if score @s zx.ov_hp matches 1 run attribute @s minecraft:max_health modifier remove sweetdream:ov_hp
+execute if score @s zx.ov_hp matches 1 run attribute @s minecraft:max_health modifier remove fallendream:ov_hp
 scoreboard players set @s zx.ov_hp 0
 '''
 
 F['equipment/armor/overflow/hook_heal.mcfunction'] = r'''# ============================================================
-# sweetdream:equipment/armor/overflow/hook_heal —— 过量治疗 → 50% 转临时生命
+# fallendream:equipment/armor/overflow/hook_heal —— 过量治疗 → 50% 转临时生命
 # ------------------------------------------------------------
 # 【谁调用它】lib/heal 的第 ⑩ 步之后（那一刻 #heal_pt / #heal_got 都还在）
 # 【执行者】被治疗的玩家
@@ -280,14 +280,14 @@ scoreboard players operation #ovf zx.meta /= #ovf_2 zx.meta
 execute if score #ovf zx.meta matches ..0 run return 0
 
 scoreboard players operation #thp_v zx.meta = #ovf zx.meta
-function sweetdream:lib/thp/add
+function fallendream:lib/thp/add
 '''
 
 # ============================================================
 # 蓄意
 # ============================================================
 F['equipment/armor/intent/second.mcfunction'] = r'''# ============================================================
-# sweetdream:equipment/armor/intent/second —— 「蓄意」常驻生命上限 +20%
+# fallendream:equipment/armor/intent/second —— 「蓄意」常驻生命上限 +20%
 # ------------------------------------------------------------
 # 【执行者】玩家
 # 【文案】魔力 +150（armor_mana 登记），最大生命值 +20%。
@@ -297,24 +297,24 @@ F['equipment/armor/intent/second.mcfunction'] = r'''# ==========================
 #   与包内其它百分比生命加成同一口径。
 # ============================================================
 
-execute unless items entity @s armor.chest *[minecraft:custom_data~{zx:["intent"]}] run function sweetdream:equipment/armor/intent/off
+execute unless items entity @s armor.chest *[minecraft:custom_data~{zx:["intent"]}] run function fallendream:equipment/armor/intent/off
 execute unless items entity @s armor.chest *[minecraft:custom_data~{zx:["intent"]}] run return 0
 
-execute unless score @s zx.it_hp matches 1 run attribute @s minecraft:max_health modifier add sweetdream:it_hp 0.2 add_multiplied_total
+execute unless score @s zx.it_hp matches 1 run attribute @s minecraft:max_health modifier add fallendream:it_hp 0.2 add_multiplied_total
 execute unless score @s zx.it_hp matches 1 run scoreboard players set @s zx.it_hp 1
 '''
 
 F['equipment/armor/intent/off.mcfunction'] = r'''# ============================================================
-# sweetdream:equipment/armor/intent/off —— 摘下「蓄意」：撤生命上限 + 账本
+# fallendream:equipment/armor/intent/off —— 摘下「蓄意」：撤生命上限 + 账本
 # ============================================================
 
-execute if score @s zx.it_hp matches 1 run attribute @s minecraft:max_health modifier remove sweetdream:it_hp
+execute if score @s zx.it_hp matches 1 run attribute @s minecraft:max_health modifier remove fallendream:it_hp
 scoreboard players set @s zx.it_hp 0
 scoreboard players set @s zx.it_sum 0
 '''
 
 F['equipment/armor/intent/tick.mcfunction'] = r'''# ============================================================
-# sweetdream:equipment/armor/intent/tick —— 「每使用 50 魔力 → +2 临时生命」（每刻）
+# fallendream:equipment/armor/intent/tick —— 「每使用 50 魔力 → +2 临时生命」（每刻）
 # ------------------------------------------------------------
 # 【谁调用它】core/tick（每刻 as @a）
 # 【执行者】玩家
@@ -334,11 +334,11 @@ execute if score @s zx.it_sum matches ..49999 run return 0
 scoreboard players remove @s zx.it_sum 50000
 
 scoreboard players set #thp_v zx.meta 2
-function sweetdream:lib/thp/add
+function fallendream:lib/thp/add
 '''
 
 F['equipment/armor/intent/on_empty.mcfunction'] = r'''# ============================================================
-# sweetdream:equipment/armor/intent/on_empty —— 临时生命清空 → 抗性Ⅱ + 迅捷Ⅲ
+# fallendream:equipment/armor/intent/on_empty —— 临时生命清空 → 抗性Ⅱ + 迅捷Ⅲ
 # ------------------------------------------------------------
 # 【谁调用它】lib/thp/clear（临时生命被清空的那一刻；执行者 = 玩家）
 # 【文案】自身临时生命值清空后，获得 5 秒抗性提升Ⅱ和迅捷Ⅲ；该效果每 12 秒最多触发一次。
@@ -363,9 +363,9 @@ particle minecraft:totem_of_undying ~ ~1 ~ 0.4 0.6 0.4 0.1 12 normal
 # 踏空
 # ============================================================
 F['equipment/armor/air_step/land.mcfunction'] = r'''# ============================================================
-# sweetdream:equipment/armor/air_step/land —— 「踏空」落地冲击（进度入口）
+# fallendream:equipment/armor/air_step/land —— 「踏空」落地冲击（进度入口）
 # ------------------------------------------------------------
-# 【谁调用它】进度 sweetdream:equipment/armor/air_step_land
+# 【谁调用它】进度 fallendream:equipment/armor/air_step_land
 #   （trigger = minecraft:fall_from_height，distance.y ≥ 2.0 ⇒ 普通跳跃只掉 1.25 格，不触发）
 # 【执行者】落地的玩家
 # 【文案】魔力 +50（armor_mana 登记）。从空中落地时，对 4 格内全部生物造成一次相当于
@@ -377,12 +377,12 @@ F['equipment/armor/air_step/land.mcfunction'] = r'''# ==========================
 #   0.36 的纵向速度 ≈ 1 格高（包内锚·冲击同款）。
 # ============================================================
 
-advancement revoke @s only sweetdream:equipment/armor/air_step_land
+advancement revoke @s only fallendream:equipment/armor/air_step_land
 
 execute unless items entity @s armor.feet *[minecraft:custom_data~{zx:["air_step"]}] run return 0
 execute if score @s zx.as_cd > #now manacore.meta run return 0
 
-function sweetdream:lib/uuid
+function fallendream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return 0
 
 # 10 秒冷却
@@ -393,12 +393,12 @@ scoreboard players add @s zx.as_cd 200
 data modify storage manacore:in arg set value {uuid:"",attack_mul:1.0}
 data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
 function manacore:api/damage/calc
-data modify storage zx:in arg set value {target:"@e[type=!#sweetdream:no_damage,distance=0.1..4]",damage:0.0}
+data modify storage zx:in arg set value {target:"@e[type=!#fallendream:no_damage,distance=0.1..4]",damage:0.0}
 data modify storage zx:in arg.damage set from storage manacore:out r.damage
-execute at @s run function sweetdream:api/damage
+execute at @s run function fallendream:api/damage
 
 # 击飞 1 格
-execute as @e[type=!#sweetdream:no_damage,distance=0.1..4] run data modify entity @s Motion set value [0.0d,0.36d,0.0d]
+execute as @e[type=!#fallendream:no_damage,distance=0.1..4] run data modify entity @s Motion set value [0.0d,0.36d,0.0d]
 
 # 回 10 魔力
 data modify storage manacore:in arg set value {uuid:"",value:10.0}
@@ -415,7 +415,7 @@ playsound minecraft:block.anvil.land player @a ~ ~ ~ 0.5 1.2
 # 屏息
 # ============================================================
 F['equipment/armor/breath_hold/second.mcfunction'] = r'''# ============================================================
-# sweetdream:equipment/armor/breath_hold/second —— 「屏息」每秒回魔
+# fallendream:equipment/armor/breath_hold/second —— 「屏息」每秒回魔
 # ------------------------------------------------------------
 # 【执行者】玩家（lib/fm/read 之后）
 # 【文案】魔力 +60（armor_mana 登记）。每有 1 个空闲术阵位，每秒恢复 2 点魔力值。
@@ -440,7 +440,7 @@ execute if score #bh_free zx.meta matches 1.. run scoreboard players operation #
 
 execute if score #bh_re zx.meta matches ..0 run return 0
 
-function sweetdream:lib/uuid
+function fallendream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return 0
 data modify storage zx:work mr.value set value 0.0
 execute store result storage zx:work mr.value double 1 run scoreboard players get #bh_re zx.meta
@@ -461,15 +461,15 @@ for rel, txt in F.items():
 JV = {
     'equipment/sword/oath_victory.json': {
         "criteria": {"oath_victory": {"trigger": "consume_item", "conditions": {"item": {"predicates": {"minecraft:custom_data": {"zx": ["oath_victory"]}}}}}},
-        "rewards": {"function": "sweetdream:equipment/sword/oath_victory/cast"},
+        "rewards": {"function": "fallendream:equipment/sword/oath_victory/cast"},
     },
     'equipment/sword/oath_victory_hit.json': {
         "criteria": {"hit": {"trigger": "player_hurt_entity", "conditions": {"damage": {"type": {"tags": [{"expected": True, "id": "minecraft:is_player_attack"}]}}}}},
-        "rewards": {"function": "sweetdream:equipment/sword/oath_victory/hit"},
+        "rewards": {"function": "fallendream:equipment/sword/oath_victory/hit"},
     },
     'equipment/armor/air_step_land.json': {
         "criteria": {"land": {"trigger": "minecraft:fall_from_height", "conditions": {"distance": {"y": {"min": 2.0}}}}},
-        "rewards": {"function": "sweetdream:equipment/armor/air_step/land"},
+        "rewards": {"function": "fallendream:equipment/armor/air_step/land"},
     },
 }
 for rel, obj in JV.items():

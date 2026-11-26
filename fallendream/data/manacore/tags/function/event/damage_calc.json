@@ -1,0 +1,33 @@
+{
+  "values": [
+    "fallendream:lib/dmg_ch",
+    "fallendream:lib/dmg_add_clear",
+    "fallendream:profession/hook_base",
+    "fallendream:upgrade/api/dmg_held",
+    "fallendream:equipment/armor/resonance/hook_calc",
+    "fallendream:equipment/armor/styx_walk/hook_calc",
+    "fallendream:equipment/tool/seraph_wing/hook_calc",
+    "fallendream:lib/mm_add/hook_calc",
+    "fallendream:equipment/axe/chenyuan/hook_calc",
+    "fallendream:equipment/staff/begonia/hook_calc",
+    "fallendream:equipment/armor/dionysus_helmet/hook_calc",
+    "fallendream:equipment/armor/mottle_vein/hook_calc",
+    "fallendream:equipment/armor/profile/hook_calc",
+    "fallendream:equipment/armor/ebb_tide/hook_calc",
+    "fallendream:equipment/armor/glimmer/hook_add",
+    "fallendream:equipment/armor/lone_walk/hook_add",
+    "fallendream:equipment/armor/breath_hold/hook_calc",
+    "fallendream:equipment/armor/last_breath/hook_oth",
+    "fallendream:equipment/armor/fade/hook_calc",
+    "fallendream:equipment/armor/eagle_hat/hook_indep",
+    "fallendream:lib/dmg_add_apply",
+    "fallendream:profession/mage/book_hook",
+    "fallendream:equipment/sword/gousi/hook_calc",
+    "fallendream:equipment/tool/wrath/hook_calc",
+    "fallendream:equipment/armor/bearing/hook_calc",
+    "fallendream:equipment/armor/lone_walk/hook_calc",
+    "fallendream:equipment/armor/glimmer/hook_calc",
+    "fallendream:profession/hook_independent",
+    "fallendream:equipment/sword/aftersound/hook_indep"
+  ]
+}

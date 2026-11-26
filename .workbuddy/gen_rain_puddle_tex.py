@@ -2,7 +2,7 @@
 """
 生成「雨迹」水迹贴图 —— 48x48 **四边渐隐**的半透明水膜
 用法: python .workbuddy/gen_rain_puddle_tex.py
-输出: sweetdream_rp_完整版/assets/sweetdream/textures/item/rain_puddle.png
+输出: fallendream_rp_完整版/assets/fallendream/textures/item/rain_puddle.png
 
 ★ 2026-10-18 第三次改：从"有轮廓的水洼"改成"四边渐隐的水膜" ★
   用户实测："水迹依旧没有铺满，且水迹之间还有重叠。"
@@ -81,7 +81,7 @@ while spots < 12:
 
 out = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-    "sweetdream_rp_完整版", "assets", "sweetdream", "textures", "item", "rain_puddle.png",
+    "fallendream_rp_完整版", "assets", "fallendream", "textures", "item", "rain_puddle.png",
 )
 img.save(out)
 print("写出", out, img.size)

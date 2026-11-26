@@ -4,7 +4,7 @@
 一次写出全部文件，内容逐字进包。可以重复跑（覆盖式）。
 """
 import os
-ROOT = r'D:/数据包/sweetdream/data/sweetdream/function'
+ROOT = r'D:/数据包/fallendream/data/fallendream/function'
 
 F = {}
 
@@ -12,7 +12,7 @@ F = {}
 # lib/thp —— 临时生命值（吸收血池）的唯一入口
 # ============================================================
 F['lib/thp/set.mcfunction'] = r'''# ============================================================
-# sweetdream:lib/thp/set —— 把「临时生命值」设成指定点数（本包唯一写吸收的地方）
+# fallendream:lib/thp/set —— 把「临时生命值」设成指定点数（本包唯一写吸收的地方）
 # ------------------------------------------------------------
 # 【入参】#thp_v zx.meta = 目标点数（整数，≥0；0 = 清空）
 # 【执行者】玩家(@s)
@@ -35,11 +35,11 @@ scoreboard players set @s zx.thp 0
 execute if score #thp_v zx.meta matches 1.. run scoreboard players operation @s zx.thp = #thp_v zx.meta
 
 # ② 摘掉上一轮的修饰符（挂过才摘）
-execute if entity @s[tag=zx.thp_on] run attribute @s minecraft:max_absorption modifier remove sweetdream:thp_cap
+execute if entity @s[tag=zx.thp_on] run attribute @s minecraft:max_absorption modifier remove fallendream:thp_cap
 tag @s remove zx.thp_on
 
 # ③ 目标是 0 ⇒ 收工（连效果一起清）
-execute if score @s zx.thp matches 0 run function sweetdream:lib/thp/clear_soft
+execute if score @s zx.thp matches 0 run function fallendream:lib/thp/clear_soft
 execute if score @s zx.thp matches 0 run return 0
 
 # ④ 等级 = ceil(N/4) = (N+3)/4
@@ -60,7 +60,7 @@ scoreboard players remove #thp_lv zx.meta 1
 data modify storage zx:work thp set value {amp:0,mod:0}
 execute store result storage zx:work thp.amp int 1 run scoreboard players get #thp_lv zx.meta
 execute store result storage zx:work thp.mod int 1 run scoreboard players get #thp_mod zx.meta
-function sweetdream:lib/thp/apply with storage zx:work thp
+function fallendream:lib/thp/apply with storage zx:work thp
 
 # ⑧ 记到期刻（60 秒后；重置时刷新）
 scoreboard players operation @s zx.thp_end = #now manacore.meta
@@ -68,7 +68,7 @@ scoreboard players add @s zx.thp_end 1200
 '''
 
 F['lib/thp/apply.mcfunction'] = r'''# ============================================================
-# sweetdream:lib/thp/apply —— 挂 max_absorption 上限 + 发吸收药水（宏 {amp,mod}）
+# fallendream:lib/thp/apply —— 挂 max_absorption 上限 + 发吸收药水（宏 {amp,mod}）
 # ------------------------------------------------------------
 # 【宏参数】zx:work thp {amp:<amplifier,0 起>, mod:<≤0 的增量>}
 # 【执行者】玩家(@s)
@@ -76,13 +76,13 @@ F['lib/thp/apply.mcfunction'] = r'''# ==========================================
 #   吃不了计分项，只能靠宏展开（同 lib/heal_up / lib/mana/* 的写法）。
 # ============================================================
 
-$attribute @s minecraft:max_absorption modifier add sweetdream:thp_cap $(mod) add_value
+$attribute @s minecraft:max_absorption modifier add fallendream:thp_cap $(mod) add_value
 $effect give @s minecraft:absorption 60 $(amp) true
 tag @s add zx.thp_on
 '''
 
 F['lib/thp/add.mcfunction'] = r'''# ============================================================
-# sweetdream:lib/thp/add —— 在现有临时生命上"加 N 点"（带最大生命 ×2 的硬上限）
+# fallendream:lib/thp/add —— 在现有临时生命上"加 N 点"（带最大生命 ×2 的硬上限）
 # ------------------------------------------------------------
 # 【入参】#thp_v zx.meta = 增量（整数，≥0）
 # 【执行者】玩家(@s)
@@ -98,7 +98,7 @@ execute if score #thp_v zx.meta matches ..0 run return 0
 scoreboard players operation #thp_v zx.meta += @s zx.thp
 
 # ③ 上限 = 最大生命 ×2（#max_hp 单位是 ×1000，先降到点）
-function sweetdream:lib/max_health_score
+function fallendream:lib/max_health_score
 scoreboard players set #2 zx.meta 2
 scoreboard players set #thp_cap zx.meta 0
 scoreboard players operation #thp_cap zx.meta = #max_hp zx.meta
@@ -107,11 +107,11 @@ scoreboard players operation #thp_cap zx.meta *= #2 zx.meta
 execute if score #thp_v zx.meta > #thp_cap zx.meta run scoreboard players operation #thp_v zx.meta = #thp_cap zx.meta
 
 # ④ 真正落值
-function sweetdream:lib/thp/set
+function fallendream:lib/thp/set
 '''
 
 F['lib/thp/clear.mcfunction'] = r'''# ============================================================
-# sweetdream:lib/thp/clear —— 清空临时生命（硬清：连 absorption 效果一起撤）
+# fallendream:lib/thp/clear —— 清空临时生命（硬清：连 absorption 效果一起撤）
 # ------------------------------------------------------------
 # 【谁调用它】lib/thp/tick（到期 / 被打空）
 # 【执行者】玩家(@s)
@@ -121,7 +121,7 @@ F['lib/thp/clear.mcfunction'] = r'''# ==========================================
 #   lib/thp/set 文件头），这里按独占处理。
 # ============================================================
 
-execute if entity @s[tag=zx.thp_on] run attribute @s minecraft:max_absorption modifier remove sweetdream:thp_cap
+execute if entity @s[tag=zx.thp_on] run attribute @s minecraft:max_absorption modifier remove fallendream:thp_cap
 tag @s remove zx.thp_on
 effect clear @s minecraft:absorption
 scoreboard players set @s zx.thp 0
@@ -129,20 +129,20 @@ scoreboard players set @s zx.thp_end 0
 '''
 
 F['lib/thp/clear_soft.mcfunction'] = r'''# ============================================================
-# sweetdream:lib/thp/clear_soft —— 账本归零时只撤吸收，不动 zx.thp（set 内部用）
+# fallendream:lib/thp/clear_soft —— 账本归零时只撤吸收，不动 zx.thp（set 内部用）
 # ------------------------------------------------------------
 # 【为什么不直接用 lib/thp/clear】set 走到这里时 @s zx.thp 已经写成 0，再调 clear
 #   会多读两次计分项；而且 set 之后还要继续判断"是否 return"，用轻量版更清楚。
 # ============================================================
 
-execute if entity @s[tag=zx.thp_on] run attribute @s minecraft:max_absorption modifier remove sweetdream:thp_cap
+execute if entity @s[tag=zx.thp_on] run attribute @s minecraft:max_absorption modifier remove fallendream:thp_cap
 tag @s remove zx.thp_on
 effect clear @s minecraft:absorption
 scoreboard players set @s zx.thp_end 0
 '''
 
 F['lib/thp/tick.mcfunction'] = r'''# ============================================================
-# sweetdream:lib/thp/tick —— 临时生命每秒维护（到期 / 被打空）
+# fallendream:lib/thp/tick —— 临时生命每秒维护（到期 / 被打空）
 # ------------------------------------------------------------
 # 【谁调用它】lib/second：execute as @a[scores={zx.thp=1..}] run ...
 # 【执行者】玩家(@s)
@@ -157,20 +157,20 @@ F['lib/thp/tick.mcfunction'] = r'''# ===========================================
 # ============================================================
 
 # ① 到期
-execute if score @s zx.thp_end <= #now manacore.meta run function sweetdream:lib/thp/clear
+execute if score @s zx.thp_end <= #now manacore.meta run function fallendream:lib/thp/clear
 
 # ② 被打空（账本还在才读 NBT）
 execute unless entity @s[tag=zx.thp_on] run return 0
 scoreboard players set #thp_real zx.meta 0
 execute store result score #thp_real zx.meta run data get entity @s AbsorptionAmount 100
-execute if score #thp_real zx.meta matches ..0 run function sweetdream:lib/thp/clear
+execute if score #thp_real zx.meta matches ..0 run function fallendream:lib/thp/clear
 '''
 
 # ============================================================
 # lib/fm —— 术阵位读数（占用 / 上限）
 # ============================================================
 F['lib/fm/read.mcfunction'] = r'''# ============================================================
-# sweetdream:lib/fm/read —— 每秒把"术阵位占用 / 上限"读进玩家计分项
+# fallendream:lib/fm/read —— 每秒把"术阵位占用 / 上限"读进玩家计分项
 # ------------------------------------------------------------
 # 【谁调用它】lib/second：execute as @a run ...
 # 【执行者】玩家(@s)
@@ -183,7 +183,7 @@ F['lib/fm/read.mcfunction'] = r'''# ============================================
 #   （见 _tags_data.py 口径 5）。
 # ============================================================
 
-function sweetdream:lib/uuid
+function fallendream:lib/uuid
 execute unless data storage zx:data self{ok:1b} run return 0
 
 # 没分数 = 0 个（store 读不到时不会执行 ⇒ 先归零）

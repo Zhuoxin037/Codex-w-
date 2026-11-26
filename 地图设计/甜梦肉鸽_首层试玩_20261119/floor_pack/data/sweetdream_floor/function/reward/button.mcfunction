@@ -1,0 +1,1 @@
+$tellraw @s {"text":"  ▸ ","color":"aqua","click_event":{"action":"run_command","command":"/trigger sd.floor_cmd set $(code)"},"extra":[{"nbt":"offers[$(index)].name","storage":"sweetdream_floor:run","underlined":true}]}

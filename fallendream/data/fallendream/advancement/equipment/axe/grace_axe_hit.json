@@ -1,0 +1,10 @@
+{
+  "criteria": {
+    "hit": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "rewards": {
+    "function": "fallendream:equipment/axe/grace_axe/hit"
+  }
+}

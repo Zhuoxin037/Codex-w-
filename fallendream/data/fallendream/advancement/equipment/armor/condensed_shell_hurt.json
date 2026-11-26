@@ -1,0 +1,10 @@
+{
+    "criteria": {
+        "hurt": {
+            "trigger": "entity_hurt_player"
+        }
+    },
+    "rewards": {
+        "function": "fallendream:equipment/armor/condensed_shell/on_hurt"
+    }
+}

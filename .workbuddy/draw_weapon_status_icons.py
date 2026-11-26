@@ -5,8 +5,8 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 ROOT=Path(__file__).resolve().parents[1]
 OUT=ROOT/'模型设计/武器专属标签_20261015'
-RP=ROOT/'sweetdream_rp_完整版'
-ATLAS=RP/'assets/sweetdream/textures/font/icons.png'
+RP=ROOT/'fallendream_rp_完整版'
+ATLAS=RP/'assets/fallendream/textures/font/icons.png'
 PAL={
  'shenghen':['#68451f','#c99b44','#f4d88f','#fff3cd'],
  'stg':['#21475b','#4798b3','#9bd6db','#e2f5e8'],
@@ -133,7 +133,7 @@ def main():
  legacy=legacy.crop((0,0,320,32))
  glyphs=[];icons={};code=0xE00A
  for name,data in SOURCE.items():
-  assert (ROOT/'sweetdream/data/sweetdream/function'/data['source']).is_file()
+  assert (ROOT/'fallendream/data/fallendream/function'/data['source']).is_file()
   for level in range(1,data['levels']+1):
    im={'shenghen':holy,'dianci':spark,'mancai':pigment}.get(name,lambda:None)() if name not in ['stg','shizhou'] else (rising(level) if name=='stg' else curse(level))
    key=name+(f'_{level}' if data['levels']>1 else '')
@@ -203,7 +203,7 @@ def main():
          '','未纳入玩家资源、临时内部选敌标记或通用控制效果。旧审计脚本提到的“蛊虫”不符合当前蛊毒技能：当前蛊毒实际施加的是已有噬心与缓慢，因此未虚构额外图标。',
          '','## 核对源码','']
  for v in SOURCE.values():
-  p=ROOT/'sweetdream/data/sweetdream/function'/v['source'];lines.append(f'- {v["name"]}：[{v["source"]}]({p.as_posix()})')
+  p=ROOT/'fallendream/data/fallendream/function'/v['source'];lines.append(f'- {v["name"]}：[{v["source"]}]({p.as_posix()})')
  (OUT/'状态核对与绘制说明.md').write_text('\n'.join(lines)+'\n',encoding='utf-8')
  assert hashlib.sha256(ATLAS.read_bytes()).hexdigest()==before
  assert preview_atlas.crop((0,0,320,32)).tobytes()==legacy.tobytes()

@@ -14,7 +14,7 @@ TITLE='C_红披风铠甲_静态'
 src=np.load(H/'source.npz');sp,sn,su,sf,st=[src[k]for k in ['p','n','uv','f','texture']]
 V={'north':[(1,1,0),(1,0,0),(0,0,0),(0,1,0)],'south':[(0,1,1),(0,0,1),(1,0,1),(1,1,1)],'east':[(1,1,1),(1,0,1),(1,0,0),(1,1,0)],'west':[(0,1,0),(0,0,0),(0,0,1),(0,1,1)],'up':[(0,1,0),(0,1,1),(1,1,1),(1,1,0)],'down':[(0,0,1),(0,0,0),(1,0,0),(1,0,1)]}
 N={'north':[0,0,-1],'south':[0,0,1],'east':[1,0,0],'west':[-1,0,0],'up':[0,1,0],'down':[0,-1,0]}
-def uid(v):return str(uuid.uuid5(uuid.NAMESPACE_URL,'sweetdream/C/20261024/'+v))
+def uid(v):return str(uuid.uuid5(uuid.NAMESPACE_URL,'fallendream/C/20261024/'+v))
 class Model:
  def __init__(self):
   self.bb={'meta':{'format_version':'5.0','model_format':'free','box_uv':False},'name':TITLE,'resolution':{'width':512,'height':512},'elements':[],'groups':[],'outliner':[],'textures':[],'animations':[]};self.nodes={};self.trans={};self.geo=[];self.mat=[]
@@ -176,7 +176,7 @@ def texture_and_save(m,texture_prefix='c_basecolor',extra_masks=None):
    w,h=f['w'],f['h'];q=f['q'];u,v=np.meshgrid((np.arange(w)+.5)/w,(np.arange(h)+.5)/h);world=q[0]+u[:,:,None]*(q[3]-q[0])+v[:,:,None]*(q[1]-q[0]);query=np.c_[world.reshape(-1,3),np.tile(f['n']*.85,(w*h,1))];dist,ix=trees[f['mat']].query(query,k=3);weights=1/(dist+.035)**2;weights/=weights.sum(1)[:,None];rgb=(colors[f['mat']][ix]*weights[:,:,None]).sum(1).reshape(h,w,3);rgba=np.full((h,w,4),255,np.uint8);rgba[:,:,:3]=np.clip(rgb,0,255);xx,yy=f['xy'];atlas.paste(Image.fromarray(np.pad(rgba,((1,1),(1,1),(0,0)),mode='edge')),(xx-1,yy-1));f['e']['faces'][f['name']]={'uv':[xx,yy,xx+w,yy+h],'texture':ti}
   name=f'{texture_prefix}_{ti}_512.png';path=D/name;atlas.save(path);m.bb['textures'].append({'name':name,'id':str(ti),'uuid':uid('t/'+name),'path':str(path),'relative_path':name,'width':512,'height':512,'uv_width':512,'uv_height':512,'render_mode':'default','render_sides':'auto','internal':True,'saved':True,'source':'data:image/png;base64,'+base64.b64encode(path.read_bytes()).decode()})
  (D/(TITLE+'.bbmodel')).write_text(json.dumps(m.bb,ensure_ascii=False,indent=2),encoding='utf8')
- aj=copy.deepcopy(m.bb);aj['meta']={'format':'animated-java:format/blueprint','format_version':'1.11.0','uuid':uid('project'),'save_location':str(D/(TITLE+'.ajblueprint')),'last_used_blueprint_id':'sweetdream_boss:c_red_cape'};aj['blueprint_settings']={'blueprint_id':'sweetdream_boss:c_red_cape','auto_render_box':False,'render_box':[4,4],'resource_pack_export_mode':'none','data_pack_export_mode':'none','target_minecraft_version':'1.21.5'};aj['texture_groups']=[];aj['variants']={'default':{'name':'default','display_name':'Default','uuid':uid('variant/default'),'slot_textures':{},'excluded_nodes':[],'is_default':True},'list':[]}
+ aj=copy.deepcopy(m.bb);aj['meta']={'format':'animated-java:format/blueprint','format_version':'1.11.0','uuid':uid('project'),'save_location':str(D/(TITLE+'.ajblueprint')),'last_used_blueprint_id':'fallendream_boss:c_red_cape'};aj['blueprint_settings']={'blueprint_id':'fallendream_boss:c_red_cape','auto_render_box':False,'render_box':[4,4],'resource_pack_export_mode':'none','data_pack_export_mode':'none','target_minecraft_version':'1.21.5'};aj['texture_groups']=[];aj['variants']={'default':{'name':'default','display_name':'Default','uuid':uid('variant/default'),'slot_textures':{},'excluded_nodes':[],'is_default':True},'list':[]}
  for e in aj['elements']:
   for f in e['faces'].values():
    if f.get('texture')is not None:f['texture']=aj['textures'][f['texture']]['uuid']

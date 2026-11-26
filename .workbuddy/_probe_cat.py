@@ -9,7 +9,7 @@ import re
 import sys
 
 ROOT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-# 已有独立建模（老包 sweetdream_rp_完整版 里 items 定义齐全）的名单
+# 已有独立建模（老包 fallendream_rp_完整版 里 items 定义齐全）的名单
 MODELED = {
     'axe': ['angelcore'],
     'sword': ['deepseaecho', 'flameremnant', 'aurora_dream'],
@@ -17,7 +17,7 @@ MODELED = {
 
 
 def main(cat):
-    d = os.path.join(ROOT, 'sweetdream', 'data', 'sweetdream', 'function', 'equipment', cat)
+    d = os.path.join(ROOT, 'fallendream', 'data', 'fallendream', 'function', 'equipment', cat)
     rows = []
     for name in sorted(os.listdir(d)):
         g = os.path.join(d, name, 'give.mcfunction')

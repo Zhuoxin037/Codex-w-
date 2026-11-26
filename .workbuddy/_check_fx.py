@@ -11,7 +11,7 @@ CATS = {'master', 'music', 'record', 'weather', 'block', 'hostile',
         'neutral', 'player', 'ambient', 'voice'}
 
 root = sys.argv[1] if len(sys.argv) > 1 else \
-    r'D:\数据包\sweetdream\data\sweetdream\function\equipment\sword\sickle_dreams\sweep\fx'
+    r'D:\数据包\fallendream\data\fallendream\function\equipment\sword\sickle_dreams\sweep\fx'
 
 bad = n = 0
 tp = set()

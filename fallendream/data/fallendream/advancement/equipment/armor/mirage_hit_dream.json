@@ -1,0 +1,10 @@
+{
+  "criteria": {
+    "hit_dream": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "rewards": {
+    "function": "fallendream:equipment/armor/mirage/hit_dream"
+  }
+}

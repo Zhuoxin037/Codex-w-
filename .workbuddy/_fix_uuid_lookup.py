@@ -11,7 +11,7 @@ import os
 import re
 import sys
 
-ROOT = r'D:/数据包/sweetdream/data/sweetdream/function'
+ROOT = r'D:/数据包/fallendream/data/fallendream/function'
 
 # 形如 nbt={UUID:[I;$(u0),$(u1),$(u2),$(u3)]}
 UUID_PAT = re.compile(r'nbt=\{UUID:\[I;\$\((?P<a>[A-Za-z0-9_.]+)\),\$\((?P<b>[A-Za-z0-9_.]+)\),\$\((?P<c>[A-Za-z0-9_.]+)\),\$\((?P<d>[A-Za-z0-9_.]+)\)\]\}')
@@ -38,7 +38,7 @@ def plan_file(path):
         a, b, c, d = m.group('a'), m.group('b'), m.group('c'), m.group('d')
         ind = line[:len(line) - len(line.lstrip())]
         feed = ind + '$data modify storage zx:work ub set value {u0:$(%s),u1:$(%s),u2:$(%s),u3:$(%s)}' % (a, b, c, d)
-        call = ind + 'function sweetdream:lib/u_by'
+        call = ind + 'function fallendream:lib/u_by'
 
         gm = GET_PAT.match(line)
         if gm:

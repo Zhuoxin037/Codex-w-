@@ -2,7 +2,7 @@
 """把 12 块四系新升级石的 lore 正文抽出来（规格来源）。"""
 import io, json, os, re
 
-BASE = r'D:\数据包\sweetdream\data\sweetdream\function'
+BASE = r'D:\数据包\fallendream\data\fallendream\function'
 IDS = ['coolant_a', 'coolant_b', 'coolant_o',
        'harden_a', 'harden_b', 'harden_o',
        'mana_surge_a', 'mana_surge_b', 'mana_surge_o',

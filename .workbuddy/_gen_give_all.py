@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-生成 sweetdream:debug/give_all —— "把至今全部的东西装进潜影盒给自己"。
+生成 fallendream:debug/give_all —— "把至今全部的东西装进潜影盒给自己"。
 
 【★ 为什么不能手抄一遍物品组件 ★】
   每件装备的 components 是一大坨(item_name/lore/custom_data/skill/...),
@@ -26,7 +26,7 @@
 """
 import glob, io, re
 
-BASE = "D:/数据包/sweetdream/data/sweetdream/function"
+BASE = "D:/数据包/fallendream/data/fallendream/function"
 OUT = BASE + "/debug/give_all.mcfunction"
 BOX_CAP = 27
 # 盒子方块坐标(和强化台 0,-59,2 错开; 0,-60,2 留给暂存箱)
@@ -35,7 +35,8 @@ BOX_CAP = 27
 #     坐标都在同一区块内(x=0/2, z=1..15), 与强化台 0,-59,2 / 暂存箱 0,-60,2 错开。
 BOX_POS = ["0 -60 1", "0 -60 3", "0 -60 5", "0 -60 7", "0 -60 9", "0 -60 11",
            "0 -60 13", "0 -60 15", "2 -60 1", "2 -60 3", "2 -60 5", "2 -60 7",
-           "2 -60 9", "2 -60 11"]
+           "2 -60 9", "2 -60 11", "2 -60 13", "2 -60 15",
+           "0 -58 1", "0 -58 3", "2 -58 1"]
 # ★ 只能是**染料色**(白/橙/品红/淡蓝/黄/黄绿/粉/灰/淡灰/青/紫/蓝/棕/绿/红/黑)——
 #   潜影盒方块只有这 16 种染色版 + 1 个默认版。写 gold/light_purple/aqua 这种
 #   "只有文字组件才认的颜色", setblock 会失败 -> 中转站建不起来 -> 盒子全发不出去。
@@ -77,7 +78,7 @@ def fn(p):
     p = p.replace("\\", "/")
     rel = p[len(BASE) + 1:]           # equipment/armor/brain_leech/give.mcfunction
     rel = rel[: -len(".mcfunction")]
-    return "sweetdream:" + rel
+    return "fallendream:" + rel
 
 
 def fill(lst, boxpos):
@@ -93,11 +94,11 @@ def fill(lst, boxpos):
 L = []
 A_ = L.append
 A_("# ============================================================")
-A_("# sweetdream:debug/give_all —— 把「至今全部的东西」打包成潜影盒给自己")
+A_("# fallendream:debug/give_all —— 把「至今全部的东西」打包成潜影盒给自己")
 A_("# ------------------------------------------------------------")
 A_("# 【这个文件是生成的】改了物品 / 加了新装备, 重跑:")
 A_("#     python .workbuddy/_gen_give_all.py")
-A_("# 【用法】/function sweetdream:debug/give_all   或   /trigger zx.dbg_give")
+A_("# 【用法】/function fallendream:debug/give_all   或   /trigger zx.dbg_give")
 A_("#")
 A_("# 【为什么是 %d 个盒子】潜影盒只有 %d 格, 而东西一共 %d 件" % (len(BOXES), BOX_CAP, len(ITEMS)))
 A_("#   (%d 件装备 + %d 块强化石) —— 按每盒 %d 件自动分包。"
@@ -133,9 +134,9 @@ A_("data modify block 0 -60 2 Items set value []")
 #    这行 JSON 源码, 而不是渲染后的名字。所以引号一律不加。
 for k, pos in enumerate(BOX_POS[:len(BOXES)]):
     if k >= NORMAL_BOX_COUNT:
-        txt = '{"text":"sweetdream · 职业装备（%d 件）","color":"light_purple","italic":false}' % len(BOXES[k])
+        txt = '{"text":"fallendream · 职业装备（%d 件）","color":"light_purple","italic":false}' % len(BOXES[k])
     else:
-        txt = '{"text":"sweetdream · 盒%d (%d 件)","color":"%s","italic":false}' % (
+        txt = '{"text":"fallendream · 盒%d (%d 件)","color":"%s","italic":false}' % (
             k + 1, len(BOXES[k]), NAME_COLOR[BOX_COLOR[k % len(BOX_COLOR)]])
     A_('data modify block %s CustomName set value %s' % (pos, txt))
 A_("#   【兜底提示】要是中转站没建成(区块没加载 / 你不在主世界), 后面全都会")

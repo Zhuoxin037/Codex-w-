@@ -11,8 +11,8 @@ import re, io, sys
 from pathlib import Path
 
 ROOT = Path(r'D:/数据包')
-PACKS = ['sweetdream', 'manacore-1.0.0']
-NS = {'sweetdream': 'sweetdream', 'manacore-1.0.0': 'manacore'}
+PACKS = ['fallendream', 'manacore-1.0.0']
+NS = {'fallendream': 'fallendream', 'manacore-1.0.0': 'manacore'}
 
 funcs = {}   # id -> path
 for p in PACKS:
@@ -105,7 +105,7 @@ for fid, fp in funcs.items():
         give_of[m.group(1)] = fid
 
 names = {}
-build = text('sweetdream:lib/reg/build')
+build = text('fallendream:lib/reg/build')
 for m in re.finditer(r'names\.([a-z0-9_]+)\s+set\s+value\s+"([^"]*)"', build):
     names[m.group(1)] = m.group(2)
 
@@ -170,7 +170,7 @@ for eid, gfid in sorted(ids.items()):
     have_skill = f"{base}/skill" in funcs
     have_attack = f"{base}/attack" in funcs
     # 进度: 找同名 advancement
-    adv_dir = ROOT / ('sweetdream' if ns == 'sweetdream' else 'manacore-1.0.0') / 'data' / ns / 'advancement'
+    adv_dir = ROOT / ('fallendream' if ns == 'fallendream' else 'manacore-1.0.0') / 'data' / ns / 'advancement'
     adv = None
     if adv_dir.exists():
         rel = gfid.split(':', 1)[1].rsplit('/give', 1)[0]

@@ -6,7 +6,7 @@
 #   mul = 倍率(x100; 1.0->100) 的**持有者名**(如 "#mul_m")
 #   obj = ★ 上面两个持有者所在的 **objective 名**(如 "manacore.math" / "zx.meta")
 #     ★★ A01(2026-10-11 三审)修: 原来 objective **硬编码** manacore.math ——
-#        而调用方 sweetdream:lib/dmg_add_apply 的分数全写在 zx.meta, 于是
+#        而调用方 fallendream:lib/dmg_add_apply 的分数全写在 zx.meta, 于是
 #        "持有者名对、objective 错" ⇒ 输入一律读不到(0) ⇒ 只要本轮有增伤,
 #        重算结果就是 0(报告例: 该给 115, 实得 0)。现在 objective 由调用方
 #        **显式传入**; 本文件不再出现任何硬编码的输入 objective。
@@ -17,7 +17,7 @@
 # 【谁调用它】
 #   · manacore:internal/damage/calc        传 obj:"manacore.math"
 #   · manacore:internal/damage/health_part 传 obj:"manacore.math"
-#   · sweetdream:lib/dmg_add_apply         传 obj:"zx.meta"
+#   · fallendream:lib/dmg_add_apply         传 obj:"zx.meta"
 # ------------------------------------------------------------
 # 【★★ N10(2026-10-11): 为什么不能直接 `src *= mul; /= #100` ★★】
 #   计分板是 32 位有符号整数(上限 2,147,483,647)。原写法先乘后除, 中间量是

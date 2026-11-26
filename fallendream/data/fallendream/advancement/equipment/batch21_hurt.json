@@ -1,0 +1,1 @@
+{"criteria":{"hurt":{"trigger":"minecraft:entity_hurt_player","conditions":{"damage":{"type":{"source_entity":{"type":"#fallendream:living"}},"taken":{"min":1e-06},"blocked":false}}}},"rewards":{"function":"fallendream:batch21/hurt"}}

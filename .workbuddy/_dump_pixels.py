@@ -31,6 +31,6 @@ if __name__ == '__main__':
         print()
     for n, t in [('deepseaecho_sword', '现有·深海的回响'),
                  ('flameremnant_sword', '现有·烈火，残躯'),
-                 ('sweetdream_aurora', '已认可·极光与幻梦')]:
+                 ('fallendream_aurora', '已认可·极光与幻梦')]:
         dump(ICON + '\\' + n + '.png', t)
         print()

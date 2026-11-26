@@ -8,7 +8,7 @@ O=Path('D:/数据包/模型设计/调色盘_阶段二');O.mkdir(parents=True,exi
 T=O/'贴图';T.mkdir(exist_ok=True)
 V=Path('C:/Users/qq303/.codex/visualizations/2026/09/30/01a0f228-3178-7672-a739-8812e448354c')
 bb=json.loads((S/'调色盘_阶段一_分组.bbmodel').read_text(encoding='utf-8'))
-U=lambda n:str(uuid.uuid5(uuid.NAMESPACE_URL,'sweetdream:palette:stage2:'+n))
+U=lambda n:str(uuid.uuid5(uuid.NAMESPACE_URL,'fallendream:palette:stage2:'+n))
 oldprops={g['uuid']:g for g in bb['groups']};props=[]
 
 # Give every nested group a distinct identity, including repeated slot subgroups.
@@ -148,8 +148,8 @@ for i,(x,y) in enumerate([(6.75,4.20),(.15,5.05),(-6.2,3.0)]):
 
 def flat(g):return {k:v for k,v in g.items() if k!='children'}
 def out(g):return {'uuid':g['uuid'],'isOpen':g['isOpen'],'children':[out(c) if isinstance(c,dict) else c for c in g['children']]}
-display_path=O/'显示调整示例/assets/sweetdream/models/item/palette/display.json';display_path.parent.mkdir(parents=True,exist_ok=True)
-display=json.loads((display_path if display_path.exists() else S/'显示调整示例/assets/sweetdream/models/item/palette/display.json').read_text(encoding='utf-8'))
+display_path=O/'显示调整示例/assets/fallendream/models/item/palette/display.json';display_path.parent.mkdir(parents=True,exist_ok=True)
+display=json.loads((display_path if display_path.exists() else S/'显示调整示例/assets/fallendream/models/item/palette/display.json').read_text(encoding='utf-8'))
 display_path.write_text(json.dumps(display,ensure_ascii=False,indent=2),encoding='utf-8')
 bb.update(name='调色盘_阶段二_古希腊装饰与三槽',groups=[flat(g) for g in props],outliner=[out(root)],elements=elements,textures=textures,display=display['display'])
 bbpath=O/'调色盘_阶段二_分组.bbmodel';bbpath.write_text(json.dumps(bb,ensure_ascii=False,separators=(',',':')),encoding='utf-8')
@@ -172,10 +172,10 @@ for e in elements:
   if p['texture'] is None:continue
   t=textures[int(p['texture'])];q['faces'][f]={'texture':'#'+str(p['texture']),'uv':[round(v*16/(t['uv_width'] if j%2==0 else t['uv_height']),6) for j,v in enumerate(p['uv'])]}
  example.append(q)
-texdir=O/'显示调整示例/assets/sweetdream/textures/item/palette';texdir.mkdir(parents=True,exist_ok=True)
+texdir=O/'显示调整示例/assets/fallendream/textures/item/palette';texdir.mkdir(parents=True,exist_ok=True)
 for i,t in enumerate(textures):(texdir/('t%d.png'%i)).write_bytes(base64.b64decode(t['source'].split(',')[1]))
-texmap={str(i):'sweetdream:item/palette/t%d'%i for i in range(len(textures))};texmap['particle']=texmap['0']
-(display_path.parent/'stage2.json').write_text(json.dumps({'parent':'sweetdream:item/palette/display','textures':texmap,'elements':example},ensure_ascii=False,separators=(',',':')),encoding='utf-8')
+texmap={str(i):'fallendream:item/palette/t%d'%i for i in range(len(textures))};texmap['particle']=texmap['0']
+(display_path.parent/'stage2.json').write_text(json.dumps({'parent':'fallendream:item/palette/display','textures':texmap,'elements':example},ensure_ascii=False,separators=(',',':')),encoding='utf-8')
 
 # Structural checks include group IDs as well as the complete BB 5.2 face schema.
 assert len({g['uuid'] for g in props})==len(props)

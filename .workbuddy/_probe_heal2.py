@@ -14,7 +14,7 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='repla
 
 ROOT = Path(r'D:\数据包')
 PY = r'C:\Users\qq303\.workbuddy\binaries\python\versions\3.13.12\python.exe'
-SD = ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function'
+SD = ROOT / 'fallendream' / 'data' / 'fallendream' / 'function'
 
 P = {
     'up':     SD / 'lib' / 'heal_up.mcfunction',
@@ -78,7 +78,7 @@ ok = []
 def m1():
     lines = ORIG['up'].split('\n')
     i = find_line(ORIG['up'], 'effect give @s minecraft:instant_health')
-    lines.insert(i + 1, 'attribute @s minecraft:max_health modifier remove sweetdream:heal_cap')
+    lines.insert(i + 1, 'attribute @s minecraft:max_health modifier remove fallendream:heal_cap')
     P['up'].write_text('\n'.join(lines), encoding='utf-8')
 
 
@@ -95,7 +95,7 @@ ok.append(('2  heal_up 去掉 heal_p 标签', probe('2', 'zx.heal_p', m2)))
 
 def m3():
     lines = ORIG['tick'].split('\n')
-    a = find_line(ORIG['tick'], 'run function sweetdream:lib/heal_off')
+    a = find_line(ORIG['tick'], 'run function fallendream:lib/heal_off')
     b = find_line(ORIG['tick'], 'run tag @s add zx.heal_on')
     lines[a], lines[b] = lines[b], lines[a]
     P['tick'].write_text('\n'.join(lines), encoding='utf-8')
@@ -107,7 +107,7 @@ ok.append(('3  core/tick 两行反转', probe('3', '两行回血收尾不能反'
 def m4():
     lines = ORIG['off'].split('\n')
     a = find_line(ORIG['off'], 'tag @s remove zx.heal_on')
-    b = find_line(ORIG['off'], 'modifier remove sweetdream:heal_cap')
+    b = find_line(ORIG['off'], 'modifier remove fallendream:heal_cap')
     lines[a], lines[b] = lines[b], lines[a]
     P['off'].write_text('\n'.join(lines), encoding='utf-8')
 

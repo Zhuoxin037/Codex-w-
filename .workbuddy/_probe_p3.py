@@ -15,7 +15,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PY = sys.executable
 CHK = os.path.join(ROOT, '.workbuddy', 'check.py')
 
-_SD = 'sweetdream/data/sweetdream/function'
+_SD = 'fallendream/data/fallendream/function'
 _MC = 'manacore-1.0.0/data/manacore/function'
 
 REL = {
@@ -33,7 +33,7 @@ REL = {
 
 ORIG_EMP_LINE = ('$execute if entity @e[tag=zx.bg_vtx,tag=zx.bg_emp,nbt={data:{zx:{bg:{'
                  'ol:1b,u0:$(u0),u1:$(u1),u2:$(u2),u3:$(u3)}}}},distance=..6,limit=1] '
-                 'run function sweetdream:equipment/staff/begonia/emp_put')
+                 'run function fallendream:equipment/staff/begonia/emp_put')
 
 
 def rd(key):
@@ -100,22 +100,22 @@ def m_cachego_global():
 
 
 def m_toggle_no_refresh():
-    _drop_line('toggle', 'run function sweetdream:equipment/tool/look/cache')
+    _drop_line('toggle', 'run function fallendream:equipment/tool/look/cache')
 
 
 # ---------------- N09 ----------------
 def m_hook_macro_back():
-    _sub('hook', 'execute at @s run function sweetdream:equipment/staff/begonia/emp_find',
+    _sub('hook', 'execute at @s run function fallendream:equipment/staff/begonia/emp_find',
          ORIG_EMP_LINE)
 
 
 def m_hook_no_at():
-    _sub('hook', 'execute at @s run function sweetdream:equipment/staff/begonia/emp_find',
-         'execute run function sweetdream:equipment/staff/begonia/emp_find')
+    _sub('hook', 'execute at @s run function fallendream:equipment/staff/begonia/emp_find',
+         'execute run function fallendream:equipment/staff/begonia/emp_find')
 
 
 def m_empfind_empty():
-    _drop_line('empfind', 'run function sweetdream:equipment/staff/begonia/emp_put')
+    _drop_line('empfind', 'run function fallendream:equipment/staff/begonia/emp_put')
 
 
 def m_tagmacro_proof():

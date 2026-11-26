@@ -3,7 +3,7 @@
 import os, re, glob, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-ROOT = 'D:/数据包/sweetdream/data/sweetdream/function/equipment'
+ROOT = 'D:/数据包/fallendream/data/fallendream/function/equipment'
 
 def parse(f):
     txt = open(f, encoding='utf-8').read()

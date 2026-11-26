@@ -5,7 +5,7 @@ import io, os, re, sys, json
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import _tags_data as D
 
-ROOT = r'D:\数据包\sweetdream\data\sweetdream\function'
+ROOT = r'D:\数据包\fallendream\data\fallendream\function'
 OUT = r'D:\数据包\.workbuddy\_sword_lore.txt'
 
 SWORDS = [c for c in D.TAGS if c in (

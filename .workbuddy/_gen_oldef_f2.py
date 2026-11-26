@@ -21,7 +21,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from lore_fmt import nfmt, tw, wrap  # noqa: E402
 
-LOAD = "D:/数据包/sweetdream/data/sweetdream/function/overlimit/def/load.mcfunction"
+LOAD = "D:/数据包/fallendream/data/fallendream/function/overlimit/def/load.mcfunction"
 
 # ★ 超限名的颜色 = 该装备**本名**的颜色(2026-10-10 用户要求, 见 overlimit/def/load 头部)。
 #   真源是 equipment/**/<id>/give.mcfunction 里的 item_name.color; 改色跑
@@ -160,7 +160,8 @@ def lore_json(items):
 
 
 def line(uid, label, note, items):
-    return ('data modify storage zx:config oldef."%s" set value {label:"%s",'
+    from _ol_cost_policy import rewrite_definition
+    return rewrite_definition(uid, 'data modify storage zx:config oldef."%s" set value {label:"%s",'
             'name:{"text":"%s","bold":true,"color":"%s"},note:"%s",'
             'dmg:0.0,mana:0.0,cd:0.0,lore:%s}\n'
             % (uid, esc(label), esc(label), OL_COLOR[uid], esc(note), lore_json(items)))

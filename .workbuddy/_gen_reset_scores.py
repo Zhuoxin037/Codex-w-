@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-"""_gen_reset_scores.py —— 生成 sweetdream:event/player_reset 的"逐项清账清单"。
+"""_gen_reset_scores.py —— 生成 fallendream:event/player_reset 的"逐项清账清单"。
 
 背景(审查报告 2026-10-11 · N05/N06):
   · N06: 旧写法 `scoreboard players reset @s`(**不带 objective**)= 清该玩家在**所有**
     计分项上的分数 —— 连别的数据包的分一起清。本包目录里就住着第二个数据包
-    `sweetdream/data/naturewind`(nw.anim / nw.cast_t) ⇒ 旧写法会把它一起清掉
+    `fallendream/data/naturewind`(nw.anim / nw.cast_t) ⇒ 旧写法会把它一起清掉
     (现场可证, 不是假想)。改成**逐项清单**: 只 reset 本包 zx.*。
   · 单一真源 = **源码**: 扫所有 `scoreboard objectives add zx.<名字>` 去重排序,
     生成 `scoreboard players reset @s zx.<名字>` 逐行写进 player_reset.mcfunction
@@ -33,9 +33,9 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SCAN_DIRS = [
     os.path.join(ROOT, 'manacore-1.0.0', 'data'),
-    os.path.join(ROOT, 'sweetdream', 'data'),
+    os.path.join(ROOT, 'fallendream', 'data'),
 ]
-TARGET = os.path.join(ROOT, 'sweetdream', 'data', 'sweetdream',
+TARGET = os.path.join(ROOT, 'fallendream', 'data', 'fallendream',
                       'function', 'event', 'player_reset.mcfunction')
 MARK = '# @@GEN-SCORES-BELOW@@'
 # ★ Q02(2026-10-11 四审): 可选尾标记 —— 见文件头"尾标记"一节。

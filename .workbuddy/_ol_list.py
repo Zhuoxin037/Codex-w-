@@ -1,5 +1,5 @@
 import re
-p = 'sweetdream/data/sweetdream/function/overlimit/def/load.mcfunction'
+p = 'fallendream/data/fallendream/function/overlimit/def/load.mcfunction'
 t = open(p, encoding='utf-8').read()
 for m in re.finditer(r'oldef\.("?\w+"?) set value \{label:"([^"]+)",name:', t):
     start = m.end()

@@ -18,8 +18,8 @@ CHK = os.path.join(ROOT, '.workbuddy', 'check.py')
 
 CALC = 'manacore-1.0.0/data/manacore/function/internal/damage/calc.mcfunction'
 HP = 'manacore-1.0.0/data/manacore/function/internal/damage/health_part.mcfunction'
-APP = 'sweetdream/data/sweetdream/function/lib/dmg_add_apply.mcfunction'
-PUT = 'sweetdream/data/sweetdream/function/lib/dmg_add_put_any.mcfunction'
+APP = 'fallendream/data/fallendream/function/lib/dmg_add_apply.mcfunction'
+PUT = 'fallendream/data/fallendream/function/lib/dmg_add_put_any.mcfunction'
 REL = [CALC, HP, APP, PUT]
 
 KEY_DMG = '本通道分量'        # dmgseg 桶标题关键词

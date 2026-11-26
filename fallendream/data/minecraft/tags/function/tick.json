@@ -1,0 +1,24 @@
+{
+  "values": [
+    "fallendream:core/tick",
+    "naturewind:tick",
+    "fallendream:equipment/sword/sickle_dreams/sweep/tick",
+    "fallendream:equipment/bow/cold_crow/model/tick",
+    "fallendream:equipment/staff/apocalypse/visual/tick",
+    "fallendream:equipment/staff/sail/visual/tick",
+    "fallendream:equipment/staff/palette/visual/tick",
+    "fallendream:equipment/axe/angel_core/visual/tick",
+    "fallendream:visual/tick",
+    "fallendream:equipment/axe/sacred_relic/visual/tick",
+    "fallendream:equipment/axe/sacred_relic/visual/remnant/tick",
+    "fallendream:equipment/staff/five_curses/visual/tick",
+    "animated_java:global/data_manager/on_tick",
+    "animated_java:global/on_tick",
+    "fallendream:boss/fireaxe/tick",
+    "fallendream:equipment/staff/triad/visual/tick",
+    "fallendream:boss/knight/tick",
+    "fallendream:boss/husk/tick",
+    "fallendream:rogue/tick",
+    "fallendream:boss/b_staff/tick"
+  ]
+}

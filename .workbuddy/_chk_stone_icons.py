@@ -20,10 +20,10 @@
 import io, os, re, sys, json
 
 ROOT = r'D:\数据包'
-DP = os.path.join(ROOT, 'sweetdream', 'data', 'sweetdream', 'function')
-RP_SRC = os.path.join(ROOT, 'sweetdream_rp_完整版')
+DP = os.path.join(ROOT, 'fallendream', 'data', 'fallendream', 'function')
+RP_SRC = os.path.join(ROOT, 'fallendream_rp_完整版')
 RP_DST = (r'D:\PCL 正式版 2.10.0\.minecraft\versions\1.21.5-Fabric 0.16.10'
-          r'\resourcepacks\sweetdream_rp_完整版')
+          r'\resourcepacks\fallendream_rp_完整版')
 RC = 'assets/minecraft/items/recovery_compass.json'
 
 bad = []
@@ -72,7 +72,7 @@ for e in entries:
     by_thr[thr] = mid
     if thr <= 0:
         err('阈值 %.1f <= 0 —— 会把原版指针顶掉(没有 cmd 的物品取值 0)' % thr)
-    if not mid.startswith('sweetdream:item/stone/'):
+    if not mid.startswith('fallendream:item/stone/'):
         err('entry %.1f 指向非 stone 模型: %s' % (thr, mid))
 
 missing = [n for n in sorted(uses) if float(n) not in by_thr]
@@ -88,7 +88,7 @@ for thr in sorted(by_thr):
     mid = by_thr[thr]
     name = mid.split(':', 1)[1].split('/')[-1]           # item/stone/<name>
     for tag, rp in (('源', RP_SRC), ('版本隔离', RP_DST)):
-        mf = os.path.join(rp, 'assets', 'sweetdream', 'models', 'item', 'stone',
+        mf = os.path.join(rp, 'assets', 'fallendream', 'models', 'item', 'stone',
                           name + '.json')
         if not os.path.exists(mf):
             err('%s资源包缺模型: models/item/stone/%s.json' % (tag, name))
@@ -116,8 +116,8 @@ diff = 0
 rel_list = [RC]
 for thr in sorted(by_thr):
     name = by_thr[thr].split(':', 1)[1].split('/')[-1]
-    rel_list.append('assets/sweetdream/models/item/stone/%s.json' % name)
-    rel_list.append('assets/sweetdream/textures/item/stone/%s.png' % name)
+    rel_list.append('assets/fallendream/models/item/stone/%s.json' % name)
+    rel_list.append('assets/fallendream/textures/item/stone/%s.png' % name)
 for rel in rel_list:
     a = os.path.join(RP_SRC, *rel.split('/'))
     b = os.path.join(RP_DST, *rel.split('/'))

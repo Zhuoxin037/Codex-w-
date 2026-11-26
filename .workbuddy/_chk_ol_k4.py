@@ -23,7 +23,7 @@ import json
 import os
 import re
 
-BASE = "D:/数据包/sweetdream/data/sweetdream"
+BASE = "D:/数据包/fallendream/data/fallendream"
 FN = BASE + "/function"
 
 NEW = [
@@ -105,7 +105,7 @@ for rel, oid, item in [
 # ---- ② 所有 function 引用都存在 ----
 referenced = set()
 for rel, t in texts.items():
-    for m in re.finditer(r'function (sweetdream:[a-z0-9_/]+)', body(t)):
+    for m in re.finditer(r'function (fallendream:[a-z0-9_/]+)', body(t)):
         referenced.add(m.group(1))
 for fq in sorted(referenced):
     p = os.path.join(FN, fq.split(":", 1)[1].replace("/", os.sep) + ".mcfunction")
@@ -156,9 +156,9 @@ SP = body(texts["equipment/axe/xiugou/spawn.mcfunction"])
 if '"zx.xg_ol"' not in SP and "add zx.xg_ol" not in SP:
     bad.append("xiugou/spawn: 超限犬没挂 zx.xg_ol 标签 —— dog_tick 分不到 8 格那一路")
 DT = body(texts["equipment/axe/xiugou/dog_tick.mcfunction"])
-if "tag=zx.xg_ol] if score @s zx.xg_n matches ..9 run function sweetdream:equipment/axe/xiugou/ol_bite" not in DT:
+if "tag=zx.xg_ol] if score @s zx.xg_n matches ..9 run function fallendream:equipment/axe/xiugou/ol_bite" not in DT:
     bad.append("xiugou/dog_tick: 没有按 zx.xg_ol 分流到 ol_bite")
-if "unless entity @s[tag=zx.xg_ol] if score @s zx.xg_n matches ..9 run function sweetdream:equipment/axe/xiugou/bite" not in DT:
+if "unless entity @s[tag=zx.xg_ol] if score @s zx.xg_n matches ..9 run function fallendream:equipment/axe/xiugou/bite" not in DT:
     bad.append("xiugou/dog_tick: 原版那一路没有 `unless zx.xg_ol`(超限犬会咬两口)")
 
 OB = body(texts["equipment/axe/xiugou/ol_bite.mcfunction"])
@@ -183,7 +183,7 @@ if "sm:1b" not in body(texts["equipment/axe/xiugou/bite_one.mcfunction"]):
     bad.append("xiugou/bite_one: 原版犬的伤害也没打 sm:1b(同一套承伤要走同一判据)")
 
 ONE = body(texts["internal/damage/one.mcfunction"])
-if "if data storage zx:work a{sm:1b} if entity @s[scores={zx.svul=1..}] run function sweetdream:internal/damage/vuln_summon" not in ONE:
+if "if data storage zx:work a{sm:1b} if entity @s[scores={zx.svul=1..}] run function fallendream:internal/damage/vuln_summon" not in ONE:
     bad.append("internal/damage/one: 没有 sm:1b + zx.svul 的钩子(那 30% 无处生效)")
 VS = body(texts["internal/damage/vuln_summon.mcfunction"])
 if "#vs zx.meta *= #130 zx.meta" not in VS or "#vs zx.meta /= #100 zx.meta" not in VS:
@@ -215,7 +215,7 @@ if "zx.dg_ol2 1" not in body(texts[DC]):
     bad.append("draught/cast: 没有置 zx.dg_ol2 = 1(第二形态永远解锁不了)")
 if "#dg_plan" not in body(texts[DC]):
     bad.append("draught/cast: 没有按「本次伤害数值」(#dg_plan)算加成")
-if "sweetdream:equipment/axe/draught/ol_strip" not in body(texts[DC]):
+if "fallendream:equipment/axe/draught/ol_strip" not in body(texts[DC]):
     bad.append("draught/cast: 重入时没有撤掉第二形态的旧账(会越叠越高)")
 
 OS = body(texts["equipment/axe/draught/ol_second.mcfunction"])
@@ -233,7 +233,7 @@ if "zx.dg_mode matches 2" not in OH:
     bad.append("draught/ol_hit: 没有判第二形态(zx.dg_mode = 2)")
 if "zx.dg_n matches 4.." not in OH:
     bad.append("draught/ol_hit: 没有 4 次上限")
-if 'type:"sweetdream:true_damage"' not in OH:
+if 'type:"fallendream:true_damage"' not in OH:
     bad.append("draught/ol_hit: 自伤不是真实伤害")
 if "zx.dg_on2 10" not in OH:
     bad.append("draught/ol_hit: +10% 的持续时间不是 10 秒")
@@ -242,20 +242,20 @@ if "#10 zx.meta" not in OH:
 if "zx.dg_buf2" not in OH:
     bad.append("draught/ol_hit: 没有账本 zx.dg_buf2(到期减不回去)")
 
-adv = os.path.join("D:/数据包/sweetdream/data/sweetdream/advancement/equipment/axe/draught_hit.json")
+adv = os.path.join("D:/数据包/fallendream/data/fallendream/advancement/equipment/axe/draught_hit.json")
 if not os.path.exists(adv):
     bad.append("缺进度: advancement/equipment/axe/draught_hit.json(平A 触发不了)")
 else:
     js = json.load(io.open(adv, encoding="utf-8"))
-    if js.get("rewards", {}).get("function") != "sweetdream:equipment/axe/draught/ol_hit":
+    if js.get("rewards", {}).get("function") != "fallendream:equipment/axe/draught/ol_hit":
         bad.append("draught_hit.json: rewards.function 不是 draught/ol_hit")
     if "player_hurt_entity" not in json.dumps(js):
         bad.append("draught_hit.json: 触发条件不是 player_hurt_entity")
 
 REARM = body(texts["lib/rearm.mcfunction"])
-if "advancement revoke @a only sweetdream:equipment/axe/draught_hit" not in REARM:
+if "advancement revoke @a only fallendream:equipment/axe/draught_hit" not in REARM:
     bad.append("lib/rearm: 没登记 draught_hit —— 奖励函数被跳过一次就永久卡死")
-if "scores={zx.dg_on2=1..}] run function sweetdream:equipment/axe/draught/ol_expire" not in SEC:
+if "scores={zx.dg_on2=1..}] run function fallendream:equipment/axe/draught/ol_expire" not in SEC:
     bad.append("lib/second: 没有第二形态的每秒推进(ol_expire)")
 
 # ================= 天穹 skyvault =================
@@ -274,7 +274,7 @@ if RS.count("tp @s ~ ~0.6 ~") < 2:
     bad.append("skyvault/rise_step: 原版与连锁段的 0.6 格/刻 两条不齐")
 
 RE = body(texts["equipment/axe/skyvault/rise_end.mcfunction"])
-if "if score @s zx.sv_cn matches 1 run function sweetdream:equipment/axe/skyvault/dive_ready" not in RE:
+if "if score @s zx.sv_cn matches 1 run function fallendream:equipment/axe/skyvault/dive_ready" not in RE:
     bad.append("skyvault/rise_end: 连锁段跃升到顶没有自动俯冲")
 
 IM = body(texts["equipment/axe/skyvault/impact.mcfunction"])
@@ -284,7 +284,7 @@ if "arg.attack_mul set value 3.0" not in IM:
     bad.append("skyvault/impact: 每层额外伤害不是 基础攻击力 ×3")
 if "arg.ticks set value 700" not in IM:
     bad.append("skyvault/impact: 超限减冷却不是 35 秒(700 tick)")
-if "matches 10.. run function sweetdream:equipment/axe/skyvault/ol_chain" not in IM:
+if "matches 10.. run function fallendream:equipment/axe/skyvault/ol_chain" not in IM:
     bad.append("skyvault/impact: 没有 ≥10 层的连锁触发")
 if "#sv_ol zx.meta 0" not in IM or "#sv_ol zx.meta 1" not in IM:
     bad.append("skyvault/impact: 没有把 @s zx.sv_ol 拍成 #sv_ol 快照")
@@ -315,7 +315,7 @@ SM = body(texts["internal/damage/stg_mul.mcfunction"])
 
 if '*= #stg_per zx.meta' not in SM:
     bad.append("stg_mul: 乘区还在用写死的 5(/每层 10% 没落地)")
-if "run function sweetdream:internal/damage/stg_per" not in SM:
+if "run function fallendream:internal/damage/stg_per" not in SM:
     bad.append("stg_mul: 没有调 stg_per 判「攻击者手里那把」(会让所有天穹都 10%)")
 SP2 = body(texts["internal/damage/stg_per.mcfunction"])
 if 'zx:["skyvault"],ol:"skyvault"' not in SP2:

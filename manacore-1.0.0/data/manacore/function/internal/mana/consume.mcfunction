@@ -21,6 +21,24 @@
 execute store result score #need manacore.math run data get storage manacore:work a.value 1000
 $execute store result score #cur manacore.math run data get storage manacore:players "$(uuid)".stats.current_mana 1000
 
+# ---- 魔耗减免(2026-11-22, fallendream「超限·共振」用) ----
+#   stats.mana_cost_multiplier 是"要扣的量"的倍率(默认 1.0 = 不打折)。
+#   只乘 #need —— 判断够不够与真正扣除用的是同一个值, 不会出现"判得多扣得少"。
+#   ★ 门控写 matches 1001.. ★ 老玩家记录里没有这个键时 data get 失败、
+#     #mcm 保持上一行的 0 ⇒ 不乘 ⇒ 行为与改动前完全一致(不 return, 因为后面
+#     的判定还要照常跑)。
+#   ★ 中间量按 ×1000 走 ★ value 与 multiplier 都是毫点/千分比例, 乘完再除 1000。
+#   ★ R05 上界保护: #need × #mcm 前先夹到 INT32_MAX ÷ #mcm ★ 技能魔耗是千分整数,
+#     极端值(几百上千点的耗蓝 × 千分倍率)会越过 2,147,483,647 回绕成负数, 静默。
+scoreboard players set #mcm manacore.math 0
+$execute store result score #mcm manacore.math run data get storage manacore:players "$(uuid)".stats.mana_cost_multiplier 1000
+execute if score #mcm manacore.math matches 1001.. run scoreboard players set #mcm_cap manacore.math 2147483647
+execute if score #mcm manacore.math matches 1001.. run scoreboard players operation #mcm_cap manacore.math /= #mcm manacore.math
+execute if score #mcm manacore.math matches 1001.. if score #need manacore.math > #mcm_cap manacore.math run scoreboard players operation #need manacore.math = #mcm_cap manacore.math
+execute if score #mcm manacore.math matches 1001.. run scoreboard players operation #need manacore.math *= #mcm manacore.math
+execute if score #mcm manacore.math matches 1001.. run scoreboard players set #mcm_k manacore.math 1000
+execute if score #mcm manacore.math matches 1001.. run scoreboard players operation #need manacore.math /= #mcm_k manacore.math
+
 # 先把"够不够"定下来, 再动手 —— 两个分支只读 #ok, 谁都不会改到判断依据
 scoreboard players set #ok manacore.math 0
 execute if score #cur manacore.math >= #need manacore.math run scoreboard players set #ok manacore.math 1

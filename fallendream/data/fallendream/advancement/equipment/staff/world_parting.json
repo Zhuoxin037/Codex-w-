@@ -1,0 +1,1 @@
+{"criteria":{"use":{"trigger":"minecraft:consume_item","conditions":{"item":{"predicates":{"minecraft:custom_data":"{zx:[\"world_parting\"]}"}}}}},"rewards":{"function":"fallendream:equipment/staff/world_parting/cast"}}

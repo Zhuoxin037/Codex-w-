@@ -9,7 +9,7 @@
 """
 import io, os, re, json, html
 
-BASE = r'D:\数据包\sweetdream\data\sweetdream\function\equipment'
+BASE = r'D:\数据包\fallendream\data\fallendream\function\equipment'
 OUT = r'D:\数据包\.workbuddy\mc_model_lab\out\preview\第五批装备_描述预览.html'
 
 NEW = [('sword', 'myriad', '剑', 'iron_sword'),

@@ -33,7 +33,7 @@ import sys
 from PIL import Image, ImageDraw
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-TEX = os.path.join(ROOT, 'sweetdream_rp_完整版', 'assets', 'sweetdream',
+TEX = os.path.join(ROOT, 'fallendream_rp_完整版', 'assets', 'fallendream',
                    'textures', 'item', 'vanilla')
 
 SKEL = 'hengdao'          # 骨架

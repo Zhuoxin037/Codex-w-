@@ -44,7 +44,7 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TARGETS = [
-    os.path.join(ROOT, "sweetdream", "data"),
+    os.path.join(ROOT, "fallendream", "data"),
     os.path.join(ROOT, "manacore-1.0.0", "data"),
 ]
 
@@ -107,7 +107,7 @@ def scan(path):
                 and "lib/num/plain" not in txt and "num_str" not in txt):
             out.append((0, "自建 zx:work a 后投伤害却没转 num_str ⇒ "
                            "deal 宏缺参数、伤害静默消失(在投递前加 "
-                           "function sweetdream:lib/num/plain)",
+                           "function fallendream:lib/num/plain)",
                         path))
     except Exception as exc:                      # 读不了就报, 别静默
         out.append((0, "读取失败: %s" % exc, path))

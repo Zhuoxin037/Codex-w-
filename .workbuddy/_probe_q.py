@@ -32,13 +32,13 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PY = r'C:\Users\qq303\.workbuddy\binaries\python\versions\3.13.12\python.exe'
 CHECK = os.path.join(ROOT, '.workbuddy', 'check.py')
 
-SD = 'sweetdream/data/sweetdream/function'
+SD = 'fallendream/data/fallendream/function'
 MC = 'manacore-1.0.0/data/manacore/function'
 ML = SD + '/internal/itembackup/migrate_legacy.mcfunction'
 RS = SD + '/internal/itembackup/resync.mcfunction'
 RSG = SD + '/internal/itembackup/resync_go.mcfunction'
 PJ = SD + '/event/player_join.mcfunction'
-PRJ = 'sweetdream/data/manacore/tags/function/event/player_join.json'
+PRJ = 'fallendream/data/manacore/tags/function/event/player_join.json'
 PR = SD + '/event/player_reset.mcfunction'
 CU = SD + '/internal/attr/cleanup.mcfunction'
 BFP = '.workbuddy/build_full_pack.py'
@@ -70,13 +70,13 @@ def build_probes():
     ml_del = find_line(ML, 'data remove storage zx:ret p."$(uuid)".mainhand')
     ml_off_append = find_line(ML, '.q append value {slot:-1}')
     ml_off_flag = find_line(ML, 'offhand.id run scoreboard players set #lg_off zx.meta 1')
-    ml_resync = find_line(ML, 'function sweetdream:internal/itembackup/resync_go')
+    ml_resync = find_line(ML, 'function fallendream:internal/itembackup/resync_go')
 
     rs_mir = find_line(RS, '.q[0].slot')
     rs_clear = find_line(RS, 'run scoreboard players set @s zx.ret_pend 0')
     rsg_call = find_line(RSG, 'resync with storage zx:work a')
 
-    pr_resync = find_line(PR, 'function sweetdream:internal/itembackup/resync_go')
+    pr_resync = find_line(PR, 'function fallendream:internal/itembackup/resync_go')
     pr_first = find_line(PR, 'scoreboard players reset @s zx.ab_age')
     pr_endmark = find_line(PR, '# @@GEN-SCORES-ABOVE@@')
 
@@ -91,7 +91,7 @@ def build_probes():
          find_line(PJ, 'migrate_legacy with storage zx:work a'),
          'register 末尾, 每次上线/重注册都抛'),
         ('Q01 player_join 标签未挂', PRJ, 'repl',
-         ('    "sweetdream:event/player_join"', '    "sweetdream:event/noop"'),
+         ('    "fallendream:event/player_join"', '    "fallendream:event/noop"'),
          '新的上线收尾函数必须真的挂进跨包事件标签'),
         # ---- Q02(重置后按队列重建镜像) ----
         ('Q02 resync 缺镜像重算', RS, 'del', rs_mir, '而不是照抄旧分数'),
@@ -103,9 +103,9 @@ def build_probes():
         ('Q02 player_reset 缺尾标记', PR, 'del', pr_endmark, '缺尾标记'),
         # ---- Q04(装备型修饰符一并摘净) ----
         ('Q04 cleanup 缺 eqp_power_hp', CU, 'del',
-         find_line(CU, 'modifier remove sweetdream:eqp_power_hp'), '装备型修饰符也必须摘'),
+         find_line(CU, 'modifier remove fallendream:eqp_power_hp'), '装备型修饰符也必须摘'),
         ('Q04 cleanup 缺 eqp_mr_set_atk', CU, 'del',
-         find_line(CU, 'modifier remove sweetdream:eqp_mr_set_atk'), '蜃楼套装攻击力'),
+         find_line(CU, 'modifier remove fallendream:eqp_mr_set_atk'), '蜃楼套装攻击力'),
         ('Q04 cleanup 缺 status.liuhuo', CU, 'del',
          find_line(CU, 'tag @s remove zx.status.liuhuo'), 'liuhuo 的撤销只在'),
         ('Q04 cleanup 缺 rm_melt', CU, 'del',

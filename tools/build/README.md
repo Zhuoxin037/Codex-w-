@@ -30,7 +30,7 @@ C:\Users\qq303\.workbuddy\binaries\python\envs\default\Scripts\python.exe
 PY="C:/Users/qq303/.workbuddy/binaries/python/envs/default/Scripts/python.exe"
 
 # 1) 生成（仅当改过真源）
-"$PY" .workbuddy/build_vanilla_pack.py          # 重建覆盖层 sweetdream_rp_原版风/
+"$PY" .workbuddy/build_vanilla_pack.py          # 重建覆盖层 fallendream_rp_原版风/
 "$PY" .workbuddy/build_full_pack.py --deploy --zip   # 合并成完整版 + 部署 + 出 zip
 
 # 2) 检查
@@ -46,7 +46,7 @@ PY="C:/Users/qq303/.workbuddy/binaries/python/envs/default/Scripts/python.exe"
 
 - **C01**：`/scoreboard players set #dev zx.meta 0` —— 收窄调试管理入口给 `zx.admin`。
 - **C02**：按需用 `发布可选配置/bypasses_cooldown.no_player_attack.json` 覆盖
-  `sweetdream/data/minecraft/tags/damage_type/bypasses_cooldown.json`。
+  `fallendream/data/minecraft/tags/damage_type/bypasses_cooldown.json`。
 - **兼容范围**：以 `pack.mcmeta` 为准 —— 数据包格式 **71**、资源格式 **55**、**仅 1.21.5**。
 
 ## 进游戏后的最后两道

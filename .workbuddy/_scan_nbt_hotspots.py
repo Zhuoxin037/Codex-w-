@@ -17,7 +17,7 @@ from collections import defaultdict, deque
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # D:\数据包
 
 PACKS = {
-    'sweetdream': os.path.join(ROOT, 'sweetdream', 'data'),
+    'fallendream': os.path.join(ROOT, 'fallendream', 'data'),
     'manacore':   os.path.join(ROOT, 'manacore-1.0.0', 'data'),
 }
 
@@ -115,8 +115,8 @@ def main():
     print('函数总数: %d' % len(funcs))
 
     ROOTS = {
-        'EVERY_TICK': ['sweetdream:core/tick'],
-        'EVERY_SECOND': ['sweetdream:lib/second'],
+        'EVERY_TICK': ['fallendream:core/tick'],
+        'EVERY_SECOND': ['fallendream:lib/second'],
     }
     # manacore 的 tick 入口
     for cand in ('manacore:core/tick', 'manacore:tick', 'manacore:main/tick'):

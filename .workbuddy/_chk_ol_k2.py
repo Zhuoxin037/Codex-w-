@@ -16,7 +16,7 @@ import io
 import os
 import re
 
-BASE = "D:/数据包/sweetdream/data/sweetdream"
+BASE = "D:/数据包/fallendream/data/fallendream"
 FN = BASE + "/function"
 
 FILES = [
@@ -69,10 +69,10 @@ for name in sorted(used - declared):
 # ---- ② 函数引用 ----
 for rel, t in texts.items():
     for s in body(t).split("\n"):
-        for m in re.finditer(r'function (sweetdream:[A-Za-z0-9_/]+)', s):
+        for m in re.finditer(r'function (fallendream:[A-Za-z0-9_/]+)', s):
             path = m.group(1).split(":", 1)[1]
             if not os.path.exists(os.path.join(FN, path.replace("/", os.sep) + ".mcfunction")):
-                bad.append("%s: 引用了不存在的函数 sweetdream:%s" % (rel, path))
+                bad.append("%s: 引用了不存在的函数 fallendream:%s" % (rel, path))
 
 # ---- ① 分流判据 ----
 for wid, rels in (

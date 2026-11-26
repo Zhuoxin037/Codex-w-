@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "grayscale": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "grayscale"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "fallendream:equipment/sword/grayscale/cast"
+    }
+}

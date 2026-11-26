@@ -140,7 +140,7 @@ execute store result storage manacore:out r.damage double 0.001 run scoreboard p
 #   independent_multiplier。所以在抛事件**之前**把分量与 im 一起写进 manacore:out
 #   (out 不受重置影响, 见第 ⑥ 步的长注)。
 # 【量纲】seg_* 都是"伤害 ×1000"的整数, im = independent_multiplier ×100。
-# 【谁读它】sweetdream:lib/dmg_add_apply; 其它任何消费者都不该依赖这几个键。
+# 【谁读它】fallendream:lib/dmg_add_apply; 其它任何消费者都不该依赖这几个键。
 execute store result storage manacore:out r.seg_m int 1 run scoreboard players get #seg_m manacore.math
 execute store result storage manacore:out r.seg_a int 1 run scoreboard players get #seg_a manacore.math
 execute store result storage manacore:out r.seg_o int 1 run scoreboard players get #seg_o manacore.math

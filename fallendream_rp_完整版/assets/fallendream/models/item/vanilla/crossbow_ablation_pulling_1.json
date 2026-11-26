@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/crossbow",
+  "textures": {
+    "layer0": "fallendream:item/vanilla/crossbow_ablation_pulling_1"
+  }
+}

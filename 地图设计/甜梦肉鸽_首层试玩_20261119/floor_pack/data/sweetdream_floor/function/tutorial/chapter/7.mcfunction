@@ -1,0 +1,3 @@
+data merge block -100 90 46 {Page:0,Book:{id:"minecraft:written_book",count:1,components:{"minecraft:written_book_content":{title:"7. 抽取装备",author:"甜梦演示室",resolved:1b,pages:[{"text":"7 / 7   抽取装备\n\n","color":"dark_aqua","bold":true,"extra":[{"text":"每赢一场普通战或精英战，就能抽一件武器或盔甲。选一个标签后抽取装备。\n普通战\n常器 47.02%  异器 27.49%\n精器 21.58%  秘器 3.91%\n精英战\n常器 30%  异器 30%\n精器 32%  秘器 8%","color":"black","bold":false}]}]}}}}
+function sweetdream_floor:tutorial/stage/actor
+item replace entity @e[type=minecraft:armor_stand,tag=sd.edu_hero,distance=..25,limit=1] weapon.mainhand with minecraft:recovery_compass[minecraft:item_model="sweetdream:look"]

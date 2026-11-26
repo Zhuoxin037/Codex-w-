@@ -1,0 +1,14 @@
+execute if score @s bs.fage matches 1 if score @s bs.dir matches -1 at @e[tag=sd.bs.source,distance=0..,limit=1] positioned ^-1.0 ^2.125 ^0.4375 run tp @s ~ ~ ~
+execute if score @s bs.fage matches 1 if score @s bs.dir matches 1 at @e[tag=sd.bs.source,distance=0..,limit=1] positioned ^1.0 ^2.125 ^0.4375 run tp @s ~ ~ ~
+execute if score @s bs.fage matches 2 if score @s bs.dir matches -1 at @e[tag=sd.bs.source,distance=0..,limit=1] positioned ^-1.0625 ^2.125 ^0.4375 run tp @s ~ ~ ~
+execute if score @s bs.fage matches 2 if score @s bs.dir matches 1 at @e[tag=sd.bs.source,distance=0..,limit=1] positioned ^1.0625 ^2.125 ^0.4375 run tp @s ~ ~ ~
+execute if score @s bs.fage matches 3 if score @s bs.dir matches -1 at @e[tag=sd.bs.source,distance=0..,limit=1] positioned ^-1.125 ^2.125 ^0.4375 run tp @s ~ ~ ~
+execute if score @s bs.fage matches 3 if score @s bs.dir matches 1 at @e[tag=sd.bs.source,distance=0..,limit=1] positioned ^1.125 ^2.125 ^0.4375 run tp @s ~ ~ ~
+execute if score @s bs.fage matches 4 if score @s bs.dir matches -1 at @e[tag=sd.bs.source,distance=0..,limit=1] positioned ^-1.1875 ^2.125 ^0.4375 run tp @s ~ ~ ~
+execute if score @s bs.fage matches 4 if score @s bs.dir matches 1 at @e[tag=sd.bs.source,distance=0..,limit=1] positioned ^1.1875 ^2.125 ^0.4375 run tp @s ~ ~ ~
+execute if score @s bs.fage matches 5 if score @s bs.dir matches -1 at @e[tag=sd.bs.source,distance=0..,limit=1] positioned ^-1.25 ^2.125 ^0.4375 run tp @s ~ ~ ~
+execute if score @s bs.fage matches 5 if score @s bs.dir matches 1 at @e[tag=sd.bs.source,distance=0..,limit=1] positioned ^1.25 ^2.125 ^0.4375 run tp @s ~ ~ ~
+execute if score @s bs.fage matches 6 if score @s bs.dir matches -1 at @e[tag=sd.bs.source,distance=0..,limit=1] positioned ^-1.3125 ^2.125 ^0.4375 run tp @s ~ ~ ~
+execute if score @s bs.fage matches 6 if score @s bs.dir matches 1 at @e[tag=sd.bs.source,distance=0..,limit=1] positioned ^1.3125 ^2.125 ^0.4375 run tp @s ~ ~ ~
+execute if score @s bs.fage matches 7 if score @s bs.dir matches -1 at @e[tag=sd.bs.source,distance=0..,limit=1] positioned ^-1.375 ^2.125 ^0.4375 run tp @s ~ ~ ~
+execute if score @s bs.fage matches 7 if score @s bs.dir matches 1 at @e[tag=sd.bs.source,distance=0..,limit=1] positioned ^1.375 ^2.125 ^0.4375 run tp @s ~ ~ ~

@@ -36,7 +36,7 @@ for old_display in baseline['parts'].values():
         count += 1
 
 for name, elements in [('angel_beam', 9), ('fr_beam', 12)]:
-    model = B.read(ROOT / f'sweetdream_rp_完整版/assets/sweetdream/models/item/{name}.json')
+    model = B.read(ROOT / f'fallendream_rp_完整版/assets/fallendream/models/item/{name}.json')
     assert len(model['elements']) == elements
     for e in model['elements']:
         assert e['light_emission'] == 15
@@ -45,14 +45,14 @@ for name, elements in [('angel_beam', 9), ('fr_beam', 12)]:
         for f in e['faces'].values():
             tex = model['textures'][f['texture'][1:]]
             ns, p = tex.split(':')
-            assert (ROOT / f'sweetdream_rp_完整版/assets/{ns}/textures/{p}.png').exists()
+            assert (ROOT / f'fallendream_rp_完整版/assets/{ns}/textures/{p}.png').exists()
 
 # 起柱与收束都必须贴地；施法的长度和视线偏移不能随外观优化改变。
 for scale, shift in [(.8, -2.6), (6, 0)]:
     assert abs(3-scale/2+shift) < 1e-8
-fr = (ROOT / 'sweetdream/data/sweetdream/function/equipment/staff/final_revelation/beam_new.mcfunction').read_text(encoding='utf-8')
+fr = (ROOT / 'fallendream/data/fallendream/function/equipment/staff/final_revelation/beam_new.mcfunction').read_text(encoding='utf-8')
 assert 'positioned ^ ^-0.45 ^8' in fr and 'scale:[1.0f,1.0f,16.0f]' in fr
-angel = (ROOT / 'sweetdream/data/sweetdream/function/equipment/axe/angel_core/beam.mcfunction').read_text(encoding='utf-8')
+angel = (ROOT / 'fallendream/data/fallendream/function/equipment/axe/angel_core/beam.mcfunction').read_text(encoding='utf-8')
 assert angel.index('zx.ab_age 0') < angel.index('remove zx.ac_beam_new')
 report = {'启示录检验姿态数': count, '旋转矩阵最大误差': max_error,
           '相对书页位置保持': True, '光柱实体数量保持': True,

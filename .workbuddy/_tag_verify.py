@@ -9,7 +9,7 @@ import io, os, re, sys, collections
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import _tags_data as D
 
-ROOT = r'D:\数据包\sweetdream\data\sweetdream\function'
+ROOT = r'D:\数据包\fallendream\data\fallendream\function'
 pat_id = re.compile(r'zx:\["([a-z0-9_]+)"')
 pat_tags = re.compile(r'tags:\[([^\]]*)\]')
 

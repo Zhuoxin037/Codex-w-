@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "dragon_tongue": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "ol_dragon_tongue"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "fallendream:overlimit/apply/dragon_tongue"
+    }
+}

@@ -1,1 +1,0 @@
-{"criteria":{"hit":{"trigger":"minecraft:player_hurt_entity","conditions":{"damage":{"type":{"tags":[{"id":"minecraft:is_player_attack","expected":true}]}}}}},"rewards":{"function":"sweetdream:equipment/sword/aftersound/hit"}}

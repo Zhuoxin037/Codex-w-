@@ -12,27 +12,27 @@
 | 路径 | 是什么 |
 | --- | --- |
 | `manacore-1.0.0/` | **前置包**：魔力 / 属性面板 / 伤害计算 / 冷却 / 术阵 / 回魔 的通用框架，跟具体玩法无关 |
-| `sweetdream/` | **应用层**：**173 件装备**、升级与超限系统、标签体系、状态图标、法球与回手，都在这里 |
-| `sweetdream_rp_完整版/` | **资源包（唯一工作目录 · 直接改这里）**：自包含 —— 3D 模型与平面图标都在里面（资源格式 55）。★ 老包 `sweetdream_rp/` 与覆盖层 `sweetdream_rp_原版风/` **已于 2026-10-13 删除**，`build_full_pack.py` 已停用 |
+| `fallendream/` | **应用层**：**173 件装备**、升级与超限系统、标签体系、状态图标、法球与回手，都在这里 |
+| `fallendream_rp_完整版/` | **资源包（唯一工作目录 · 直接改这里）**：自包含 —— 3D 模型与平面图标都在里面（资源格式 55）。★ 老包 `fallendream_rp/` 与覆盖层 `fallendream_rp_原版风/` **已于 2026-10-13 删除**，`build_full_pack.py` 已停用 |
 | `使用教程.md` | 完整教程：接口怎么调、技能怎么写、属性怎么加减、踩过的坑 |
 | `升级与超限系统-设计.md` | 升级 / 超限两套系统的设计说明与扩展点 |
 | `标签体系-设计.md` | 装备标签（`custom_data.tags`）的词汇表与逐件表，供将来的肉鸽地图做模糊查询 |
 | `新增装备-标签补缺-设计.md` | 标签审计后的补缺方案（**待拍板**；含「术阵 ≠ 领域」设计红线） |
 | `AGENTS.md` | 给 AI 协作者的开工约定（先读哪几份记忆、资源包真源、别乱加设定） |
-| `sweetdream/README.md` | 应用层的目录结构 + 新增一件道具的步骤 |
+| `fallendream/README.md` | 应用层的目录结构 + 新增一件道具的步骤 |
 | `发布可选配置/` | 打包发布时的**可替换件**（如 C02 的 `bypasses_cooldown` 变体），不参与运行时加载 |
 | `tools/build/README.md` | **构建/发布流程说明**（生成 → 检查 → 打包 → 部署 四阶段；工具链已纳入版本控制） |
 
 ## 怎么装进游戏
 
 两个包**必须同时**放进存档的 `datapacks` 目录，缺一个都不行（应用层依赖前置包）。
-资源包就是 `sweetdream_rp_完整版/`（自包含），丢进 `resourcepacks/` 即可。
+资源包就是 `fallendream_rp_完整版/`（自包含），丢进 `resourcepacks/` 即可。
 它**同时是唯一工作目录** —— 改外观直接改这里（旧的"老包 + 覆盖层再合并"流程已停用）。
 
 ```
 <saves>/<存档名>/datapacks/
 ├── manacore-1.0.0/
-└── sweetdream/
+└── fallendream/
 ```
 
 然后 `/reload`。**这两个目录是复制进去的，不是链接** —— 在本目录改完代码，
@@ -59,7 +59,7 @@
 
 | 东西 | 用什么 | 说明 |
 | --- | --- | --- |
-| 命名空间 | `sweetdream:` | 应用层的函数、进度、标签 |
+| 命名空间 | `fallendream:` | 应用层的函数、进度、标签 |
 | 存储 | `zx:` | `zx:data`（存东西）/ `zx:work`（临时）/ `zx:out` / `zx:config` |
 | 计分板 | `zx.meta` | 应用层内部用 |
 | 前置包 | `manacore:*` | 那是它的地盘，别混用 |
@@ -87,13 +87,13 @@
 
 ### 装备：173 件
 
-全部入口是 `give`（发一件）—— `/function sweetdream:equipment/<类别>/<id>/give`。
+全部入口是 `give`（发一件）—— `/function fallendream:equipment/<类别>/<id>/give`。
 一次全发用 `/trigger zx.dbg_give`（发**十个**潜影盒：一共 **261 件** =
 173 件装备 + 升级/消除材料 28 件 + 超限材料 60 件）。
 
 > ⚠️ 下面这些明细表是早期 21 件时写的；后面几批新装备（寒鸦之后的弩/剑、
 > 枯枝园、无光海、炉心、共振等）的说明在各自的文档里。
-> 完整清单直接看 `/function sweetdream:debug/menu` 或 `_gen_give_all.py` 的清单
+> 完整清单直接看 `/function fallendream:debug/menu` 或 `_gen_give_all.py` 的清单
 > （`.workbuddy/_chk_give_all.py` 会核对"应有 261 / 实调 261 / 10 个盒子"）。
 
 #### 盔甲（11 件，`custom_data.zx` 里都带 `armor` 词，通用升级才认得它们）
@@ -150,7 +150,7 @@
   高级要敲过前一级。**槽位：每件装备 2 个自由槽**（2026-10-07 改版：一个系列占一槽、
   高级替换低级；最多装 2 个不同系列）。**无色石**可以消除最近敲入的一个升级并返还
   该等级的石头。
-  - 升级 / 消除材料入口 **28 个**（= `sweetdream/function/upgrade/item/*` 的文件数）：
+  - 升级 / 消除材料入口 **28 个**（= `fallendream/function/upgrade/item/*` 的文件数）：
     7 个 α/β/Ω 系列 × 3 阶 = 21，加 1 个「神经衰弱」系列 × 3 阶 = 3，
     再加 1 颗无色石 和 3 个单体材料。系列与单体：
     - 魔力上限提升 α/β/Ω（装盔甲）
@@ -168,14 +168,14 @@
     高效/迅捷还没实物、也没接线，是留给后面扩的
 - **超限**：给武器换整套玩法 —— **① 物品改名成「超限·XX」② 描述整段替换**（原名字和原描述
   一行不留）③ 数值真实乘进伤害 / 耗蓝 / 冷却乘区。超限材料入口 **28 个**
-  （= `sweetdream/function/overlimit/item/*`），**每件对应装备一块专属超限石**
+  （= `fallendream/function/overlimit/item/*`），**每件对应装备一块专属超限石**
   （武器 + 盔甲各若干，如 流光 / 脑髓蛭 / 脊骨共生 / 海棠 / 偏振光 / 桂冠 / 炉心 …）。
   **强化材料总计 28 + 28 = 56 个入口**；`/trigger zx.dbg_give` 一次发全
   （98 件装备 + 56 个材料 = 154 件，装 6 个潜影盒）。
 
 ### 调试入口
 
-游戏里 `/function sweetdream:debug/<名>`，最常用的：
+游戏里 `/function fallendream:debug/<名>`，最常用的：
 
 - **`menu`** —— 可点击菜单，不知道用哪个就先进它
 - **`stats`** 数值面板 / **`worn`** 当前 6 槽位装备 / **`diff`** 快照对比
@@ -207,12 +207,12 @@
   `manacore-1.0.0/data/manacore/function/internal/uuid/build.mcfunction`。
 - **⚠️ 新增伤害类型 / 改附魔后必须"退出世界重进"，`/reload` 不补。**
   `damage_type` 和 `enchantment` 是**注册表**类内容，只在进世界时加载。
-  本包的 `sweetdream:skill`（技能默认类型）、`sweetdream:true_damage` 就是新增的；
+  本包的 `fallendream:skill`（技能默认类型）、`fallendream:true_damage` 就是新增的；
   没重进世界时相关 `/damage` 会**静默失败** —— 不报错、不写日志，只表现为
   "技能放出来了但一点伤害都没有"。**症状必然是"别的都正常，就那几处哑火"。**
   寒鸦的命中判定完全靠附魔「霜矢」，同理：改完要重进世界 **+ 重新 give 一把**
-  （老物品不会自己长出附魔）。一秒判定：`/function sweetdream:debug/true_damage`、
-  `/function sweetdream:debug/cold_crow`。
+  （老物品不会自己长出附魔）。一秒判定：`/function fallendream:debug/true_damage`、
+  `/function fallendream:debug/cold_crow`。
   应急开关（万一类型没生效）：
   ```mcfunction
   /data modify storage zx:config damage_type set value "minecraft:player_attack"
@@ -221,17 +221,17 @@
   代价是多段伤害又会撞无敌帧。
 - ~~原版没有"绕过无敌帧"的伤害类型标签~~ **已解决。** 原版其实**有**这个标签：
   `minecraft:bypasses_cooldown`（1.21.5 里由 `DamageTypeTags` 注册，只是原版一个
-  伤害类型都没往里放）。sweetdream 注册了自己的 `sweetdream:skill` 并挂进这个标签 ——
+  伤害类型都没往里放）。fallendream 注册了自己的 `fallendream:skill` 并挂进这个标签 ——
   技能伤害**不再被受伤无敌帧吃掉**（照样吃护甲 / 保护附魔 / 抗性）。
   副作用：同一 tick 的多段伤害现在会全部结算，击退也会叠加，以后做平衡按"多段全额生效"算。
 - ~~武器放副手右键会顶掉主手的武器~~ **已解决。** 现在主手 / 副手各备份一份
   （盔甲架两个槽位），触发那一刻记录用的是哪只手，回手按标签分叉写回对应槽位。
-  自查：`/function sweetdream:debug/offhand`。
+  自查：`/function fallendream:debug/offhand`。
 - ~~寒鸦按射手保存"最近一发"，在途旧箭会被后发覆盖~~ **已解决。** 改成**逐箭快照**
-  （每支箭随身带自己那一发）。自检：`/function sweetdream:debug/cold_crow` 的 ⑤。
+  （每支箭随身带自己那一发）。自检：`/function fallendream:debug/cold_crow` 的 ⑤。
 - ~~幻昼可能把效果施加给错误的生物~~ **已解决。** 改用生物自己的 `last_hurt_by_player`
   精确匹配，`HurtTime` 10/9 只负责钉住"就是刚才这一下"。
-- ~~概率与坐标 / 攻击节奏绑定~~ **已解决。** 新增 `sweetdream:lib/rnd`（全局 LCG），
+- ~~概率与坐标 / 攻击节奏绑定~~ **已解决。** 新增 `fallendream:lib/rnd`（全局 LCG），
   幻昼的两次 20%、异彩的"5 选 2"全部改从它取样，和坐标、攻击间隔彻底脱钩。
 - ~~副手引梦镰会扣费却不释放~~ **已解决。** 在消耗那一刻判定用哪只手并写进施法快照，
   后续全程按它走。
@@ -271,22 +271,22 @@
 
 ### C02 · `minecraft:player_attack` 绕过受击无敌帧
 
-`sweetdream/data/minecraft/tags/damage_type/bypasses_cooldown.json` 里额外放了
+`fallendream/data/minecraft/tags/damage_type/bypasses_cooldown.json` 里额外放了
 `minecraft:player_attack` ⇒ **所有玩家的原版近战都绕过目标受击无敌帧**（含普通武器与 PvP；
 这不等于取消攻击蓄力）。本包整套"平A 触发技能"的管线依赖它，属**有意保留**。
 面向 PvP 服想收窄时，用 `发布可选配置/` 里的替换件覆盖该文件后 `/reload`（详见该目录 README）。
 
 ### 其他
 
-- 资源包目录名：`sweetdream_rp_完整版/` —— **它既是发布件，也是唯一工作目录**。
-- ~~完整版是构建产物，别直接改~~ **已改（2026-10-13）**：老包 `sweetdream_rp/` 与覆盖层
-  `sweetdream_rp_原版风/` 两个源目录已删除，`build_full_pack.py` 已停用并加了守卫。
-  **现在就改 `sweetdream_rp_完整版/`**（改完 `git commit`；删资源包目录前尤其要先提交）。
+- 资源包目录名：`fallendream_rp_完整版/` —— **它既是发布件，也是唯一工作目录**。
+- ~~完整版是构建产物，别直接改~~ **已改（2026-10-13）**：老包 `fallendream_rp/` 与覆盖层
+  `fallendream_rp_原版风/` 两个源目录已删除，`build_full_pack.py` 已停用并加了守卫。
+  **现在就改 `fallendream_rp_完整版/`**（改完 `git commit`；删资源包目录前尤其要先提交）。
 - 兼容范围以实际 `pack.mcmeta` 为准：数据包格式 **71**、资源格式 **55**、**仅 Java 1.21.5**。
 
 ## 仓库里放什么 / 不放什么
 
-**入库**：数据包本体（`manacore-1.0.0/`、`sweetdream/`、`sweetdream_rp_完整版/`）、几份文档，
+**入库**：数据包本体（`manacore-1.0.0/`、`fallendream/`、`fallendream_rp_完整版/`）、几份文档，
 以及 **`.workbuddy/` 里的工具链脚本**（`_*.py` / `build_*.py` / `draw_*.py` / `gen_*.py` /
 `check*.py` / `lore_fmt.py` / `*.ps1`）—— 发布产物不能取决于"本机恰好有某个脚本"，
 换台机器 clone 下来必须能重建。白名单写在 `.gitignore` 里（2026-10-10 起）。
@@ -298,7 +298,7 @@
 - `*.zip` —— 打包产物（发版时才生成）
 - `*.bak-*` / `*.broken-*` —— 备份与坏版本存档
 
-> 注意 `sweetdream_rp_完整版/**/optimized/` **不是**临时产物，是模型真正引用的贴图，别删。
+> 注意 `fallendream_rp_完整版/**/optimized/` **不是**临时产物，是模型真正引用的贴图，别删。
 
 ## 新开一个对话怎么接着干
 
@@ -307,7 +307,7 @@
 ```
 工作目录是 D:\数据包，先读 D:\数据包\AGENTS.md、README.md 和 D:\数据包\使用教程.md，再动手。
 这是两个配套的 Minecraft Java 1.21.5 数据包：manacore-1.0.0（前置框架）和
-sweetdream（应用层），外加资源包 sweetdream_rp_完整版。改完记得跑 .workbuddy/check.py
+fallendream（应用层），外加资源包 fallendream_rp_完整版。改完记得跑 .workbuddy/check.py
 做静态自检（必须 0 问题），并用中文详细注释。
 ```
 

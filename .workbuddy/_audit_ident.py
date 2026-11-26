@@ -21,9 +21,9 @@ import sys
 import collections
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-EQ = os.path.join(ROOT, "sweetdream", "data", "sweetdream", "function", "equipment")
-DATA = os.path.join(ROOT, "sweetdream", "data")
-RP = os.path.join(ROOT, "sweetdream_rp_完整版")
+EQ = os.path.join(ROOT, "fallendream", "data", "fallendream", "function", "equipment")
+DATA = os.path.join(ROOT, "fallendream", "data")
+RP = os.path.join(ROOT, "fallendream_rp_完整版")
 
 # zx:["a","b","c"] —— 列表里每个引号词都要抽出来(不能只认单元素写法)
 ZX_LIST = re.compile(r'zx\s*:\s*\[([^\]]*)\]')

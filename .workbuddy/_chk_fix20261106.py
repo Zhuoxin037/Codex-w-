@@ -3,9 +3,9 @@
 import os, json, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DP = os.path.join(ROOT, "sweetdream", "data", "sweetdream")
+DP = os.path.join(ROOT, "fallendream", "data", "fallendream")
 MC = os.path.join(ROOT, "manacore-1.0.0", "data", "manacore")
-RP = os.path.join(ROOT, "sweetdream_rp_完整版", "assets")
+RP = os.path.join(ROOT, "fallendream_rp_完整版", "assets")
 
 
 def walk_mcf(base):
@@ -20,7 +20,7 @@ def walk_mcf(base):
 fn_files = walk_mcf(os.path.join(DP, "function")) + walk_mcf(os.path.join(MC, "function"))
 exists = set()
 for p in fn_files:
-    for base, ns in ((os.path.join(DP, "function"), "sweetdream"),
+    for base, ns in ((os.path.join(DP, "function"), "fallendream"),
                      (os.path.join(MC, "function"), "manacore")):
         if p.startswith(base):
             rel = os.path.relpath(p, base).replace("\\", "/")[:-11]
@@ -62,13 +62,13 @@ for root, _, fs in os.walk(mod_root):
     for f in fs:
         if f.endswith(".json"):
             rel = os.path.relpath(os.path.join(root, f), mod_root).replace("\\", "/")[:-5]
-            mods.add("sweetdream:" + rel)
+            mods.add("fallendream:" + rel)
 for p in fn_files:
     for i, line in enumerate(open(p, encoding="utf-8", errors="replace"), 1):
         s = line.strip()
         if s.startswith("#"):
             continue
-        for m in re.finditer(r"\bitem modify\s+\S+\s+(sweetdream:[a-z0-9_/]+)", s):
+        for m in re.finditer(r"\bitem modify\s+\S+\s+(fallendream:[a-z0-9_/]+)", s):
             if m.group(1) not in mods:
                 issues.append(("item_modifier 不存在", p, i, m.group(1)))
 
@@ -86,14 +86,14 @@ for iid in ids:
 
 # 5) 本轮新增关键函数接线
 wires = [
-    ("sacrifice/tick", "sweetdream:equipment/sword/sacrifice/tick"),
-    ("bulwark/event", "sweetdream:equipment/armor/bulwark/event"),
-    ("surge_ebb/one", "sweetdream:equipment/staff/surge_ebb/one"),
-    ("throe/settle", "sweetdream:equipment/axe/throe/settle"),
-    ("throe/watch", "sweetdream:equipment/axe/throe/watch"),
+    ("sacrifice/tick", "fallendream:equipment/sword/sacrifice/tick"),
+    ("bulwark/event", "fallendream:equipment/armor/bulwark/event"),
+    ("surge_ebb/one", "fallendream:equipment/staff/surge_ebb/one"),
+    ("throe/settle", "fallendream:equipment/axe/throe/settle"),
+    ("throe/watch", "fallendream:equipment/axe/throe/watch"),
     ("lib/victim 目录", None),
-    ("b21_icons", "sweetdream:visual/b21_icons"),
-    ("hp_digit", "sweetdream:lib/math/hp_digit"),
+    ("b21_icons", "fallendream:visual/b21_icons"),
+    ("hp_digit", "fallendream:lib/math/hp_digit"),
 ]
 all_text = {}
 for p in fn_files:

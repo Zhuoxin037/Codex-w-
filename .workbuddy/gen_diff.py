@@ -12,7 +12,7 @@ import os
 import re
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-FN = os.path.join(ROOT, 'sweetdream', 'data', 'sweetdream', 'function')
+FN = os.path.join(ROOT, 'fallendream', 'data', 'fallendream', 'function')
 
 # ------------------------------------------------------------
 # 不在注册表里、但值得盯的面板/原版数值。
@@ -89,7 +89,7 @@ def store_score(key):
 
 
 HEAD_DIFF = u'''# ============================================================
-# sweetdream:debug/diff_go —— 快照对比的正文(宏参数 {uuid})
+# fallendream:debug/diff_go —— 快照对比的正文(宏参数 {uuid})
 # ------------------------------------------------------------
 # 【这个文件是生成的】改动看 .workbuddy/gen_diff.py, 然后跑
 #   python .workbuddy/gen_diff.py
@@ -121,7 +121,7 @@ HEAD_DIFF = u'''# ============================================================
 # ---- 第一次按: 只存快照, 不比较(没有"上一次"可比) ----
 $execute unless data storage zx:data snap."$(uuid)" run tellraw @s [{"text":"[调试] 第一次按: 已存下当前快照。","color":"aqua"}]
 $execute unless data storage zx:data snap."$(uuid)" run tellraw @s [{"text":"换一件装备, 再按一次 /trigger zx.dbg_diff 就能看到变了什么。","color":"gray"}]
-$execute unless data storage zx:data snap."$(uuid)" run function sweetdream:debug/snap_save with storage zx:work df
+$execute unless data storage zx:data snap."$(uuid)" run function fallendream:debug/snap_save with storage zx:work df
 $execute unless data storage zx:data snap."$(uuid)" run return 0
 
 # ---- 之后每次: 比较 + 更新快照 ----
@@ -131,7 +131,7 @@ scoreboard players set #d_n zx.meta 0
 '''
 
 HEAD_SAVE = u'''# ============================================================
-# sweetdream:debug/snap_save —— 把当前所有要盯的值存成快照(宏参数 {uuid})
+# fallendream:debug/snap_save —— 把当前所有要盯的值存成快照(宏参数 {uuid})
 # ------------------------------------------------------------
 # 【这个文件是生成的】改动看 .workbuddy/gen_diff.py, 然后跑
 #   python .workbuddy/gen_diff.py

@@ -6,28 +6,28 @@
 插入位置: 每个入口第一行 `advancement revoke ...` 之后
   (lib/rearm 契约: revoke 必须是奖励函数第一非注释行, 不能被顶掉)。
 
-幂等: 文件里已含 `sweetdream:lib/atk_charge` 就跳过。
-排除: sweetdream:upgrade/api/on_hit —— 它是"蓄力采样点 + 升级石系统", 不挂闸(见报告)。
+幂等: 文件里已含 `fallendream:lib/atk_charge` 就跳过。
+排除: fallendream:upgrade/api/on_hit —— 它是"蓄力采样点 + 升级石系统", 不挂闸(见报告)。
 """
 import io
 import json
 import os
 import sys
 
-ROOT = r"D:\数据包\sweetdream\data"
-ADV = os.path.join(ROOT, "sweetdream", "advancement")
-FN = os.path.join(ROOT, "sweetdream", "function")
+ROOT = r"D:\数据包\fallendream\data"
+ADV = os.path.join(ROOT, "fallendream", "advancement")
+FN = os.path.join(ROOT, "fallendream", "function")
 
 GATE = [
     "# ---- 满蓄力闸(2026-10-10, 全包统一口径) ----\n",
     "#   平A 没**蓄满力**这一发就不触发本被动。判定与出参见 lib/atk_charge 头部\n",
     "#   (每刻只算一次 + 玩家级 `@s zx.atk_ok`)。\n",
     "#   ★ 必须排在 revoke 之后: lib/rearm 契约要求 revoke 是奖励函数第一非注释行。\n",
-    "function sweetdream:lib/atk_charge\n",
+    "function fallendream:lib/atk_charge\n",
     "execute unless score @s zx.atk_ok matches 1 run return 0\n",
 ]
 
-EXCLUDE = {"sweetdream:upgrade/api/on_hit"}
+EXCLUDE = {"fallendream:upgrade/api/on_hit"}
 
 advs = []
 for dirpath, _dirs, files in os.walk(ADV):
@@ -68,7 +68,7 @@ for adv_path, d in sorted(advs):
             continue
         with io.open(fp, encoding="utf-8", newline="") as fh:
             text = fh.read()
-        if "sweetdream:lib/atk_charge" in text:
+        if "fallendream:lib/atk_charge" in text:
             skipped.append((fnid, "已有闸(幂等跳过)"))
             continue
         lines = text.splitlines(keepends=True)

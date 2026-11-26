@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "rebirth_veil": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "ol_rebirth_veil"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "fallendream:overlimit/apply/rebirth_veil"
+    }
+}

@@ -71,3 +71,13 @@ desktop.ini
 !/.workbuddy/check*.py
 !/.workbuddy/lore_fmt.py
 !/.workbuddy/*.ps1
+
+# ---- 打包输出 / 大体积中间产物 ----
+# 2026-11-26: outputs/ 累积了 933MB 的历史发版 zip 与对拍照;
+# 与 *.zip 同性质(生成物), 不进仓库。
+/outputs/
+
+# ---- 地图成品 zip 例外: 地图是交付物, 不是数据包发版产物 ----
+# 地图的构建脚本 + floor_pack 在 地图设计/<项目>/ 下已入库;
+# 成品 zip 要手动 git add -f 才会进(保持 *.zip 总体忽略)。
+

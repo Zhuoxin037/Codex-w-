@@ -1,0 +1,10 @@
+{
+  "criteria": {
+    "use": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "rewards": {
+    "function": "fallendream:profession/melee"
+  }
+}

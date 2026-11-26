@@ -5,7 +5,7 @@
 import os, re, collections
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-FP = os.path.join(ROOT, "sweetdream", "data", "sweetdream", "function")
+FP = os.path.join(ROOT, "fallendream", "data", "fallendream", "function")
 EQ = os.path.join(FP, "equipment")
 
 # ---- 1. 通道表 + 从注释里抽系数 ----

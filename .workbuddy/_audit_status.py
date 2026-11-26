@@ -4,7 +4,7 @@
 import os, re, collections
 
 EQ = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                  "sweetdream", "data", "sweetdream", "function")
+                  "fallendream", "data", "fallendream", "function")
 
 TAGS = [("渊海", r"status\.yuanhai|渊海"),
         ("流火", r"status\.liuhuo|流火"),

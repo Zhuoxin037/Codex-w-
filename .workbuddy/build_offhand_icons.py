@@ -5,7 +5,7 @@ build_offhand_icons.py —— 「副手物品」原版风 16×16 图标生成器
 对象 = 数据包 `equipment/tool/` 下 7 件「副手 · 被动」道具：
     bitter_cold 苦寒 / blaze_plume 炽翎 / mana_pump 体外魔力泵 /
     nullify 无效 / seraph_wing 炽天使之翼 / thunder 雷鸣 / wrath 愠怒
-（第 8 件 look 观测镜已有原版风图标 `sweetdream:look`，本批不动。）
+（第 8 件 look 观测镜已有原版风图标 `fallendream:look`，本批不动。）
 
 ------------------------------------------------------------------
 v1 用「disc / rect / line 直接往 16×16 上盖」的纯手绘法，被用户否掉
@@ -632,7 +632,7 @@ def _native_accessory_source(ident, previous):
         from pathlib import Path
         root = Path(__file__).resolve().parents[1]
         filename = 'tool_' + ident + '.png'
-        live = root / 'sweetdream_rp_完整版/assets/sweetdream/textures/item/vanilla' / filename
+        live = root / 'fallendream_rp_完整版/assets/fallendream/textures/item/vanilla' / filename
         source = live if live.exists() else root / 'tools/art/native_icons_20261113' / filename
         image = Image.open(source).convert('RGBA')
         _old_image, colors, _old_mask = previous()

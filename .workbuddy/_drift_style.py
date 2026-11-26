@@ -42,5 +42,5 @@ for rel in ("armor/furnace_core", "bow/lucid_dream"):
     print('=' * 78)
     print('#### %s' % rel)
     show('磁盘原状 /tmp/givebak', lore_of('C:/Users/qq303/AppData/Local/Temp/givebak/equipment/%s/give.mcfunction' % rel))
-    show('生成器+lore_fmt(当前磁盘)', lore_of('sweetdream/data/sweetdream/function/equipment/%s/give.mcfunction' % rel))
+    show('生成器+lore_fmt(当前磁盘)', lore_of('fallendream/data/fallendream/function/equipment/%s/give.mcfunction' % rel))
     print()

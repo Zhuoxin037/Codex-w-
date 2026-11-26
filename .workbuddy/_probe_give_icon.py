@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-"""普查 12 件剑的所有物品串产出点, 看是否都带了 item_model="sweetdream:<id>"。
+"""普查 12 件剑的所有物品串产出点, 看是否都带了 item_model="fallendream:<id>"。
 
 只读, 不写任何文件。用于验收 _ins_sword_icon.py 的注入是否完整。
 """
 import os
 import re
 
-ROOT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'sweetdream', 'data', 'sweetdream', 'function')
+ROOT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'fallendream', 'data', 'fallendream', 'function')
 IDS = ['everfrost', 'hengdao', 'hush', 'liaoyuan', 'liuguang', 'myriad',
        'qiansan', 'rebound', 'remelt', 'rogue_star', 'shadow_blade', 'verdict']
 
@@ -29,7 +29,7 @@ for r, d, fs in os.walk(ROOT):
             if not (st.startswith('give') or 'item replace' in s):
                 continue
             n += 1
-            want = 'item_model="sweetdream:%s"' % m.group(1)
+            want = 'item_model="fallendream:%s"' % m.group(1)
             ok = want in s
             rows.append((ok, m.group(1), rel, ln, st[:38]))
             if not ok:

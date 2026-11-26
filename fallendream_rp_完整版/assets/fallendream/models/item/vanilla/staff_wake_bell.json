@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "fallendream:item/vanilla/staff_wake_bell"
+  }
+}

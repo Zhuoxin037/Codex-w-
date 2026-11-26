@@ -7,7 +7,7 @@ from PIL import Image,ImageDraw
 from model_review_io import renderer
 from sync_palette_bright_display import rotation
 
-B=Path(__file__).resolve().parents[1];RP=B/'sweetdream_rp_完整版';DP=B/'sweetdream/data/sweetdream'
+B=Path(__file__).resolve().parents[1];RP=B/'fallendream_rp_完整版';DP=B/'fallendream/data/fallendream'
 F=DP/'function/equipment/staff/palette';A=RP/'assets/palette';M=A/'models/item'
 O=B/'模型设计/调色盘_明亮木盘_20261009/阶段二_提色施法'
 BACK=B/'.workbuddy/backup/palette-bright-source-20261009'
@@ -36,7 +36,7 @@ def choose(d,v,context):
         if value>=e['threshold']:selected=e['model']
     return choose(selected,v,context)
 item=read(A/'items/palette.json');assert item['hand_animation_on_swap'] is False
-whole=read(M/'palette.json');assert whole['display']==read(BACK/'sweetdream_rp_完整版/assets/palette/models/item/palette.json')['display']
+whole=read(M/'palette.json');assert whole['display']==read(BACK/'fallendream_rp_完整版/assets/palette/models/item/palette.json')['display']
 for rel in plan['source_rp_files']:
     p=RP/rel
     if p.suffix!='.json':continue
@@ -77,10 +77,10 @@ for color,box in [('red',(0,16,16,32)),('yellow',(16,16,32,32)),('blue',(32,16,4
     assert np.array_equal(orb,current),color
 
 # Gameplay changed only by the visual hand-off hook and a 22-tick gather gate.
-old=code(BACK/'sweetdream/data/sweetdream/function/equipment/staff/palette/skill.mcfunction')
+old=code(BACK/'fallendream/data/fallendream/function/equipment/staff/palette/skill.mcfunction')
 new=[s for s in code(F/'skill.mcfunction') if not s.endswith('/visual/color_prepare')]
 assert old==new
-old=code(BACK/'sweetdream/data/sweetdream/function/equipment/staff/palette/color_tick.mcfunction')
+old=code(BACK/'fallendream/data/fallendream/function/equipment/staff/palette/color_tick.mcfunction')
 new=[s.replace(' unless score @s zx.pv_wait matches 1..','') for s in code(F/'color_tick.mcfunction') if not s.endswith('/visual/color_wait')]
 assert old==new
 assert code(F/'visual/color_prepare.mcfunction')==['scoreboard players set @s zx.pv_wait 22','data modify entity @s transformation.scale set value [0.0f,0.0f,0.0f]']
@@ -178,7 +178,7 @@ wait=code(F/'visual/color_wait.mcfunction')
 assert wait[0].startswith('execute unless entity @a[tag=zx.mc_by,distance=0..,limit=1] run return run function')
 assert wait[1]=='execute at @a[tag=zx.mc_by,distance=0..,limit=1] anchored eyes positioned ^ ^ ^1.5 run tp @s ~ ~ ~ ~ ~'
 assert wait[2]=='scoreboard players remove @s zx.pv_wait 1'
-assert wait[3]=='execute if score @s zx.pv_wait matches 0 run function sweetdream:equipment/staff/palette/visual/color_launch'
+assert wait[3]=='execute if score @s zx.pv_wait matches 0 run function fallendream:equipment/staff/palette/visual/color_launch'
 remaining=22;active=[]
 for t in range(1,25):
     if remaining>0:remaining-=1

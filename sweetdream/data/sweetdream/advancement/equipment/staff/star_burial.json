@@ -1,1 +1,0 @@
-{"criteria":{"use":{"trigger":"minecraft:consume_item","conditions":{"item":{"predicates":{"minecraft:custom_data":"{zx:[\"star_burial\"]}"}}}}},"rewards":{"function":"sweetdream:equipment/staff/star_burial/cast"}}

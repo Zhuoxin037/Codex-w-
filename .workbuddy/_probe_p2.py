@@ -15,12 +15,12 @@ PY = sys.executable
 CHK = os.path.join(ROOT, '.workbuddy', 'check.py')
 
 REL = {
-    'reset': 'sweetdream/data/sweetdream/function/event/player_reset.mcfunction',
+    'reset': 'fallendream/data/fallendream/function/event/player_reset.mcfunction',
     'join': 'manacore-1.0.0/data/manacore/function/internal/join/new.mcfunction',
     'reset_all': 'manacore-1.0.0/data/manacore/function/debug/reset_all.mcfunction',
     'tag_mc': 'manacore-1.0.0/data/manacore/tags/function/event/player_first_join.json',
-    'tag_sd': 'sweetdream/data/manacore/tags/function/event/player_first_join.json',
-    'handler': 'sweetdream/data/sweetdream/function/event/player_first_join.mcfunction',
+    'tag_sd': 'fallendream/data/manacore/tags/function/event/player_first_join.json',
+    'handler': 'fallendream/data/fallendream/function/event/player_first_join.mcfunction',
 }
 
 
@@ -117,14 +117,14 @@ def m_tag_mc():
 
 def m_tag_sd():
     ls = rd('tag_sd')
-    wr('tag_sd', [l.replace('sweetdream:event/player_first_join',
-                            'sweetdream:event/player_reset') for l in ls])
+    wr('tag_sd', [l.replace('fallendream:event/player_first_join',
+                            'fallendream:event/player_reset') for l in ls])
 
 
 def m_handler():
     ls = rd('handler')
     for i, l in enumerate(ls):
-        if l.strip() == 'function sweetdream:event/player_reset':
+        if l.strip() == 'function fallendream:event/player_reset':
             del ls[i]
             wr('handler', ls)
             return
@@ -139,7 +139,7 @@ CASES = [
     ('E join/new 抛在 register 之前', m_reorder_first_join, 'player_first_join', 'regress'),
     ('F reset_all 少清 manacore.gen', m_drop_gen, 'manacore.gen', 'regress'),
     ('G manacore 侧 tag 占位被改坏', m_tag_mc, 'noop', 'regress'),
-    ('H sweetdream 侧 tag 没挂 handler', m_tag_sd, 'player_first_join', 'regress'),
+    ('H fallendream 侧 tag 没挂 handler', m_tag_sd, 'player_first_join', 'regress'),
     ('I handler 不再复用清单', m_handler, 'player_reset', 'regress'),
 ]
 

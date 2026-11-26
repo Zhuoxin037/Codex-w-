@@ -21,7 +21,7 @@ import io, os, subprocess
 
 ROOT = r'D:\数据包'
 PY = r'C:\Users\qq303\.workbuddy\binaries\python\versions\3.13.12\python.exe'
-SW = os.path.join(ROOT, 'sweetdream', 'data', 'sweetdream', 'function', 'equipment', 'sword')
+SW = os.path.join(ROOT, 'fallendream', 'data', 'fallendream', 'function', 'equipment', 'sword')
 TAIL = os.path.join(SW, 'myriad', 'tail.mcfunction')
 HIT = os.path.join(SW, 'myriad', 'hit_go.mcfunction')
 JUC = os.path.join(SW, 'myriad', 'ju_check.mcfunction')

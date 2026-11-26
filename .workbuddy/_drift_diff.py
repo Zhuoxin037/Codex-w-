@@ -56,7 +56,7 @@ def seg_list(line):
 
 for rel in FILES:
     pa = 'C:/Users/qq303/AppData/Local/Temp/givebak/equipment/%s/give.mcfunction' % rel
-    pb = 'sweetdream/data/sweetdream/function/equipment/%s/give.mcfunction' % rel
+    pb = 'fallendream/data/fallendream/function/equipment/%s/give.mcfunction' % rel
     print('=' * 78)
     print('#### %s' % rel)
     print('=' * 78)

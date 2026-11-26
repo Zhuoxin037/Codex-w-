@@ -1,0 +1,9 @@
+# ============================================================
+# fallendream:overlimit/item/empty_cicada —— 给一块「超限·空蝉」
+# 【接线】custom_data zx:["ol_empty_cicada"] 供 advancement 识别；
+#   CMD=136 与 _gen_stone_icons.py 的 CMD 表、recovery_compass.json 路由三处一致。
+# 【敲入】副手持对应装备 + 主手右键本石 -> consume_item -> apply/empty_cicada。
+#   三件套(item/advancement/apply)与 oldef 均已就位，敲失败退材料。
+# ============================================================
+
+give @s recovery_compass[max_stack_size=1,item_name={text:"超限·空蝉",bold:true,color:light_purple},custom_model_data={floats:[136.0f]},lore=[{"text":"✦ 超限石","color":"gold","bold":true,"italic":false},{"text":"","italic":false,"extra":[{"text":"适用于 ","color":"gray"},{"text":"空蝉","color":"blue"},{"text":"   ·   ","color":"dark_gray"},{"text":"前置 ","color":"gray"},{"text":"尚未超限","color":"aqua"}]},{"text":" ","italic":false},{"text":"敲入后空蝉更名为「超限·空蝉」，被动技","color":"gray","italic":false},{"text":"能变为：最大生命值 +12，基础攻击力 +5。","color":"gray","italic":false},{"text":"受到生物造成的伤害后，在受击位置留下","color":"gray","italic":false},{"text":"持续 12 秒的“余影”，存在“余影”时","color":"gray","italic":false},{"text":"不能再次召唤。✦ 余影存在期间，自身通","color":"gray","italic":false},{"text":"过武器主动技能实际完成至少 3 格位移，","color":"gray","italic":false},{"text":"则使自身的全部余影爆裂，对其 3 格内生","color":"gray","italic":false},{"text":"物造成最大魔力值 ×0.06 的伤害并附加 3","color":"gray","italic":false},{"text":"秒虚弱Ⅱ，之后使其向“余影”处大力吸","color":"gray","italic":false},{"text":"引一次，本次位移使全部余影爆裂后，自","color":"gray","italic":false},{"text":"身合计获得持续 5 秒的 12 点临时生命。","color":"gray","italic":false},{"text":"之后自身在技能位移的起点和终点各召唤","color":"gray","italic":false},{"text":"一个不计入召唤上限的额外“余影”，持","color":"gray","italic":false},{"text":"续 30 秒。","color":"gray","italic":false}],custom_data={zx:["ol_empty_cicada"]},consumable={animation:"none",consume_seconds:0,has_consume_particles:false,sound:"block.bamboo_wood_button.click_off"}]

@@ -15,7 +15,7 @@
   ① 每个暗海**最多存在 10 秒** -> 数据包侧(sea_cap), 与本脚本无关
   ② 暗海有**三个形态**, 每次生成随机取一个
 
-产出（都在 sweetdream_rp_完整版/assets/sweetdream/ 下）:
+产出（都在 fallendream_rp_完整版/assets/fallendream/ 下）:
   textures/item/sea_{a,b,c}_deep.png      64x64    海底色(不规则 alpha 裁边, 静态)
   textures/item/sea_{a,b,c}_ripple.png    64x1024 波纹层(16 帧动画, 透明底)
   textures/item/sea_{a,b,c}_ripple.png.mcmeta
@@ -37,8 +37,8 @@
 import json, math, random, struct, zlib
 from pathlib import Path
 
-ROOT = Path(r'D:/数据包/sweetdream_rp_完整版')
-NS = ROOT / 'assets' / 'sweetdream'
+ROOT = Path(r'D:/数据包/fallendream_rp_完整版')
+NS = ROOT / 'assets' / 'fallendream'
 TEX = NS / 'textures' / 'item'
 MDL = NS / 'models' / 'item'
 ITM = NS / 'items'
@@ -326,12 +326,12 @@ def main():
         (MDL / ('sea_%s_deep.json' % k)).write_text(
             json.dumps(gen_plane('暗海%s_底层' % v['cn'],
                                  '漫步冥河·暗海%s形态 底层海面(静态墨黑蓝)' % v['cn'],
-                                 'sweetdream:item/sea_%s_deep' % k, 8.0, 9.0),
+                                 'fallendream:item/sea_%s_deep' % k, 8.0, 9.0),
                        ensure_ascii=False, indent=1), encoding='utf-8')
         (MDL / ('sea_%s_ripple.json' % k)).write_text(
             json.dumps(gen_plane('暗海%s_波纹' % v['cn'],
                                  '漫步冥河·暗海%s形态 波纹层(16 帧动画)' % v['cn'],
-                                 'sweetdream:item/sea_%s_ripple' % k, 10.0, 10.5,
+                                 'fallendream:item/sea_%s_ripple' % k, 10.0, 10.5,
                                  faces=('up',)),
                        ensure_ascii=False, indent=1), encoding='utf-8')
         (ITM / ('sea_%s.json' % k)).write_text(
@@ -339,9 +339,9 @@ def main():
                         'model': {'type': 'minecraft:composite',
                                   'models': [
                                       {'type': 'minecraft:model',
-                                       'model': 'sweetdream:item/sea_%s_deep' % k},
+                                       'model': 'fallendream:item/sea_%s_deep' % k},
                                       {'type': 'minecraft:model',
-                                       'model': 'sweetdream:item/sea_%s_ripple' % k}]}},
+                                       'model': 'fallendream:item/sea_%s_ripple' % k}]}},
                        ensure_ascii=False, indent=1), encoding='utf-8')
 
     # 废弃的单形态素材删掉(数据包已全面改用 sea_a/b/c)

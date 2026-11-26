@@ -44,7 +44,7 @@ def body_text(lore):
 
 for rel in FILES:
     a = comps('C:/Users/qq303/AppData/Local/Temp/givebak/equipment/%s/give.mcfunction' % rel)
-    b = comps('sweetdream/data/sweetdream/function/equipment/%s/give.mcfunction' % rel)
+    b = comps('fallendream/data/fallendream/function/equipment/%s/give.mcfunction' % rel)
     ha, hb = heads(a), heads(b)
     ba, bb = body_text(a), body_text(b)
     print('#### %s' % rel)

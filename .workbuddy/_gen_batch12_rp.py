@@ -12,7 +12,7 @@
     → range_dispatch(crossbow/pull)` 的分支树，6 个态各一个模型；
     这里直接拿 `crossbow_arc.json` 当模板做字符串替换（不手写，免得漏一个分支）
   · 法杖 triad 的模型/贴图统一带 `staff_` 前缀（与包内 8 件法杖一致），
-    但 item_model 名是 `sweetdream:triad`（give 里已经这么写了）
+    但 item_model 名是 `fallendream:triad`（give 里已经这么写了）
 
 【用法】python .workbuddy/_gen_batch12_rp.py
 """
@@ -20,7 +20,7 @@ import json
 import os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-RP = os.path.join(ROOT, 'sweetdream_rp_完整版', 'assets', 'sweetdream')
+RP = os.path.join(ROOT, 'fallendream_rp_完整版', 'assets', 'fallendream')
 ITEMS = os.path.join(RP, 'items')
 MODELS = os.path.join(RP, 'models', 'item', 'vanilla')
 
@@ -53,12 +53,12 @@ def main():
     for item_name, model_name, tex_name, parent in HANDHELD:
         dump(os.path.join(MODELS, model_name + '.json'), {
             'parent': parent,
-            'textures': {'layer0': 'sweetdream:item/vanilla/' + tex_name},
+            'textures': {'layer0': 'fallendream:item/vanilla/' + tex_name},
         })
         dump(os.path.join(ITEMS, item_name + '.json'), {
             'hand_animation_on_swap': False,
             'model': {'type': 'minecraft:model',
-                      'model': 'sweetdream:item/vanilla/' + model_name},
+                      'model': 'fallendream:item/vanilla/' + model_name},
         })
 
     # ② 弩：6 个态各一个模型；items 拿 crossbow_arc.json 当模板替换
@@ -69,7 +69,7 @@ def main():
             src = 'crossbow_%s_%s' % (key, st)
             dump(os.path.join(MODELS, src + '.json'), {
                 'parent': 'minecraft:item/crossbow',
-                'textures': {'layer0': 'sweetdream:item/vanilla/' + src},
+                'textures': {'layer0': 'fallendream:item/vanilla/' + src},
             })
         dump(os.path.join(ITEMS, item_name + '.json'),
              json.loads(tpl.replace('crossbow_arc_', 'crossbow_%s_' % key)))

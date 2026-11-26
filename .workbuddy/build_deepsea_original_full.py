@@ -12,7 +12,7 @@ byid={g['uuid']:g for g in bb['groups']};groups={}
 def expand(n):
     g={**byid[n['uuid']],**n,'children':[expand(c) if isinstance(c,dict) else c for c in n['children']]};groups[g['name']]=g;return g
 tree=expand(bb['outliner'][0]);root=tree['name'];elements=bb['elements'];textures=bb['textures']
-U=lambda n:str(uuid.uuid5(uuid.NAMESPACE_URL,'sweetdream:deepsea:oldreference:full:'+n))
+U=lambda n:str(uuid.uuid5(uuid.NAMESPACE_URL,'fallendream:deepsea:oldreference:full:'+n))
 names=['abyss','steel','steelfacet','shade','silver','silverlit','edge','silverdark','ice0','ice1','ice2','ice3','ice4','ice5','ice6','blueblack']
 uv={n:[i%4*32,i//4*32,i%4*32+32,i//4*32+32] for i,n in enumerate(names)}
 atlas=Image.new('RGBA',(64,64));rng=random.Random(1010);uv2={}
@@ -95,7 +95,7 @@ for j in range(12):
         wc=w*.48;cube(pommel,'尾端蓝晶嵌面'+str(j),[-wc,yy-.19,-dep-.055],[wc,yy,-dep-.031],'ice1' if j<7 else 'ice4')
 check(elements,groups,root,textures)
 now={e['uuid']:e for e in elements};assert all(now[e['uuid']]==e for e in original['elements'])
-display=json.loads((ROOT/'sweetdream_rp_完整版/assets/deepseaecho/models/item/sword.json').read_text(encoding='utf-8'))['display']
+display=json.loads((ROOT/'fallendream_rp_完整版/assets/deepseaecho/models/item/sword.json').read_text(encoding='utf-8'))['display']
 native=save_native(O,'深海回响_旧稿整剑_分组',elements,groups,root,textures,display)
 master,count=export_static(O,'sword','deepseaecho',elements,groups,root,textures,display,offset=(7.775,2,7.895))
 (O/'贴图').mkdir(exist_ok=True)

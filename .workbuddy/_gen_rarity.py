@@ -31,7 +31,7 @@ from collections import Counter
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 TRUTH = ROOT / '.workbuddy' / 'rarity_20261107' / 'rarity_truth.csv'
-BASE = str(ROOT / 'sweetdream' / 'data' / 'sweetdream' / 'function' / 'equipment')
+BASE = str(ROOT / 'fallendream' / 'data' / 'fallendream' / 'function' / 'equipment')
 
 TIERS = ['常器', '异器', '精器', '秘器', '禁器']
 TIER_ID = {'常器': 't1', '异器': 't2', '精器': 't3',

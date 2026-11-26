@@ -9,7 +9,7 @@ sys.path.insert(0, 'D:/数据包/.workbuddy')
 from lore_fmt import nfmt
 
 META = json.load(io.open('D:/数据包/.workbuddy/_ol_j2.json', encoding='utf-8'))
-DIR = 'D:/数据包/sweetdream/data/sweetdream/function/overlimit/item/%s.mcfunction'
+DIR = 'D:/数据包/fallendream/data/fallendream/function/overlimit/item/%s.mcfunction'
 bad = 0
 for uid, d in META.items():
     t = io.open(DIR % uid, encoding='utf-8').read()

@@ -15,7 +15,7 @@
 #   上一批改 F01 时手滑写成 `$store result ...`(少一个 execute)⇒ `store` 不是命令
 #   ⇒ 宏函数在这一行炸掉 ⇒ 后面全部不执行 ⇒ **索引写不进去、manacore.gen 不写**
 #   ⇒ tick_self 每秒判定"未注册" ⇒ 每秒重走 join(每秒弹走一格槽位: 实测 64→55)
-#   ⇒ self_uuid 恒空 ⇒ sweetdream 整包静默失效, 且日志**零报错**。
+#   ⇒ self_uuid 恒空 ⇒ fallendream 整包静默失效, 且日志**零报错**。
 #   ★ 宏函数(带 $ 的行)在**加载时不解析**, 所以这种语法错不会变成
 #     "Failed to load function", 只在运行时炸 —— 守门规则 `noexecute` 已拦这一类。
 $execute store result storage manacore:players "$(uuid)".slot int 1 run scoreboard players get @s manacore.slot

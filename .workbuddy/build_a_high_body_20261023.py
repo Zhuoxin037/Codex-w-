@@ -13,7 +13,7 @@ from scipy.spatial import cKDTree
 from build_b_staff_static_20261021 import greedy,VERTS,NORMAL
 from repair_b_saved_seams_20261022 import unwrap
 
-TITLE='A_高模还原_常驻主体';ID='sweetdream:a/high-body/20261023/'
+TITLE='A_高模还原_常驻主体';ID='fallendream:a/high-body/20261023/'
 def uid(s):return str(uuid.uuid5(uuid.NAMESPACE_URL,ID+s))
 def orientation(part):
     if not part.get('end'):return np.eye(3)

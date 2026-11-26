@@ -22,7 +22,7 @@ import json
 import os
 import re
 
-BASE = "D:/数据包/sweetdream/data/sweetdream"
+BASE = "D:/数据包/fallendream/data/fallendream"
 FN = BASE + "/function"
 
 NEW = [
@@ -58,7 +58,7 @@ EDIT = [
     "core/load.mcfunction",
 ]
 
-DAMAGE_CALC = "D:/数据包/sweetdream/data/manacore/tags/function/event/damage_calc.json"
+DAMAGE_CALC = "D:/数据包/fallendream/data/manacore/tags/function/event/damage_calc.json"
 
 bad = []
 texts = {}
@@ -105,7 +105,7 @@ for rel, oid in [
 # ---- ② 所有 function 引用都存在 ----
 referenced = set()
 for rel, t in texts.items():
-    for m in re.finditer(r'function (sweetdream:[a-z0-9_/]+)', body(t)):
+    for m in re.finditer(r'function (fallendream:[a-z0-9_/]+)', body(t)):
         referenced.add(m.group(1))
 for fq in sorted(referenced):
     p = os.path.join(FN, fq.split(":", 1)[1].replace("/", os.sep) + ".mcfunction")
@@ -178,19 +178,19 @@ if "hit_scan_exclude" not in OH:
     bad.append("frost_carve/on_hurt: 没有按先例找最近的非玩家实体(攻击者)")
 if "frost_carve/ol_ice" not in OH:
     bad.append("frost_carve/on_hurt: 没有调 ol_ice")
-if "advancement revoke @s only sweetdream:equipment/axe/frost_carve_hurt" not in OH:
+if "advancement revoke @s only fallendream:equipment/axe/frost_carve_hurt" not in OH:
     bad.append("frost_carve/on_hurt: 首行没 revoke 自己(一次受伤后就永久失效)")
-advf = "D:/数据包/sweetdream/data/sweetdream/advancement/equipment/axe/frost_carve_hurt.json"
+advf = "D:/数据包/fallendream/data/fallendream/advancement/equipment/axe/frost_carve_hurt.json"
 if not os.path.exists(advf):
     bad.append("缺进度: advancement/equipment/axe/frost_carve_hurt.json(受击触发不了)")
 else:
     js = json.load(io.open(advf, encoding="utf-8"))
-    if js.get("rewards", {}).get("function") != "sweetdream:equipment/axe/frost_carve/on_hurt":
+    if js.get("rewards", {}).get("function") != "fallendream:equipment/axe/frost_carve/on_hurt":
         bad.append("frost_carve_hurt.json: rewards.function 不是 frost_carve/on_hurt")
     if "entity_hurt_player" not in json.dumps(js):
         bad.append("frost_carve_hurt.json: 触发条件不是 entity_hurt_player")
 REARM = body(texts.get("lib/rearm.mcfunction", ""))
-if "advancement revoke @a only sweetdream:equipment/axe/frost_carve_hurt" not in REARM:
+if "advancement revoke @a only fallendream:equipment/axe/frost_carve_hurt" not in REARM:
     bad.append("lib/rearm: 没登记 frost_carve_hurt —— 奖励函数被跳过一次就永久卡死")
 OI = body(texts["equipment/axe/frost_carve/ol_ice.mcfunction"])
 if "distance=..3" not in OI or "ticks:40" not in OI:
@@ -203,7 +203,7 @@ if "equipment/axe/frost_carve/on_hurt" in DEAL:
     bad.append("internal/damage/deal: 又挂了剜霜的受击钩子 —— 会和进度重复, 一次受击扣两层")
 
 SEC = body(texts["lib/second.mcfunction"])
-if "scores={zx.frc_ft=1..}] run function sweetdream:equipment/axe/frost_carve/ol_wing_tick" not in SEC:
+if "scores={zx.frc_ft=1..}] run function fallendream:equipment/axe/frost_carve/ol_wing_tick" not in SEC:
     bad.append("lib/second: 没有「披霜」的每秒推进(12 秒永不到期)")
 
 # ================= 歌谣 ballad =================
@@ -257,19 +257,19 @@ NT = body(texts["equipment/axe/ballad/ol_note_tick.mcfunction"])
 if "ol_note_go with storage" not in NT:
     bad.append("ballad/ol_note_tick: 到点没有结算")
 NG = body(texts["equipment/axe/ballad/ol_note_go.mcfunction"])
-if 'type:"sweetdream:true_damage"' not in NG:
+if 'type:"fallendream:true_damage"' not in NG:
     bad.append("ballad/ol_note_go: 路径伤害不是真实伤害")
 if "positioned $(sx) $(sy) $(sz) facing entity @s feet" not in NG:
     bad.append("ballad/ol_note_go: 起点->终点不是靠 facing entity @s feet 定的")
 if "kill @s" not in NG:
     bad.append("ballad/ol_note_go: 到点没有自毁")
 NL = body(texts["equipment/axe/ballad/ol_note_line.mcfunction"])
-if "positioned ^ ^ ^1.5 run function sweetdream:equipment/axe/ballad/ol_note_line" not in NL:
+if "positioned ^ ^ ^1.5 run function fallendream:equipment/axe/ballad/ol_note_line" not in NL:
     bad.append("ballad/ol_note_line: 自递归那行不对(带 at @s 会卡在原地)")
 if "distance=..1.3" not in NL:
     bad.append("ballad/ol_note_line: 采样半径不是 1.3(会把自己算进路径)")
 CT = body(texts["core/tick.mcfunction"])
-if CT.count("as @e[tag=zx.bd_note,distance=0..] at @s run function sweetdream:equipment/axe/ballad/ol_note_tick") < 3:
+if CT.count("as @e[tag=zx.bd_note,distance=0..] at @s run function fallendream:equipment/axe/ballad/ol_note_tick") < 3:
     bad.append("core/tick: 音符不是三维度各一遍")
 
 # ================= 沉渊 chenyuan =================
@@ -305,8 +305,8 @@ if "zx.cy_mml" not in CH:
 
 if os.path.exists(DAMAGE_CALC):
     vals = json.load(io.open(DAMAGE_CALC, encoding="utf-8")).get("values", [])
-    hc = "sweetdream:equipment/axe/chenyuan/hook_calc"
-    ap = "sweetdream:lib/dmg_add_apply"
+    hc = "fallendream:equipment/axe/chenyuan/hook_calc"
+    ap = "fallendream:lib/dmg_add_apply"
     if hc not in vals:
         bad.append("damage_calc.json: 沉渊的 hook_calc 没登记(写了但永远不生效)")
     elif ap in vals and vals.index(hc) > vals.index(ap):

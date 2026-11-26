@@ -1,0 +1,68 @@
+# ============================================================
+# fallendream:equipment/axe/angel_core/hit_go —— 被动主体: 给"还没有圣痕"的铺「圣痕」
+# ------------------------------------------------------------
+# 【执行者】动手的玩家
+# 【文案】每次攻击后若自身有 80 及以上的魔力值, 则消耗 80 魔力值并使离自身
+#   8 格内最近的 3 个生物附加「圣痕」。
+# 【★ 2026-10-04 规则调整 ★】「圣痕」**同一只只能给一次**:
+#   8 格内最近的 3 个里如果**全都已经带圣痕**, 这一次整个不触发(不扣蓝、不铺)。
+#   带圣痕的生物会一直有金色常态特效(由 status/aura 每秒画)。
+# 【顺序】先钉候选 -> 数"还没圣痕的" -> 有才查/扣魔力 -> 只给没圣痕的加。
+# 【★ 每条提前 return 之前都要把 zx.ac_t 清掉 ★】不然残留标签会被下一次攻击当成目标。
+# ============================================================
+
+# ① 钉住"8 格内最近的 3 个生物"
+#   【为什么先打标签】@e[sort=nearest,limit=3] 每次求值都会重挑, 不冻结的话
+#   后面"打粒子"和"贴标签"可能作用在不同的三只身上。
+tag @e[tag=zx.ac_t] remove zx.ac_t
+execute at @s run tag @e[type=!#fallendream:no_damage,distance=0.1..8,sort=nearest,limit=3] add zx.ac_t
+execute unless entity @e[tag=zx.ac_t] run return 0
+
+# ② 其中"还没有圣痕"的有几个? 一个都没有 -> 不触发(圣痕只能给一次)
+scoreboard players set #ac_new zx.meta 0
+execute as @e[tag=zx.ac_t] unless entity @s[tag=zx.status.shenghen] run scoreboard players add #ac_new zx.meta 1
+execute if score #ac_new zx.meta matches ..0 run tag @e[tag=zx.ac_t] remove zx.ac_t
+execute if score #ac_new zx.meta matches ..0 run return 0
+
+# ③ 拿 uuid
+function fallendream:lib/uuid
+execute unless data storage zx:data self{ok:1b} run tag @e[tag=zx.ac_t] remove zx.ac_t
+execute unless data storage zx:data self{ok:1b} run return 0
+
+# ④ 读当前魔力(不到 80 就整个不动, 也不扣蓝)
+data modify storage manacore:in arg set value {uuid:""}
+data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
+function manacore:api/mana/get
+scoreboard players set #ac_m zx.meta 0
+execute store result score #ac_m zx.meta run data get storage manacore:out r.value 1
+execute if score #ac_m zx.meta matches ..79 run tag @e[tag=zx.ac_t] remove zx.ac_t
+execute if score #ac_m zx.meta matches ..79 run return 0
+
+# ⑤ 消耗 80 魔力(扣不动就什么都不做)
+data modify storage manacore:in arg set value {uuid:"",value:80.0}
+data modify storage manacore:in arg.uuid set from storage zx:data self.uuid
+function fallendream:lib/mana/pay
+execute if data storage manacore:out r{success:0b} run tag @e[tag=zx.ac_t] remove zx.ac_t
+execute if data storage manacore:out r{success:0b} run return 0
+
+# ⑥ 只给"还没有圣痕"的加(已有的不重复给), 音效响一次
+# 【音效 2026-10-08 改版】用户: "音效没有啥感觉, 没力气"。
+#   原来只有 `block.amethyst_block.chime 0.6 1.6` —— 音量 0.6、音高 1.6,
+#   又轻又尖, 就是"叮"一下。现在改成"刻印/祝福"三层:
+#     ① amethyst_block.chime  —— 亮片, 听得出"光"
+#     ② enchantment_table.use —— 附魔台的过气声, 一记"刻上去"的动作感
+#     ③ beacon.activate ×1.5  —— 抬高的启明音, 给一点向上的力量
+#   ★ 位置仍是 `at @s`(玩家处): 这是"我打出这一下"的反馈, 该响在自己身上;
+#     光柱/命中那些响在**生物处**的声由 beam / dmg2 各自负责。
+execute as @e[tag=zx.ac_t] unless entity @s[tag=zx.status.shenghen] run function fallendream:equipment/axe/angel_core/mark
+execute at @s run playsound minecraft:block.amethyst_block.chime player @a ~ ~ ~ 1.00 1.30
+execute at @s run playsound minecraft:block.enchantment_table.use player @a ~ ~ ~ 0.85 1.25
+execute at @s run playsound minecraft:block.beacon.activate player @a ~ ~ ~ 0.75 1.50
+
+# ⑦ 超限：3 格内 1 个圣痕者叠「额外一层」并把它重置回满时长
+#   ★ 必须排在 ⑥ 之后 —— 文案是"…附加「圣痕」，**之后**使自身 3 格内 1 个有圣痕的…"，
+#     本次刚挂上的那几只也要有资格被挑中。
+#   ★ 也必须在 ⑤ 扣蓝**之后**：这一次攻击没扣到蓝就整段不生效（前面已 return）。
+execute if score #ac_ol zx.meta matches 1 run function fallendream:equipment/axe/angel_core/ol_layer
+
+tag @e[tag=zx.ac_t] remove zx.ac_t

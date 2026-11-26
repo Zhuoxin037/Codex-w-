@@ -28,14 +28,14 @@
 
 【三处约定(照 batch5/6)】
   · custom_data.zx = [<id>, <分类标记>, <"itemreplace"(右键触发的才有)>]
-  · 带 冷却 的才有 skill:"sweetdream:<id>"(观测镜靠它显示冷却)
+  · 带 冷却 的才有 skill:"fallendream:<id>"(观测镜靠它显示冷却)
   · 剑/斧/弩 有 max_damage -> 不能加 max_stack_size; 法杖底座 recovery_compass 能堆 -> 要加
 """
 import io, os, json, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from _tags_data import TAGS        # noqa: E402  标签单一真源(批 A)
 
-BASE = r'D:\数据包\sweetdream\data\sweetdream\function\equipment'
+BASE = r'D:\数据包\fallendream\data\fallendream\function\equipment'
 
 
 # ---------------------------------------------------------------- lore 构件
@@ -82,9 +82,9 @@ def B(t):
 # ---------------------------------------------------------------- 本批 11 件
 ITEMS = [
     # ============================================================ 斧 ============
-    dict(cat='axe', id='sacred_relic', item_model='sweetdream:sacred_relic', name='圣骸',
+    dict(cat='axe', id='sacred_relic', item_model='fallendream:sacred_relic', name='圣骸',
          base='netherite_axe', color='white',
-         headnote=['# ★ 圣骸外观已接入 sweetdream:sacred_relic；旧物品持有时自动补绑。',
+         headnote=['# ★ 圣骸外观已接入 fallendream:sacred_relic；旧物品持有时自动补绑。',
                    '#   实际模型及统一 display 在 assets/sacredrelic/models/item/axe.json。'],
          note='【被动 + 主动】被动: 玩家击杀的生物在死亡位置留 12 秒“遗骸”, 记住死者的最大生命与身上的标签。\n'
               '#   主动: 400 / 40 秒 -> 术阵; 每秒让 12 格内全部“遗骸”打它 3 格内随机一只 最大魔力 ×0.1;\n'
@@ -102,7 +102,7 @@ ITEMS = [
                  '若有「夜火」则伤害 +80%；若有「噬心」则额外附加相当于死亡者最大生命值 5% 的真实伤害；'
                  '若有「白昼梦」则额外附加 0.3 秒的时停；若有「渊海」则锁定目标 +2。共持续 12 秒。')]),
 
-    dict(cat='axe', id='anchor', item_model='sweetdream:anchor', name='沉锚',
+    dict(cat='axe', id='anchor', item_model='fallendream:anchor', name='沉锚',
          base='diamond_axe', color='blue',
          note='【被动 + 主动】被动: 攻击 10% -> 前方 1 格内生物击飞 1 格 + 最大魔力 ×0.06。\n'
               '#   主动: 200 / 12 秒 -> 向 10 格内准星目标掷锚并位移过去, 落点 2 格内 基础攻击力 ×5 且击飞 2 格。',
@@ -116,7 +116,7 @@ ITEMS = [
                P('向自身 10 格内的准星上的目标掷出沉锚并位移到目标位置，之后对其 2 格内的生物造成相当于释放者'
                  '基础攻击力 ×5 的伤害并击飞 2 格。')]),
 
-    dict(cat='axe', id='scorch_bone', item_model='sweetdream:scorch_bone', name='焦骨',
+    dict(cat='axe', id='scorch_bone', item_model='fallendream:scorch_bone', name='焦骨',
          base='diamond_axe', color='dark_gray',
          note='【主动】160 / 28 秒 -> 打 6 格内最近目标 基础攻击力 ×5, 并对其周围 2 格 最大魔力 ×0.05;\n'
               '#   主目标有「流火」-> 转「夜火」+ 返 40 魔力; 主目标原本已是「夜火」-> 范围伤提到 最大魔力 ×0.1。',
@@ -128,7 +128,7 @@ ITEMS = [
                  '原本已经拥有「夜火」，则改为将范围伤害提高至相当于自身最大魔力 ×0.1。')]),
 
     # ============================================================ 剑 ============
-    dict(cat='sword', id='tidemark', item_model='sweetdream:tidemark', name='潮痕',
+    dict(cat='sword', id='tidemark', item_model='fallendream:tidemark', name='潮痕',
          base='iron_sword', color='aqua',
          note='【主动】30 / 20 秒 -> 前方 4×2 范围 最大魔力 ×0.08, 之后随机一个受击者附加「渊海」。',
          lore=[H('✦ 主动技能'),
@@ -137,7 +137,7 @@ ITEMS = [
                P('使用后对自身前方 4×2 范围内的生物造成一次相当于自身最大魔力值 ×0.08 的伤害，之后使受到'
                  '伤害的随机一个生物附加「渊海」。')]),
 
-    dict(cat='sword', id='grayscale', item_model='sweetdream:grayscale', name='灰度',
+    dict(cat='sword', id='grayscale', item_model='fallendream:grayscale', name='灰度',
          base='iron_sword', color='gray',
          note='【主动】30 / 18 秒 -> 自身 2 格内 当前魔力 ×0.08 + 燃烧 3 秒; 已在燃烧 -> 改附加「流火」。',
          lore=[H('✦ 主动技能'),
@@ -146,7 +146,7 @@ ITEMS = [
                P('使用后使自身 2 格内的生物受到一次相当于自身当前魔力值 ×0.08 的伤害，之后使其燃烧 3 秒。'
                  '若已经处于燃烧状态则改为使其附加「流火」。')]),
 
-    dict(cat='sword', id='crescent', item_model='sweetdream:crescent', name='缺月',
+    dict(cat='sword', id='crescent', item_model='fallendream:crescent', name='缺月',
          base='netherite_sword', color='white',
          note='【被动 + 主动】被动: 主手持有缺月时按快捷栏里"正在冷却的其它主动技能"数量分三档(1 / 2 / ≥3)。\n'
               '#   主动: 240 / 30 秒 -> 冻结快捷栏全部技能剩余冷却 6 秒, 每冻结 1 秒总剩余冷却 +1% 最终伤害\n'
@@ -167,7 +167,7 @@ ITEMS = [
                  '×0.12 + 基础攻击力 ×4 的伤害，之后被冻结的技能继续正常冷却。')]),
 
     # ============================================================ 弩 ============
-    dict(cat='bow', id='dragon_tongue', item_model='sweetdream:crossbow_dragon_tongue', name='龙舌',
+    dict(cat='bow', id='dragon_tongue', item_model='fallendream:crossbow_dragon_tongue', name='龙舌',
          base='crossbow', color='red',
          note='【弩 = 射击触发】不加 consumable/itemreplace, 也没有冷却 -> 不加 skill。\n'
               '#   射中带「夜火」的目标 -> 消其「夜火」+ 其 4 格内随机落箭雨; 箭随机落点, 命中落点处的生物\n'
@@ -183,7 +183,7 @@ ITEMS = [
                  '为 X×3。X 为被命中的生物 8 格内附有「流火」或「夜火」的生物数量，其中附有「夜火」的'
                  '每个记为 2。')]),
 
-    dict(cat='bow', id='cloudtrail', item_model='sweetdream:crossbow_cloudtrail', name='云迹',
+    dict(cat='bow', id='cloudtrail', item_model='fallendream:crossbow_cloudtrail', name='云迹',
          base='crossbow', color='white',
          note='【弩 = 射击触发】不加 consumable/itemreplace, 也没有冷却 -> 不加 skill。\n'
               '#   没射中 -> 箭停留处生成半径 3 的领域 5 秒; 射领域内生物时同步对领域内全体 基础攻击力 ×2。',
@@ -193,7 +193,7 @@ ITEMS = [
                P('射击后若未射中生物，则在箭停留位置生成一个持续 5 秒的半径 3 格的领域。当自身射击在领域内'
                  '的生物时会同步对领域内的全部生物造成一次相当于自身基础攻击力 ×2 的伤害。')]),
 
-    dict(cat='bow', id='burst_dawn', item_model='sweetdream:crossbow_burst_dawn', name='爆裂黎明',
+    dict(cat='bow', id='burst_dawn', item_model='fallendream:crossbow_burst_dawn', name='爆裂黎明',
          base='crossbow', color='gold',
          note='【弩 = 射击触发】不加 consumable/itemreplace, 也没有冷却 -> 不加 skill。\n'
               '#   799 -> 术阵 + 两个“魂灵之影”(生命 100 / 20 秒); 主力 基础攻击力 ×8 + 最大魔力 ×0.15 + 缓慢5 2 秒,\n'
@@ -210,7 +210,7 @@ ITEMS = [
                  '则该技能结束。')]),
 
     # ============================================================ 法杖 ==========
-    dict(cat='staff', id='triad', item_model='sweetdream:triad', name='很冰的斧',
+    dict(cat='staff', id='triad', item_model='fallendream:triad', name='很冰的斧',
          base='recovery_compass', color='aqua',
          note='【法杖三形态】★ 名字先按初始形态「很冰的斧」；切形态改名属"效果", 本批不做。\n'
               '#   普攻 50: 冰斧 = 最大魔力 ×0.02 / 热刀 = 基础攻击力 ×3 / 重枪 = 基础攻击力 ×6。\n'
@@ -237,7 +237,7 @@ ITEMS = [
                  '空且每次攻击都会使其抗性提升失效 2 秒。本效果持续 15 秒；结束后保留当前形态，不会自动变回'
                  '「很冰的斧」。')]),
 
-    dict(cat='staff', id='five_curses', item_model='sweetdream:five_curses', name='五世恶咒',
+    dict(cat='staff', id='five_curses', item_model='fallendream:five_curses', name='五世恶咒',
          base='recovery_compass', color='dark_purple',
          note='【法杖: 普攻 + 主动】普攻 100, 伤害 自身当前魔力值 ×0.03; 每次命中推进一世「世咒」(第一~五世);\n'
               '#   已在第五世再被命中 -> 立即结算终世(30%)并清除(2026-10-15 用户拍板);\n'
@@ -281,7 +281,7 @@ def build(it):
         zx.append('itemreplace')
     zx_txt = json.dumps(zx, ensure_ascii=False, separators=(',', ':'))
     if need_skill:
-        zx_txt = zx_txt + ',skill:"sweetdream:%s"' % cid
+        zx_txt = zx_txt + ',skill:"fallendream:%s"' % cid
 
     parts = []
     # ★ 批 12（2026-10-18）：这 7 件的 16×16 平面图标已就位
@@ -299,15 +299,15 @@ def build(it):
         parts.append('item_model="%s"' % it['item_model'])
     if cid == 'sacred_relic':
         # 已批准并接入的圣骸3D外观，其他本批装备仍保留原版。
-        parts.append('item_model="sweetdream:sacred_relic"')
+        parts.append('item_model="fallendream:sacred_relic"')
         parts.append('custom_model_data={floats:[0.0f]}')
     if cid == 'five_curses':
         # 2026-10-16 用户授权猴头模型、待机、拍颅普攻和重施法接入。
-        parts.append('item_model="sweetdream:five_curses"')
+        parts.append('item_model="fallendream:five_curses"')
         parts.append('custom_model_data={floats:[0.0f]}')
     if cid == 'burst_dawn':
         # 2026-10-16 用户授权维什戴尔炮身、肩饰及真实弹道/背效接入。
-        parts.append('item_model="sweetdream:crossbow_burst_dawn"')
+        parts.append('item_model="fallendream:crossbow_burst_dawn"')
         parts.append('custom_model_data={floats:[0.0f,0.0f]}')
     parts.append('item_name={text:"%s",bold:true,color:%s}' % (it['name'], it['color']))
     parts.append('lore=' + json.dumps(it['lore'], ensure_ascii=False, separators=(',', ':')))
@@ -322,7 +322,7 @@ def build(it):
         #      命中结算全靠 enchantment 的 post_attack 三条回调
         #      (hook_arrow / hook_attacker / hook_victim)。漏了它就整把弩静默失效
         #      (同族事故: 坑 138 —— 回调只读**攻击者主手物品**上的附魔)。
-        parts.append('enchantments={"sweetdream:%s":1}' % cid)
+        parts.append('enchantments={"fallendream:%s":1}' % cid)
         parts.append('enchantment_glint_override=false')
         hide.append('enchantments')
     # ★ 标签(批 A): custom_data.tags = 语义关键词(见 _tags_data.py), 与 zx 并列。
@@ -347,7 +347,7 @@ def header(it):
     L = []
     A = L.append
     A('# ============================================================')
-    A('# sweetdream:equipment/%s/%s/give —— 给一件「%s」（%s）'
+    A('# fallendream:equipment/%s/%s/give —— 给一件「%s」（%s）'
       % (it['cat'], it['id'], it['name'], cat_cn))
     A('# ------------------------------------------------------------')
     A('# 【custom_data】')
@@ -360,7 +360,7 @@ def header(it):
     A('# 【这个文件是生成的】改描述/数值请改 .workbuddy/_gen_batch7.py 再重跑,')
     A('#   然后跑 `python .workbuddy/lore_fmt.py --write` 让规范器重新折行。')
     if it['cat'] == 'bow':
-        A('# ★ 批 11(2026-10-12)已接上技能: 本件带附魔 sweetdream:%s —— 弩的命中结算' % it['id'])
+        A('# ★ 批 11(2026-10-12)已接上技能: 本件带附魔 fallendream:%s —— 弩的命中结算' % it['id'])
         if it['id'] == 'burst_dawn':
             # 爆裂黎明 2026-10-16 已接外观 → 不再是"外观仍待做"; 与下一行的 2026-10-16 说明保持一致。
             A('#   全靠附魔的 post_attack 回调(没有右键/消耗)，保留现有机制附魔。')

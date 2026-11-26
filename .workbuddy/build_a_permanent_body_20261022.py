@@ -13,7 +13,7 @@ import copy,uuid,base64,io,math,itertools,time,trimesh
 from collections import Counter,defaultdict
 
 TITLE='A_常驻身体与下衣_静态'
-def uid(s):return str(uuid.uuid5(uuid.NAMESPACE_URL,'sweetdream:a/permanent-body/'+s))
+def uid(s):return str(uuid.uuid5(uuid.NAMESPACE_URL,'fallendream:a/permanent-body/'+s))
 
 class RegionSampler(Source):
     def __init__(self,mask):

@@ -10,7 +10,7 @@ KEYS = D.VOCAB_KEYS
 TAGS = D.TAGS
 CN = {k: (g, c) for k, g, c, _ in VOCAB}
 
-ROOT = r'D:\数据包\sweetdream\data\sweetdream\function'
+ROOT = r'D:\数据包\fallendream\data\fallendream\function'
 
 # ---- 从 give 文件挖 zx:["<id>", "<cat>", ...] ----
 cat_of = {}

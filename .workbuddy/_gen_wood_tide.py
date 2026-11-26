@@ -2,7 +2,7 @@
 """
 生成「枯枝园·朽木」与「无光海·暗潮」的资源包素材。
 
-产出（都在 sweetdream_rp_完整版/assets/sweetdream/ 下）:
+产出（都在 fallendream_rp_完整版/assets/fallendream/ 下）:
   textures/item/withered_wood.png   64x64   枯木树皮 + 菌菇/苔藓/焦黑色块
   textures/item/tide_deep.png       64x64   暗潮底层: 深暗海水(圆形 alpha 裁边)
   textures/item/tide_ripple.png     64x1024 暗潮波纹层: 16 帧动画(透明底 + 亮波纹)
@@ -22,8 +22,8 @@
 import json, math, random, struct, zlib
 from pathlib import Path
 
-ROOT = Path(r'D:/数据包/sweetdream_rp_完整版')
-NS = ROOT / 'assets' / 'sweetdream'
+ROOT = Path(r'D:/数据包/fallendream_rp_完整版')
+NS = ROOT / 'assets' / 'fallendream'
 TEX = NS / 'textures' / 'item'
 MDL = NS / 'models' / 'item'
 ITM = NS / 'items'
@@ -176,7 +176,7 @@ def gen_tide_ripple(size=64, frames=16):
 
 # ================================================================ 模型
 def load_display():
-    """复用 sweetdream:item/look 的 display(包里验证过能用的那套)"""
+    """复用 fallendream:item/look 的 display(包里验证过能用的那套)"""
     try:
         d = json.loads((MDL / 'look.json').read_text(encoding='utf-8'))
         return d.get('display', {})
@@ -283,11 +283,11 @@ def gen_wood_model(display):
     e.append(box('苔藓_下', [6.6, 3.0, 6.2], [8.8, 3.35, 6.9], uvbox=(12, 4)))
     e.append(box('苔藓_上', [8.9, 10.0, 7.0], [9.6, 10.4, 8.4], uvbox=(12, 4)))
     m = {
-        'credit': 'sweetdream 枯枝园·朽木 (程序化生成, 改数字请改 .workbuddy/_gen_wood_tide.py)',
+        'credit': 'fallendream 枯枝园·朽木 (程序化生成, 改数字请改 .workbuddy/_gen_wood_tide.py)',
         'ambientocclusion': False,
         'gui_light': 'front',
-        'textures': {'wood': 'sweetdream:item/withered_wood',
-                     'particle': 'sweetdream:item/withered_wood'},
+        'textures': {'wood': 'fallendream:item/withered_wood',
+                     'particle': 'fallendream:item/withered_wood'},
         'elements': e,
     }
     if display:
@@ -329,27 +329,27 @@ def main():
         json.dumps(gen_wood_model(disp), ensure_ascii=False, indent=1), encoding='utf-8')
     (MDL / 'tide_deep.json').write_text(
         json.dumps(gen_plane('暗潮_底层', '无光海·暗潮 底层海面(静态深色)',
-                             'sweetdream:item/tide_deep', 8.0, 9.0),
+                             'fallendream:item/tide_deep', 8.0, 9.0),
                    ensure_ascii=False, indent=1), encoding='utf-8')
     (MDL / 'tide_ripple.json').write_text(
         json.dumps(gen_plane('暗潮_波纹', '无光海·暗潮 波纹层(16 帧动画, 悬在底层上方)',
-                             'sweetdream:item/tide_ripple', 10.0, 10.5,
+                             'fallendream:item/tide_ripple', 10.0, 10.5,
                              faces=('up',)),
                    ensure_ascii=False, indent=1), encoding='utf-8')
     # ---- 物品模型定义 ----
     (ITM / 'withered_wood.json').write_text(
         json.dumps({'hand_animation_on_swap': False,
                     'model': {'type': 'minecraft:model',
-                              'model': 'sweetdream:item/withered_wood'}},
+                              'model': 'fallendream:item/withered_wood'}},
                    ensure_ascii=False, indent=1), encoding='utf-8')
     (ITM / 'tide.json').write_text(
         json.dumps({'hand_animation_on_swap': False,
                     'model': {'type': 'minecraft:composite',
                               'models': [
                                   {'type': 'minecraft:model',
-                                   'model': 'sweetdream:item/tide_deep'},
+                                   'model': 'fallendream:item/tide_deep'},
                                   {'type': 'minecraft:model',
-                                   'model': 'sweetdream:item/tide_ripple'}]}},
+                                   'model': 'fallendream:item/tide_ripple'}]}},
                    ensure_ascii=False, indent=1), encoding='utf-8')
     print('withered_wood elements:',
           len(json.loads((MDL / 'withered_wood.json').read_text(encoding='utf-8'))['elements']))

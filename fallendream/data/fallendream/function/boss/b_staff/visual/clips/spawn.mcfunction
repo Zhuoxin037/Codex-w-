@@ -1,0 +1,13 @@
+execute if score @s bs.vframe matches 0 run function fallendream:boss/b_staff/visual/frames/spawn/0 with storage fallendream:b_staff args
+execute if score @s bs.vframe matches 1 run function fallendream:boss/b_staff/visual/frames/spawn/1 with storage fallendream:b_staff args
+execute if score @s bs.vframe matches 2 run function fallendream:boss/b_staff/visual/frames/spawn/2 with storage fallendream:b_staff args
+execute if score @s bs.vframe matches 3 run function fallendream:boss/b_staff/visual/frames/spawn/3 with storage fallendream:b_staff args
+execute if score @s bs.vframe matches 4 run function fallendream:boss/b_staff/visual/frames/spawn/4 with storage fallendream:b_staff args
+execute if score @s bs.vframe matches 5 run function fallendream:boss/b_staff/visual/frames/spawn/5 with storage fallendream:b_staff args
+execute if score @s bs.vframe matches 6 run function fallendream:boss/b_staff/visual/frames/spawn/6 with storage fallendream:b_staff args
+execute if score @s bs.vframe matches 7 run function fallendream:boss/b_staff/visual/frames/spawn/7 with storage fallendream:b_staff args
+execute if score @s bs.vframe matches 8 run function fallendream:boss/b_staff/visual/frames/spawn/8 with storage fallendream:b_staff args
+execute if score @s bs.vframe matches 9 run function fallendream:boss/b_staff/visual/frames/spawn/9 with storage fallendream:b_staff args
+execute if score @s bs.vframe matches 10 run function fallendream:boss/b_staff/visual/frames/spawn/10 with storage fallendream:b_staff args
+execute if score @s bs.vframe matches 11 run function fallendream:boss/b_staff/visual/frames/spawn/11 with storage fallendream:b_staff args
+execute if score @s bs.vframe matches 12 run function fallendream:boss/b_staff/visual/frames/spawn/12 with storage fallendream:b_staff args

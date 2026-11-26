@@ -393,7 +393,7 @@ def patch_text(text, width=37):
     return text, n
 
 
-ROOT = r'D:\数据包\sweetdream\data\sweetdream'
+ROOT = r'D:\数据包\fallendream\data\fallendream'
 TARGETS = []
 
 

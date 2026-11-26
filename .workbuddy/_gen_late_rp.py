@@ -26,7 +26,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from _gen_late_icons import AXES, CROSSBOWS, STAFFS, SWORDS, TOOLS, ARMOR  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-RP = os.path.join(ROOT, 'sweetdream_rp_完整版', 'assets', 'sweetdream')
+RP = os.path.join(ROOT, 'fallendream_rp_完整版', 'assets', 'fallendream')
 ITEMS = os.path.join(RP, 'items')
 MODELS = os.path.join(RP, 'models', 'item', 'vanilla')
 EQUIP = os.path.join(RP, 'equipment')
@@ -46,12 +46,12 @@ def dump(path, obj):
 def handheld(items_name, model_key, parent='minecraft:item/handheld'):
     dump(os.path.join(MODELS, model_key + '.json'), {
         'parent': parent,
-        'textures': {'layer0': 'sweetdream:item/vanilla/' + model_key},
+        'textures': {'layer0': 'fallendream:item/vanilla/' + model_key},
     })
     dump(os.path.join(ITEMS, items_name + '.json'), {
         'hand_animation_on_swap': False,
         'model': {'type': 'minecraft:model',
-                  'model': 'sweetdream:item/vanilla/' + model_key},
+                  'model': 'fallendream:item/vanilla/' + model_key},
     })
 
 
@@ -81,7 +81,7 @@ def main():
         for st in CB_STATES:
             dump(os.path.join(MODELS, '%s_%s.json' % (key, st)), {
                 'parent': 'minecraft:item/crossbow',
-                'textures': {'layer0': 'sweetdream:item/vanilla/%s_%s' % (key, st)},
+                'textures': {'layer0': 'fallendream:item/vanilla/%s_%s' % (key, st)},
             })
         dump(os.path.join(ITEMS, key + '.json'),
              json.loads(tpl.replace('crossbow_arc_', key + '_')))
@@ -90,15 +90,15 @@ def main():
         key = 'armor_' + s['id']
         dump(os.path.join(MODELS, key + '.json'), {
             'parent': 'minecraft:item/generated',
-            'textures': {'layer0': 'sweetdream:item/vanilla/' + key},
+            'textures': {'layer0': 'fallendream:item/vanilla/' + key},
         })
         dump(os.path.join(ITEMS, key + '.json'), {
             'hand_animation_on_swap': False,
-            'model': {'type': 'minecraft:model', 'model': 'sweetdream:item/vanilla/' + key},
+            'model': {'type': 'minecraft:model', 'model': 'fallendream:item/vanilla/' + key},
         })
         layer = 'humanoid_leggings' if s['slot'] == 'leggings' else 'humanoid'
         dump(os.path.join(EQUIP, key + '.json'), {
-            'layers': {layer: [{'texture': 'sweetdream:' + key}]},
+            'layers': {layer: [{'texture': 'fallendream:' + key}]},
         })
 
 

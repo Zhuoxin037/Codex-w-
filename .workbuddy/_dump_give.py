@@ -2,7 +2,7 @@
 """列出全部装备 give 的 custom_data / skill / 底材，供新增装备对照。"""
 import glob, re, io, os
 
-BASE = r'D:\数据包\sweetdream\data\sweetdream\function\equipment'
+BASE = r'D:\数据包\fallendream\data\fallendream\function\equipment'
 for f in sorted(glob.glob(os.path.join(BASE, '*', '*', 'give.mcfunction'))):
     t = io.open(f, encoding='utf-8').read()
     rel = os.path.relpath(f, BASE).replace('\\', '/')

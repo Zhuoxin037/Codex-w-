@@ -17,12 +17,12 @@
 #      ★ 不要试图 `data remove storage manacore:players`(不带路径) ——
 #        `/data remove` 的 <path> 是**必填**的, 那样写会让**整个函数加载失败**
 #        (见 purge_registry 头部的实测报错)。存储的"根"在纯命令层面删不掉。
-#   ② 应用层(sweetdream)那些"已加成账本"(zx.am_mana / zx.chg_atk …)挂在玩家身上,
+#   ② 应用层(fallendream)那些"已加成账本"(zx.am_mana / zx.chg_atk …)挂在玩家身上,
 #      manacore 清不到 ⇒ 底层属性被重置后装备**不会把加成加回来**。现在逐个在线
 #      玩家抛 #manacore:event/player_reset, 由应用层收尾(见 internal/debug/reset_notify)。
 #   ③ 离线玩家的应用层账本这一次清不到(@a 选不到); 但他们下次上线必然走
 #      internal/join/new(记录已被本条删掉) ⇒ 由那里的 #manacore:event/player_first_join
-#      补清(见 sweetdream:event/player_first_join)。★ N05 修(2026-10-11)。
+#      补清(见 fallendream:event/player_first_join)。★ N05 修(2026-10-11)。
 # ============================================================
 scoreboard players set #mode manacore.meta 7
 function manacore:internal/index/foreach

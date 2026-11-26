@@ -1,0 +1,10 @@
+{
+  "pack": {
+    "pack_format": 71,
+    "supported_formats": {
+      "min_inclusive": 71,
+      "max_inclusive": 71
+    },
+    "description": "fallendream v1.0.0 (仅验证 1.21.5)"
+  }
+}

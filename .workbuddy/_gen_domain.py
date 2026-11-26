@@ -2,7 +2,7 @@
 """
 生成「威霆·领域法阵」的资源包素材(幂等, 改数字重跑即可)。
 
-产出(都在 sweetdream_rp_完整版/assets/sweetdream/ 下):
+产出(都在 fallendream_rp_完整版/assets/fallendream/ 下):
   textures/item/domain.png        64x1536 = 24 帧 x 64x64  暗紫符文法阵(自转)
   textures/item/domain.png.mcmeta                          动画声明(每 2 刻一帧)
   textures/item/domain_rune.png   16x16                    竖立的符文碎片贴图
@@ -34,8 +34,8 @@ import struct
 import zlib
 from pathlib import Path
 
-ROOT = Path(r'D:/数据包/sweetdream_rp_完整版')
-NS = ROOT / 'assets' / 'sweetdream'
+ROOT = Path(r'D:/数据包/fallendream_rp_完整版')
+NS = ROOT / 'assets' / 'fallendream'
 TEX = NS / 'textures' / 'item'
 MDL = NS / 'models' / 'item'
 ITM = NS / 'items'
@@ -216,9 +216,9 @@ MODEL = {
     ),
     "ambientocclusion": False,
     "gui_light": "front",
-    "textures": {"disc": "sweetdream:item/domain",
-                 "rune": "sweetdream:item/domain_rune",
-                 "particle": "sweetdream:item/domain"},
+    "textures": {"disc": "fallendream:item/domain",
+                 "rune": "fallendream:item/domain_rune",
+                 "particle": "fallendream:item/domain"},
     "elements": elements,
     "display": {
         "ground": {"rotation": [0, 0, 0], "translation": [0, 2, 0],
@@ -230,7 +230,7 @@ MODEL = {
 
 ITEMS = {
     "hand_animation_on_swap": False,
-    "model": {"type": "minecraft:model", "model": "sweetdream:item/domain"},
+    "model": {"type": "minecraft:model", "model": "fallendream:item/domain"},
 }
 
 (MDL / 'domain.json').write_text(

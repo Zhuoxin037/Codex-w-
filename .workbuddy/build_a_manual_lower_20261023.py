@@ -16,7 +16,7 @@ from scipy.spatial import cKDTree
 TITLE='A_下衣与双足_手工分部'
 VERTS={'north':[(1,1,0),(1,0,0),(0,0,0),(0,1,0)],'south':[(0,1,1),(0,0,1),(1,0,1),(1,1,1)],'east':[(1,1,1),(1,0,1),(1,0,0),(1,1,0)],'west':[(0,1,0),(0,0,0),(0,0,1),(0,1,1)],'up':[(0,1,0),(0,1,1),(1,1,1),(1,1,0)],'down':[(0,0,1),(0,0,0),(1,0,0),(1,0,1)]}
 NORMAL={'north':[0,0,-1],'south':[0,0,1],'east':[1,0,0],'west':[-1,0,0],'up':[0,1,0],'down':[0,-1,0]}
-def uid(s):return str(uuid.uuid5(uuid.NAMESPACE_URL,'sweetdream:A/manual-lower/20261023/'+s))
+def uid(s):return str(uuid.uuid5(uuid.NAMESPACE_URL,'fallendream:A/manual-lower/20261023/'+s))
 
 class Model:
  def __init__(self):

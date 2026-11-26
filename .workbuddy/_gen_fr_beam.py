@@ -2,7 +2,7 @@
 """
 生成「终末天启·实体光柱」的资源包素材(幂等, 改数字重跑即可)。
 
-产出(都在 sweetdream_rp_完整版/assets/sweetdream/ 下):
+产出(都在 fallendream_rp_完整版/assets/fallendream/ 下):
   textures/item/fr_beam_glow.png   16x16  外辉: 暖白, 四边渐隐 (alpha 中心 0.72)
   textures/item/fr_beam_core.png   16x16  亮核: 纯白, 四边渐隐 (alpha 中心 1.00)
   models/item/fr_beam.json         四片**正交薄片**(外辉 16px 宽 / 亮核 6px 宽), 沿 model Z 铺
@@ -41,8 +41,8 @@ import struct
 import zlib
 from pathlib import Path
 
-ROOT = Path(r'D:/数据包/sweetdream_rp_完整版')
-NS = ROOT / 'assets' / 'sweetdream'
+ROOT = Path(r'D:/数据包/fallendream_rp_完整版')
+NS = ROOT / 'assets' / 'fallendream'
 TEX = NS / 'textures' / 'item'
 MDL = NS / 'models' / 'item'
 for d in (TEX, MDL):
@@ -134,9 +134,9 @@ MODEL = {
     "ambientocclusion": False,
     "gui_light": "front",
     "textures": {
-        "glow": "sweetdream:item/fr_beam_glow",
-        "core": "sweetdream:item/fr_beam_core",
-        "particle": "sweetdream:item/fr_beam_glow",
+        "glow": "fallendream:item/fr_beam_glow",
+        "core": "fallendream:item/fr_beam_core",
+        "particle": "fallendream:item/fr_beam_glow",
     },
     "elements": [
         h_plane("#glow", "外辉_横(法线±Y, 从上方才看得见)", 0.5),

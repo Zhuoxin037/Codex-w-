@@ -1,1 +1,0 @@
-$execute if data storage zx:rogue floor.cells[{cell:$(cell),present:1b}] unless data storage zx:rogue floor.cells[{cell:$(cell),visited:1b}] run function sweetdream:rogue/map/visit with storage zx:rogue floor.cells[$(cell)]

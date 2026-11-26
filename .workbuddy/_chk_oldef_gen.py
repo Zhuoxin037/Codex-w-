@@ -19,7 +19,7 @@ import re
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-LOAD = os.path.join(HERE, '..', 'sweetdream', 'data', 'sweetdream', 'function',
+LOAD = os.path.join(HERE, '..', 'fallendream', 'data', 'fallendream', 'function',
                     'overlimit', 'def', 'load.mcfunction')
 
 sys.path.insert(0, HERE)
@@ -48,9 +48,12 @@ bad = []
 disk = disk_lines()
 
 # ---- 6 个批量生成器: DEFS = [(uid, label, note, items)] + line(uid,label,note,items) ----
-for fn in ('_gen_oldef_e1.py', '_gen_oldef_e2.py',
-           '_gen_oldef_f1.py', '_gen_oldef_f2.py', '_gen_oldef_gh.py',
-           '_gen_oldef_i1.py', '_gen_oldef_j3.py'):
+ALL_GENS = ('_gen_oldef_e1.py', '_gen_oldef_e2.py',
+            '_gen_oldef_f1.py', '_gen_oldef_f2.py', '_gen_oldef_gh.py',
+            '_gen_oldef_i1.py', '_gen_oldef_j3.py',
+            # 2026-11-19 批量 153 件（子目录）
+            'overlimit_all_20261118/build_all.py')
+for fn in ALL_GENS:
     mod = load_mod(fn)
     for (uid, label, note, items) in mod.DEFS:
         want = mod.line(uid, label, note, items).rstrip('\n')
@@ -60,8 +63,13 @@ for fn in ('_gen_oldef_e1.py', '_gen_oldef_e2.py',
         elif got != want:
             bad.append('%s: oldef."%s" 与磁盘不一致\n   生成器: %s\n   磁盘  : %s'
                        % (fn, uid, want[:110], got[:110]))
+        # 大批 153 件只报异常，逐条 ok 不刷屏
+        elif fn.endswith('build_all.py'):
+            pass
         else:
             print('[ok] %-20s oldef."%s"' % (fn, uid))
+    if fn.endswith('build_all.py'):
+        print('[ok] %-20s oldef 全部 %d 条逐字一致' % (fn, len(mod.DEFS)))
 
 # ---- _fix_oldef.py: NEW = {id: 整行}; ★ 它写的是**折行前**的 lore, 跑完还要过
 #      `lore_fmt.py --write`, 所以整行必然和磁盘不等 —— 这里只比 **name 组件**
@@ -88,9 +96,7 @@ for uid, want in mod.NEW.items():
 
 # ---- 未被任何生成器覆盖的条目: 只提示(手写的), 不算问题 ----
 covered = set()
-for fn in ('_gen_oldef_e1.py', '_gen_oldef_e2.py',
-           '_gen_oldef_f1.py', '_gen_oldef_f2.py', '_gen_oldef_gh.py',
-           '_gen_oldef_i1.py', '_gen_oldef_j3.py'):
+for fn in ALL_GENS:
     covered |= {d[0] for d in load_mod(fn).DEFS}
 covered |= set(load_mod('_fix_oldef.py').NEW)
 manual = sorted(set(disk) - covered)

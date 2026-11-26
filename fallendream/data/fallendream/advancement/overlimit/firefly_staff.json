@@ -1,0 +1,21 @@
+{
+    "criteria": {
+        "firefly_staff": {
+            "trigger": "consume_item",
+            "conditions": {
+                "item": {
+                    "predicates": {
+                        "minecraft:custom_data": {
+                            "zx": [
+                                "ol_firefly_staff"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "fallendream:overlimit/apply/firefly_staff"
+    }
+}

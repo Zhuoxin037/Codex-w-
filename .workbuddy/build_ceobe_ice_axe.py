@@ -11,7 +11,7 @@ OUT.mkdir(parents=True,exist_ok=True)
 NAME='很冰的斧_刻俄柏原设_分组可编辑'
 if (OUT/(NAME+'.bbmodel')).exists() and '--replace-draft' not in sys.argv:
     raise SystemExit('Draft exists. Do not overwrite an approved model. Explicit --replace-draft only during initial modelling.')
-def uid(s):return str(uuid.uuid5(uuid.NAMESPACE_URL,'sweetdream/ceobe/iceaxe/v1/'+s))
+def uid(s):return str(uuid.uuid5(uuid.NAMESPACE_URL,'fallendream/ceobe/iceaxe/v1/'+s))
 groups={};elements=[]
 def group(name,parent=None,origin=(0,-7,0)):
     g={'name':name,'uuid':uid('group/'+name),'origin':list(origin),'rotation':[0,0,0],'visibility':True,'export':True,'children':[]}

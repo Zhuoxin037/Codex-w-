@@ -6,7 +6,7 @@
 """
 import io, os, re, sys, json
 
-BASE = r'D:\数据包\sweetdream\data\sweetdream\function\equipment'
+BASE = r'D:\数据包\fallendream\data\fallendream\function\equipment'
 NEW = [('sword', 'myriad'), ('sword', 'qiansan'), ('axe', 'agony'),
        ('staff', 'polarized_light'), ('staff', 'delusion'), ('staff', 'fallen_dream'),
        ('staff', 'apocalypse'), ('bow', 'sculk_echo'), ('bow', 'bone_erode'),
@@ -17,7 +17,9 @@ NEW = [('sword', 'myriad'), ('sword', 'qiansan'), ('axe', 'agony'),
        ('axe', 'sacred_relic'), ('axe', 'anchor'), ('axe', 'scorch_bone'),
        ('sword', 'tidemark'), ('sword', 'grayscale'), ('sword', 'crescent'),
        ('bow', 'dragon_tongue'), ('bow', 'cloudtrail'), ('bow', 'burst_dawn'),
-       ('staff', 'triad'), ('staff', 'five_curses')]
+       ('staff', 'triad'), ('staff', 'five_curses'),
+       # 用户 11-18 定稿新装备（只做 give）
+       ('axe', 'spindle'), ('staff', 'symphony')]
 
 
 def scan(s):
@@ -76,15 +78,15 @@ for cat, cid in NEW:
         except Exception as ex:
             err = err or ('lore 不是合法 JSON: %s' % ex)
     # ★ 附魔存在性(2026-10-05 加) ★
-    #   give 里写了 enchantments={"sweetdream:<id>":1}, 但 data/sweetdream/enchantment/<id>.json
-    #   不存在 -> 加载时报 "Failed to get element sweetdream:<id> missed input", 整个 give 作废。
+    #   give 里写了 enchantments={"fallendream:<id>":1}, 但 data/fallendream/enchantment/<id>.json
+    #   不存在 -> 加载时报 "Failed to get element fallendream:<id> missed input", 整个 give 作废。
     #   (另一个常见原因是"附魔是注册表内容, 改完没退世界重进" —— 那种情况文件是在的,
     #    这里查不出来, 属于运行期问题。)
     for me in re.finditer(r'enchantments=\{"([a-z_0-9]+):([a-z_0-9]+)"', g):
         ns, eid = me.group(1), me.group(2)
         ep = os.path.join(os.path.dirname(os.path.dirname(BASE)), 'enchantment', eid + '.json')
-        if ns == 'sweetdream' and not os.path.exists(ep):
-            err = err or ('引用了不存在的附魔 sweetdream:%s(缺 enchantment/%s.json)' % (eid, eid))
+        if ns == 'fallendream' and not os.path.exists(ep):
+            err = err or ('引用了不存在的附魔 fallendream:%s(缺 enchantment/%s.json)' % (eid, eid))
     if err or miss:
         print('[×] %-18s %s%s' % (cid, err or '', (' 缺: ' + ','.join(miss)) if miss else ''))
         bad += 1

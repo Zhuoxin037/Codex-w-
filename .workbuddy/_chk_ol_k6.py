@@ -25,7 +25,7 @@ import io
 import os
 import re
 
-BASE = "D:/数据包/sweetdream/data/sweetdream"
+BASE = "D:/数据包/fallendream/data/fallendream"
 FN = BASE + "/function"
 
 NEW = [
@@ -111,13 +111,13 @@ for rel, oid in [
         bad.append("%s: 分流没判副手" % rel)
 
 # ---- ② 所有 function 引用必须存在 ----
-ref = re.compile(r"function\s+sweetdream:([A-Za-z0-9_/]+)")
+ref = re.compile(r"function\s+fallendream:([A-Za-z0-9_/]+)")
 missing = set()
 for rel in NEW + EDIT:
     for m in ref.finditer(body(texts.get(rel, ""))):
         p = os.path.join(FN, m.group(1).replace("/", os.sep) + ".mcfunction")
         if not os.path.exists(p):
-            missing.add("%s -> sweetdream:%s" % (rel, m.group(1)))
+            missing.add("%s -> fallendream:%s" % (rel, m.group(1)))
 for x in sorted(missing):
     bad.append("引用了不存在的函数: " + x)
 

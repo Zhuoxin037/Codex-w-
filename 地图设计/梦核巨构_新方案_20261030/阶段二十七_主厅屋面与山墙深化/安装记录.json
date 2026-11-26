@@ -1,0 +1,18 @@
+{
+  "time": "2026-11-09T19:36:50.3218984+08:00",
+  "target": "D:\\PCL 正式版 2.10.0\\.minecraft\\versions\\1.21.5-Fabric 0.16.10\\saves\\梦核哥特_承接修复与照明补漏_20261102",
+  "display_name": "梦核哥特_天光与照明修复_20261102",
+  "backup": "D:\\数据包\\地图设计\\梦核巨构_新方案_20261030\\阶段二十七_主厅屋面与山墙深化\\修改前完整备份.zip",
+  "archive": "D:\\数据包\\地图设计\\梦核巨构_新方案_20261030\\阶段二十七_主厅屋面与山墙深化\\主厅屋面与山墙深化_完整存档.zip",
+  "verified_region_files": 4,
+  "non_region_files_changed": 0,
+  "additional_game_worlds": 0,
+  "all_hashes_match": true,
+  "native_checks": 42,
+  "reopen_checks": 28,
+  "navigation_checks": 63,
+  "verified_content_files": 694,
+  "all_content_files_match_saved_copy": true,
+  "protected_user_positions_verified": 24,
+  "patch_sha256": "2ced15e099b3c155c77487eb7921f8c06ccc8c3da65158049b10fc92ce83049c"
+}

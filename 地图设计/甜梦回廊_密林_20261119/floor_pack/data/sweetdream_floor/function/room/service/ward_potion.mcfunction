@@ -1,0 +1,1 @@
+give @s minecraft:potion[minecraft:potion_contents={custom_color:15897475,custom_effects:[{id:"minecraft:regeneration",amplifier:1,duration:100},{id:"minecraft:absorption",amplifier:0,duration:2400}]},minecraft:item_name={text:"护命药剂",color:"gold"}] 2

@@ -26,13 +26,13 @@
 【zx 约定（照 batch5/6/7）】
   custom_data.zx = [<id>, <分类标记>, <"itemreplace"(剑/斧/法杖 —— 本包武器标记)>]
   弩 = [<id>,"bow"]（无 itemreplace）；盔甲 = [<id>,<部位>, "armor"]；副手 = [<id>,"tool"]
-  带 冷却 的才有 skill:"sweetdream:<id>"（观测镜/清冷却靠它显示）。
+  带 冷却 的才有 skill:"fallendream:<id>"（观测镜/清冷却靠它显示）。
 
 【★ 2026-10-15 批 15-1 的改动：4 把弩开始挂 enchantments ★】
   批 15-1（弩 4 件：feather_sleep / ember_string / reverse_string / dark_sun）接上了命中
   结算 —— 弩没有右键/consumable，全靠附魔 post_attack 三回调（hook_arrow / hook_attacker /
   hook_victim；坑 138：回调只读**攻击者主手物品**上的附魔）。所以 `cat == 'bow'` 的 give
-  现在会写 `enchantments={"sweetdream:<id>":1}` + `enchantment_glint_override=false`，
+  现在会写 `enchantments={"fallendream:<id>":1}` + `enchantment_glint_override=false`，
   并在 tooltip_display 里同时藏掉 "enchantments"。
   ★ 附魔是**注册表**内容：首次加载须**退世界重进**（坑 153）；旧件须**重新 give**（坑 144）。
 """
@@ -45,7 +45,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import _new42_lore as SRC          # noqa: E402  描述真源
 from _tags_data import TAGS        # noqa: E402  标签单一真源
 
-BASE = r'D:\数据包\sweetdream\data\sweetdream\function\equipment'
+BASE = r'D:\数据包\fallendream\data\fallendream\function\equipment'
 
 # 类别（目录）与部位
 KIND_CAT = {'剑': 'sword', '斧': 'axe', '弩': 'bow', '法杖': 'staff', '副手': 'tool',
@@ -108,7 +108,7 @@ def build(it, cat, slot, base):
         zx.append('itemreplace')       # 剑/斧/法杖 = 本包武器标记（照 batch6/7）
     zx_txt = json.dumps(zx, ensure_ascii=False, separators=(',', ':'))
     if cat in RIGHT_CLICK and has_cooldown(it['segs']):
-        zx_txt += ',skill:"sweetdream:%s"' % cid
+        zx_txt += ',skill:"fallendream:%s"' % cid
 
     parts = []
     parts.append('item_name={text:"%s",bold:true,color:%s}' % (it['name'], it['color']))
@@ -127,7 +127,7 @@ def build(it, cat, slot, base):
     #   ★ enchantment_glint_override=false + tooltip 里藏掉 "enchantments"：
     #     让附魔生效但不显示附魔名/紫色光效（与既有 10 把弩同一套写法）。
     if cat == 'bow':
-        parts.append('enchantments={"sweetdream:%s":1}' % cid)
+        parts.append('enchantments={"fallendream:%s":1}' % cid)
         parts.append('enchantment_glint_override=false')
         hide.append('enchantments')
     cd_txt = 'zx:%s' % zx_txt
@@ -142,14 +142,14 @@ def build(it, cat, slot, base):
     # ★ 批 16 外观（2026-10-18）：46 件的贴图补齐了，这里开始挂 item_model。
     #   位置与 `_gen_armor_visual.py` / `_gen_offhand_visual.py` 的 comps() 逐字一致：
     #   tooltip_display 之后、行尾 `]` 之前（否则 _chk_gen_drift.py 判漂移）。
-    #   · 剑/斧/法杖：item_model = sweetdream:<id>
-    #   · 弩        ：item_model = sweetdream:crossbow_<id>（弩的模型键统一带前缀）
-    #   · 副手      ：item_model = sweetdream:tool_<id>
+    #   · 剑/斧/法杖：item_model = fallendream:<id>
+    #   · 弩        ：item_model = fallendream:crossbow_<id>（弩的模型键统一带前缀）
+    #   · 副手      ：item_model = fallendream:tool_<id>
     #   · 盔甲      ：item_model + equippable 一起给（equippable 一写就是整体替换，
     #                 slot / asset_id / equip_sound 三个字段必须给全 —— 坑见 RULES 盔甲接入）
-    parts.append('item_model="sweetdream:%s"' % model_key(cat, cid))
+    parts.append('item_model="fallendream:%s"' % model_key(cat, cid))
     if cat == 'armor':
-        parts.append('equippable={slot:"%s",asset_id:"sweetdream:armor_%s",equip_sound:%s}'
+        parts.append('equippable={slot:"%s",asset_id:"fallendream:armor_%s",equip_sound:%s}'
                      % (EQ_SLOT[slot], cid, json.dumps(ARMOR_SOUND[TIER[it['rarity']]])))
 
     pre = ''
@@ -164,7 +164,7 @@ def header(it, cat, slot, base):
     heads = [p for k, p in it['segs'] if k == 'head']
     A = []
     A.append('# ============================================================')
-    A.append('# sweetdream:equipment/%s/%s/give —— 给一件「%s」（%s · %s）'
+    A.append('# fallendream:equipment/%s/%s/give —— 给一件「%s」（%s · %s）'
              % (cat, it['id'], it['name'], it['rarity'], cat_cn))
     A.append('# ------------------------------------------------------------')
     A.append('# 【custom_data】')
@@ -176,10 +176,10 @@ def header(it, cat, slot, base):
     A.append('#')
     A.append('# 【这个文件是生成的】改描述请改 .workbuddy/_new42_lore.py、改标签请改')
     A.append('#   .workbuddy/_tags_data.py，然后重跑本生成器 + `python .workbuddy/lore_fmt.py --write`。')
-    A.append('# 【外观】批 16（2026-10-18）补齐：item_model 指向 sweetdream:%s' % model_key(cat, it['id']))
+    A.append('# 【外观】批 16（2026-10-18）补齐：item_model 指向 fallendream:%s' % model_key(cat, it['id']))
     A.append('#   （贴图源 _gen_late_icons.py，接线 _gen_late_rp.py）。')
     if cat == 'bow':
-        A.append('# ★ 弩的命中结算要靠 sweetdream:%s 附魔的 post_attack 回调（坑 138：回调' % it['id'])
+        A.append('# ★ 弩的命中结算要靠 fallendream:%s 附魔的 post_attack 回调（坑 138：回调' % it['id'])
         A.append('#   只读**攻击者主手物品**上的附魔）=> **必须挂 enchantments**；漏了它整把弩')
         A.append('#   会"射得出去、什么都不发生"且零日志。')
         A.append('#   ★ 附魔属于**注册表**内容：第一次加载（或改动它）之后要**退出世界再进**，')

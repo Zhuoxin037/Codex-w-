@@ -1,6 +1,6 @@
 import os, re
 
-root = r'D:/数据包/sweetdream/data/sweetdream/function'
+root = r'D:/数据包/fallendream/data/fallendream/function'
 bad = []
 total = 0
 for dp, dn, fn in os.walk(root):

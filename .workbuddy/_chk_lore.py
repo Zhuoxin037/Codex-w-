@@ -17,7 +17,7 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-FN = os.path.join(ROOT, 'sweetdream', 'data', 'sweetdream', 'function',
+FN = os.path.join(ROOT, 'fallendream', 'data', 'fallendream', 'function',
                   'overlimit', 'def', 'load.mcfunction')
 
 # SNBT -> JSON: 给裸 key 加引号(只对 "{" / "," 后面紧跟的标识符动手)

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-"""扫描 sweetdream 全部装备 give 文件，输出结构化清单。"""
+"""扫描 fallendream 全部装备 give 文件，输出结构化清单。"""
 import os, re, json
 
-ROOT = r"D:/数据包/sweetdream/data/sweetdream/function/equipment"
+ROOT = r"D:/数据包/fallendream/data/fallendream/function/equipment"
 CAT = {"armor": "盔甲", "axe": "斧", "bow": "弩", "staff": "法杖", "sword": "剑", "tool": "副手"}
 
 MAT_STAGE = {
