@@ -210,11 +210,11 @@ def update(tag,x,y,z,scale,angle=0,*,locate=pos):
             f"data merge entity {entity} {{start_interpolation:0,interpolation_duration:2,transformation:{transform}}}"]
 
 
-def timeline(mc,*,count=4,length=LENGTH,locate=pos,directory="frames",reveal=None):
+def timeline(mc,*,count=4,length=LENGTH,locate=pos,directory="frames",reveal=None,size=1):
     if reveal is None:
         reveal=[f"execute if score #draw {SCORE} matches {i} run {fn(f'result/{i}')}" for i in range(4)]
-    def move(*args):
-        return update(*args,locate=locate)
+    def move(tag,x,y,z,scale,angle=0):
+        return update(tag,x,y,z,scale*size,angle,locate=locate)
     note={8:1.55,12:1.49,16:1.51,22:1.40,30:1.35,36:1.12,40:.88}
     for n in range(0,length,2):
         t=n/20
@@ -249,7 +249,7 @@ def timeline(mc,*,count=4,length=LENGTH,locate=pos,directory="frames",reveal=Non
                     rows.append(f"kill {select('dl.card_0')}")
                     for half in ("left","right"):
                         rows.append(display(f"dl.{half}",NS+"tablet_"+half,locate(x,y,z),
-                                            scale=scale,billboard="vertical",moving=True))
+                                            scale=scale*size,billboard="vertical",moving=True))
                 if 46<=n<58:
                     for half,direction in (("left",1),("right",-1)):
                         rows.extend(move(f"dl.{half}",x+direction*.59*burst,y-.57*burst,z-.035*burst,

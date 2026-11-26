@@ -1,0 +1,1 @@
+{"gui_light":"front","ambientocclusion":false,"textures":{"surface":"fallenroute:item/panel/icon_combat"},"elements":[{"from":[0,0,7.997],"to":[16,16,8.003],"shade":false,"faces":{"north":{"uv":[0,0,16,16],"texture":"#surface"},"south":{"uv":[0,0,16,16],"texture":"#surface"}}}]}

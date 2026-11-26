@@ -14,11 +14,12 @@ RUN = F+"run"
 STATE = "drawlab:combat"
 OBJ = "dl.combat"
 LENGTH = 66
+TABLE_SCALE = .70
 PLAYERS = "@a[tag=sd.floor_run,tag=zx.rg_active,tag=!sd.rejoin_pending,distance=0..,scores={sd.floor_death=0}]"
 
 
 def local(x=0,y=0,z=0):
-    return " ".join("~" if abs(v)<.00005 else f"~{v:.4f}" for v in (x,y,z))
+    return " ".join("~" if abs(v)<.00005 else f"~{v*TABLE_SCALE:.4f}" for v in (x,y,z))
 
 
 def msg(label,color="gold"):
@@ -102,10 +103,10 @@ def room_control(lab):
         return entry.replace('"minecraft:item_model":',f'"minecraft:item_name":{text},"minecraft:item_model":',1)
 
     lab("room/build",
-        named(display("dl.table","drawlab:pedestal",local()),"抽取台"),
-        named(display("dl.dial","drawlab:dial",local()),"抽取盘"),
-        named(display("dl.pointer","drawlab:pointer",local(0,1.045,1.24)),"停轮指针"),
-        f'summon minecraft:interaction {local(0,.48,0)} {{Tags:["dl.click"],width:3.18f,height:.94f,response:1b}}',
+        named(display("dl.table","drawlab:forest_pedestal",local(),scale=TABLE_SCALE),"抽取台"),
+        named(display("dl.dial","drawlab:dial",local(),scale=TABLE_SCALE),"抽取盘"),
+        named(display("dl.pointer","drawlab:pointer",local(0,.66,1.05),scale=TABLE_SCALE),"停轮指针"),
+        f'summon minecraft:interaction {local(0,.25,0)} {{Tags:["dl.click"],width:2.12f,height:.64f,response:1b}}',
         f"function {D}room/prompt")
     lab("room/prompt",text_display(local(0,1.40,0),"右击抽取","#eddbac",.84,tag="dl.idle",bold=True))
     lab("room/restore_prompt",
@@ -231,7 +232,7 @@ def drawing(lab):
     lab("draw/animate",*(f"execute if score #count {OBJ} matches {count} run return run function {D}draw/animate_{count}"
                          for count in range(1,5)))
     lab("draw/reveal",
-        text_display(local(0,.73,1.56),"","#f2d49b",1.15,tag="dl.result").replace('["dl.result"]','["dl.play","dl.result"]'),
+        text_display(local(0,.73,1.56),"","#f2d49b",.95,tag="dl.result").replace('["dl.result"]','["dl.play","dl.result"]'),
         f'data modify storage {STATE} revealed set value {{text:"",color:"#f2d49b",bold:true}}',
         f"data modify storage {STATE} revealed.text set from storage {STATE} result.name",
         f"data modify entity @e[tag=dl.result,distance=..5,limit=1] text set from storage {STATE} revealed")
@@ -239,4 +240,4 @@ def drawing(lab):
         lab(f"draw/animate_{count}",*(f"execute if score #frame {OBJ} matches {i} run return run function {D}draw/frames_{count}/{i}"
                                        for i in range(0,LENGTH,2)))
         timeline(lab,count=count,length=LENGTH,locate=local,directory=f"draw/frames_{count}",
-                 reveal=[f"function {D}draw/reveal"])
+                 reveal=[f"function {D}draw/reveal"],size=.85)

@@ -81,3 +81,10 @@ desktop.ini
 # 地图的构建脚本 + floor_pack 在 地图设计/<项目>/ 下已入库;
 # 成品 zip 要手动 git add -f 才会进(保持 *.zip 总体忽略)。
 
+# ---- Python 编译缓存 ----
+__pycache__/
+*.pyc
+
+# ---- WorkBuddy 临时导出文件 ----
+/.wbapp_*.genie
+

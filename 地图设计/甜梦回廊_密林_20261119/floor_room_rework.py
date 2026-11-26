@@ -4,11 +4,12 @@ from pathlib import Path
 import json
 import re
 
-from architecture import Build, LEAVES, PITCH, RADII
+from architecture import Build, LEAVES, PITCH
 from floor_route_map import DIMS, EDGES, KINDS
 from forest_new_interiors import blade_clear_arena, interiors
 from route_trial_scenes import black_arch
 from wardrobe_panel import wardrobe
+from portal_edges import generate as room_portals
 
 
 F = "sweetdream_floor:"
@@ -58,11 +59,10 @@ def stage(destination, original):
         mc(path,*(line.replace(" ~ ~5 run "," ~ ~-7 run ").replace("distance=..10","distance=..12") for line in read(path)))
 
     remove(RG+"gen/corridor",RG+"corridors/")
-    remove(F+"junction/build_shrub",F+"junction/closed_panel")
     remove(F+"junction/unlock",RG+"corridors/")
     mc(RG+"gen/build_cell",*read(RG+"gen/build_cell"),
-       f"$execute positioned $(x) 80 $(z) run function {F}routes/room_exit_$(radius)",
-       f"$data modify storage {GRAPH} floor.cells[$(cell)].isolated set value 1b")
+       f"$data modify storage {GRAPH} floor.cells[$(cell)].isolated set value 1b",
+       f"$function {F}routes/portal/build with storage {GRAPH} floor.cells[$(cell)]")
     mc(RG+"map/locate",f"execute if entity @s[tag={ROAD_TAG},y=120,dy=14] run return run scoreboard players operation @s zx.rg_room = @s sd.road_cell",
        *read(RG+"map/locate"))
     mc(F+"run/join_party",f"tag @s remove {ROAD_TAG}",*read(F+"run/join_party"))
@@ -71,7 +71,7 @@ def stage(destination, original):
     health_bars(mc,read)
     reward_cards(mc,read)
     combat_clock(mc,read)
-    narrow_gates(mc,read)
+    room_portals(mc,read)
     room_effects(mc,read)
     weapon_effects(mc,original.parent/"fallendream")
     wardrobe(mc,asset,read)
@@ -150,32 +150,6 @@ def reward_cards(mc,read):
     show_reward=read(F+"reward/show")
     show_reward.insert(-1,f"execute if data storage {RUN} offers[3] run function {F}reward/button {{index:3,code:33}}")
     mc(F+"reward/show",*show_reward)
-
-
-def narrow_gates(mc,read):
-    gate=F+"routes/gate/"
-    mc(F+"room/doors/update",
-       '$execute if data storage zx:rogue floor.cells[{cell:$(cell),isolated:1b}] run return run function '
-       +gate+'update {x:$(x),z:$(z),radius:$(radius)}',
-       *read(F+"room/doors/update"))
-    mc(gate+"update",f"$execute positioned $(x) 81 $(z) positioned ~ ~ ~$(radius) positioned ~ ~ ~-1 run function {gate}threshold")
-    mc(gate+"threshold",
-       f"execute if score #door_closed sd.floor matches 0 run return run function {gate}open",
-       "execute if block ~ ~ ~ minecraft:barrier run return 0",
-       "fill ~-1 ~ ~ ~1 ~2 ~ minecraft:barrier replace #sweetdream_floor:room_air",
-       "kill @e[tag=sd.isolated_gate,distance=..0.2]",
-       f"function {gate}panels")
-    mc(gate+"open","fill ~-1 ~ ~ ~1 ~2 ~ minecraft:air replace minecraft:barrier",
-       f"execute as @e[tag=sd.isolated_gate,tag=!sd.floor_gate_open,distance=..0.2] run function {F}room/doors/sink")
-    panels=[]
-    for x in (-1,0,1):
-        for y in range(3):
-            log="stripped_spruce_log" if x==0 else "stripped_dark_oak_log"
-            panels.append(f'summon minecraft:block_display ~ ~ ~ {{Tags:["sd.isolated_gate","sd.floor_gate_row_{y}"],'
-                          f'block_state:{{Name:"minecraft:{log}",Properties:{{axis:"x"}}}},'
-                          f'transformation:{{translation:[{x}.0f,{y}.0f,0f],scale:[1f,1f,1f],left_rotation:[0f,0f,0f,1f],'
-                          'right_rotation:[0f,0f,0f,1f]},width:5f,height:5f,view_range:.75f}')
-    mc(gate+"panels",*panels)
 
 
 def room_effects(mc,read):
@@ -376,14 +350,9 @@ def stage_route_room():
 
 def rooms_and_roads(mc):
     mc(F+"routes/shell",*stage_route_room())
-    for r in RADII:
-        b=Build(relative=True)
-        b.box((-2,0,r-5),(2,0,r),"mossy_stone_bricks")
-        b.box((-1,1,r-2),(1,3,r-1),"air")
-        black_arch(b,0,r-1,"z")
-        mc(F+f"routes/room_exit_{r}",*b.lines)
     mc(F+"routes/tick",
        f"execute unless score #phase sd.floor matches 2 if score #clock_active sd.clock matches 1 run function {F}combat/clock/stop",
+       *(f"execute in {dim} run function {F}routes/portal/tick" for dim in DIMS),
        *(f"execute in {dim} if entity @e[tag=sd.draw_fx,distance=0..] run function {F}routes/effects/draw_tick" for dim in DIMS),
        "tag @a[tag=sd.black_loading,tag=!zx.rg_wait] remove sd.black_loading",
        f"execute as @a[tag=sd.floor_run,tag=zx.rg_wait,tag=!sd.black_loading] unless data storage {RUN} {{floor:2}} in {DIMS[0]} run function {F}routes/wait_forest",
@@ -397,13 +366,9 @@ def rooms_and_roads(mc):
        f"execute if entity @s[tag=sd.floor_mirror] run return 0",
        f"execute if entity @s[tag={ROAD_TAG}] run return run function {F}routes/check",
        f"function {F}routes/find_exit")
-    entries=[]
     road_checks=[]
     for cell in range(25):
         x,z=PITCH*(cell%5),PITCH*(cell//5)
-        for r in RADII:
-            entries.append(f"execute if data storage {GRAPH} floor.cells[{{cell:{cell},present:1b,radius:{r},isolated:1b}}] "
-                           f"positioned {x-1} 81 {z+r-2} if entity @s[dx=2,dy=2,dz=1] run return run function {F}routes/enter_{cell}")
         road_checks.append(f"execute if score @s sd.road_cell matches {cell} run return run function {F}routes/step_{cell}")
         mc(F+f"routes/enter_{cell}",
            f"execute unless data storage {GRAPH} floor.cells[{{cell:{cell},route_built:1b}}] positioned {x} {ROAD_Y} {z} run function {F}routes/shell",
@@ -457,7 +422,6 @@ def rooms_and_roads(mc):
                f"execute if entity @s[tag={ROAD_TAG}] run tp @s {x+sx*9+.5} {ROAD_Y+1} {z+sz*9+.5}")
         mc(F+f"routes/step_{cell}",*moves)
         mc(F+f"routes/draw_{cell}",*draw,"scoreboard players operation @s sd.road_rev = #rd_rev zx.meta")
-    mc(F+"routes/find_exit",*entries)
     mc(F+"routes/check",*road_checks)
     mc(F+"routes/travel", f"$function {F}room/read_go {{cell:$(cell)}}",
        f"execute store result score #road_safe sd.floor run function fallenroute:floor/can_land with storage {RUN} inspected",

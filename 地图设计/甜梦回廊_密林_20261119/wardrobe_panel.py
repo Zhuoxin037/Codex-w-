@@ -10,6 +10,7 @@ STORE = "sweetdream_floor:wardrobe"
 FLOOR = "sweetdream_floor:run"
 SLOTS = (1.70, .61, -.61, -1.70)
 ITEM_KIND = "sdc.kind"
+KEY = "minecraft:paper[minecraft:custom_data~{fr_cabinet:1b}]"
 
 
 def snbt(data):
@@ -18,13 +19,6 @@ def snbt(data):
 
 def at(x,y,z,action):
     return f"execute positioned ^{x:g} ^{y:g} ^{z:g} run {action}"
-
-
-def tile(x,y,z,w,h,block,extra=""):
-    nbt=(f'{{Tags:["sdc.panel","sdc.new"{extra}],block_state:{{Name:"minecraft:{block}"}},'
-         f'brightness:{{block:15,sky:15}},transformation:{{translation:[{-w/2:.4f}f,{-h/2:.4f}f,0f],'
-         f'scale:[{w:g}f,{h:g}f,.025f],left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f]}}}}')
-    return at(x,y,z,f"summon minecraft:block_display ~ ~ ~ {nbt}")
 
 
 def label(x,y,words,color,scale,extra="",bold=False):
@@ -38,6 +32,15 @@ def label(x,y,words,color,scale,extra="",bold=False):
 def hitbox(x,y,index,w,h):
     return at(x,y,-.17,
               f'summon minecraft:interaction ~ ~ ~ {{Tags:["sdc.panel","sdc.new","sdc.slot_{index}"],width:{w:g}f,height:{h:g}f,response:1b}}')
+
+
+def folio():
+    return at(0,0,.07,
+              'summon minecraft:item_display ~ ~ ~ {Tags:["sdc.panel","sdc.new"],item_display:"none",'
+              'brightness:{block:15,sky:15},width:5f,height:2.4f,'
+              'item:{id:"minecraft:paper",count:1,components:{"minecraft:item_model":"fallenrooms:folio"}},'
+              'transformation:{translation:[0f,0f,0f],scale:[4.88f,2.3f,1f],'
+              'left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f]}}')
 
 
 def wardrobe(mc,asset,read):
@@ -76,21 +79,13 @@ def wardrobe(mc,asset,read):
        "tag @s add sdc.open",
        "attribute @s minecraft:entity_interaction_range modifier add fallendream:cabinet_reach 0.85 add_value",
        'summon minecraft:marker ~ ~ ~ {Tags:["sdc.panel","sdc.new","sdc.anchor"]}',
-       tile(0,0,.13,4.88,2.30,"dark_oak_planks"),
-       tile(0,0,.07,4.73,2.15,"black_wool"),
-       tile(0,.57,.025,4.51,.016,"waxed_oxidized_copper"),
-       tile(0,-.78,.025,4.51,.016,"waxed_oxidized_copper"),
-       tile(0,-.13,.025,.013,1.11,"waxed_oxidized_copper"),
+       folio(),
        label(0,.78,"装备寄存","#f4e2c1",1.12,bold=True),
        label(1.155,.34,"武器","#efd6a4",.78,bold=True),
        label(-1.155,.34,"盔甲","#b5dfd7",.78,bold=True),
        label(-1.93,.79,"收起","#c7bfb2",.68),
        hitbox(-1.93,.79,4,.68,.29),
-       *(row for i,x in enumerate(SLOTS) for row in (
-           tile(x,-.19,-.015,.97,.88,"dark_oak_planks" if i<2 else "waxed_oxidized_copper"),
-           tile(x,-.19,-.055,.94,.85,"gray_wool"),
-           hitbox(x,-.64,i,.73,.89),
-       )),
+       *(hitbox(x,-.64,i,.91,.88) for i,x in enumerate(SLOTS)),
        label(0,-1.01,"右击存取","#c7bfb2",.69),
        f"function {NS}stamp",
        f"function {NS}redraw")
@@ -169,10 +164,20 @@ def wardrobe(mc,asset,read):
            f"execute if data entity @s EnderItems[{{Slot:{index}b}}] run return run function {NS}take {{slot:{index}}}",
            f"function {NS}put {{slot:{index},kind:{1 if index<2 else 2}}}")
     fn("take",
+       f"$execute if items entity @s weapon.mainhand {KEY} run return run function {NS}take_free {{slot:$(slot)}}",
        'execute if items entity @s weapon.mainhand * run return run title @s actionbar {text:"空手右击取出",color:"yellow"}',
        "$execute store success score #moved sdc.sys run item replace entity @s weapon.mainhand from entity @s enderchest.$(slot)",
        "execute unless score #moved sdc.sys matches 1 run return 0",
        "$item replace entity @s enderchest.$(slot) with minecraft:air",
+       f"function {NS}moved")
+    fn("take_free",
+       *(f"$execute unless items entity @s {target} * run return run function {NS}take_at {{source:$(slot),target:\"{target}\"}}"
+         for target in [*(f"hotbar.{i}" for i in range(7)),*(f"inventory.{i}" for i in range(27))]),
+       'title @s actionbar {text:"背包已满",color:"yellow"}')
+    fn("take_at",
+       "$execute store success score #moved sdc.sys run item replace entity @s $(target) from entity @s enderchest.$(source)",
+       "execute unless score #moved sdc.sys matches 1 run return 0",
+       "$item replace entity @s enderchest.$(source) with minecraft:air",
        f"function {NS}moved")
     fn("put",
        'execute unless items entity @s weapon.mainhand * run return 0',
